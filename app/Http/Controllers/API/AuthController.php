@@ -1,0 +1,285 @@
+<?php
+
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
+//use Dotenv\Validator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use App\Models\User;
+use App\Models\UserInfo;
+use Illuminate\Support\Facades\Hash;
+use Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
+
+
+class AuthController extends Controller
+{
+    public function register(Request $request)
+    {
+
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|unique:users,email',
+            'phone' => 'required|unique:users,phone',
+            'password' => 'required|min:4'
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $user = User::create([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => Hash::make($request->password),
+                'otp' => rand(100000, 999999)
+            ]);
+
+            $token = $user->createToken($user->email . '_Token')->plainTextToken;
+
+            // send sms via helper function
+            send_sms('Welcome to Hello Super Stars, Your otp is : ' . $user->otp, $user->phone);
+
+
+            return response()->json([
+                'status' => 200,
+                'id' => $user->id,
+                'token' => $token,
+                'message' => 'Verify Phone Number',
+            ]);
+        }
+    }
+
+    public function login(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'password' => 'required|min:4'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $user = User::where('email', $request->email)->orWhere('phone', $request->email)->first();
+
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'Invalid Credantials',
+                ]);
+            } else {
+                if ($user->user_type == 'user') {
+                    $token = $user->createToken($user->email . '_UserToken', ['server:user'])->plainTextToken;
+                    $role = 1;
+                } else if ($user->user_type == 'admin' && $user->status == 1) {
+                    $token = $user->createToken($user->email . '_AdminToken', ['server:admin'])->plainTextToken;
+                    $role = 8;
+                } else if ($user->user_type == 'star' && $user->status == 1) {
+                    $token = $user->createToken($user->email . '_StarToken', ['server:star'])->plainTextToken;
+                    $role = 7;
+                } else if ($user->user_type == null) {
+                    $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
+                    $role = 0;
+                } else {
+                    $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
+                    $role = 0;
+                }
+
+
+                return response()->json([
+                    'status' => 200,
+                    'email' => $user->email,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                    'id' => $user->id,
+                    'token' => $token,
+                    'role' => $role,
+                    'message' => 'Logged In Successfully',
+                ]);
+            }
+        }
+    }
+
+    public function verify_user(Request $request)
+    {
+        $user = User::find(auth('sanctum')->user()->id);
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Invalid Credantials',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Verified',
+            ]);
+        }
+    }
+
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
+        return response()->json([
+            'status' => 200,
+            'message' => 'Logged Out Successfully',
+        ]);
+    }
+
+    public function otp_verify(Request $request)
+    {
+
+        $user = User::where('email', auth('sanctum')->user()->email)->first();
+
+        if ($request->otp == $user->otp) {
+
+            $user->user_type = 'user';
+            $user->update();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Registration Successful!',
+                'phone' => $user->phone,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Invalid OTP',
+            ]);
+        }
+
+
+        //return auth()->user();
+
+    }
+
+    public function resend_otp()
+    {
+        $user = auth('sanctum')->user();
+
+        // send sms via helper function
+        send_sms('Welcome to Hello SuperStars, your otp is : ' . $user->otp, $user->phone);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'OTP has been Sent Again in ' . $user->phone,
+        ]);
+    }
+
+    public function reset_otp()
+    {
+        $user = User::find(auth('sanctum')->user()->id);
+
+        $user->otp = rand('100000', '999999');
+
+        $user->update();
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+
+    public function user_info()
+    {
+        $user = User::find(auth('sanctum')->user()->id);
+
+        $user_info = UserInfo::where('user_id', $user->id)->first();
+
+        if (empty($user_info)) {
+            $user_info = new UserInfo;
+        }
+
+        return response()->json([
+            'status' => 200,
+            'users' => $user,
+            'info' => $user_info
+        ]);
+    }
+
+    public function user_info_update(Request $request)
+    {
+        $user = User::find(auth('sanctum')->user()->id);
+
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+
+        if ($request->hasFile('image')) {
+            if ($user->image != null)
+                File::delete(public_path($user->image)); //Old image delete
+            $image             = $request->file('image');
+            $folder_path       = 'uploads/images/users/';
+            $image_new_name    = Str::random(3) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+            //resize and save to server
+            Image::make($image->getRealPath())->resize(400, 400)->save($folder_path . $image_new_name, 100);
+            $user->image   = $folder_path . $image_new_name;
+        }
+
+        if ($request->hasFile('cover_photo')) {
+            if ($user->cover_photo != null)
+                File::delete(public_path($user->cover_photo)); //Old image delete
+            $image             = $request->file('cover_photo');
+            $folder_path       = 'uploads/images/users/';
+            $image_new_name    = Str::random(3) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+            //resize and save to server
+            Image::make($image->getRealPath())->resize(900, 300)->save($folder_path . $image_new_name, 100);
+            $user->cover_photo   = $folder_path . $image_new_name;
+        }
+
+
+        $user->update();
+
+        $user_info = UserInfo::where('user_id', $user->id)->first();
+
+        if (empty($user_info)) {
+            $user_info = new UserInfo;
+        }
+
+        $user_info->user_id = $user->id;
+        $user_info->dob = $request->dob;
+        $user_info->country = $request->country;
+        $user_info->save();
+
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Your Information Updated Successfully'
+        ]);
+    }
+
+    public function user_OtherInfo_update(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        $user_info = UserInfo::where('user_id', $user->id)->first();
+
+        if (empty($user_info)) {
+            $user_info = new UserInfo;
+        }
+
+        $user_info->occupation = $request->occupation;
+        $user_info->edu_level = $request->edu_level;
+        $user_info->institute = $request->institute;
+        $user_info->subject = $request->subject;
+        $user_info->position = $request->position;
+        $user_info->company = $request->company;
+        $user_info->salery_range = $request->salery_range;
+
+        $user_info->save();
+
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Your Other Information Updated Successfully'
+        ]);
+    }
+}
