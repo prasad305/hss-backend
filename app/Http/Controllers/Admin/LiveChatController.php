@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Livechat;
@@ -8,7 +8,7 @@ use App\Models\LiveChatRegistration;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class LivechatController extends Controller
+class LiveChatController extends Controller
 {
 
     /// Super Star Method ....
@@ -139,6 +139,4 @@ class LivechatController extends Controller
             'registeredLiveChats' => $registeredLiveChats,
         ]);
     }
-
-
 }

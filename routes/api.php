@@ -2,7 +2,7 @@
 
 
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\LivechatController;
+use App\Http\Controllers\API\LiveChatController;
 use App\Http\Controllers\API\StarAuthController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\SubCategoryController;
@@ -12,10 +12,6 @@ use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\API\SimplePostController;
 use App\Http\Controllers\API\LearningSessionController;
-use App\Http\Controllers\ManagerAdmin\LiveChatController as ManagerAdminLiveChatController;
-use App\Models\LiveChat;
-use App\Models\MeetupEventRegistration;
-use App\Models\SimplePost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -45,7 +41,7 @@ Route::get('/user/getStarPost/{id}', [UserController::class, 'getStarPost']);
 
 // Data Fetching For Landing Page Right Side Bar
 Route::get('/user/learning_session/all', [LearningSessionController::class, 'user_all']);
-Route::get('/user/live_chat/all', [LivechatController::class, 'user_all']);
+Route::get('/user/live_chat/all', [LiveChatController::class, 'userAll']);
 
 
 // Verified User Middleware
@@ -74,14 +70,14 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/liveChatRigister/', [UserController::class, 'liveChatRigister']);
 
     //Route::get('view-category', [CategoryController::class, 'index']);
-        //Route::get('view-category', [CategoryController::class, 'index']);
+    //Route::get('view-category', [CategoryController::class, 'index']);
 
     Route::get('/user/registeredLivechat', [UserController::class, 'registeredLivechat']);
 
     Route::get('/user/interest/type', [UserController::class, 'interestType']);
 
 
-    Route::get('/user/meetupEventList/', [MeetupEventController::class, 'meetup_event_list']);
+    Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
     Route::get('/user/meetup-event/{star_id}/{event_id}', [MeetupEventController::class, 'meetup_event_booking']);
     Route::post('/user/meetup-event/register', [MeetupEventController::class, 'meetup_register']);
 
@@ -140,11 +136,11 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/learning_session/approved', [LearningSessionController::class, 'approved_list']);
 
     // Live Session Section
-    Route::post('admin/add_live_session', [LivechatController::class, 'add_live_session']);
-    Route::get('/admin/livechat', [LivechatController::class, 'admin_livechat']);
-    Route::get('/admin/sinlgeLiveChat/{id}', [LivechatController::class, 'admin_sinlgeLiveChat']);
-    Route::get('/admin/livechatListByDate/{date}', [LivechatController::class, 'admin_livechatListByDate']);
-    Route::get('/admin/registeredUserList/{live_chat_id}', [LivechatController::class, 'admin_registeredUserList']);
+    Route::post('admin/add_live_session', [LiveChatController::class, 'add_live_session']);
+    Route::get('/admin/livechat', [LiveChatController::class, 'admin_livechat']);
+    Route::get('/admin/sinlgeLiveChat/{id}', [LiveChatController::class, 'admin_sinlgeLiveChat']);
+    Route::get('/admin/livechatListByDate/{date}', [LiveChatController::class, 'admin_livechatListByDate']);
+    Route::get('/admin/registeredUserList/{live_chat_id}', [LiveChatController::class, 'admin_registeredUserList']);
 
 
     Route::get('admin/star_list', [CategoryController::class, 'star_list']);
@@ -155,7 +151,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('admin/greeting/{id}', [GreetingController::class, 'show']);
 
 
-    Route::get('admin/greeting/check_status', [LivechatController::class, 'greetingsCreateStatus']);
+    Route::get('admin/greeting/check_status', [LiveChatController::class, 'greetingsCreateStatus']);
 
 
     Route::post('/admin/add_meetup', [MeetupEventController::class, 'add']);
@@ -164,14 +160,14 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/meetup_event_details/{id}', [MeetupEventController::class, 'details']);
     Route::get('/admin/meetup_event_slots/{id}', [MeetupEventController::class, 'slots']);
 
-    Route::post('/admin/add_livechat_profile', [LivechatController::class, 'profile_create']);
-    Route::get('/admin/livechat_event_profile', [LivechatController::class, 'profile']);
-    Route::post('/admin/add_live_chat', [LivechatController::class, 'add']);
-    Route::get('/admin/live_chat/pending', [LivechatController::class, 'pending_list']);
-    Route::get('/admin/live_chat/approved', [LivechatController::class, 'approved_list']);
-    Route::get('/admin/livechat_event_details/{id}', [LivechatController::class, 'details']);
-    Route::get('/admin/live_chat_slots/{id}', [LivechatController::class, 'slots']);
-    Route::get('/admin/live_chat/count', [LivechatController::class, 'count']);
+    Route::post('/admin/add_livechat_profile', [LiveChatController::class, 'profile_create']);
+    Route::get('/admin/livechat_event_profile', [LiveChatController::class, 'profile']);
+    Route::post('/admin/add_live_chat', [LiveChatController::class, 'add']);
+    Route::get('/admin/live_chat/pending', [LiveChatController::class, 'pending_list']);
+    Route::get('/admin/live_chat/approved', [LiveChatController::class, 'approved_list']);
+    Route::get('/admin/livechat_event_details/{id}', [LiveChatController::class, 'details']);
+    Route::get('/admin/live_chat_slots/{id}', [LiveChatController::class, 'slots']);
+    Route::get('/admin/live_chat/count', [LiveChatController::class, 'count']);
 
 
     Route::post('/admin/add_schedule', [ScheduleController::class, 'add_schedule']);
@@ -195,8 +191,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
         return response()->json(['message' => 'You are in as Superstar', 'status' => 200], 200);
     });
 
-    Route::get('/livechat', [LivechatController::class, 'livechat']);
-    Route::get('/sinlgeLiveChat/{id}', [LivechatController::class, 'sinlgeLiveChat']);
+    Route::get('/livechat', [LiveChatController::class, 'livechat']);
+    Route::get('/sinlgeLiveChat/{id}', [LiveChatController::class, 'sinlgeLiveChat']);
 
 
     // Simple Post Section
@@ -218,17 +214,17 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/approve_learning_session/{id}', [LearningSessionController::class, 'approve_post']);
 
 
-    Route::get('/star/pendingLiveChat', [LivechatController::class, 'pendingLiveChat']);
-    Route::get('/star/approvedLiveChat', [LivechatController::class, 'approveLiveChat']);
-    Route::get('/star/approveLiveChat/{id}', [LivechatController::class, 'setApproveLiveChat']);
-    Route::get('/star/livechat_event_details/{id}', [LivechatController::class, 'details']);
+    Route::get('/star/pendingLiveChat', [LiveChatController::class, 'pendingLiveChat']);
+    Route::get('/star/approvedLiveChat', [LiveChatController::class, 'approveLiveChat']);
+    Route::get('/star/approveLiveChat/{id}', [LiveChatController::class, 'setApproveLiveChat']);
+    Route::get('/star/livechat_event_details/{id}', [LiveChatController::class, 'details']);
 
-    Route::get('/deleteLiveChat/{id}', [LivechatController::class, 'deleteLiveChat']);
-    Route::get('/livechatListByDate/{date}', [LivechatController::class, 'livechatListByDate']);
-    Route::get('/registeredUserList/{live_chat_id}', [LivechatController::class, 'registeredUserList']);
+    Route::get('/deleteLiveChat/{id}', [LiveChatController::class, 'deleteLiveChat']);
+    Route::get('/livechatListByDate/{date}', [LiveChatController::class, 'livechatListByDate']);
+    Route::get('/registeredUserList/{live_chat_id}', [LiveChatController::class, 'registeredUserList']);
 
-    Route::post('/star/add_live_session', [LivechatController::class, 'add_live_session']);
-    Route::post('/star/update_live_session', [LivechatController::class, 'update_live_session']);
+    Route::post('/star/add_live_session', [LiveChatController::class, 'add_live_session']);
+    Route::post('/star/update_live_session', [LiveChatController::class, 'update_live_session']);
 
     Route::get('/star/greetings', [GreetingController::class, 'view_star_greeting']);
     Route::get('/admin/greeting_approve', [GreetingController::class, 'greetingsApprovedByStar']);
@@ -243,7 +239,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     Route::get('/admin/greeting_approve', [GreetingController::class, 'greetingsApprovedByStar']);
 
-    Route::get('/star/live_chat/count', [LivechatController::class, 'count2']);
+    Route::get('/star/live_chat/count', [LiveChatController::class, 'count2']);
 
     //user greetings register list
     Route::get('/star/greetings_reg_list/{greetings_id}', [GreetingController::class, 'greetingsRegisterListByGreetingsId']);

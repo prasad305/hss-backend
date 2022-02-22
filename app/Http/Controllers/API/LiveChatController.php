@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\LiveChat;
 use App\Models\EventProfile;
 use App\Models\Greeting;
@@ -10,17 +11,11 @@ use App\Models\LiveChatRegistration;
 use App\Models\SuperStar;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 
-class LivechatController extends Controller
+class LiveChatController extends Controller
 {
-
-    /// Super Star Method ....
-
-
-
     public function livechat()
     {
         $livechats = LiveChat::where('star_id', auth('sanctum')->user()->id)->get();
@@ -67,7 +62,7 @@ class LivechatController extends Controller
             'status' => 200,
             'message' => 'Ok',
             'event' => $event,
-            'details' => '"'.$event->description.'"',
+            'details' => '"' . $event->description . '"',
         ]);
     }
 
@@ -390,7 +385,7 @@ class LivechatController extends Controller
 
 
     // user section
-    public function user_all()
+    public function userAll()
     {
         $event = LiveChat::all();
 
