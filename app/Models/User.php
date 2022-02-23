@@ -211,6 +211,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(LiveChatRegistration::class, 'user_id');
     }
- 
-    
 }
