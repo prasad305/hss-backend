@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\API\AuctionController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\LiveChatController;
 use App\Http\Controllers\API\StarAuthController;
@@ -287,3 +287,11 @@ Route::post('select_star', [SubCategoryController::class, 'select_star']);
 Route::get('submit_react/{id}', [UserController::class, 'submit_react']);
 Route::get('check_react/{id}', [UserController::class, 'check_react']);
 Route::get('checkchoice', [CategoryController::class, 'check']);
+
+//<======================== Auction Route ========================>
+
+Route::post('/add/auction/product',[AuctionController::class,'addProduct']);
+Route::get('/show/auction/product',[AuctionController::class,'showProduct']);
+Route::get('/total/auction/product',[AuctionController::class,'totalProduct']);
+Route::get('/sold/auction/product',[AuctionController::class,'soldProduct']);
+Route::get('/unSold/auction/product',[AuctionController::class,'unSoldProduct']);
