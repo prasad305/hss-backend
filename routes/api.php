@@ -264,7 +264,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-
 // Route for Star Panel
 Route::post('superStar/register', [StarAuthController::class, 'superStar_register']);
 Route::post('star_login', [StarAuthController::class, 'login']);
