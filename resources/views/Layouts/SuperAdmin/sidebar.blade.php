@@ -75,6 +75,33 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a href="{{ route('superAdmin.country.index') }}" class="nav-link">
+          <i class="nav-icon fas fa-th"></i>
+          <p>
+            Country
+          </p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{ route('superAdmin.state.index') }}" class="nav-link">
+          <i class="nav-icon fas fa-th"></i>
+          <p>
+            State
+          </p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{ route('superAdmin.city.index') }}" class="nav-link">
+          <i class="nav-icon fas fa-th"></i>
+          <p>
+            City
+          </p>
+        </a>
+      </li>
+
 
       {{-- Gap For Future --}}
       <div style="height: 150px"></div>

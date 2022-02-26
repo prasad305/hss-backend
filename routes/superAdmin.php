@@ -5,6 +5,9 @@ use App\Http\Controllers\SuperAdmin\ManagerAdminController;
 use App\Http\Controllers\SuperAdmin\AdminController;
 use App\Http\Controllers\SuperAdmin\SuperStarController;
 use App\Http\Controllers\SuperAdmin\CategoryController;
+use App\Http\Controllers\SuperAdmin\CountryController;
+use App\Http\Controllers\SuperAdmin\StateController;
+use App\Http\Controllers\SuperAdmin\CityController;
 use App\Http\Controllers\SuperAdmin\GreetingController;
 use App\Http\Controllers\SuperAdmin\InterestTypeController;
 use App\Http\Controllers\SuperAdmin\SubCategoryController;
@@ -28,6 +31,22 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::resource('greeting-type', GreetingController::class);
     Route::post('admin/greeting-type-active/{id}',[GreetingController::class, 'activeNow'])->name('greetingtype.activeNow');
     Route::post('admin/greeting-type-inactive/{id}', [GreetingController::class, 'inactiveNow'])->name('greetingtype.inactiveNow');
+
+    // Country
+    Route::resource('country', CountryController::class);
+    Route::post('admin/country-active/{id}',[CountryController::class, 'activeNow'])->name('country.activeNow');
+    Route::post('admin/country-inactive/{id}', [CountryController::class, 'inactiveNow'])->name('country.inactiveNow');
+
+    // State
+    Route::resource('state', StateController::class);
+    Route::post('admin/state-active/{id}',[StateController::class, 'activeNow'])->name('state.activeNow');
+    Route::post('admin/state-inactive/{id}', [StateController::class, 'inactiveNow'])->name('state.inactiveNow');
+
+    // City
+    Route::resource('city', CityController::class);
+    Route::get('get-state/{id}',[CityController::class, 'getState'])->name('getState');
+    Route::post('admin/city-active/{id}',[CityController::class, 'activeNow'])->name('city.activeNow');
+    Route::post('admin/city-inactive/{id}', [CityController::class, 'inactiveNow'])->name('city.inactiveNow');
 
     // Interest Type
     Route::resource('interest-type', InterestTypeController::class);
