@@ -15,11 +15,11 @@ class CreateBiddingsTable extends Migration
     {
         Schema::create('biddings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('auction_id');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('auction_id')->nullable();
             $table->string('name');
             $table->integer('amount');
-            $table->boolean('status');
+            $table->boolean('status')->nullable();
             $table->timestamps();
         });
     }

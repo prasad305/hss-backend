@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auction;
+use App\Models\Bidding;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +22,7 @@ class AuctionController extends Controller
             'status' => 'required',
         ]);
 
-        $data = $request->except(['_token', 'product_image','banner']);
+        $data = $request->except(['_token', 'product_image', 'banner']);
 
         if ($request->hasFile('product_image')) {
             $file        = $request->file('product_image');
@@ -44,7 +45,8 @@ class AuctionController extends Controller
         return response()->json($product);
     }
 
-    public function allProduct(){
+    public function allProduct()
+    {
 
         $products = Auction::all();
         return response()->json([
@@ -53,43 +55,75 @@ class AuctionController extends Controller
         ]);
     }
 
-    public function showProduct($id){
+    public function showProduct($id)
+    {
 
         $product = Auction::find($id);
 
         return response()->json([
-            'status' =>'200',
+            'status' => '200',
             'product' => $product
         ]);
     }
 
-    public function totalProduct(){
+    public function totalProduct()
+    {
 
         $product = Auction::count();
         return response()->json($product);
     }
+    public function pendingProduct()
+    {
 
-    public function soldProduct(){
-
-        $product = Auction::where('status',1)->count();
-        return response()->json($product);
+        $product = Auction::where('status', 0)->count();
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+        ]);
     }
 
-    public function unSoldProduct(){
+    public function soldProduct()
+    {
 
-        $product = Auction::where('status',0)->count();
-        return response()->json($product);
+        $product = Auction::where('product_status', 1)->count();
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+        ]);
     }
 
-    public function bidNow(Request $request,$id){
+    public function unSoldProduct()
+    {
 
+        $product = Auction::where('product_status', 0)->count();
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+        ]);
+    }
+
+    public function bidNow(Request $request, $id)
+    {
         $user = User::find($id);
-        
-        if (Hash::check($request->passowrd, $user->password)) {
+        if (Hash::check($request->password, $user->password)) {
+            $bidding = Bidding::create([
 
-            return response()->json("Passowrd Match");
-            
+                'user_id' => $user->id,
+                'name' => $user->first_name,
+                'amount' => $request->amount,
+            ]);
+            return response()->json([
+
+                'status' => 200,
+                'data' => $bidding,
+            ]);
+
         }
+        else{
+            return response()->json([
+                'status' =>201,
+                'message' => 'Passowrd Not Match'
+            ]);
+        } 
     }
-
 }
