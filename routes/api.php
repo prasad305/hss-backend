@@ -293,6 +293,7 @@ Route::post('/add/auction/product', [AuctionController::class, 'addProduct']);
 Route::get('/all/auction/product', [AuctionController::class, 'allProduct']);
 Route::get('/show/auction/product/{id}', [AuctionController::class, 'showProduct']);
 Route::get('/total/auction/product', [AuctionController::class, 'totalProduct']);
+Route::get('/pending/auction/product', [AuctionController::class, 'pendingProduct']);
 Route::get('/sold/auction/product', [AuctionController::class, 'soldProduct']);
 Route::get('/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
 Route::post('/bidding/auction/product/{id}', [AuctionController::class, 'bidNow']);
