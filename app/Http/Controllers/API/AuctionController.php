@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auction;
 use App\Models\Bidding;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,6 +14,8 @@ class AuctionController extends Controller
 {
     public function addProduct(Request $request)
     {
+       return response()->json($request->all());
+       
         $request->validate([
 
             'name' => 'required',
@@ -21,15 +24,27 @@ class AuctionController extends Controller
             'details' => 'required',
             'status' => 'required',
         ]);
-
+   
         $data = $request->except(['_token', 'product_image', 'banner']);
 
         if ($request->hasFile('product_image')) {
-            $file        = $request->file('product_image');
+
+                $images = [];
+        foreach($request->file('product_image') as $image)
+        {
+            $destinationPath = 'uploads/images/auction';
+            $filename = $image->getClientOriginalName();
+            $image->move($destinationPath, $filename);
+            $product_images = array_push($images, $filename);
+            $data['product_image'] = $product_images;     
+
+        }
+
+            /* $file        = $request->file('product_image');
             $path        = 'uploads/images/auction';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
-            $data['product_image'] = $path . '/' . $file_name;
+            $data['product_image'] = $path . '/' . $file_name; */
         }
 
         if ($request->hasFile('banner')) {
@@ -39,7 +54,7 @@ class AuctionController extends Controller
             $file->move($path, $file_name);
             $data['banner'] = $path . '/' . $file_name;
         }
-
+  
         $product = Auction::create($data);
 
         return response()->json($product);
