@@ -9,12 +9,24 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Facades\Image;
 
 class AuctionController extends Controller
 {
+    
     public function addProduct(Request $request)
+    
     {
-       return response()->json($request->all());
+
+        // $data = $request->only('name','email','mobile_number');
+        // $test['token'] = time();
+        // $test['name'] = json_encode($data);
+        // Auction::insert($test);
+        // return response()->json('Great! Successfully store data in json format in datbase');
+ 
+       //return response()->json($request->all());
+
+
        
         $request->validate([
 
@@ -29,22 +41,28 @@ class AuctionController extends Controller
 
         if ($request->hasFile('product_image')) {
 
-                $images = [];
+            // $name = time().'.' . explode('/', explode(':', substr($request->product_image, 0, strpos($request->product_image, ';')))[1])[1];
+            // Image::make($request->product_image)->save(public_path('uploads/images/auction').$name);
+            // return response()->json("OK");
+      
+        /*         $images = [];
         foreach($request->file('product_image') as $image)
         {
             $destinationPath = 'uploads/images/auction';
             $filename = $image->getClientOriginalName();
             $image->move($destinationPath, $filename);
-            $product_images = array_push($images, $filename);
-            $data['product_image'] = $product_images;     
-
+            array_push($images, $filename);
+            
         }
-
-            /* $file        = $request->file('product_image');
+        $data['product_image'] = json_encode($images);     
+ */
+            $file        = $request->file('product_image');
             $path        = 'uploads/images/auction';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
-            $data['product_image'] = $path . '/' . $file_name; */
+            $data['product_image'] = $path . '/' . $file_name;
+            
+            
         }
 
         if ($request->hasFile('banner')) {
@@ -58,7 +76,8 @@ class AuctionController extends Controller
         $product = Auction::create($data);
 
         return response()->json($product);
-    }
+    
+}
 
     public function allProduct()
     {
