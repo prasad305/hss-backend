@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Marketplace extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'title',
+        'description',
+        'unit_price',
+        'total_items',
+        'keywords',
+        'image',
+        'status',
+    ];
 }

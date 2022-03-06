@@ -8,6 +8,7 @@ use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\SubCategoryController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\GreetingController;
+use App\Http\Controllers\API\MarketplaceController;
 use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\API\SimplePostController;
@@ -119,6 +120,10 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
         return response()->json(['message' => 'You are in as Admin', 'status' => 200], 200);
     });
 
+    // Marketplace Section
+    Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
+    // Route::get('/admin/simple_post/all', [SimplePostController::class, 'all']);
+
     // Simple Post Section
     Route::post('admin/add_simple_post', [SimplePostController::class, 'add']);
     Route::get('/admin/simple_post/all', [SimplePostController::class, 'all']);
@@ -193,6 +198,10 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     Route::get('/livechat', [LiveChatController::class, 'livechat']);
     Route::get('/sinlgeLiveChat/{id}', [LiveChatController::class, 'sinlgeLiveChat']);
+
+    // Marketplace Section
+    Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);
+    // Route::get('/admin/simple_post/all', [SimplePostController::class, 'all']);
 
 
     // Simple Post Section
