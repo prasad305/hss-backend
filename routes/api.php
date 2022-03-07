@@ -122,7 +122,9 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
-    // Route::get('/admin/simple_post/all', [SimplePostController::class, 'all']);
+    Route::get('/admin/marketplace/product-list/approved', [MarketplaceController::class, 'allProductList']);
+    Route::get('/admin/marketplace/product-list/pending', [MarketplaceController::class, 'pendingProductList']);
+    Route::get('/admin/marketplace/product-list/live', [MarketplaceController::class, 'liveProductList']);
 
     // Simple Post Section
     Route::post('admin/add_simple_post', [SimplePostController::class, 'add']);

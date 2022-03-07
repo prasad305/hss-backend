@@ -80,4 +80,34 @@ class MarketplaceController extends Controller
             'message' => 'Marketplace Added Successfully',
         ]);
     }
+
+    public function allProductList(){
+        $approved = Marketplace::where('status', 1)->get();
+        
+        return response()->json([
+            'status' => 200,
+            'approved' => $approved,
+        ]);
+    }
+
+    public function liveProductList(){
+        $live = Marketplace::whereColumn('total_items','>','total_selling')->where('status',1)->get();
+
+
+        // $live = Marketplace::where('status', 1)->get();
+        
+        return response()->json([
+            'status' => 200,
+            'live' => $live,
+        ]);
+    }
+
+    public function pendingProductList(){
+        $pending = Marketplace::where('status', 0)->get();
+
+        return response()->json([
+            'status' => 200,
+            'pending' => $pending,
+        ]);
+    }
 }
