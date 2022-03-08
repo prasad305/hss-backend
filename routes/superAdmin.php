@@ -7,6 +7,7 @@ use App\Http\Controllers\SuperAdmin\SuperStarController;
 use App\Http\Controllers\SuperAdmin\CategoryController;
 use App\Http\Controllers\SuperAdmin\CountryController;
 use App\Http\Controllers\SuperAdmin\StateController;
+use App\Http\Controllers\SuperAdmin\MarketplaceController;
 use App\Http\Controllers\SuperAdmin\CityController;
 use App\Http\Controllers\SuperAdmin\GreetingController;
 use App\Http\Controllers\SuperAdmin\InterestTypeController;
@@ -31,6 +32,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::resource('greeting-type', GreetingController::class);
     Route::post('admin/greeting-type-active/{id}',[GreetingController::class, 'activeNow'])->name('greetingtype.activeNow');
     Route::post('admin/greeting-type-inactive/{id}', [GreetingController::class, 'inactiveNow'])->name('greetingtype.inactiveNow');
+
+    // Greeting Type
+    Route::resource('marketplace', MarketplaceController::class);
+    Route::post('admin/marketplace-type-active/{id}',[MarketplaceController::class, 'activeNow'])->name('marketplace.activeNow');
+    Route::post('admin/marketplace-type-inactive/{id}', [MarketplaceController::class, 'inactiveNow'])->name('marketplace.inactiveNow');
 
     // Country
     Route::resource('country', CountryController::class);
