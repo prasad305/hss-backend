@@ -313,3 +313,4 @@ Route::get('/pending/auction/product', [AuctionController::class, 'pendingProduc
 Route::get('/sold/auction/product', [AuctionController::class, 'soldProduct']);
 Route::get('/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
 Route::post('/bidding/auction/product/{id}', [AuctionController::class, 'bidNow']);
+Route::get('/live/allProduct', [AuctionController::class, 'allLiveProduct']);
