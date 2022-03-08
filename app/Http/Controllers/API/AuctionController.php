@@ -99,6 +99,8 @@ public function editProduct($id){
 
 public function updateProduct(Request $request,$id){
 
+    return response()->json($request->name);
+
     $request->validate([
 
         'name' => 'required',
@@ -151,6 +153,20 @@ public function updateProduct(Request $request,$id){
             'product' => $products
         ]);
     }
+    public function allLiveProduct()
+    {
+        $totolBidding = Bidding::count();
+        $maxBidding = Bidding::max('amount');
+        $products = Auction::with('bidding')->where('status',1)->get();
+
+        return response()->json([
+            'status' => '200',
+            'products' => $products,
+            'totolBidding' => $totolBidding,
+            'maxBidding' => $maxBidding
+        ]);
+    }
+
 
     public function showProduct($id)
     {
