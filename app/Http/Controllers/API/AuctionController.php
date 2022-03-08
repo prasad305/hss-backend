@@ -78,6 +78,69 @@ class AuctionController extends Controller
         return response()->json($product);
     
 }
+public function editOrConfirm(){
+
+    $product = Auction::latest()->first();
+    return response()->json([
+        'status' => 200,
+        'product' => $product
+    ]);
+
+    
+}
+public function editProduct($id){
+    $product = Auction::findOrFail($id);
+    return response()->json([
+        'status' => 200,
+        'product'=>$product
+
+    ]);
+}
+
+public function updateProduct(Request $request,$id){
+
+    $request->validate([
+
+        'name' => 'required',
+        'title' => 'required',
+        'base_price' => 'required',
+        'details' => 'required',
+        'status' => 'required',
+    ]);
+
+    $data = $request->except(['_token', 'product_image', 'banner']);
+
+    if ($request->hasFile('product_image'))
+
+    {$file        = $request->file('product_image');
+        $path        = 'uploads/images/auction';
+        $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+        $file->move($path, $file_name);
+        $data['product_image'] = $path . '/' . $file_name;
+        
+        
+    }
+
+    if ($request->hasFile('banner')) {
+        $file        = $request->file('banner');
+        $path        = 'uploads/images/auction';
+        $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+        $file->move($path, $file_name);
+        $data['banner'] = $path . '/' . $file_name;
+    }
+
+    $product = Auction::findOrfail($id)->update([
+        'name' => $request->name,
+        'title'=>$request->title,
+        'base_price'=>$request->base_price,
+        'details'=>$request->status,
+        'status'=>$request->status,
+    ]);
+
+
+    return response()->json($product);
+
+}
 
     public function allProduct()
     {
