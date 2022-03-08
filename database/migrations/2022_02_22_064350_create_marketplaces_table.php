@@ -17,14 +17,16 @@ class CreateMarketplacesTable extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
-            $table->text('description')->nullable();
+            $table->string('description')->nullable();
             $table->string('unit_price')->nullable();
             $table->string('total_items')->nullable();
             $table->string('total_selling')->nullable();
             $table->string('superstar_id')->nullable();
             $table->string('keywords')->nullable();
             $table->string('status')->nullable();
-            $table->text('image')->nullable();
+            $table->string('image')->nullable();
+            $table->string('expire_date')->nullable();
+            $table->string('expire_time')->nullable();
             $table->timestamps();
         });
     }
