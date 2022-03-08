@@ -22,11 +22,12 @@ class CreateMarketplacesTable extends Migration
             $table->string('total_items')->nullable();
             $table->string('total_selling')->nullable();
             $table->string('superstar_id')->nullable();
+            $table->string('superstar_admin_id')->nullable();
             $table->string('keywords')->nullable();
-            $table->string('status')->nullable();
+            $table->string('post_status')->nullable();
+            $table->string('status')->default(0);
             $table->string('image')->nullable();
-            $table->string('expire_date')->nullable();
-            $table->string('expire_time')->nullable();
+            $table->string('approved_date')->nullable();
             $table->timestamps();
         });
     }

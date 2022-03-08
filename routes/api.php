@@ -203,7 +203,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     // Marketplace Section
     Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);
-    // Route::get('/admin/simple_post/all', [SimplePostController::class, 'all']);
+    Route::get('/star/marketplace/product-list/approved', [MarketplaceController::class, 'allStarProductList']);
+    Route::get('/star/marketplace/product-list/pending', [MarketplaceController::class, 'pendingStarProductList']);
+    Route::get('/star/marketplace/product-list/live', [MarketplaceController::class, 'liveStarProductList']);
 
 
     // Simple Post Section
