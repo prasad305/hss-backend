@@ -102,6 +102,15 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a href="{{ route('superAdmin.marketplace.index') }}" class="nav-link">
+          <i class="nav-icon fas fa-th"></i>
+          <p>
+            Marketplace
+          </p>
+        </a>
+      </li>
+
 
       {{-- Gap For Future --}}
       <div style="height: 150px"></div>
