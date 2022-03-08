@@ -301,6 +301,9 @@ Route::get('checkchoice', [CategoryController::class, 'check']);
 //<======================== Auction Route ========================>
 
 Route::post('/add/auction/product', [AuctionController::class, 'addProduct']);
+Route::get('/editOrConfirm/auction/editOrConfirm', [AuctionController::class, 'editOrConfirm']);
+Route::get('/edit/auction/{id}', [AuctionController::class, 'editProduct']);
+Route::put('/update/auction/{id}', [AuctionController::class, 'updateProduct']);
 Route::get('/all/auction/product', [AuctionController::class, 'allProduct']);
 Route::get('/show/auction/product/{id}', [AuctionController::class, 'showProduct']);
 Route::get('/total/auction/product', [AuctionController::class, 'totalProduct']);
