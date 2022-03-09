@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\DashboardController;
 use App\Http\Controllers\SuperAdmin\ManagerAdminController;
 use App\Http\Controllers\SuperAdmin\AdminController;
@@ -17,7 +18,7 @@ use App\Models\Slider;
 use Illuminate\Support\Facades\Route;
 
 // Super Admin route
-Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth','superAdmin']], function () {
+Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin']], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
@@ -28,35 +29,38 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // category
     Route::resource('category', CategoryController::class);
 
+    //audtion
+    Route::resource('audition', AuditionController::class);
+
     // Greeting Type
     Route::resource('greeting-type', GreetingController::class);
-    Route::post('admin/greeting-type-active/{id}',[GreetingController::class, 'activeNow'])->name('greetingtype.activeNow');
+    Route::post('admin/greeting-type-active/{id}', [GreetingController::class, 'activeNow'])->name('greetingtype.activeNow');
     Route::post('admin/greeting-type-inactive/{id}', [GreetingController::class, 'inactiveNow'])->name('greetingtype.inactiveNow');
 
     // Greeting Type
     Route::resource('marketplace', MarketplaceController::class);
-    Route::post('admin/marketplace-type-active/{id}',[MarketplaceController::class, 'activeNow'])->name('marketplace.activeNow');
+    Route::post('admin/marketplace-type-active/{id}', [MarketplaceController::class, 'activeNow'])->name('marketplace.activeNow');
     Route::post('admin/marketplace-type-inactive/{id}', [MarketplaceController::class, 'inactiveNow'])->name('marketplace.inactiveNow');
 
     // Country
     Route::resource('country', CountryController::class);
-    Route::post('admin/country-active/{id}',[CountryController::class, 'activeNow'])->name('country.activeNow');
+    Route::post('admin/country-active/{id}', [CountryController::class, 'activeNow'])->name('country.activeNow');
     Route::post('admin/country-inactive/{id}', [CountryController::class, 'inactiveNow'])->name('country.inactiveNow');
 
     // State
     Route::resource('state', StateController::class);
-    Route::post('admin/state-active/{id}',[StateController::class, 'activeNow'])->name('state.activeNow');
+    Route::post('admin/state-active/{id}', [StateController::class, 'activeNow'])->name('state.activeNow');
     Route::post('admin/state-inactive/{id}', [StateController::class, 'inactiveNow'])->name('state.inactiveNow');
 
     // City
     Route::resource('city', CityController::class);
-    Route::get('get-state/{id}',[CityController::class, 'getState'])->name('getState');
-    Route::post('admin/city-active/{id}',[CityController::class, 'activeNow'])->name('city.activeNow');
+    Route::get('get-state/{id}', [CityController::class, 'getState'])->name('getState');
+    Route::post('admin/city-active/{id}', [CityController::class, 'activeNow'])->name('city.activeNow');
     Route::post('admin/city-inactive/{id}', [CityController::class, 'inactiveNow'])->name('city.inactiveNow');
 
     // Interest Type
     Route::resource('interest-type', InterestTypeController::class);
-    Route::post('admin/interest-type-active/{id}',[InterestTypeController::class, 'activeNow'])->name('interestType.activeNow');
+    Route::post('admin/interest-type-active/{id}', [InterestTypeController::class, 'activeNow'])->name('interestType.activeNow');
     Route::post('admin/interest-type-inactive/{id}', [InterestTypeController::class, 'inactiveNow'])->name('interestType.inactiveNow');
 
     // subCategory
@@ -78,10 +82,9 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('admin/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('admin.inactiveNow');
 
 
-    Route::get('admin/starlist',[AdminController::class, 'starlist'])->name('admin.starlist');
+    Route::get('admin/starlist', [AdminController::class, 'starlist'])->name('admin.starlist');
 
     Route::resource('star', SuperStarController::class);
-    Route::post('star/active/{id}',[SuperStarController::class, 'activeNow'])->name('star.activeNow');
+    Route::post('star/active/{id}', [SuperStarController::class, 'activeNow'])->name('star.activeNow');
     Route::post('star/inactive/{id}', [SuperStarController::class, 'inactiveNow'])->name('star.inactiveNow');
-
 });
