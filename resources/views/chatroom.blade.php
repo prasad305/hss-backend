@@ -262,7 +262,7 @@
 
             $(function(){
                 var user_id = {{Auth::id()}};
-                var socket = io("http://localhost:3000",{query:{user_id}});
+                var socket = io("http://localhost:5000",{query:{user_id}});
 
                 socket.on('user_connected', function(data){
                     //alert(data);

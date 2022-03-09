@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
         $user->password = Hash::make('12345');
         $user->user_type = 'super-admin'; // SUPER Admin user_type == 'super-admin'
         $user->status = 1;
-        $user->otp = rand(100000, 999999);
+        $user->otp = '123456';
         $user->save();
 
         $user = new User();
@@ -36,18 +36,7 @@ class UserSeeder extends Seeder
         $user->password = Hash::make('12345');
         $user->user_type = 'manager-admin'; // Manager Admin user_type == 'manager-admin'
         $user->status = 1;
-        $user->otp = rand(100000, 999999);
-        $user->save();
-
-        $user = new User();
-        $user->first_name = 'Mizanur Rahman';
-        $user->last_name = 'Raihan';
-        $user->email = 'raihan@gmail.com';
-        $user->phone = '01871006624';
-        $user->password = Hash::make('12345');
-        $user->user_type = 'admin'; // Admin user_type == 'admin'
-        $user->status = 1;
-        $user->otp = rand(100000, 999999);
+        $user->otp = '123456';
         $user->save();
 
         $user = new User();
@@ -55,37 +44,48 @@ class UserSeeder extends Seeder
         $user->last_name = 'Al Hasan';
         $user->email = 'shakib75@gmail.com';
         $user->image = '';
-        $user->phone = '01749969029';
+        $user->phone = '01700000003';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
         $user->status = 1;
-        $user->otp = rand(100000, 999999);
+        $user->otp = '123456';
         $user->save();
 
-        
 
         $user = new User();
-        $user->first_name = 'Shakib';
-        $user->last_name = 'All Hasan';
-        $user->email = 'star-crirket@gmail.com';
-        $user->image = 'uploads/images/users/Shakibpro.png';
+        $user->first_name = 'Mizanur Rahman';
+        $user->last_name = 'Raihan';
+        $user->email = 'raihan@gmail.com';
+        $user->phone = '01700000002';
+        $user->password = Hash::make('12345');
+        $user->user_type = 'admin'; // Admin user_type == 'admin'
+        $user->status = 1;
+        $user->otp = '123456';
+        $user->save();
+
+
+        $user = new User();
+        $user->first_name = 'Mizanur Rahman';
+        $user->last_name = 'Azhari';
+        $user->email = 'azhari@gmail.com';
+        $user->image = 'uploads/images/users/1642919728.jpg';
         $user->phone = '01700000004';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
         $user->status = 1;
-        $user->otp = rand(100000, 999999);
+        $user->otp = '123456';
         $user->save();
 
         $user = new User();
         $user->first_name = 'Momtaz';
         $user->last_name = 'Begum';
-        $user->email = 'star-song@gmail.com';
+        $user->email = 'momtaj@gmail.com';
         $user->image = 'uploads/images/users/Momtaz-Begum-photo.jpg';
         $user->phone = '01700000005';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
         $user->status = 1;
-        $user->otp = rand(100000, 999999);
+        $user->otp = '123456';
         $user->save();
 
         $user = new User();
@@ -97,7 +97,7 @@ class UserSeeder extends Seeder
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
         $user->status = 1;
-        $user->otp = rand(100000, 999999);
+        $user->otp = '123456';
         $user->save();
 
         $user = new User();
@@ -109,7 +109,7 @@ class UserSeeder extends Seeder
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
         $user->status = 1;
-        $user->otp = rand(100000, 999999);
+        $user->otp = '123456';
         $user->save();
 
         $user = new User();
@@ -121,22 +121,21 @@ class UserSeeder extends Seeder
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
         $user->status = 1;
-        $user->otp = rand(100000, 999999);
+        $user->otp = '123456';
         $user->save();
 
+        $user = new User();
+        $user->first_name = 'Mr.';
+        $user->last_name = 'User';
+        $user->email = 'user1@gmail.com';
+        $user->image = 'uploads/images/users/lzg-1643882523.jpg';
+        $user->cover_photo = 'uploads/images/users/1642659396.jpg';
+        $user->phone = '01700000008';
+        $user->password = Hash::make('12345');
+        $user->user_type = 'star';
+        $user->status = 1;
+        $user->otp = '123456';
+        $user->save();
 
-
-        for ($i = 1; $i < 6; $i++) {
-            $user = new User();
-            $user->first_name = 'Mr. ';
-            $user->last_name = 'User' . $i;
-            $user->email = 'user' . $i . '@gmail.com';
-            $user->phone = '017011111' . $i;
-            $user->password = Hash::make('12345');
-            $user->user_type = 'user';
-            $user->status = 1;
-            $user->otp = rand(100000, 999999);
-            $user->save();
-        }
     }
 }
