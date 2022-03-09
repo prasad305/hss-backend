@@ -19,6 +19,7 @@ class StarAuthController extends Controller
 {
     public function register(Request $request)
     {
+        return $request;
 
         $validator = Validator::make($request->all(),[
             // 'email' => 'required|unique:users,email',
@@ -46,6 +47,29 @@ class StarAuthController extends Controller
 
             if($request->hasfile('image'))
             {
+                $destination = $user->image;
+                if(File::exists($destination))
+                {
+                    File::delete($destination);
+                }
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/users/'.time(). '.' . $extension;
+
+                Image::make($file)->resize(400,400)
+                ->save($filename, 100);
+
+                $user->image = $filename;
+            }
+
+            if($request->hasfile('imagem[]'))
+            {
+
+                return response()->json([
+                    'status'=>200,
+                    'message'=> 'Multi Image Working',
+                ]);
+
                 $destination = $user->image;
                 if(File::exists($destination))
                 {

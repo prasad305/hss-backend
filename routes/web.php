@@ -37,6 +37,9 @@ Route::get('/', function () {
 })->name('forntend.index');
 
 
+Route::get('/chat', function () {
+    return view('chatroom');
+});
 
 
 
