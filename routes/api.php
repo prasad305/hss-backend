@@ -188,6 +188,22 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
     //Sent Notification to user
     Route::post('/admin/sent_notofiaction_user', [GreetingController::class, 'sentNotificationToUser']);
+
+    //<======================== Auction Route ========================>
+
+    Route::post('/admin/add/auction/product', [AuctionController::class, 'addProduct']);
+    Route::get('/admin/editOrConfirm/auction/editOrConfirm', [AuctionController::class, 'editOrConfirm']);
+    Route::get('/admin/edit/auction/{id}', [AuctionController::class, 'editProduct']);
+    Route::put('/admin/update/auction/{id}', [AuctionController::class, 'updateProduct']);
+    Route::get('/admin/all/auction/product', [AuctionController::class, 'allProduct']);
+    Route::get('/admin/show/auction/product/{id}', [AuctionController::class, 'showProduct']);
+    Route::get('/admin/total/auction/product', [AuctionController::class, 'totalProduct']);
+    Route::get('/admin/pending/auction/product', [AuctionController::class, 'pendingProduct']);
+    Route::get('/admin/sold/auction/product', [AuctionController::class, 'soldProduct']);
+    Route::get('/admin/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
+    Route::post('/admin/bidding/auction/product/{id}', [AuctionController::class, 'bidNow']);
+    Route::get('/admin/live/allProduct', [AuctionController::class, 'allLiveProduct']);
+
 });
 
 
@@ -258,6 +274,22 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/greetings_reg_list/{greetings_id}', [GreetingController::class, 'greetingsRegisterListByGreetingsId']);
 
     Route::get('/star/greetings_reg_payment_list/{greetings_id}', [GreetingController::class, 'greetingsRegisterWithPaymentList']);
+
+    //<======================== Auction Route ========================>
+
+    Route::post('/star/add/auction/product', [AuctionController::class, 'star_addProduct']);
+    Route::get('/star/editOrConfirm/auction/editOrConfirm', [AuctionController::class, 'star_editOrConfirm']);
+    Route::get('/star/edit/auction/{id}', [AuctionController::class, 'star_editProduct']);
+    Route::put('/star/update/auction/{id}', [AuctionController::class, 'star_updateProduct']);
+    Route::get('/star/all/auction/product', [AuctionController::class, 'star_allProduct']);
+    Route::get('/star/show/auction/product/{id}', [AuctionController::class, 'star_showProduct']);
+    Route::get('/star/total/auction/product', [AuctionController::class, 'star_totalProduct']);
+    Route::get('/star/pending/auction/product', [AuctionController::class, 'star_pendingProduct']);
+    Route::get('/star/pending/auction/product/all', [AuctionController::class, 'star_pendingProductShow']);
+    Route::get('/star/sold/auction/product', [AuctionController::class, 'star_soldProduct']);
+    Route::get('/star/unSold/auction/product', [AuctionController::class, 'star_unSoldProduct']);
+    Route::post('/star/bidding/auction/product/{id}', [AuctionController::class, 'star_bidNow']);
+    Route::get('/star/live/allProduct', [AuctionController::class, 'star_allLiveProduct']);
 });
 
 
@@ -300,17 +332,3 @@ Route::get('submit_react/{id}', [UserController::class, 'submit_react']);
 Route::get('check_react/{id}', [UserController::class, 'check_react']);
 Route::get('checkchoice', [CategoryController::class, 'check']);
 
-//<======================== Auction Route ========================>
-
-Route::post('/add/auction/product', [AuctionController::class, 'addProduct']);
-Route::get('/editOrConfirm/auction/editOrConfirm', [AuctionController::class, 'editOrConfirm']);
-Route::get('/edit/auction/{id}', [AuctionController::class, 'editProduct']);
-Route::put('/update/auction/{id}', [AuctionController::class, 'updateProduct']);
-Route::get('/all/auction/product', [AuctionController::class, 'allProduct']);
-Route::get('/show/auction/product/{id}', [AuctionController::class, 'showProduct']);
-Route::get('/total/auction/product', [AuctionController::class, 'totalProduct']);
-Route::get('/pending/auction/product', [AuctionController::class, 'pendingProduct']);
-Route::get('/sold/auction/product', [AuctionController::class, 'soldProduct']);
-Route::get('/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
-Route::post('/bidding/auction/product/{id}', [AuctionController::class, 'bidNow']);
-Route::get('/live/allProduct', [AuctionController::class, 'allLiveProduct']);
