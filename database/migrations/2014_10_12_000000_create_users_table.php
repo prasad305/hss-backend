@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable();
             $table->unsignedBigInteger('parent_user')->nullable();
             $table->integer('category_id')->nullable();
+            $table->integer('is_online')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -21,6 +21,8 @@ class LearningSessionRegistration extends Model
         'account_no',
     ];
 
+    protected $with = ['user', 'learningSession'];
+
     public function learningSession()
     {
         return $this->belongsTo(LearningSession::class, 'learning_session_id');

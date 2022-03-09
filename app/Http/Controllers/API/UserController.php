@@ -155,6 +155,18 @@ class UserController extends Controller
         ]);
     }
 
+    public function registeredLearningSession()
+    {
+
+        $post = LearningSessionRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'events' => $post,
+        ]);
+    }
+
     public function registeredMeetup()
     {
 
