@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\API\AuctionController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\LiveChatController;
 use App\Http\Controllers\API\StarAuthController;
@@ -8,6 +8,7 @@ use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\SubCategoryController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\GreetingController;
+use App\Http\Controllers\API\MarketplaceController;
 use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\API\SimplePostController;
@@ -122,6 +123,12 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
         return response()->json(['message' => 'You are in as Admin', 'status' => 200], 200);
     });
 
+    // Marketplace Section
+    Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
+    Route::get('/admin/marketplace/product-list/approved', [MarketplaceController::class, 'allProductList']);
+    Route::get('/admin/marketplace/product-list/pending', [MarketplaceController::class, 'pendingProductList']);
+    Route::get('/admin/marketplace/product-list/live', [MarketplaceController::class, 'liveProductList']);
+
     // Simple Post Section
     Route::post('admin/add_simple_post', [SimplePostController::class, 'add']);
     Route::get('/admin/simple_post/all', [SimplePostController::class, 'all']);
@@ -197,6 +204,12 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/livechat', [LiveChatController::class, 'livechat']);
     Route::get('/sinlgeLiveChat/{id}', [LiveChatController::class, 'sinlgeLiveChat']);
 
+    // Marketplace Section
+    Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);
+    Route::get('/star/marketplace/product-list/approved', [MarketplaceController::class, 'allStarProductList']);
+    Route::get('/star/marketplace/product-list/pending', [MarketplaceController::class, 'pendingStarProductList']);
+    Route::get('/star/marketplace/product-list/live', [MarketplaceController::class, 'liveStarProductList']);
+
 
     // Simple Post Section
     Route::post('/star/add_simple_post', [SimplePostController::class, 'star_add']);
@@ -267,7 +280,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-
 // Route for Star Panel
 Route::post('superStar/register', [StarAuthController::class, 'superStar_register']);
 Route::post('star_login', [StarAuthController::class, 'login']);
@@ -290,3 +302,18 @@ Route::post('select_star', [SubCategoryController::class, 'select_star']);
 Route::get('submit_react/{id}', [UserController::class, 'submit_react']);
 Route::get('check_react/{id}', [UserController::class, 'check_react']);
 Route::get('checkchoice', [CategoryController::class, 'check']);
+
+//<======================== Auction Route ========================>
+
+Route::post('/add/auction/product', [AuctionController::class, 'addProduct']);
+Route::get('/editOrConfirm/auction/editOrConfirm', [AuctionController::class, 'editOrConfirm']);
+Route::get('/edit/auction/{id}', [AuctionController::class, 'editProduct']);
+Route::put('/update/auction/{id}', [AuctionController::class, 'updateProduct']);
+Route::get('/all/auction/product', [AuctionController::class, 'allProduct']);
+Route::get('/show/auction/product/{id}', [AuctionController::class, 'showProduct']);
+Route::get('/total/auction/product', [AuctionController::class, 'totalProduct']);
+Route::get('/pending/auction/product', [AuctionController::class, 'pendingProduct']);
+Route::get('/sold/auction/product', [AuctionController::class, 'soldProduct']);
+Route::get('/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
+Route::post('/bidding/auction/product/{id}', [AuctionController::class, 'bidNow']);
+Route::get('/live/allProduct', [AuctionController::class, 'allLiveProduct']);
