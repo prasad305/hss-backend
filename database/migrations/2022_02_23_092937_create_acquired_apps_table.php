@@ -6,11 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateAcquiredAppsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+    
     public function up()
     {
         Schema::create('acquired_apps', function (Blueprint $table) {
@@ -23,12 +19,7 @@ class CreateAcquiredAppsTable extends Migration
             $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+  
     public function down()
     {
         Schema::dropIfExists('acquired_apps');
