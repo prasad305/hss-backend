@@ -15,6 +15,11 @@ class CreateAudtionMarksTable extends Migration
     {
         Schema::create('audtion_marks', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('judge_id')->nullable();
+            $table->unsignedBigInteger('participant_id')->nullable();
+            $table->string('marks')->nullable();
+            $table->text('comments')->nullable();
+            $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
             $table->timestamps();
         });
     }

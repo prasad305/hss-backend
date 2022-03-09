@@ -15,6 +15,11 @@ class CreateFilterVideosTable extends Migration
     {
         Schema::create('filter_videos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('audition_id')->nullable();
+            $table->unsignedBigInteger('admin_id')->nullable();
+            $table->unsignedBigInteger('participant_id')->nullable();
+            $table->text('comments')->nullable();
+            $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
             $table->timestamps();
         });
     }

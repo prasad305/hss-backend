@@ -15,6 +15,11 @@ class CreateAudtionAppealsTable extends Migration
     {
         Schema::create('audtion_appeals', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('audition_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->date('appeal_date_line')->nullable();
+            $table->text('video_url')->nullable();
+            $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
             $table->timestamps();
         });
     }
