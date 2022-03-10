@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ManagerAdmin\AdminController;
+use App\Http\Controllers\ManagerAdmin\JobAssign;
 use App\Http\Controllers\ManagerAdmin\DashboardController;
 use App\Http\Controllers\ManagerAdmin\LiveChatController;
 use App\Http\Controllers\ManagerAdmin\LiveEventController;
@@ -36,6 +37,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::resource('admin', AdminController::class);
     Route::post('admin/active/{id}', [AdminController::class, 'activeNow'])->name('admin.activeNow');
     Route::post('admin/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('admin.inactiveNow');
+    Route::get('admin-assinged', [AdminController::class, 'assinged'])->name('admin_assinged');
+    Route::get('admin-free', [AdminController::class, 'notAssinged'])->name('admin_notAssinged');
 
 
     // Live route
@@ -84,4 +87,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('learningSession/edit/{id}', [LearningSessionController::class, 'edit'])->name('learningSession.edit');
     Route::put('learningSession/edit/{id}', [LearningSessionController::class, 'update'])->name('learningSession.update');
     Route::get('learningSession/set_publish/{id}', [LearningSessionController::class, 'manager_event_set_publish'])->name('learningSession.set_publish');
+
+    //audition create
+    Route::post('audition-assign/{admin_id}', [JobAssign::class, 'auditionStore'])->name('AuditionAssign');
 });
