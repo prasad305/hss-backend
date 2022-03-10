@@ -283,12 +283,16 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::post('/star/add/auction/product', [AuctionController::class, 'star_addProduct']);
     Route::get('/star/editOrConfirm/auction/editOrConfirm', [AuctionController::class, 'star_editOrConfirm']);
     Route::get('/star/edit/auction/{id}', [AuctionController::class, 'star_editProduct']);
+    Route::get('/star/approvedOrDecline/auction/{id}', [AuctionController::class, 'star_approvedOrDecline']);
+    Route::put('/star/approved/auction/{id}', [AuctionController::class, 'star_approved']);
     Route::put('/star/update/auction/{id}', [AuctionController::class, 'star_updateProduct']);
     Route::get('/star/all/auction/product', [AuctionController::class, 'star_allProduct']);
     Route::get('/star/show/auction/product/{id}', [AuctionController::class, 'star_showProduct']);
     Route::get('/star/total/auction/product', [AuctionController::class, 'star_totalProduct']);
     Route::get('/star/pending/auction/product', [AuctionController::class, 'star_pendingProduct']);
-    Route::get('/star/pending/auction/product/all', [AuctionController::class, 'star_pendingProductShow']);
+    Route::get('/star/pending/auction/product/all', [AuctionController::class, 'star_pendingProductList']);
+    Route::get('/star/unSold/auction/product/all', [AuctionController::class, 'star_unSoldProductList']);
+    Route::get('/star/sold/auction/product/all', [AuctionController::class, 'star_soldProductList']);
     Route::get('/star/sold/auction/product', [AuctionController::class, 'star_soldProduct']);
     Route::get('/star/unSold/auction/product', [AuctionController::class, 'star_unSoldProduct']);
     Route::post('/star/bidding/auction/product/{id}', [AuctionController::class, 'star_bidNow']);

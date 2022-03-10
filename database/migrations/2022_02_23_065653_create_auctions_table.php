@@ -15,6 +15,7 @@ class CreateAuctionsTable extends Migration
     {
         Schema::create('auctions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('created_by_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
             $table->string('name');
             $table->string('title');
@@ -29,6 +30,7 @@ class CreateAuctionsTable extends Migration
             $table->timestamp('bid_from')->nullable();
             $table->timestamp('bid_to')->nullable();
             $table->boolean('status')->nullable();
+            $table->boolean('star_approval')->default(0)->comment('0=pending,1=approved');
             $table->boolean('product_status')->default(0)->comment('0=unsold,1=sold');
             $table->timestamps();
         });

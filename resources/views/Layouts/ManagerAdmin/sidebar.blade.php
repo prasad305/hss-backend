@@ -51,6 +51,35 @@
         </ul>
       </li>
 
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="nav-icon fas fa-chart-pie"></i>
+          <p>Auction
+            <i class="right fas fa-angle-left"></i>
+          </p>
+        </a>
+        <ul class="nav nav-treeview">
+          <li class="nav-item">
+            <a href="{{ route('managerAdmin.auctionProduct.published') }}" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Published</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route('managerAdmin.auctionProduct.pending') }}" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Pending</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route('managerAdmin.auctionProduct.all') }}" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>All</p>
+            </a>
+          </li>
+        </ul>
+      </li>
+
 
       <li class="nav-item">
         <a href="#" class="nav-link">

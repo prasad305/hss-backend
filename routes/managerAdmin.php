@@ -7,6 +7,7 @@ use App\Http\Controllers\ManagerAdmin\LiveEventController;
 use App\Http\Controllers\ManagerAdmin\LearningSessionController;
 use App\Http\Controllers\ManagerAdmin\SimplePostController;
 use App\Http\Controllers\API\MeetupEventController;
+use App\Http\Controllers\ManagerAdmin\AuctionController;
 use Illuminate\Support\Facades\Route;
 
 // manager Admin route
@@ -55,6 +56,17 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('post/edit/{id}', [SimplePostController::class, 'edit'])->name('simplePost.edit');
     Route::put('post/edit/{id}', [SimplePostController::class, 'update'])->name('simplePost.update');
     Route::get('post/set_publish/{id}', [SimplePostController::class, 'set_publish'])->name('simplePost.set_publish');
+
+    // Souvenir Auction
+    Route::get('auction/pending', [AuctionController::class, 'pending'])->name('auctionProduct.pending');
+    Route::get('auction/published', [AuctionController::class, 'published'])->name('auctionProduct.published');
+    Route::get('auction/all', [AuctionController::class, 'all'])->name('auctionProduct.all');
+
+    Route::get('auction/details/{id}', [AuctionController::class, 'details'])->name('auctionProduct.details');
+    Route::get('auction/edit/{id}', [AuctionController::class, 'edit'])->name('auctionProduct.edit');
+    Route::put('auction/edit/{id}', [AuctionController::class, 'update'])->name('auctionProduct.update');
+    Route::get('auction/set_publish/{id}', [AuctionController::class, 'set_publish'])->name('auctionProduct.set_publish');
+
 
 
     //Meetup-events
