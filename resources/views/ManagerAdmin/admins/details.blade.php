@@ -95,6 +95,9 @@
                                             <option value="audition">Audition</option>
 
                                         </select>
+                                        @error('job_type')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -104,6 +107,9 @@
                                     <div class="col-10">
                                         <input type="text" name="title" class="form-control" placeholder="Title"
                                             autocomplete="off" value="{{ old('title') }}">
+                                        @error('title')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -113,6 +119,9 @@
                                     <div class="col-10">
                                         <textarea name="details" class="form-control"
                                             rows="7">{{ old('details') }}</textarea>
+                                        @error('details')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class=" float-right">
