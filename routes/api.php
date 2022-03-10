@@ -206,6 +206,10 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/marketplace/product-list/approved', [MarketplaceController::class, 'allStarProductList']);
     Route::get('/star/marketplace/product-list/pending', [MarketplaceController::class, 'pendingStarProductList']);
     Route::get('/star/marketplace/product-list/live', [MarketplaceController::class, 'liveStarProductList']);
+    Route::get('/star/marketplace/product-edit/{id}', [MarketplaceController::class, 'editStarProductList']);
+    Route::post('/star/marketplace/product-store/{id}', [MarketplaceController::class, 'storeStarProductList']);
+    Route::get('/star/marketplace/product-approved/{id}', [MarketplaceController::class, 'approvedStarProductList']);
+    Route::get('/star/marketplace/product-decline/{id}', [MarketplaceController::class, 'declineStarProductList']);
 
 
     // Simple Post Section
