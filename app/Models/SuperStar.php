@@ -27,4 +27,7 @@ class SuperStar extends Model
     {
         return $this->belongsto(User::class,'star_id','id');
     }
+    public function auction(){
+        return $this->hasMany(Auction::class,'star_id');
+    }
 }

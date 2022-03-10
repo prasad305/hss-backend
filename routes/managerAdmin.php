@@ -9,6 +9,7 @@ use App\Http\Controllers\ManagerAdmin\LearningSessionController;
 use App\Http\Controllers\ManagerAdmin\SimplePostController;
 use App\Http\Controllers\ManagerAdmin\MarketplaceController;
 use App\Http\Controllers\API\MeetupEventController;
+use App\Http\Controllers\ManagerAdmin\AuctionController;
 use Illuminate\Support\Facades\Route;
 
 // manager Admin route
@@ -60,6 +61,18 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::put('post/edit/{id}', [SimplePostController::class, 'update'])->name('simplePost.update');
     Route::get('post/set_publish/{id}', [SimplePostController::class, 'set_publish'])->name('simplePost.set_publish');
 
+
+    // Souvenir Auction
+    Route::get('auction/pending', [AuctionController::class, 'pending'])->name('auctionProduct.pending');
+    Route::get('auction/published', [AuctionController::class, 'published'])->name('auctionProduct.published');
+    Route::get('auction/all', [AuctionController::class, 'all'])->name('auctionProduct.all');
+
+    Route::get('auction/details/{id}', [AuctionController::class, 'details'])->name('auctionProduct.details');
+    Route::get('auction/edit/{id}', [AuctionController::class, 'edit'])->name('auctionProduct.edit');
+    Route::put('auction/edit/{id}', [AuctionController::class, 'update'])->name('auctionProduct.update');
+    Route::get('auction/set_publish/{id}', [AuctionController::class, 'set_publish'])->name('auctionProduct.set_publish');
+
+
     //Marketplace Post
     Route::get('marketplace/pending', [MarketplaceController::class, 'pending'])->name('marketplace.pending');
     Route::get('marketplace/published', [MarketplaceController::class, 'published'])->name('marketplace.published');
@@ -69,6 +82,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('marketplace/edit/{id}', [MarketplaceController::class, 'edit'])->name('marketplace.edit');
     Route::put('marketplace/update/{id}', [MarketplaceController::class, 'update'])->name('marketplace.update');
     Route::get('marketplace/set_publish/{id}', [MarketplaceController::class, 'set_publish'])->name('marketplace.set_publish');
+
 
 
     //Meetup-events

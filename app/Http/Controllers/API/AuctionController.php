@@ -14,9 +14,9 @@ use Intervention\Image\Facades\Image;
 
 class AuctionController extends Controller
 {
-    
+
     public function addProduct(Request $request)
-    
+
     {
 
         // $data = $request->only('name','email','mobile_number');
@@ -24,11 +24,11 @@ class AuctionController extends Controller
         // $test['name'] = json_encode($data);
         // Auction::insert($test);
         // return response()->json('Great! Successfully store data in json format in datbase');
- 
-       //return response()->json($request->all());
+
+        //return response()->json($request->all());
 
 
-       
+
         $request->validate([
 
             'name' => 'required',
@@ -37,16 +37,17 @@ class AuctionController extends Controller
             'details' => 'required',
             'status' => 'required',
         ]);
-   
+
         $data = $request->except(['_token', 'product_image', 'banner']);
+        $data['created_by_id'] = Auth::user()->id;
 
         if ($request->hasFile('product_image')) {
 
             // $name = time().'.' . explode('/', explode(':', substr($request->product_image, 0, strpos($request->product_image, ';')))[1])[1];
             // Image::make($request->product_image)->save(public_path('uploads/images/auction').$name);
             // return response()->json("OK");
-      
-        /*         $images = [];
+
+            /*         $images = [];
         foreach($request->file('product_image') as $image)
         {
             $destinationPath = 'uploads/images/auction';
@@ -62,8 +63,6 @@ class AuctionController extends Controller
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
             $data['product_image'] = $path . '/' . $file_name;
-            
-            
         }
 
         if ($request->hasFile('banner')) {
@@ -73,77 +72,73 @@ class AuctionController extends Controller
             $file->move($path, $file_name);
             $data['banner'] = $path . '/' . $file_name;
         }
-  
+
         $product = Auction::create($data);
 
         return response()->json($product);
-    
-}
-public function editOrConfirm(){
+    }
+    public function editOrConfirm()
+    {
 
-    $product = Auction::latest()->first();
-    return response()->json([
-        'status' => 200,
-        'product' => $product
-    ]);
+        $product = Auction::latest()->first();
+        return response()->json([
+            'status' => 200,
+            'product' => $product
+        ]);
+    }
+    public function editProduct($id)
+    {
+        $product = Auction::findOrFail($id);
+        return response()->json([
+            'status' => 200,
+            'product' => $product
 
-    
-}
-public function editProduct($id){
-    $product = Auction::findOrFail($id);
-    return response()->json([
-        'status' => 200,
-        'product'=>$product
-
-    ]);
-}
-
-public function updateProduct(Request $request,$id){
-
-    return response()->json($request->name);
-
-    $request->validate([
-
-        'name' => 'required',
-        'title' => 'required',
-        'base_price' => 'required',
-        'details' => 'required',
-        'status' => 'required',
-    ]);
-
-    $data = $request->except(['_token', 'product_image', 'banner']);
-
-    if ($request->hasFile('product_image'))
-
-    {$file        = $request->file('product_image');
-        $path        = 'uploads/images/auction';
-        $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
-        $file->move($path, $file_name);
-        $data['product_image'] = $path . '/' . $file_name;
-        
-        
+        ]);
     }
 
-    if ($request->hasFile('banner')) {
-        $file        = $request->file('banner');
-        $path        = 'uploads/images/auction';
-        $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
-        $file->move($path, $file_name);
-        $data['banner'] = $path . '/' . $file_name;
+    public function updateProduct(Request $request, $id)
+    {
+
+        return response()->json($request->name);
+
+        $request->validate([
+
+            'name' => 'required',
+            'title' => 'required',
+            'base_price' => 'required',
+            'details' => 'required',
+            'status' => 'required',
+        ]);
+
+        $data = $request->except(['_token', 'product_image', 'banner']);
+
+        if ($request->hasFile('product_image')) {
+            $file        = $request->file('product_image');
+            $path        = 'uploads/images/auction';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $data['product_image'] = $path . '/' . $file_name;
+        }
+
+        if ($request->hasFile('banner')) {
+            $file        = $request->file('banner');
+            $path        = 'uploads/images/auction';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $data['banner'] = $path . '/' . $file_name;
+        }
+
+        $product = Auction::findOrfail($id)->update([
+            'name' => $request->name,
+            'title' => $request->title,
+            'base_price' => $request->base_price,
+            'details' => $request->status,
+            'status' => $request->status,
+        ]);
+
+
+        return response()->json($product);
     }
-
-    $product = Auction::findOrfail($id)->update([
-        'name' => $request->name,
-        'title'=>$request->title,
-        'base_price'=>$request->base_price,
-        'details'=>$request->status,
-        'status'=>$request->status,
-    ]);
-
-
-    return response()->json($product);
-
-}
 
     public function allProduct()
     {
@@ -158,7 +153,7 @@ public function updateProduct(Request $request,$id){
     {
         $totolBidding = Bidding::count();
         $maxBidding = Bidding::max('amount');
-        $products = Auction::with('bidding')->where('status',1)->get();
+        $products = Auction::with('bidding')->where('status', 1)->get();
 
         return response()->json([
             'status' => '200',
@@ -231,14 +226,12 @@ public function updateProduct(Request $request,$id){
                 'status' => 200,
                 'data' => $bidding,
             ]);
-
-        }
-        else{
+        } else {
             return response()->json([
-                'status' =>201,
+                'status' => 201,
                 'message' => 'Passowrd Not Match'
             ]);
-        } 
+        }
     }
 
     //<========================= Star Section ==============================>
@@ -246,7 +239,7 @@ public function updateProduct(Request $request,$id){
 
 
     public function star_addProduct(Request $request)
-    
+
     {
 
         // $data = $request->only('name','email','mobile_number');
@@ -254,11 +247,11 @@ public function updateProduct(Request $request,$id){
         // $test['name'] = json_encode($data);
         // Auction::insert($test);
         // return response()->json('Great! Successfully store data in json format in datbase');
- 
-       //return response()->json($request->all());
+
+        //return response()->json($request->all());
 
 
-       
+
         $request->validate([
 
             'name' => 'required',
@@ -266,13 +259,13 @@ public function updateProduct(Request $request,$id){
             'base_price' => 'required',
             'details' => 'required',
             'status' => 'required',
+
         ]);
-   
-        $data = $request->except(['_token', 'product_image', 'banner','star_id']);
-        if($request->has('star_id')){
-            $star_id = Auth::user()->id;
-            $data['star_id'] = $star_id;
-        }
+
+        $data = $request->except(['_token', 'product_image', 'banner']);
+        $data['star_approval'] = 1;
+        $data['star_id'] = Auth::user()->id;
+        $data['created_by_id'] = Auth::user()->id;
 
 
         if ($request->hasFile('product_image')) {
@@ -280,8 +273,8 @@ public function updateProduct(Request $request,$id){
             // $name = time().'.' . explode('/', explode(':', substr($request->product_image, 0, strpos($request->product_image, ';')))[1])[1];
             // Image::make($request->product_image)->save(public_path('uploads/images/auction').$name);
             // return response()->json("OK");
-      
-        /*         $images = [];
+
+            /*         $images = [];
         foreach($request->file('product_image') as $image)
         {
             $destinationPath = 'uploads/images/auction';
@@ -297,8 +290,6 @@ public function updateProduct(Request $request,$id){
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
             $data['product_image'] = $path . '/' . $file_name;
-            
-            
         }
 
         if ($request->hasFile('banner')) {
@@ -308,77 +299,95 @@ public function updateProduct(Request $request,$id){
             $file->move($path, $file_name);
             $data['banner'] = $path . '/' . $file_name;
         }
-  
+
         $product = Auction::create($data);
 
         return response()->json($product);
-    
-}
-public function star_editOrConfirm(){
+    }
+    public function star_editOrConfirm()
+    {
 
-    $product = Auction::latest()->first();
-    return response()->json([
-        'status' => 200,
-        'product' => $product
-    ]);
+        $product = Auction::latest()->first();
+        return response()->json([
+            'status' => 200,
+            'product' => $product
+        ]);
+    }
+    public function star_editProduct($id)
+    {
+        $product = Auction::findOrFail($id);
+        return response()->json([
+            'status' => 200,
+            'product' => $product
 
-    
-}
-public function star_editProduct($id){
-    $product = Auction::findOrFail($id);
-    return response()->json([
-        'status' => 200,
-        'product'=>$product
+        ]);
+    }
+    public function star_approvedOrDecline($id)
+    {
 
-    ]);
-}
+        $product = Auction::findOrFail($id);
+        return response()->json([
+            'status' => 200,
+            'product' => $product
 
-public function star_updateProduct(Request $request,$id){
-
-    return response()->json($request->name);
-
-    $request->validate([
-
-        'name' => 'required',
-        'title' => 'required',
-        'base_price' => 'required',
-        'details' => 'required',
-        'status' => 'required',
-    ]);
-
-    $data = $request->except(['_token', 'product_image', 'banner']);
-
-    if ($request->hasFile('product_image'))
-
-    {$file        = $request->file('product_image');
-        $path        = 'uploads/images/auction';
-        $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
-        $file->move($path, $file_name);
-        $data['product_image'] = $path . '/' . $file_name;
-        
-        
+        ]);
     }
 
-    if ($request->hasFile('banner')) {
-        $file        = $request->file('banner');
-        $path        = 'uploads/images/auction';
-        $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
-        $file->move($path, $file_name);
-        $data['banner'] = $path . '/' . $file_name;
+    public function star_approved($id)
+    {
+
+
+        Auction::where('id',$id)->update(['star_approval'=>1]);
+ 
+        return response()->json([
+            'status' => 200,
+        ]);
     }
 
-    $product = Auction::findOrfail($id)->update([
-        'name' => $request->name,
-        'title'=>$request->title,
-        'base_price'=>$request->base_price,
-        'details'=>$request->status,
-        'status'=>$request->status,
-    ]);
+
+    public function star_updateProduct(Request $request, $id)
+    {
+
+        return response()->json($request->name);
+
+        $request->validate([
+
+            'name' => 'required',
+            'title' => 'required',
+            'base_price' => 'required',
+            'details' => 'required',
+            'status' => 'required',
+        ]);
+
+        $data = $request->except(['_token', 'product_image', 'banner']);
+
+        if ($request->hasFile('product_image')) {
+            $file        = $request->file('product_image');
+            $path        = 'uploads/images/auction';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $data['product_image'] = $path . '/' . $file_name;
+        }
+
+        if ($request->hasFile('banner')) {
+            $file        = $request->file('banner');
+            $path        = 'uploads/images/auction';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $data['banner'] = $path . '/' . $file_name;
+        }
+
+        $product = Auction::findOrfail($id)->update([
+            'name' => $request->name,
+            'title' => $request->title,
+            'base_price' => $request->base_price,
+            'details' => $request->status,
+            'status' => $request->status,
+        ]);
 
 
-    return response()->json($product);
-
-}
+        return response()->json($product);
+    }
 
     public function star_allProduct()
     {
@@ -393,7 +402,7 @@ public function star_updateProduct(Request $request,$id){
     {
         $totolBidding = Bidding::count();
         $maxBidding = Bidding::max('amount');
-        $products = Auction::with('bidding')->where('star_approval',1)->get();
+        $products = Auction::with('bidding')->where('star_approval', 1)->where('product_status',0)->get();
 
         return response()->json([
             'status' => '200',
@@ -430,10 +439,28 @@ public function star_updateProduct(Request $request,$id){
             'product' => $product,
         ]);
     }
-    public function star_pendingProductShow()
+    public function star_pendingProductList()
     {
 
         $products = Auction::where('star_approval', 0)->get();
+        return response()->json([
+            'status' => 200,
+            'products' => $products,
+        ]);
+    }
+    public function star_unSoldProductList()
+    {
+
+        $products = Auction::where('star_approval', 1)->where('product_status', 0)->get();
+        return response()->json([
+            'status' => 200,
+            'products' => $products,
+        ]);
+    }
+    public function star_soldProductList()
+    {
+
+        $products = Auction::where('product_status', 1)->get();
         return response()->json([
             'status' => 200,
             'products' => $products,
@@ -453,7 +480,7 @@ public function star_updateProduct(Request $request,$id){
     public function star_unSoldProduct()
     {
 
-        $product = Auction::where('product_status', 0)->count();
+        $product = Auction::where('star_approval', 1)->where('product_status', 0)->count();
         return response()->json([
             'status' => 200,
             'product' => $product,
@@ -475,13 +502,12 @@ public function star_updateProduct(Request $request,$id){
                 'status' => 200,
                 'data' => $bidding,
             ]);
-
-        }
-        else{
+        } else {
             return response()->json([
-                'status' =>201,
+                'status' => 201,
                 'message' => 'Passowrd Not Match'
             ]);
-        } 
+        }
     }
+
 }

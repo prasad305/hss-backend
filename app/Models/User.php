@@ -213,8 +213,14 @@ class User extends Authenticatable
         return $this->hasMany(LiveChatRegistration::class, 'user_id');
     }
 
+    public function auction()
+    {
+        return $this->hasMany(Auction::class, 'created_by_id');
+
+
     public function assignAudition()
     {
         return $this->hasOne(AssignAdmin::class, 'assign_person');
+
     }
 }
