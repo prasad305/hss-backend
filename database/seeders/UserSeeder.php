@@ -130,7 +130,7 @@ class UserSeeder extends Seeder
         $user->email = 'user1@gmail.com';
         $user->image = 'uploads/images/users/lzg-1643882523.jpg';
         $user->cover_photo = 'uploads/images/users/1642659396.jpg';
-        $user->phone = '01700000008';
+        $user->phone = '01700000009';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
         $user->status = 1;
