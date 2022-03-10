@@ -35,9 +35,10 @@
                     <i class=" fa fa-filter"></i> Filter
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Show assigned admin</a>
-                    <a class="dropdown-item" href="#">Show available admin</a>
-                    <a class="dropdown-item" href="#">More option</a>
+                    <a class="dropdown-item" href="{{ route('managerAdmin.admin_assinged') }}">Show assigned admins</a>
+                    <a class="dropdown-item" href="{{ route('managerAdmin.admin_notAssinged') }}">Show available
+                        admins</a>
+                    <a class="dropdown-item" href="{{ route('managerAdmin.admin.index') }}">All Admins</a>
                 </div>
                 <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;" onclick=""><i
                         class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
@@ -69,9 +70,13 @@
                                         <h4>{{ $admin->first_name }} {{ $admin->last_name }}</h4>
                                     </span>
                                 </a>
-                                <p>Music</p>
+                                {{-- <p>Music</p> --}}
 
-                                <span class="right badge border border-danger my-2">Assigned</span> ⭕ 🏳️<br>
+                                @if ($admin->assignAudition)
+                                    <span class="right badge border border-danger my-2">Assigned</span> ⭕<br>
+                                @else
+                                    <span class="right badge border border-success my-2">Free Now</span> 🏳️<br>
+                                @endif
                                 <a class="btn btn-sm btn-info"
                                     onclick="Show('Edit Admin','{{ route('managerAdmin.admin.edit', $admin->id) }}')"><i
                                         class="fa fa-edit text-white"></i></a>

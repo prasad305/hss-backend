@@ -128,6 +128,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/marketplace/product-list/approved', [MarketplaceController::class, 'allProductList']);
     Route::get('/admin/marketplace/product-list/pending', [MarketplaceController::class, 'pendingProductList']);
     Route::get('/admin/marketplace/product-list/live', [MarketplaceController::class, 'liveProductList']);
+    Route::get('/admin/marketplace/product-edit/{id}', [MarketplaceController::class, 'editAdminProductList']);
+    Route::post('/admin/marketplace/product-store/{id}', [MarketplaceController::class, 'storeAdminProductList']);
 
     // Simple Post Section
     Route::post('admin/add_simple_post', [SimplePostController::class, 'add']);
@@ -225,6 +227,10 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/marketplace/product-list/approved', [MarketplaceController::class, 'allStarProductList']);
     Route::get('/star/marketplace/product-list/pending', [MarketplaceController::class, 'pendingStarProductList']);
     Route::get('/star/marketplace/product-list/live', [MarketplaceController::class, 'liveStarProductList']);
+    Route::get('/star/marketplace/product-edit/{id}', [MarketplaceController::class, 'editStarProductList']);
+    Route::post('/star/marketplace/product-store/{id}', [MarketplaceController::class, 'storeStarProductList']);
+    Route::get('/star/marketplace/product-approved/{id}', [MarketplaceController::class, 'approvedStarProductList']);
+    Route::get('/star/marketplace/product-decline/{id}', [MarketplaceController::class, 'declineStarProductList']);
 
 
     // Simple Post Section

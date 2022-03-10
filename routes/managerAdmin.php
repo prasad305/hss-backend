@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\ManagerAdmin\AdminController;
+use App\Http\Controllers\ManagerAdmin\JobAssign;
 use App\Http\Controllers\ManagerAdmin\DashboardController;
 use App\Http\Controllers\ManagerAdmin\LiveChatController;
 use App\Http\Controllers\ManagerAdmin\LiveEventController;
 use App\Http\Controllers\ManagerAdmin\LearningSessionController;
 use App\Http\Controllers\ManagerAdmin\SimplePostController;
+use App\Http\Controllers\ManagerAdmin\MarketplaceController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\ManagerAdmin\AuctionController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +39,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::resource('admin', AdminController::class);
     Route::post('admin/active/{id}', [AdminController::class, 'activeNow'])->name('admin.activeNow');
     Route::post('admin/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('admin.inactiveNow');
+    Route::get('admin-assinged', [AdminController::class, 'assinged'])->name('admin_assinged');
+    Route::get('admin-free', [AdminController::class, 'notAssinged'])->name('admin_notAssinged');
 
 
     // Live route
@@ -57,6 +61,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::put('post/edit/{id}', [SimplePostController::class, 'update'])->name('simplePost.update');
     Route::get('post/set_publish/{id}', [SimplePostController::class, 'set_publish'])->name('simplePost.set_publish');
 
+
     // Souvenir Auction
     Route::get('auction/pending', [AuctionController::class, 'pending'])->name('auctionProduct.pending');
     Route::get('auction/published', [AuctionController::class, 'published'])->name('auctionProduct.published');
@@ -66,6 +71,17 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('auction/edit/{id}', [AuctionController::class, 'edit'])->name('auctionProduct.edit');
     Route::put('auction/edit/{id}', [AuctionController::class, 'update'])->name('auctionProduct.update');
     Route::get('auction/set_publish/{id}', [AuctionController::class, 'set_publish'])->name('auctionProduct.set_publish');
+
+
+    //Marketplace Post
+    Route::get('marketplace/pending', [MarketplaceController::class, 'pending'])->name('marketplace.pending');
+    Route::get('marketplace/published', [MarketplaceController::class, 'published'])->name('marketplace.published');
+    Route::get('marketplace/all', [MarketplaceController::class, 'all'])->name('marketplace.all');
+
+    Route::get('marketplace/details/{id}', [MarketplaceController::class, 'details'])->name('marketplace.details');
+    Route::get('marketplace/edit/{id}', [MarketplaceController::class, 'edit'])->name('marketplace.edit');
+    Route::put('marketplace/update/{id}', [MarketplaceController::class, 'update'])->name('marketplace.update');
+    Route::get('marketplace/set_publish/{id}', [MarketplaceController::class, 'set_publish'])->name('marketplace.set_publish');
 
 
 
@@ -96,4 +112,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('learningSession/edit/{id}', [LearningSessionController::class, 'edit'])->name('learningSession.edit');
     Route::put('learningSession/edit/{id}', [LearningSessionController::class, 'update'])->name('learningSession.update');
     Route::get('learningSession/set_publish/{id}', [LearningSessionController::class, 'manager_event_set_publish'])->name('learningSession.set_publish');
+
+    //audition create
+    Route::post('audition-assign/{admin_id}', [JobAssign::class, 'auditionStore'])->name('AuditionAssign');
 });

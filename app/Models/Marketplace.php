@@ -18,4 +18,8 @@ class Marketplace extends Model
         'image',
         'status',
     ];
+    public function star()
+    {
+        return $this->belongsTo(User::class, 'star_id');
+    }
 }
