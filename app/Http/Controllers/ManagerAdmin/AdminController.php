@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Audition\AssignAdmin;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -20,6 +21,30 @@ class AdminController extends Controller
     public function index()
     {
         $admins = User::where('user_type', 'admin')->orderBy('id', 'DESC')->get();
+        return view('ManagerAdmin.admins.index', compact('admins'));
+    }
+
+    public function assinged()
+    {
+        $assignAdmins = AssignAdmin::select('assign_person')->get();
+
+        $userIds = [];
+        foreach ($assignAdmins as $assignAdmin) {
+            array_push($userIds, $assignAdmin->assign_person);
+        }
+        $admins = User::whereIn('id', $userIds)->orderBy('id', 'DESC')->get();
+        return view('ManagerAdmin.admins.index', compact('admins'));
+    }
+
+    public function notAssinged()
+    {
+        $assignAdmins = AssignAdmin::select('assign_person')->get();
+
+        $userIds = [];
+        foreach ($assignAdmins as $assignAdmin) {
+            array_push($userIds, $assignAdmin->assign_person);
+        }
+        $admins = User::whereNotIn('id', $userIds)->where('user_type', 'admin')->orderBy('id', 'DESC')->get();
         return view('ManagerAdmin.admins.index', compact('admins'));
     }
 
@@ -55,12 +80,12 @@ class AdminController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make('12345');
         $user->user_type = 'admin'; // Admin user_type == 'admin'
-        $user->otp = rand( 100000 , 999999 );
+        $user->otp = rand(100000, 999999);
 
         if ($request->hasFile('image')) {
             $image             = $request->file('image');
             $folder_path       = 'uploads/images/users/';
-            $image_new_name    = time(). '.' . $image->getClientOriginalExtension();
+            $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->save($folder_path . $image_new_name);
             $user->image   = $folder_path . $image_new_name;
@@ -69,14 +94,14 @@ class AdminController extends Controller
         if ($request->hasFile('cover')) {
             $image             = $request->file('cover');
             $folder_path       = 'uploads/images/users/';
-            $image_new_name    = time(). '.' . $image->getClientOriginalExtension();
+            $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
             //resize and save to server
-            Image::make($image->getRealPath())->resize(879,200)->save($folder_path . $image_new_name);
+            Image::make($image->getRealPath())->resize(879, 200)->save($folder_path . $image_new_name);
             $user->cover_photo   = $folder_path . $image_new_name;
         }
         try {
             $user->save();
-            if($user){
+            if ($user) {
                 return response()->json([
                     'success' => true,
                     'message' => 'Admin Added Successfully'
@@ -98,7 +123,7 @@ class AdminController extends Controller
      */
     public function show(User $admin)
     {
-        return view('ManagerAdmin.admins.details')->with('admin',$admin);
+        return view('ManagerAdmin.admins.details')->with('admin', $admin);
     }
 
     /**
@@ -110,7 +135,7 @@ class AdminController extends Controller
     public function edit(User $admin)
     {
         $data['admin'] = $admin;
-        return view('ManagerAdmin.admins.edit',$data);
+        return view('ManagerAdmin.admins.edit', $data);
     }
 
     /**
@@ -120,7 +145,7 @@ class AdminController extends Controller
      * @param  \App\Models\User  $admin
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'first_name' => 'required',
@@ -138,7 +163,7 @@ class AdminController extends Controller
 
             $image             = $request->file('image');
             $folder_path       = 'uploads/images/users/';
-            $image_new_name    = time(). '.' . $image->getClientOriginalExtension();
+            $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->save($folder_path . $image_new_name);
             $user->image   = $folder_path . $image_new_name;
@@ -150,15 +175,15 @@ class AdminController extends Controller
 
             $image             = $request->file('cover');
             $folder_path       = 'uploads/images/users/';
-            $image_new_name    = time(). '.' . $image->getClientOriginalExtension();
+            $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
             //resize and save to server
-            Image::make($image->getRealPath())->resize(879,200)->save($folder_path . $image_new_name);
+            Image::make($image->getRealPath())->resize(879, 200)->save($folder_path . $image_new_name);
             $user->cover_photo   = $folder_path . $image_new_name;
         }
 
         try {
             $user->save();
-            if($user){
+            if ($user) {
                 return response()->json([
                     'success' => true,
                     'message' => 'Admin Updated Successfully'
@@ -170,8 +195,6 @@ class AdminController extends Controller
                 'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
             ]);
         }
-
-
     }
 
     /**
