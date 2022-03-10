@@ -6,6 +6,7 @@ use App\Http\Controllers\ManagerAdmin\LiveChatController;
 use App\Http\Controllers\ManagerAdmin\LiveEventController;
 use App\Http\Controllers\ManagerAdmin\LearningSessionController;
 use App\Http\Controllers\ManagerAdmin\SimplePostController;
+use App\Http\Controllers\ManagerAdmin\MarketplaceController;
 use App\Http\Controllers\API\MeetupEventController;
 use Illuminate\Support\Facades\Route;
 
@@ -55,6 +56,16 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('post/edit/{id}', [SimplePostController::class, 'edit'])->name('simplePost.edit');
     Route::put('post/edit/{id}', [SimplePostController::class, 'update'])->name('simplePost.update');
     Route::get('post/set_publish/{id}', [SimplePostController::class, 'set_publish'])->name('simplePost.set_publish');
+
+    //Marketplace Post
+    Route::get('marketplace/pending', [MarketplaceController::class, 'pending'])->name('marketplace.pending');
+    Route::get('marketplace/published', [MarketplaceController::class, 'published'])->name('marketplace.published');
+    Route::get('marketplace/all', [MarketplaceController::class, 'all'])->name('marketplace.all');
+
+    Route::get('marketplace/details/{id}', [MarketplaceController::class, 'details'])->name('marketplace.details');
+    Route::get('marketplace/edit/{id}', [MarketplaceController::class, 'edit'])->name('marketplace.edit');
+    Route::put('marketplace/update/{id}', [MarketplaceController::class, 'update'])->name('marketplace.update');
+    Route::get('marketplace/set_publish/{id}', [MarketplaceController::class, 'set_publish'])->name('marketplace.set_publish');
 
 
     //Meetup-events

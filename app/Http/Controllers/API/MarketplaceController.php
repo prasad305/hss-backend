@@ -91,6 +91,49 @@ class MarketplaceController extends Controller
         ]);
     }
 
+    public function editAdminProductList($id){
+        $editData = Marketplace::find($id);
+
+        return response()->json([
+            'status' => 200,
+            'editData' => $editData,
+        ]);
+    }
+    public function storeAdminProductList(Request $request ,$id){
+        $marketplace = Marketplace::find($id);
+
+        $marketplace->title = $request->title;
+        $marketplace->slug = Str::slug($request->input('title'));
+        $marketplace->description = $request->description;
+        $marketplace->unit_price = $request->unit_price;
+        $marketplace->total_items = $request->total_items;
+        $marketplace->keywords = $request->keywords;
+
+        if ($request->hasfile('image')) {
+            $destination = $marketplace->image;
+                if(File::exists($destination))
+                {
+                    File::delete($destination);
+                }
+
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/marketplace/' . time() . '.' . $extension;
+
+            Image::make($file)->resize(400, 400)->save($filename, 100);
+            $marketplace->image = $filename;
+        }
+
+        $marketplace->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Marketplace Updated Successfully',
+        ]);
+    }
+
+
+
     // SuperStar For Marketplace
 
     public function starMarketplaceStore(Request $request){
