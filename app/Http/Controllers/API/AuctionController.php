@@ -98,19 +98,13 @@ class AuctionController extends Controller
 
     public function updateProduct(Request $request, $id)
     {
+        // $request->validate([
+        //     'name' => 'required',
+        //     'title' => 'required',
+        //     'base_price' => 'required',
+        //     'status' => 'required',
+        // ]);
 
-        return response()->json($request->name);
-
-        $request->validate([
-
-            'name' => 'required',
-            'title' => 'required',
-            'base_price' => 'required',
-            'details' => 'required',
-            'status' => 'required',
-        ]);
-
-        $data = $request->except(['_token', 'product_image', 'banner']);
 
         if ($request->hasFile('product_image')) {
             $file        = $request->file('product_image');
@@ -132,12 +126,16 @@ class AuctionController extends Controller
             'name' => $request->name,
             'title' => $request->title,
             'base_price' => $request->base_price,
-            'details' => $request->status,
+            //'details' => $request->status,
             'status' => $request->status,
         ]);
 
 
-        return response()->json($product);
+        return response()->json([
+            'status' => '200',
+            'products' => $product,
+            'message' => 'success',
+        ]);
     }
 
     public function allProduct()
@@ -164,7 +162,7 @@ class AuctionController extends Controller
     }
 
 
-    public function showProduct($id)
+    public function showProductDetails($id)
     {
 
         $product = Auction::find($id);
@@ -185,9 +183,11 @@ class AuctionController extends Controller
     {
 
         $product = Auction::where('status', 0)->count();
+        $pending_product = Auction::where('status', 0)->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
+            'pending_product' => $pending_product,
         ]);
     }
 
@@ -195,19 +195,23 @@ class AuctionController extends Controller
     {
 
         $product = Auction::where('product_status', 1)->count();
+        $sold_product = Auction::where('product_status', 1)->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
+            'sold_product' => $sold_product,
         ]);
     }
 
     public function unSoldProduct()
     {
 
-        $product = Auction::where('product_status', 0)->count();
+        $product = Auction::where('star_approval', 1)->where('product_status', 0)->count();
+        $unsold_product = Auction::where('star_approval', 1)->where('product_status', 0)->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
+            'unsold_product' => $unsold_product,
         ]);
     }
 
@@ -337,8 +341,8 @@ class AuctionController extends Controller
     {
 
 
-        Auction::where('id',$id)->update(['star_approval'=>1]);
- 
+        Auction::where('id', $id)->update(['star_approval' => 1]);
+
         return response()->json([
             'status' => 200,
         ]);
@@ -402,7 +406,7 @@ class AuctionController extends Controller
     {
         $totolBidding = Bidding::count();
         $maxBidding = Bidding::max('amount');
-        $products = Auction::with('bidding')->where('star_approval', 1)->where('product_status',0)->get();
+        $products = Auction::with('bidding')->where('star_approval', 1)->where('product_status', 0)->get();
 
         return response()->json([
             'status' => '200',
@@ -509,5 +513,4 @@ class AuctionController extends Controller
             ]);
         }
     }
-
 }
