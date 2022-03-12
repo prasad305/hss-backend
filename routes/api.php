@@ -78,6 +78,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/user/interest/type', [UserController::class, 'interestType']);
 
+    Route::get('/user/marketplace/all', [MarketplaceController::class, 'marketplaceAll']);
+
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
     Route::get('/user/meetup-event/{star_id}/{event_id}', [MeetupEventController::class, 'meetup_event_booking']);
