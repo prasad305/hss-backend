@@ -18,6 +18,7 @@ class AuditionController extends Controller
     public function index()
     {
         $auditions = Audition::orderBy('id', 'DESC')->get();
+       
         return view('SuperAdmin.audition.index', compact('auditions'));
     }
 

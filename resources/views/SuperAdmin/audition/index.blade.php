@@ -39,6 +39,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>category</th>
+                                <th>Assign Person</th>
                                 <th>Photo</th>
                                 <th style="width: 150px">Action</th>
                             </tr>
@@ -51,6 +52,7 @@
                                     <td>
                                         {{ $audition->category->name ?? '-' }}
                                     </td>
+                                    <td>{{ $audition->assignAdmin ? $audition->assignAdmin->assignPerson->first_name : '' }}</td>
                                     <td>
                                         {{ $audition->created_at->diffForHumans() }}
                                     </td>
