@@ -352,19 +352,6 @@ class AuctionController extends Controller
     public function star_updateProduct(Request $request, $id)
     {
 
-        return response()->json($request->name);
-
-        $request->validate([
-
-            'name' => 'required',
-            'title' => 'required',
-            'base_price' => 'required',
-            'details' => 'required',
-            'status' => 'required',
-        ]);
-
-        $data = $request->except(['_token', 'product_image', 'banner']);
-
         if ($request->hasFile('product_image')) {
             $file        = $request->file('product_image');
             $path        = 'uploads/images/auction';
@@ -385,12 +372,16 @@ class AuctionController extends Controller
             'name' => $request->name,
             'title' => $request->title,
             'base_price' => $request->base_price,
-            'details' => $request->status,
+            //'details' => $request->status,
             'status' => $request->status,
         ]);
 
 
-        return response()->json($product);
+        return response()->json([
+            'status' => '200',
+            'products' => $product,
+            'message' => 'success',
+        ]);
     }
 
     public function star_allProduct()
