@@ -18,8 +18,13 @@ class Marketplace extends Model
         'image',
         'status',
     ];
-    public function star()
+
+    //Relation For API
+    protected $with = ['superstar'];
+
+
+    public function superstar()
     {
-        return $this->belongsTo(User::class, 'star_id');
+        return $this->belongsTo(User::class, 'superstar_id');
     }
 }
