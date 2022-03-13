@@ -74,11 +74,20 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //Route::get('view-category', [CategoryController::class, 'index']);
     //Route::get('view-category', [CategoryController::class, 'index']);
 
+
+    Route::get('view-country', [CategoryController::class, 'index']);
+    Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
+
     Route::get('/user/registeredLivechat', [UserController::class, 'registeredLivechat']);
 
     Route::get('/user/interest/type', [UserController::class, 'interestType']);
 
     Route::get('/user/marketplace/all', [MarketplaceController::class, 'marketplaceAll']);
+    Route::get('/user/marketplace/view-country', [MarketplaceController::class, 'viewCountry']);
+    Route::get('/user/marketplace/state/{id}', [MarketplaceController::class, 'viewState']);
+    Route::get('/user/marketplace/city/{id}', [MarketplaceController::class, 'viewCity']);
+    Route::get('/user/marketplace/details/{slug}', [MarketplaceController::class, 'getSlugDetails']);
+    Route::post('/user/marketplace/order/store', [MarketplaceController::class, 'viewMarketplaceOrder']);
 
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);

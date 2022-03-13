@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Models\Marketplace;
 use App\Models\User;
+use App\Models\Country;
+use App\Models\State;
+use App\Models\Order;
+use App\Models\City;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
@@ -25,6 +29,70 @@ class MarketplaceController extends Controller
                 'status' => 200,
                 'data' => $data,
             ]);
+    }
+    
+    public function viewCountry(){
+        $data = Country::where('status', 1)
+                            ->get();
+
+        return response()->json([
+                'status' => 200,
+                'data' => $data,
+            ]);
+    }
+    public function viewState($id){
+        $country = Country::where('id',$id)->first();
+        $state = State::where('country_id',$country->id)->get();
+
+        return response()->json([
+                'status' => 200,
+                'state' => $state,
+            ]);
+    }
+    public function viewCity($id){
+        $state = State::where('id',$id)->first();
+        $city = City::where('state_id',$state->id)->get();
+
+        return response()->json([
+                'status' => 200,
+                'city' => $city,
+            ]);
+    }
+    public function getSlugDetails($slug){
+        $slugdetails = Marketplace::where('slug',$slug)->first();
+
+        return response()->json([
+                'status' => 200,
+                'slugdetails' => $slugdetails,
+            ]);
+    }
+
+    public function viewMarketplaceOrder(Request $request){
+        $marketplace = Marketplace::where('slug', $request->marketplace_slug)->first();
+
+        $data = new Order();
+        $data->country_id = $request->country_id;
+        $data->state_id = $request->state_id;
+        $data->city_id = $request->city_id;
+        $data->area = $request->area;
+        $data->phone = $request->phone;
+        $data->items = $request->items;
+        $data->unit_price = $request->unit_price;
+        $data->delivery_charge = $request->delivery_charge;
+        $data->cvc = $request->cvc;
+        $data->card_no = $request->card_no;
+        $data->expire_date = $request->expire_date;
+        $data->user_id = Auth::user()->id;
+        $data->marketplace_id = $marketplace->id;
+        $data->total_price = ($request->items * $request->unit_price) + $request->delivery_charge;
+        $data->status = 0;
+
+        $data->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Order submit Successfully',
+        ]);
     }
 
     //SuperStar Admin for marketplace
