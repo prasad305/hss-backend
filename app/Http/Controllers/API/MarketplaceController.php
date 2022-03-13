@@ -14,11 +14,25 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class MarketplaceController extends Controller
 {
+    // Marketplace Homepage
+
+    public function marketplaceAll(){
+        $data = Marketplace::where('status', 1)
+                            ->where('post_status', 1)
+                            ->get();
+
+        return response()->json([
+                'status' => 200,
+                'data' => $data,
+            ]);
+    }
+
     //SuperStar Admin for marketplace
 
     public function marketplaceStore(Request $request){
 
         $id = Auth::user()->id;
+        $parent_id = User::find($id);
         // return $request->all();
 
         $marketplace = new Marketplace();
@@ -32,7 +46,8 @@ class MarketplaceController extends Controller
         $marketplace->post_status = 0;
         $marketplace->status = 0;
         $marketplace->total_selling = 0;
-        $marketplace->superstar_id = 0;
+        $marketplace->created_by = $id;
+        $marketplace->superstar_id = $request->star_id;
         $marketplace->superstar_admin_id = $id;
 
         if ($request->hasfile('image')) {
@@ -107,6 +122,7 @@ class MarketplaceController extends Controller
         $marketplace->description = $request->description;
         $marketplace->unit_price = $request->unit_price;
         $marketplace->total_items = $request->total_items;
+        $marketplace->total_selling = $request->sellingItems;
         $marketplace->keywords = $request->keywords;
 
         if ($request->hasfile('image')) {
@@ -154,7 +170,8 @@ class MarketplaceController extends Controller
         $marketplace->post_status = 1;
         $marketplace->total_selling = 0;
         $marketplace->superstar_admin_id = $parent_id->parent_user;
-        $marketplace->superstar_id = Auth('sanctum')->user()->id;
+        $marketplace->superstar_id = $id;
+        $marketplace->created_by = $id;
 
         if ($request->hasfile('image')) {
 
@@ -238,6 +255,7 @@ class MarketplaceController extends Controller
         $marketplace->description = $request->description;
         $marketplace->unit_price = $request->unit_price;
         $marketplace->total_items = $request->total_items;
+        $marketplace->total_selling = $request->sellingItems;
         $marketplace->keywords = $request->keywords;
 
         if ($request->hasfile('image')) {
@@ -276,7 +294,7 @@ class MarketplaceController extends Controller
 
     public function declineStarProductList($id){
         $marketplace = Marketplace::find($id);
-        $marketplace->post_status = 2;
+        $marketplace->post_status = 0;
         $marketplace->save();
 
         return response()->json([

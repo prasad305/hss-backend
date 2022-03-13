@@ -22,6 +22,7 @@ class CreateMarketplacesTable extends Migration
             $table->string('total_items')->nullable();
             $table->string('total_selling')->nullable();
             $table->string('superstar_id')->nullable();
+            $table->string('created_by')->nullable();
             $table->string('superstar_admin_id')->nullable();
             $table->string('keywords')->nullable();
             $table->string('post_status')->nullable();

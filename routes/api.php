@@ -78,6 +78,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/user/interest/type', [UserController::class, 'interestType']);
 
+    Route::get('/user/marketplace/all', [MarketplaceController::class, 'marketplaceAll']);
+
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
     Route::get('/user/meetup-event/{star_id}/{event_id}', [MeetupEventController::class, 'meetup_event_booking']);
@@ -109,8 +111,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/learnig-session/{slug}', [UserController::class, 'singleLearnigSession']);
     //lerning session registaion
     Route::post('/learnig-session', [UserController::class, 'LearningSessionReg']);
-
-
 });
 
 
@@ -199,16 +199,15 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/add/auction/product', [AuctionController::class, 'addProduct']);
     Route::get('/admin/editOrConfirm/auction/editOrConfirm', [AuctionController::class, 'editOrConfirm']);
     Route::get('/admin/edit/auction/{id}', [AuctionController::class, 'editProduct']);
-    Route::put('/admin/update/auction/{id}', [AuctionController::class, 'updateProduct']);
+    Route::post('/admin/update/auction/{id}', [AuctionController::class, 'updateProduct']);
     Route::get('/admin/all/auction/product', [AuctionController::class, 'allProduct']);
-    Route::get('/admin/show/auction/product/{id}', [AuctionController::class, 'showProduct']);
+    Route::get('/admin/show/auction/product/{id}', [AuctionController::class, 'showProductDetails']);
     Route::get('/admin/total/auction/product', [AuctionController::class, 'totalProduct']);
     Route::get('/admin/pending/auction/product', [AuctionController::class, 'pendingProduct']);
     Route::get('/admin/sold/auction/product', [AuctionController::class, 'soldProduct']);
     Route::get('/admin/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
     Route::post('/admin/bidding/auction/product/{id}', [AuctionController::class, 'bidNow']);
     Route::get('/admin/live/allProduct', [AuctionController::class, 'allLiveProduct']);
-
 });
 
 
@@ -344,4 +343,3 @@ Route::post('select_star', [SubCategoryController::class, 'select_star']);
 Route::get('submit_react/{id}', [UserController::class, 'submit_react']);
 Route::get('check_react/{id}', [UserController::class, 'check_react']);
 Route::get('checkchoice', [CategoryController::class, 'check']);
-
