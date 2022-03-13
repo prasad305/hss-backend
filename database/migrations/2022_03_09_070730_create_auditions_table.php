@@ -27,7 +27,7 @@ class CreateAuditionsTable extends Migration
             $table->timestamp('end_time')->nullable();
             $table->integer('round_stattus')->nullable();
             $table->unsignedBigInteger('template_id')->nullable();
-            $table->boolean('status')->default(1);
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }
