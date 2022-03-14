@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auction;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
 use App\Models\LearningSession;
@@ -456,6 +457,14 @@ class UserController extends Controller
             'notifiction' => $notification,
             'greeting_info' => $greeting_info,
 
+        ]);
+    }
+
+    public function auctionProduct(){
+        $product = Auction::with('star')->where('status',1)->get();
+        return response()->json([
+            'status' => 200,
+            'product' => $product
         ]);
     }
 }

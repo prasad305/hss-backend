@@ -37,8 +37,6 @@ Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearnin
 //Star Photo and videos
 Route::get('/star_photos/{id}', [UserController::class, 'star_photo']);
 Route::get('/star_videos/{id}', [UserController::class, 'star_video']);
-
-
 Route::get('/user/getStarPost/{id}', [UserController::class, 'getStarPost']);
 
 // Data Fetching For Landing Page Right Side Bar
@@ -121,6 +119,10 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/learnig-session/{slug}', [UserController::class, 'singleLearnigSession']);
     //lerning session registaion
     Route::post('/learnig-session', [UserController::class, 'LearningSessionReg']);
+    
+    // auction product
+    Route::get('/auction-product/all', [UserController::class, 'auctionProduct']);
+
 });
 
 
@@ -307,7 +309,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/edit/auction/{id}', [AuctionController::class, 'star_editProduct']);
     Route::get('/star/approvedOrDecline/auction/{id}', [AuctionController::class, 'star_approvedOrDecline']);
     Route::put('/star/approved/auction/{id}', [AuctionController::class, 'star_approved']);
-    Route::put('/star/update/auction/{id}', [AuctionController::class, 'star_updateProduct']);
+    Route::post('/star/update/auction/{id}', [AuctionController::class, 'star_updateProduct']);
     Route::get('/star/all/auction/product', [AuctionController::class, 'star_allProduct']);
     Route::get('/star/show/auction/product/{id}', [AuctionController::class, 'star_showProduct']);
     Route::get('/star/total/auction/product', [AuctionController::class, 'star_totalProduct']);
