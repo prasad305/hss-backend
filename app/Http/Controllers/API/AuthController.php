@@ -6,10 +6,11 @@ use App\Http\Controllers\Controller;
 //use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\UserInfo;
 use Illuminate\Support\Facades\Hash;
-use Auth;
+//use Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -100,6 +101,7 @@ class AuthController extends Controller
                     'email' => $user->email,
                     'name' => $user->first_name . ' ' . $user->last_name,
                     'id' => $user->id,
+                    'user_type' => $user->user_type,
                     'token' => $token,
                     'role' => $role,
                     'message' => 'Logged In Successfully',
@@ -203,6 +205,8 @@ class AuthController extends Controller
             'info' => $user_info
         ]);
     }
+
+
 
     public function user_info_update(Request $request)
     {

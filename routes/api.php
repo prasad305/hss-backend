@@ -44,6 +44,7 @@ Route::get('/user/learning_session/all', [LearningSessionController::class, 'use
 Route::get('/user/live_chat/all', [LiveChatController::class, 'userAll']);
 
 
+
 // Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
@@ -119,7 +120,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/learnig-session/{slug}', [UserController::class, 'singleLearnigSession']);
     //lerning session registaion
     Route::post('/learnig-session', [UserController::class, 'LearningSessionReg']);
-    
+
     // auction product
     Route::get('/auction-product/all', [UserController::class, 'auctionProduct']);
 
@@ -362,3 +363,18 @@ Route::post('select_star', [SubCategoryController::class, 'select_star']);
 Route::get('submit_react/{id}', [UserController::class, 'submit_react']);
 Route::get('check_react/{id}', [UserController::class, 'check_react']);
 Route::get('checkchoice', [CategoryController::class, 'check']);
+
+//<======================== Auction Route ========================>
+
+Route::post('/add/auction/product', [AuctionController::class, 'addProduct']);
+Route::get('/editOrConfirm/auction/editOrConfirm', [AuctionController::class, 'editOrConfirm']);
+Route::get('/edit/auction/{id}', [AuctionController::class, 'editProduct']);
+Route::put('/update/auction/{id}', [AuctionController::class, 'updateProduct']);
+Route::get('/all/auction/product', [AuctionController::class, 'allProduct']);
+Route::get('/show/auction/product/{id}', [AuctionController::class, 'showProduct']);
+Route::get('/total/auction/product', [AuctionController::class, 'totalProduct']);
+Route::get('/pending/auction/product', [AuctionController::class, 'pendingProduct']);
+Route::get('/sold/auction/product', [AuctionController::class, 'soldProduct']);
+Route::get('/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
+Route::post('/bidding/auction/product/{id}', [AuctionController::class, 'bidNow']);
+Route::get('/live/allProduct', [AuctionController::class, 'allLiveProduct']);
