@@ -10,11 +10,7 @@ use Illuminate\Support\Str;
 
 class AuditionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
         $auditions = Audition::orderBy('id', 'DESC')->get();
@@ -22,23 +18,14 @@ class AuditionController extends Controller
         return view('SuperAdmin.audition.index', compact('auditions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+ 
     public function create()
     {
         $categories = Category::orderBy('id', 'DESC')->get();
         return view('SuperAdmin.audition.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -66,24 +53,15 @@ class AuditionController extends Controller
             ]);
         }
     }
+  
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+  
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function edit($id)
     {
         $categories = Category::orderBy('id', 'DESC')->get();
@@ -91,13 +69,7 @@ class AuditionController extends Controller
         return view('SuperAdmin.audition.edit', compact('audition', 'categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -125,12 +97,7 @@ class AuditionController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function destroy($id)
     {
         $audition = Audition::findOrfail($id);

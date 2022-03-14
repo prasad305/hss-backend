@@ -13,6 +13,7 @@ use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\API\SimplePostController;
 use App\Http\Controllers\API\LearningSessionController;
+use App\Http\Controllers\API\AuditionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -189,6 +190,13 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/livechat_event_details/{id}', [LiveChatController::class, 'details']);
     Route::get('/admin/live_chat_slots/{id}', [LiveChatController::class, 'slots']);
     Route::get('/admin/live_chat/count', [LiveChatController::class, 'count']);
+
+
+    // Monir Audition Part 1
+    Route::get('/admin/audition/status', [AuditionController::class, 'adminStatus']);
+    Route::get('/admin/audition/pendings', [AuditionController::class, 'adminPendings']);
+
+
 
 
     Route::post('/admin/add_schedule', [ScheduleController::class, 'add_schedule']);
