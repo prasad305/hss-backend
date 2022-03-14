@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
+
+    protected $with = ['marketplace'];
+
+
+    public function marketplace()
+    {
+        return $this->belongsTo(Marketplace::class, 'marketplace_id');
+    }
 }
