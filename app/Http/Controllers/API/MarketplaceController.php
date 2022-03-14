@@ -95,6 +95,17 @@ class MarketplaceController extends Controller
         ]);
     }
 
+    public function viewMarketplaceActivities(){
+        $data = Order::where('user_id', Auth::user()->id)
+                    ->latest()
+                    ->get();
+
+        return response()->json([
+            'status' => 200,
+            'data' => $data,
+        ]);
+    }
+
     //SuperStar Admin for marketplace
 
     public function marketplaceStore(Request $request){

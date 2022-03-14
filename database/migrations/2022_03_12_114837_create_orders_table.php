@@ -30,6 +30,7 @@ class CreateOrdersTable extends Migration
             $table->string('expire_date')->nullable();
             $table->string('cvc')->nullable();
             $table->string('status')->nullable();
+            $table->date('delivery_at')->nullable();
             $table->timestamps();
         });
     }
