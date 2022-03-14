@@ -45,6 +45,7 @@ Route::get('/user/learning_session/all', [LearningSessionController::class, 'use
 Route::get('/user/live_chat/all', [LiveChatController::class, 'userAll']);
 
 
+
 // Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
