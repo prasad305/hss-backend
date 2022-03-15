@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Models\Audition\AssignJudge;
+use Illuminate\Support\Facades\Validator;
 
 class AuditionController extends Controller
 {
@@ -57,40 +58,81 @@ class AuditionController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+       
+
+        $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'start_one_id' => 'required',
-            'start_two_id' => 'required',
-            'start_three_id' => 'required',
             'banner' => 'required',
+
         ]);
 
-        $audition = Audition::find($request->audition_id);
-        $audition->title = $request->title;
-        $audition->description = $request->description;
-
-        if ($request->hasfile('banner')) {
-            $destination = $audition->banner;
-            if (File::exists($destination)) {
-                File::delete($destination);
+        if ($validator->fails()) {
+            return response()->json([
+                'validation_errors' => $validator->errors(),
+            ]);
+        }else{
+            $one = $request->star_one_id;
+            $two = $request->star_two_id;
+            $three = $request->star_three_id;
+    
+            $star_ids = [$one,$two,$three];
+    
+            $audition = Audition::find($request->audition_id);
+            $audition->title = $request->title;
+            $audition->description = $request->description;
+    
+            if ($request->hasfile('banner')) {
+                $destination = $audition->banner;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('banner');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/auditions/' . time() . '.' . $extension;
+    
+                Image::make($file)->resize(900, 400)->save($filename, 50);
+    
+                $audition->banner = $filename;
             }
-            $file = $request->file('banner');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/auditions/' . time() . '.' . $extension;
-
-            Image::make($file)->resize(900, 400)->save($filename, 50);
-
-            $audition->banner = $filename;
+    
+    
+            try { 
+                $audition->save();
+                foreach ($star_ids as $key => $star) {
+                   $assign_star = AssignJudge::create([
+                        'audition_id' => $audition->id,
+                        'judge_id' => $star,
+                   ]); 
+                }
+    
+                return response()->json([
+                    'status' => 200,
+                    'stars' => $assign_star,
+                    'audition' => $audition,
+                    'message' => 'Audition Judge Added successfully'
+                ]);
+    
+    
+            } catch (\Exception $exception) {
+                return response()->json([
+                    'status' => 30,
+                    'type' => 'error',
+                    'message' => $exception->getMessage()
+                ]);
+            }
         }
-        try {
-        
-                
-            $audition->save();
 
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
+
+     
        
+    }
+
+    public function getAudition($audition_id){
+        $audition = Audition::find($audition_id);
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
+        ]);
     }
 
 

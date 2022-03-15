@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class AssignJudge extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'audition_id',
+        'judge_id',
+        'approved_by_judge',
+        'status'
+    ];
 }
