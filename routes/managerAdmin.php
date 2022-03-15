@@ -77,6 +77,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('marketplace/pending', [MarketplaceController::class, 'pending'])->name('marketplace.pending');
     Route::get('marketplace/published', [MarketplaceController::class, 'published'])->name('marketplace.published');
     Route::get('marketplace/all', [MarketplaceController::class, 'all'])->name('marketplace.all');
+    Route::get('marketplace/order/list', [MarketplaceController::class, 'allOrderList'])->name('marketplace.allOrderList');
+    Route::get('marketplace/order/list/{id}', [MarketplaceController::class, 'allOrderDetails'])->name('marketplace.allOrderDetails');
 
     Route::get('marketplace/details/{id}', [MarketplaceController::class, 'details'])->name('marketplace.details');
     Route::get('marketplace/edit/{id}', [MarketplaceController::class, 'edit'])->name('marketplace.edit');

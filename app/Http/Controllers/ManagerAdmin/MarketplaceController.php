@@ -5,16 +5,34 @@ namespace App\Http\Controllers\ManagerAdmin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Marketplace;
+use App\Models\Order;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
+use Carbon\Carbon;
 
 class MarketplaceController extends Controller
 {
     public function all()
     {
+        // $date = (int) Carbon::now()->format('dmYHis');
+        // $rand = rand(100,999).$date;
+
         $post = Marketplace::latest()->where('post_status', 1)->get();
 
         return view('ManagerAdmin.marketplace.index', compact('post'));
+    }
+
+    public function allOrderList(){
+        $orders = Order::latest()
+                       ->get();
+
+        return view('ManagerAdmin.marketplace.order', compact('orders'));
+    }
+    public function allOrderDetails($id){
+        $order = Order::find($id);
+        // dd($order);
+
+        return view('ManagerAdmin.marketplace.order-view', compact('order'));
     }
 
     public function pending()
