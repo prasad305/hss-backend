@@ -124,6 +124,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     // auction product
     Route::get('/auction-product/all', [UserController::class, 'auctionProduct']);
     Route::get('/user/getStarAuction/{star_id}', [UserController::class, 'starAuction']);
+    Route::get('/user/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
 
 });
 
