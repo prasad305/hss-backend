@@ -19,7 +19,6 @@ class StarAuthController extends Controller
 {
     public function register(Request $request)
     {
-        return $request;
 
         $validator = Validator::make($request->all(),[
             // 'email' => 'required|unique:users,email',

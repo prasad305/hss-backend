@@ -198,6 +198,9 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     // Monir Audition Part 1
     Route::get('/admin/audition/status', [AuditionController::class, 'adminStatus']);
     Route::get('/admin/audition/pendings', [AuditionController::class, 'adminPendings']);
+    Route::get('/admin/audition/stars', [AuditionController::class, 'stars']);
+    Route::post('/admin/audition/add', [AuditionController::class, 'store']);
+
 
 
 
