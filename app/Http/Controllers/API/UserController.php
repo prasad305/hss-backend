@@ -467,4 +467,13 @@ class UserController extends Controller
             'product' => $product
         ]);
     }
+    public function starAuction($star_id){
+
+        $product = Auction::with('star')->where('star_id',$star_id)->where('status',1)->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+            'message' => 'okay',
+        ]);
+    }
 }
