@@ -88,6 +88,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/marketplace/city/{id}', [MarketplaceController::class, 'viewCity']);
     Route::get('/user/marketplace/details/{slug}', [MarketplaceController::class, 'getSlugDetails']);
     Route::post('/user/marketplace/order/store', [MarketplaceController::class, 'viewMarketplaceOrder']);
+    Route::get('/user/marketplace/activities', [MarketplaceController::class, 'viewMarketplaceActivities']);
 
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
@@ -123,6 +124,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // auction product
     Route::get('/auction-product/all', [UserController::class, 'auctionProduct']);
+    Route::get('/user/getStarAuction/{star_id}', [UserController::class, 'starAuction']);
 
 });
 
@@ -143,6 +145,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/marketplace/product-list/live', [MarketplaceController::class, 'liveProductList']);
     Route::get('/admin/marketplace/product-edit/{id}', [MarketplaceController::class, 'editAdminProductList']);
     Route::post('/admin/marketplace/product-store/{id}', [MarketplaceController::class, 'storeAdminProductList']);
+    Route::get('/admin/marketplace/order/product-list', [MarketplaceController::class, 'orderAdminProductList']);
 
     // Simple Post Section
     Route::post('admin/add_simple_post', [SimplePostController::class, 'add']);
@@ -198,6 +201,9 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     // Monir Audition Part 1
     Route::get('/admin/audition/status', [AuditionController::class, 'adminStatus']);
     Route::get('/admin/audition/pendings', [AuditionController::class, 'adminPendings']);
+    Route::get('/admin/audition/stars', [AuditionController::class, 'stars']);
+    Route::post('/admin/audition/add', [AuditionController::class, 'store']);
+
 
 
 

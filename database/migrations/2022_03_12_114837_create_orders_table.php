@@ -16,7 +16,11 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('user_id')->nullable();
+            $table->string('invoice_no')->nullable();
+            $table->string('order_no')->nullable();
             $table->string('marketplace_id')->nullable();
+            $table->string('superstar_id')->nullable();
+            $table->string('superstar_admin_id')->nullable();
             $table->string('country_id')->nullable();
             $table->string('state_id')->nullable();
             $table->string('city_id')->nullable();
@@ -30,6 +34,7 @@ class CreateOrdersTable extends Migration
             $table->string('expire_date')->nullable();
             $table->string('cvc')->nullable();
             $table->string('status')->nullable();
+            $table->timestamp('delivery_at')->nullable();
             $table->timestamps();
         });
     }

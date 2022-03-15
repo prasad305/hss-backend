@@ -31,6 +31,7 @@ class MarketplaceController extends Controller
             ]);
     }
     
+    
     public function viewCountry(){
         $data = Country::where('status', 1)
                             ->get();
@@ -70,12 +71,16 @@ class MarketplaceController extends Controller
     public function viewMarketplaceOrder(Request $request){
         $marketplace = Marketplace::where('slug', $request->marketplace_slug)->first();
 
+        $date = (int) Carbon::now()->format('dmYHis');
+        $rand = rand(100,999).$date;
+
         $data = new Order();
         $data->country_id = $request->country_id;
         $data->state_id = $request->state_id;
         $data->city_id = $request->city_id;
         $data->area = $request->area;
         $data->phone = $request->phone;
+        $data->order_no = $rand;
         $data->items = $request->items;
         $data->unit_price = $request->unit_price;
         $data->delivery_charge = $request->delivery_charge;
@@ -84,6 +89,8 @@ class MarketplaceController extends Controller
         $data->expire_date = $request->expire_date;
         $data->user_id = Auth::user()->id;
         $data->marketplace_id = $marketplace->id;
+        $data->superstar_id = $marketplace->superstar_id;
+        $data->superstar_admin_id = $marketplace->superstar_admin_id;
         $data->total_price = ($request->items * $request->unit_price) + $request->delivery_charge;
         $data->status = 0;
 
@@ -92,6 +99,17 @@ class MarketplaceController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Order submit Successfully',
+        ]);
+    }
+
+    public function viewMarketplaceActivities(){
+        $data = Order::where('user_id', Auth::user()->id)
+                    ->latest()
+                    ->get();
+
+        return response()->json([
+            'status' => 200,
+            'data' => $data,
         ]);
     }
 
@@ -140,10 +158,24 @@ class MarketplaceController extends Controller
         $approved = Marketplace::where('status', 1)
                                 ->where('superstar_admin_id', Auth::user()->id)
                                 ->get();
+        $approvedCount = Marketplace::where('status', 1)
+                                ->where('superstar_admin_id', Auth::user()->id)
+                                ->count();
         
         return response()->json([
             'status' => 200,
             'approved' => $approved,
+            'approvedCount' => $approvedCount,
+        ]);
+    }
+
+    public function orderAdminProductList(){
+        $orderList = Order::where('superstar_admin_id', Auth::user()->id)
+                                ->get();
+        
+        return response()->json([
+            'status' => 200,
+            'orderList' => $orderList,
         ]);
     }
 
@@ -164,13 +196,17 @@ class MarketplaceController extends Controller
     }
 
     public function pendingProductList(){
-        $pending = Marketplace::where('status', 0)
+        $pending = Marketplace::where('post_status', 0)
                                 ->where('superstar_admin_id', Auth::user()->id)
                                 ->get();
+        $pendingCount = Marketplace::where('post_status', 0)
+                                ->where('superstar_admin_id', Auth::user()->id)
+                                ->count();
 
         return response()->json([
             'status' => 200,
             'pending' => $pending,
+            'pendingCount' => $pendingCount,
         ]);
     }
 
@@ -263,14 +299,18 @@ class MarketplaceController extends Controller
         $id = Auth::user()->id;
         $parent_id = User::find($id);
 
-        $approved = Marketplace::where('status', 1)
-                                ->where('post_status', 1)
+        $approved = Marketplace::where('post_status', 1)
                                 ->where('superstar_admin_id', $parent_id->parent_user)
                                 ->get();
+
+        $approvedCount = Marketplace::where('post_status', 1)
+                                ->where('superstar_admin_id', $parent_id->parent_user)
+                                ->count();
         
         return response()->json([
             'status' => 200,
             'approved' => $approved,
+            'approvedCount' => $approvedCount,
         ]);
     }
 
@@ -300,10 +340,14 @@ class MarketplaceController extends Controller
         $pending = Marketplace::where('post_status', 0)
                             ->where('superstar_admin_id', $parent_id->parent_user)
                             ->get();
+        $pendingCount = Marketplace::where('post_status', 0)
+                            ->where('superstar_admin_id', $parent_id->parent_user)
+                            ->count();
 
         return response()->json([
             'status' => 200,
             'pending' => $pending,
+            'pendingCount' => $pendingCount,
         ]);
     }
 

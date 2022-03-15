@@ -105,13 +105,20 @@
               <p>All</p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ route('managerAdmin.marketplace.allOrderList') }}" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Order List</p>
+            </a>
           </li>
+
+          {{-- </li>
           <li class="nav-item">
             <a href="" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
               <p>Order</p>
             </a>
-          </li>
+          </li> --}}
         </ul>
       </li>
 
