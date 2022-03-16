@@ -215,28 +215,7 @@ class AuctionController extends Controller
         ]);
     }
 
-    public function bidNow(Request $request, $id)
-    {
-        $user = User::find($id);
-        if (Hash::check($request->password, $user->password)) {
-            $bidding = Bidding::create([
 
-                'user_id' => $user->id,
-                'name' => $user->first_name,
-                'amount' => $request->amount,
-            ]);
-            return response()->json([
-
-                'status' => 200,
-                'data' => $bidding,
-            ]);
-        } else {
-            return response()->json([
-                'status' => 201,
-                'message' => 'Passowrd Not Match'
-            ]);
-        }
-    }
 
     //<========================= Star Section ==============================>
 
@@ -480,28 +459,5 @@ class AuctionController extends Controller
             'status' => 200,
             'product' => $product,
         ]);
-    }
-
-    public function star_bidNow(Request $request, $id)
-    {
-        $user = User::find($id);
-        if (Hash::check($request->password, $user->password)) {
-            $bidding = Bidding::create([
-
-                'user_id' => $user->id,
-                'name' => $user->first_name,
-                'amount' => $request->amount,
-            ]);
-            return response()->json([
-
-                'status' => 200,
-                'data' => $bidding,
-            ]);
-        } else {
-            return response()->json([
-                'status' => 201,
-                'message' => 'Passowrd Not Match'
-            ]);
-        }
     }
 }
