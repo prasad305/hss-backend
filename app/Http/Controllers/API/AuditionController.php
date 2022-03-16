@@ -62,12 +62,15 @@ class AuditionController extends Controller
 
         $validator = Validator::make($request->all(), [
             'title' => 'required',
+            'description' => 'required',
+            'star_one_id' => 'required',
             'banner' => 'required',
 
         ]);
 
         if ($validator->fails()) {
             return response()->json([
+                'status' => 422,
                 'validation_errors' => $validator->errors(),
             ]);
         }else{
@@ -75,7 +78,9 @@ class AuditionController extends Controller
             $two = $request->star_two_id;
             $three = $request->star_three_id;
     
-            $star_ids = [$one,$two,$three];
+             $primay_array = [$one,$two,$three];
+
+             $star_ids = array_filter($primay_array);
     
             $audition = Audition::find($request->audition_id);
             $audition->title = $request->title;
@@ -128,9 +133,13 @@ class AuditionController extends Controller
     }
 
     public function getAudition($audition_id){
-        $audition = Audition::find($audition_id);
+        $audition = Audition::with('assignJudge')->find($audition_id);
+        // foreach ($audition->assignJudge as $key => $value) {
+        //     # code...
+        // }
         return response()->json([
             'status' => 200,
+            'audition' => $audition,
             'audition' => $audition,
         ]);
     }
