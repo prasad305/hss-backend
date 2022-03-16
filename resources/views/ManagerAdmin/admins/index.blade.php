@@ -60,9 +60,7 @@
                 @foreach ($admins as $admin)
                     <div class="col-md-3 col-sm-6 col-12">
                         <div class="info-box shadow-none">
-                            <img src="{{ $admin->image ? asset($admin->image) : asset(get_static_option('no_image')) }}"
-                                alt="admin Image" class="img-fluid mr-3"
-                                style="height: 100px; width: 100px; border-radius: 50%;">
+                            <img src="{{ asset($admin->image ?? get_static_option('user')) }}" alt="Admin Image" class="img-fluid mr-3" style="height: 100px; width: 100px; border-radius: 50%;">
 
                             <div class="px-2" style="border-left: 1px solid gray">
                                 <a href="{{ route('managerAdmin.admin.show', $admin->id) }}">

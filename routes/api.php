@@ -204,6 +204,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/audition/stars', [AuditionController::class, 'stars']);
     Route::post('/admin/audition/add', [AuditionController::class, 'store']);
 
+    Route::get('/admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
+
 
 
 

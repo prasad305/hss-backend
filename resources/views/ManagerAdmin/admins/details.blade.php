@@ -47,38 +47,65 @@
                     <div class="mx-auto my-3">
                         <h4 class="text-center">{{ $admin->first_name }} {{ $admin->last_name }}</h4>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-4 border-right">
-                            <div class="description-block">
-                                <h5 class="description-header">3,200</h5>
-                                <span class="description-text">Event Completed</span>
+                   <div class="container">
+                        <div class="row">
+                            <div class="col-md-2 offset-md-3">
+                            <div class="card" style="background-color: white;height:250px;">
+                               <div style="height:170px; width:100%;" class="justify-content-center  d-flex align-items-center">
+                                        <div style="background-color:#ffff; border-radius:50%; border: 2px solid rgba(190, 11, 11, 0.067); height:70px; width:80px; color:red;" class="justify-content-center  d-flex align-items-center">
+                                            @if ($admin->assignAudition)
+                                            <span class="right badge border border-danger my-2">Assigned</span> ⭕<br>
+                                            @else
+                                                <span class="right badge border border-success my-2">Free Now</span><br>
+                                            @endif
+                                        </div>
+                               </div>
+                                <h2 class="my-5 h2" style="color:black;">Star Assign</h2>
                             </div>
-                            <!-- /.description-block -->
                         </div>
-                        <!-- /.col -->
-                        <div class="col-sm-4 border-right">
-                            <div class="description-block">
-                                <h5 class="description-header">13,000</h5>
-                                <span class="description-text">Months Supervison</span>
+                            <div class="col-md-2">
+                            <div class="card" style="background-color: white;height:250px;">
+                               <div style="height:170px; width:100%;" class="justify-content-center  d-flex align-items-center">
+                                        <div style="background-color:#ffff; border-radius:50%; border: 2px solid rgba(190, 11, 11, 0.067); height:70px; width:80px; color:red;" class="justify-content-center  d-flex align-items-center">
+                                            @if ($admin->assignAudition)
+                                            <span class="right badge border border-danger my-2">Assigned</span> ⭕<br>
+                                            @else
+                                                <span class="right badge border border-success my-2">Free Now</span><br>
+                                            @endif
+                                        </div>
+                               </div>
+                                <h2 class="my-5 h2" style="color:black;"> Event Assign</h2>
                             </div>
-                            <!-- /.description-block -->
                         </div>
-                        <!-- /.col -->
-                        <div class="col-sm-4">
-                            <div class="description-block">
-                                <h5 class="description-header">35</h5>
-                                <span class="description-text">More</span>
+                            <div class="col-md-2">
+                            <div class="card" style="background-color: white;height:250px;">
+                               <div style="height:150px; width:100%;" class="justify-content-center  d-flex align-items-center">
+                                        <div style="background-color:#ffff; border-radius:50%; border: 2px solid rgba(190, 11, 11, 0.067); height:70px; width:80px; color:red;" class="justify-content-center  d-flex align-items-center">
+                                            @if ($admin->assignAudition)
+                                            <span class="right badge border border-danger my-2">Assigned</span> ⭕<br>
+                                            @else
+                                                <span class="right badge border border-success my-2">Free Now</span><br>
+                                            @endif
+                                        </div>
+                               </div>
+                                <h2 class="my-5 h2" style="color:black;">Event Completed</h2>
                             </div>
-                            <!-- /.description-block -->
                         </div>
-                        <!-- /.col -->
-                    </div>
-                    <div class="row">
-
-
-
-                    </div>
-                    <!-- /.row -->
+                            <div class="col-md-2">
+                            <div class="card" style="background-color: white;height:250px;">
+                               <div style="height:150px; width:100%;" class="justify-content-center  d-flex align-items-center">
+                                        <div style="background-color:#ffff; border-radius:50%; border: 2px solid rgba(190, 11, 11, 0.067); height:70px; width:80px; color:red;" class="justify-content-center  d-flex align-items-center">
+                                            @if ($admin->assignAudition)
+                                            <span class="right badge border border-danger my-2">Assigned</span> ⭕<br>
+                                            @else
+                                                <span class="right badge border border-success my-2">Free Now</span><br>
+                                            @endif
+                                        </div>
+                               </div>
+                                <h2 class="my-5 h2" style="color:black;">Month Supervised</h2>
+                            </div>
+                        </div>
+                   </div>
                 </div>
                 <div class="card m-4">
                     @if ($admin->assignAudition)
