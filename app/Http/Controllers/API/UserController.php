@@ -523,4 +523,12 @@ class UserController extends Controller
             'bidding' => $bidding,
         ]);
     }
+    public function bidHistory($auction_id)
+    {
+        $bidHistory = Bidding::where('user_id', auth()->user()->id)->where('auction_id', $auction_id)->get();
+        return response()->json([
+            'status' => 200,
+            'bidHistory' => $bidHistory,
+        ]);
+    }
 }
