@@ -4,7 +4,6 @@
 Manager Admin
 @endpush
 
-
 @section('content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -35,8 +34,7 @@ Manager Admin
             </button>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="{{ route('managerAdmin.admin_assinged') }}">Show assigned admins</a>
-                <a class="dropdown-item" href="{{ route('managerAdmin.admin_notAssinged') }}">Show available
-                    admins</a>
+                <a class="dropdown-item" href="{{ route('managerAdmin.admin_notAssinged') }}">Show available admins</a>
                 <a class="dropdown-item" href="{{ route('managerAdmin.admin.index') }}">All Admins</a>
             </div>
             <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;" onclick=""><i
@@ -50,40 +48,6 @@ Manager Admin
         <h4 class="mb-2">Admin List</h4>
 
         <hr>
-
-        <style>
-            .AdminImg {
-                width: 100px;
-                height: 100px;
-                object-fit: cover;
-                border-radius: 50%;
-
-            }
-
-            .AdminName {
-                color: black;
-                font-size: 1rem;
-            }
-
-            .AdminMusic {
-                color: #638BC9 !important:
-            }
-
-            .AtifAdmin {
-                color: #FF602E;
-            }
-
-
-            @media only screen and (min-width: 1100px) and (max-width: 1400px) {
-
-                .AdminName {
-                    white-space: nowrap;
-                    width: 8vw;
-                    overflow: hidden;
-                }
-            }
-        </style>
-
         <div class="row">
 
             @foreach ($admins as $admin)
@@ -102,10 +66,10 @@ Manager Admin
                         {{-- <p>Music</p> --}}
 
                         @if ($admin->assignAudition)
-                        <span class="right badge bg-danger my-2">Assigned</span><i class="fa-solid fa-bahai px-2 text-danger"></i> <br>
+                        <span class="right badge bg-danger my-2">Assigned</span>
+                        <i class="fa-solid fa-bahai px-2 text-danger"></i><br>
                         @else
-                        <span class="right badge border border-success my-2">Free Now</span> 🏳️<br>
-
+                        {{-- <span class="right badge border border-success my-2">Free Now</span> 🏳️<br> --}}
                         @endif
 
                         <p class="AtifAdmin">Atif Aslam</p>
@@ -167,6 +131,39 @@ Manager Admin
 
 </div> <!-- container -->
 </div> <!-- content -->
+
+<style>
+    .AdminImg {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+
+    }
+
+    .AdminName {
+        color: black;
+        font-size: 1rem;
+    }
+
+    .AdminMusic {
+        color: #638BC9 !important:
+    }
+
+    .AtifAdmin {
+        color: #FF602E;
+    }
+    
+
+    @media only screen and (min-width: 1100px) and (max-width: 1400px) {
+
+        .AdminName {
+            white-space: nowrap;
+            width: 8vw;
+            overflow: hidden;
+        }
+    }
+</style>
 
 <script>
     function activeNow(objButton) {
