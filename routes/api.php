@@ -237,6 +237,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/sold/auction/product', [AuctionController::class, 'soldProduct']);
     Route::get('/admin/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
     Route::get('/admin/live/allProduct', [AuctionController::class, 'allLiveProduct']);
+    Route::get('/admin/liveBidding/auction/{auction_id}', [AuctionController::class, 'liveBidding']);
+    Route::get('/admin/topBidder/auction/{auction_id}', [AuctionController::class, 'topBidder']);
 });
 
 
