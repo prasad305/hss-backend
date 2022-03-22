@@ -472,7 +472,7 @@ class UserController extends Controller
     public function starAuction($star_id)
     {
 
-        $product = Auction::with('star')->where('star_id', $star_id)->where('status', 1)->latest()->get();
+        $product = Auction::with('star', 'bidding', 'bidding.user')->where('star_id', $star_id)->where('status', 1)->latest()->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
@@ -517,7 +517,7 @@ class UserController extends Controller
 
     public function liveBidding($auction_id)
     {
-        $bidding = Bidding::with('user')->where('auction_id', $auction_id)->get();
+        $bidding = Bidding::with('user')->orderBy('amount', 'DESC')->where('auction_id', $auction_id)->take(6)->get();
         return response()->json([
             'status' => 200,
             'bidding' => $bidding,
@@ -529,6 +529,14 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'bidHistory' => $bidHistory,
+        ]);
+    }
+    public function topBidder($auction_id)
+    {
+        $topBidder = Bidding::orderBy('amount', 'DESC')->where('auction_id', $auction_id)->limit(4);
+        return response()->json([
+            'status' => 200,
+            'topBidder' => $topBidder,
         ]);
     }
 }
