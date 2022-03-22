@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ManagerAdmin\AuditionAdminController;
 use App\Http\Controllers\ManagerAdmin\AdminController;
 use App\Http\Controllers\ManagerAdmin\JobAssign;
 use App\Http\Controllers\ManagerAdmin\DashboardController;
@@ -42,6 +43,12 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('admin-assinged', [AdminController::class, 'assinged'])->name('admin_assinged');
     Route::get('admin-free', [AdminController::class, 'notAssinged'])->name('admin_notAssinged');
 
+    // Audition Admin route
+    Route::resource('auditionAdmin', AuditionAdminController::class);
+    Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');
+    Route::post('auditionAdmin/inactive/{id}', [AuditionAdminController::class, 'inactiveNow'])->name('auditionAdmin.inactiveNow');
+    Route::get('auditionAdmin-assinged', [AuditionAdminController::class, 'assinged'])->name('auditionAdmin_assinged');
+    Route::get('auditionAdmin-free', [AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin_notAssinged');
 
     // Live route
     Route::get('liveChat', [LiveChatController::class, 'index'])->name('liveChat.index');

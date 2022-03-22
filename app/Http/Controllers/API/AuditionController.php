@@ -153,13 +153,17 @@ class AuditionController extends Controller
         ]);
     }
 
-    // public function starAudition(){
-    //     $star_auditions = AssignJudge::where([['judge_id', auth('sanctum')->user()->id], ['approved_by_judge', 0]])->get();
-    //     return response()->json([
-    //         'status' => 200,
-    //         'star_auditions' => $star_auditions,
-    //     ]);
-    // }
+    public function starPendingAudtion(){
+        $pending_auditions = Audition::with('judge')
+                                        ->whereHas('judge', function($q){
+                                            $q->where('judge_id',auth('sanctum')->user()->id); 
+                                        })->get();
+                        
+        return response()->json([
+            'status' => 200,
+            'pending_auditions' => $pending_auditions,
+        ]);
+    }
 
     // public function starSingleAudition($id){
 

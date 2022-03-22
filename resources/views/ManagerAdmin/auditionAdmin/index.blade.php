@@ -1,7 +1,7 @@
 @extends('Layouts.ManagerAdmin.master')
 
 @push('title')
- Admin
+Audition Admin
 @endpush
 
 @section('content')
@@ -10,12 +10,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0"> Admin</h1>
+                <h1 class="m-0">Audition Admin</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active"> Admin List</li>
+                    <li class="breadcrumb-item active">Audition Admin List</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -33,40 +33,40 @@
                 <i class=" fa fa-filter"></i> Filter
             </button>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="{{ route('managerAdmin.admin_assinged') }}">Show assigned audition admins</a>
-                <a class="dropdown-item" href="{{ route('managerAdmin.admin_notAssinged') }}">Show available audition admins</a>
-                <a class="dropdown-item" href="{{ route('managerAdmin.admin.index') }}">All  Admins</a>
+                <a class="dropdown-item" href="{{ route('managerAdmin.auditionAdmin_assinged') }}">Show assigned audition admins</a>
+                <a class="dropdown-item" href="{{ route('managerAdmin.auditionAdmin_notAssinged') }}">Show available audition admins</a>
+                <a class="dropdown-item" href="{{ route('managerAdmin.auditionAdmin.index') }}">All Audition Admins</a>
             </div>
             <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;" onclick=""><i
                     class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
             <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;"
-                onclick="Show('New  Admin','{{ route('managerAdmin.admin.create') }}')"><i
+                onclick="Show('New Audition Admin','{{ route('managerAdmin.auditionAdmin.create') }}')"><i
                     class=" fa fa-plus"></i>&nbsp;Add New</a>
         </div>
 
         <!-- =========================================================== -->
-        <h4 class="mb-2"> Admin List</h4>
+        <h4 class="mb-2">Audition Admin List</h4>
 
         <hr>
         <div class="row">
 
-            @foreach ($admins as $admin)
+            @foreach ($auditionAdmins as $auditionAdmin)
             <div class="col-md-3 col-sm-6 col-12">
                 <div class="info-box shadow-none bg-light pt-4 pb-4">
-                    <img src="{{ asset($admin->image ?? get_static_option('user')) }}" alt="Admin Image"
+                    <img src="{{ asset($auditionAdmin->image ?? get_static_option('user')) }}" alt="Admin Image"
                         class="img-fluid AdminImg mr-3 mt-4">
 
                     <div class="px-2" style="border-left: 1px solid gray">
 
-                        <a href="{{ route('managerAdmin.admin.show', $admin->id) }}">
+                        <a href="{{ route('managerAdmin.auditionAdmin.show', $auditionAdmin->id) }}">
                             <span class="info-box-text AdminName">
-                                <h5>{{ $admin->first_name }} {{ $admin->last_name }}</h5>
+                                <h5>{{ $auditionAdmin->first_name }} {{ $auditionAdmin->last_name }}</h5>
                             </span>
                             <b class="AdminMusic">Music</b> <br />
                         </a>
                         {{-- <p>Music</p> --}}
 
-                        @if ($admin->assign)
+                        @if ($auditionAdmin->assignAudition)
                         <span class="right badge bg-danger my-2">Assigned</span>
                         <i class="fa-solid fa-bahai px-2 text-danger"></i><br>
                         @else
@@ -74,13 +74,13 @@
                         @endif
 
                         {{-- <p class="AtifAdmin">Atif Aslam</p> --}}
-                        {{-- <p class="{{ $admin->status == 0 ? 'text-danger' : 'text-success' }}">{{ $admin->status == 0 ? 'Pending For Approval' : 'Approved' }}</p> --}}
+                        <p class="{{ $auditionAdmin->status == 0 ? 'text-danger' : 'text-success' }}">{{ $auditionAdmin->status == 0 ? 'Pending For Approval' : 'Approved' }}</p>
                         <a class="btn btn-sm btn-info"
-                            onclick="Show('Edit  Admin','{{ route('managerAdmin.admin.edit', $admin->id) }}')"><i
+                            onclick="Show('Edit Audition Admin','{{ route('managerAdmin.auditionAdmin.edit', $auditionAdmin->id) }}')"><i
                                 class="fa fa-edit text-white"></i></a>
 
                         <button class="btn btn-sm btn-warning" onclick="delete_function(this)"
-                            value="{{ route('managerAdmin.admin.destroy', $admin->id) }}"><i class="fa fa-trash"></i>
+                            value="{{ route('managerAdmin.auditionAdmin.destroy', $auditionAdmin->id) }}"><i class="fa fa-trash"></i>
                         </button>
                     </div>
                     <!-- /.info-box-content -->

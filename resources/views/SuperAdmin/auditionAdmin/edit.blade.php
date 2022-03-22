@@ -22,6 +22,7 @@
              <input type="text" class="form-control" id="email" name="email" placeholder="Enter Audition Admin Email" value="{{$admin->email}}">
         </div>
     </div>
+
     <span class="row">
            <div class="form-group col-md-6">
               <label for="image">Image</label>
@@ -40,7 +41,18 @@
       </div>
     </span>
 
-    <button type="submit" class="btn btn-primary" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update Admin</button>
+    <div class="form-group row">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="status" id="inlineRadio1" {{ $admin->status == 1 ? 'checked' : '' }} value="1">
+            <label class="form-check-label" for="inlineRadio1">Approved</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="status" id="inlineRadio2" {{ $admin->status == 0 ? 'checked' : '' }} value="0">
+            <label class="form-check-label" for="inlineRadio2">Pending</label>
+          </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update Audition Admin</button>
 
 </form>
 
@@ -59,7 +71,7 @@
     });
 
     $.ajax({
-        url: "{{ route('managerAdmin.auditionAdmin.update',$admin->id) }}",// your request url
+        url: "{{ route('superAdmin.auditionAdmin.update',$admin->id) }}",// your request url
         data: formData,
         processData: false,
         contentType: false,
