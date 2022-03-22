@@ -12,6 +12,7 @@ use App\Http\Controllers\API\MarketplaceController;
 use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\API\SimplePostController;
+use App\Http\Controllers\API\FanGroupController;
 use App\Http\Controllers\API\LearningSessionController;
 use App\Http\Controllers\API\AuditionController;
 use Illuminate\Http\Request;
@@ -139,6 +140,12 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/checkingAdmin', function () {
         return response()->json(['message' => 'You are in as Admin', 'status' => 200], 200);
     });
+
+    // Fan Group Section
+    Route::post('admin/fan-group/store', [FanGroupController::class, 'fanGroupStore']);
+    Route::get('/admin/fan-group/star/list', [FanGroupController::class, 'allStarList']);
+    Route::get('/admin/fan-group/star/list/{data}', [FanGroupController::class, 'someStarList']);
+    Route::get('/admin/fan-group/star/list/status', [FanGroupController::class, 'statusStar']);
 
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
