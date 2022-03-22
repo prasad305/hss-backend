@@ -58,15 +58,23 @@ class AuditionController extends Controller
 
     public function store(Request $request)
     {
-       
+        
 
+        // return $request->star_ids;
+
+        // foreach ($array as $id){
+        //     return $id;
+        // }
+       
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
-            'star_one_id' => 'required',
-            'banner' => 'required',
-
+            'star_ids' => 'required',
         ]);
+
+        
+
+        
 
         if ($validator->fails()) {
             return response()->json([
@@ -74,20 +82,13 @@ class AuditionController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         }else{
-            $one = $request->star_one_id;
-            $two = $request->star_two_id;
-            $three = $request->star_three_id;
-    
-             $primay_array = [$one,$two,$three];
-
-             $star_ids = array_filter($primay_array);
-    
             $audition = Audition::find($request->audition_id);
             $audition->title = $request->title;
             $audition->description = $request->description;
     
             if ($request->hasfile('banner')) {
                 $destination = $audition->banner;
+
                 if (File::exists($destination)) {
                     File::delete($destination);
                 }
@@ -103,21 +104,25 @@ class AuditionController extends Controller
     
             try { 
                 $audition->save();
+
+                $star_ids = array_map('intval', explode(',', $request->star_ids));
+                
+                AssignJudge::whereNotIn('id',$star_ids)->where('audition_id', $audition->id)->delete();
+
                 foreach ($star_ids as $key => $star) {
-                   $assign_star = AssignJudge::create([
-                        'audition_id' => $audition->id,
-                        'judge_id' => $star,
-                   ]); 
+                    if(!AssignJudge::where('judge_id',$star)->where('audition_id', $audition->id)->first()){
+                        $assign_star = AssignJudge::create([
+                            'audition_id' => $audition->id,
+                            'judge_id' => $star,
+                        ]); 
+                    }
                 }
-    
                 return response()->json([
                     'status' => 200,
                     'stars' => $assign_star,
                     'audition' => $audition,
                     'message' => 'Audition Judge Added successfully'
                 ]);
-    
-    
             } catch (\Exception $exception) {
                 return response()->json([
                     'status' => 30,
@@ -134,15 +139,33 @@ class AuditionController extends Controller
 
     public function getAudition($audition_id){
         $audition = Audition::with('assignJudge')->find($audition_id);
-        // foreach ($audition->assignJudge as $key => $value) {
-        //     # code...
-        // }
+       
+        $judge_ids = [];
+        foreach ($audition->assignJudge as $key => $judge) {
+           array_push($judge_ids, $judge->judge_id);
+        }
+        
+        // return $judge_ids;
         return response()->json([
             'status' => 200,
             'audition' => $audition,
-            'audition' => $audition,
+            'judge_ids' => $judge_ids
         ]);
     }
+
+    // public function starAudition(){
+    //     $star_auditions = AssignJudge::where([['judge_id', auth('sanctum')->user()->id], ['approved_by_judge', 0]])->get();
+    //     return response()->json([
+    //         'status' => 200,
+    //         'star_auditions' => $star_auditions,
+    //     ]);
+    // }
+
+    // public function starSingleAudition($id){
+
+    //     return $this->getAudition($id);
+
+    // }
 
 
     public function show($id)

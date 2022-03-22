@@ -14,4 +14,8 @@ class AssignJudge extends Model
         'approved_by_judge',
         'status'
     ];
+
+    public function auditions(){
+        return $this->belongsTo(Audition::class);
+    }
 }

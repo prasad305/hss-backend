@@ -208,6 +208,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
     Route::get('/admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
 
+   
 
 
 
@@ -330,6 +331,14 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/sold/auction/product', [AuctionController::class, 'star_soldProduct']);
     Route::get('/star/unSold/auction/product', [AuctionController::class, 'star_unSoldProduct']);
     Route::get('/star/live/allProduct', [AuctionController::class, 'star_allLiveProduct']);
+
+
+    // Super Star Audtion Routes
+    // Route::get('/star/auditions',[AuditionController::class, 'starAudition']);
+    // Route::get('/star/audition/{id}',[AuditionController::class, 'starSingleAudition']);
+
+
+
 });
 
 
