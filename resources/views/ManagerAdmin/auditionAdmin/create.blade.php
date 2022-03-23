@@ -59,7 +59,7 @@
         }
     });
     $.ajax({
-        url: "{{route('managerAdmin.admin.store')}}",// your request url
+        url: "{{route('managerAdmin.auditionAdmin.store')}}",// your request url
         data: formData,
         processData: false,
         contentType: false,
