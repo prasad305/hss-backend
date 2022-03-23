@@ -151,7 +151,7 @@ class AuctionController extends Controller
     {
         $totolBidding = Bidding::count();
         $maxBidding = Bidding::max('amount');
-        $products = Auction::with('bidding')->where('status', 1)->get();
+        $products = Auction::with('bidding')->orderBy('id', 'DESC')->where('status', 1)->get();
 
         return response()->json([
             'status' => '200',
@@ -393,7 +393,7 @@ class AuctionController extends Controller
     {
         $totolBidding = Bidding::count();
         $maxBidding = Bidding::max('amount');
-        $products = Auction::with('bidding')->where('star_approval', 1)->where('product_status', 0)->get();
+        $products = Auction::with('bidding')->orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->get();
 
         return response()->json([
             'status' => '200',
@@ -442,7 +442,7 @@ class AuctionController extends Controller
     public function star_unSoldProductList()
     {
 
-        $products = Auction::where('star_approval', 1)->where('product_status', 0)->get();
+        $products = Auction::orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->get();
         return response()->json([
             'status' => 200,
             'products' => $products,
