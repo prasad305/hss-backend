@@ -16,7 +16,7 @@ class AuditionSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        
+
         for ($i = 1; $i < 10; $i++) {
             $audition = new Audition();
             $audition->category_id =  $faker->numberBetween(1, 8);
@@ -27,11 +27,9 @@ class AuditionSeeder extends Seeder
             $audition->description = $faker->text(100);
             $audition->start_time = Carbon::now();
             $audition->end_time = Carbon::now();
-            $audition->round_stattus =  $faker->numberBetween(1,3);
-            $audition->template_id = $faker->numberBetween(1,3);
+            $audition->round_status =  $faker->numberBetween(1, 3);
+            $audition->template_id = $faker->numberBetween(1, 3);
             $audition->save();
         };
     }
-
-
 }
