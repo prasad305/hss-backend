@@ -14,9 +14,19 @@
 
       <li class="nav-item">
         <a href="{{ route('managerAdmin.admin.index') }}" class="nav-link">
-          <i class="nav-icon fas fa-th"></i>
+          <i class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-th"></i>
           <p>
-            Admins
+             Admins
+            <span class="right badge badge-danger">New</span>
+          </p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{ route('managerAdmin.auditionAdmin.index') }}" class="nav-link">
+          <i class="nav-icon {{ Request::routeIs('managerAdmin.auditionAdmin.index') ? 'active' : '' }} fas fa-th"></i>
+          <p>
+            Audition Admins
             <span class="right badge badge-danger">New</span>
           </p>
         </a>
