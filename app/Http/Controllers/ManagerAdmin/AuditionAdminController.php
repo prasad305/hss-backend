@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\File;
 
-class AdminController extends Controller
+class AuditionAdminController extends Controller
 {
     public function index()
     {
-        $admins = User::where('user_type', 'admin')->orderBy('id', 'DESC')->get();
-        return view('ManagerAdmin.admins.index', compact('admins'));
+        $auditionAdmins = User::where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
+        return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins'));
     }
 
     public function assinged()
@@ -26,8 +26,8 @@ class AdminController extends Controller
         foreach ($assignAdmins as $assignAdmin) {
             array_push($userIds, $assignAdmin->assign_person);
         }
-        $admins = User::whereIn('id', $userIds)->orderBy('id', 'DESC')->get();
-        return view('ManagerAdmin.admins.index', compact('admins'));
+        $auditionAdmins = User::whereIn('id', $userIds)->orderBy('id', 'DESC')->get();
+        return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins'));
     }
 
     public function notAssinged()
@@ -38,8 +38,8 @@ class AdminController extends Controller
         foreach ($assignAdmins as $assignAdmin) {
             array_push($userIds, $assignAdmin->assign_person);
         }
-        $admins = User::whereNotIn('id', $userIds)->where('user_type', 'admin')->orderBy('id', 'DESC')->get();
-        return view('ManagerAdmin.admins.index', compact('admins'));
+        $auditionAdmins = User::whereNotIn('id', $userIds)->where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
+        return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins'));
     }
 
     /**
@@ -49,7 +49,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('ManagerAdmin.admins.create');
+        return view('ManagerAdmin.auditionAdmin.create');
     }
 
     /**
@@ -73,9 +73,9 @@ class AdminController extends Controller
         $user->phone = $request->phone;
         $user->email = $request->email;
         $user->password = Hash::make('12345');
-        $user->user_type = 'admin'; // Admin user_type == 'admin'
+        $user->user_type = 'audition-admin'; // Admin user_type == 'audition-admin'
         $user->otp = rand(100000, 999999);
-        // $user->status = 0;
+        $user->status = 0;
 
         if ($request->hasFile('image')) {
             $image             = $request->file('image');
@@ -113,32 +113,35 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User  $admin
+     * @param  \App\Models\User  $auditionAdmin
      * @return \Illuminate\Http\Response
      */
-    public function show(User $admin)
+    public function show(User $auditionAdmin)
     {
- 
-        return view('ManagerAdmin.admins.details')->with('auditionAdmin', $admin);
+        if ($auditionAdmin->status == 0) {
+            session()->flash('error','This Admin Need to Approval First');
+            return redirect()->back();
+        }
+        return view('ManagerAdmin.auditionAdmin.details')->with('auditionAdmin', $auditionAdmin);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\User  $admin
+     * @param  \App\Models\User  $auditionAdmin
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $admin)
+    public function edit(User $auditionAdmin)
     {
-        $data['admin'] = $admin;
-        return view('ManagerAdmin.admins.edit', $data);
+        $data['auditionAdmin'] = $auditionAdmin;
+        return view('ManagerAdmin.auditionAdmin.edit', $data);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $admin
+     * @param  \App\Models\User  $auditionAdmin
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -196,13 +199,13 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User  $admin
+     * @param  \App\Models\User  $auditionAdmin
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $admin)
+    public function destroy(User $auditionAdmin)
     {
         try {
-            $admin->delete();
+            $auditionAdmin->delete();
             return response()->json([
                 'type' => 'success',
                 'message' => 'Successfully Deleted'

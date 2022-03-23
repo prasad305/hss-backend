@@ -151,7 +151,7 @@ class AuctionController extends Controller
     {
         $totolBidding = Bidding::count();
         $maxBidding = Bidding::max('amount');
-        $products = Auction::with('bidding')->where('status', 1)->get();
+        $products = Auction::with('bidding')->orderBy('id', 'DESC')->where('status', 1)->get();
 
         return response()->json([
             'status' => '200',
@@ -183,7 +183,7 @@ class AuctionController extends Controller
     {
 
         $product = Auction::where('status', 0)->count();
-        $pending_product = Auction::where('status', 0)->get();
+        $pending_product = Auction::orderBy('id', 'DESC')->where('status', 0)->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
@@ -207,7 +207,7 @@ class AuctionController extends Controller
     {
 
         $product = Auction::where('star_approval', 1)->where('product_status', 0)->count();
-        $unsold_product = Auction::where('star_approval', 1)->where('product_status', 0)->get();
+        $unsold_product = Auction::orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
@@ -215,28 +215,24 @@ class AuctionController extends Controller
         ]);
     }
 
-    public function bidNow(Request $request, $id)
+    public function liveBidding($auction_id)
     {
-        $user = User::find($id);
-        if (Hash::check($request->password, $user->password)) {
-            $bidding = Bidding::create([
-
-                'user_id' => $user->id,
-                'name' => $user->first_name,
-                'amount' => $request->amount,
-            ]);
-            return response()->json([
-
-                'status' => 200,
-                'data' => $bidding,
-            ]);
-        } else {
-            return response()->json([
-                'status' => 201,
-                'message' => 'Passowrd Not Match'
-            ]);
-        }
+        $bidding = Bidding::with('user')->orderBy('amount', 'DESC')->where('auction_id', $auction_id)->take(6)->get();
+        return response()->json([
+            'status' => 200,
+            'bidding' => $bidding,
+        ]);
     }
+    public function topBidder($auction_id)
+    {
+        $bidding = Bidding::with('user')->orderBy('amount', 'DESC')->where('auction_id', $auction_id)->take(3)->get();
+        return response()->json([
+            'status' => 200,
+            'bidding' => $bidding,
+        ]);
+    }
+
+
 
     //<========================= Star Section ==============================>
 
@@ -397,7 +393,7 @@ class AuctionController extends Controller
     {
         $totolBidding = Bidding::count();
         $maxBidding = Bidding::max('amount');
-        $products = Auction::with('bidding')->where('star_approval', 1)->where('product_status', 0)->get();
+        $products = Auction::with('bidding')->orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->get();
 
         return response()->json([
             'status' => '200',
@@ -446,7 +442,7 @@ class AuctionController extends Controller
     public function star_unSoldProductList()
     {
 
-        $products = Auction::where('star_approval', 1)->where('product_status', 0)->get();
+        $products = Auction::orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->get();
         return response()->json([
             'status' => 200,
             'products' => $products,
@@ -480,28 +476,5 @@ class AuctionController extends Controller
             'status' => 200,
             'product' => $product,
         ]);
-    }
-
-    public function star_bidNow(Request $request, $id)
-    {
-        $user = User::find($id);
-        if (Hash::check($request->password, $user->password)) {
-            $bidding = Bidding::create([
-
-                'user_id' => $user->id,
-                'name' => $user->first_name,
-                'amount' => $request->amount,
-            ]);
-            return response()->json([
-
-                'status' => 200,
-                'data' => $bidding,
-            ]);
-        } else {
-            return response()->json([
-                'status' => 201,
-                'message' => 'Passowrd Not Match'
-            ]);
-        }
     }
 }
