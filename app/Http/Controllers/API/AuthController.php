@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 //use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -135,6 +136,17 @@ class AuthController extends Controller
             'message' => 'Logged Out Successfully',
         ]);
     }
+
+    public function activity_count()
+    {
+        $activity = Activity::where('user_id', auth('sanctum')->user()->id)->count();
+
+        return response()->json([
+            'status' => 200,
+            'activity' => $activity,
+        ]);
+    }
+
 
     public function otp_verify(Request $request)
     {
