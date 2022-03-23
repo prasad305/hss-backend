@@ -347,6 +347,19 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 });
 
 
+// Approved Star Audition Admin Middleware
+Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
+
+    Route::get('/checkingAuditionAdmin', function () {
+        return response()->json(['message' => 'You are in as Audition Admin', 'status' => 200], 200);
+    });
+
+    // Marketplace Section
+    Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
+    
+});
+
+
 
 
 
