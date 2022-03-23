@@ -15,4 +15,14 @@ class Bidding extends Model
 
         return $this->hasMany(Acquired_app::class, 'bidding_id');
     }
+    public function user()
+    {
+
+        return $this->hasMany(User::class, 'id', 'user_id');
+    }
+    public function auction()
+    {
+
+        return $this->hasMany(Auction::class, 'auction_id');
+    }
 }

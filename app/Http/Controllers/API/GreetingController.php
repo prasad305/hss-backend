@@ -62,8 +62,6 @@ class GreetingController extends Controller
 
         $greeting->save();
 
-
-
         return response()->json([
             'status' => 200,
             'greeting_id' => $greeting->id,
