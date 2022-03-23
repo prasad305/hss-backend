@@ -15,6 +15,8 @@ class LearningSessionController extends Controller
     public function add(Request $request)
     {
         //return $request->all();
+
+
         $post = new LearningSession();
         $post->title = $request->input('title');
         $post->slug = Str::slug($request->input('title'));
@@ -30,6 +32,8 @@ class LearningSessionController extends Controller
 
         $post->fee = $request->input('fee');
         $post->participant_number = $request->input('participant_number');
+        $post->room_id = $request->input('room_id');
+
 
         //$post->video = $request->input('video');
         //$post->type = $request->input('type');
