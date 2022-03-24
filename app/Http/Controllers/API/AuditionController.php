@@ -146,8 +146,6 @@ class AuditionController extends Controller
                 ]);
             }
         }
-
-
     }
 
 
@@ -155,11 +153,11 @@ class AuditionController extends Controller
 
     public function getAudition($audition_id)
     {
-        $audition = Audition::with('assignJudge')->find($audition_id);
+        $audition = Audition::with('judge')->find($audition_id);
 
         $judge_ids = [];
-        foreach ($audition->assignJudge as $key => $judge) {
-            array_push($judge_ids, $judge->judge_id);
+        foreach ($audition->judge as $key => $star) {
+            array_push($judge_ids, $star->judge_id);
         }
 
         // return $judge_ids;
