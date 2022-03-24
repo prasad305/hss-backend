@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Models\Audition\AssignJudge;
 use Illuminate\Support\Facades\Validator;
-
+use PhpParser\Node\Expr\Assign;
 
 class AuditionController extends Controller
 {
@@ -98,7 +98,7 @@ class AuditionController extends Controller
 
 
 
-        
+
 
             if ($request->hasFile('video')) {
                 $destination = $audition->video;
@@ -114,9 +114,9 @@ class AuditionController extends Controller
                 $request->video->move(public_path($folder_path), $video_file_name);
                 $audition->video = $folder_path . $video_file_name;
             }
-    
-    
-            try { 
+
+
+            try {
 
                 $audition->save();
 
@@ -147,7 +147,9 @@ class AuditionController extends Controller
             }
         }
 
+
     }
+
 
 
 
@@ -173,8 +175,8 @@ class AuditionController extends Controller
     {
         $pendingAuditions = Audition::with('judge')
             ->whereHas('judge', function ($q) {
-                $q->where('judge_id', auth('sanctum')->user()->id);
-            })->where('star_approval', 0)->get();
+                $q->where([['judge_id', auth('sanctum')->user()->id], ['approved_by_judge', 0]]);
+            })->get();
 
         return response()->json([
             'status' => 200,
@@ -182,11 +184,25 @@ class AuditionController extends Controller
         ]);
     }
 
-    // public function starSingleAudition($id){
 
-    //     return $this->getAudition($id);
+    public function starSingleAudition($id)
+    {
 
-    // }
+        $pending_auditions = Audition::with(['judge', 'judge.user'])->where('id', $id)->get();
+        return response()->json([
+
+            'status' => 200,
+            'pending_audition' => $pending_auditions,
+        ]);
+    }
+    public function starApprovedAudition($id)
+    {
+        AssignJudge::where('audition_id', $id)->where('judge_id', auth('sanctum')->user()->id)->update(['approved_by_judge' => 1]);
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
 
 
     public function show($id)

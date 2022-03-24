@@ -88,6 +88,18 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::put('auction/edit/{id}', [AuctionController::class, 'update'])->name('auctionProduct.update');
     Route::get('auction/set_publish/{id}', [AuctionController::class, 'set_publish'])->name('auctionProduct.set_publish');
 
+    // Audition Routes
+
+    Route::get('audition/pending', [AuditionAdminController::class, 'pending'])->name('audition.pending');
+    Route::get('audition/published', [AuditionAdminController::class, 'published'])->name('audition.published');
+    Route::get('audition/all', [AuditionAdminController::class, 'all'])->name('audition.all');
+
+    Route::get('audition/details/{id}', [AuditionAdminController::class, 'details'])->name('audition.details');
+    Route::get('audition/edit/{id}', [AuditionAdminController::class, 'auditionEdit'])->name('audition.edit');
+    Route::put('audition/edit/{id}', [AuditionAdminController::class, 'auditionUpdate'])->name('audition.update');
+    Route::get('audition/set_publish/{id}', [AuditionAdminController::class, 'set_publish'])->name('audition.set_publish');
+
+
 
     //Marketplace Post
     Route::get('marketplace/pending', [MarketplaceController::class, 'pending'])->name('marketplace.pending');
