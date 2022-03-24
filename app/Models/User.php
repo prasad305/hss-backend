@@ -221,4 +221,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(AssignAdmin::class, 'assign_person');
     }
+
+    public function jury()
+    {
+        return $this->hasOne(SuperStar::class, 'star_id');
+    }
 }

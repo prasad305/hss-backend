@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ManagerAdmin\AuditionAdminController;
+use App\Http\Controllers\ManagerAdmin\JuryBoardController;
 use App\Http\Controllers\ManagerAdmin\AdminController;
 use App\Http\Controllers\ManagerAdmin\JobAssign;
 use App\Http\Controllers\ManagerAdmin\DashboardController;
@@ -49,6 +50,14 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::post('auditionAdmin/inactive/{id}', [AuditionAdminController::class, 'inactiveNow'])->name('auditionAdmin.inactiveNow');
     Route::get('auditionAdmin-assinged', [AuditionAdminController::class, 'assinged'])->name('auditionAdmin_assinged');
     Route::get('auditionAdmin-free', [AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin_notAssinged');
+
+    // Jury Board route
+    Route::resource('jury', JuryBoardController::class);
+    Route::get('get-subcategory/{category_id}', [JuryBoardController::class,'getSubCategory']);
+    Route::post('jury/active/{id}', [JuryBoardController::class, 'activeNow'])->name('juryBoard.activeNow');
+    Route::post('jury/inactive/{id}', [JuryBoardController::class, 'inactiveNow'])->name('juryBoard.inactiveNow');
+    Route::get('jury-assinged', [JuryBoardController::class, 'assinged'])->name('juryBoard_assinged');
+    Route::get('jury-free', [JuryBoardController::class, 'notAssinged'])->name('juryBoard_notAssinged');
 
     // Live route
     Route::get('liveChat', [LiveChatController::class, 'index'])->name('liveChat.index');

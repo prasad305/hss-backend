@@ -137,5 +137,19 @@ class UserSeeder extends Seeder
         $user->otp = '123456';
         $user->save();
 
+
+        $user = new User();
+        $user->first_name = 'Mr.';
+        $user->last_name = 'Jury';
+        $user->email = 'jury@gmail.com';
+        $user->image = 'uploads/images/users/lzg-1643882523.jpg';
+        $user->cover_photo = 'uploads/images/users/1642659396.jpg';
+        $user->phone = '01700000010';
+        $user->password = Hash::make('12345');
+        $user->user_type = 'jury';
+        $user->status = 1;
+        $user->otp = '123456';
+        $user->save();
+
     }
 }

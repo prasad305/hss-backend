@@ -32,6 +32,17 @@
           </p>
         </a>
       </li>
+
+      <li class="nav-item">
+        <a href="{{ route('managerAdmin.jury.index') }}" class="nav-link">
+          <i class="nav-icon {{ Request::routeIs('managerAdmin.jury.index') ? 'active' : '' }} fas fa-th"></i>
+          <p>
+            Jury
+            <span class="right badge badge-danger">New</span>
+          </p>
+        </a>
+      </li>
+
     <li class="nav-item">
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-chart-pie"></i>

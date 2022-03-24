@@ -87,6 +87,16 @@
         </li>
 
         <li class="nav-item">
+            <a href="{{ route('superAdmin.jury.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.jury.index') ? 'active' : '' }}">
+                <i class="nav-icon fa fa-television"></i>
+                <p>
+                   Jury
+                </p>
+            </a>
+        </li>
+
+        <li class="nav-item">
             <a href="{{ route('superAdmin.greeting-type.index') }}"
                 class="nav-link {{ Request::routeIs('superAdmin.greeting-type.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-video-camera"></i>
