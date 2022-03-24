@@ -145,6 +145,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('admin/fan-group/store', [FanGroupController::class, 'fanGroupStore']);
     Route::get('/admin/fan-group/star/list', [FanGroupController::class, 'allStarList']);
     Route::get('/admin/fan-group/star/list/{data}', [FanGroupController::class, 'someStarList']);
+    Route::get('admin/fan/group/adminlist/status', [FanGroupController::class, 'statusAdminStar']);
 
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);

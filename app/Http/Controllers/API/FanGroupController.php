@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
+use Carbon\Carbon;
 
 class FanGroupController extends Controller
 {
@@ -151,6 +152,18 @@ class FanGroupController extends Controller
                     $query->where('another_star_status', 2)
                         ->where('another_star',$id);
                 })->get();
+        
+        $today = Carbon::now();
+
+        $starLiveGroup = FanGroup::where('my_star_status',1)
+                                    ->where('another_star_status',1)
+                                    ->where(function ($query) use($id) {
+                                    $query->where('my_star', $id)
+                                        ->orWhere('another_star', $id);
+                                    })
+                                    ->whereDate('start_date','<=', $today)
+                                    ->whereDate('end_date','>=', $today)
+                                    ->get();
 
 
         // return $star;
@@ -160,6 +173,62 @@ class FanGroupController extends Controller
             'starActive' => $starActive,
             'starApproved' => $starApproved,
             'starRejected' => $starRejected,
+            'starLiveGroup' => $starLiveGroup,
+            'id' => $id,
+        ]);
+    }
+    public function statusAdminStar(){
+        $id = Auth::user()->id;
+        $user = FanGroup::where('created_by', $id);
+
+        $starActive = FanGroup::where(function ($query) use($id) {
+            $query->where('my_star_status', 0)
+                ->where('my_star', $id);
+            })->
+            orWhere(function ($query) use($id) {
+                    $query->where('another_star_status', 0)
+                        ->where('another_star',$id);
+                })->get();
+
+        $starApproved = FanGroup::where(function ($query) use($id) {
+            $query->where('my_star_status', 1)
+                ->where('my_star', $id);
+            })->
+            orWhere(function ($query) use($id) {
+                    $query->where('another_star_status', 1)
+                        ->where('another_star',$id);
+                })->get();
+                
+        $starRejected = FanGroup::where(function ($query) use($id) {
+            $query->where('my_star_status', 2)
+                ->where('my_star', $id);
+            })->
+            orWhere(function ($query) use($id) {
+                    $query->where('another_star_status', 2)
+                        ->where('another_star',$id);
+                })->get();
+        
+        $today = Carbon::now();
+
+        $starLiveGroup = FanGroup::where('my_star_status',1)
+                                    ->where('another_star_status',1)
+                                    ->where(function ($query) use($id) {
+                                    $query->where('my_star', $id)
+                                        ->orWhere('another_star', $id);
+                                    })
+                                    ->whereDate('start_date','<=', $today)
+                                    ->whereDate('end_date','>=', $today)
+                                    ->get();
+
+
+        // return $star;
+
+        return response()->json([
+            'status' => 200,
+            'starActive' => $starActive,
+            'starApproved' => $starApproved,
+            'starRejected' => $starRejected,
+            'starLiveGroup' => $starLiveGroup,
             'id' => $id,
         ]);
     }
