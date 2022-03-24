@@ -146,7 +146,12 @@ class AuditionController extends Controller
                 ]);
             }
         }
+
+
     }
+
+
+
 
     public function getAudition($audition_id)
     {

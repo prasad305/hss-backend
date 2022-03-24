@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AuctionController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\LiveChatController;
 use App\Http\Controllers\API\StarAuthController;
+use App\Http\Controllers\API\JuryAuthController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\SubCategoryController;
 use App\Http\Controllers\API\UserController;
@@ -346,7 +347,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     });
 
     // Marketplace Section
-    Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
+    // Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
 
 
     // Monir Audition Part 1
@@ -356,6 +357,23 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
 
     Route::get('/audition-admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
+});
+
+
+// Approved Jury Board Middleware
+Route::middleware(['auth:sanctum', 'isAPIJuryBoard'])->group(function () {
+
+    Route::get('/checkingSuperStar', function () {
+        return response()->json(['message' => 'You are in as Jury Audition', 'status' => 200], 200);
+    });
+      // Monir Jury Board
+    //   Route::get('/audition-admin/audition/status', [AuditionController::class, 'auditionAdminStatus']);
+    //   Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'auditionAdminPendings']);
+    //   Route::get('/audition-admin/audition/stars', [AuditionController::class, 'stars']);
+    //   Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
+  
+    //   Route::get('/audition-admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
+    
 });
 
 
@@ -382,6 +400,11 @@ Route::post('star_otp_verify', [StarAuthController::class, 'otp_verify']);
 Route::post('star_qr_verify', [StarAuthController::class, 'qr_verify']);
 
 Route::post('star_register', [StarAuthController::class, 'register']);
+
+// Route for Jury Board Panel
+Route::post('jury-register', [JuryAuthController::class, 'register']);
+
+
 
 Route::get('view-category', [CategoryController::class, 'index']);
 Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
