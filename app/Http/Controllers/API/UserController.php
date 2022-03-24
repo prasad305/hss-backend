@@ -59,7 +59,7 @@ class UserController extends Controller
     public function getAllLearningSession()
     {
 
-        $post = Post::where('type','learningSession')->latest()->get();
+        $post = Post::where('type', 'learningSession')->latest()->get();
 
 
         return response()->json([
@@ -528,7 +528,7 @@ class UserController extends Controller
     }
     public function bidHistory($auction_id)
     {
-        $bidHistory = Bidding::where('user_id', auth()->user()->id)->where('auction_id', $auction_id)->get();
+        $bidHistory = Bidding::orderBy('id', 'DESC')->where('user_id', auth()->user()->id)->where('auction_id', $auction_id)->get();
         return response()->json([
             'status' => 200,
             'bidHistory' => $bidHistory,

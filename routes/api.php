@@ -130,7 +130,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('user/bidding/auction/product', [UserController::class, 'bidNow']);
     Route::get('user/liveBidding/auction/{auction_id}', [UserController::class, 'liveBidding']);
     Route::get('user/liveBidding/history/{auction_id}', [UserController::class, 'bidHistory']);
-
 });
 
 
@@ -203,9 +202,9 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/live_chat/count', [LiveChatController::class, 'count']);
 
 
-  
 
-   
+
+
 
 
 
@@ -333,11 +332,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
 
     // Super Star Audtion Routes
-    Route::get('superstar/audition/pendings',[AuditionController::class, 'starPendingAudtion']);
-    // Route::get('/star/audition/{id}',[AuditionController::class, 'starSingleAudition']);
-
-
-
+    Route::get('superstar/audition/pendings', [AuditionController::class, 'starPendingAudtion']);
+    Route::get('/star/audition/{id}', [AuditionController::class, 'starSingleAudition']);
+    Route::put('/star/approved/audition/{id}', [AuditionController::class, 'starApprovedAudition']);
 });
 
 
@@ -351,15 +348,14 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
 
-    
-      // Monir Audition Part 1
-      Route::get('/audition-admin/audition/status', [AuditionController::class, 'auditionAdminStatus']);
-      Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'auditionAdminPendings']);
-      Route::get('/audition-admin/audition/stars', [AuditionController::class, 'stars']);
-      Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
-  
-      Route::get('/audition-admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
-    
+
+    // Monir Audition Part 1
+    Route::get('/audition-admin/audition/status', [AuditionController::class, 'auditionAdminStatus']);
+    Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'auditionAdminPendings']);
+    Route::get('/audition-admin/audition/stars', [AuditionController::class, 'stars']);
+    Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
+
+    Route::get('/audition-admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
 });
 
 
