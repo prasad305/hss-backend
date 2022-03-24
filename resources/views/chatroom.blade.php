@@ -72,7 +72,7 @@
                                     <div class="d-flex align-items-start">
                                         <img src="https://koolinus.files.wordpress.com/2019/03/avataaars-e28093-koolinus-1-12mar2019.png" class="rounded-circle mr-1" alt="Vanessa Tucker" width="40" height="40" />
                                         <div class="flex-grow-1 ml-3">
-                                            {{ $user->first_name }}
+                                            {{ $user->first_name }} {{ $user->last_name }}
                                             <div class="small" id="status_{{ $user->id }}">
                                                 @if($user->is_online == 1)
                                                 <span class="fa fa-circle chat-online"></span> Online</div>
@@ -262,7 +262,8 @@
 
             $(function(){
                 var user_id = {{Auth::id()}};
-                var socket = io("http://localhost:5000",{query:{user_id}});
+                var socket = io("http://localhost:8800",{query:{user_id}});
+
 
                 socket.on('user_connected', function(data){
                     //alert(data);

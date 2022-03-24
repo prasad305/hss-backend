@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use App\Models\Auction;
 use App\Models\Bidding;
 use App\Models\Greeting;
@@ -44,12 +45,8 @@ class UserController extends Controller
     }
 
 
-    public function getAllLiveChatEventWith()
+    public function all_post()
     {
-        // $livechats = LiveChat::with('star')->where('status',1)->latest()->get();
-        // $meetupEvents = MeetupEvent::with('star')->where('status',1)->latest()->get();
-        // $query = ($livechats->merge($meetupEvents));
-
         $post = Post::latest()->get();
 
         return response()->json([
@@ -62,7 +59,8 @@ class UserController extends Controller
     public function getAllLearningSession()
     {
 
-        $post = Post::where('type', 'learningSession')->latest()->get();
+        $post = Post::where('type','learningSession')->latest()->get();
+
 
         return response()->json([
             'status' => 200,
@@ -83,14 +81,20 @@ class UserController extends Controller
     }
 
 
-
-    public function LearningSessionReg(Request $request)
+    public function LearningSessionRegistration(Request $request)
     {
+        // New Learning Session Registration
         $learnigSession = new LearningSessionRegistration();
         $learnigSession->learning_session_id = $request->input('post_id');
         $learnigSession->user_id = auth('sanctum')->user()->id;
         $learnigSession->save();
 
+        // New Activity Add For Learning Session Registrartion
+        $activity = new Activity();
+        $activity->user_id = auth('sanctum')->user()->id;
+        $activity->event_id = $learnigSession->id;
+        $activity->type = 'learningSession';
+        $activity->save();
 
         return response()->json([
             'status' => 200,
@@ -101,7 +105,6 @@ class UserController extends Controller
 
     public function star_photo($id)
     {
-
         $post = SimplePost::where([['status', 1], ['star_id', $id]])->latest()->get();
 
         return response()->json([
@@ -110,9 +113,9 @@ class UserController extends Controller
             'post' => $post,
         ]);
     }
+
     public function star_video($id)
     {
-
         $post = SimplePost::where([['status', 1], ['star_id', $id]])->latest()->get();
 
         return response()->json([
@@ -147,7 +150,6 @@ class UserController extends Controller
 
     public function registeredLivechat()
     {
-
         $post = LiveChatRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
 
         return response()->json([
@@ -159,19 +161,17 @@ class UserController extends Controller
 
     public function registeredLearningSession()
     {
-
-        $post = LearningSessionRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+        $register = LearningSessionRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
 
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
-            'events' => $post,
+            'events' => $register,
         ]);
     }
 
     public function registeredMeetup()
     {
-
         $post = MeetupEventRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
 
         return response()->json([
@@ -186,7 +186,6 @@ class UserController extends Controller
     {
         $livechats = LiveChat::orderBy('id', 'DESC')->get();
 
-
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
@@ -198,7 +197,6 @@ class UserController extends Controller
     public function getSingleLiveChatEvent($id)
     {
         $livechat = LiveChat::find($id);
-
 
         return response()->json([
             'status' => 200,
@@ -217,7 +215,6 @@ class UserController extends Controller
             'message' => 'Ok',
             'liveChat' => $liveChat,
             'starInfo' =>  $starInfo
-
         ]);
     }
 
@@ -257,7 +254,6 @@ class UserController extends Controller
         // return $request->all();
         $liveChat = LiveChat::find($request->event_id);
         $liveChat->slot_counter = $liveChat->slot_counter + $request->minute;
-
         $start_time = Carbon::parse($liveChat->start_time)->addMinutes($liveChat->slot_counter);
         $end_time = Carbon::parse($start_time)->addMinutes($request->minute);
 
@@ -280,6 +276,13 @@ class UserController extends Controller
 
         $liveChat->save();
 
+        // New Activity Add for Live Chat Register
+        $activity = new Activity();
+        $activity->user_id = auth('sanctum')->user()->id;
+        $activity->event_id = $liveChatReg->id;
+        $activity->type = 'liveChat';
+        $activity->save();
+
         return response()->json([
             'status' => 200,
             'message' => 'Registation done successfully',
@@ -287,26 +290,26 @@ class UserController extends Controller
     }
 
 
-
     /**
      * greetings registations take time
      */
     public function greetingsRegistation(Request $request)
     {
-
         $greetings = new GreetingsRegistration();
-
 
         $greetings->request_time = Carbon::parse($request->input('time'));
         $greetings->user_id = auth('sanctum')->user()->id;
         $greetings->greeting_id = $request->greetings_id;
         $greetings->save();
 
-
-
+        // New Activity Add for Greeting Register
+        $activity = new Activity();
+        $activity->user_id = auth('sanctum')->user()->id;
+        $activity->event_id = $greetings->id;
+        $activity->type = 'greeting';
+        $activity->save();
 
         $single_greeting = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
-
 
         return response()->json([
             'status' => 200,

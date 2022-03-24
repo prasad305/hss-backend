@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 //use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\UserInfo;
 use Illuminate\Support\Facades\Hash;
-use Auth;
+//use Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -100,6 +102,7 @@ class AuthController extends Controller
                     'email' => $user->email,
                     'name' => $user->first_name . ' ' . $user->last_name,
                     'id' => $user->id,
+                    'user_type' => $user->user_type,
                     'token' => $token,
                     'role' => $role,
                     'message' => 'Logged In Successfully',
@@ -133,6 +136,17 @@ class AuthController extends Controller
             'message' => 'Logged Out Successfully',
         ]);
     }
+
+    public function activity_count()
+    {
+        $activity = Activity::where('user_id', auth('sanctum')->user()->id)->count();
+
+        return response()->json([
+            'status' => 200,
+            'activity' => $activity,
+        ]);
+    }
+
 
     public function otp_verify(Request $request)
     {
@@ -203,6 +217,8 @@ class AuthController extends Controller
             'info' => $user_info
         ]);
     }
+
+
 
     public function user_info_update(Request $request)
     {

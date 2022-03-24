@@ -28,6 +28,7 @@ class LearningSession extends Model
         'time',
         'fee',
         'status',
+        'room_id',
         'total_amount',
     ];
     protected $with = ['star'];

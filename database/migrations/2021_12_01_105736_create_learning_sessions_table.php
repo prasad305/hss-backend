@@ -30,6 +30,7 @@ class CreateLearningSessionsTable extends Migration
             $table->timestamp('date')->nullable();
             $table->time('time')->nullable();
             $table->float('fee')->nullable();
+            $table->string('room_id')->nullable();
             $table->float('star_approval')->default(0)->comment('0 = deactive, 1 = active');
             $table->boolean('status')->default(0)->comment('0 = deactive, 1 = active');
             $table->string('total_amount')->nullable();

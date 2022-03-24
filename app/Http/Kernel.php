@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
         'isAPIUser' => \App\Http\Middleware\ApiUserMiddleware::class,
         'isAPIAdmin' => \App\Http\Middleware\ApiAdminMiddleware::class,
         'isAPIStar' => \App\Http\Middleware\ApiSuperStarMiddleware::class,
+        'isAPIAuditionAdmin' => \App\Http\Middleware\AuditionAdminMiddleware::class,
 
         'superAdmin' => \App\Http\Middleware\SuperAdminMiddleware::class,
         'managerAdmin' => \App\Http\Middleware\ManagerAdminMiddleware::class,

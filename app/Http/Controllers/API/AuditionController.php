@@ -11,6 +11,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 use App\Models\Audition\AssignJudge;
 use Illuminate\Support\Facades\Validator;
 
+
 class AuditionController extends Controller
 {
 
@@ -19,7 +20,7 @@ class AuditionController extends Controller
         //
     }
 
-    public function adminStatus()
+    public function auditionAdminStatus()
     {
         $live = Audition::where([['admin_id', auth('sanctum')->user()->id], ['status', 1]])->count();
         $pending = Audition::where([['admin_id', auth('sanctum')->user()->id], ['status', 0]])->count();
@@ -31,7 +32,7 @@ class AuditionController extends Controller
     }
 
 
-    public function adminPendings()
+    public function auditionAdminPendings()
     {
         $pendings = Audition::where([['admin_id', auth('sanctum')->user()->id], ['status', 0]])->get();
         return response()->json([
@@ -60,20 +61,12 @@ class AuditionController extends Controller
     {
 
 
-        // return $request->star_ids;
-
-        // foreach ($array as $id){
-        //     return $id;
-        // }
 
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
             'star_ids' => 'required',
         ]);
-
-
-
 
 
         if ($validator->fails()) {
@@ -85,6 +78,8 @@ class AuditionController extends Controller
             $audition = Audition::find($request->audition_id);
             $audition->title = $request->title;
             $audition->description = $request->description;
+            $audition->start_time = $request->start_time;
+            $audition->end_time = $request->end_time;
 
             if ($request->hasfile('banner')) {
                 $destination = $audition->banner;
@@ -102,7 +97,27 @@ class AuditionController extends Controller
             }
 
 
-            try {
+
+        
+
+            if ($request->hasFile('video')) {
+                $destination = $audition->video;
+
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+
+                $file = $request->file('video');
+                $folder_path = 'uploads/videos/auditions/';
+                $video_file_name = now()->timestamp . '.' . $file->getClientOriginalExtension();
+                // save to server
+                $request->video->move(public_path($folder_path), $video_file_name);
+                $audition->video = $folder_path . $video_file_name;
+            }
+    
+    
+            try { 
+
                 $audition->save();
 
                 $star_ids = array_map('intval', explode(',', $request->star_ids));
@@ -131,7 +146,8 @@ class AuditionController extends Controller
                 ]);
             }
         }
-    }
+
+
 
     public function getAudition($audition_id)
     {
@@ -143,6 +159,7 @@ class AuditionController extends Controller
         }
 
         // return $judge_ids;
+
         return response()->json([
             'status' => 200,
             'audition' => $audition,

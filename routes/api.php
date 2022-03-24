@@ -17,22 +17,22 @@ use App\Http\Controllers\API\AuditionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-
+// Authentication API
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 
-
+// OTP Verification API
 Route::post('otp_verify', [AuthController::class, 'otp_verify']);
 Route::post('verify_user', [AuthController::class, 'verify_user']);
-
 Route::get('resend_otp', [AuthController::class, 'resend_otp']);
 Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 
-// Change You
-Route::get('/user/getAllLiveChatEventWith', [UserController::class, 'getAllLiveChatEventWith']);
-Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
+// Home Page All Post
+Route::get('/user/all_post', [UserController::class, 'all_post']);
 
+
+Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
 
 //Star Photo and videos
 Route::get('/star_photos/{id}', [UserController::class, 'star_photo']);
@@ -44,7 +44,8 @@ Route::get('/user/learning_session/all', [LearningSessionController::class, 'use
 Route::get('/user/live_chat/all', [LiveChatController::class, 'userAll']);
 
 
-// Verified User Middleware
+
+// Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/checkingAuthenticated', function () {
@@ -55,28 +56,21 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user_info_update', [AuthController::class, 'user_info_update']);
     Route::post('/user_otherInfo_update', [AuthController::class, 'user_OtherInfo_update']);
 
-
+    Route::get('/user/activity_count', [AuthController::class, 'activity_count']);
 
     Route::get('/user/getAllLiveChatEvent', [UserController::class, 'getAllLiveChatEvent']);
-
-
-
     Route::get('/user/registerMeestup', [UserController::class, 'registeredMeetup']);
     Route::get('/user/registerLivechat', [UserController::class, 'registeredLivechat']);
     Route::get('/user/registerLearningSession', [UserController::class, 'registeredLearningSession']);
 
+
     Route::get('/user/sinlgeLiveChat/{id}', [UserController::class, 'sinlgeLiveChat']);
     Route::get('/user/getSingleLiveChatEvent/{id}', [UserController::class, 'getSingleLiveChatEvent']);
     Route::get('/user/getSingleLiveChatEvent/{minute}/{id}', [UserController::class, 'getLiveChatTiemSlot']);
-    Route::post('/user/liveChatRigister/', [UserController::class, 'liveChatRigister']);
-
-    //Route::get('view-category', [CategoryController::class, 'index']);
-    //Route::get('view-category', [CategoryController::class, 'index']);
 
 
     Route::get('view-country', [CategoryController::class, 'index']);
     Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
-
     Route::get('/user/registeredLivechat', [UserController::class, 'registeredLivechat']);
 
     Route::get('/user/interest/type', [UserController::class, 'interestType']);
@@ -92,15 +86,12 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
     Route::get('/user/meetup-event/{star_id}/{event_id}', [MeetupEventController::class, 'meetup_event_booking']);
-    Route::post('/user/meetup-event/register', [MeetupEventController::class, 'meetup_register']);
+
 
     Route::get('/star_info/{star_id}', [UserController::class, 'star_info']);
 
-
     Route::get('/meetup_event_info/{id}', [MeetupEventController::class, 'event_info']);
 
-    //greetings registation
-    Route::post('/user/greetings_registaion', [UserController::class, 'greetingsRegistation']);
 
     //greetings registation update
     Route::post('/user/greetings_registaion_update', [UserController::class, 'greetingsRegistationUpdate']);
@@ -118,16 +109,28 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //check user notification
     Route::get('/user/check_notification', [UserController::class, 'checkUserNotifiaction']);
     Route::get('/learnig-session/{slug}', [UserController::class, 'singleLearnigSession']);
+
     //lerning session registaion
     Route::post('/learnig-session', [UserController::class, 'LearningSessionReg']);
 
     // auction product
     Route::get('/auction-product/all', [UserController::class, 'auctionProduct']);
     Route::get('/user/getStarAuction/{star_id}', [UserController::class, 'starAuction']);
+
+
+
+    //Event Registaion By User (Learning Session + Live Chat + Greeting + Meetup Event)
+    Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
+    Route::post('/user/liveChat/register', [UserController::class, 'liveChatRigister']);
+    Route::post('/user/greetings/register', [UserController::class, 'greetingsRegistation']);
+    Route::post('/user/meetup-event/register', [MeetupEventController::class, 'meetup_register']);
+
+
     Route::get('/user/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
     Route::post('user/bidding/auction/product', [UserController::class, 'bidNow']);
     Route::get('user/liveBidding/auction/{auction_id}', [UserController::class, 'liveBidding']);
     Route::get('user/liveBidding/history/{auction_id}', [UserController::class, 'bidHistory']);
+
 });
 
 
@@ -200,13 +203,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/live_chat/count', [LiveChatController::class, 'count']);
 
 
-    // Monir Audition Part 1
-    Route::get('/admin/audition/status', [AuditionController::class, 'adminStatus']);
-    Route::get('/admin/audition/pendings', [AuditionController::class, 'adminPendings']);
-    Route::get('/admin/audition/stars', [AuditionController::class, 'stars']);
-    Route::post('/admin/audition/add', [AuditionController::class, 'store']);
-
-    Route::get('/admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
+  
 
    
 
@@ -344,6 +341,28 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 });
 
 
+// Approved Star Audition Admin Middleware
+Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
+
+    Route::get('/checkingAuditionAdmin', function () {
+        return response()->json(['message' => 'You are in as Audition Admin', 'status' => 200], 200);
+    });
+
+    // Marketplace Section
+    Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
+
+    
+      // Monir Audition Part 1
+      Route::get('/audition-admin/audition/status', [AuditionController::class, 'auditionAdminStatus']);
+      Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'auditionAdminPendings']);
+      Route::get('/audition-admin/audition/stars', [AuditionController::class, 'stars']);
+      Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
+  
+      Route::get('/audition-admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
+    
+});
+
+
 
 
 
@@ -382,3 +401,18 @@ Route::post('select_star', [SubCategoryController::class, 'select_star']);
 Route::get('submit_react/{id}', [UserController::class, 'submit_react']);
 Route::get('check_react/{id}', [UserController::class, 'check_react']);
 Route::get('checkchoice', [CategoryController::class, 'check']);
+
+//<======================== Auction Route ========================>
+
+Route::post('/add/auction/product', [AuctionController::class, 'addProduct']);
+Route::get('/editOrConfirm/auction/editOrConfirm', [AuctionController::class, 'editOrConfirm']);
+Route::get('/edit/auction/{id}', [AuctionController::class, 'editProduct']);
+Route::put('/update/auction/{id}', [AuctionController::class, 'updateProduct']);
+Route::get('/all/auction/product', [AuctionController::class, 'allProduct']);
+Route::get('/show/auction/product/{id}', [AuctionController::class, 'showProduct']);
+Route::get('/total/auction/product', [AuctionController::class, 'totalProduct']);
+Route::get('/pending/auction/product', [AuctionController::class, 'pendingProduct']);
+Route::get('/sold/auction/product', [AuctionController::class, 'soldProduct']);
+Route::get('/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
+Route::post('/bidding/auction/product/{id}', [AuctionController::class, 'bidNow']);
+Route::get('/live/allProduct', [AuctionController::class, 'allLiveProduct']);
