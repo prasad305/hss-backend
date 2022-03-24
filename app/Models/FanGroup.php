@@ -18,5 +18,6 @@ class FanGroup extends Model
         'star_two',
         'min_member',
         'max_member',
+        'banner',
     ];
 }

@@ -8,11 +8,14 @@ use Auth;
 use App\Models\FanGroup;
 use App\Models\User;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class FanGroupController extends Controller
 {
     public function allStarList(){
-        $allStar = User::where('user_type', 'star')->get();
+        // $allStar = User::where('user_type', 'star')->get();
+        $allStar = User::where('parent_user', auth('sanctum')->user()->id)->get();
 
         return response()->json([
             'status' => 200,
@@ -30,6 +33,9 @@ class FanGroupController extends Controller
 
     public function fanGroupStore(Request $request){
         $id = Auth::user()->id;
+        $anotherStar =  $request->another_star;
+
+        $adminId = User::find($anotherStar);
         // return $request->all();
 
         $fangroup = new FanGroup();
@@ -41,14 +47,27 @@ class FanGroupController extends Controller
         $fangroup->end_date = $request->end_date;
         $fangroup->min_member = $request->min_member;
         $fangroup->max_member = $request->max_member;
-
-        $fangroup->star_one = $request->star_one;
-        $fangroup->star_two = $request->star_two;
-
-        $fangroup->star_one_status = 0;
-        $fangroup->star_two_status = 0;
-        $fangroup->status = 0;
         $fangroup->created_by = $id;
+
+        $fangroup->my_star = $request->my_star;
+        $fangroup->my_star_status = 0;
+
+        $fangroup->another_star = $anotherStar;
+        $fangroup->another_star_admin_id = $adminId->parent_user;
+        $fangroup->another_star_status = 0;
+
+        if ($request->hasfile('banner')) {
+
+            $file = $request->file('banner');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/banner/' . time() . '.' . $extension;
+
+            Image::make($file)->resize(800, 300)->save($filename, 100);
+            $fangroup->banner = $filename;
+        }
+
+        $fangroup->post_approval_status = 0;
+        $fangroup->status = 0;
 
         $fangroup->save();
 
@@ -58,14 +77,140 @@ class FanGroupController extends Controller
         ]);
     }
 
-    public function statusStar(){
-        $id = Auth::user()->id;
+    public function starUpdate(Request $request, $slug){
 
-        $star = FanGroup::where('star_one', $id)->orWhere('star_two', $id)->get();
+        $fangroup = FanGroup::where('slug', $slug)->first();
+        
+        $fangroup->group_name = $request->group_name;
+        $fangroup->slug = Str::slug($request->input('group_name'));
+        $fangroup->description = $request->description;
+        $fangroup->start_date = $request->start_date;
+        $fangroup->end_date = $request->end_date;
+        $fangroup->min_member = $request->min_member;
+        $fangroup->max_member = $request->max_member;
+
+        if ($request->hasfile('banner')) {
+
+            $file = $request->file('banner');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/banner/' . time() . '.' . $extension;
+
+            Image::make($file)->resize(800, 300)->save($filename, 100);
+            $fangroup->banner = $filename;
+        }
+
+        $fangroup->save();
 
         return response()->json([
             'status' => 200,
-            'star' => $star,
+            'message' => 'Fan Group Updated Successfully',
+        ]);
+    }
+
+    public function statusStar(){
+        $id = Auth::user()->id;
+
+        // $starActive = FanGroup::where('my_star', $id)->orWhere('another_star', $id)->get(); 
+
+        // $starActive = FanGroup::where(['my_star' => $id, 'my_star_status' => 0])->get(); 
+
+        // $starActive = FanGroup::where(function ($query) {
+        //         $query->where('my_star', $id)
+        //               ->orWhere('another_star', $id); })->get();
+
+        // $starActive = FanGroup::where('my_star_status',0)->
+        //     where('another_star_status',0)->
+        //     where(function ($query) use($id) {
+        //         $query->where('my_star',$id)
+        //             ->orWhere('another_star',$id);
+        //     })->get();
+
+        $starActive = FanGroup::where(function ($query) use($id) {
+            $query->where('my_star_status', 0)
+                ->where('my_star', $id);
+            })->
+            orWhere(function ($query) use($id) {
+                    $query->where('another_star_status', 0)
+                        ->where('another_star',$id);
+                })->get();
+
+        $starApproved = FanGroup::where(function ($query) use($id) {
+            $query->where('my_star_status', 1)
+                ->where('my_star', $id);
+            })->
+            orWhere(function ($query) use($id) {
+                    $query->where('another_star_status', 1)
+                        ->where('another_star',$id);
+                })->get();
+                
+        $starRejected = FanGroup::where(function ($query) use($id) {
+            $query->where('my_star_status', 2)
+                ->where('my_star', $id);
+            })->
+            orWhere(function ($query) use($id) {
+                    $query->where('another_star_status', 2)
+                        ->where('another_star',$id);
+                })->get();
+
+
+        // return $star;
+
+        return response()->json([
+            'status' => 200,
+            'starActive' => $starActive,
+            'starApproved' => $starApproved,
+            'starRejected' => $starRejected,
+            'id' => $id,
+        ]);
+    }
+
+    public function fanGroupDetails($slug){
+        $id = Auth::user()->id;
+        $starId = User::find($id);
+        
+        $fanDetails = FanGroup::where('slug', $slug)->first();
+
+        return response()->json([
+            'status' => 200,
+            'fanDetails' => $fanDetails,
+            'starId' => $starId,
+            'id' => $id,
+        ]);
+    }
+
+    public function fanGroupActive($slug, $id){
+        $fanDetails = FanGroup::where('slug', $slug)->first();
+
+        if($fanDetails->my_star == $id){
+            $fanDetails->my_star_status = 1;
+        }
+        if($fanDetails->another_star == $id){
+            $fanDetails->another_star_status = 1;
+        }
+        
+        $fanDetails->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Star Approved Successfully',
+        ]);
+    }
+
+    public function fanGroupIgnore($slug, $id){
+        $fanDetails = FanGroup::where('slug', $slug)->first();
+
+        if($fanDetails->my_star == $id){
+            $fanDetails->my_star_status = 2;
+        }
+        if($fanDetails->another_star == $id){
+            $fanDetails->another_star_status = 2;
+        }
+        
+        $fanDetails->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Fan Group Ignored!',
         ]);
     }
 }
