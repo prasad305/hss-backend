@@ -345,6 +345,35 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/sold/auction/product', [AuctionController::class, 'star_soldProduct']);
     Route::get('/star/unSold/auction/product', [AuctionController::class, 'star_unSoldProduct']);
     Route::get('/star/live/allProduct', [AuctionController::class, 'star_allLiveProduct']);
+
+
+
+    // Super Star Audtion Routes
+    Route::get('superstar/audition/pendings',[AuditionController::class, 'starPendingAudtion']);
+    // Route::get('/star/audition/{id}',[AuditionController::class, 'starSingleAudition']);
+
+
+
+});
+
+
+// Approved Star Audition Admin Middleware
+Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
+
+    Route::get('/checkingAuditionAdmin', function () {
+        return response()->json(['message' => 'You are in as Audition Admin', 'status' => 200], 200);
+    });
+
+    
+      // Monir Audition Part 1
+      Route::get('/audition-admin/audition/status', [AuditionController::class, 'auditionAdminStatus']);
+      Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'auditionAdminPendings']);
+      Route::get('/audition-admin/audition/stars', [AuditionController::class, 'stars']);
+      Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
+  
+      Route::get('/audition-admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
+    
+
 });
 
 
