@@ -203,13 +203,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/live_chat/count', [LiveChatController::class, 'count']);
 
 
-    // Monir Audition Part 1
-    Route::get('/admin/audition/status', [AuditionController::class, 'adminStatus']);
-    Route::get('/admin/audition/pendings', [AuditionController::class, 'adminPendings']);
-    Route::get('/admin/audition/stars', [AuditionController::class, 'stars']);
-    Route::post('/admin/audition/add', [AuditionController::class, 'store']);
-
-    Route::get('/admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
+  
 
    
 
@@ -356,6 +350,15 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
+
+    
+      // Monir Audition Part 1
+      Route::get('/audition-admin/audition/status', [AuditionController::class, 'auditionAdminStatus']);
+      Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'auditionAdminPendings']);
+      Route::get('/audition-admin/audition/stars', [AuditionController::class, 'stars']);
+      Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
+  
+      Route::get('/audition-admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
     
 });
 
