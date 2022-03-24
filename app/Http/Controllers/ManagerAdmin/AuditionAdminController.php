@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ManagerAdmin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Audition\AssignAdmin;
+use App\Models\Audition\Audition;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -119,7 +120,7 @@ class AuditionAdminController extends Controller
     public function show(User $auditionAdmin)
     {
         if ($auditionAdmin->status == 0) {
-            session()->flash('error','This Admin Need to Approval First');
+            session()->flash('error', 'This Admin Need to Approval First');
             return redirect()->back();
         }
         return view('ManagerAdmin.auditionAdmin.details')->with('auditionAdmin', $auditionAdmin);
@@ -252,5 +253,106 @@ class AuditionAdminController extends Controller
                 'message' => $exception->getMessage()
             ]);
         }
+    }
+
+    //<=================== Audition Logic by srabon =============================
+
+    public function all()
+    {
+        $audition = Audition::where('status', 1)->latest()->get();
+
+        return view('ManagerAdmin.Audition.index', compact('audition'));
+    }
+
+    public function pending()
+    {
+        $audition = Audition::where([['status', 0], ['star_approval', 1]])->latest()->get();
+
+        return view('ManagerAdmin.Audition.index', compact('audition'));
+    }
+
+    public function published()
+    {
+        $audition = Audition::where('status', 1)->latest()->get();
+
+        return view('ManagerAdmin.Audition.index', compact('audition'));
+    }
+
+    public function details($id)
+    {
+        $audition = Audition::with('star')->find($id);
+        //dd($audition);
+
+        return view('ManagerAdmin.Audition.details', compact('audition'));
+    }
+
+
+    public function auditionEdit($id)
+    {
+        $audition = Audition::find($id);
+
+        return view('ManagerAdmin.Audition.edit', compact('audition'));
+    }
+
+    public function auditionUpdate(Request $request, $id)
+    {
+        $audition = Audition::findOrFail($id);
+        $audition->fill($request->except('_token'));
+
+        $audition->name = $request->input('name');
+        $audition->details = $request->input('details');
+
+        // $meetup->event_link= $request->input('event_link');
+        // $meetup->meetup_type = $request->input('meetup_type');
+        // $meetup->date = $request->input('date');
+        // $meetup->start_time = $request->input('start_time');
+        // $meetup->end_time = $request->input('end_time');
+        // $meetup->venue = $request->input('venue');
+
+        if ($request->hasfile('audition_image')) {
+
+            // $destination = $meetup->image;
+            // if (File::exists($destination)) {
+            //     File::delete($destination);
+            // }
+
+            $file = $request->file('audition_image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/Audition/' . time() . '.' . $extension;
+
+            Image::make($file)->resize(900, 400)->save($filename, 50);
+            $audition->audition_image = $filename;
+        }
+
+
+        try {
+            $audition->update();
+            if ($audition) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Updated Successfully'
+                ]);
+            }
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+            ]);
+        }
+    }
+
+    public function set_publish($id)
+    {
+        $audition = Audition::find($id);
+        if ($audition->status != 0) {
+
+            $audition->status = 0;
+            $audition->update();
+        } else {
+            $audition->status = 1;
+            $audition->update();
+        }
+
+        return redirect()->back()->with('success', 'Published');
     }
 }
