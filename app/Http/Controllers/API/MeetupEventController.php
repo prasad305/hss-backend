@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
 use App\Models\SuperStar;
+use App\Models\Activity;
 use App\Models\Post;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -288,6 +289,13 @@ class MeetupEventController extends Controller
         $meetup->payment_status = 1;
 
         $meetup->save();
+
+        // New Activity Add For Activity
+        $activity = new Activity();
+        $activity->user_id = auth('sanctum')->user()->id;
+        $activity->event_id = $meetup->id;
+        $activity->type = 'meetup';
+        $activity->save();
 
         return response()->json([
             'status'=>200,

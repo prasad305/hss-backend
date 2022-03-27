@@ -42,12 +42,26 @@
                 </p>
             </a>
         </li>
+
+       
+
+
         <li class="nav-item">
             <a href="{{ route('superAdmin.audition.index') }}"
                 class="nav-link {{ Request::routeIs('superAdmin.audition.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-bullhorn"></i>
                 <p>
                     Audtion
+                </p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{{ route('superAdmin.auditionAdmin.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.auditionAdmin.index') ? 'active' : '' }}">
+                <i class="nav-icon fa fa-bullhorn"></i>
+                <p>
+                    Audtion Admin
                 </p>
             </a>
         </li>
@@ -68,6 +82,16 @@
                 <i class="nav-icon fa fa-television"></i>
                 <p>
                     Super Star
+                </p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{{ route('superAdmin.jury.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.jury.index') ? 'active' : '' }}">
+                <i class="nav-icon fa fa-television"></i>
+                <p>
+                   Jury
                 </p>
             </a>
         </li>

@@ -4,22 +4,22 @@
     <div class="row form-group">
         <div class="col-md-6">
               <label for="first_name">First Name</label>
-              <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter Admin First Name" value="{{$admin->first_name}}">
+              <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter Audition Admin First Name" value="{{$admin->first_name}}">
          </div>
          <div class="col-md-6">
               <label for="last_name">Last Name</label>
-              <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Admin Last Name" value="{{$admin->last_name}}">
+              <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Audition Admin Last Name" value="{{$admin->last_name}}">
         </div>
      </div>
 
     <div class="form-group row">
         <div class="col-md-6">
           <label for="phone">Phone</label>
-          <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter Admin Phone" value="{{$admin->phone}}">
+          <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter Audition Admin Phone" value="{{$admin->phone}}">
         </div>
         <div class="col-md-6">
              <label for="email">Email</label>
-             <input type="text" class="form-control" id="email" name="email" placeholder="Enter Admin Email" value="{{$admin->email}}">
+             <input type="text" class="form-control" id="email" name="email" placeholder="Enter Audition Admin Email" value="{{$admin->email}}">
         </div>
     </div>
     <span class="row">
@@ -59,7 +59,7 @@
     });
 
     $.ajax({
-        url: "{{ route('managerAdmin.admin.update',$admin->id) }}",// your request url
+        url: "{{ route('managerAdmin.auditionAdmin.update',$admin->id) }}",// your request url
         data: formData,
         processData: false,
         contentType: false,
@@ -67,7 +67,7 @@
         success: function (data) {
             Swal.fire(
                     'Success!',
-                    'Admin has been Added. ' + data.message,
+                    'Audition Admin has been Added. ' + data.message,
                     'success'
                 )
                 setTimeout(function() {

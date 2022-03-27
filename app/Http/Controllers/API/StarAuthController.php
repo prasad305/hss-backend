@@ -236,6 +236,11 @@ class StarAuthController extends Controller
                     $token = $user->createToken($user->email.'_StarToken', ['server:star'])->plainTextToken;
                     $role = 'star';
                 }
+                else if($user->user_type == 'audition-admin' && $user->status == 1)
+                {
+                    $token = $user->createToken($user->email.'_StarToken', ['server:audition-admin'])->plainTextToken;
+                    $role = 'audition-admin';
+                }
                 else if($user->status != 1)
                 {
                     return response()->json([

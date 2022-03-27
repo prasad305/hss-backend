@@ -3,21 +3,15 @@
 namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Audition\AssignAdmin;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManagerStatic as Image;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $admins = User::where('user_type', 'admin')->orderBy('id', 'DESC')->get();
@@ -81,6 +75,7 @@ class AdminController extends Controller
         $user->password = Hash::make('12345');
         $user->user_type = 'admin'; // Admin user_type == 'admin'
         $user->otp = rand(100000, 999999);
+        // $user->status = 0;
 
         if ($request->hasFile('image')) {
             $image             = $request->file('image');
@@ -123,7 +118,8 @@ class AdminController extends Controller
      */
     public function show(User $admin)
     {
-        return view('ManagerAdmin.admins.details')->with('admin', $admin);
+ 
+        return view('ManagerAdmin.admins.details')->with('auditionAdmin', $admin);
     }
 
     /**

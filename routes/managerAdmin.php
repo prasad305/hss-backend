@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ManagerAdmin\AuditionAdminController;
+use App\Http\Controllers\ManagerAdmin\JuryBoardController;
 use App\Http\Controllers\ManagerAdmin\AdminController;
 use App\Http\Controllers\ManagerAdmin\JobAssign;
 use App\Http\Controllers\ManagerAdmin\DashboardController;
@@ -42,6 +44,20 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('admin-assinged', [AdminController::class, 'assinged'])->name('admin_assinged');
     Route::get('admin-free', [AdminController::class, 'notAssinged'])->name('admin_notAssinged');
 
+    // Audition Admin route
+    Route::resource('auditionAdmin', AuditionAdminController::class);
+    Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');
+    Route::post('auditionAdmin/inactive/{id}', [AuditionAdminController::class, 'inactiveNow'])->name('auditionAdmin.inactiveNow');
+    Route::get('auditionAdmin-assinged', [AuditionAdminController::class, 'assinged'])->name('auditionAdmin_assinged');
+    Route::get('auditionAdmin-free', [AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin_notAssinged');
+
+    // Jury Board route
+    Route::resource('jury', JuryBoardController::class);
+    Route::get('get-subcategory/{category_id}', [JuryBoardController::class,'getSubCategory']);
+    Route::post('jury/active/{id}', [JuryBoardController::class, 'activeNow'])->name('juryBoard.activeNow');
+    Route::post('jury/inactive/{id}', [JuryBoardController::class, 'inactiveNow'])->name('juryBoard.inactiveNow');
+    Route::get('jury-assinged', [JuryBoardController::class, 'assinged'])->name('juryBoard_assinged');
+    Route::get('jury-free', [JuryBoardController::class, 'notAssinged'])->name('juryBoard_notAssinged');
 
     // Live route
     Route::get('liveChat', [LiveChatController::class, 'index'])->name('liveChat.index');
@@ -71,6 +87,18 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('auction/edit/{id}', [AuctionController::class, 'edit'])->name('auctionProduct.edit');
     Route::put('auction/edit/{id}', [AuctionController::class, 'update'])->name('auctionProduct.update');
     Route::get('auction/set_publish/{id}', [AuctionController::class, 'set_publish'])->name('auctionProduct.set_publish');
+
+    // Audition Routes
+
+    Route::get('audition/pending', [AuditionAdminController::class, 'pending'])->name('audition.pending');
+    Route::get('audition/published', [AuditionAdminController::class, 'published'])->name('audition.published');
+    Route::get('audition/all', [AuditionAdminController::class, 'all'])->name('audition.all');
+
+    Route::get('audition/details/{id}', [AuditionAdminController::class, 'details'])->name('audition.details');
+    Route::get('audition/edit/{id}', [AuditionAdminController::class, 'auditionEdit'])->name('audition.edit');
+    Route::put('audition/edit/{id}', [AuditionAdminController::class, 'auditionUpdate'])->name('audition.update');
+    Route::get('audition/set_publish/{id}', [AuditionAdminController::class, 'set_publish'])->name('audition.set_publish');
+
 
 
     //Marketplace Post

@@ -16,6 +16,7 @@ class CreateSuperStarsTable extends Migration
         Schema::create('super_stars', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('star_id');
+            $table->string('star_type')->nullable();
             $table->unsignedBigInteger('admin_id');
             $table->integer('category_id')->nullable();
             $table->integer('sub_category_id')->nullable();

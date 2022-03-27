@@ -1,7 +1,7 @@
 @extends('Layouts.ManagerAdmin.master')
 
 @push('title')
-Manager Admin
+ Admin
 @endpush
 
 @section('content')
@@ -10,12 +10,12 @@ Manager Admin
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Admin</h1>
+                <h1 class="m-0"> Admin</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Admin List</li>
+                    <li class="breadcrumb-item active"> Admin List</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -33,19 +33,19 @@ Manager Admin
                 <i class=" fa fa-filter"></i> Filter
             </button>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="{{ route('managerAdmin.admin_assinged') }}">Show assigned admins</a>
-                <a class="dropdown-item" href="{{ route('managerAdmin.admin_notAssinged') }}">Show available admins</a>
-                <a class="dropdown-item" href="{{ route('managerAdmin.admin.index') }}">All Admins</a>
+                <a class="dropdown-item" href="{{ route('managerAdmin.admin_assinged') }}">Show assigned audition admins</a>
+                <a class="dropdown-item" href="{{ route('managerAdmin.admin_notAssinged') }}">Show available audition admins</a>
+                <a class="dropdown-item" href="{{ route('managerAdmin.admin.index') }}">All  Admins</a>
             </div>
             <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;" onclick=""><i
                     class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
             <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;"
-                onclick="Show('New Admin','{{ route('managerAdmin.admin.create') }}')"><i
+                onclick="Show('New  Admin','{{ route('managerAdmin.admin.create') }}')"><i
                     class=" fa fa-plus"></i>&nbsp;Add New</a>
         </div>
 
         <!-- =========================================================== -->
-        <h4 class="mb-2">Admin List</h4>
+        <h4 class="mb-2"> Admin List</h4>
 
         <hr>
         <div class="row">
@@ -57,6 +57,7 @@ Manager Admin
                         class="img-fluid AdminImg mr-3 mt-4">
 
                     <div class="px-2" style="border-left: 1px solid gray">
+
                         <a href="{{ route('managerAdmin.admin.show', $admin->id) }}">
                             <span class="info-box-text AdminName">
                                 <h5>{{ $admin->first_name }} {{ $admin->last_name }}</h5>
@@ -65,17 +66,19 @@ Manager Admin
                         </a>
                         {{-- <p>Music</p> --}}
 
-                        @if ($admin->assignAudition)
+                        @if ($admin->assign)
                         <span class="right badge bg-danger my-2">Assigned</span>
                         <i class="fa-solid fa-bahai px-2 text-danger"></i><br>
                         @else
                         {{-- <span class="right badge border border-success my-2">Free Now</span> 🏳️<br> --}}
                         @endif
 
-                        <p class="AtifAdmin">Atif Aslam</p>
+                        {{-- <p class="AtifAdmin">Atif Aslam</p> --}}
+                        {{-- <p class="{{ $admin->status == 0 ? 'text-danger' : 'text-success' }}">{{ $admin->status == 0 ? 'Pending For Approval' : 'Approved' }}</p> --}}
                         <a class="btn btn-sm btn-info"
-                            onclick="Show('Edit Admin','{{ route('managerAdmin.admin.edit', $admin->id) }}')"><i
+                            onclick="Show('Edit  Admin','{{ route('managerAdmin.admin.edit', $admin->id) }}')"><i
                                 class="fa fa-edit text-white"></i></a>
+
                         <button class="btn btn-sm btn-warning" onclick="delete_function(this)"
                             value="{{ route('managerAdmin.admin.destroy', $admin->id) }}"><i class="fa fa-trash"></i>
                         </button>
@@ -87,47 +90,6 @@ Manager Admin
             @endforeach
 
         </div>
-
-        {{-- <div class="row mt-5">
-            <div class="col-md-12">
-                <div class="panel panel-primary" style="background: #f3f4f6;">
-                    <div class="panel-heading">
-                        <span class="panel-title">Admin Table
-                    </div>
-                    <div class="panel-body row bg-light">
-
-                        @foreach ($admins as $admin)
-                            <div class="col-sm-6 col-lg-4 ">
-                                <div class="panel panel-primary">
-                                    <div class="panel-body row">
-                                        <div class="col-md-6 col-sm-6" style="display: flex; justify-content: center">
-                                            <img src="{{ $admin->image ? asset($admin->image) : asset(get_static_option('no_image')) }}"
-        alt="admin Image" class="img-fluid" style="height: 150px; width: 150px; border-radius: 50%;">
-    </div>
-    <div class="col-md-6 col-sm-6" style="border-left: 1px solid gray">
-        <a href="{{ route('managerAdmin.admin.show', $admin->id) }}">
-            <h3 class="name text-ellipsis">{{ $admin->first_name }} {{ $admin->last_name }}</h3>
-        </a>
-        <b>Music</b>
-        <br>
-
-        <button class="badge badge-success p-3">Assigned</button>
-        <h4>Atif Aslam</h4>
-        <a class="btn btn-sm btn-info"
-            onclick="Show('Edit Admin','{{ route('managerAdmin.admin.edit', $admin->id) }}')"><i
-                class="fa fa-edit text-white"></i></a>
-        <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
-            value="{{ route('managerAdmin.admin.destroy', $admin->id) }}"><i class="fa fa-trash"></i> </button>
-    </div>
-</div>
-
-</div>
-</div>
-@endforeach
-</div>
-</div>
-</div>
-</div> <!-- End Row --> --}}
 
 </div> <!-- container -->
 </div> <!-- content -->
