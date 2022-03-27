@@ -41,12 +41,12 @@ Manager Admin
                 <div class="card">
                     <div class="panel panel-primary text-center">
                         <div class="">
-                            <img width="50%" src="{{ asset($val->product_image) }}" alt="">
+                            <img width="50%" src="{{ asset($val->banner) }}" alt="">
                         </div>
                         <div class="panel-body py-3">
                             <h3 class="text-ellipsis-line-1">{{ $val->name }}</h3>
 
-                            @if ($val->status == 0)
+                            @if ($val->star_approval == 1)
 
                             <a type="button" class="btn btn-warning waves-effect waves-light"><i class="icon-record"></i>
                                 Pending</a>

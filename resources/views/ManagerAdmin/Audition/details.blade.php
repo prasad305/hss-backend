@@ -45,7 +45,7 @@ Manager Admin
                 <div class="row card p-5">
                     <h3>{{ $audition->name }}</h3>
                     <p>
-                        {!! $audition->details !!}
+                        {!! $audition->description !!}
                     </p>
                 </div>
                 <div class="row">
@@ -55,35 +55,25 @@ Manager Admin
                     </div>
                     <div class="col-md-3 card py-3 mr-1">
                         Time
-                        <h4 class="text-warning">Reselase {{ \Carbon\Carbon::parse($audition->bid_from)->format('h:i A')}} - End {{ \Carbon\Carbon::parse($audition->bid_to)->format('h:i A')}}</h4>
-                    </div>
-                    <div class="col-md-3 card py-3">
-                        Base Price
-                        <h4 class="text-warning">$ {{$audition->base_price}}</h4>
+                        <h4 class="text-warning">Reselase {{ \Carbon\Carbon::parse($audition->start_time)->format('h:i A')}} - End {{ \Carbon\Carbon::parse($audition->end_time)->format('h:i A')}}</h4>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-4">
                 <div class="card px-5 py-3">
+                    <h3> Judge Panel</h3>
+                    @foreach($audition->judge as $star)
                     <div class="row">
                         <div class="col-xs-6 content-center">
-                            <img src="{{ asset($audition->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                            <img src="{{ asset($star->user->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                         </div>
                         <div class="col-xs-6">
-                            Star
-                            <h3>{{ $audition->judge.user->first_name }} {{ $audition->judge.user->last_name }}</h3>
+                            <h3>{{ $star->user->first_name}} {{ $star->user->last_name}}</h3>
                         </div>
                     </div>
-                    <div class="row py-3">
-                        <div class="col-xs-6 content-center">
-                            <img src="{{ asset($audition->admin->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
-                        </div>
-                        <div class="col-xs-6">
-                            Admin
-                            <h3>{{ $audition->admin->first_name }} {{ $audition->admin->last_name }}</h3>
-                        </div>
-                    </div>
+                    @endforeach
+
                 </div>
             </div>
 
