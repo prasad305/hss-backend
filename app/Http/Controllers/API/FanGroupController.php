@@ -180,21 +180,79 @@ class FanGroupController extends Controller
     public function statusAdminStar(){
         $id = Auth::user()->id;
         // $user = FanGroup::where('created_by', $id);
+        // another_star_admin_id
 
-        $fanPending = FanGroup::where('created_by', $id)->where('my_star_status', 0)->where('another_star_status', 0)->get();
-        $fanPendingCount = FanGroup::where('created_by', $id)->where('my_star_status', 0)->where('another_star_status', 0)->count();
 
-        $fanApproved = FanGroup::where('created_by', $id)->where('my_star_status', 1)->where('another_star_status', 1)->get();
-        $fanApprovedCount = FanGroup::where('created_by', $id)->where('my_star_status', 1)->where('another_star_status', 1)->count();
+        $fanApproved = FanGroup::where(function ($query) use($id) {
+            $query->where('my_star_status', 1)
+                ->where('created_by', $id);
+            })->
+            orWhere(function ($query) use($id) {
+                    $query->where('another_star_status', 1)
+                        ->where('another_star_admin_id',$id);
+                })->get();
+
+        $fanApprovedCount = FanGroup::where(function ($query) use($id) {
+            $query->where('my_star_status', 1)
+                ->where('created_by', $id);
+            })->
+            orWhere(function ($query) use($id) {
+                    $query->where('another_star_status', 1)
+                        ->where('another_star_admin_id',$id);
+                })->count();
+
+                
+        $fanPending = FanGroup::where(function ($query) use($id) {
+            $query->where('my_star_status', 0)
+                ->where('created_by', $id);
+            })->
+            orWhere(function ($query) use($id) {
+                    $query->where('another_star_status', 0)
+                        ->where('another_star_admin_id',$id);
+                })->get();
+                
+        $fanPendingCount = FanGroup::where(function ($query) use($id) {
+            $query->where('my_star_status', 0)
+                ->where('created_by', $id);
+            })->
+            orWhere(function ($query) use($id) {
+                    $query->where('another_star_status', 0)
+                        ->where('another_star_admin_id',$id);
+                })->count();
                 
         
         $today = Carbon::now();
 
-        $fanLiveGroup = FanGroup::where('created_by', $id)->where('my_star_status', 1)
-                            ->where('another_star_status', 1)
-                            ->whereDate('start_date','<=', $today)
-                            ->whereDate('end_date','>=', $today)
-                            ->get();
+        $fanLiveGroup = FanGroup::where(function ($query) use($id) {
+                                    $query->where('my_star_status', 1)
+                                        ->where('created_by', $id);
+                                    })->
+                                    orWhere(function ($query) use($id) {
+                                            $query->where('another_star_status', 1)
+                                                ->where('another_star_admin_id',$id);
+                                        })
+                                    ->whereDate('start_date','<=', $today)
+                                    ->whereDate('end_date','>=', $today)
+                                    ->get();
+
+
+
+
+
+        // $fanPending = FanGroup::where('created_by', $id)->where('my_star_status', 0)->where('another_star_status', 0)->get();
+        // $fanPendingCount = FanGroup::where('created_by', $id)->where('my_star_status', 0)->where('another_star_status', 0)->count();
+
+        // $fanApproved = FanGroup::where('created_by', $id)->where('my_star_status', 1)->where('another_star_status', 1)->get();
+        // $fanApprovedCount = FanGroup::where('created_by', $id)->where('my_star_status', 1)->where('another_star_status', 1)->count();
+                
+        
+        // $today = Carbon::now();
+
+        // $fanLiveGroup = FanGroup::where('created_by', $id)->where('my_star_status', 1)
+        //                     ->where('another_star_status', 1)
+        //                     ->whereDate('start_date','<=', $today)
+        //                     ->whereDate('end_date','>=', $today)
+        //                     ->get();
 
 
         // return $star;
