@@ -259,14 +259,14 @@ class AuditionAdminController extends Controller
 
     public function all()
     {
-        $audition = Audition::where('status', 1)->latest()->get();
+        $audition = Audition::latest()->get();
 
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
 
     public function pending()
     {
-        $audition = Audition::where([['status', 0], ['star_approval', 1]])->latest()->get();
+        $audition = Audition::where('status', 0)->latest()->get();
 
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
@@ -280,7 +280,7 @@ class AuditionAdminController extends Controller
 
     public function details($id)
     {
-        $audition = Audition::with('star')->find($id);
+        $audition = Audition::with(['judge.user'])->find($id);
         //dd($audition);
 
         return view('ManagerAdmin.Audition.details', compact('audition'));

@@ -68,11 +68,11 @@ Manager Admin
                 <div class="card px-5 py-3">
                     <div class="row">
                         <div class="col-xs-6 content-center">
-                            <img src="{{ asset($audition->star->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                            <img src="{{ asset($audition->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                         </div>
                         <div class="col-xs-6">
                             Star
-                            <h3>{{ $audition->star->first_name }} {{ $audition->star->last_name }}</h3>
+                            <h3>{{ $audition->judge.user->first_name }} {{ $audition->judge.user->last_name }}</h3>
                         </div>
                     </div>
                     <div class="row py-3">
