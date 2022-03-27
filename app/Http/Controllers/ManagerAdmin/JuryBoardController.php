@@ -25,6 +25,15 @@ class JuryBoardController extends Controller
         return view('ManagerAdmin.jury.index', $data);
     }
 
+    public function views()
+    {
+        $data = [
+            'juries' =>  User::where('user_type', 'jury')->orderBy('id', 'DESC')->get(),
+
+        ];
+        return view('ManagerAdmin.jury.views', $data);
+    }
+
     public function assinged()
     {
         $assignAdmins = AssignAdmin::select('assign_person')->get();
@@ -70,7 +79,7 @@ class JuryBoardController extends Controller
                             })->orderBy('id', 'DESC')->get();
     }
 
-  
+
     public function store(Request $request)
     {
         $request->validate([
