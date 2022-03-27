@@ -12,7 +12,7 @@
         </div>
      </div>
 
-    <div class="form-group row">
+    {{-- <div class="form-group row">
         <div class="col-md-6">
           <label for="phone">Phone</label>
           <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter Audition Admin Phone" value="{{$auditionAdmin->phone}}">
@@ -21,7 +21,7 @@
              <label for="email">Email</label>
              <input type="text" class="form-control" id="email" name="email" placeholder="Enter Audition Admin Email" value="{{$auditionAdmin->email}}">
         </div>
-    </div>
+    </div> --}}
     <span class="row">
            <div class="form-group col-md-6">
               <label for="image">Image</label>
