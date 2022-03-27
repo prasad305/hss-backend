@@ -363,17 +363,17 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 // Approved Jury Board Middleware
 Route::middleware(['auth:sanctum', 'isAPIJuryBoard'])->group(function () {
 
-    Route::get('/checkingSuperStar', function () {
+    Route::get('/checkingJurySuperStar', function () {
         return response()->json(['message' => 'You are in as Jury Audition', 'status' => 200], 200);
     });
-      // Monir Jury Board
+    // Monir Jury Board
     //   Route::get('/audition-admin/audition/status', [AuditionController::class, 'auditionAdminStatus']);
     //   Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'auditionAdminPendings']);
     //   Route::get('/audition-admin/audition/stars', [AuditionController::class, 'stars']);
     //   Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
-  
+
     //   Route::get('/audition-admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
-    
+
 });
 
 
