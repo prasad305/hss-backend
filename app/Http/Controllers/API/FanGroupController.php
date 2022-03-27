@@ -224,13 +224,11 @@ class FanGroupController extends Controller
         $today = Carbon::now();
 
         $fanLiveGroup = FanGroup::where(function ($query) use($id) {
-                                    $query->where('my_star_status', 1)
-                                        ->where('created_by', $id);
-                                    })->
-                                    orWhere(function ($query) use($id) {
-                                            $query->where('another_star_status', 1)
-                                                ->where('another_star_admin_id',$id);
-                                        })
+                                    $query->where('another_star_admin_id', $id)
+                                        ->orWhere('created_by', $id);
+                                    })
+                                    ->where('my_star_status', 1)
+                                    ->where('another_star_status', 1)
                                     ->whereDate('start_date','<=', $today)
                                     ->whereDate('end_date','>=', $today)
                                     ->get();
