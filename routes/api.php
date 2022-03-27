@@ -13,6 +13,7 @@ use App\Http\Controllers\API\MarketplaceController;
 use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\API\SimplePostController;
+use App\Http\Controllers\API\FanGroupController;
 use App\Http\Controllers\API\LearningSessionController;
 use App\Http\Controllers\API\AuditionController;
 use Illuminate\Http\Request;
@@ -143,6 +144,12 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
         return response()->json(['message' => 'You are in as Admin', 'status' => 200], 200);
     });
 
+    // Fan Group Section
+    Route::post('admin/fan-group/store', [FanGroupController::class, 'fanGroupStore']);
+    Route::get('/admin/fan-group/star/list', [FanGroupController::class, 'allStarList']);
+    Route::get('/admin/fan-group/star/list/{data}', [FanGroupController::class, 'someStarList']);
+    Route::get('admin/fan/group/adminlist/status', [FanGroupController::class, 'statusAdminStar']);
+
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
     Route::get('/admin/marketplace/product-list/approved', [MarketplaceController::class, 'allProductList']);
@@ -249,6 +256,14 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     Route::get('/livechat', [LiveChatController::class, 'livechat']);
     Route::get('/sinlgeLiveChat/{id}', [LiveChatController::class, 'sinlgeLiveChat']);
+
+
+    // Fan Group Section
+    Route::get('star/fan/group/starlist/status', [FanGroupController::class, 'statusStar']);
+    Route::post('star/fan/group/update/{slug}', [FanGroupController::class, 'starUpdate']);
+    Route::get('star/fan/group/details/{slug}', [FanGroupController::class, 'fanGroupDetails']);
+    Route::get('star/fan/group/active/{slug}/{id}', [FanGroupController::class, 'fanGroupActive']);
+    Route::get('star/fan/group/ignore/{slug}/{id}', [FanGroupController::class, 'fanGroupIgnore']);
 
     // Marketplace Section
     Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);
