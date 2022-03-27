@@ -110,10 +110,9 @@ class JuryBoardController extends Controller
         try {
             $user->save();
 
-            $jury = new SuperStar();
+            $jury = new JuryBoard();
 
             $jury->star_id = $user->id;
-            $jury->star_type = 'jury';
             $jury->admin_id = auth()->user()->id;
             $jury->category_id = $request->category_id;
             $jury->sub_category_id = $request->sub_category_id;
@@ -217,7 +216,7 @@ class JuryBoardController extends Controller
         try {
             $user->save();
 
-            $jury = SuperStar::where('star_id', $user->id)->first();
+            $jury = JuryBoard::where('star_id', $user->id)->first();
 
             $jury->category_id = $request->category_id;
             $jury->sub_category_id = $request->sub_category_id;

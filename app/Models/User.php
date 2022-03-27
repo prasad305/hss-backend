@@ -224,6 +224,6 @@ class User extends Authenticatable
 
     public function jury()
     {
-        return $this->hasOne(SuperStar::class, 'star_id');
+        return $this->hasOne(JuryBoard::class, 'star_id');
     }
 }

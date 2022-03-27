@@ -11,7 +11,7 @@ class JuryBoard extends Model
 
 
     protected $fillable = [
-        'jury_id',
+        'star_id',
         'admin_id',
         'category_id',
         'sub_category_id',
@@ -26,6 +26,6 @@ class JuryBoard extends Model
 
     public function juryBoard()
     {
-        return $this->belongsto(User::class,'jury_id','id');
+        return $this->belongsto(User::class,'star_id','id');
     }
 }

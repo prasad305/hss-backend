@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\JuryBoard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
@@ -296,13 +297,21 @@ class StarAuthController extends Controller
     public function qr_verify(Request $request)
     {
 
-            $user = SuperStar::where('qr_code', $request->input('qr_code'))->first();
+
+        $superStar = SuperStar::all();
+
+        $juryBoard = JuryBoard::all();
+        
+        $merged = $superStar->merge($juryBoard);
+        
+        $user = $merged->where('qr_code',$request->qr_code)->first();
 
             if ($user) {
 
                 return response()->json([
                     'status'=>200,
                     'star_id' => $user->star_id,
+                    'auth_type' => $user->user_type,
                     'message'=>'QR Code Matched!',
                 ]);
             }

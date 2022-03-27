@@ -83,7 +83,7 @@ class JuryAuthController extends Controller
 
             $star = new JuryBoard();
 
-            $star->jury_id = $user->id;
+            $star->star_id = $user->id;
             $star->admin_id = auth('sanctum')->user()->id;
             $star->category_id = $request->input('category_id');
             $star->sub_category_id = $request->input('subcategory_id');
