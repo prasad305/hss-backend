@@ -259,14 +259,14 @@ class AuditionAdminController extends Controller
 
     public function all()
     {
-        $audition = Audition::latest()->get();
+        $audition = Audition::where('star_approval', 1)->orWhere('status', 1)->latest()->get();
 
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
 
     public function pending()
     {
-        $audition = Audition::where('status', 0)->latest()->get();
+        $audition = Audition::where('star_approval', 1)->latest()->get();
 
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
@@ -281,7 +281,7 @@ class AuditionAdminController extends Controller
     public function details($id)
     {
         $audition = Audition::with(['judge.user'])->find($id);
-        //dd($audition);
+        // dd($audition);
 
         return view('ManagerAdmin.Audition.details', compact('audition'));
     }
@@ -299,8 +299,8 @@ class AuditionAdminController extends Controller
         $audition = Audition::findOrFail($id);
         $audition->fill($request->except('_token'));
 
-        $audition->name = $request->input('name');
-        $audition->details = $request->input('details');
+        $audition->title = $request->input('title');
+        $audition->description = $request->input('description');
 
         // $meetup->event_link= $request->input('event_link');
         // $meetup->meetup_type = $request->input('meetup_type');
@@ -309,19 +309,19 @@ class AuditionAdminController extends Controller
         // $meetup->end_time = $request->input('end_time');
         // $meetup->venue = $request->input('venue');
 
-        if ($request->hasfile('audition_image')) {
+        if ($request->hasfile('banner')) {
 
             // $destination = $meetup->image;
             // if (File::exists($destination)) {
             //     File::delete($destination);
             // }
 
-            $file = $request->file('audition_image');
+            $file = $request->file('banner');
             $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/Audition/' . time() . '.' . $extension;
+            $filename = 'uploads/images/auditions/' . time() . '.' . $extension;
 
             Image::make($file)->resize(900, 400)->save($filename, 50);
-            $audition->audition_image = $filename;
+            $audition->banner = $filename;
         }
 
 

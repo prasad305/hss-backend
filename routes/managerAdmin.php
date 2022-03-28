@@ -53,7 +53,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     // Jury Board route
     Route::resource('jury', JuryBoardController::class);
-    Route::get('get-subcategory/{category_id}', [JuryBoardController::class,'getSubCategory']);
+    Route::get('get-subcategory/{category_id}', [JuryBoardController::class, 'getSubCategory']);
     Route::post('jury/active/{id}', [JuryBoardController::class, 'activeNow'])->name('juryBoard.activeNow');
     Route::post('jury/inactive/{id}', [JuryBoardController::class, 'inactiveNow'])->name('juryBoard.inactiveNow');
     Route::get('jury-assinged', [JuryBoardController::class, 'assinged'])->name('juryBoard_assinged');
@@ -97,7 +97,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     Route::get('audition/details/{id}', [AuditionAdminController::class, 'details'])->name('audition.details');
     Route::get('audition/edit/{id}', [AuditionAdminController::class, 'auditionEdit'])->name('audition.edit');
-    Route::put('audition/edit/{id}', [AuditionAdminController::class, 'auditionUpdate'])->name('audition.update');
+    Route::put('audition/update/{id}', [AuditionAdminController::class, 'auditionUpdate'])->name('audition.update');
     Route::get('audition/set_publish/{id}', [AuditionAdminController::class, 'set_publish'])->name('audition.set_publish');
 
 
