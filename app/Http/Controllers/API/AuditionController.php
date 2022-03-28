@@ -40,6 +40,30 @@ class AuditionController extends Controller
             'pendings' => $pendings,
         ]);
     }
+    public function auditionAdminLive()
+    {
+        $lives = Audition::where([['admin_id', auth('sanctum')->user()->id], ['status', 1]])->get();
+        return response()->json([
+            'status' => 200,
+            'lives' => $lives,
+        ]);
+    }
+    public function auditionStatus($audition_id)
+    {
+        $auditionStatus = Audition::with('judge', 'judge.user')->where([['admin_id', auth('sanctum')->user()->id], ['id', $audition_id]])->get();
+        return response()->json([
+            'status' => 200,
+            'auditionStatus' => $auditionStatus,
+        ]);
+    }
+    public function confirmedAudition($audition_id)
+    {
+        $confirmedAudition = Audition::where([['admin_id', auth('sanctum')->user()->id], ['id', $audition_id]])->update(['star_approval' => 1]);
+        return response()->json([
+            'status' => 200,
+            'confirmedAudition' => $confirmedAudition,
+        ]);
+    }
 
     public function stars()
     {
@@ -179,6 +203,18 @@ class AuditionController extends Controller
         return response()->json([
             'status' => 200,
             'pending_auditions' => $pendingAuditions,
+        ]);
+    }
+    public function starLiveAudtion()
+    {
+        $liveAuditions = Audition::with('judge')
+            ->whereHas('judge', function ($q) {
+                $q->where([['judge_id', auth('sanctum')->user()->id], ['approved_by_judge', 1]]);
+            })->get();
+
+        return response()->json([
+            'status' => 200,
+            'liveAuditions' => $liveAuditions,
         ]);
     }
 

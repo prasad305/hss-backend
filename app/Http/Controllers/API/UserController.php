@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Auction;
+use App\Models\Audition\Audition;
 use App\Models\Bidding;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
@@ -29,6 +30,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\array_sort;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
+use PhpParser\Node\Expr\FuncCall;
 
 class UserController extends Controller
 {
@@ -540,6 +542,16 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'topBidder' => $topBidder,
+        ]);
+    }
+    //=============== Audition Logic By Srabon ===================
+
+    public function getUpcomingAuditions()
+    {
+        $upcomingAuditions = Audition::with('judge.user')->where('status', 1)->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'upcomingAuditions' => $upcomingAuditions,
         ]);
     }
 }
