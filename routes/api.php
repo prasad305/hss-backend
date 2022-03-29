@@ -127,11 +127,15 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/greetings/register', [UserController::class, 'greetingsRegistation']);
     Route::post('/user/meetup-event/register', [MeetupEventController::class, 'meetup_register']);
 
-
+    // Auction
     Route::get('/user/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
     Route::post('user/bidding/auction/product', [UserController::class, 'bidNow']);
     Route::get('user/liveBidding/auction/{auction_id}', [UserController::class, 'liveBidding']);
     Route::get('user/liveBidding/history/{auction_id}', [UserController::class, 'bidHistory']);
+
+    // Audition
+
+    Route::get('/user/getUpcomingAuditions', [UserController::class, 'getUpcomingAuditions']);
 });
 
 
@@ -349,6 +353,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     // Super Star Audtion Routes
     Route::get('superstar/audition/pendings', [AuditionController::class, 'starPendingAudtion']);
+    Route::get('superstar/audition/live', [AuditionController::class, 'starLiveAudtion']);
     Route::get('/star/audition/{id}', [AuditionController::class, 'starSingleAudition']);
     Route::put('/star/approved/audition/{id}', [AuditionController::class, 'starApprovedAudition']);
 });
@@ -368,10 +373,13 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     // Monir Audition Part 1
     Route::get('/audition-admin/audition/status', [AuditionController::class, 'auditionAdminStatus']);
     Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'auditionAdminPendings']);
+    Route::get('/audition-admin/audition/lives', [AuditionController::class, 'auditionAdminlive']);
     Route::get('/audition-admin/audition/stars', [AuditionController::class, 'stars']);
     Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
-
     Route::get('/audition-admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
+    // Srabon Auditon Part 2
+    Route::get('/audition-admin/auditionStatus/{audition_id}', [AuditionController::class, 'auditionStatus']);
+    Route::put('/audition-admin/confirmed/audition/{audition_id}', [AuditionController::class, 'confirmedAudition']);
 });
 
 
