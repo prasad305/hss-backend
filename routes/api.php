@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AuctionController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\LiveChatController;
 use App\Http\Controllers\API\StarAuthController;
+use App\Http\Controllers\API\JuryAuthController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\SubCategoryController;
 use App\Http\Controllers\API\UserController;
@@ -12,27 +13,28 @@ use App\Http\Controllers\API\MarketplaceController;
 use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\API\SimplePostController;
+use App\Http\Controllers\API\FanGroupController;
 use App\Http\Controllers\API\LearningSessionController;
 use App\Http\Controllers\API\AuditionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-
+// Authentication API
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 
-
+// OTP Verification API
 Route::post('otp_verify', [AuthController::class, 'otp_verify']);
 Route::post('verify_user', [AuthController::class, 'verify_user']);
-
 Route::get('resend_otp', [AuthController::class, 'resend_otp']);
 Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 
-// Change You
-Route::get('/user/getAllLiveChatEventWith', [UserController::class, 'getAllLiveChatEventWith']);
-Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
+// Home Page All Post
+Route::get('/user/all_post', [UserController::class, 'all_post']);
 
+
+Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
 
 //Star Photo and videos
 Route::get('/star_photos/{id}', [UserController::class, 'star_photo']);
@@ -45,7 +47,8 @@ Route::get('/user/live_chat/all', [LiveChatController::class, 'userAll']);
 
 
 
-// Verified User Middleware
+
+// Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/checkingAuthenticated', function () {
@@ -56,28 +59,21 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user_info_update', [AuthController::class, 'user_info_update']);
     Route::post('/user_otherInfo_update', [AuthController::class, 'user_OtherInfo_update']);
 
-
+    Route::get('/user/activity_count', [AuthController::class, 'activity_count']);
 
     Route::get('/user/getAllLiveChatEvent', [UserController::class, 'getAllLiveChatEvent']);
-
-
-
     Route::get('/user/registerMeestup', [UserController::class, 'registeredMeetup']);
     Route::get('/user/registerLivechat', [UserController::class, 'registeredLivechat']);
     Route::get('/user/registerLearningSession', [UserController::class, 'registeredLearningSession']);
 
+
     Route::get('/user/sinlgeLiveChat/{id}', [UserController::class, 'sinlgeLiveChat']);
     Route::get('/user/getSingleLiveChatEvent/{id}', [UserController::class, 'getSingleLiveChatEvent']);
     Route::get('/user/getSingleLiveChatEvent/{minute}/{id}', [UserController::class, 'getLiveChatTiemSlot']);
-    Route::post('/user/liveChatRigister/', [UserController::class, 'liveChatRigister']);
-
-    //Route::get('view-category', [CategoryController::class, 'index']);
-    //Route::get('view-category', [CategoryController::class, 'index']);
 
 
     Route::get('view-country', [CategoryController::class, 'index']);
     Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
-
     Route::get('/user/registeredLivechat', [UserController::class, 'registeredLivechat']);
 
     Route::get('/user/interest/type', [UserController::class, 'interestType']);
@@ -93,15 +89,12 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
     Route::get('/user/meetup-event/{star_id}/{event_id}', [MeetupEventController::class, 'meetup_event_booking']);
-    Route::post('/user/meetup-event/register', [MeetupEventController::class, 'meetup_register']);
+
 
     Route::get('/star_info/{star_id}', [UserController::class, 'star_info']);
 
-
     Route::get('/meetup_event_info/{id}', [MeetupEventController::class, 'event_info']);
 
-    //greetings registation
-    Route::post('/user/greetings_registaion', [UserController::class, 'greetingsRegistation']);
 
     //greetings registation update
     Route::post('/user/greetings_registaion_update', [UserController::class, 'greetingsRegistationUpdate']);
@@ -119,16 +112,31 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //check user notification
     Route::get('/user/check_notification', [UserController::class, 'checkUserNotifiaction']);
     Route::get('/learnig-session/{slug}', [UserController::class, 'singleLearnigSession']);
+
     //lerning session registaion
     Route::post('/learnig-session', [UserController::class, 'LearningSessionReg']);
 
     // auction product
     Route::get('/auction-product/all', [UserController::class, 'auctionProduct']);
     Route::get('/user/getStarAuction/{star_id}', [UserController::class, 'starAuction']);
+
+
+
+    //Event Registaion By User (Learning Session + Live Chat + Greeting + Meetup Event)
+    Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
+    Route::post('/user/liveChat/register', [UserController::class, 'liveChatRigister']);
+    Route::post('/user/greetings/register', [UserController::class, 'greetingsRegistation']);
+    Route::post('/user/meetup-event/register', [MeetupEventController::class, 'meetup_register']);
+
+    // Auction
     Route::get('/user/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
     Route::post('user/bidding/auction/product', [UserController::class, 'bidNow']);
     Route::get('user/liveBidding/auction/{auction_id}', [UserController::class, 'liveBidding']);
     Route::get('user/liveBidding/history/{auction_id}', [UserController::class, 'bidHistory']);
+
+    // Audition
+
+    Route::get('/user/getUpcomingAuditions', [UserController::class, 'getUpcomingAuditions']);
 });
 
 
@@ -140,6 +148,12 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/checkingAdmin', function () {
         return response()->json(['message' => 'You are in as Admin', 'status' => 200], 200);
     });
+
+    // Fan Group Section
+    Route::post('admin/fan-group/store', [FanGroupController::class, 'fanGroupStore']);
+    Route::get('/admin/fan-group/star/list', [FanGroupController::class, 'allStarList']);
+    Route::get('/admin/fan-group/star/list/{data}', [FanGroupController::class, 'someStarList']);
+    Route::get('admin/fan/group/adminlist/status', [FanGroupController::class, 'statusAdminStar']);
 
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
@@ -201,15 +215,9 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/live_chat/count', [LiveChatController::class, 'count']);
 
 
-    // Monir Audition Part 1
-    Route::get('/admin/audition/status', [AuditionController::class, 'adminStatus']);
-    Route::get('/admin/audition/pendings', [AuditionController::class, 'adminPendings']);
-    Route::get('/admin/audition/stars', [AuditionController::class, 'stars']);
-    Route::post('/admin/audition/add', [AuditionController::class, 'store']);
 
-    Route::get('/admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
 
-   
+
 
 
 
@@ -254,6 +262,14 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/livechat', [LiveChatController::class, 'livechat']);
     Route::get('/sinlgeLiveChat/{id}', [LiveChatController::class, 'sinlgeLiveChat']);
 
+
+    // Fan Group Section
+    Route::get('star/fan/group/starlist/status', [FanGroupController::class, 'statusStar']);
+    Route::post('star/fan/group/update/{slug}', [FanGroupController::class, 'starUpdate']);
+    Route::get('star/fan/group/details/{slug}', [FanGroupController::class, 'fanGroupDetails']);
+    Route::get('star/fan/group/active/{slug}/{id}', [FanGroupController::class, 'fanGroupActive']);
+    Route::get('star/fan/group/ignore/{slug}/{id}', [FanGroupController::class, 'fanGroupIgnore']);
+
     // Marketplace Section
     Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);
     Route::get('/star/marketplace/product-list/approved', [MarketplaceController::class, 'allStarProductList']);
@@ -275,7 +291,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/approve_post/{id}', [SimplePostController::class, 'approve_post']);
 
     // Learning Session Section
-    Route::post('/star/add_learning_session', [LearningSessionController::class, 'add']);
+    Route::post('/star/add_learning_session', [LearningSessionController::class, 'star_add']);
     Route::get('/star/learning_session/all', [LearningSessionController::class, 'star_all']);
     Route::get('/star/learning_session/count', [LearningSessionController::class, 'star_count']);
     Route::get('/star/learning_session/pending', [LearningSessionController::class, 'star_pending_list']);
@@ -337,10 +353,50 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
 
     // Super Star Audtion Routes
-    Route::get('superstar/audition/pendings',[AuditionController::class, 'starPendingAudtion']);
-    // Route::get('/star/audition/{id}',[AuditionController::class, 'starSingleAudition']);
+    Route::get('superstar/audition/pendings', [AuditionController::class, 'starPendingAudtion']);
+    Route::get('superstar/audition/live', [AuditionController::class, 'starLiveAudtion']);
+    Route::get('/star/audition/{id}', [AuditionController::class, 'starSingleAudition']);
+    Route::put('/star/approved/audition/{id}', [AuditionController::class, 'starApprovedAudition']);
+});
 
 
+// Approved Star Audition Admin Middleware
+Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
+
+    Route::get('/checkingAuditionAdmin', function () {
+        return response()->json(['message' => 'You are in as Audition Admin', 'status' => 200], 200);
+    });
+
+    // Marketplace Section
+    // Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
+
+
+    // Monir Audition Part 1
+    Route::get('/audition-admin/audition/status', [AuditionController::class, 'auditionAdminStatus']);
+    Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'auditionAdminPendings']);
+    Route::get('/audition-admin/audition/lives', [AuditionController::class, 'auditionAdminlive']);
+    Route::get('/audition-admin/audition/stars', [AuditionController::class, 'stars']);
+    Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
+    Route::get('/audition-admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
+    // Srabon Auditon Part 2
+    Route::get('/audition-admin/auditionStatus/{audition_id}', [AuditionController::class, 'auditionStatus']);
+    Route::put('/audition-admin/confirmed/audition/{audition_id}', [AuditionController::class, 'confirmedAudition']);
+});
+
+
+// Approved Jury Board Middleware
+Route::middleware(['auth:sanctum', 'isAPIJuryBoard'])->group(function () {
+
+    Route::get('/checkingJurySuperStar', function () {
+        return response()->json(['message' => 'You are in as Jury Audition', 'status' => 200], 200);
+    });
+    // Monir Jury Board
+    //   Route::get('/audition-admin/audition/status', [AuditionController::class, 'auditionAdminStatus']);
+    //   Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'auditionAdminPendings']);
+    //   Route::get('/audition-admin/audition/stars', [AuditionController::class, 'stars']);
+    //   Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
+
+    //   Route::get('/audition-admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
 
 });
 
@@ -364,10 +420,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route for Star Panel
 Route::post('superStar/register', [StarAuthController::class, 'superStar_register']);
 Route::post('star_login', [StarAuthController::class, 'login']);
+
 Route::post('star_otp_verify', [StarAuthController::class, 'otp_verify']);
+
 Route::post('star_qr_verify', [StarAuthController::class, 'qr_verify']);
 
 Route::post('star_register', [StarAuthController::class, 'register']);
+
+// Route for Jury Board Panel
+Route::post('jury-register', [JuryAuthController::class, 'register']);
+
+
 
 Route::get('view-category', [CategoryController::class, 'index']);
 Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);

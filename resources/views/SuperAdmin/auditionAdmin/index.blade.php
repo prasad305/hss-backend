@@ -66,6 +66,15 @@
                                         @endif
                                     </td>
                                     <td style="width: 150px">
+                                        @if ($admin->status == 0)
+                                        <button class="btn btn-sm btn-success" onclick="activeNow(this)" value="{{ route('superAdmin.auditionAdmin.activeNow', $admin->id) }}">
+                                            <i class="fa fa-check" aria-hidden="true"></i>
+                                        </button>
+                                    @elseif($admin->status == 1)
+                                        <button class="btn btn-sm btn-danger" onclick="inactiveNow(this)" value="{{ route('superAdmin.auditionAdmin.inactiveNow', $admin->id) }}">
+                                            <i class="fa fa-close"></i>
+                                        </button>
+                                    @endif
                                         <a class="btn btn-sm btn-info"
                                             onclick="Show('Edit Audition Admin','{{ route('superAdmin.auditionAdmin.edit', $admin->id) }}')"><i
                                                 class="fa fa-edit text-white"></i>
@@ -85,4 +94,91 @@
             </div>
         </div> <!-- container -->
     </div> <!-- content -->
+
+    <script>
+          function activeNow(objButton) {
+        var url = objButton.value;
+        // alert(objButton.value)
+        Swal.fire({
+            title: 'Are you sure?'
+            , text: "You won't be able to revert this!"
+            , icon: 'warning'
+            , showCancelButton: true
+            , confirmButtonColor: '#3085d6'
+            , cancelButtonColor: '#d33'
+            , confirmButtonText: 'Yes, Active !'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    },
+                    success: function(data) {
+                        if (data.type == 'success') {
+                            Swal.fire(
+                                'Activated !',
+                                'This account has been Activated. ' + data.message,
+                                'success'
+                            )
+                            setTimeout(function() {
+                                location.reload();
+                            }, 800);
+                        } else {
+                            Swal.fire(
+                                'Wrong !',
+                                'Something going wrong. ' + data.message,
+                                'warning'
+                            )
+                        }
+                    }
+                , })
+            }
+        })
+    }
+
+    function inactiveNow(objButton) {
+        var url = objButton.value;
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Inactive !'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    }
+                    ,success: function(data) {
+                        if (data.type == 'success') {
+                            Swal.fire(
+                                'Inactivated !',
+                                'This account has been Inactivated. ' + data.message,
+                                'success'
+                            )
+                            setTimeout(function() {
+                                location.reload();
+                            }, 800);
+                        } else {
+                            Swal.fire(
+                                'Wrong !',
+                                'Something going wrong. ' + data.message,
+                                'warning'
+                            )
+                        }
+                    },
+                })
+            }
+        })
+    }
+    </script>
 @endsection

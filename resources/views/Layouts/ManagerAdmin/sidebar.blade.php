@@ -13,15 +13,16 @@
     </li>
 
 
-      <li class="nav-item">
-        <a href="{{ route('managerAdmin.admin.index') }}" class="nav-link">
-          <i class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-th"></i>
-          <p>
-             Admins
-            <span class="right badge badge-danger">New</span>
-          </p>
-        </a>
-      </li>
+    <li class="nav-item">
+      <a href="{{ route('managerAdmin.admin.index') }}" class="nav-link">
+        <i class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-th"></i>
+        <p>
+          Admins
+          <span class="right badge badge-danger">New</span>
+        </p>
+      </a>
+    </li>
+
 
       <li class="nav-item">
         <a href="{{ route('managerAdmin.auditionAdmin.index') }}" class="nav-link">
@@ -32,6 +33,18 @@
           </p>
         </a>
       </li>
+
+      <li class="nav-item">
+        <a href="{{ route('managerAdmin.jury.index') }}" class="nav-link">
+          <i class="nav-icon {{ Request::routeIs('managerAdmin.jury.index') ? 'active' : '' }} fas fa-th"></i>
+          <p>
+            Jury
+            <span class="right badge badge-danger">New</span>
+          </p>
+        </a>
+      </li>
+
+
     <li class="nav-item">
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-chart-pie"></i>
@@ -54,6 +67,34 @@
         </li>
         <li class="nav-item">
           <a href="{{ route('managerAdmin.simplePost.all') }}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>All</p>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-chart-pie"></i>
+        <p>Audition
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a href="{{ route('managerAdmin.audition.published') }}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Published</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('managerAdmin.audition.pending') }}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Pending</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('managerAdmin.audition.all') }}" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>All</p>
           </a>
