@@ -326,4 +326,13 @@ class FanGroupController extends Controller
             'fanList' => $fanList,
         ]);
     }
+
+    public function getFanGroupDetails($slug){
+        $fanDetails = FanGroup::where('slug', $slug)->first();
+
+        return response()->json([
+            'status' => 200,
+            'fanList' => $fanDetails,
+        ]);
+    }
 }

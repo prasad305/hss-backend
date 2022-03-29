@@ -87,6 +87,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // Fan Group Section
     Route::get('user/fan/group/list', [FanGroupController::class, 'getFanGroupList']);
+    Route::get('user/fan/group/{slug}', [FanGroupController::class, 'getFanGroupDetails']);
 
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
