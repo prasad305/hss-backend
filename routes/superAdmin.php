@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SuperAdmin\AuditionAdminController;    
 use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\DashboardController;
 use App\Http\Controllers\SuperAdmin\ManagerAdminController;
@@ -87,4 +88,10 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::resource('star', SuperStarController::class);
     Route::post('star/active/{id}', [SuperStarController::class, 'activeNow'])->name('star.activeNow');
     Route::post('star/inactive/{id}', [SuperStarController::class, 'inactiveNow'])->name('star.inactiveNow');
+
+   // Adudition Admin Create by Monir 
+
+    Route::resource('auditionAdmin',AuditionAdminController::class);
+   
+
 });

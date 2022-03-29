@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Auction;
+use App\Models\Bidding;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
 use App\Models\LearningSession;
@@ -57,7 +58,9 @@ class UserController extends Controller
 
     public function getAllLearningSession()
     {
+
         $post = Post::where('type','learningSession')->latest()->get();
+
 
         return response()->json([
             'status' => 200,
@@ -68,7 +71,7 @@ class UserController extends Controller
 
     public function singleLearnigSession($slug)
     {
-        $learnigSession = LearningSession::where('slug',$slug)->first();
+        $learnigSession = LearningSession::where('slug', $slug)->first();
 
         return response()->json([
             'status' => 200,
@@ -447,10 +450,10 @@ class UserController extends Controller
     {
         $notification = Notification::where('user_id', auth('sanctum')->user()->id)->get();
         $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
-        if($greeting_reg)
-        $greeting_info = Greeting::find($greeting_reg->greeting_id);
+        if ($greeting_reg)
+            $greeting_info = Greeting::find($greeting_reg->greeting_id);
         else
-        $greeting_info = '';
+            $greeting_info = '';
 
         return response()->json([
             'status' => 200,
@@ -461,20 +464,82 @@ class UserController extends Controller
         ]);
     }
 
-    public function auctionProduct(){
-        $product = Auction::with('star')->where('status',1)->get();
+    public function auctionProduct()
+    {
+        $product = Auction::with('star')->where('status', 1)->get();
         return response()->json([
             'status' => 200,
             'product' => $product
         ]);
     }
-    public function starAuction($star_id){
+    public function starAuction($star_id)
+    {
 
-        $product = Auction::with('star')->where('star_id',$star_id)->where('status',1)->latest()->get();
+        $product = Auction::with('star', 'bidding', 'bidding.user')->where('star_id', $star_id)->where('status', 1)->latest()->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
             'message' => 'okay',
+        ]);
+    }
+    public function starAuctionProduct($product_id)
+    {
+        $product = Auction::with('star')->where('id', $product_id)->get();
+        // $product = Auction::with(['star', 'bidding.user'])->where('id', $product_id)->get();
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+            'message' => 'okay',
+        ]);
+    }
+    public function bidNow(Request $request)
+    {
+        // return response()->json($request->all());
+
+        $user = User::find(auth()->user()->id);
+        if (Hash::check($request->password, $user->password)) {
+            $bidding = Bidding::create([
+
+                'user_id' => $user->id,
+                'auction_id' => $request->auction_id,
+                'name' => $user->first_name,
+                'amount' => $request->amount,
+            ]);
+            return response()->json([
+
+                'status' => 200,
+                'data' => $bidding,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 201,
+                'message' => 'Passowrd Not Match'
+            ]);
+        }
+    }
+
+    public function liveBidding($auction_id)
+    {
+        $bidding = Bidding::with('user')->orderBy('amount', 'DESC')->where('auction_id', $auction_id)->take(6)->get();
+        return response()->json([
+            'status' => 200,
+            'bidding' => $bidding,
+        ]);
+    }
+    public function bidHistory($auction_id)
+    {
+        $bidHistory = Bidding::where('user_id', auth()->user()->id)->where('auction_id', $auction_id)->get();
+        return response()->json([
+            'status' => 200,
+            'bidHistory' => $bidHistory,
+        ]);
+    }
+    public function topBidder($auction_id)
+    {
+        $topBidder = Bidding::orderBy('amount', 'DESC')->where('auction_id', $auction_id)->limit(4);
+        return response()->json([
+            'status' => 200,
+            'topBidder' => $topBidder,
         ]);
     }
 }

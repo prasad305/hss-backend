@@ -15,6 +15,10 @@ class Auction extends Model
     {
         return $this->belongsTo(User::class, 'star_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id', 'user_id');
+    }
     public function admin()
     {
         return $this->belongsTo(User::class, 'created_by_id');
