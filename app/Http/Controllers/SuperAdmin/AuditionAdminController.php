@@ -126,4 +126,40 @@ class AuditionAdminController extends Controller
             ]);
         }
     }
+
+    public function activeNow($id)
+    {
+        $jury = User::findOrFail($id);
+        $jury->status = 1;
+        try {
+            $jury->save();
+            return response()->json([
+                'type' => 'success',
+                'message' => 'Successfully Updated'
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => $exception->getMessage()
+            ]);
+        }
+    }
+
+    public function inactiveNow($id)
+    {
+        $jury = User::findOrFail($id);
+        $jury->status = 0;
+        try {
+            $jury->save();
+            return response()->json([
+                'type' => 'success',
+                'message' => 'Successfully Updated'
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => $exception->getMessage()
+            ]);
+        }
+    }
 }

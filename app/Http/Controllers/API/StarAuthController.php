@@ -115,6 +115,8 @@ class StarAuthController extends Controller
             'password' => 'required|min:4'
         ]);
 
+        // return $request->all();
+
         if($validator->fails())
         {
             return response()->json([
@@ -142,6 +144,7 @@ class StarAuthController extends Controller
             return response()->json([
                 'status'=>200,
                 'id'=>$user->id,
+                'auth_type'=>$user->user_type,
                 'name'=>$user->first_name.' '.$user->last_name,
                 'token'=>$token,
                 'message'=>'Verify Phone Number',
@@ -242,6 +245,11 @@ class StarAuthController extends Controller
                     $token = $user->createToken($user->email.'_StarToken', ['server:audition-admin'])->plainTextToken;
                     $role = 'audition-admin';
                 }
+                else if($user->user_type == 'jury' && $user->status == 1)
+                {
+                    $token = $user->createToken($user->email.'_StarToken', ['server:audition-admin'])->plainTextToken;
+                    $role = 'jury';
+                }
                 else if($user->status != 1)
                 {
                     return response()->json([
@@ -283,6 +291,7 @@ class StarAuthController extends Controller
                     'status'=>200,
                     'message'=>'You are logged in successfully!',
                     'phone'=>$user->phone,
+                    'auth_type'=>$user->user_type,
                 ]);
             }
             else
