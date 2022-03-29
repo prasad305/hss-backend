@@ -10,6 +10,7 @@ use App\Http\Controllers\ManagerAdmin\LiveEventController;
 use App\Http\Controllers\ManagerAdmin\LearningSessionController;
 use App\Http\Controllers\ManagerAdmin\SimplePostController;
 use App\Http\Controllers\ManagerAdmin\MarketplaceController;
+use App\Http\Controllers\ManagerAdmin\FanGroupController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\ManagerAdmin\AuctionController;
 use Illuminate\Support\Facades\Route;
@@ -112,6 +113,17 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('marketplace/edit/{id}', [MarketplaceController::class, 'edit'])->name('marketplace.edit');
     Route::put('marketplace/update/{id}', [MarketplaceController::class, 'update'])->name('marketplace.update');
     Route::get('marketplace/set_publish/{id}', [MarketplaceController::class, 'set_publish'])->name('marketplace.set_publish');
+
+     //Fan Group
+     Route::get('fangroup/pending', [FanGroupController::class, 'pending'])->name('fangroup.pending');
+     Route::get('fangroup/published', [FanGroupController::class, 'published'])->name('fangroup.published');
+     Route::get('fangroup/all', [FanGroupController::class, 'all'])->name('fangroup.all');
+     Route::get('fangroup/list', [FanGroupController::class, 'allFangroupList'])->name('fangroup.allFangroupList');
+     Route::get('fangroup/list/{id}', [FanGroupController::class, 'allFangroupDetails'])->name('fangroup.allFangroupDetails');
+     Route::get('fangroup/details/{id}', [FanGroupController::class, 'details'])->name('fangroup.details');
+     Route::get('fangroup/set_publish/{id}', [FanGroupController::class, 'set_publish'])->name('fangroup.set_publish');
+     Route::get('fangroup/edit/{id}', [FanGroupController::class, 'edit'])->name('fangroup.edit');
+     Route::put('fangroup/update/{id}', [FanGroupController::class, 'update'])->name('fangroup.update');
 
 
 

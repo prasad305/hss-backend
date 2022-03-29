@@ -61,7 +61,7 @@ class FanGroupController extends Controller
 
             $file = $request->file('banner');
             $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/banner/' . time() . '.' . $extension;
+            $filename = 'uploads/images/fangroup/' . time() . '.' . $extension;
 
             Image::make($file)->resize(800, 300)->save($filename, 100);
             $fangroup->banner = $filename;
@@ -94,7 +94,7 @@ class FanGroupController extends Controller
 
             $file = $request->file('banner');
             $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/banner/' . time() . '.' . $extension;
+            $filename = 'uploads/images/fangroup/' . time() . '.' . $extension;
 
             Image::make($file)->resize(800, 300)->save($filename, 100);
             $fangroup->banner = $filename;
@@ -315,6 +315,15 @@ class FanGroupController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Fan Group Ignored!',
+        ]);
+    }
+
+    public function getFanGroupList(){
+        $fanList = FanGroup::where('status', 1)->latest()->get();
+
+        return response()->json([
+            'status' => 200,
+            'fanList' => $fanList,
         ]);
     }
 }

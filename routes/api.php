@@ -85,6 +85,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/marketplace/order/store', [MarketplaceController::class, 'viewMarketplaceOrder']);
     Route::get('/user/marketplace/activities', [MarketplaceController::class, 'viewMarketplaceActivities']);
 
+    // Fan Group Section
+    Route::get('user/fan/group/list', [FanGroupController::class, 'getFanGroupList']);
+
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
     Route::get('/user/meetup-event/{star_id}/{event_id}', [MeetupEventController::class, 'meetup_event_booking']);
