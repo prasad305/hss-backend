@@ -329,10 +329,15 @@ class FanGroupController extends Controller
 
     public function getFanGroupDetails($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
+        $my_star = User::find($fanDetails->my_star);
+        $another_star = User::find($fanDetails->another_star);
 
         return response()->json([
             'status' => 200,
-            'fanList' => $fanDetails,
+            'fanDetails' => $fanDetails,
+            'fanId' => $fanDetails->id,
+            'my_star' => $my_star,
+            'another_star' => $another_star,
         ]);
     }
 }
