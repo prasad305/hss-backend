@@ -15,12 +15,14 @@ class CreateAuditionParticipantsTable extends Migration
     {
         Schema::create('audition_participants', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('audtion_id')->nullable();
+            $table->unsignedBigInteger('audition_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('marks_id')->nullable();
             $table->integer('winning_status')->nullable()->comment(' 0 = fail , 1 = win');
             $table->text('video_url')->nullable();
             $table->text('certificates')->nullable();
+            $table->integer('accept_status')->comment('0 = reject, 1= except');
+            $table->text('comments')->nullable();
             $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
             $table->timestamps();
         });
