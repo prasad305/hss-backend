@@ -137,6 +137,10 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     // Audition
 
     Route::get('/user/getUpcomingAuditions', [UserController::class, 'getUpcomingAuditions']);
+    Route::get('/user/audition/participate/{id}', [UserController::class, 'participateAudition']);
+    Route::post('/user/register/participate', [UserController::class, 'participantRegister']);
+    Route::post('/user/payment/participate', [UserController::class, 'auditionPayment']);
+    Route::post('/user/video/participate/{id}', [UserController::class, 'videoUpload']);
 });
 
 
