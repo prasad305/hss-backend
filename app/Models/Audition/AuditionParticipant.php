@@ -17,6 +17,11 @@ class AuditionParticipant extends Model
         'certificates',
         'accept_status',
         'comments',
+        'filter_status',
         'status',
     ];
+
+    public function filter(){
+        return $this->hasMany(FilterVideo::class,'participant_id','id');
+    }
 }
