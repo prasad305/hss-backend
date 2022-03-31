@@ -18,6 +18,7 @@ class CreateFanGroupJoinsTable extends Migration
             $table->string('user_id')->nullable();
             $table->string('fan_group_id')->nullable();
             $table->string('star_id')->nullable();
+            $table->string('star_name')->nullable();
             $table->string('warning_count')->nullable();
             $table->string('approveStatus')->nullable();
             $table->timestamps();

@@ -359,6 +359,7 @@ class MarketplaceController extends Controller
             'editData' => $editData,
         ]);
     }
+    
     public function storeStarProductList(Request $request ,$id){
         $marketplace = Marketplace::find($id);
 

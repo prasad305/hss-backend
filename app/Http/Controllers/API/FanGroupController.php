@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Models\FanGroup;
 use App\Models\User;
+use App\Models\Fan_Group_Join;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -338,6 +339,69 @@ class FanGroupController extends Controller
             'fanId' => $fanDetails->id,
             'my_star' => $my_star,
             'another_star' => $another_star,
+        ]);
+    }
+
+    public function getFanGroupStore(Request $request){
+        $id = Auth::user()->id;
+
+        $fan_group_id = $request->fan_group_id;
+
+        $fanStore = new Fan_Group_Join();
+        $fanStore->fan_group_id = $request->fan_group_id;
+        $fanStore->star_id = $request->star_id;
+        $fanStore->star_name = $request->star_name;
+        $fanStore->user_id = $id;
+        $fanStore->warning_count = 0;
+        $fanStore->approveStatus = 0;
+        $fanStore->save();
+
+        $user = User::find($id);
+        
+        $array = json_decode($user->fan_group);
+
+
+
+        if (is_array($array)) {
+            if(!in_array($fan_group_id,$array)){
+                array_push($fan_group_id,$array);
+            }else{
+               
+                if (($key = array_search($fan_group_id, $array))) {
+                    unset($array[$key]);
+                }
+            }
+        }
+        // $groups = [$fan_group_id];
+        $user->fan_group = $array;
+        $user->save();
+
+        // $user = User::find($id);
+        // $array =  json_decode($fan_group_id);
+        // if(in_array( $fan_group_id,$array)){
+        //     if (($key = array_search( $fan_group_id, $array))) {
+        //         unset($array[$key]);
+        //     }
+        // }else{
+        //     array_push($array,  $fan_group_id);
+        // }
+        // $user->fan_group = $array;
+        // $user->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Fan Group Joided Successfully',
+        ]);
+    }
+
+    public function getFanGroupJoinId($id){
+
+        $userId = Auth::user()->id;
+        $fanJoinDetails = Fan_Group_Join::where('fan_group_id', $id)->where('user_id', $userId)->first();
+
+        return response()->json([
+            'status' => 200,
+            'fanJoinDetails' => $fanJoinDetails,
         ]);
     }
 }
