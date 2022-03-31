@@ -168,7 +168,7 @@ class AuditionController extends Controller
 
     public function getAudition($audition_id)
     {
-        $audition = Audition::with('judge')->find($audition_id);
+        $audition = Audition::with(['judge','participant'])->find($audition_id);
 
         $judge_ids = [];
         foreach ($audition->judge as $key => $star) {

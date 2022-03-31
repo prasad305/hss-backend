@@ -11,6 +11,12 @@ class AuditionParticipant extends Model
     protected $fillable = [
         'audtion_id',
         'user_id',
-
+        'marks_id',
+        'winning_status',
+        'video_url',
+        'certificates',
+        'accept_status',
+        'comments',
+        'status',
     ];
 }
