@@ -19,6 +19,4 @@ class AuditionParticipant extends Model
         'comments',
         'status',
     ];
-
-    
 }

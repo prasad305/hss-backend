@@ -87,7 +87,7 @@ class AuditionController extends Controller
             'title' => 'required',
             'description' => 'required',
             'star_ids' => 'required',
-            'video' => 'mimes:mp4,mkv,3gp',
+            //'video' => 'mimes:mp4,mkv,3gp',
         ]);
 
 
@@ -102,6 +102,7 @@ class AuditionController extends Controller
             $audition->description = $request->description;
             $audition->start_time = $request->start_time;
             $audition->end_time = $request->end_time;
+            $audition->round_status = $request->round_status;
 
             if ($request->hasfile('banner')) {
                 $destination = $audition->banner;
@@ -118,18 +119,15 @@ class AuditionController extends Controller
                 $audition->banner = $filename;
             }
 
-            if ($request->hasFile('video'))
-            {
-                if ($audition->video != null && file_exists($audition->video))
-                {
+            if ($request->hasFile('video')) {
+                if ($audition->video != null && file_exists($audition->video)) {
                     unlink($audition->video);
                 }
                 $file        = $request->file('video');
                 $path        = 'uploads/videos/auditions';
-                $file_name   = time().rand('0000','9999').'.'.$file->getClientOriginalName();
-                $file->move($path,$file_name);
-                $audition->video = $path.'/'.$file_name;
-                
+                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                $file->move($path, $file_name);
+                $audition->video = $path . '/' . $file_name;
             }
 
 
