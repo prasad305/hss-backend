@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\FanGroup;
+use App\Models\FanPost;
 use App\Models\User;
 use App\Models\Fan_Group_Join;
 use Illuminate\Support\Str;
@@ -331,7 +332,17 @@ class FanGroupController extends Controller
     public function getFanGroupDetails($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
 
-        $my_user_join = json_decode($fanDetails->my_user_join);
+        $users_one = json_decode($fanDetails->my_user_join);
+
+        $my_user_join = User::select("*")
+                    ->whereIn('id', $users_one)
+                    ->get();
+
+        $users_two = json_decode($fanDetails->another_user_join);
+
+        $another_user_join = User::select("*")
+                    ->whereIn('id', $users_two)
+                    ->get();
 
         $my_star = User::find($fanDetails->my_star);
         $another_star = User::find($fanDetails->another_star);
@@ -343,6 +354,7 @@ class FanGroupController extends Controller
             'fanDetails' => $fanDetails,
             'fanId' => $fanDetails->id,
             'my_user_join' => $my_user_join,
+            'another_user_join' => $another_user_join,
             'my_star' => $my_star,
             'another_star' => $another_star,
         ]);
@@ -400,6 +412,75 @@ class FanGroupController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Fan Group Joined Successfully',
+        ]);
+    }
+
+    public function getFanPostStore(Request $request){
+        $id = Auth::user()->id;
+
+        $slug = $request->slug;
+        $fan_id = FanGroup::where('slug', $slug)->first();
+
+        $star = Fan_Group_Join::where('user_id', $id)->where('fan_group_id', $fan_id->id)->first();
+
+        $fanPost = new FanPost();
+        $fanPost->user_id = $id;
+        $fanPost->fan_group_id = $fan_id->id;
+        $fanPost->description = $request->description;
+
+        $fanPost->star_id = $star->star_id;
+        $fanPost->star_name = $star->star_name;
+
+        $fanPost->like_count = 0;
+        $fanPost->status = 0;
+
+        if ($request->hasfile('image')) {
+
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/fanpost/' . time() . '.' . $extension;
+
+            Image::make($file)->resize(800, 300)->save($filename, 100);
+            $fanPost->image = $filename;
+        }
+
+        // if ($request->hasfile('video')) {
+
+        //     $file = Request::file('video');
+        //     $filename = time() . $file->getClientOriginalExtension();
+        //     $path = public_path().'/uploads/images/fanvideo/';
+        //     $file->move($path, $filename);
+
+
+        //     // $file = $request->file('video');
+        //     // $extension = $file->getClientOriginalExtension();
+        //     // $filename = 'uploads/images/fanvideo/' . time() . '.' . $extension;
+
+        //     // Image::make($file)->save($filename, 100);
+        //     // $file->move($path, $filename);
+        //     $fanPost->video = $path . $filename;
+        // }
+
+        if ($request->hasFile('video')) {
+            // $destination = $audition->video;
+
+            // if (File::exists($destination)) {
+            //     File::delete($destination);
+            // }
+
+            $file = $request->file('video');
+            $folder_path = 'uploads/videos/fanvideo/';
+            $video_file_name = now()->timestamp . '.' . $file->getClientOriginalExtension();
+            // save to server
+            $request->video->move(public_path($folder_path), $video_file_name);
+            $fanPost->video = $folder_path . $video_file_name;
+        }
+
+        $fanPost->save();
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'Fan Group Post Successfully',
         ]);
     }
 

@@ -18,9 +18,9 @@ class CreateFanPostsTable extends Migration
             $table->string('user_id')->nullable();
             $table->string('fan_group_id')->nullable();
             $table->text('description')->nullable();
-            $table->string('slug')->nullable();
             $table->string('image')->nullable();
             $table->string('star_id')->nullable();
+            $table->string('star_name')->nullable();
             $table->string('like_count')->nullable();
             $table->string('video')->nullable();
             $table->string('status')->nullable();
