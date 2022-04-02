@@ -330,13 +330,19 @@ class FanGroupController extends Controller
 
     public function getFanGroupDetails($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
+
+        $my_user_join = json_decode($fanDetails->my_user_join);
+
         $my_star = User::find($fanDetails->my_star);
         $another_star = User::find($fanDetails->another_star);
+
+        
 
         return response()->json([
             'status' => 200,
             'fanDetails' => $fanDetails,
             'fanId' => $fanDetails->id,
+            'my_user_join' => $my_user_join,
             'my_star' => $my_star,
             'another_star' => $another_star,
         ]);
@@ -356,41 +362,44 @@ class FanGroupController extends Controller
         $fanStore->approveStatus = 0;
         $fanStore->save();
 
+        // Add ID(json) in User table
         $user = User::find($id);
-        
-        $array = json_decode($user->fan_group);
+        $fan_group_idd = (int) $fan_group_id;
 
+        $array =  $user->fan_group ? json_decode($user->fan_group) : [] ;
 
-
-        if (is_array($array)) {
-            if(!in_array($fan_group_id,$array)){
-                array_push($fan_group_id,$array);
-            }else{
-               
-                if (($key = array_search($fan_group_id, $array))) {
-                    unset($array[$key]);
-                }
-            }
+        if(!in_array( $fan_group_idd, $array)){
+            array_push($array,  $fan_group_idd);
         }
-        // $groups = [$fan_group_id];
         $user->fan_group = $array;
         $user->save();
+        
 
-        // $user = User::find($id);
-        // $array =  json_decode($fan_group_id);
-        // if(in_array( $fan_group_id,$array)){
-        //     if (($key = array_search( $fan_group_id, $array))) {
-        //         unset($array[$key]);
-        //     }
-        // }else{
-        //     array_push($array,  $fan_group_id);
-        // }
-        // $user->fan_group = $array;
-        // $user->save();
+        $fan_group = FanGroup::find($fan_group_id);
+        // return $fan_group;
+
+        if($fan_group->my_star == $request->star_id){
+            $array =  $fan_group->my_user_join ? json_decode($fan_group->my_user_join) : [] ;
+
+            if(!in_array( $id, $array)){
+                array_push($array,  $id);
+            }
+            $fan_group->my_user_join = $array;
+            $fan_group->save();
+        }
+        else{
+            $array =  $fan_group->another_user_join ? json_decode($fan_group->another_user_join) : [] ;
+
+            if(!in_array( $id, $array)){
+                array_push($array,  $id);
+            }
+            $fan_group->another_user_join = $array;
+            $fan_group->save();
+        }
 
         return response()->json([
             'status' => 200,
-            'message' => 'Fan Group Joided Successfully',
+            'message' => 'Fan Group Joined Successfully',
         ]);
     }
 
