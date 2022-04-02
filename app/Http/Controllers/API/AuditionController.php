@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Models\Audition\AssignJudge;
+use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\FilterVideo;
 use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Expr\Assign;
 
@@ -226,6 +228,72 @@ class AuditionController extends Controller
 
         return response()->json([
             'status' => 200,
+        ]);
+    }
+
+    public function getAuditionVideos($audition_id){
+       $audition_videos =  AuditionParticipant::where('audition_id', $audition_id)->where('filter_status',0)->get();
+
+        return response()->json([
+            'status' => 200,
+            'audition_videos' => $audition_videos,
+        ]);
+    }
+
+
+    public function submitFilterVideo(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'audition_id' => 'required',
+            'participant_id' => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+
+            $participant = AuditionParticipant::find($request->participant_id);
+            $participant->filter_status = 1;
+            $participant->admin_id = auth('sanctum')->user()->id;
+
+            if ($request->accept == 1) {
+                $participant->accept_status = 1;
+            }
+
+            if ($request->reject == 1) {
+                $participant->accept_status = 0;
+                $participant->comments = $request->comments;
+            }
+
+            try {
+
+                $participant->save();
+
+                return response()->json([
+                    'status' => 200,
+                    'filter' => $participant,
+                    'message' => 'Video Filtered successfully Done'
+                ]);
+            } catch (\Exception $exception) {
+                return response()->json([
+                    'status' => 30,
+                    'type' => 'error',
+                    'message' => $exception->getMessage()
+                ]);
+            }
+        }
+    }
+
+    public function acceptedVideo($audition_id){
+        $accepted_videos =  AuditionParticipant::where('audition_id', $audition_id)->where('accept_status',1)->where('filter_status',1)->get();
+
+        return response()->json([
+            'status' => 200,
+            'accepted_videos' => $accepted_videos,
         ]);
     }
 

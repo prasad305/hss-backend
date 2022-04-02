@@ -386,6 +386,10 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     // Srabon Auditon Part 2
     Route::get('/audition-admin/auditionStatus/{audition_id}', [AuditionController::class, 'auditionStatus']);
     Route::put('/audition-admin/confirmed/audition/{audition_id}', [AuditionController::class, 'confirmedAudition']);
+
+    Route::get('audition-admin/audtion-videos/{audition_id}',[AuditionController::class, 'getAuditionVideos']);
+    Route::post('audition-admin/filter-video/submit',[AuditionController::class, 'submitFilterVideo']);
+    Route::get('audition-admin/accepted-videos/{audition_id}',[AuditionController::class, 'acceptedVideo']);
 });
 
 
