@@ -47,6 +47,9 @@ Route::get('/user/live_chat/all', [LiveChatController::class, 'userAll']);
 
 
 
+Route::get('/user_info/{id}', [AuthController::class, 'user_data']);
+
+
 
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
