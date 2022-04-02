@@ -607,9 +607,40 @@ class UserController extends Controller
             'status' => 200,
         ]);
     }
-    public function videoUpload(Request $request, $id)
+    public function videoUpload(Request $request)
     {
 
-        return response($request->video_url);
+        // return $request->all();
+
+        $audition = AuditionParticipant::where('audtion_id', $request->audition_id)->where('user_id', Auth::user()->id)->first();
+
+
+
+        if ($request->hasFile('video_url')) {
+
+
+            $file        = $request->file('video_url');
+            $path        = 'uploads/videos/auditions';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $audition->video_url = $path . '/' . $file_name;
+        }
+
+        $audition->update();
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+    public function videoDetails($id)
+    {
+        $participateAudition = Audition::with('judge.user', 'participant')->where('id', $id)->get();
+        $ownVideo = AuditionParticipant::where('user_id', Auth::user()->id)->where('audtion_id', $id)->first();
+
+        return response()->json([
+            'status' => 200,
+            'participateAudition' => $participateAudition,
+            'ownVideo' => $ownVideo,
+        ]);
     }
 }
