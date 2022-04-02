@@ -16,7 +16,7 @@ class CreateAuditionTemplatesTable extends Migration
         Schema::create('audition_templates', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('judge_id')->nullable();
-            $table->unsignedBigInteger('audtion_id')->nullable();
+            $table->unsignedBigInteger('audition_id')->nullable();
             $table->text('banner')->nullable();
             $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
             $table->timestamps();

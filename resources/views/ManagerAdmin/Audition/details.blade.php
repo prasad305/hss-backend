@@ -55,7 +55,7 @@ Manager Admin
                     </div>
                     <div class="col-md-3 card py-3 mr-1">
                         Time
-                        <h4 class="text-warning">Reselase {{ \Carbon\Carbon::parse($audition->start_time)->format('h:i A')}} - End {{ \Carbon\Carbon::parse($audition->end_time)->format('h:i A')}}</h4>
+                        <h4 class="text-warning">Reselase {{ \Carbon\Carbon::parse($audition->start_time)->format('d F,Y')}} <span class="text-success">-</span><span class="text-danger"> End {{ \Carbon\Carbon::parse($audition->end_time)->format('d F,Y')}}</span></h4>
                     </div>
                 </div>
             </div>
@@ -82,7 +82,7 @@ Manager Admin
 
         <div class="container row">
             @if($audition->status != 1)
-            <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.audition.set_publish', [$audition->id]) }}">Publish Now</a>
+            <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.audition.set_publish', $audition->id) }}">Publish Now</a>
             @elseif($audition->status != 0)
             <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.audition.set_publish', [$audition->id]) }}">Remove From Publish</a>
             @endif
