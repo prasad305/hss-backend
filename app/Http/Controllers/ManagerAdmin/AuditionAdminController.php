@@ -19,6 +19,13 @@ class AuditionAdminController extends Controller
         return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins'));
     }
 
+
+    public function juryPublished()
+    {
+
+        return view('ManagerAdmin.audition.jury_published');
+    }
+
     public function assinged()
     {
         $assignAdmins = AssignAdmin::select('assign_person')->get();
