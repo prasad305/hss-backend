@@ -575,8 +575,9 @@ class UserController extends Controller
         if (Hash::check($request->password, $user->password)) {
             $participant = AuditionParticipant::create([
 
-                'audtion_id' => $request->audition_id,
+                'audition_id' => $request->audition_id,
                 'user_id' => $user->id,
+                'accept_status' => 0,
             ]);
             return response()->json([
 
@@ -612,7 +613,7 @@ class UserController extends Controller
 
         // return $request->all();
 
-        $audition = AuditionParticipant::where('audtion_id', $request->audition_id)->where('user_id', Auth::user()->id)->first();
+        $audition = AuditionParticipant::where('audition_id', $request->audition_id)->where('user_id', Auth::user()->id)->first();
 
 
 
@@ -626,6 +627,8 @@ class UserController extends Controller
             $audition->video_url = $path . '/' . $file_name;
         }
 
+        $audition->filter_status = 0;
+
         $audition->update();
 
         return response()->json([
@@ -634,8 +637,10 @@ class UserController extends Controller
     }
     public function videoDetails($id)
     {
-        $participateAudition = Audition::with('judge.user', 'participant')->where('id', $id)->get();
-        $ownVideo = AuditionParticipant::where('user_id', Auth::user()->id)->where('audtion_id', $id)->first();
+        $participateAudition = Audition::with(['judge.user', 'participant' => function ($query) {
+            return $query->whereNotIn('user_id', [auth()->user()->id])->get();
+        }])->where('id', $id)->get();
+        $ownVideo = AuditionParticipant::where('user_id', Auth::user()->id)->where('audition_id', $id)->first();
 
         return response()->json([
             'status' => 200,

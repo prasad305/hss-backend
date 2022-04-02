@@ -9,7 +9,7 @@ class AuditionParticipant extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'audtion_id',
+        'audition_id',
         'user_id',
         'marks_id',
         'winning_status',
@@ -21,7 +21,8 @@ class AuditionParticipant extends Model
         'status',
     ];
 
-    public function filter(){
-        return $this->hasMany(FilterVideo::class,'participant_id','id');
+    public function filter()
+    {
+        return $this->hasMany(FilterVideo::class, 'participant_id', 'id');
     }
 }
