@@ -27,6 +27,7 @@ class CreateAuditionsTable extends Migration
             $table->timestamp('end_time')->nullable();
             $table->integer('round_status')->nullable();
             $table->integer('star_approval')->default(0);
+            $table->double('fee')->nullable();
             $table->unsignedBigInteger('template_id')->nullable();
             $table->boolean('status')->default(0);
             $table->timestamps();

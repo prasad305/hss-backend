@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Auction;
 use App\Models\Audition\Audition;
+use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\AuditionPayment;
 use App\Models\Bidding;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
@@ -29,6 +31,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\array_sort;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use PhpParser\Node\Expr\FuncCall;
 
@@ -552,6 +555,92 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'upcomingAuditions' => $upcomingAuditions,
+        ]);
+    }
+    public function participateAudition($id)
+    {
+        $participateAudition = Audition::with('judge.user')->where('id', $id)->get();
+        $user = User::where('id', Auth()->user()->id)->get();
+        $payment = AuditionPayment::where('user_id', Auth()->user()->id)->where('audition_id', $id)->get();
+        return response()->json([
+            'status' => 200,
+            'participateAudition' => $participateAudition,
+            'user' => $user,
+            'payment' => $payment
+        ]);
+    }
+    public function participantRegister(Request $request)
+    {
+        $user = User::find(auth()->user()->id);
+        if (Hash::check($request->password, $user->password)) {
+            $participant = AuditionParticipant::create([
+
+                'audtion_id' => $request->audition_id,
+                'user_id' => $user->id,
+            ]);
+            return response()->json([
+
+                'status' => 200,
+                'data' => $participant,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 201,
+                'message' => 'Passowrd Not Match'
+            ]);
+        }
+    }
+
+    public function auditionPayment(Request $request)
+    {
+
+        $user = User::find(auth()->user()->id);
+        $payment = AuditionPayment::create([
+
+            'audition_id' => $request->audition_id,
+            'user_id' => $user->id,
+            'card_holder_name' => $request->card_holder_name,
+            'card_number' => $request->card_number,
+            'status' => 1,
+        ]);
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+    public function videoUpload(Request $request)
+    {
+
+        // return $request->all();
+
+        $audition = AuditionParticipant::where('audtion_id', $request->audition_id)->where('user_id', Auth::user()->id)->first();
+
+
+
+        if ($request->hasFile('video_url')) {
+
+
+            $file        = $request->file('video_url');
+            $path        = 'uploads/videos/auditions';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $audition->video_url = $path . '/' . $file_name;
+        }
+
+        $audition->update();
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+    public function videoDetails($id)
+    {
+        $participateAudition = Audition::with('judge.user', 'participant')->where('id', $id)->get();
+        $ownVideo = AuditionParticipant::where('user_id', Auth::user()->id)->where('audtion_id', $id)->first();
+
+        return response()->json([
+            'status' => 200,
+            'participateAudition' => $participateAudition,
+            'ownVideo' => $ownVideo,
         ]);
     }
 }

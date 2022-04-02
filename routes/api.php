@@ -137,6 +137,11 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     // Audition
 
     Route::get('/user/getUpcomingAuditions', [UserController::class, 'getUpcomingAuditions']);
+    Route::get('/user/audition/participate/{id}', [UserController::class, 'participateAudition']);
+    Route::post('/user/register/participate', [UserController::class, 'participantRegister']);
+    Route::post('/user/payment/participate', [UserController::class, 'auditionPayment']);
+    Route::post('/user/video/participate', [UserController::class, 'videoUpload']);
+    Route::get('/user/audition/participate/video/{id}', [UserController::class, 'videoDetails']);
 });
 
 
@@ -381,6 +386,10 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     // Srabon Auditon Part 2
     Route::get('/audition-admin/auditionStatus/{audition_id}', [AuditionController::class, 'auditionStatus']);
     Route::put('/audition-admin/confirmed/audition/{audition_id}', [AuditionController::class, 'confirmedAudition']);
+
+    Route::get('audition-admin/audtion-videos/{audition_id}',[AuditionController::class, 'getAuditionVideos']);
+    Route::post('audition-admin/filter-video/submit',[AuditionController::class, 'submitFilterVideo']);
+    Route::get('audition-admin/accepted-videos/{audition_id}',[AuditionController::class, 'acceptedVideo']);
 });
 
 

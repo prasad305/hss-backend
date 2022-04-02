@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Models\Audition\AssignJudge;
+use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\FilterVideo;
 use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Expr\Assign;
 
@@ -87,7 +89,7 @@ class AuditionController extends Controller
             'title' => 'required',
             'description' => 'required',
             'star_ids' => 'required',
-            'video' => 'mimes:mp4,mkv,3gp',
+            //'video' => 'mimes:mp4,mkv,3gp',
         ]);
 
 
@@ -102,6 +104,7 @@ class AuditionController extends Controller
             $audition->description = $request->description;
             $audition->start_time = $request->start_time;
             $audition->end_time = $request->end_time;
+            $audition->round_status = $request->round_status;
 
             if ($request->hasfile('banner')) {
                 $destination = $audition->banner;
@@ -118,18 +121,15 @@ class AuditionController extends Controller
                 $audition->banner = $filename;
             }
 
-            if ($request->hasFile('video'))
-            {
-                if ($audition->video != null && file_exists($audition->video))
-                {
+            if ($request->hasFile('video')) {
+                if ($audition->video != null && file_exists($audition->video)) {
                     unlink($audition->video);
                 }
                 $file        = $request->file('video');
                 $path        = 'uploads/videos/auditions';
-                $file_name   = time().rand('0000','9999').'.'.$file->getClientOriginalName();
-                $file->move($path,$file_name);
-                $audition->video = $path.'/'.$file_name;
-                
+                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                $file->move($path, $file_name);
+                $audition->video = $path . '/' . $file_name;
             }
 
 
@@ -170,7 +170,7 @@ class AuditionController extends Controller
 
     public function getAudition($audition_id)
     {
-        $audition = Audition::with('judge')->find($audition_id);
+        $audition = Audition::with(['judge','participant'])->find($audition_id);
 
         $judge_ids = [];
         foreach ($audition->judge as $key => $star) {
@@ -228,6 +228,72 @@ class AuditionController extends Controller
 
         return response()->json([
             'status' => 200,
+        ]);
+    }
+
+    public function getAuditionVideos($audition_id){
+       $audition_videos =  AuditionParticipant::where('audition_id', $audition_id)->where('filter_status',0)->get();
+
+        return response()->json([
+            'status' => 200,
+            'audition_videos' => $audition_videos,
+        ]);
+    }
+
+
+    public function submitFilterVideo(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'audition_id' => 'required',
+            'participant_id' => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+
+            $participant = AuditionParticipant::find($request->participant_id);
+            $participant->filter_status = 1;
+            $participant->admin_id = auth('sanctum')->user()->id;
+
+            if ($request->accept == 1) {
+                $participant->accept_status = 1;
+            }
+
+            if ($request->reject == 1) {
+                $participant->accept_status = 0;
+                $participant->comments = $request->comments;
+            }
+
+            try {
+
+                $participant->save();
+
+                return response()->json([
+                    'status' => 200,
+                    'filter' => $participant,
+                    'message' => 'Video Filtered successfully Done'
+                ]);
+            } catch (\Exception $exception) {
+                return response()->json([
+                    'status' => 30,
+                    'type' => 'error',
+                    'message' => $exception->getMessage()
+                ]);
+            }
+        }
+    }
+
+    public function acceptedVideo($audition_id){
+        $accepted_videos =  AuditionParticipant::where('audition_id', $audition_id)->where('accept_status',1)->where('filter_status',1)->get();
+
+        return response()->json([
+            'status' => 200,
+            'accepted_videos' => $accepted_videos,
         ]);
     }
 

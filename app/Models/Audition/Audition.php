@@ -31,10 +31,18 @@ class Audition extends Model
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
-    public function assignAdmin(){
-        return $this->hasOne(AssignAdmin::class, 'job_id','id');
+    public function assignAdmin()
+    {
+        return $this->hasOne(AssignAdmin::class, 'job_id', 'id');
     }
-    public function judge(){
-        return $this->hasMany(AssignJudge::class, 'audition_id','id');
+    
+    public function judge()
+    {
+        return $this->hasMany(AssignJudge::class, 'audition_id', 'id');
+    }
+
+    public function participant()
+    {
+        return $this->hasMany(AuditionParticipant::class, 'audtion_id', 'id');
     }
 }
