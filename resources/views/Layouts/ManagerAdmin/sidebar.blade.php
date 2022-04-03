@@ -185,6 +185,44 @@
     <li class="nav-item">
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-chart-pie"></i>
+        <p>Fan Group
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a href="{{ route('managerAdmin.fangroup.published') }}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Published</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('managerAdmin.fangroup.pending') }}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Pending</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('managerAdmin.fangroup.all') }}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>All</p>
+          </a>
+        </li>
+
+
+        {{-- </li>
+          <li class="nav-item">
+            <a href="" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Order</p>
+            </a>
+          </li> --}}
+      </ul>
+    </li>
+
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-chart-pie"></i>
         <p>Meetup Events
 
           <i class="right fas fa-angle-left"></i>
