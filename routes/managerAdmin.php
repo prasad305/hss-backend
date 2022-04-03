@@ -101,6 +101,11 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('audition/set_publish/{id}', [AuditionAdminController::class, 'set_publish'])->name('audition.set_publish');
 
 
+    // Jury Audition Routes
+    Route::get('audition/jury-published', [AuditionAdminController::class, 'juryPublished'])->name('audition.jury_published');
+
+
+
 
     //Marketplace Post
     Route::get('marketplace/pending', [MarketplaceController::class, 'pending'])->name('marketplace.pending');
