@@ -410,31 +410,27 @@ class UserController extends Controller
 
     public function submit_react($id)
     {
-        $post = Post::find($id);
+        // $post = Post::find($id);
 
-        $array = $post->react_provider ? json_decode($post->react_provider) : [];
+        // $array = $post->react_provider ? json_decode($post->react_provider) : [];
 
-        if(!in_array( auth('sanctum')->user()->id,$array)){
-            array_push($array,  auth('sanctum')->user()->id);
-            $post->react_number = $post->react_number + 1;
-            // $array[] = auth('sanctum')->user()->id;
-        }else{
-            if (($key = array_search( auth('sanctum')->user()->id, $array))) {
-                unset($array[$key]);
-            }
-            $post->react_number = $post->react_number - 1;
-        }
-
-        $post->react_provider =$array;
-
-        $post->save();
+        // if(!in_array( auth('sanctum')->user()->id,$array)){
+        //     array_push($array,  auth('sanctum')->user()->id);
+        //     $post->react_number = $post->react_number + 1;
+        //     // $array[] = auth('sanctum')->user()->id;
+        // }else{
+        //     if (($key = array_search( auth('sanctum')->user()->id, $array))) {
+        //         unset($array[$key]);
+        //     }
+        //     $post->react_number = $post->react_number - 1;
+        // }
+        // $post->react_provider = $array;
+        // $post->save();
 
         // $react = React::where([['post_id', $id], ['user_id', auth('sanctum')->user()->id]])->first();
 
-
         // if ($react) {
         //     $react->delete();
-
         //     $post = Post::find($id);
         //     $post->react_number = $post->react_number - 1;
         //     $post->update();
@@ -448,6 +444,30 @@ class UserController extends Controller
         //     $post->react_number = $post->react_number + 1;
         //     $post->update();
         // }
+
+        // $post->react_provider =$array;
+
+        // $post->save();
+
+        $react = React::where([['post_id', $id], ['user_id', auth('sanctum')->user()->id]])->first();
+
+
+        if ($react) {
+            $react->delete();
+
+            $post = Post::find($id);
+            $post->react_number = $post->react_number - 1;
+            $post->update();
+        } else {
+            $react = new React();
+            $react->user_id = auth('sanctum')->user()->id;
+            $react->post_id = $id;
+            $react->save();
+
+            $post = Post::find($id);
+            $post->react_number = $post->react_number + 1;
+            $post->update();
+        }
 
         return response()->json([
             'status' => 200,

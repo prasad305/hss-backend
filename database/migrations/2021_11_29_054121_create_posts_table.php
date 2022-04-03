@@ -25,6 +25,7 @@ class CreatePostsTable extends Migration
             $table->longText('details')->nullable();
             $table->text('react_provider');
             $table->string('share_link')->nullable();
+            $table->longText('react_provider')->nullable();
             $table->boolean('status')->nullable();
             $table->timestamps();
         });
