@@ -32,6 +32,16 @@ class AuditionController extends Controller
             'pending' => $pending,
         ]);
     }
+    public function starAdminStatus()
+    {
+        $live = Audition::where([['parent_user', auth('sanctum')->user()->id], ['star_approval', 1]])->count();
+        $pending = Audition::where([['parent_user', auth('sanctum')->user()->id], ['star_approval', 0]])->count();
+        return response()->json([
+            'status' => 200,
+            'live' => $live,
+            'pending' => $pending,
+        ]);
+    }
 
 
     public function auditionAdminPendings()
@@ -170,7 +180,7 @@ class AuditionController extends Controller
 
     public function getAudition($audition_id)
     {
-        $audition = Audition::with(['judge','participant'])->find($audition_id);
+        $audition = Audition::with(['judge', 'participant'])->find($audition_id);
 
         $judge_ids = [];
         foreach ($audition->judge as $key => $star) {
@@ -231,8 +241,9 @@ class AuditionController extends Controller
         ]);
     }
 
-    public function getAuditionVideos($audition_id){
-       $audition_videos =  AuditionParticipant::where('audition_id', $audition_id)->where('filter_status',0)->get();
+    public function getAuditionVideos($audition_id)
+    {
+        $audition_videos =  AuditionParticipant::where('audition_id', $audition_id)->where('filter_status', 0)->get();
 
         return response()->json([
             'status' => 200,
@@ -241,7 +252,8 @@ class AuditionController extends Controller
     }
 
 
-    public function submitFilterVideo(Request $request){
+    public function submitFilterVideo(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'audition_id' => 'required',
@@ -288,8 +300,9 @@ class AuditionController extends Controller
         }
     }
 
-    public function acceptedVideo($audition_id){
-        $accepted_videos =  AuditionParticipant::where('audition_id', $audition_id)->where('accept_status',1)->where('filter_status',1)->get();
+    public function acceptedVideo($audition_id)
+    {
+        $accepted_videos =  AuditionParticipant::where('audition_id', $audition_id)->where('accept_status', 1)->where('filter_status', 1)->get();
 
         return response()->json([
             'status' => 200,

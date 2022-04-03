@@ -254,6 +254,11 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/live/allProduct', [AuctionController::class, 'allLiveProduct']);
     Route::get('/admin/liveBidding/auction/{auction_id}', [AuctionController::class, 'liveBidding']);
     Route::get('/admin/topBidder/auction/{auction_id}', [AuctionController::class, 'topBidder']);
+
+    // audition routes
+    Route::get('/admin/audition/status', [AuditionController::class, 'starAdminStatus']);
+    Route::get('/admin/audition/pendings', [AuditionController::class, 'starPendingAudtion']);
+    Route::get('/admin/audition/live', [AuditionController::class, 'starLiveAudtion']);
 });
 
 
@@ -387,9 +392,9 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/auditionStatus/{audition_id}', [AuditionController::class, 'auditionStatus']);
     Route::put('/audition-admin/confirmed/audition/{audition_id}', [AuditionController::class, 'confirmedAudition']);
 
-    Route::get('audition-admin/audtion-videos/{audition_id}',[AuditionController::class, 'getAuditionVideos']);
-    Route::post('audition-admin/filter-video/submit',[AuditionController::class, 'submitFilterVideo']);
-    Route::get('audition-admin/accepted-videos/{audition_id}',[AuditionController::class, 'acceptedVideo']);
+    Route::get('audition-admin/audtion-videos/{audition_id}', [AuditionController::class, 'getAuditionVideos']);
+    Route::post('audition-admin/filter-video/submit', [AuditionController::class, 'submitFilterVideo']);
+    Route::get('audition-admin/accepted-videos/{audition_id}', [AuditionController::class, 'acceptedVideo']);
 });
 
 
