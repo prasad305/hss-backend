@@ -57,6 +57,10 @@ Manager Admin
 
                             <a href="{{ route('managerAdmin.audition.details', [$val->id]) }}" type="button" class="btn btn-info waves-effect waves-light">Details <i class="fa fa-angle-double-right"></i></a>
 
+                            <a href="{{ route('managerAdmin.audition.jury_published', [$val->id]) }}"  class="btn btn-info waves-effect waves-light">Filter Videos <i class="fa fa-angle-double-right"></i></a>
+
+                            
+
                         </div>
                     </div>
 

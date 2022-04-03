@@ -102,7 +102,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
 
     // Jury Audition Routes
-    Route::get('audition/jury-published', [AuditionAdminController::class, 'juryPublished'])->name('audition.jury_published');
+    Route::get('audition/jury-published/{id}', [AuditionAdminController::class, 'juryPublished'])->name('audition.jury_published');
 
 
 
