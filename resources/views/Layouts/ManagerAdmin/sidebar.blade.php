@@ -81,16 +81,13 @@
         </p>
       </a>
       <ul class="nav nav-treeview">
-        <li class="nav-item">
-<<<<<<< Updated upstream
-=======
+        {{-- <li class="nav-item">
             <a href="{{ route('managerAdmin.audition.jury_published') }}" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
               <p>Jury Published</p>
             </a>
-          </li>
+          </li> --}}
         <li class="nav-item">
->>>>>>> Stashed changes
           <a href="{{ route('managerAdmin.audition.published') }}" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>Published</p>

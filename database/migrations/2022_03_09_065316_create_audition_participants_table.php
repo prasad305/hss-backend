@@ -25,6 +25,7 @@ class CreateAuditionParticipantsTable extends Migration
             $table->integer('accept_status')->comment('0 = reject, 1= except');
             $table->text('comments')->nullable();
             $table->integer('filter_status')->comment('0 = not-filtered, 1= filter');
+            $table->integer('send_manager_admin')->default(0)->comment('0 = unsend, 1= send');
             $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
             $table->timestamps();
         });

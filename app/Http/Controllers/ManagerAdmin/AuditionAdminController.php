@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\Audition;
+use App\Models\Audition\AuditionParticipant;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -20,10 +21,12 @@ class AuditionAdminController extends Controller
     }
 
 
-    public function juryPublished()
+    public function juryPublished($audition_id)
     {
-
-        return view('ManagerAdmin.audition.jury_published');
+        $data = [
+            'filter_videos' => AuditionParticipant::where([['audition_id',$audition_id],['accept_status', 1],['filter_status', 1],['send_manager_admin',1]])->get(),
+        ];
+        return view('ManagerAdmin.Audition.jury_published',$data);
     }
 
     public function assinged()
