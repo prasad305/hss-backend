@@ -263,9 +263,9 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/topBidder/auction/{auction_id}', [AuctionController::class, 'topBidder']);
 
     // audition routes
-    Route::get('/admin/audition/status', [AuditionController::class, 'starAdminStatus']);
-    Route::get('/admin/audition/pendings', [AuditionController::class, 'starPendingAudtion']);
-    Route::get('/admin/audition/live', [AuditionController::class, 'starLiveAudtion']);
+    //Route::get('/admin/audition/status', [AuditionController::class, 'starAdminPendingAudtion']);
+    Route::get('/admin/audition/pendings', [AuditionController::class, 'starAdminPendingAudition']);
+    Route::get('/admin/audition/live', [AuditionController::class, 'starAdminLiveAudition']);
 });
 
 
@@ -374,6 +374,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('superstar/audition/live', [AuditionController::class, 'starLiveAudtion']);
     Route::get('/star/audition/{id}', [AuditionController::class, 'starSingleAudition']);
     Route::put('/star/approved/audition/{id}', [AuditionController::class, 'starApprovedAudition']);
+    Route::put('/star/decline/audition/{id}', [AuditionController::class, 'starDeclineAudition']);
 });
 
 
