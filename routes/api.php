@@ -91,6 +91,13 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/marketplace/order/store', [MarketplaceController::class, 'viewMarketplaceOrder']);
     Route::get('/user/marketplace/activities', [MarketplaceController::class, 'viewMarketplaceActivities']);
 
+    // Fan Group Section
+    Route::get('user/fan/group/list', [FanGroupController::class, 'getFanGroupList']);
+    Route::get('user/fan/group/{slug}', [FanGroupController::class, 'getFanGroupDetails']);
+    Route::post('user/fan/group/store', [FanGroupController::class, 'getFanGroupStore']);
+    Route::get('user/fan/group/join/{join_id}', [FanGroupController::class, 'getFanGroupJoinId']);
+    Route::post('/user/fan/group/post/store', [FanGroupController::class, 'getFanPostStore']);
+
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
     Route::get('/user/meetup-event/{star_id}/{event_id}', [MeetupEventController::class, 'meetup_event_booking']);
@@ -261,9 +268,9 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/topBidder/auction/{auction_id}', [AuctionController::class, 'topBidder']);
 
     // audition routes
-    Route::get('/admin/audition/status', [AuditionController::class, 'starAdminStatus']);
-    Route::get('/admin/audition/pendings', [AuditionController::class, 'starPendingAudtion']);
-    Route::get('/admin/audition/live', [AuditionController::class, 'starLiveAudtion']);
+    //Route::get('/admin/audition/status', [AuditionController::class, 'starAdminPendingAudtion']);
+    Route::get('/admin/audition/pendings', [AuditionController::class, 'starAdminPendingAudition']);
+    Route::get('/admin/audition/live', [AuditionController::class, 'starAdminLiveAudition']);
 });
 
 
@@ -372,6 +379,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('superstar/audition/live', [AuditionController::class, 'starLiveAudtion']);
     Route::get('/star/audition/{id}', [AuditionController::class, 'starSingleAudition']);
     Route::put('/star/approved/audition/{id}', [AuditionController::class, 'starApprovedAudition']);
+    Route::put('/star/decline/audition/{id}', [AuditionController::class, 'starDeclineAudition']);
 });
 
 
@@ -400,6 +408,8 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('audition-admin/audtion-videos/{audition_id}', [AuditionController::class, 'getAuditionVideos']);
     Route::post('audition-admin/filter-video/submit', [AuditionController::class, 'submitFilterVideo']);
     Route::get('audition-admin/accepted-videos/{audition_id}', [AuditionController::class, 'acceptedVideo']);
+
+    Route::post('audition-admin/send-manager-admin', [AuditionController::class, 'videoSendManagerAdmin']);
 });
 
 

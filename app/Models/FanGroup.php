@@ -20,4 +20,23 @@ class FanGroup extends Model
         'max_member',
         'banner',
     ];
+    //Relation For API
+    protected $with = ['another_admin', 'another_superstar', 'my_superstar', 'my_admin'];
+
+    public function my_admin()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    public function my_superstar()
+    {
+        return $this->belongsTo(User::class, 'my_star');
+    }
+    public function another_superstar()
+    {
+        return $this->belongsTo(User::class, 'another_star');
+    }
+    public function another_admin()
+    {
+        return $this->belongsTo(User::class, 'another_star_admin_id');
+    }
 }

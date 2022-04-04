@@ -29,6 +29,8 @@ class CreateFanGroupsTable extends Migration
             $table->string('another_star_admin_id')->nullable();
             $table->string('another_star_status')->nullable();
             $table->string('banner')->nullable();
+            $table->string('my_user_join')->nullable();
+            $table->string('another_user_join')->nullable();
             $table->string('post_approval_status')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();

@@ -71,6 +71,11 @@ class User extends Authenticatable
         return $this->hasOne(User::class, 'parent_user');
     }
 
+    public function star()
+    {
+        return $this->hasOne(User::class, 'parent_user');
+    }
+
 
     public function userInfo()
     {

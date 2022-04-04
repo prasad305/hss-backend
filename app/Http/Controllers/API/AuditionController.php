@@ -32,16 +32,7 @@ class AuditionController extends Controller
             'pending' => $pending,
         ]);
     }
-    public function starAdminStatus()
-    {
-        $live = Audition::where([['parent_user', auth('sanctum')->user()->id], ['star_approval', 1]])->count();
-        $pending = Audition::where([['parent_user', auth('sanctum')->user()->id], ['star_approval', 0]])->count();
-        return response()->json([
-            'status' => 200,
-            'live' => $live,
-            'pending' => $pending,
-        ]);
-    }
+
 
 
     public function auditionAdminPendings()
@@ -196,6 +187,8 @@ class AuditionController extends Controller
         ]);
     }
 
+    // Star  Audition Start
+
     public function starPendingAudtion()
     {
         $pendingAuditions = Audition::with('judge')
@@ -208,6 +201,7 @@ class AuditionController extends Controller
             'pending_auditions' => $pendingAuditions,
         ]);
     }
+
     public function starLiveAudtion()
     {
         $liveAuditions = Audition::with('judge')
@@ -240,6 +234,56 @@ class AuditionController extends Controller
             'status' => 200,
         ]);
     }
+    public function starDeclineAudition($id)
+    {
+        AssignJudge::where('audition_id', $id)->where('judge_id', auth('sanctum')->user()->id)->update(['approved_by_judge' => 2]);
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+
+
+    // Star Audtion End
+
+
+
+    // Star Admin Adution Start
+    public function starAdminPendingAudition()
+    {
+        $star = User::where('user_type', 'star')->where('parent_user', auth('sanctum')->user()->id)->first();
+        $pendingAuditions = Audition::with('judge')
+            ->whereHas('judge', function ($q) use ($star) {
+                $q->where([['judge_id', $star->id], ['approved_by_judge', 0]]);
+            })->get();
+
+        return response()->json([
+            'status' => 200,
+            'pending_auditions' => $pendingAuditions,
+        ]);
+    }
+
+    public function starAdminLiveAudition()
+    {
+        $star = User::where('user_type', 'star')->where('parent_user', auth('sanctum')->user()->id)->first();
+
+        $liveAuditions = Audition::with('judge')
+            ->whereHas('judge', function ($q) use ($star) {
+                $q->where([['judge_id', $star->id], ['approved_by_judge', 1]]);
+            })->get();
+
+        return response()->json([
+            'status' => 200,
+            'liveAuditions' => $liveAuditions,
+        ]);
+    }
+
+
+
+    // Star Admin Adution End
+
+
+
 
     public function getAuditionVideos($audition_id)
     {
@@ -309,6 +353,24 @@ class AuditionController extends Controller
             'accepted_videos' => $accepted_videos,
         ]);
     }
+
+    public function videoSendManagerAdmin(Request $request)
+    {
+       
+        AuditionParticipant::where([['audition_id', $request->audition_id],['accept_status', 1],['filter_status', 1]])->update([
+            'send_manager_admin' => $request->send_manager_admin,
+        ]);
+
+
+        return response()->json([
+            'status' => 200,
+            'send_manager_admin' => true,
+            'message' => 'Send to Manager Admin Successfully',
+        ]);
+    }
+
+
+
 
 
     public function show($id)
