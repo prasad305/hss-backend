@@ -79,7 +79,8 @@ Jury Board
                     <a class="btn btn-sm btn-info"
                         onclick="Show('Edit Jury Board','{{ route('managerAdmin.jury.edit', $jury->id) }}')"><i
                             class="fa fa-edit text-white"></i></a>
-                    <a class="btn btn-sm btn-success">
+
+                    <a href="{{ route('managerAdmin.jury.views',$jury->id) }}" class="btn btn-sm btn-success">
                         <i class="fa-solid fa-eye text-white"></i>
                     </a>
 

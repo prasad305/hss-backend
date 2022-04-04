@@ -60,7 +60,7 @@
                             <div class="row">
                                 <div class="large-12 columns">
                                     <div class="owl-carousel">
-                                        @foreach ($filter_videos as $video)
+                                        {{-- @foreach ($filter_videos as $video)
                                             <div class="item">
                                                
 
@@ -68,14 +68,14 @@
                                                     <source src="{{ url($video->video_url) }}" type="video/mp4">
                                                   </video>
                                             </div>
-                                        @endforeach
+                                        @endforeach --}}
                                         <div class="item">
                                             <h2>Drag</h2>
                                         </div>
                                         <div class="item">
                                             <h2>Responsive</h2>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -112,46 +112,33 @@
             <div class="bgAs bg-dark mb-4 ">
                 <div class="row justify-content-between border-shadow">
                     <h4 class="px-5 mt-3">Available Jury</h4>
-                    <h4 class="px-5 mt-3">12 Jury</h4>
+                    <h4 class="px-5 mt-3"> {{ $avaiable_juries->count() }} Jury</h4>
                 </div>
                 <div class="row  mx-1 px-3 pt-3 border-around">
+                    @if (isset($avaiable_juries[0]))
+                        @foreach ($avaiable_juries as $jury)
 
-                    <div class="col-md-4 justify-content-center">
-                        <div class="card bg-light text-center  m-4 p-4">
-                            <center> <img src="{{ asset('assets/manager-admin/dist/img/user8-128x128.jpg') }}" alt=""
-                                    class="ImGCard"></center>
-                            <b class=" mt-2">Onil Hasan</b>
-                            <small>Music Specialist</small>
-                            <center><button class="btn bg-info mt-3 w-75"> Contact</button></center>
-                        </div>
-                    </div>
-                    <div class="col-md-4 justify-content-center">
-                        <div class="card bg-light text-center  m-4 p-4">
-                            <center> <img src="{{ asset('assets/manager-admin/dist/img/user8-128x128.jpg') }}" alt=""
-                                    class="ImGCard"></center>
-                            <b class=" mt-2">Onil Hasan</b>
-                            <small>Music Specialist</small>
-                            <center><button class="btn bg-info mt-3 w-75"> Contact</button></center>
-                        </div>
-                    </div>
-                    <div class="col-md-4 justify-content-center">
-                        <div class="card bg-light text-center  m-4 p-4">
-                            <center> <img src="{{ asset('assets/manager-admin/dist/img/user8-128x128.jpg') }}" alt=""
-                                    class="ImGCard"></center>
-                            <b class=" mt-2">Onil Hasan</b>
-                            <small>Music Specialist</small>
-                            <center><button class="btn bg-info mt-3 w-75"> Contact</button></center>
-                        </div>
-                    </div>
-                    <div class="col-md-4 justify-content-center">
-                        <div class="card bg-light text-center  m-4 p-4">
-                            <center> <img src="{{ asset('assets/manager-admin/dist/img/user8-128x128.jpg') }}" alt=""
-                                    class="ImGCard"></center>
-                            <b class=" mt-2">Onil Hasan</b>
-                            <small>Music Specialist</small>
-                            <center><button class="btn bg-info mt-3 w-75"> Contact</button></center>
-                        </div>
-                    </div>
+                            <div class="col-md-4 justify-content-center">
+                                <div class="card bg-light text-center  m-4 p-4">
+                                    <center> <img src="{{ asset($jury->image) }}"
+                                            alt="" class="ImGCard"></center>
+                                    <b class=" mt-2">{{ $jury->first_name.' '.$jury->last_name }}</b>
+                                    {{-- <small>Music Specialist</small> --}}
+                                   
+                                    <center>
+                                        <form action="{{ route('managerAdmin.jury.AssingVideos') }}" method="post">
+                                            @csrf
+                                            <input type="number" name="number_of_videos" class="form-control w-50" placeholder="Number Of Video" value="{{ $video_pack }}">
+                                            <input type="hidden" value="{{ $jury_id }}" name="jury_id">
+                                            <input type="hidden" value="{{ $audition_id }}" name="audition_id">
+                                            <button class="btn bg-info mt-3 w-75"> Apply</button>
+                                         </form>
+                                    </center>
+                                </div>
+                            </div>
+
+                        @endforeach
+                    @endif
                 </div>
             </div>
 
