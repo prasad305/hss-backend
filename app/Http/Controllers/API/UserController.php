@@ -640,12 +640,24 @@ class UserController extends Controller
         $participateAudition = Audition::with(['judge.user', 'participant' => function ($query) {
             return $query->whereNotIn('user_id', [auth()->user()->id])->get();
         }])->where('id', $id)->get();
+
         $ownVideo = AuditionParticipant::where('user_id', Auth::user()->id)->where('audition_id', $id)->first();
 
         return response()->json([
             'status' => 200,
             'participateAudition' => $participateAudition,
             'ownVideo' => $ownVideo,
+        ]);
+    }
+
+    public function enrolledAuditions()
+    {
+
+        $enrolledAuditions = AuditionParticipant::with(['auditions'])->where('user_id', auth()->user()->id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'enrolledAuditions' => $enrolledAuditions,
         ]);
     }
 }
