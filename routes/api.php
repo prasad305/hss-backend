@@ -16,6 +16,7 @@ use App\Http\Controllers\API\SimplePostController;
 use App\Http\Controllers\API\FanGroupController;
 use App\Http\Controllers\API\LearningSessionController;
 use App\Http\Controllers\API\AuditionController;
+use App\Http\Controllers\SuperAdmin\Audition\AuditionController as AuditionAuditionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -150,6 +151,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/video/participate', [UserController::class, 'videoUpload']);
     Route::get('/user/audition/participate/video/{id}', [UserController::class, 'videoDetails']);
     Route::get('/user/audition/enrolled', [UserController::class, 'enrolledAuditions']);
+    Route::get('/user/pendingEnrollAudition', [UserController::class, 'enrolledAuditionsPending']);
 });
 
 
@@ -416,6 +418,9 @@ Route::middleware(['auth:sanctum', 'isAPIJuryBoard'])->group(function () {
     Route::get('/checkingJurySuperStar', function () {
         return response()->json(['message' => 'You are in as Jury Audition', 'status' => 200], 200);
     });
+
+    Route::get('/jury/selectVideo', [AuditionController::class, 'getJuryVideos']);
+    Route::post('/jury/juryMarking', [AuditionController::class, 'juryMarking']);
     // Monir Jury Board
     //   Route::get('/audition-admin/audition/status', [AuditionController::class, 'auditionAdminStatus']);
     //   Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'auditionAdminPendings']);
@@ -455,6 +460,8 @@ Route::post('star_register', [StarAuthController::class, 'register']);
 
 // Route for Jury Board Panel
 Route::post('jury-register', [JuryAuthController::class, 'register']);
+
+
 
 
 

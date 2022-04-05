@@ -10,7 +10,9 @@ use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Models\Audition\AssignJudge;
 use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\AudtionMark;
 use App\Models\Audition\FilterVideo;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Expr\Assign;
 
@@ -377,6 +379,32 @@ class AuditionController extends Controller
             'status' => 200,
             'send_manager_admin' => true,
             'message' => 'Send to Manager Admin Successfully',
+        ]);
+    }
+
+    public function getJuryVideos()
+    {
+
+        $audition_videos =  AuditionParticipant::with('auditions')->where('jury_id', Auth::user()->id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'audition_videos' => $audition_videos,
+        ]);
+    }
+
+    public function juryMarking(Request $request, $id)
+    {
+
+        $auditionMark = AudtionMark::create([
+
+            'judge_id' => $request->judge_id,
+            'participant_id' => $request->user_id,
+            'jury_id' => Auth::user()->id,
+            'marks' => $request->marks,
+            'comments' => $request->comments,
+            'status' => 1
+
         ]);
     }
 
