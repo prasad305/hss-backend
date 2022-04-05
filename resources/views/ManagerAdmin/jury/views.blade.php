@@ -18,7 +18,7 @@
 
         <div class="BodyDear">
             <h5 class="viewDear">Dear,</h5>
-            <p class="viewSakib"> Sakib Al Hasan</p>
+            <p class="viewSakib"> {{ $jury->first_name.' '.$jury->last_name }}</p>
             <p class="viewWelcome">Welcome to Hello Superstar </p>
             <p class="viewLorem">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut asperiores reiciendis beatae
@@ -34,8 +34,9 @@
             <p class="ViewList"> 4 .Lorem ipsum, dolor sit amet consectetur a </p>
 
             <div class="dQr">
-                <img class="Imgqr" src="{{ asset('qr_img/qrCode.png') }}" alt="" /><br>
-                <p class="ViewListC">987 123 9876</p>
+                {!! QrCode::size(150)->generate($jury->jury->qr_code); !!}
+                <br>
+                <p class="ViewListC">{{ $jury->jury ? $jury->jury->qr_code : '' }}</p>
             </div>
 
         </div>

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AssignJury;
 use Illuminate\Http\Request;
 use App\Models\Audition\AssignAdmin;
+use App\Models\Audition\AuditionParticipant;
 use App\Models\Category;
 use App\Models\JuryBoard;
 use App\Models\SubCategory;
@@ -25,10 +27,10 @@ class JuryBoardController extends Controller
         return view('ManagerAdmin.jury.index', $data);
     }
 
-    public function views()
+    public function views($jury_id)
     {
         $data = [
-            'juries' =>  User::where('user_type', 'jury')->orderBy('id', 'DESC')->get(),
+            'jury' =>  User::findOrFail($jury_id),
 
         ];
         return view('ManagerAdmin.jury.views', $data);
@@ -58,6 +60,25 @@ class JuryBoardController extends Controller
         return view('ManagerAdmin.jury.index', compact('auditionAdmins'));
     }
 
+    public function assignVideo(Request $request)
+    {
+
+        $request->validate([
+            'jury_id' => 'required',
+            'number_of_videos' => 'required'
+        ]);
+
+        $filter_videos = AuditionParticipant::where([['audition_id', $request->audition_id], ['accept_status', 1], ['filter_status', 1], ['send_manager_admin', 1], ['jury_id', null]])->take($request->number_of_videos)->get();
+
+       foreach ($filter_videos as $key => $video) {
+           $video->jury_id = $request->jury_id;
+           $video->save();
+       }
+
+       session()->flash('success', 'Jury Assigned Successfully!');
+       return redirect()->back();
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -75,8 +96,8 @@ class JuryBoardController extends Controller
     public function getSubCategory($category_id)
     {
         return SubCategory::when($category_id > 0, function ($query) use ($category_id) {
-                                return $query->where('category_id', $category_id);
-                            })->orderBy('id', 'DESC')->get();
+            return $query->where('category_id', $category_id);
+        })->orderBy('id', 'DESC')->get();
     }
 
 
@@ -126,7 +147,7 @@ class JuryBoardController extends Controller
             $jury->category_id = $request->category_id;
             $jury->sub_category_id = $request->sub_category_id;
             $jury->terms_and_condition = $request->terms_and_condition;
-            $jury->qr_code = rand( 10000000 , 99999999 );
+            $jury->qr_code = rand(10000000, 99999999);
 
 
             $jury->save();
@@ -145,15 +166,6 @@ class JuryBoardController extends Controller
         }
     }
 
-
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $auditionAdmin
-     * @return \Illuminate\Http\Response
-     */
     public function show(User $jury)
     {
         if ($jury->status == 0) {
@@ -163,15 +175,9 @@ class JuryBoardController extends Controller
         $data = [
             'jury' => $jury,
         ];
-        return view('ManagerAdmin.jury.details',$data);
+        return view('ManagerAdmin.jury.details', $data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $auditionAdmin
-     * @return \Illuminate\Http\Response
-     */
     public function edit(User $jury)
     {
         $data = [
@@ -182,13 +188,6 @@ class JuryBoardController extends Controller
         return view('ManagerAdmin.jury.edit', $data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $auditionAdmin
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -247,12 +246,6 @@ class JuryBoardController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $auditionAdmin
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(User $auditionAdmin)
     {
         try {

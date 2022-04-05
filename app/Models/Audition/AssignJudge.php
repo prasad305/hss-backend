@@ -16,6 +16,8 @@ class AssignJudge extends Model
         'status'
     ];
 
+    protected $with = ['user'];
+
     public function auditions()
     {
         return $this->belongsTo(Audition::class);

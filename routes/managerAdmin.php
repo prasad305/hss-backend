@@ -59,7 +59,12 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::post('jury/inactive/{id}', [JuryBoardController::class, 'inactiveNow'])->name('juryBoard.inactiveNow');
     Route::get('jury-assinged', [JuryBoardController::class, 'assinged'])->name('juryBoard_assinged');
     Route::get('jury-free', [JuryBoardController::class, 'notAssinged'])->name('juryBoard_notAssinged');
-    Route::get('jury-view', [JuryBoardController::class, 'views'])->name('juryBoard_views');
+    Route::get('jury-view/{jury_id}', [JuryBoardController::class, 'views'])->name('jury.views');
+
+
+    Route::post('jury-video-assign', [JuryBoardController::class, 'assignVideo'])->name('jury.AssingVideos');
+
+
 
     // Live route
     Route::get('liveChat', [LiveChatController::class, 'index'])->name('liveChat.index');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AssignJury;
 use Illuminate\Http\Request;
 use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\Audition;
@@ -23,9 +24,43 @@ class AuditionAdminController extends Controller
 
     public function juryPublished($audition_id)
     {
+        $assignJuries = AuditionParticipant::select('jury_id')->get();
+
+        $userIds = [];
+        foreach ($assignJuries as $jury) {
+            if($jury->jury_id != null){
+                array_push($userIds, $jury->jury_id);
+            }
+        }
+        
+        $avaiable_juries = User::whereNotIn('id', $userIds)->where('user_type','jury')->orderBy('id', 'DESC')->get();
+
+        $filter_videos = AuditionParticipant::where([['audition_id',$audition_id],['accept_status', 1],['filter_status', 1],['send_manager_admin',1],['jury_id', null]])->get();
+
+        $total_jury = count($avaiable_juries);
+        $total_video = count($filter_videos);
+
+        $videoPackArray = [];
+       if($total_jury > 0){
+            $video_pack = floor($total_video / $total_jury);
+            for ($total_jury; $total_jury > 0; $total_jury--) { 
+                if($total_jury == 1){
+                    array_push($videoPackArray, $total_video);
+                }else{
+                    array_push($videoPackArray, $video_pack);
+                    $total_video = $total_video - $video_pack;
+                }
+            }
+       }
+        // forea
+        // return $videoPackArray;
         $data = [
-            'filter_videos' => AuditionParticipant::where([['audition_id',$audition_id],['accept_status', 1],['filter_status', 1],['send_manager_admin',1]])->get(),
+            'filter_videos' => $filter_videos,
+            'avaiable_juries' => $avaiable_juries,
+            'video_pack' => $videoPackArray,
+            'audition_id' => $audition_id,
         ];
+
         return view('ManagerAdmin.Audition.jury_published',$data);
     }
 
@@ -38,6 +73,7 @@ class AuditionAdminController extends Controller
             array_push($userIds, $assignAdmin->assign_person);
         }
         $auditionAdmins = User::whereIn('id', $userIds)->orderBy('id', 'DESC')->get();
+
         return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins'));
     }
 

@@ -25,4 +25,14 @@ class AuditionParticipant extends Model
     {
         return $this->hasMany(FilterVideo::class, 'participant_id', 'id');
     }
+    public function auditions()
+    {
+
+        return $this->hasMany(Audition::class, 'id', 'audition_id');
+    }
+    public function judge()
+    {
+
+        return $this->hasMany(AssignJudge::class, 'judge_id', 'user_id');
+    }
 }
