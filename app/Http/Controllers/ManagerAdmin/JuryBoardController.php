@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AssignJury;
 use Illuminate\Http\Request;
 use App\Models\Audition\AssignAdmin;
+use App\Models\Audition\AuditionParticipant;
 use App\Models\Category;
 use App\Models\JuryBoard;
 use App\Models\SubCategory;
@@ -25,10 +27,10 @@ class JuryBoardController extends Controller
         return view('ManagerAdmin.jury.index', $data);
     }
 
-    public function views()
+    public function views($jury_id)
     {
         $data = [
-            'juries' =>  User::where('user_type', 'jury')->orderBy('id', 'DESC')->get(),
+            'jury' =>  User::findOrFail($jury_id),
 
         ];
         return view('ManagerAdmin.jury.views', $data);
@@ -56,6 +58,30 @@ class JuryBoardController extends Controller
         }
         $juries = User::whereNotIn('id', $userIds)->where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
         return view('ManagerAdmin.jury.index', compact('auditionAdmins'));
+    }
+
+    public function assignVideo(Request $request){
+       
+        $request->validate([
+            'jury_id' => 'required',
+            'number_of_videos' => 'required'
+        ]);
+
+        $filter_videos = AuditionParticipant::where([['audition_id',$request->audition_id],['accept_status', 1],['filter_status', 1],['send_manager_admin',1]])->get();
+
+        $assign_jury = new AssignJury();
+
+        foreach ($filter_videos as $key => $video) {
+           $assign_jury->audition_id = $request->audition_id;
+           $assign_jury->jury_id = $request->jury_id;
+           $assign_jury->participant_id = $video->id;
+           $assign_jury->save();
+        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Jury Assigned Successfully'
+        ]);
+
     }
 
     /**
@@ -144,16 +170,7 @@ class JuryBoardController extends Controller
             ]);
         }
     }
-
-
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $auditionAdmin
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show(User $jury)
     {
         if ($jury->status == 0) {
@@ -166,12 +183,6 @@ class JuryBoardController extends Controller
         return view('ManagerAdmin.jury.details',$data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $auditionAdmin
-     * @return \Illuminate\Http\Response
-     */
     public function edit(User $jury)
     {
         $data = [
@@ -182,13 +193,6 @@ class JuryBoardController extends Controller
         return view('ManagerAdmin.jury.edit', $data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $auditionAdmin
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -247,12 +251,6 @@ class JuryBoardController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $auditionAdmin
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(User $auditionAdmin)
     {
         try {

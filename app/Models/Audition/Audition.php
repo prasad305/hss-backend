@@ -2,6 +2,7 @@
 
 namespace App\Models\Audition;
 
+use App\Models\AssignJury;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -41,6 +42,11 @@ class Audition extends Model
     public function judge()
     {
         return $this->hasMany(AssignJudge::class, 'audition_id', 'id');
+    }
+    
+    public function jury()
+    {
+        return $this->hasMany(AssignJury::class, 'audition_id', 'id');
     }
 
     public function participant()

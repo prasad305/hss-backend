@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AssignJury;
 use Illuminate\Http\Request;
 use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\Audition;
@@ -23,9 +24,24 @@ class AuditionAdminController extends Controller
 
     public function juryPublished($audition_id)
     {
+        $assignJuries = AssignJury::select('jury_id')->get();
+        $userIds = [];
+        foreach ($assignJuries as $jury) {
+            array_push($userIds, $jury->jury_id);
+        }
+        $avaiable_juries = User::whereNotIn('id', $userIds)->where('user_type','jury')->orderBy('id', 'DESC')->get();
+
+        $filter_videos = AuditionParticipant::where([['audition_id',$audition_id],['accept_status', 1],['filter_status', 1],['send_manager_admin',1]])->get();
+
+        $video_pack = count($filter_videos)/count($avaiable_juries);
+
         $data = [
-            'filter_videos' => AuditionParticipant::where([['audition_id',$audition_id],['accept_status', 1],['filter_status', 1],['send_manager_admin',1]])->get(),
+            'filter_videos' => $filter_videos,
+            'avaiable_juries' => $avaiable_juries,
+            'video_pack' => $video_pack,
+            'audition_id' => $audition_id,
         ];
+
         return view('ManagerAdmin.Audition.jury_published',$data);
     }
 
@@ -38,6 +54,7 @@ class AuditionAdminController extends Controller
             array_push($userIds, $assignAdmin->assign_person);
         }
         $auditionAdmins = User::whereIn('id', $userIds)->orderBy('id', 'DESC')->get();
+
         return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins'));
     }
 
