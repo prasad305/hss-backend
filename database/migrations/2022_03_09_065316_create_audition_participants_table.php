@@ -18,6 +18,7 @@ class CreateAuditionParticipantsTable extends Migration
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->unsignedBigInteger('audition_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('jury_id')->nullable();
             $table->unsignedBigInteger('marks_id')->nullable();
             $table->integer('winning_status')->nullable()->comment(' 0 = fail , 1 = win');
             $table->text('video_url')->nullable();
