@@ -60,28 +60,23 @@ class JuryBoardController extends Controller
         return view('ManagerAdmin.jury.index', compact('auditionAdmins'));
     }
 
-    public function assignVideo(Request $request){
-       
+    public function assignVideo(Request $request)
+    {
+
         $request->validate([
             'jury_id' => 'required',
             'number_of_videos' => 'required'
         ]);
 
-        $filter_videos = AuditionParticipant::where([['audition_id',$request->audition_id],['accept_status', 1],['filter_status', 1],['send_manager_admin',1]])->get();
+        $filter_videos = AuditionParticipant::where([['audition_id', $request->audition_id], ['accept_status', 1], ['filter_status', 1], ['send_manager_admin', 1], ['jury_id', null]])->take($request->number_of_videos)->get();
 
-        $assign_jury = new AssignJury();
+       foreach ($filter_videos as $key => $video) {
+           $video->jury_id = $request->jury_id;
+           $video->save();
+       }
 
-        foreach ($filter_videos as $key => $video) {
-           $assign_jury->audition_id = $request->audition_id;
-           $assign_jury->jury_id = $request->jury_id;
-           $assign_jury->participant_id = $video->id;
-           $assign_jury->save();
-        }
-        return response()->json([
-            'success' => true,
-            'message' => 'Jury Assigned Successfully'
-        ]);
-
+       session()->flash('success', 'Jury Assigned Successfully!');
+       return redirect()->back();
     }
 
     /**
@@ -101,8 +96,8 @@ class JuryBoardController extends Controller
     public function getSubCategory($category_id)
     {
         return SubCategory::when($category_id > 0, function ($query) use ($category_id) {
-                                return $query->where('category_id', $category_id);
-                            })->orderBy('id', 'DESC')->get();
+            return $query->where('category_id', $category_id);
+        })->orderBy('id', 'DESC')->get();
     }
 
 
@@ -152,7 +147,7 @@ class JuryBoardController extends Controller
             $jury->category_id = $request->category_id;
             $jury->sub_category_id = $request->sub_category_id;
             $jury->terms_and_condition = $request->terms_and_condition;
-            $jury->qr_code = rand( 10000000 , 99999999 );
+            $jury->qr_code = rand(10000000, 99999999);
 
 
             $jury->save();
@@ -170,7 +165,7 @@ class JuryBoardController extends Controller
             ]);
         }
     }
-    
+
     public function show(User $jury)
     {
         if ($jury->status == 0) {
@@ -180,7 +175,7 @@ class JuryBoardController extends Controller
         $data = [
             'jury' => $jury,
         ];
-        return view('ManagerAdmin.jury.details',$data);
+        return view('ManagerAdmin.jury.details', $data);
     }
 
     public function edit(User $jury)
