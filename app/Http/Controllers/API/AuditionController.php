@@ -263,6 +263,7 @@ class AuditionController extends Controller
         ]);
     }
 
+
     public function starAdminLiveAudition()
     {
         $star = User::where('user_type', 'star')->where('parent_user', auth('sanctum')->user()->id)->first();
@@ -275,6 +276,16 @@ class AuditionController extends Controller
         return response()->json([
             'status' => 200,
             'liveAuditions' => $liveAuditions,
+        ]);
+    }
+
+    public function starAdminDetailsAudition($id)
+    {
+        $pending_auditions = Audition::with(['judge', 'judge.user'])->where('id', $id)->get();
+        return response()->json([
+
+            'status' => 200,
+            'pending_audition' => $pending_auditions,
         ]);
     }
 
@@ -356,8 +367,8 @@ class AuditionController extends Controller
 
     public function videoSendManagerAdmin(Request $request)
     {
-       
-        AuditionParticipant::where([['audition_id', $request->audition_id],['accept_status', 1],['filter_status', 1]])->update([
+
+        AuditionParticipant::where([['audition_id', $request->audition_id], ['accept_status', 1], ['filter_status', 1]])->update([
             'send_manager_admin' => $request->send_manager_admin,
         ]);
 

@@ -27,6 +27,8 @@ class Audition extends Model
         'status'
     ];
 
+    protected $with = ['judge'];
+
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');

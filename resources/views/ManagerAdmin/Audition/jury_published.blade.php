@@ -24,17 +24,14 @@ Manager Admin
 <!-- /.content-header -->
 
 <div class="content">
-    <div class="container-fluid">
 
+    <div class="container-fluid">
         <div class="bgAs bg-dark mb-4 ">
             <div class="row justify-content-between border-shadow">
                 <h4 class="px-5 mt-3">Round 1 </h4>
                 <h4 class="px-5 mt-3">{{ $filter_videos->count() }} Videos</h4>
             </div>
             <div class="row  mx-1 px-3 pt-3 border-around">
-
-                <!DOCTYPE html>
-                <html lang="en">
 
                 <head>
 
@@ -44,16 +41,16 @@ Manager Admin
                     <link rel="stylesheet" href="assets/css/docs.theme.min.css') }}">
 
                     <!-- Owl Stylesheets -->
-                    <link rel="stylesheet" href="{{ asset('assets/manager-admin/carousel/owl.carousel.min.css') }}">
-                    <link rel="stylesheet"
-                        href="{{ asset('assets/manager-admin/carousel/owl.theme.default.min.css') }}">
+
+                    <link rel="stylesheet" href="{{ asset('assets/manager-admin/carousel/owl.carousel.css') }}">
 
                     <!-- javascript -->
-                    <script src="{{ asset('assets/manager-admin/carousel/jquery.min.js') }}"></script>
+                    <script src="{{ asset('assets/manager-admin/carousel/jquery.js') }}"></script>
                     <script src="{{ asset('assets/manager-admin/carousel/owl.carousel.js') }}"></script>
                 </head>
 
                 <body>
+
 
                     <!-- body -->
                     <div class="home-demo">
@@ -71,50 +68,49 @@ Manager Admin
                                     </div>
                                 </div>
                             </div>
+
+
+                        @endforeach
+                        @foreach ($filter_videos as $video)
+
+                        <div class="box mx-3">
+                            <video width="380" controls>
+                                <source src="{{ url($video->video_url) }}" type="video/mp4">
+                            </video>
                         </div>
 
-
+                        @endforeach
 
                     </div>
-            </div>
-            <script>
-                $(document).ready(function() {
-                    $("#news-slider").owlCarousel({
-                        items: 4,
-                        itemsDesktop: [1199, 3],
-                        itemsDesktopSmall: [980, 2],
-                        itemsMobile: [600, 1],
-                        autoPlay: true
-                    });
-                });
-                var owl = $('.owl-carousel');
-                owl.owlCarousel({
-                    margin: 10,
-                    loop: true,
 
-                    responsive: {
-                        0: {
-                            items: 4
-                        },
-                        600: {
-                            items: 2
-                        },
-                        1000: {
-                            items: 1
-                        }
-                    }
-                })
-            </script>
-
-            <!-- vendors -->
-            <script src="{{ asset('assets/manager-admin/carousel/highlight.js') }}"></script>
-            <script src="{{ asset('assets/manager-admin/carousel/app.js') }}"></script>
-            </body>
-
-            </html>
-
-        </div>
-    </div>
+                    <script src="jquery.js"></script>
+                    <script src="owl.carousel.js"></script>
+                    <script>
+                        $('.owl-carousel').owlCarousel({
+                            loop: true,
+                            margin: 10,
+                            padding: 10,
+                            nav: false,
+                            items: 4,
+                            autoplay: false,
+                            autoplayTimeout: 6000,
+                            responsive: {
+                                0: {
+                                    items: 1
+                                },
+                                480: {
+                                    items: 2
+                                },
+                                768: {
+                                    items: 3
+                                },
+                                992: {
+                                    items: 4
+                                }
+                            }
+                        });
+                    </script>
+                </body>
 
 
             <div class="bgAs bg-dark mb-4 ">
@@ -152,8 +148,16 @@ Manager Admin
         <div class="row justify-content-between border-shadow">
             <h4 class="px-5 mt-3">Available Jury</h4>
             <h4 class="px-5 mt-3">12 Jury</h4>
+
+            </div>
+
         </div>
-        <div class="row  mx-1 px-3 pt-3 border-around">
+
+        <div class="bgAs bg-dark mb-4 ">
+            <div class="row justify-content-between border-shadow">
+                <h4 class="px-5 mt-3">Available Jury</h4>
+                <h4 class="px-5 mt-3">12 Jury</h4>
+            </div>
 
             <div class="col-md-4 justify-content-center">
                 <div class="card bg-light text-center  m-4 p-4">
@@ -162,80 +166,90 @@ Manager Admin
                     <b class=" mt-2">Onil Hasan</b>
                     <small>Music Specialist</small>
                     <center><button class="btn bg-info mt-3 w-75"> Contact</button></center>
-                </div>
-            </div>
-            <div class="col-md-4 justify-content-center">
-                <div class="card bg-light text-center  m-4 p-4">
-                    <center> <img width="100" src="{{ asset('assets/manager-admin/dist/img/user8-128x128.jpg') }}"
-                            alt="" class="ImGCard"></center>
-                    <b class=" mt-2">Onil Hasan</b>
-                    <small>Music Specialist</small>
-                    <center><button class="btn bg-info mt-3 w-75"> Contact</button></center>
+
+            <div class="row  mx-1 px-3 pt-3 border-around">
+
+                <div class="col-md-4 justify-content-center">
+                    <div class="card bg-light text-center  m-4 p-4">
+                        <center> <img width="100" src="{{ asset('assets/manager-admin/dist/img/user8-128x128.jpg') }}"
+                                alt="" class="ImGCard"></center>
+                        <b class=" mt-2">Onil Hasan</b>
+                        <small>Music Specialist</small>
+                        <center><button class="btn bg-info mt-3 w-75"> Contact</button></center>
+                    </div>
 
                 </div>
-            </div>
-            <div class="col-md-4 justify-content-center">
-                <div class="card bg-light text-center  m-4 p-4">
-                    <center> <img width="100" src="{{ asset('assets/manager-admin/dist/img/user8-128x128.jpg') }}"
-                            alt="" class="ImGCard"></center>
-                    <b class=" mt-2">Onil Hasan</b>
-                    <small>Music Specialist</small>
-                    <center><button class="btn bg-info mt-3 w-75"> Contact</button></center>
+                <div class="col-md-4 justify-content-center">
+                    <div class="card bg-light text-center  m-4 p-4">
+                        <center> <img width="100" src="{{ asset('assets/manager-admin/dist/img/user8-128x128.jpg') }}"
+                                alt="" class="ImGCard"></center>
+                        <b class=" mt-2">Onil Hasan</b>
+                        <small>Music Specialist</small>
+                        <center><button class="btn bg-info mt-3 w-75"> Contact</button></center>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-4 justify-content-center">
-                <div class="card bg-light text-center  m-4 p-4">
-                    <center> <img width="100" src="{{ asset('assets/manager-admin/dist/img/user8-128x128.jpg') }}"
-                            alt="" class="ImGCard"></center>
-                    <b class=" mt-2">Onil Hasan</b>
-                    <small>Music Specialist</small>
-                    <center><button class="btn bg-info mt-3 w-75"> Contact</button></center>
+                <div class="col-md-4 justify-content-center">
+                    <div class="card bg-light text-center  m-4 p-4">
+                        <center> <img width="100" src="{{ asset('assets/manager-admin/dist/img/user8-128x128.jpg') }}"
+                                alt="" class="ImGCard"></center>
+                        <b class=" mt-2">Onil Hasan</b>
+                        <small>Music Specialist</small>
+                        <center><button class="btn bg-info mt-3 w-75"> Contact</button></center>
+                    </div>
+                </div>
+                <div class="col-md-4 justify-content-center">
+                    <div class="card bg-light text-center  m-4 p-4">
+                        <center> <img width="100" src="{{ asset('assets/manager-admin/dist/img/user8-128x128.jpg') }}"
+                                alt="" class="ImGCard"></center>
+                        <b class=" mt-2">Onil Hasan</b>
+                        <small>Music Specialist</small>
+                        <center><button class="btn bg-info mt-3 w-75"> Contact</button></center>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="bgAs bg-dark ">
-        <div class="row justify-content-between border-shadow">
-            <h4 class="px-5 mt-3">Distribution</h4>
-        </div>
-        <div class="row px-5">
-            <input type="text" class="from-control mx-2" placeholder="Number of jury">
-            <button class="btn btn-info px-4 Bntsx">Apply</button>
-        </div>
-        <div class="row  mx-1 px-3 pt-3 border-around">
+        <div class="bgAs bg-dark ">
+            <div class="row justify-content-between border-shadow">
+                <h4 class="px-5 mt-3">Distribution</h4>
+            </div>
+            <div class="row px-5">
+                <input type="text" class="from-control mx-2" placeholder="Number of jury">
+                <button class="btn btn-info px-4 Bntsx">Apply</button>
+            </div>
+            <div class="row  mx-1 px-3 pt-3 border-around">
 
-            <div class="col-md-4 justify-content-center">
-                <div class="card bg-light text-center  m-4 p-4">
-                    <h5 class=" mt-5">Video pack</h5>
-                    <small class="mb-4">80 Videos</small>
-                    <center><button class="btn bg-info mt-3 w-75"> Coppy</button></center>
+                <div class="col-md-4 justify-content-center">
+                    <div class="card bg-light text-center  m-4 p-4">
+                        <h5 class=" mt-5">Video pack</h5>
+                        <small class="mb-4">80 Videos</small>
+                        <center><button class="btn bg-info mt-3 w-75"> Coppy</button></center>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-4 justify-content-center">
-                <div class="card bg-light text-center  m-4 p-4">
-                    <h5 class=" mt-5">Video pack</h5>
-                    <small class="mb-4">80 Videos</small>
-                    <center><button class="btn bg-info mt-3 w-75"> Coppy</button></center>
+                <div class="col-md-4 justify-content-center">
+                    <div class="card bg-light text-center  m-4 p-4">
+                        <h5 class=" mt-5">Video pack</h5>
+                        <small class="mb-4">80 Videos</small>
+                        <center><button class="btn bg-info mt-3 w-75"> Coppy</button></center>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-4 justify-content-center">
-                <div class="card bg-light text-center  m-4 p-4">
-                    <h5 class=" mt-5">Video pack</h5>
-                    <small class="mb-4">80 Videos</small>
-                    <center><button class="btn bg-info mt-3 w-75"> Coppy</button></center>
+                <div class="col-md-4 justify-content-center">
+                    <div class="card bg-light text-center  m-4 p-4">
+                        <h5 class=" mt-5">Video pack</h5>
+                        <small class="mb-4">80 Videos</small>
+                        <center><button class="btn bg-info mt-3 w-75"> Coppy</button></center>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-4 justify-content-center">
-                <div class="card bg-light text-center  m-4 p-4">
-                    <h5 class=" mt-5">Video pack</h5>
-                    <small class="mb-4">80 Videos</small>
-                    <center><button class="btn bg-info mt-3 w-75"> Coppy</button></center>
+                <div class="col-md-4 justify-content-center">
+                    <div class="card bg-light text-center  m-4 p-4">
+                        <h5 class=" mt-5">Video pack</h5>
+                        <small class="mb-4">80 Videos</small>
+                        <center><button class="btn bg-info mt-3 w-75"> Coppy</button></center>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div> <!-- container -->
+    </div> <!-- container -->
 </div>
 
 <style>

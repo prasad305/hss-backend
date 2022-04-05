@@ -149,6 +149,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/payment/participate', [UserController::class, 'auditionPayment']);
     Route::post('/user/video/participate', [UserController::class, 'videoUpload']);
     Route::get('/user/audition/participate/video/{id}', [UserController::class, 'videoDetails']);
+    Route::get('/user/audition/enrolled', [UserController::class, 'enrolledAuditions']);
 });
 
 
@@ -266,6 +267,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     //Route::get('/admin/audition/status', [AuditionController::class, 'starAdminPendingAudtion']);
     Route::get('/admin/audition/pendings', [AuditionController::class, 'starAdminPendingAudition']);
     Route::get('/admin/audition/live', [AuditionController::class, 'starAdminLiveAudition']);
+    Route::get('/admin/audition/details/{id}', [AuditionController::class, 'starAdminDetailsAudition']);
 });
 
 
