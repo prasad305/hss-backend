@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Models\Audition\AssignJudge;
 use App\Models\Audition\AuditionParticipant;
-use App\Models\Audition\AudtionMark;
+use App\Models\Audition\AuditionMark;
 use App\Models\Audition\FilterVideo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -395,7 +395,7 @@ class AuditionController extends Controller
     public function juryMarking(Request $request, $id)
     {
 
-        $auditionMark = AudtionMark::create([
+        $auditionMark = AuditionMark::create([
 
             'judge_id' => $request->judge_id,
             'participant_id' => $request->user_id,
@@ -410,10 +410,33 @@ class AuditionController extends Controller
 
     public function juryMarkingVideos($audition_id){
 
-        $audition_juries = AuditionParticipant::where([['audition_id',$audition_id], ['accept_status', 1], ['filter_status', 1],['jury_id','!=',null]])->get();
+        $audition_participants = AuditionParticipant::where([['audition_id',$audition_id], ['accept_status', 1], ['filter_status', 1],['jury_id','!=',null]])->get();
+
+        $juryIds = [];
+        foreach ($audition_participants as $key => $jury) {
+            array_push($juryIds,$jury->jury_id);
+        }
+
+        $juries = User::whereIn('id',$juryIds)->with(['participant_jury','markingVideo'])->orderBy('id','desc')->get();
+        
+       
         return response()->json([
             'status' => 200,
-            'audition_juries' => $audition_juries,
+            'audition_participants' => $audition_participants,
+            'juries' => $juries,
+        ]);
+    }
+
+    public function getJuryMarkingVideos($jury_id){
+        $marking_videos = AuditionMark::where('jury_id',$jury_id)->get();
+        $passed_videos = AuditionMark::where([['jury_id',$jury_id],['marks','>=',80]])->get();
+        $failed_videos = AuditionMark::where([['jury_id',$jury_id],['marks','<',80]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'marking_videos' => $marking_videos,
+            'passed_videos' => $passed_videos,
+            'failed_videos' => $failed_videos,
         ]);
     }
 
