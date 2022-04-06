@@ -172,6 +172,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/fan/group/show/{slug}', [FanGroupController::class, 'showFanGroup']);
     Route::post('/admin/fan/group/update/{slug}', [FanGroupController::class, 'updateFanGroup']);
     Route::delete('/admin/fan/group/delete/{slug}', [FanGroupController::class, 'deleteFanGroup']);
+    Route::post('/admin/fan/member/approve/{id}', [FanGroupController::class, 'approveFanMember']);
+    Route::post('/admin/fan/member/post/{id}', [FanGroupController::class, 'approveFanPost']);
 
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
