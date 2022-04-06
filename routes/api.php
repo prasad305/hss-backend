@@ -412,6 +412,11 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('audition-admin/accepted-videos/{audition_id}', [AuditionController::class, 'acceptedVideo']);
 
     Route::post('audition-admin/send-manager-admin', [AuditionController::class, 'videoSendManagerAdmin']);
+
+    // Selected Jury Marking on Audition Video
+    Route::get('audition-admin/jury-selected-videos/{audition_id}', [AuditionController::class, 'juryMarkingVideos']);
+
+
 });
 
 

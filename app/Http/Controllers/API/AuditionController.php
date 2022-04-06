@@ -370,10 +370,9 @@ class AuditionController extends Controller
     public function videoSendManagerAdmin(Request $request)
     {
 
-        AuditionParticipant::where([['audition_id', $request->audition_id], ['accept_status', 1], ['filter_status', 1]])->update([
+        AuditionParticipant::where([['audition_id', $request->audition_id], ['accept_status', 1], ['filter_status', 1],['jury_id',null]])->update([
             'send_manager_admin' => $request->send_manager_admin,
         ]);
-
 
         return response()->json([
             'status' => 200,
@@ -405,6 +404,16 @@ class AuditionController extends Controller
             'comments' => $request->comments,
             'status' => 1
 
+        ]);
+    }
+
+
+    public function juryMarkingVideos($audition_id){
+
+        $audition_juries = AuditionParticipant::where([['audition_id',$audition_id], ['accept_status', 1], ['filter_status', 1],['jury_id','!=',null]])->get();
+        return response()->json([
+            'status' => 200,
+            'audition_juries' => $audition_juries,
         ]);
     }
 
