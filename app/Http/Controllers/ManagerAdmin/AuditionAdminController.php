@@ -52,8 +52,7 @@ class AuditionAdminController extends Controller
                 }
             }
        }
-        // forea
-        // return $videoPackArray;
+        
         $data = [
             'filter_videos' => $filter_videos,
             'avaiable_juries' => $avaiable_juries,
