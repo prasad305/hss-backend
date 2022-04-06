@@ -79,6 +79,60 @@ class FanGroupController extends Controller
             'message' => 'Fan Group Added Successfully',
         ]);
     }
+    public function updateFanGroup(Request $request, $slug){
+        // $id = Auth::user()->id;
+        // $anotherStar =  $request->another_star;
+
+        // $adminId = User::find($anotherStar);
+        // return $request->all();
+
+        $fangroup = FanGroup::where('slug', $slug)->first();
+        
+        $fangroup->group_name = $request->group_name;
+        $fangroup->slug = Str::slug($request->input('group_name'));
+        $fangroup->description = $request->description;
+        $fangroup->start_date = $request->start_date;
+        $fangroup->end_date = $request->end_date;
+        $fangroup->min_member = $request->min_member;
+        $fangroup->max_member = $request->max_member;
+        // $fangroup->created_by = $id;
+
+        // $fangroup->my_star = $request->my_star;
+        // $fangroup->my_star_status = 0;
+
+        // $fangroup->another_star = $anotherStar;
+        // $fangroup->another_star_admin_id = $adminId->parent_user;
+        // $fangroup->another_star_status = 0;
+
+        if ($request->hasfile('banner')) {
+
+            $file = $request->file('banner');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/fangroup/' . time() . '.' . $extension;
+
+            Image::make($file)->resize(800, 300)->save($filename, 100);
+            $fangroup->banner = $filename;
+        }
+
+        $fangroup->post_approval_status = 0;
+        $fangroup->status = 0;
+
+        $fangroup->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Fan Group Updated Successfully',
+        ]);
+    }
+    public function deleteFanGroup($slug){
+        $fangroup = FanGroup::where('slug', $slug)->first();
+        $fangroup->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Fan Group Deleted Successfully',
+        ]);
+    }
 
     public function starUpdate(Request $request, $slug){
 
@@ -185,23 +239,41 @@ class FanGroupController extends Controller
         // another_star_admin_id
 
 
+        // $fanApproved = FanGroup::where(function ($query) use($id) {
+        //     $query->where('my_star_status', 1)
+        //         ->where('created_by', $id);
+        //     })->
+        //     orWhere(function ($query) use($id) {
+        //             $query->where('another_star_status', 1)
+        //                 ->where('another_star_admin_id',$id);
+        //         })->where('status', 1)->get();
+
         $fanApproved = FanGroup::where(function ($query) use($id) {
-            $query->where('my_star_status', 1)
-                ->where('created_by', $id);
-            })->
-            orWhere(function ($query) use($id) {
-                    $query->where('another_star_status', 1)
-                        ->where('another_star_admin_id',$id);
-                })->get();
+                    $query->where('another_star_admin_id', $id)
+                        ->orWhere('created_by', $id);
+                    })
+                    ->where('my_star_status', 1)
+                    ->where('status', 1)
+                    ->where('another_star_status', 1)
+                    ->get();
 
         $fanApprovedCount = FanGroup::where(function ($query) use($id) {
-            $query->where('my_star_status', 1)
-                ->where('created_by', $id);
-            })->
-            orWhere(function ($query) use($id) {
-                    $query->where('another_star_status', 1)
-                        ->where('another_star_admin_id',$id);
-                })->count();
+                    $query->where('another_star_admin_id', $id)
+                        ->orWhere('created_by', $id);
+                    })
+                    ->where('my_star_status', 1)
+                    ->where('status', 1)
+                    ->where('another_star_status', 1)
+                    ->count();
+
+        // $fanApprovedCount = FanGroup::where(function ($query) use($id) {
+        //     $query->where('my_star_status', 1)
+        //         ->where('created_by', $id);
+        //     })->
+        //     orWhere(function ($query) use($id) {
+        //             $query->where('another_star_status', 1)
+        //                 ->where('another_star_admin_id',$id);
+        //         })->where('status', 1)->count();
 
                 
         $fanPending = FanGroup::where(function ($query) use($id) {
@@ -211,7 +283,7 @@ class FanGroupController extends Controller
             orWhere(function ($query) use($id) {
                     $query->where('another_star_status', 0)
                         ->where('another_star_admin_id',$id);
-                })->get();
+                })->orWhere('status', 0)->get();
                 
         $fanPendingCount = FanGroup::where(function ($query) use($id) {
             $query->where('my_star_status', 0)
@@ -220,7 +292,7 @@ class FanGroupController extends Controller
             orWhere(function ($query) use($id) {
                     $query->where('another_star_status', 0)
                         ->where('another_star_admin_id',$id);
-                })->count();
+                })->orWhere('status', 0)->count();
                 
         
         $today = Carbon::now();
@@ -230,6 +302,7 @@ class FanGroupController extends Controller
                                         ->orWhere('created_by', $id);
                                     })
                                     ->where('my_star_status', 1)
+                                    ->where('status', 1)
                                     ->where('another_star_status', 1)
                                     ->whereDate('start_date','<=', $today)
                                     ->whereDate('end_date','>=', $today)
@@ -355,6 +428,38 @@ class FanGroupController extends Controller
             'fanId' => $fanDetails->id,
             'my_user_join' => $my_user_join,
             'another_user_join' => $another_user_join,
+            'my_star' => $my_star,
+            'another_star' => $another_star,
+        ]);
+    }
+
+    public function showFanGroup($slug){
+        $fanDetails = FanGroup::where('slug', $slug)->first();
+        $fanId = Auth::user()->id;
+
+        // $users_one = json_decode($fanDetails->my_user_join);
+
+        // $my_user_join = User::select("*")
+        //             ->whereIn('id', $users_one)
+        //             ->get();
+
+        // $users_two = json_decode($fanDetails->another_user_join);
+
+        // $another_user_join = User::select("*")
+        //             ->whereIn('id', $users_two)
+        //             ->get();
+
+        $my_star = User::find($fanDetails->my_star);
+        $another_star = User::find($fanDetails->another_star);
+
+        
+
+        return response()->json([
+            'status' => 200,
+            'fanDetails' => $fanDetails,
+            'fanId' => $fanId,
+            // 'my_user_join' => $my_user_join,
+            // 'another_user_join' => $another_user_join,
             'my_star' => $my_star,
             'another_star' => $another_star,
         ]);

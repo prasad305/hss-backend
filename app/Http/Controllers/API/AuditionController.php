@@ -10,7 +10,9 @@ use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Models\Audition\AssignJudge;
 use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\AudtionMark;
 use App\Models\Audition\FilterVideo;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Expr\Assign;
 
@@ -368,15 +370,50 @@ class AuditionController extends Controller
     public function videoSendManagerAdmin(Request $request)
     {
 
-        AuditionParticipant::where([['audition_id', $request->audition_id], ['accept_status', 1], ['filter_status', 1]])->update([
+        AuditionParticipant::where([['audition_id', $request->audition_id], ['accept_status', 1], ['filter_status', 1],['jury_id',null]])->update([
             'send_manager_admin' => $request->send_manager_admin,
         ]);
-
 
         return response()->json([
             'status' => 200,
             'send_manager_admin' => true,
             'message' => 'Send to Manager Admin Successfully',
+        ]);
+    }
+
+    public function getJuryVideos()
+    {
+
+        $audition_videos =  AuditionParticipant::with('auditions')->where('jury_id', Auth::user()->id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'audition_videos' => $audition_videos,
+        ]);
+    }
+
+    public function juryMarking(Request $request, $id)
+    {
+
+        $auditionMark = AudtionMark::create([
+
+            'judge_id' => $request->judge_id,
+            'participant_id' => $request->user_id,
+            'jury_id' => Auth::user()->id,
+            'marks' => $request->marks,
+            'comments' => $request->comments,
+            'status' => 1
+
+        ]);
+    }
+
+
+    public function juryMarkingVideos($audition_id){
+
+        $audition_juries = AuditionParticipant::where([['audition_id',$audition_id], ['accept_status', 1], ['filter_status', 1],['jury_id','!=',null]])->get();
+        return response()->json([
+            'status' => 200,
+            'audition_juries' => $audition_juries,
         ]);
     }
 
