@@ -660,4 +660,14 @@ class UserController extends Controller
             'enrolledAuditions' => $enrolledAuditions,
         ]);
     }
+    public function enrolledAuditionsPending()
+    {
+
+        $enrolledAuditionsPending = AuditionParticipant::with(['auditions'])->where('user_id', auth()->user()->id)->count();
+
+        return response()->json([
+            'status' => 200,
+            'enrolledAuditionsPending' => $enrolledAuditionsPending,
+        ]);
+    }
 }
