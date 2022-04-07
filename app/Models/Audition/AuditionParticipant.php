@@ -39,8 +39,7 @@ class AuditionParticipant extends Model
 
     public function mark()
     {
-
-        return $this->hasMany(AudtionMark::class, 'participant_id');
+        return $this->hasMany(AuditionMark::class, 'participant_id');
     }
 
     
