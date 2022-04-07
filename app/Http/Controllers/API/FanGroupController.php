@@ -405,13 +405,13 @@ class FanGroupController extends Controller
     public function getFanGroupDetails($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
 
-        $users_one = json_decode($fanDetails->my_user_join);
+        $users_one = json_decode($fanDetails->my_user_join ? $fanDetails->my_user_join : '[]');
 
         $my_user_join = User::select("*")
                     ->whereIn('id', $users_one)
                     ->get();
 
-        $users_two = json_decode($fanDetails->another_user_join);
+        $users_two = json_decode($fanDetails->another_user_join ? $fanDetails->another_user_join : '[]');
 
         $another_user_join = User::select("*")
                     ->whereIn('id', $users_two)
@@ -435,33 +435,53 @@ class FanGroupController extends Controller
 
     public function showFanGroup($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
+        $fanMember = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('approveStatus', 0)->get();
+
+        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->get();
+        $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->get();
+
         $fanId = Auth::user()->id;
 
-        // $users_one = json_decode($fanDetails->my_user_join);
+        // return $fanId;
 
-        // $my_user_join = User::select("*")
-        //             ->whereIn('id', $users_one)
-        //             ->get();
+        $users_one = json_decode($fanDetails->my_user_join ? $fanDetails->my_user_join : '[]');
 
-        // $users_two = json_decode($fanDetails->another_user_join);
+        $my_user_join = User::select("*")
+                    ->whereIn('id', $users_one)
+                    ->get();
 
-        // $another_user_join = User::select("*")
-        //             ->whereIn('id', $users_two)
-        //             ->get();
+        $users_two = json_decode($fanDetails->another_user_join ? $fanDetails->another_user_join : '[]');
 
-        $my_star = User::find($fanDetails->my_star);
-        $another_star = User::find($fanDetails->another_star);
+        $another_user_join = User::select("*")
+                    ->whereIn('id', $users_two)
+                    ->get();
+        
+        if($fanDetails->created_by == $fanId){
+            $userJoin = $my_user_join;
+        }else{
+            $userJoin = $another_user_join;
+        }
+
+        if($fanDetails->my_star == $fanId){
+            $myStar = User::find($fanDetails->my_star);
+        }else{
+            $myStar = User::find($fanDetails->another_star);
+        }
+
+        // $my_star = User::find($fanDetails->my_star);
+        // $another_star = User::find($fanDetails->another_star);
 
         
 
         return response()->json([
             'status' => 200,
             'fanDetails' => $fanDetails,
+            'fanMember' => $fanMember,
+            'fanPost' => $fanPost,
+            'allFanPost' => $allFanPost,
             'fanId' => $fanId,
-            // 'my_user_join' => $my_user_join,
-            // 'another_user_join' => $another_user_join,
-            'my_star' => $my_star,
-            'another_star' => $another_star,
+            'userJoin' => $userJoin,
+            'myStar' => $myStar,
         ]);
     }
 
@@ -597,6 +617,29 @@ class FanGroupController extends Controller
         return response()->json([
             'status' => 200,
             'fanJoinDetails' => $fanJoinDetails,
+        ]);
+    }
+
+    public function approveFanMember($id){
+
+        $fanMember = Fan_Group_Join::find($id);
+        $fanMember->approveStatus = 1;
+        $fanMember->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Fan Member approved Successfully',
+        ]);
+    }
+    public function approveFanPost($id){
+
+        $fanMember = FanPost::find($id);
+        $fanMember->status = 1;
+        $fanMember->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Fan Post approved Successfully',
         ]);
     }
 }
