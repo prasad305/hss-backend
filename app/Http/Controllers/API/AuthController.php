@@ -4,6 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Models\AuditionParticipant;
+use App\Models\GreetingsRegistration;
+use App\Models\LearningSessionRegistration;
+use App\Models\MeetupEventRegistration;
 //use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -127,6 +131,46 @@ class AuthController extends Controller
                 'status' => 200,
                 'message' => 'Verified',
             ]);
+        }
+    }
+
+    public function VerifyToRegisterEvent(Request $request)
+    {
+        $user = User::find(auth('sanctum')->user()->id);
+        $eventId = $request->event_id;
+        $modelName = $request->model_name;
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Invalid Credantials',
+            ]);
+        } else {
+                // AuditionEventRegistration
+            if( $modelName == 'MeetupEventRegistration'){
+                $countValue  = MeetupEventRegistration::where('user_id',$user->id)->where('meetup_event_id',$eventId)->count();
+            }
+            if( $modelName == 'LearningSessionRegistration'){
+                $countValue  = LearningSessionRegistration::where('user_id',$user->id)->where('learning_session_id',$eventId)->count();
+            }
+            if( $modelName == 'GreetingsRegistration'){
+                $countValue  = GreetingsRegistration::where('user_id',$user->id)->where('greeting_id',$eventId)->count();
+            }
+            // if( $modelName == 'AuditionParticipant'){
+            //     $countValue  = AuditionParticipant::where('user_id',$user->id)->where('audition_id',$eventId)->count();
+            // }
+
+            if($countValue > 0){
+                $is_already_registered = true;
+            }else{
+                $is_already_registered = false;
+            }
+            return response()->json([
+                'status' => 200,
+                'message' => 'Verified',
+                'is_already_registered' => $is_already_registered,
+            ]);
+
         }
     }
 
