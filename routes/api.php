@@ -415,6 +415,8 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 
     // Selected Jury Marking on Audition Video
     Route::get('audition-admin/jury-selected-videos/{audition_id}', [AuditionController::class, 'juryMarkingVideos']);
+
+
     Route::get('audition-admin/jury-marking-videos/{jury_id}', [AuditionController::class, 'getJuryMarkingVideos']);
 
 
@@ -430,6 +432,7 @@ Route::middleware(['auth:sanctum', 'isAPIJuryBoard'])->group(function () {
 
     Route::get('/jury/selectVideo', [AuditionController::class, 'getJuryVideos']);
     Route::post('/jury/juryMarking', [AuditionController::class, 'juryMarking']);
+    Route::get('/jury/juryMarkingDone/videos', [AuditionController::class, 'markingDone']);
     // Monir Jury Board
     //   Route::get('/audition-admin/audition/status', [AuditionController::class, 'auditionAdminStatus']);
     //   Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'auditionAdminPendings']);
