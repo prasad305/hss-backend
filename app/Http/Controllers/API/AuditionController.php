@@ -398,10 +398,6 @@ class AuditionController extends Controller
     {
 
 
-
-        $auditionMark = AuditionMark::create([
-
-
         $validator = Validator::make($request->all(), [
             'participant_id' => 'required',
             'audition_id' => 'required',
@@ -421,13 +417,22 @@ class AuditionController extends Controller
                 'participant_id' => $request->participant_id,
                 'audition_id' => $request->audition_id,
                 'jury_id' => Auth::user()->id,
-                'marks' => $request->marks,
                 'comments' => $request->comments,
                 'status' => 1
 
             ]);
 
             if ($auditionMark) {
+                if ($request->selected == 1) {
+                    $auditionMark->participant_status = 1;
+                    $auditionMark->marks = $request->marks;
+                }
+
+                if ($request->rejected == 1) {
+                    $auditionMark->participant_status = 0;
+                }
+                $auditionMark->save();
+
                 AuditionParticipant::find($request->participant_id)->update([
                     'marks_id' => $auditionMark->id,
                 ]);
@@ -456,16 +461,16 @@ class AuditionController extends Controller
 
         $audition_juries = AuditionParticipant::where([['audition_id', $audition_id], ['accept_status', 1], ['filter_status', 1], ['jury_id', '!=', null]])->get();
 
-        $audition_participants = AuditionParticipant::where([['audition_id',$audition_id], ['accept_status', 1], ['filter_status', 1],['jury_id','!=',null]])->get();
+        $audition_participants = AuditionParticipant::where([['audition_id', $audition_id], ['accept_status', 1], ['filter_status', 1], ['jury_id', '!=', null]])->get();
 
         $juryIds = [];
         foreach ($audition_participants as $key => $jury) {
-            array_push($juryIds,$jury->jury_id);
+            array_push($juryIds, $jury->jury_id);
         }
 
-        $juries = User::whereIn('id',$juryIds)->with(['participant_jury','markingVideo'])->orderBy('id','desc')->get();
-        
-       
+        $juries = User::whereIn('id', $juryIds)->with(['participant_jury', 'markingVideo'])->orderBy('id', 'desc')->get();
+
+
         return response()->json([
             'status' => 200,
             'audition_participants' => $audition_participants,
@@ -473,10 +478,11 @@ class AuditionController extends Controller
         ]);
     }
 
-    public function getJuryMarkingVideos($jury_id){
-        $marking_videos = AuditionMark::where('jury_id',$jury_id)->get();
-        $passed_videos = AuditionMark::where([['jury_id',$jury_id],['marks','>=',80]])->get();
-        $failed_videos = AuditionMark::where([['jury_id',$jury_id],['marks','<',80]])->get();
+    public function getJuryMarkingVideos($jury_id)
+    {
+        $marking_videos = AuditionMark::where('jury_id', $jury_id)->get();
+        $passed_videos = AuditionMark::where([['jury_id', $jury_id], ['marks', '>=', 80]])->get();
+        $failed_videos = AuditionMark::where([['jury_id', $jury_id], ['marks', '<', 80]])->get();
 
         return response()->json([
             'status' => 200,
