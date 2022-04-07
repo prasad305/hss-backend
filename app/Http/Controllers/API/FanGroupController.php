@@ -492,13 +492,21 @@ class FanGroupController extends Controller
 
         $fan_group_id = $request->fan_group_id;
 
+        $showFanGroup = FanGroup::find($fan_group_id);
+
         $fanStore = new Fan_Group_Join();
         $fanStore->fan_group_id = $request->fan_group_id;
         $fanStore->star_id = $request->star_id;
         $fanStore->star_name = $request->star_name;
         $fanStore->user_id = $id;
         $fanStore->warning_count = 0;
-        $fanStore->approveStatus = 0;
+
+        if($showFanGroup->join_approval_status == 1){
+            $fanStore->approveStatus = 1;
+        }else{
+            $fanStore->approveStatus = 0;
+        }
+        
         $fanStore->save();
 
         // Add ID(json) in User table
@@ -559,7 +567,13 @@ class FanGroupController extends Controller
         $fanPost->star_name = $star->star_name;
 
         $fanPost->like_count = 0;
-        $fanPost->status = 0;
+
+        if($fan_id->post_approval_status == 1){
+            $fanPost->status = 1;
+        }else{
+            $fanPost->status = 0;
+        }
+        
 
         if ($request->hasfile('image')) {
 
