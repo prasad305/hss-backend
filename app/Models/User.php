@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Audition\AssignAdmin;
+use App\Models\Audition\AuditionMark;
+use App\Models\Audition\AuditionParticipant;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -230,5 +232,13 @@ class User extends Authenticatable
     public function jury()
     {
         return $this->hasOne(JuryBoard::class, 'star_id');
+    }
+
+    public function participant_jury(){
+        return $this->hasMany(AuditionParticipant::class, 'jury_id');
+    }
+
+    public function markingVideo(){
+        return $this->hasMany(AuditionMark::class, 'jury_id');
     }
 }

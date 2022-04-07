@@ -54,6 +54,7 @@ class AuthController extends Controller
                 'status' => 200,
                 'id' => $user->id,
                 'token' => $token,
+                'user' => $user,
                 'message' => 'Verify Phone Number',
             ]);
         }
@@ -105,6 +106,7 @@ class AuthController extends Controller
                     'user_type' => $user->user_type,
                     'token' => $token,
                     'role' => $role,
+                    'user' => $user,
                     'message' => 'Logged In Successfully',
                 ]);
             }
