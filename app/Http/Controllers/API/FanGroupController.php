@@ -69,6 +69,7 @@ class FanGroupController extends Controller
             $fangroup->banner = $filename;
         }
 
+        $fangroup->join_approval_status = 0;
         $fangroup->post_approval_status = 0;
         $fangroup->status = 0;
 
@@ -114,6 +115,7 @@ class FanGroupController extends Controller
             $fangroup->banner = $filename;
         }
 
+        $fangroup->join_approval_status = 0;
         $fangroup->post_approval_status = 0;
         $fangroup->status = 0;
 
@@ -641,5 +643,43 @@ class FanGroupController extends Controller
             'status' => 200,
             'message' => 'Fan Post approved Successfully',
         ]);
+    }
+    public function joinFanGroup($slug, $data){
+
+        $fanjoin = FanGroup::where('slug', $slug)->first();
+        $fanjoin->join_approval_status = $data;
+        $fanjoin->save();
+
+        if($data == 1){
+            return response()->json([
+                'status' => 200,
+                'message' => 'Anyone Can Join in FanGroup',
+            ]);
+        }else{
+            return response()->json([
+                'status' => 200,
+                'message' => 'Approve by Admin/Star in FanGroup',
+            ]);
+        }
+        
+    }
+
+    public function postFanGroup($slug, $data){
+
+        $fanpost = FanGroup::where('slug', $slug)->first();
+        $fanpost->post_approval_status = $data;
+        $fanpost->save();
+
+        if($data == 1){
+            return response()->json([
+                'status' => 200,
+                'message' => 'Anyone Can Post in FanGroup',
+            ]);
+        }else{
+            return response()->json([
+                'status' => 200,
+                'message' => 'Approve by Admin/Star in FanGroup',
+            ]);
+        }
     }
 }
