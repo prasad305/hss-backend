@@ -48,6 +48,9 @@ Route::get('/user/live_chat/all', [LiveChatController::class, 'userAll']);
 
 
 
+Route::get('/user_info/{id}', [AuthController::class, 'user_data']);
+
+
 
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
@@ -59,6 +62,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user_info', [AuthController::class, 'user_info']);
     Route::post('/user_info_update', [AuthController::class, 'user_info_update']);
     Route::post('/user_otherInfo_update', [AuthController::class, 'user_OtherInfo_update']);
+
+    Route::get('/user_data/{id}', [AuthController::class, 'user_data']);
 
     Route::get('/user/activity_count', [AuthController::class, 'activity_count']);
 

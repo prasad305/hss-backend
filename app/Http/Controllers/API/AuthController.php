@@ -220,6 +220,23 @@ class AuthController extends Controller
         ]);
     }
 
+    public function user_data($id)
+    {
+        $user = User::find($id);
+
+        $user_info = UserInfo::where('user_id', $user->id)->first();
+
+        if (empty($user_info)) {
+            $user_info = new UserInfo;
+        }
+
+        return response()->json([
+            'status' => 200,
+            'users' => $user,
+            'info' => $user_info
+        ]);
+    }
+
 
 
     public function user_info_update(Request $request)

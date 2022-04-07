@@ -20,6 +20,7 @@ class Post extends Model
         'title',
         'details',
         'share_link',
+        'react_provider',
         'status',
     ];
 
