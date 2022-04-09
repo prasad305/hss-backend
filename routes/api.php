@@ -28,6 +28,7 @@ Route::post('logout', [AuthController::class, 'logout']);
 // OTP Verification API
 Route::post('otp_verify', [AuthController::class, 'otp_verify']);
 Route::post('verify_user', [AuthController::class, 'verify_user']);
+Route::post('verify_to_register_event', [AuthController::class, 'VerifyToRegisterEvent']);
 Route::get('resend_otp', [AuthController::class, 'resend_otp']);
 Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 
