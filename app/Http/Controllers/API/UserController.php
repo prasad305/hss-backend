@@ -22,6 +22,7 @@ use App\Models\Post;
 use App\Models\React;
 use App\Models\SimplePost;
 use App\Models\InterestType;
+use App\Models\Message;
 use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
@@ -717,6 +718,33 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'enrolledAuditionsPending' => $enrolledAuditionsPending,
+        ]);
+    }
+
+    //message Controlling
+    public function message(Request $request)
+    {
+        $message = new Message();
+
+        $message->conversation_id = 1;
+        $message->sender_id = $request->sender_id;
+        $message->receiver_id = $request->receiver_id;
+        $message->text = $request->text;
+        $message->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => $message,
+        ]);
+    }
+
+    public function get_message($id)
+    {
+        $message = Message::where('conversation_id',1)->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => $message,
         ]);
     }
 }
