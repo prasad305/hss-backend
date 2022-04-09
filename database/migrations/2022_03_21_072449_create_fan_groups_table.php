@@ -31,7 +31,8 @@ class CreateFanGroupsTable extends Migration
             $table->string('banner')->nullable();
             $table->string('my_user_join')->nullable();
             $table->string('another_user_join')->nullable();
-            $table->string('post_approval_status')->nullable();
+            $table->integer('join_approval_status')->nullable();
+            $table->integer('post_approval_status')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
         });

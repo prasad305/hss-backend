@@ -28,6 +28,7 @@ Route::post('logout', [AuthController::class, 'logout']);
 // OTP Verification API
 Route::post('otp_verify', [AuthController::class, 'otp_verify']);
 Route::post('verify_user', [AuthController::class, 'verify_user']);
+Route::post('verify_to_register_event', [AuthController::class, 'VerifyToRegisterEvent']);
 Route::get('resend_otp', [AuthController::class, 'resend_otp']);
 Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 
@@ -180,6 +181,9 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::delete('/admin/fan/group/delete/{slug}', [FanGroupController::class, 'deleteFanGroup']);
     Route::post('/admin/fan/member/approve/{id}', [FanGroupController::class, 'approveFanMember']);
     Route::post('/admin/fan/member/post/{id}', [FanGroupController::class, 'approveFanPost']);
+
+    Route::post('/admin/fan-group/join/{slug}/{data}', [FanGroupController::class, 'joinFanGroup']);
+    Route::post('/admin/fan-group/post/{slug}/{data}', [FanGroupController::class, 'postFanGroup']);
 
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
@@ -418,6 +422,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('audition-admin/audtion-videos/{audition_id}', [AuditionController::class, 'getAuditionVideos']);
     Route::post('audition-admin/filter-video/submit', [AuditionController::class, 'submitFilterVideo']);
     Route::get('audition-admin/accepted-videos/{audition_id}', [AuditionController::class, 'acceptedVideo']);
+    Route::get('audition-admin/rejected-videos/{audition_id}', [AuditionController::class, 'rejectedVideo']);
 
     Route::post('audition-admin/send-manager-admin', [AuditionController::class, 'videoSendManagerAdmin']);
 
@@ -426,6 +431,8 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 
 
     Route::get('audition-admin/jury-marking-videos/{jury_id}', [AuditionController::class, 'getJuryMarkingVideos']);
+    Route::post('audition-admin/selected-top-videos', [AuditionController::class, 'selectedTop']);
+    Route::post('audition-admin/rejected-videos-message', [AuditionController::class, 'rejectedMessage']);
 
 
 });
