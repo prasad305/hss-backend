@@ -419,6 +419,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('audition-admin/audtion-videos/{audition_id}', [AuditionController::class, 'getAuditionVideos']);
     Route::post('audition-admin/filter-video/submit', [AuditionController::class, 'submitFilterVideo']);
     Route::get('audition-admin/accepted-videos/{audition_id}', [AuditionController::class, 'acceptedVideo']);
+    Route::get('audition-admin/rejected-videos/{audition_id}', [AuditionController::class, 'rejectedVideo']);
 
     Route::post('audition-admin/send-manager-admin', [AuditionController::class, 'videoSendManagerAdmin']);
 
@@ -427,6 +428,8 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 
 
     Route::get('audition-admin/jury-marking-videos/{jury_id}', [AuditionController::class, 'getJuryMarkingVideos']);
+    Route::post('audition-admin/selected-top-videos', [AuditionController::class, 'selectedTop']);
+    Route::post('audition-admin/rejected-videos-message', [AuditionController::class, 'rejectedMessage']);
 
 
 });
