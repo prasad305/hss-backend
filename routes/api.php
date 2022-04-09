@@ -182,6 +182,9 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/fan/member/approve/{id}', [FanGroupController::class, 'approveFanMember']);
     Route::post('/admin/fan/member/post/{id}', [FanGroupController::class, 'approveFanPost']);
 
+    Route::post('/admin/fan-group/join/{slug}/{data}', [FanGroupController::class, 'joinFanGroup']);
+    Route::post('/admin/fan-group/post/{slug}/{data}', [FanGroupController::class, 'postFanGroup']);
+
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
     Route::get('/admin/marketplace/product-list/approved', [MarketplaceController::class, 'allProductList']);
