@@ -68,6 +68,7 @@ class UserMobileAppController extends Controller
         return response()->json([
             'status'=>200,
             'eventRegistration'=>$eventRegistration,
+            'modelName'=>$modelName,
             'message'=>'Success',
         ]);
     }
