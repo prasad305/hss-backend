@@ -21,10 +21,15 @@ class FanPost extends Model
         'user_id',
     ];
 
-    protected $with = ['user'];
+    protected $with = ['user', 'star'];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function star()
+    {
+        return $this->belongsTo(User::class, 'star_id');
     }
 }
