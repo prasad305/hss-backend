@@ -53,8 +53,8 @@ class UserMobileAppController extends Controller
         }
 
         $eventRegistration->user_id = $user->id;
-        $eventRegistration->card_holder_name = $request->input('card_holder_name');
-        $eventRegistration->account_no = $request->input('card_number');
+        $eventRegistration->card_holder_name = $request->card_holder_name;
+        $eventRegistration->account_no = $request->card_number;
         $eventRegistration->payment_date = Carbon::now();
         $eventRegistration->amount = $event->fee;
         $eventRegistration->payment_status = 1;
