@@ -188,7 +188,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/fan-group/join/{slug}/{data}', [FanGroupController::class, 'joinFanGroup']);
     Route::post('/admin/fan-group/post/{slug}/{data}', [FanGroupController::class, 'postFanGroup']);
 
-    
+
 
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
@@ -533,3 +533,7 @@ Route::get('/sold/auction/product', [AuctionController::class, 'soldProduct']);
 Route::get('/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
 Route::post('/bidding/auction/product/{id}', [AuctionController::class, 'bidNow']);
 Route::get('/live/allProduct', [AuctionController::class, 'allLiveProduct']);
+
+
+
+require __DIR__.'/userMobileAppApi.php';
