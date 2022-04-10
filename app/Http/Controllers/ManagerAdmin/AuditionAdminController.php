@@ -400,4 +400,14 @@ class AuditionAdminController extends Controller
 
         return redirect()->back()->with('success', 'Published');
     }
+
+
+    public function auditionAdmins(){
+        return view('managerAdmin.audition.admins');
+    }
+
+    public function auditionJuries(){
+        return view('managerAdmin.audition.juries');
+    }
 }
+

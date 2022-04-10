@@ -104,11 +104,17 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('audition/details/{id}', [AuditionAdminController::class, 'details'])->name('audition.details');
     Route::get('audition/edit/{id}', [AuditionAdminController::class, 'auditionEdit'])->name('audition.edit');
     Route::put('audition/update/{id}', [AuditionAdminController::class, 'auditionUpdate'])->name('audition.update');
-    Route::get('audition/set_publish/{id}', [AuditionAdminController::class, 'set_publish'])->name('audition.set_publish');
+
+//joti
+    Route::get('audition/admins', [AuditionAdminController::class, 'auditionAdmins'])->name('audition.admins');
+    Route::get('audition/juries', [AuditionAdminController::class, 'auditionJuries'])->name('audition.juries');
 
 
     // Jury Audition Routes
     Route::get('audition/jury-published/{id}', [AuditionAdminController::class, 'juryPublished'])->name('audition.jury_published');
+    Route::get('audition/jury-published/{id}', [AuditionAdminController::class, 'juryPublished'])->name('audition.jury_published');
+
+
 
 
 
