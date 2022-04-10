@@ -51,6 +51,9 @@ Route::get('/user/live_chat/all', [LiveChatController::class, 'userAll']);
 
 Route::get('/user_info/{id}', [AuthController::class, 'user_data']);
 
+Route::post('/chatting/message', [UserController::class, 'message']);
+Route::get('/chatting/message/{id}', [UserController::class, 'get_message']);
+
 
 
 // Registered & Verified User Middleware
