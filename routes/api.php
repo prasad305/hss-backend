@@ -185,6 +185,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/fan-group/join/{slug}/{data}', [FanGroupController::class, 'joinFanGroup']);
     Route::post('/admin/fan-group/post/{slug}/{data}', [FanGroupController::class, 'postFanGroup']);
 
+    
+
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
     Route::get('/admin/marketplace/product-list/approved', [MarketplaceController::class, 'allProductList']);
@@ -305,6 +307,12 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('star/fan/group/details/{slug}', [FanGroupController::class, 'fanGroupDetails']);
     Route::get('star/fan/group/active/{slug}/{id}', [FanGroupController::class, 'fanGroupActive']);
     Route::get('star/fan/group/ignore/{slug}/{id}', [FanGroupController::class, 'fanGroupIgnore']);
+    Route::get('/star/fan/group/show/{slug}', [FanGroupController::class, 'showStarFanGroup']);
+    Route::post('/star/fan/member/approve/{id}', [FanGroupController::class, 'approveFanMember']);
+    Route::post('/star/fan/member/post/{id}', [FanGroupController::class, 'approveFanPost']);
+
+    Route::post('/star/fan-group/join/{slug}/{data}', [FanGroupController::class, 'joinFanGroup']);
+    Route::post('/star/fan-group/post/{slug}/{data}', [FanGroupController::class, 'postFanGroup']);
 
     // Marketplace Section
     Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);

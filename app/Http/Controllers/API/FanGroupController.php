@@ -487,6 +487,65 @@ class FanGroupController extends Controller
         ]);
     }
 
+    public function showStarFanGroup($slug){
+        $fanDetails = FanGroup::where('slug', $slug)->first();
+        $fanMember = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('approveStatus', 0)->get();
+
+        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->get();
+        $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->get();
+
+        $id = Auth::user()->id;
+        $my_star = User::find($id);
+        $fanId = $my_star->	parent_user;
+
+        // return $fanId;
+
+        $users_one = json_decode($fanDetails->my_user_join ? $fanDetails->my_user_join : '[]');
+
+        $my_user_join = User::select("*")
+                    ->whereIn('id', $users_one)
+                    ->get();
+
+        $users_two = json_decode($fanDetails->another_user_join ? $fanDetails->another_user_join : '[]');
+
+        $another_user_join = User::select("*")
+                    ->whereIn('id', $users_two)
+                    ->get();
+        
+        if($fanDetails->created_by == $fanId){
+            $userJoin = $my_user_join;
+            $myStar = User::find($fanDetails->my_star);
+            $adminId = User::find($fanDetails->created_by);
+        }else{
+            $userJoin = $another_user_join;
+            $myStar = User::find($fanDetails->another_star);
+            $adminId = User::find($fanDetails->another_star_admin_id);
+        }
+
+        if($fanDetails->my_star == $fanId){
+            $myStar = User::find($fanDetails->my_star);
+        }else{
+            $myStar = User::find($fanDetails->another_star);
+        }
+
+        // $my_star = User::find($fanDetails->my_star);
+        // $another_star = User::find($fanDetails->another_star);
+
+        
+
+        return response()->json([
+            'status' => 200,
+            'fanDetails' => $fanDetails,
+            'fanMember' => $fanMember,
+            'fanPost' => $fanPost,
+            'allFanPost' => $allFanPost,
+            'fanId' => $fanId,
+            'userJoin' => $userJoin,
+            'myStar' => $myStar,
+            'adminId' => $adminId,
+        ]);
+    }
+
     public function getFanGroupStore(Request $request){
         $id = Auth::user()->id;
 
