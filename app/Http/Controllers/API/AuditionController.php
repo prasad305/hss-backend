@@ -491,8 +491,8 @@ class AuditionController extends Controller
     public function getJuryMarkingVideos($jury_id)
     {
         $marking_videos = AuditionMark::where('jury_id', $jury_id)->count();
-        $passed_videos = AuditionMark::where([['jury_id', $jury_id], ['marks', '!=',null],['participant_status',1]])->count();
-        $failed_videos = AuditionMark::where([['jury_id', $jury_id], ['marks',null],['participant_status',0]])->count();
+        $passed_videos = AuditionMark::where([['jury_id', $jury_id], ['marks', '!=', null], ['participant_status', 1]])->count();
+        $failed_videos = AuditionMark::where([['jury_id', $jury_id], ['marks', null], ['participant_status', 0]])->count();
 
         return response()->json([
             'status' => 200,
@@ -502,8 +502,9 @@ class AuditionController extends Controller
         ]);
     }
 
-    public function selectedTop(Request $request){
-        AuditionMark::where('marks','!=',null)->orderBy('marks','desc')->take($request->selected_top)->update([
+    public function selectedTop(Request $request)
+    {
+        AuditionMark::where('marks', '!=', null)->orderBy('marks', 'desc')->take($request->selected_top)->update([
             'selected_status' => 1,
             'message' => $request->message,
         ]);
@@ -511,10 +512,10 @@ class AuditionController extends Controller
             'status' => 200,
             'message' => 'Selected Top Videos and Message Send Successfully',
         ]);
-        
     }
-    public function rejectedMessage(Request $request){
-        AuditionMark::where('marks',null)->where('participant_status',0)->update([
+    public function rejectedMessage(Request $request)
+    {
+        AuditionMark::where('marks', null)->where('participant_status', 0)->update([
             'selected_status' => 0,
             'message' => $request->message,
         ]);
@@ -522,9 +523,16 @@ class AuditionController extends Controller
             'status' => 200,
             'message' => 'Rejected Videos and Message Send Successfully',
         ]);
-        
     }
 
+    // public function juryTime($aud_id)
+    // {
+    //     $getTime = Audition::first($aud_id);
 
+    //     return response()->json([
+    //         'status' => 200,
+    //         'getTime' => $getTime
 
+    //     ]);
+    // }
 }
