@@ -198,6 +198,18 @@ class UserController extends Controller
             'livechats' => $livechats,
         ]);
     }
+
+    
+    public function getAllLiveChatEventByStar($id)
+    {
+        $livechats = LiveChat::where('star_id',$id)->orderBy('id', 'DESC')->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'livechats' => $livechats,
+        ]);
+    }
     public function getAllPostWithForSingleStar($star_id)
     {
         $post = Post::where('user_id',$star_id)->latest()->get();
