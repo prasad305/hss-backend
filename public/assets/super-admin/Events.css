@@ -43,6 +43,13 @@
     transform: translate(-50%, -50%);
 }
 
+.centeredSX1{
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .Back {
     width: 100px;
     height: 40px;
@@ -74,5 +81,11 @@
     color: gold;
     border: 1px solid gold;
     background: none;
+    border-radius: 10px;
+}
+
+.selects{
+    background-color: #302f2f;
+    font-size: 25px;
     border-radius: 10px;
 }

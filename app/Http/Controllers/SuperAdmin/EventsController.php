@@ -60,6 +60,8 @@ class EventsController extends Controller
         return view('SuperAdmin.events.edit');
     }
 
+
+
     /**
      * Update the specified resource in storage.
      *

@@ -15,7 +15,7 @@ Super Admin
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Events Create</li>
+                    <li class="breadcrumb-item active">Create New Audition</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -32,13 +32,14 @@ Super Admin
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Create New Audition</h3>
+                <h3 class="card-title">Update Music Audition</h3>
                 {{-- <a class="btn btn-success btn-sm" style="float: right;"
                         onclick="Show('New Audition','{{ route('superAdmin.events.create') }}')"><i
                     class=" fa fa-plus"></i>&nbsp;New Audition</a> --}}
             </div>
             <!-- /.card-header -->
             <div class="card-body d-flex justify-content-between mx-2">
+
                 <div class=" WidhtEvent ">
                     <div class="divS mt-3">
                         <center>
@@ -65,6 +66,7 @@ Super Admin
                         <label class="mx-3 text-warning" for="vehicle3">Drama</label>
                     </div>
                 </div>
+
                 <div class=" WidhtEvent " style="position: relative">
                     <div class="divS mt-3">
                         <center>
@@ -129,41 +131,56 @@ Super Admin
                     </div>
                 </div>
 
-                <div class=" WidhtEvent ">
+                <div class=" WidhtEvent"  style="position: relative">
                     <div class="divS mt-3">
                         <center>
                             <img src="{{ asset('assets/super-admin/images/table.png') }}" width="35" height="35" alt="">
                             <p><b class="text-warning fw-bold pt-4">Select Time</b></p>
                         </center>
                     </div>
+                    <center><small>Select Time : </small></center>
 
                     <div class=" border-warning mx-5 mt-3 mb-3">
-                        <input type="checkbox" class="CheckIB" id="vehicle1" name="vehicle1" value="Bike">
-                        <label class="mx-3 text-warning" for="vehicle1"> Sports</label><br>
-                        <input type="checkbox" class="CheckIB" id="vehicle1" name="vehicle1" value="Bike">
-                        <label class="mx-3 text-warning" for="vehicle1">Music</label><br>
-                        <input type="checkbox" class="CheckIB" id="vehicle2" name="vehicle2" value="Car">
-                        <label class="mx-3 text-warning" for="vehicle2"> Film</label><br>
-                        <input type="checkbox" class="CheckIB" id="vehicle3" name="vehicle3" value="Boat">
-                        <label class="mx-3 text-warning" for="vehicle3">Dance</label><br>
-                        <input type="checkbox" class="CheckIB" id="vehicle1" name="vehicle1" value="Bike">
-                        <label class="mx-3 text-warning" for="vehicle1">Teaching</label><br>
-                        <input type="checkbox" class="CheckIB" id="vehicle2" name="vehicle2" value="Car">
-                        <label class="mx-3 text-warning" for="vehicle2"> Comedy</label><br>
-                        <input type="checkbox" class="CheckIB" id="vehicle3" name="vehicle3" value="Boat">
-                        <label class="mx-3 text-warning" for="vehicle3">Drama</label>
+
+                        <div class="sds">
+                            <div class="row justify-content-around">
+                                <button class="d-flex ms-2">+</button>
+                                <button class="d-flex ms-2">+</button>
+                            </div>
+
+                            <div class="row justify-content-around">
+                                <b class="d-flex ms-2 selects px-3 ">0</b>
+                                <b class="d-flex ms-2 selects px-3 ">0</b>
+                            </div>
+
+                            <div class="row justify-content-around">
+                                <button class="d-flex ms-2">+</button>
+                                <button class="d-flex ms-2">+</button>
+                            </div>
+                        </div>
+
+                        <div class="centeredSXS text-center">
+                            <b class="text-danger">#Note:</b><br>
+                            <small>You can’t create more than 8 jurys</small>
+                        </div>
+                        
                     </div>
+
+
+
                 </div>
             </div>
             <!-- /.card-body -->
 
             <center>
                 <div class="Footerbtn">
-                    <button class="btn Back">Back</button>
-                    <button class="btn Confirm">Confirm</button>
+                    {{-- <a href="{{ route('superAdmin.events.edit',1) }}"> <li class="breadcrumb-item active">Events List</li></a> --}}
+                    <a href="{{ route('superAdmin.events.index') }}"><button class="btn Back">Back</button></a>
+                    <button class="btn Confirm">Update</button>
                 </div>
             </center>
         </div>
+
 
     </div> <!-- container -->
 </div> <!-- content -->

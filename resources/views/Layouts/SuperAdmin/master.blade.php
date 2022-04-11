@@ -319,6 +319,8 @@
 
 <script src="{{ asset('assets/helper.js')}}"></script>
 
+<script src="{{ asset('assets/super-admin/Events.js')}}"></script>
+
 
 <script>
     $(function () {
