@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Audition\Audition;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,7 +25,7 @@ class Post extends Model
         'status',
     ];
 
-    protected $with = ['star', 'meetup', 'livechat', 'general', 'react', 'learningSession'];
+    protected $with = ['star', 'meetup', 'livechat', 'general', 'react', 'learningSession','audition'];
 
     public function star()
     {
@@ -44,6 +45,11 @@ class Post extends Model
     public function learningSession()
     {
         return $this->belongsTo(LearningSession::class, 'event_id');
+    }
+
+    public function audition()
+    {
+        return $this->belongsTo(Audition::class, 'event_id');
     }
 
     public function general()

@@ -514,6 +514,18 @@ class AuditionController extends Controller
         ]);
     }
 
+    public function getMarkWiseVideos($audition_id,$mark)
+    {
+        $marking_videos = AuditionMark::where('audition_id',$audition_id)->where('selected_status',1)->where('marks','>=',$mark)->count();
+
+        return response()->json([
+            'status' => 200,
+            'mark_wise_videos' => $marking_videos,
+        ]);
+    }
+
+
+
     public function selectedTop(Request $request)
     {
         // return $request->all();
