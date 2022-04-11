@@ -72,6 +72,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/activity_count', [AuthController::class, 'activity_count']);
 
     Route::get('/user/getAllLiveChatEvent', [UserController::class, 'getAllLiveChatEvent']);
+    Route::get('/user/getAllLiveChatEventByStar/{id}', [UserController::class, 'getAllLiveChatEventByStar']);
     Route::get('/user/getAllPostWithForSingleStar/{star_id}', [UserController::class, 'getAllPostWithForSingleStar']);
     Route::get('/user/registerMeestup', [UserController::class, 'registeredMeetup']);
     Route::get('/user/registerLivechat', [UserController::class, 'registeredLivechat']);
@@ -89,6 +90,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/user/interest/type', [UserController::class, 'interestType']);
 
+    // Marketplace Section
     Route::get('/user/marketplace/all', [MarketplaceController::class, 'marketplaceAll']);
     Route::get('/user/marketplace/view-country', [MarketplaceController::class, 'viewCountry']);
     Route::get('/user/marketplace/state/{id}', [MarketplaceController::class, 'viewState']);
@@ -103,6 +105,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('user/fan/group/store', [FanGroupController::class, 'getFanGroupStore']);
     Route::get('user/fan/group/join/{join_id}', [FanGroupController::class, 'getFanGroupJoinId']);
     Route::post('/user/fan/group/post/store', [FanGroupController::class, 'getFanPostStore']);
+    Route::get('/user/fan/group/post/show/{slug}', [FanGroupController::class, 'getFanPostShow']);
 
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
@@ -188,7 +191,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/fan-group/join/{slug}/{data}', [FanGroupController::class, 'joinFanGroup']);
     Route::post('/admin/fan-group/post/{slug}/{data}', [FanGroupController::class, 'postFanGroup']);
 
-    
+
 
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
@@ -428,7 +431,9 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
     // Srabon Auditon Part 2
     Route::get('/audition-admin/auditionStatus/{audition_id}', [AuditionController::class, 'auditionStatus']);
+    Route::get('/audition-admin/sendManager/{audition_id}', [AuditionController::class, 'sendManager']);
     Route::put('/audition-admin/confirmed/audition/{audition_id}', [AuditionController::class, 'confirmedAudition']);
+
 
     Route::get('audition-admin/audtion-videos/{audition_id}', [AuditionController::class, 'getAuditionVideos']);
     Route::post('audition-admin/filter-video/submit', [AuditionController::class, 'submitFilterVideo']);
@@ -533,3 +538,7 @@ Route::get('/sold/auction/product', [AuctionController::class, 'soldProduct']);
 Route::get('/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
 Route::post('/bidding/auction/product/{id}', [AuctionController::class, 'bidNow']);
 Route::get('/live/allProduct', [AuctionController::class, 'allLiveProduct']);
+
+
+
+require __DIR__.'/userMobileAppApi.php';

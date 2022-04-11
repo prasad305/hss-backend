@@ -395,6 +395,20 @@ class FanGroupController extends Controller
         ]);
     }
 
+    public function getFanPostShow($slug){
+        $fanDetails = FanGroup::where('slug', $slug)->first();
+        // $id = Auth::user()->id;
+        
+        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->get();
+        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->get();
+
+        return response()->json([
+            'status' => 200,
+            'fanPost' => $fanPost,
+            'fanMedia' => $fanMedia,
+        ]);
+    }
+
     public function getFanGroupList(){
         $fanList = FanGroup::where('status', 1)->latest()->get();
 
