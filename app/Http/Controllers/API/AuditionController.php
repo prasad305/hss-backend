@@ -61,6 +61,18 @@ class AuditionController extends Controller
             'auditionStatus' => $auditionStatus,
         ]);
     }
+    public function sendManager($audition_id)
+    {
+        $total_audition = AssignJudge::where('audition_id', $audition_id)->count();
+        $sendManager = AssignJudge::where([['audition_id', $audition_id], ['approved_by_judge', 1]])->count();
+
+        return response()->json([
+            'status' => 200,
+            'sendManager' => $total_audition == $sendManager,
+        ]);
+    }
+
+
     public function confirmedAudition($audition_id)
     {
         $confirmedAudition = Audition::where([['admin_id', auth('sanctum')->user()->id], ['id', $audition_id]])->update(['star_approval' => 1]);
