@@ -1,0 +1,78 @@
+.WidhtEvent {
+    width: 15vw;
+
+    border: 1px solid gold !important;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: #151515;
+}
+
+.CheckIB {}
+
+.Number {
+    background-color: #302f2f;
+    font-size: 25px;
+    border-radius: 10px;
+}
+
+.NumAdd {
+    background: #302f2f;
+    color: white;
+    font-weight: 600;
+    border: 1px solid gold !important;
+}
+
+.cards {}
+
+.divS {
+    border-bottom: 1px solid goldenrod;
+}
+
+
+.centeredSX {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.centeredSXS {
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.Back {
+    width: 100px;
+    height: 40px;
+    margin: 20px;
+    background: #ADF1E7;
+    border-radius: 10px;
+}
+
+.Confirm {
+    width: 100px;
+    height: 40px;
+    margin: 20px;
+    background: linear-gradient(102.45deg, #F5EA45 28.52%, #DDA336 52.38%, #E7A725 72.31%);
+    border-radius: 10px;
+}
+
+.Back:hover {
+    width: 100px;
+    height: 40px;
+    margin: 20px;
+    background: #f0f7f6;
+    border-radius: 10px;
+}
+
+.Confirm:hover {
+    width: 100px;
+    height: 40px;
+    margin: 20px;
+    color: gold;
+    border: 1px solid gold;
+    background: none;
+    border-radius: 10px;
+}
