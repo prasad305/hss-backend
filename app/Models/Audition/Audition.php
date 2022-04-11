@@ -43,7 +43,7 @@ class Audition extends Model
     {
         return $this->hasMany(AssignJudge::class, 'audition_id', 'id');
     }
-    
+
     public function jury()
     {
         return $this->hasMany(AssignJury::class, 'audition_id', 'id');
