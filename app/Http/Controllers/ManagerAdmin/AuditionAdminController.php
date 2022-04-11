@@ -406,8 +406,13 @@ class AuditionAdminController extends Controller
         return view('managerAdmin.audition.admins');
     }
 
-    public function auditionJuries(){
-        return view('managerAdmin.audition.juries');
+
+    public function adminAssign(){
+        return view('managerAdmin.audition.adminAssign');
+    }
+
+    public function adminAssignSubmit(){
+        return view('managerAdmin.audition.adminAssignSubmit');
     }
 }
 
