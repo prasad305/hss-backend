@@ -7,12 +7,19 @@
     background-color: #151515;
 }
 
-.CheckIB {}
+.CheckIB {
+    background-color: #DDA336 !important;
+    color: #151515 !important;
+}
 
 .Number {
     background-color: #302f2f;
-    font-size: 25px;
+    font-size: 35px;
     border-radius: 10px;
+    color: white;
+    width: 70px;
+    font-weight: 6000;
+    border: none !important;
 }
 
 .NumAdd {
@@ -31,7 +38,7 @@
 
 .centeredSX {
     position: absolute;
-    top: 60%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
