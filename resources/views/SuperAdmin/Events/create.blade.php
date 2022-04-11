@@ -76,7 +76,11 @@ Super Admin
 
                     <div class=" border-warning mx-5 mt-3 mb-3">
                         <div class="centeredSX">
-                            <button class="minus" onclick="decrement()">-</button> <b class="bg-gray p-3 mx-3" id="root">01</b> <button class="plus" onclick="increment()">+</button>
+                            <button class="minus NumAdd" onclick="decrement()">-</button> <b class="text-warning Number p-3 mx-3" id="root">01</b> <button class=" NumAdd plus" onclick="increment()">+</button>
+                        </div>
+                        <div class="centeredSXS text-center">
+                            <b class="text-danger">#Note:</b><br>
+                            <small>You can’t create more than 6 rounds</small>
                         </div>
                     </div>
                 </div>
@@ -176,6 +180,12 @@ Super Admin
     .CheckIB{
 
     }
+    .Number{
+        background-color: #302f2f;
+    }
+    .NumAdd{
+        background:
+    }
 
     .cards{
 
@@ -189,6 +199,12 @@ Super Admin
     .centeredSX {
   position: absolute;
   top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.centeredSXS {
+  position: absolute;
+  top: 85%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
