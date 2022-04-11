@@ -491,8 +491,8 @@ class AuditionController extends Controller
     public function getJuryMarkingVideos($jury_id)
     {
         $marking_videos = AuditionMark::where('jury_id', $jury_id)->count();
-        $passed_videos = AuditionMark::where([['jury_id', $jury_id], ['marks', '!=', null], ['participant_status', 1]])->count();
-        $failed_videos = AuditionMark::where([['jury_id', $jury_id], ['marks', null], ['participant_status', 0]])->count();
+        $passed_videos = AuditionMark::where([['jury_id', $jury_id], ['participant_status', 1]])->count();
+        $failed_videos = AuditionMark::where([['jury_id', $jury_id], ['participant_status', 0]])->count();
 
         return response()->json([
             'status' => 200,
@@ -504,10 +504,21 @@ class AuditionController extends Controller
 
     public function selectedTop(Request $request)
     {
-        AuditionMark::where('marks', '!=', null)->orderBy('marks', 'desc')->take($request->selected_top)->update([
-            'selected_status' => 1,
-            'message' => $request->message,
-        ]);
+        // return $request->all();
+
+        if ($request->mark_wise != null && $request->mark_wise == 'mark') {
+            AuditionMark::where('audition_id',$request->audition_id)->where('marks','>=',$request->selected_top)->where('participant_status',1)->update([
+                    'selected_status' => 1,
+                    'message' => $request->message,
+                ]);
+        }
+
+        if ($request->number_wise != null && $request->number_wise == 'number') {
+            AuditionMark::where('audition_id',$request->audition_id)->where('participant_status',1)->take($request->selected_top)->update([
+                    'selected_status' => 1,
+                    'message' => $request->message,
+                ]);
+        }
         return response()->json([
             'status' => 200,
             'message' => 'Selected Top Videos and Message Send Successfully',
