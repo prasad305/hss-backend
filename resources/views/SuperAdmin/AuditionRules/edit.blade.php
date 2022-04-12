@@ -10,12 +10,12 @@ Super Admin
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Events</h1>
+                <h1 class="m-0">Update Audition Rules</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Create New Audition</li>
+                    <li class="breadcrumb-item active">Update New Audition Rules</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -32,7 +32,7 @@ Super Admin
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Create Music Audition</h3>
+                {{-- <h3 class="card-title">Create New Audition Rules</h3> --}}
                 {{-- <a class="btn btn-success btn-sm" style="float: right;"
                         onclick="Show('New Audition','{{ route('superAdmin.events.create') }}')"><i
                     class=" fa fa-plus"></i>&nbsp;New Audition</a> --}}
@@ -43,44 +43,59 @@ Super Admin
                 <div class=" WidhtEvent pys-3">
                     <div class="divS mt-3">
                         <center>
-                            <img src="{{ asset('assets/super-admin/images/Category.png') }}" class="mb-1" width="35" height="35"
-                                alt="">
+                            <img src="{{ asset('assets/super-admin/images/Category.png') }}" class="mb-1" width="35"
+                                height="35" alt="">
                             <p><b class="fw-bold pt-4" style="color:#F8EE00;font-size: 20px;">Select Category</b></p>
                         </center>
                     </div>
 
                     <div class=" border-warning mx-5 mt-3 mb-5">
-                        <input type="checkbox" class="CheckIB" id="vehicle1" name="vehicle1" value="Bike">
-                        <label class="mx-3 text-warning VXS" for="vehicle1"> Sports</label><br>
-                        <input type="checkbox" class="CheckIB" id="vehicle1" name="vehicle1" value="Bike">
-                        <label class="mx-3 text-warning VXS" for="vehicle1">Music</label><br>
-                        <input type="checkbox" class="CheckIB" id="vehicle2" name="vehicle2" value="Car">
-                        <label class="mx-3 text-warning VXS" for="vehicle2"> Film</label><br>
-                        <input type="checkbox" class="CheckIB" id="vehicle3" name="vehicle3" value="Boat">
-                        <label class="mx-3 text-warning VXS" for="vehicle3">Dance</label><br>
-                        <input type="checkbox" class="CheckIB" id="vehicle1" name="vehicle1" value="Bike">
-                        <label class="mx-3 text-warning VXS" for="vehicle1">Teaching</label><br>
-                        <input type="checkbox" class="CheckIB" id="vehicle2" name="vehicle2" value="Car">
-                        <label class="mx-3 text-warning VXS" for="vehicle2"> Comedy</label><br>
-                        <input type="checkbox" class="CheckIB" id="vehicle3" name="vehicle3" value="Boat">
-                        <label class="mx-3 text-warning VXS " for="vehicle3">Drama</label>
+                        <div class="custom-control custom-checkbox mt-2">
+                            <input id="checked" class="custom-control-input" type="checkbox" />
+                            <label for="checked" class="custom-control-label fontLA">Sports</label>
+                        </div>
+                        <div class="custom-control custom-checkbox mt-2">
+                            <input id="checked1" class="custom-control-input" type="checkbox" />
+                            <label for="checked1" class="custom-control-label fontLA">Music</label>
+                        </div>
+                        <div class="custom-control custom-checkbox mt-2">
+                            <input id="checked2" class="custom-control-input" type="checkbox" />
+                            <label for="checked2" class="custom-control-label fontLA">Film</label>
+                        </div>
+                        <div class="custom-control custom-checkbox mt-2">
+                            <input id="checked3" class="custom-control-input" type="checkbox" />
+                            <label for="checked3" class="custom-control-label fontLA">Dance</label>
+                        </div>
+                        <div class="custom-control custom-checkbox mt-2">
+                            <input id="checked4" class="custom-control-input" type="checkbox" />
+                            <label for="checked4" class="custom-control-label fontLA">Teaching</label>
+                        </div>
+                        <div class="custom-control custom-checkbox mt-2">
+                            <input id="checked5" class="custom-control-input" type="checkbox" />
+                            <label for="checked5" class="custom-control-label fontLA">Comedy</label>
+                        </div>
+                        <div class="custom-control custom-checkbox mt-2">
+                            <input id="checked6" class="custom-control-input" type="checkbox" />
+                            <label for="checked6" class="custom-control-label fontLA">Drama</label>
+                        </div>
 
                     </div>
                 </div>
 
                 <div class=" WidhtEvent " style="position: relative">
-                    <div class="divS mt-3">
+                    <div class="divS mt-2">
                         <center>
-                            <img src="{{ asset('assets/super-admin/images/select.png') }}" class="mb-1"  width="35" height="35"
-                                alt="">
+                            <img src="{{ asset('assets/super-admin/images/select.png') }}" class="mb-1" width="35"
+                                height="35" alt="">
                             <p><b class="fw-bold pt-4" style="color:#F8EE00;font-size: 20px;">Select Rounds</b></p>
                         </center>
                     </div>
 
-                    <div class=" border-warning mx-5 mt-3 mb-3">
+                    <div class=" border-warning mx-5 mt-2 mb-3">
                         <div class="centeredSX">
                             <button data-decrease class="minus NumAdd">-</button>
-                            <input data-value class="Number text-center fw-bold p-3 mx-2 " type="text" value="0" disabled />
+                            <input data-value class="Number text-center fw-bold p-3 mx-2 " type="text" value="0"
+                                disabled />
                             <button class="minus NumAdd" data-increase>+</button>
                         </div>
 
@@ -92,17 +107,18 @@ Super Admin
                 </div>
 
                 <div class=" WidhtEvent " style="position: relative">
-                    <div class="divS mt-3">
+                    <div class="divS mt-2">
                         <center>
-                            <img src="{{ asset('assets/super-admin/images/star.png') }}" class="mb-1"  width="35" height="35" alt="">
+                            <img src="{{ asset('assets/super-admin/images/star.png') }}" class="mb-1" width="35"
+                                height="35" alt="">
                             <p><b class="fw-bold pt-4" style="color:#F8EE00;font-size: 20px;">Select SuperStar</b></p>
                         </center>
                     </div>
 
-                    <div class=" border-warning mx-5 mt-3 mb-3">
+                    <div class=" border-warning mx-5 mt-2 mb-3">
                         <div class="centeredSX">
                             <button data-decrease class="minus NumAdd">-</button>
-                            <input data-value class="Number text-center fw-bold  p-3 mx-2 " type="text" value="0"  />
+                            <input data-value class="Number text-center fw-bold  p-3 mx-2 " type="text" value="0" />
                             <button class="minus NumAdd" data-increase>+</button>
                         </div>
                         <div class="centeredSXS text-center">
@@ -113,17 +129,18 @@ Super Admin
                 </div>
 
                 <div class=" WidhtEvent " style="position: relative">
-                    <div class="divS mt-3">
+                    <div class="divS mt-2">
                         <center>
-                            <img src="{{ asset('assets/super-admin/images/jury.png') }}" class="mb-1"  width="35" height="35" alt="">
+                            <img src="{{ asset('assets/super-admin/images/jury.png') }}" class="mb-1" width="35"
+                                height="35" alt="">
                             <p><b class="fw-bold pt-4" style="color:#F8EE00;font-size: 20px;">Select Jurys</b></p>
                         </center>
                     </div>
 
-                    <div class=" border-warning mx-5 mt-3 mb-3">
+                    <div class=" border-warning mx-5 mt-2 mb-3">
                         <div class="centeredSX">
                             <button data-decrease class="minus NumAdd">-</button>
-                            <input data-value class="Number text-center fw-bold  p-3 mx-2 " type="text" value="0"  />
+                            <input data-value class="Number text-center fw-bold  p-3 mx-2 " type="text" value="0" />
                             <button class="minus NumAdd" data-increase>+</button>
                         </div>
                         <div class="centeredSXS text-center">
@@ -134,15 +151,16 @@ Super Admin
                 </div>
 
                 <div class=" WidhtEvent" style="position: relative">
-                    <div class="divS mt-3">
+                    <div class="divS mt-2">
                         <center>
-                            <img src="{{ asset('assets/super-admin/images/table.png') }}" class="mb-1"  width="35" height="35" alt="">
+                            <img src="{{ asset('assets/super-admin/images/table.png') }}" class="mb-1" width="35"
+                                height="35" alt="">
                             <p><b class="fw-bold pt-4" style="color:#F8EE00;font-size: 20px;">Select Time</b></p>
                         </center>
                     </div>
                     <center><small>Select Time : </small></center>
 
-                    <div class=" border-warning mx-5 mt-3 mb-3">
+                    <div class=" border-warning mx-5 mt-5 mb-3">
 
                         <div class="sds">
                             <div class="row justify-content-around mb-2">
@@ -166,10 +184,6 @@ Super Admin
                                 <button class="d-flex ms-2 NumAdd" onclick="decrement4()">-</button>
                             </div>
                         </div>
-                        <div class="centeredSXS text-center">
-                            <b class="text-danger">#Note:</b><br>
-                            <small>You can’t create more than 8 jurys</small>
-                        </div>
 
                     </div>
 
@@ -181,7 +195,7 @@ Super Admin
                 <div class="Footerbtn">
                     {{-- <a href="{{ route('superAdmin.events.edit',1) }}"> <li class="breadcrumb-item active">Events
                         List</li></a> --}}
-                    <a href="{{ route('superAdmin.events.index') }}"><button class="btn Back">Back</button></a>
+                    <a href="{{ route('superAdmin.audition-rules.index') }}"><button class="btn Back">Back</button></a>
                     <button class="btn Confirm" data-toggle="modal" data-target="#exampleModalCenter">Confirm</button>
                 </div>
             </center>
@@ -191,8 +205,8 @@ Super Admin
 
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
-            <div class="modal-dialog modal-dialog-centered" role="document" >
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content" style="background: #151515;
                 border: 1px solid #FFD910;
                 box-sizing: border-box;
@@ -200,7 +214,7 @@ Super Admin
                     <center>
                         <img src="{{ asset('assets/super-admin/images/modal.png') }}" width="150" class="p-3" alt="">
                         <div>
-                            <h5 class="text-warning">Event Create</h5>
+                            <h5 class="text-warning">Event Update</h5>
                             <h4 class="text-warning"> <b> Succesfully Done!!</b></h4>
                         </div>
 

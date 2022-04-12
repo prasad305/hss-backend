@@ -14,11 +14,11 @@
 
 .Number {
     background-color: #302f2f;
-    font-size: 35px;
+    font-size: 40px;
     border-radius: 10px;
     color: white;
-    width: 70px;
-    font-weight: 6000;
+    width: 75px;
+    font-weight: 600;
     border: none !important;
 }
 
@@ -26,6 +26,7 @@
     background: #302f2f;
     color: white;
     font-weight: 600;
+    font-size: 20px;
     border: 1px solid gold !important;
 }
 
@@ -38,7 +39,7 @@
 
 .centeredSX {
     position: absolute;
-    top: 50%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -96,3 +97,53 @@
     font-size: 25px;
     border-radius: 10px;
 }
+
+
+
+/* /////////////? */
+
+.fontLA{
+    font-size: 18px;
+    font-weight: 150 !important;
+}
+.custom-control-label::before {
+  top: 0.1rem;
+  left: -1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: #fff;
+  border: 1px solid #FFD910;
+}
+
+
+.custom-control-label:hover.custom-control-label::before {
+    box-shadow: 0px 2px 5px rgba(201, 198, 0, 0.6);
+  }
+
+.custom-control-label::after {
+    top: .4rem;
+    left: -1.25rem;
+    width: 1rem;
+    height: 1rem;
+  }
+
+
+.custom-control-label {
+  margin-bottom: .5rem;
+  padding-left: 12px;
+}
+
+.custom-control-label:hover.custom-control-label::before {
+    box-shadow: 0px 2px 5px rgba(201, 198, 0, 0.6);
+  }
+
+
+.custom-control-label::after {
+  top: -.1rem;
+  left: -1.75rem;
+  width: 2rem;
+  height: 2rem;
+  }
+
+
+
