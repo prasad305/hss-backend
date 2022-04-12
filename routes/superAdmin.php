@@ -37,6 +37,8 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     //audtion
     Route::resource('audition', AuditionController::class);
+    Route::get('setMark/{id}', [AuditionController::class, 'setMark'])->name('audition.setMark');
+    Route::put('setMark/{id}', [AuditionController::class, 'setMarkUpdate'])->name('audition.setMarkUpdate');
 
     // Greeting Type
     Route::resource('greeting-type', GreetingController::class);
@@ -99,11 +101,9 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('jury/active/{id}', [JuryBoardController::class, 'activeNow'])->name('jury.activeNow');
     Route::post('jury/inactive/{id}', [JuryBoardController::class, 'inactiveNow'])->name('jury.inactiveNow');
 
-   // Adudition Admin Create by Monir
+    // Adudition Admin Create by Monir
 
-    Route::resource('auditionAdmin',AuditionAdminController::class);
+    Route::resource('auditionAdmin', AuditionAdminController::class);
     Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');
     Route::post('auditionAdmin/inactive/{id}', [AuditionAdminController::class, 'inactiveNow'])->name('auditionAdmin.inactiveNow');
-
-
 });

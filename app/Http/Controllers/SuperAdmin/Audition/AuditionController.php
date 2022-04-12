@@ -10,22 +10,22 @@ use Illuminate\Support\Str;
 
 class AuditionController extends Controller
 {
-    
+
     public function index()
     {
         $auditions = Audition::orderBy('id', 'DESC')->get();
-       
+
         return view('SuperAdmin.audition.index', compact('auditions'));
     }
 
- 
+
     public function create()
     {
         $categories = Category::orderBy('id', 'DESC')->get();
         return view('SuperAdmin.audition.create', compact('categories'));
     }
 
-    
+
     public function store(Request $request)
     {
         $request->validate([
@@ -53,15 +53,15 @@ class AuditionController extends Controller
             ]);
         }
     }
-  
 
-  
+
+
     public function show($id)
     {
         //
     }
 
-   
+
     public function edit($id)
     {
         $categories = Category::orderBy('id', 'DESC')->get();
@@ -69,7 +69,7 @@ class AuditionController extends Controller
         return view('SuperAdmin.audition.edit', compact('audition', 'categories'));
     }
 
-    
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -97,7 +97,41 @@ class AuditionController extends Controller
         }
     }
 
-   
+
+
+    public function setMark($id)
+    {
+        $audition = Audition::find($id);
+        return view('SuperAdmin.audition.setMark', compact('audition'));
+    }
+
+    public function setMarkUpdate(Request $request, $id)
+    {
+        $request->validate([
+            'setJuryMark' => 'required',
+            'setJudgeMark' => 'required',
+        ]);
+
+        $audition = Audition::find($id);
+
+        $audition->setJuryMark = $request->input('setJuryMark');
+        $audition->setJudgeMark = $request->input('setJudgeMark');
+
+        try {
+            $audition->save();
+            return response()->json([
+                'type' => 'success',
+                'message' => 'Audition Mark Set Successfully',
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+            ]);
+        }
+    }
+
+
     public function destroy($id)
     {
         $audition = Audition::findOrfail($id);
