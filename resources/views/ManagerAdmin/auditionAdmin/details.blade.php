@@ -193,6 +193,7 @@ Audition Admin
         </div>
 
     </div>
+</div>
 
     <style>
         .dark-mode .card {
