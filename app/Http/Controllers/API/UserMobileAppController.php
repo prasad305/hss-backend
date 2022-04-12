@@ -15,13 +15,12 @@ use App\Models\MeetupEventRegistration;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class UserMobileAppController extends Controller
 {
     public function eventRegister(Request $request){
         $user = User::find(auth('sanctum')->user()->id);
-        $eventId = $request->event_id;
+        $eventId = (string)$request->event_id;
         $modelName = $request->model_name;
 
         // New Activity Add For Activity
@@ -30,25 +29,25 @@ class UserMobileAppController extends Controller
         if( $modelName == 'MeetupEventRegistration'){
             $eventRegistration = new MeetupEventRegistration();
             $event = MeetupEvent::find($eventId);
-            $event->meetup_event_id = $eventId;
+            $eventRegistration->meetup_event_id = $eventId;
             $activity->type = 'meetup';
         }
         if( $modelName == 'LearningSessionRegistration'){
             $eventRegistration = new LearningSessionRegistration();
             $event = LearningSession::find($eventId);
-            $event->learning_session_id = $eventId;
+            $eventRegistration->learning_session_id = $eventId;
             $activity->type = 'learningSession';
         }
         if( $modelName == 'GreetingsRegistration'){
             $eventRegistration = new GreetingsRegistration();
             $event = Greeting::find($eventId);
-            $event->greeting_id = $eventId;
+            $eventRegistration->greeting_id = $eventId;
             $activity->type = 'greeting';
         }
         if( $modelName == 'AuditionParticipant'){
             $eventRegistration = new AuditionParticipant();
             $event = Audition::find($eventId);
-            $event->audition_id = $eventId;
+            $eventRegistration->audition_id = $eventId;
             $activity->type = 'audition';
         }
 
@@ -69,6 +68,7 @@ class UserMobileAppController extends Controller
             'status'=>200,
             'eventRegistration'=>$eventRegistration,
             'modelName'=>$modelName,
+            'eventId'=>$eventId,
             'message'=>'Success',
         ]);
     }
