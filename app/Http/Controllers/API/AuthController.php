@@ -8,6 +8,8 @@ use App\Models\AuditionParticipant;
 use App\Models\GreetingsRegistration;
 use App\Models\LearningSessionRegistration;
 use App\Models\MeetupEventRegistration;
+use App\Models\LiveChatRegistration;
+use App\Models\LiveChat;
 //use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -152,6 +154,9 @@ class AuthController extends Controller
             }
             if( $modelName == 'LearningSessionRegistration'){
                 $countValue  = LearningSessionRegistration::where('user_id',$user->id)->where('learning_session_id',$eventId)->count();
+            }
+            if( $modelName == 'LiveChatRegistration'){
+                $countValue  = LiveChatRegistration::where('user_id',$user->id)->where('live_chat_id',$eventId)->count();
             }
             if( $modelName == 'GreetingsRegistration'){
                 $countValue  = GreetingsRegistration::where('user_id',$user->id)->where('greeting_id',$eventId)->count();

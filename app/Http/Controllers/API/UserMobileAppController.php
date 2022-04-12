@@ -8,6 +8,8 @@ use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
+use App\Models\LiveChatRegistration;
+use App\Models\LiveChat;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
 use App\Models\MeetupEvent;
@@ -37,6 +39,12 @@ class UserMobileAppController extends Controller
             $event = LearningSession::find($eventId);
             $eventRegistration->learning_session_id = $eventId;
             $activity->type = 'learningSession';
+        }
+        if( $modelName == 'LiveChatRegistration'){
+            $eventRegistration = new LiveChatRegistration();
+            $event = LiveChat::find($eventId);
+            $eventRegistration->live_chat_id = $eventId;
+            $activity->type = 'liveChat';
         }
         if( $modelName == 'GreetingsRegistration'){
             $eventRegistration = new GreetingsRegistration();
