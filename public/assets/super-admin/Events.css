@@ -1,0 +1,170 @@
+.WidhtEvent {
+    width: 15vw;
+
+    border: 1px solid gold !important;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: #151515;
+}
+
+.CheckIB {
+    background-color: #DDA336 !important;
+    color: #151515 !important;
+}
+
+.Number {
+    background-color: #302f2f;
+    font-size: 29px;
+    border-radius: 10px;
+    color: white;
+    width: 60px;
+    font-weight: 600;
+    border: none !important;
+}
+
+.NumAdd {
+    background: #302f2f;
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+    border: 1px solid gold !important;
+}
+
+.cards {}
+
+.divS {
+    border-bottom: 1px solid goldenrod;
+}
+
+
+.centeredSX {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.centeredSXS {
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.centeredSX1{
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.Back {
+    width: 100px;
+    height: 40px;
+    margin: 20px;
+    background: #ADF1E7;
+    border-radius: 10px;
+}
+
+.Confirm {
+    width: 100px;
+    height: 40px;
+    margin: 20px;
+    background: linear-gradient(102.45deg, #F5EA45 28.52%, #DDA336 52.38%, #E7A725 72.31%);
+    border-radius: 10px;
+}
+
+.Back:hover {
+    width: 100px;
+    height: 40px;
+    margin: 20px;
+    background: #f0f7f6;
+    border-radius: 10px;
+}
+
+.Confirm:hover {
+    width: 100px;
+    height: 40px;
+    margin: 20px;
+    color: gold;
+    border: 1px solid gold;
+    background: none;
+    border-radius: 10px;
+}
+
+.selects{
+    background-color: #302f2f;
+    font-size: 25px;
+    border-radius: 10px;
+}
+
+
+@media screen and (max-width: 1400px) {
+    .WidhtEvent {
+        width: 12vw;
+
+        border: 1px solid gold !important;
+        justify-content: center;
+        border-radius: 10px;
+        background-color: #151515;
+    }
+
+    .Number {
+        background-color: #302f2f;
+        font-size: 25px;
+        border-radius: 10px;
+        color: white;
+        width: 40px !important;
+        font-weight: 600;
+        border: none !important;
+    }
+  }
+
+
+/* /////////////? */
+
+.fontLA{
+    font-size: 18px;
+    font-weight: 150 !important;
+}
+.custom-control-label::before {
+  top: 0.1rem;
+  left: -1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: #fff;
+  border: 1px solid #FFD910;
+}
+
+
+.custom-control-label:hover.custom-control-label::before {
+    box-shadow: 0px 2px 5px rgba(201, 198, 0, 0.6);
+  }
+
+.custom-control-label::after {
+    top: .4rem;
+    left: -1.25rem;
+    width: 1rem;
+    height: 1rem;
+  }
+
+
+.custom-control-label {
+  margin-bottom: .5rem;
+  padding-left: 12px;
+}
+
+.custom-control-label:hover.custom-control-label::before {
+    box-shadow: 0px 2px 5px rgba(201, 198, 0, 0.6);
+  }
+
+
+.custom-control-label::after {
+  top: -.1rem;
+  left: -1.75rem;
+  width: 2rem;
+  height: 2rem;
+  }
+
+
+

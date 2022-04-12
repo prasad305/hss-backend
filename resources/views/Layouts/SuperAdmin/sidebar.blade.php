@@ -43,8 +43,6 @@
             </a>
         </li>
 
-       
-
 
         <li class="nav-item">
             <a href="{{ route('superAdmin.audition.index') }}"
@@ -54,6 +52,51 @@
                     Audtion
                 </p>
             </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-bullhorn"></i>
+                <p>
+                    Audtion
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.audition-rules.index') }}"
+                    class="nav-link ">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Audition Rules</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href=""
+                    class="nav-link ">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Manager</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href=""
+                    class="nav-link ">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Admins</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="pages/charts/flot.html" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Jurys</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="pages/charts/flot.html" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Result</p>
+                    </a>
+                </li>
+            </ul>
         </li>
 
         <li class="nav-item">
@@ -91,7 +134,7 @@
                 class="nav-link {{ Request::routeIs('superAdmin.jury.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-television"></i>
                 <p>
-                   Jury
+                    Jury
                 </p>
             </a>
         </li>
@@ -152,11 +195,9 @@
             </a>
         </li>
 
-
         {{-- Gap For Future --}}
         <div style="height: 150px"></div>
         {{-- Gap For Future --}}
-
 
         <li class="nav-item">
             <a href="#" class="nav-link">
@@ -186,17 +227,6 @@
                 </li>
             </ul>
         </li>
-
-
-
-
-
-
-
-
-
-
-
 
         <li class="nav-item">
             <a href="#" class="nav-link">

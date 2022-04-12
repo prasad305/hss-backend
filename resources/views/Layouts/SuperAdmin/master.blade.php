@@ -21,12 +21,13 @@
   <link rel="stylesheet" href="{{ asset('assets/super-admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
     <!-- Custom style -->
   <link rel="stylesheet" href="{{ asset('assets/custom-style.css')}}">
+  <link rel="stylesheet" href="{{ asset('assets/super-admin/Events.css')}}">
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -317,6 +318,8 @@
 <script src="{{ asset('assets/super-admin/dist/js/pages/dashboard2.js')}}"></script>
 
 <script src="{{ asset('assets/helper.js')}}"></script>
+
+<script src="{{ asset('assets/super-admin/Events.js')}}"></script>
 
 
 <script>

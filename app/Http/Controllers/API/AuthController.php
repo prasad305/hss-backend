@@ -137,7 +137,7 @@ class AuthController extends Controller
     public function VerifyToRegisterEvent(Request $request)
     {
         $user = User::find(auth('sanctum')->user()->id);
-        $eventId = $request->event_id;
+        $eventId = (string)$request->event_id;
         $modelName = $request->model_name;
 
         if (!$user || !Hash::check($request->password, $user->password)) {
@@ -146,7 +146,7 @@ class AuthController extends Controller
                 'message' => 'Invalid Credantials',
             ]);
         } else {
-                // AuditionEventRegistration
+            // AuditionEventRegistration
             if( $modelName == 'MeetupEventRegistration'){
                 $countValue  = MeetupEventRegistration::where('user_id',$user->id)->where('meetup_event_id',$eventId)->count();
             }

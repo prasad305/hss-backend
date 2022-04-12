@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\SuperAdmin\AuditionAdminController;    
+use App\Http\Controllers\SuperAdmin\AuditionAdminController;
 use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\DashboardController;
 use App\Http\Controllers\SuperAdmin\ManagerAdminController;
 use App\Http\Controllers\SuperAdmin\AdminController;
+use App\Http\Controllers\SuperAdmin\AuditionRulesController;
 use App\Http\Controllers\SuperAdmin\SuperStarController;
 use App\Http\Controllers\SuperAdmin\JuryBoardController;
 use App\Http\Controllers\SuperAdmin\CategoryController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\SuperAdmin\CountryController;
 use App\Http\Controllers\SuperAdmin\StateController;
 use App\Http\Controllers\SuperAdmin\MarketplaceController;
 use App\Http\Controllers\SuperAdmin\CityController;
+use App\Http\Controllers\SuperAdmin\EventsController;
 use App\Http\Controllers\SuperAdmin\GreetingController;
 use App\Http\Controllers\SuperAdmin\InterestTypeController;
 use App\Http\Controllers\SuperAdmin\SubCategoryController;
@@ -30,6 +32,12 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // category
     Route::resource('category', CategoryController::class);
+
+    // Audition Rules
+    Route::resource('audition-rules', AuditionRulesController::class);
+
+    // Events
+    Route::resource('events', EventsController::class);
 
     //audtion
     Route::resource('audition', AuditionController::class);
@@ -95,11 +103,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('jury/active/{id}', [JuryBoardController::class, 'activeNow'])->name('jury.activeNow');
     Route::post('jury/inactive/{id}', [JuryBoardController::class, 'inactiveNow'])->name('jury.inactiveNow');
 
-   // Adudition Admin Create by Monir 
+   // Adudition Admin Create by Monir
 
     Route::resource('auditionAdmin',AuditionAdminController::class);
     Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');
     Route::post('auditionAdmin/inactive/{id}', [AuditionAdminController::class, 'inactiveNow'])->name('auditionAdmin.inactiveNow');
-   
+
 
 });
