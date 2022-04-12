@@ -38,6 +38,7 @@ Super Admin
                     class=" fa fa-plus"></i>&nbsp;New Audition</a> --}}
             </div>
             <!-- /.card-header -->
+
             <div class="card-body d-flex justify-content-between mx-2">
 
                 <div class=" WidhtEvent pys-3">
