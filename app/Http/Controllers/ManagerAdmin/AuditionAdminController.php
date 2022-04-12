@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -396,6 +397,17 @@ class AuditionAdminController extends Controller
         } else {
             $audition->status = 1;
             $audition->update();
+            $post =  Post::where('type','audition')->where('event_id',$audition->id)->first();
+            if (!isset($post)) {
+                Post::create([
+                    'type' => 'audition',
+                    'user_id' => '1',
+                    'event_id' => $audition->id,
+                    'title' => $audition->title,
+                    'details' => $audition->description,
+                    'status' => 1,
+                    ]);
+            }
         }
 
         return redirect()->back()->with('success', 'Published');
