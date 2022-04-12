@@ -60,14 +60,38 @@
             <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a href="{{ route('superAdmin.events.index') }}" class="nav-link ">
+
+                    <a href="{{ route('superAdmin.audition-rules.index') }}"
+                    class="nav-link ">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Events</p>
+                        <p>Audition Rules</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href=""
+                    class="nav-link ">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Manager</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href=""
+                    class="nav-link ">
+
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Admins</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="pages/charts/flot.html" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Jury</p>
+                        <p>Jurys</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="pages/charts/flot.html" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Result</p>
                     </a>
                 </li>
             </ul>
