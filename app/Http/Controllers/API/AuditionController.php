@@ -519,17 +519,17 @@ class AuditionController extends Controller
         // return $request->all();
 
         if ($request->mark_wise != null && $request->mark_wise == 'mark') {
-            AuditionMark::where('audition_id',$request->audition_id)->where('marks','>=',$request->selected_top)->where('participant_status',1)->update([
-                    'selected_status' => 1,
-                    'message' => $request->message,
-                ]);
+            AuditionMark::where('audition_id', $request->audition_id)->where('marks', '>=', $request->selected_top)->where('participant_status', 1)->update([
+                'selected_status' => 1,
+                'message' => $request->message,
+            ]);
         }
 
         if ($request->number_wise != null && $request->number_wise == 'number') {
-            AuditionMark::where('audition_id',$request->audition_id)->where('participant_status',1)->take($request->selected_top)->update([
-                    'selected_status' => 1,
-                    'message' => $request->message,
-                ]);
+            AuditionMark::where('audition_id', $request->audition_id)->where('participant_status', 1)->take($request->selected_top)->update([
+                'selected_status' => 1,
+                'message' => $request->message,
+            ]);
         }
         return response()->json([
             'status' => 200,
@@ -547,15 +547,15 @@ class AuditionController extends Controller
             'message' => 'Rejected Videos and Message Send Successfully',
         ]);
     }
+    public function participantList()
+    {
+        $participantList = AuditionParticipant::with(['auditions', 'user'])->orderBy('id', 'DESC')->get();
 
-    // public function juryTime($aud_id)
-    // {
-    //     $getTime = Audition::first($aud_id);
+        return response()->json([
 
-    //     return response()->json([
-    //         'status' => 200,
-    //         'getTime' => $getTime
+            'status' => 200,
+            'participantList' => $participantList
 
-    //     ]);
-    // }
+        ]);
+    }
 }

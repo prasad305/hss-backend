@@ -449,6 +449,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('audition-admin/jury-marking-videos/{jury_id}', [AuditionController::class, 'getJuryMarkingVideos']);
     Route::post('audition-admin/selected-top-videos', [AuditionController::class, 'selectedTop']);
     Route::post('audition-admin/rejected-videos-message', [AuditionController::class, 'rejectedMessage']);
+    Route::get('audition-admin/participant/list', [AuditionController::class, 'participantList']);
 });
 
 
@@ -541,4 +542,4 @@ Route::get('/live/allProduct', [AuctionController::class, 'allLiveProduct']);
 
 
 
-require __DIR__.'/userMobileAppApi.php';
+require __DIR__ . '/userMobileAppApi.php';
