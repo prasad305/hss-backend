@@ -397,7 +397,7 @@ class FanGroupController extends Controller
 
     public function getFanPostShow($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
-        // $id = Auth::user()->id;
+       
         
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->get();
         $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->get();
@@ -406,15 +406,26 @@ class FanGroupController extends Controller
             'status' => 200,
             'fanPost' => $fanPost,
             'fanMedia' => $fanMedia,
+            // 'useFanGroup' => $useFanGroup,
         ]);
     }
 
     public function getFanGroupList(){
         $fanList = FanGroup::where('status', 1)->latest()->get();
+        $id = Auth::user()->id;
+
+        $useFan = User::where('id', $id)->first();
+
+        $fanUser = json_decode($useFan->fan_group ? $useFan->fan_group : '[]');
+
+        $useFanGroup = FanGroup::select("*")
+                    ->whereIn('id', $fanUser)
+                    ->get();
 
         return response()->json([
             'status' => 200,
             'fanList' => $fanList,
+            'useFanGroup' => $useFanGroup,
         ]);
     }
 

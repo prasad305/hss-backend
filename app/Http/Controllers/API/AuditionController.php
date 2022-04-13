@@ -12,6 +12,7 @@ use App\Models\Audition\AssignJudge;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionMark;
 use App\Models\Audition\FilterVideo;
+use App\Models\JudgeMarks;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Expr\Assign;
@@ -514,9 +515,9 @@ class AuditionController extends Controller
         ]);
     }
 
-    public function getMarkWiseVideos($audition_id,$mark)
+    public function getMarkWiseVideos($audition_id, $mark)
     {
-        $marking_videos = AuditionMark::where('audition_id',$audition_id)->where('selected_status',1)->where('marks','>=',$mark)->count();
+        $marking_videos = AuditionMark::where('audition_id', $audition_id)->where('selected_status', 1)->where('marks', '>=', $mark)->count();
 
         return response()->json([
             'status' => 200,
@@ -568,6 +569,76 @@ class AuditionController extends Controller
             'status' => 200,
             'participantList' => $participantList
 
+        ]);
+    }
+
+
+    // Star Marking Auditions
+
+
+    public function getStarVideos($id)
+    {
+
+        $audition_videos =  AuditionParticipant::with('auditions')->where('audition_id', $id)->get();
+
+        $auditionInfo =  AuditionParticipant::with('auditions')->where('audition_id', $id)->first();
+
+        return response()->json([
+            'status' => 200,
+            'audition_videos' => $audition_videos,
+            'auditionInfo' => $auditionInfo,
+        ]);
+    }
+
+    public function StarMarking(Request $request)
+    {
+
+
+        $validator = Validator::make($request->all(), [
+            'participant_id' => 'required',
+            'audition_id' => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+
+
+            $audition =  Audition::find($request->audition_id);
+
+            if ($audition->setJudgeMark > $request->marks) {
+
+                $auditionMark = JudgeMarks::create([
+                    'video_id' => $request->participant_id,
+                    'audition_id' => $request->audition_id,
+                    'marks' => $request->marks,
+                    'judge_id' => Auth::user()->id,
+                    'comments' => $request->comments,
+                ]);
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Marking Successfully',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 202,
+                    'message' => $audition->setJudgeMark,
+                ]);
+            }
+        }
+    }
+    public function starMarkingDone($id)
+    {
+
+        $accepted_videos = JudgeMarks::with('auditionsParticipant')->where('audition_id', $id)->where('marks', '!=', null)->get();
+
+        return response()->json([
+            'status' => 200,
+            'accepted_videos' => $accepted_videos,
         ]);
     }
 }
