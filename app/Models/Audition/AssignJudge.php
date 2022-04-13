@@ -20,7 +20,7 @@ class AssignJudge extends Model
 
     public function auditions()
     {
-        return $this->belongsTo(Audition::class);
+        return $this->belongsTo(Audition::class, 'audition_id', 'id');
     }
     public function audition()
     {
