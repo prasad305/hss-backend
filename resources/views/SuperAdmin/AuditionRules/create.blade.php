@@ -94,7 +94,7 @@ Super Admin
                     <div class=" border-warning mx-5 mt-2 mb-3">
                         <div class="centeredSX">
                             <button data-decrease class="minus NumAdd">-</button>
-                            <input data-value class="Number text-center fw-bold p-3 mx-2 " type="text" value="0"
+                            <input data-value class="Number text-center fw-bold p-3 mx-2 " type="text" value="0" min="0"
                                 disabled />
                             <button class="minus NumAdd" data-increase>+</button>
                         </div>

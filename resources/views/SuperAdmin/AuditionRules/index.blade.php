@@ -43,7 +43,7 @@ Super Admin
                     <img src="{{ asset('assets/super-admin/images/CreateNewAuditionsrules.png') }}"
                         style="width: 60px; " class=" pt-4" alt="">
                 </center>
-                <button class="btn text-white border-warning Buths"> <a href=""
+                <button class="btn text-white border-warning Buths"> <a href="{{ route('superAdmin.audition-rules.create') }}"
                         class="" style="color:
                         #8CF9FF">Create New Audition Rules</a></button>
             </div>
