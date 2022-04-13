@@ -64,14 +64,14 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.audition-rules.index') }}"
+                    <a href=""
                     class="nav-link ">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Audition Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.audition-rules.create') }}"
+                    <a href="{{ route('superAdmin.audition-rules.index') }}"
                     class="nav-link ">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Audition Rules</p>
