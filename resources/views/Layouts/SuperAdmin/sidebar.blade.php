@@ -4,7 +4,8 @@
         <!-- Add icons to the links using the .nav-icon class
            with font-awesome or any other icon font library -->
         <li class="nav-item">
-            <a href="{{ route('superAdmin.dashboard') }}" class="nav-link {{ Request::routeIs('superAdmin.dashboard') ? 'active' : '' }} ">
+            <a href="{{ route('superAdmin.dashboard') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.dashboard') ? 'active' : '' }} ">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                     Dashboard
@@ -13,7 +14,8 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('superAdmin.category.index') }}" class="nav-link {{ Request::routeIs('superAdmin.category.index') ? 'active' : '' }}">
+            <a href="{{ route('superAdmin.category.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.category.index') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-edit"></i>
                 <p>
                     Category
@@ -22,7 +24,8 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('superAdmin.subCategory.index') }}" class="nav-link {{ Request::routeIs('superAdmin.subCategory.index') ? 'active' : '' }}">
+            <a href="{{ route('superAdmin.subCategory.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.subCategory.index') ? 'active' : '' }}">
                 <i class="nav-icon far fa-plus-square"></i>
                 <p>
                     Subcategory
@@ -31,7 +34,8 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('superAdmin.managerAdmin.index') }}" class="nav-link {{ Request::routeIs('superAdmin.managerAdmin.index') ? 'active' : '' }}">
+            <a href="{{ route('superAdmin.managerAdmin.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.managerAdmin.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-user"> </i>
                 <p>
                     Manager Admin
@@ -41,10 +45,11 @@
 
 
         <li class="nav-item">
-            <a href="{{ route('superAdmin.audition.index') }}" class="nav-link {{ Request::routeIs('superAdmin.audition.index') ? 'active' : '' }}">
+            <a href="{{ route('superAdmin.audition.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.audition.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-bullhorn"></i>
                 <p>
-                    Audition
+                    Audtion
                 </p>
             </a>
         </li>
@@ -53,14 +58,12 @@
             <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-bullhorn"></i>
                 <p>
-                    Audition
+                    Audtion
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="" class="nav-link ">
-
                     <a href="{{ route('superAdmin.audition-rules.index') }}"
                     class="nav-link ">
                         <i class="far fa-circle nav-icon"></i>
@@ -84,7 +87,6 @@
                 <li class="nav-item">
                     <a href=""
                     class="nav-link ">
-
                         <i class="far fa-circle nav-icon"></i>
                         <p>Admins</p>
                     </a>
@@ -105,7 +107,8 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('superAdmin.auditionAdmin.index') }}" class="nav-link {{ Request::routeIs('superAdmin.auditionAdmin.index') ? 'active' : '' }}">
+            <a href="{{ route('superAdmin.auditionAdmin.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.auditionAdmin.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-bullhorn"></i>
                 <p>
                     Audtion Admin
@@ -114,7 +117,8 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('superAdmin.admin.index') }}" class="nav-link {{ Request::routeIs('superAdmin.admin.index') ? 'active' : '' }}">
+            <a href="{{ route('superAdmin.admin.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.admin.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-users"></i>
                 <p>
                     Admin
@@ -123,7 +127,8 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('superAdmin.star.index') }}" class="nav-link {{ Request::routeIs('superAdmin.star.index') ? 'active' : '' }}">
+            <a href="{{ route('superAdmin.star.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.star.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-television"></i>
                 <p>
                     Super Star
@@ -132,7 +137,8 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('superAdmin.jury.index') }}" class="nav-link {{ Request::routeIs('superAdmin.jury.index') ? 'active' : '' }}">
+            <a href="{{ route('superAdmin.jury.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.jury.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-television"></i>
                 <p>
                     Jury
@@ -141,7 +147,8 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('superAdmin.greeting-type.index') }}" class="nav-link {{ Request::routeIs('superAdmin.greeting-type.index') ? 'active' : '' }}">
+            <a href="{{ route('superAdmin.greeting-type.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.greeting-type.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-video-camera"></i>
                 <p>
                     Greeting Type
@@ -150,7 +157,8 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('superAdmin.interest-type.index') }}" class="nav-link {{ Request::routeIs('superAdmin.interest-type.index') ? 'active' : '' }}">
+            <a href="{{ route('superAdmin.interest-type.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.interest-type.index') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                     Interest Type
