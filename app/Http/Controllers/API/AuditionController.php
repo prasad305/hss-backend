@@ -434,37 +434,46 @@ class AuditionController extends Controller
             ]);
         } else {
 
-            $auditionMark = AuditionMark::create([
+            $audition =  Audition::find($request->audition_id);
+            if ($audition->setJuryMark >= $request->marks) {
 
-                //'judge_id' => $request->judge_id,
-                'participant_id' => $request->participant_id,
-                'audition_id' => $request->audition_id,
-                'jury_id' => Auth::user()->id,
-                'comments' => $request->comments,
-                'status' => 1
+                $auditionMark = AuditionMark::create([
 
-            ]);
+                    //'judge_id' => $request->judge_id,
+                    'participant_id' => $request->participant_id,
+                    'audition_id' => $request->audition_id,
+                    'jury_id' => Auth::user()->id,
+                    'comments' => $request->comments,
+                    'status' => 1
 
-            if ($auditionMark) {
-                if ($request->selected == 1) {
-                    $auditionMark->participant_status = 1;
-                    $auditionMark->marks = $request->marks;
+                ]);
+
+                if ($auditionMark) {
+                    if ($request->selected == 1) {
+                        $auditionMark->participant_status = 1;
+                        $auditionMark->marks = $request->marks;
+                    }
+
+                    if ($request->rejected == 1) {
+                        $auditionMark->participant_status = 0;
+                    }
+                    $auditionMark->save();
+
+                    AuditionParticipant::find($request->participant_id)->update([
+                        'marks_id' => $auditionMark->id,
+                    ]);
                 }
 
-                if ($request->rejected == 1) {
-                    $auditionMark->participant_status = 0;
-                }
-                $auditionMark->save();
-
-                AuditionParticipant::find($request->participant_id)->update([
-                    'marks_id' => $auditionMark->id,
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Marking Successfully',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 202,
+                    'message' => $audition->setJuryMark,
                 ]);
             }
-
-            return response()->json([
-                'status' => 200,
-                'message' => 'Marking Successfully',
-            ]);
         }
     }
     public function markingDone()
@@ -579,7 +588,7 @@ class AuditionController extends Controller
     public function getStarVideos($id)
     {
 
-        $audition_videos =  AuditionParticipant::with('auditions')->where('audition_id', $id)->get();
+        $audition_videos =  AuditionParticipant::with('auditions')->doesntHave('judgeMark')->where('audition_id', $id)->get();
 
         $auditionInfo =  AuditionParticipant::with('auditions')->where('audition_id', $id)->first();
 
@@ -610,7 +619,7 @@ class AuditionController extends Controller
 
             $audition =  Audition::find($request->audition_id);
 
-            if ($audition->setJudgeMark > $request->marks) {
+            if ($audition->setJudgeMark >= $request->marks) {
 
                 $auditionMark = JudgeMarks::create([
                     'video_id' => $request->participant_id,
@@ -618,10 +627,11 @@ class AuditionController extends Controller
                     'marks' => $request->marks,
                     'judge_id' => Auth::user()->id,
                     'comments' => $request->comments,
+                    'selected_status' => $request->selected_status,
                 ]);
                 return response()->json([
                     'status' => 200,
-                    'message' => 'Marking Successfully',
+                    'message' => 'Marking Done! Select Next',
                 ]);
             } else {
                 return response()->json([
