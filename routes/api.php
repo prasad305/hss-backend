@@ -408,6 +408,10 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/audition/{id}', [AuditionController::class, 'starSingleAudition']);
     Route::put('/star/approved/audition/{id}', [AuditionController::class, 'starApprovedAudition']);
     Route::put('/star/decline/audition/{id}', [AuditionController::class, 'starDeclineAudition']);
+
+    Route::get('/star/selectVideo/{id}', [AuditionController::class, 'getStarVideos']);
+    Route::post('/star/starMarking', [AuditionController::class, 'starMarking']);
+    Route::get('/star/starMarkingDone/videos/{id}', [AuditionController::class, 'starMarkingDone']);
 });
 
 

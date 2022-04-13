@@ -2,6 +2,7 @@
 
 namespace App\Models\Audition;
 
+use App\Models\JudgeMarks;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -45,5 +46,10 @@ class AuditionParticipant extends Model
     public function mark()
     {
         return $this->hasMany(AuditionMark::class, 'participant_id');
+    }
+
+    public function judgeMark()
+    {
+        return $this->hasMany(JudgeMarks::class, 'video_id');
     }
 }
