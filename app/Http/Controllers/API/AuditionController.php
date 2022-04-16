@@ -408,6 +408,7 @@ class AuditionController extends Controller
     {
 
         $audition_videos =  AuditionParticipant::with(['auditions'])->where([['jury_id', Auth::user()->id], ['marks_id', null]])->get();
+
         $auditionInfo =  AuditionParticipant::with(['auditions'])->where([['jury_id', Auth::user()->id]])->first();
 
         return response()->json([
@@ -590,7 +591,7 @@ class AuditionController extends Controller
 
         $audition_videos =  AuditionParticipant::with('auditions')->doesntHave('judgeMark')->where('audition_id', $id)->get();
 
-        $auditionInfo =  AuditionParticipant::with('auditions')->where('audition_id', $id)->first();
+        $auditionInfo =  Audition::where('id', $id)->first();
 
         return response()->json([
             'status' => 200,
