@@ -399,8 +399,8 @@ class FanGroupController extends Controller
         $fanDetails = FanGroup::where('slug', $slug)->first();
         // $id = Auth::user()->id;
 
-        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->get();
-        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('post_image', '!=', Null)->get();
+        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->latest()->get();
+        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->get();
 
         return response()->json([
             'status' => 200,
@@ -665,7 +665,7 @@ class FanGroupController extends Controller
             $filename = 'uploads/images/fanpost/' . time() . '.' . $extension;
 
             Image::make($file)->resize(800, 300)->save($filename, 100);
-            $fanPost->post_image = $filename;
+            $fanPost->image = $filename;
         }
 
         // if ($request->hasfile('video')) {
