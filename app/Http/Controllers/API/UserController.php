@@ -199,7 +199,7 @@ class UserController extends Controller
         ]);
     }
 
-    
+
     public function getAllLiveChatEventByStar($id)
     {
         $livechats = LiveChat::where('star_id',$id)->orderBy('id', 'DESC')->get();
