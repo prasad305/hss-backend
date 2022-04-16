@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Audition\AuditionRules;
 use Illuminate\Http\Request;
 
 use function PHPUnit\Framework\returnSelf;
+use App\Models\Category;
+use Carbon\Carbon;
 
 class AuditionRulesController extends Controller
 {
@@ -26,7 +29,11 @@ class AuditionRulesController extends Controller
      */
     public function create()
     {
-        return view('SuperAdmin.AuditionRules.create');
+        // return $dateS = Carbon::now()->addMonth(5)->addDays(10);
+        $data = [
+            'categories' => Category::where('status',1)->orderBy('id', 'DESC')->get(),
+        ];
+        return view('SuperAdmin.AuditionRules.create',$data);
     }
 
     /**
@@ -37,7 +44,22 @@ class AuditionRulesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'category_id' => 'required',
+            'round_num' => 'required',
+            'judge_num' => 'required',
+            'jury_num' => 'required',
+            'month' => 'required',
+            'day' => 'required',
+        ]);
+
+      $audition_rules = new  AuditionRules();
+      $audition_rules->fill($request->all());
+      $audition_rules->save();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Rules Created Successfullly!',
+        ]);
     }
 
     /**
