@@ -5,6 +5,71 @@ Super Admin
 @endpush
 
 @section('content')
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<style>
+    .container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #dfa431;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
+ 	top: 9px;
+	left: 9px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
+</style>
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -37,6 +102,8 @@ Super Admin
                         onclick="Show('New Audition','{{ route('superAdmin.events.create') }}')"><i
                     class=" fa fa-plus"></i>&nbsp;New Audition</a> --}}
             </div>
+            <form id="create-form" >
+                @csrf
             <!-- /.card-header -->
             <div class="card-body d-flex justify-content-between mx-2">
 
@@ -50,35 +117,14 @@ Super Admin
                     </div>
 
                     <div class=" border-warning mx-5 mt-3 mb-5">
-                        <div class="custom-control custom-checkbox mt-2">
-                            <input id="checked" class="custom-control-input" type="checkbox" />
-                            <label for="checked" class="custom-control-label fontLA">Sports</label>
-                        </div>
-                        <div class="custom-control custom-checkbox mt-2">
-                            <input id="checked1" class="custom-control-input" type="checkbox" />
-                            <label for="checked1" class="custom-control-label fontLA">Music</label>
-                        </div>
-                        <div class="custom-control custom-checkbox mt-2">
-                            <input id="checked2" class="custom-control-input" type="checkbox" />
-                            <label for="checked2" class="custom-control-label fontLA">Film</label>
-                        </div>
-                        <div class="custom-control custom-checkbox mt-2">
-                            <input id="checked3" class="custom-control-input" type="checkbox" />
-                            <label for="checked3" class="custom-control-label fontLA">Dance</label>
-                        </div>
-                        <div class="custom-control custom-checkbox mt-2">
-                            <input id="checked4" class="custom-control-input" type="checkbox" />
-                            <label for="checked4" class="custom-control-label fontLA">Teaching</label>
-                        </div>
-                        <div class="custom-control custom-checkbox mt-2">
-                            <input id="checked5" class="custom-control-input" type="checkbox" />
-                            <label for="checked5" class="custom-control-label fontLA">Comedy</label>
-                        </div>
-                        <div class="custom-control custom-checkbox mt-2">
-                            <input id="checked6" class="custom-control-input" type="checkbox" />
-                            <label for="checked6" class="custom-control-label fontLA">Drama</label>
-                        </div>
-
+                        @if (isset($categories[0]))
+                            @foreach ($categories as $key => $category)
+                                <label class="container"><span style="color:#F8EE00">{{ $category->name }}</span>
+                                    <input type="radio" name="category_id" id="category_id" value="{{ $category->id }}"{{ $key == 0 ? 'checked' : '' }} onchange="resetAll()">
+                                    <span class="checkmark"></span>
+                                </label>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
 
@@ -93,10 +139,10 @@ Super Admin
 
                     <div class=" border-warning mx-5 mt-2 mb-3">
                         <div class="centeredSX">
-                            <button data-decrease class="minus NumAdd">-</button>
-                            <input data-value class="Number text-center fw-bold p-3 mx-2 " type="text" value="0"
+                            <span data-decrease class="minus NumAdd">-</span>
+                            <input data-value id="round" class="Number text-center fw-bold p-3 mx-2 " type="text" value="0" min="0"
                                 disabled />
-                            <button class="minus NumAdd" data-increase>+</button>
+                            <span class="minus NumAdd" data-increase>+</span>
                         </div>
 
                         <div class="centeredSXS text-center">
@@ -117,9 +163,9 @@ Super Admin
 
                     <div class=" border-warning mx-5 mt-2 mb-3">
                         <div class="centeredSX">
-                            <button data-decrease class="minus NumAdd">-</button>
-                            <input data-value class="Number text-center fw-bold  p-3 mx-2 " type="text" value="0" />
-                            <button class="minus NumAdd" data-increase>+</button>
+                            <span data-decrease class="minus NumAdd">-</span>
+                            <input data-value id="superstar" class="Number text-center fw-bold  p-3 mx-2 " type="text" value="0" />
+                            <span class="minus NumAdd" data-increase>+</span>
                         </div>
                         <div class="centeredSXS text-center">
                             <b class="text-danger">#Note:</b><br>
@@ -139,9 +185,9 @@ Super Admin
 
                     <div class=" border-warning mx-5 mt-2 mb-3">
                         <div class="centeredSX">
-                            <button data-decrease class="minus NumAdd">-</button>
-                            <input data-value class="Number text-center fw-bold  p-3 mx-2 " type="text" value="0" />
-                            <button class="minus NumAdd" data-increase>+</button>
+                            <span data-decrease class="minus NumAdd">-</span>
+                            <input data-value id="jury" class="Number text-center fw-bold  p-3 mx-2 " type="text" value="0" />
+                            <span class="minus NumAdd" data-increase>+</span>
                         </div>
                         <div class="centeredSXS text-center">
                             <b class="text-danger">#Note:</b><br>
@@ -164,8 +210,8 @@ Super Admin
 
                         <div class="sds">
                             <div class="row justify-content-around mb-2">
-                                <button class="d-flex ms-2 NumAdd" onclick="increment3()">+</button>
-                                <button class="d-flex ms-2 NumAdd" onclick="increment4()">+</button>
+                                <span class="d-flex ms-2 NumAdd" onclick="increment3()">+</span>
+                                <span class="d-flex ms-2 NumAdd" onclick="increment4()">+</span>
                             </div>
                             <div class="bg-dark card mb-2 py-1">
                                 <div class="row justify-content-around py-2">
@@ -180,8 +226,8 @@ Super Admin
                             </div>
 
                             <div class="row justify-content-around mt-2">
-                                <button class="d-flex ms-2 NumAdd" onclick="decrement3()">-</button>
-                                <button class="d-flex ms-2 NumAdd" onclick="decrement4()">-</button>
+                                <span class="d-flex ms-2 NumAdd" onclick="decrement3()">-</span>
+                                <span class="d-flex ms-2 NumAdd" onclick="decrement4()">-</span>
                             </div>
                         </div>
 
@@ -196,14 +242,17 @@ Super Admin
                     {{-- <a href="{{ route('superAdmin.events.edit',1) }}"> <li class="breadcrumb-item active">Events
                         List</li></a> --}}
                     <a href="{{ route('superAdmin.audition-rules.index') }}"><button class="btn Back">Back</button></a>
-                    <button class="btn Confirm" data-toggle="modal" data-target="#exampleModalCenter">Confirm</button>
+                    <button class="btn Confirm" id="submitAuditionRules" >Confirm</button>
+                    {{-- <button class="btn Confirm" data-toggle="modal" id="submitAuditionRules" data-target="#exampleModalCenter">Confirm</button> --}}
                 </div>
             </center>
+
+            </form>
         </div>
 
         <!-- Button trigger modal -->
 
-        <!-- Modal -->
+        {{-- <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -224,9 +273,85 @@ Super Admin
                     </center>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
     </div> <!-- container -->
 </div> <!-- content -->
 
+<script>
+    function resetAll() {
+       $("#round").val("0");
+       $("#superstar").val("0");
+       $("#jury").val("0");
+       $("#root3").text("0");
+       $("#root4").text("0");
+    }
+    $(document).on('click','#submitAuditionRules',function (event) {
+                event.preventDefault();
+                var form = $('#create-form')[0];
+
+                var category_id = $("#category_id").val();
+                var round_num = $("#round").val();
+                var judge_num = $("#superstar").val();
+                var jury_num = $("#jury").val();
+                var month = $("#root3").text();
+                var day = $("#root4").text();
+
+                // console.log('submitted data month: ',month+" day: "+day);
+                var formData = new FormData(form);
+                formData.append('category_id',category_id);
+                formData.append('round_num',round_num);
+                formData.append('judge_num',judge_num);
+                formData.append('jury_num',jury_num);
+                formData.append('month',month);
+                formData.append('day',day);
+
+                // Set header if need any otherwise remove setup part
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
+                    }
+                });
+                $.ajax({
+                    url: "{{route('superAdmin.audition-rules.store')}}",// your request url
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    success: function (data) {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: data.type,
+                            title: data.message,
+                            showConfirmButton: false,
+                            // timer: 1500
+                        })
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                        // console.log('success')
+                    },
+                    error: function (data) {
+                        var errorMessage = '<div class="card bg-danger">\n' +
+                                    '<div class="card-body text-center p-5">\n' +
+                                    '<span class="text-white">';
+                        $.each(data.responseJSON.errors, function(key, value) {
+                            errorMessage += ('' + value + '<br>');
+                        });
+                        errorMessage += '</span>\n' +
+                            '</div>\n' +
+                            '</div>';
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            footer: errorMessage
+                        });
+
+                        console.log(data);
+                    }
+                });
+        });
+
+  
+</script>
 @endsection

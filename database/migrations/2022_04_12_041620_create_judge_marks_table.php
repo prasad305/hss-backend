@@ -20,6 +20,7 @@ class CreateJudgeMarksTable extends Migration
             $table->unsignedBigInteger('video_id')->nullable();
             $table->integer('marks')->nullable();
             $table->string('comments')->nullable();
+            $table->boolean('selected_status')->nullable()->comment("0=Rejected,1=Selected");
             $table->timestamps();
         });
     }
