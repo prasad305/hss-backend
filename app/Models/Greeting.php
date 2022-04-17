@@ -28,4 +28,11 @@ class Greeting extends Model
         'star_approve_status',
         'status',
     ];
+
+    protected $with = ['star'];
+
+    public function star()
+    {
+        return $this->belongsTo(User::class, 'star_id');
+    }
 }
