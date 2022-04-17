@@ -54,6 +54,9 @@ Route::get('/user_info/{id}', [AuthController::class, 'user_data']);
 Route::post('/chatting/message', [UserController::class, 'message']);
 Route::get('/chatting/message/{id}', [UserController::class, 'get_message']);
 
+Route::post('/group/message', [UserController::class, 'group_message']);
+Route::get('/group/message/{id}', [UserController::class, 'get_group_message']);
+
 
 
 // Registered & Verified User Middleware

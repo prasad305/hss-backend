@@ -9,6 +9,7 @@ use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPayment;
 use App\Models\Bidding;
+use App\Models\FanGroupMessage;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
 use App\Models\LearningSession;
@@ -760,4 +761,30 @@ class UserController extends Controller
             'message' => $message,
         ]);
     }
+
+     //group message Controlling
+     public function group_message(Request $request)
+     {
+         $message = new FanGroupMessage();
+
+         $message->group_id = $request->group_id;
+         $message->sender_id = $request->sender_id;
+         $message->text = $request->text;
+         $message->save();
+
+         return response()->json([
+             'status' => 200,
+             'message' => $message,
+         ]);
+     }
+
+     public function get_group_message($id)
+     {
+         $message = FanGroupMessage::where('group_id',$id)->get();
+
+         return response()->json([
+             'status' => 200,
+             'message' => $message,
+         ]);
+     }
 }
