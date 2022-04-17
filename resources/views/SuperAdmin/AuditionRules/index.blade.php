@@ -71,19 +71,19 @@ Super Admin
                     </thead>
                     <tbody>
 
-                        {{-- @foreach ($auditions as $audition) --}}
+                        @foreach ($rules as $rule)
                         <tr>
-                            <td>Music Audition</td>
-                            <td> Round 1 </td>
-                            <td>Super Star 3</td>
-                            <td>Jury 2</td>
-                            <td>Time: 2 Month 10 Days</td>
+                            <td>{{ $rule->category ? $rule->category->name : '' }}  Audition</td>
+                            <td> Rounds Number {{ $rule->round_num }} </td>
+                            <td>Super Star {{ $rule->judge_num }}</td>
+                            <td>Jury {{ $rule->jury_num }}</td>
+                            <td>Time: {{ $rule->month }} Month {{ $rule->day }} Days</td>
                             <td style="width: 150px">
-                                <a href="{{ route('superAdmin.audition-rules.edit',1) }}" class="btn btn-sm btn-info"><i class="fa fa-edit text-white"></i></a>
+                                <a href="{{ route('superAdmin.audition-rules.edit',$rule->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit text-white"></i></a>
                                 <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </button>
                             </td>
                         </tr>
-                        {{-- @endforeach --}}
+                        @endforeach
                     </tbody>
                 </table>
             </div>
