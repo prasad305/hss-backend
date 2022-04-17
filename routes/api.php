@@ -16,6 +16,7 @@ use App\Http\Controllers\API\SimplePostController;
 use App\Http\Controllers\API\FanGroupController;
 use App\Http\Controllers\API\LearningSessionController;
 use App\Http\Controllers\API\AuditionController;
+use App\Http\Controllers\API\PromoVideoController;
 use App\Http\Controllers\SuperAdmin\Audition\AuditionController as AuditionAuditionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -296,6 +297,12 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/audition/pendings', [AuditionController::class, 'starAdminPendingAudition']);
     Route::get('/admin/audition/live', [AuditionController::class, 'starAdminLiveAudition']);
     Route::get('/admin/audition/details/{id}', [AuditionController::class, 'starAdminDetailsAudition']);
+
+    // Promo Videos
+    Route::post('/admin/promoVideo/store', [PromoVideoController::class, 'videoStore']);
+    Route::get('/admin/promoVideo/pending', [PromoVideoController::class, 'pendingVideos']);
+    Route::get('/admin/promoVideo/live', [PromoVideoController::class, 'liveVideos']);
+    Route::get('/admin/promoVideo/count', [PromoVideoController::class, 'promoVideoCount']);
 });
 
 
@@ -415,6 +422,12 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/selectVideo/{id}', [AuditionController::class, 'getStarVideos']);
     Route::post('/star/starMarking', [AuditionController::class, 'starMarking']);
     Route::get('/star/starMarkingDone/videos/{id}', [AuditionController::class, 'starMarkingDone']);
+
+    // Promo Vidoes
+    Route::post('/star/promoVideo/store', [PromoVideoController::class, 'starPromovideoStore']);
+    Route::get('/star/promoVideo/pending', [PromoVideoController::class, 'starPromopendingVideos']);
+    Route::get('/star/promoVideo/live', [PromoVideoController::class, 'starPromoliveVideos']);
+    Route::get('/star/promoVideo/count', [PromoVideoController::class, 'starPromoVideoCount']);
 });
 
 
