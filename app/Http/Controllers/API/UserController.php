@@ -634,19 +634,31 @@ class UserController extends Controller
     }
     public function participantRegister(Request $request)
     {
+
         $user = User::find(auth()->user()->id);
+
         if (Hash::check($request->password, $user->password)) {
-            $participant = AuditionParticipant::create([
 
-                'audition_id' => $request->audition_id,
-                'user_id' => $user->id,
-                'accept_status' => 0,
-            ]);
-            return response()->json([
 
-                'status' => 200,
-                'data' => $participant,
-            ]);
+            if (AuditionParticipant::where('user_id', $user->id)->exists()) {
+                return response()->json([
+                    'status' => 201,
+                    'message' => 'User already Registered'
+                ]);
+            } else {
+
+                $participant = AuditionParticipant::create([
+
+                    'audition_id' => $request->audition_id,
+                    'user_id' => $user->id,
+                    'accept_status' => 0,
+                ]);
+                return response()->json([
+
+                    'status' => 200,
+                    'data' => $participant,
+                ]);
+            }
         } else {
             return response()->json([
                 'status' => 201,
@@ -680,7 +692,7 @@ class UserController extends Controller
 
 
 
-        if ($request->hasFile('video_url')) {
+        if ($request->hasFile('video_url') && $audition->video_url == null) {
 
 
             $file        = $request->file('video_url');
@@ -701,7 +713,7 @@ class UserController extends Controller
     public function videoDetails($id)
     {
         $participateAudition = Audition::with(['judge.user', 'participant' => function ($query) {
-            return $query->whereNotIn('user_id', [auth()->user()->id])->get();
+            return $query->whereNotIn('user_id', [auth()->user()->id])->whereNotNull('video_url')->get();
         }])->where('id', $id)->get();
 
         $ownVideo = AuditionParticipant::where('user_id', Auth::user()->id)->where('audition_id', $id)->first();
