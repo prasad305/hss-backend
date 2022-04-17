@@ -17,6 +17,7 @@ use App\Models\MeetupEventRegistration;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class UserMobileAppController extends Controller
 {
@@ -106,5 +107,34 @@ class UserMobileAppController extends Controller
             'greeting_registration' => $greetingsRegistration,
             'greeting' => $greeting,
         ]);
+    }
+
+    public function userInformationUpdate(Request $request){
+
+        $user = User::find(auth('sanctum')->user()->id);
+        
+        if($request->img['data']){
+
+            $originalExtension = str_ireplace("image/","",$request->img['type']);
+            $folder_path       = 'uploads/images/users/';
+            $image_new_name    = Str::random(20).'-'.now()->timestamp.'.'.$originalExtension;
+            $decodedBase64 = $request->img['data'];
+        }
+
+        try {
+            Image::make($decodedBase64)->save($folder_path.$image_new_name);
+            $user->image = $folder_path.$image_new_name;
+            $user->save();
+            return response()->json([
+                "message"=>"Profile image updated ",
+                "status"=>"1",
+            ]);
+        } catch (\Exception $exception) {   
+            return response()->json([
+                "message"=>$exception->getMessage(),
+                "status"=>"0",
+            ]);
+        }
+        
     }
 }
