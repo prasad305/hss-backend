@@ -342,7 +342,8 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'message' => "Your request time is pending,Wating for approval",
-            'greeting' => $single_greeting
+            'greeting' => $single_greeting,
+            'greeting_registration' => $greetings,
         ]);
     }
     /**
