@@ -36,8 +36,8 @@ function valueChange() {
 
 var data3 = 0;
 var data4 = 0;
-document.getElementById("root3").innerText = data3;
-document.getElementById("root4").innerText = data4;
+// document.getElementById("root3").innerText = data3;
+// document.getElementById("root4").innerText = data4;
 
 function decrement3() {
     data3 = 0 <= data3 - 1 ? data3 - 1 : 0;

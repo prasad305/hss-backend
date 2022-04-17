@@ -21,7 +21,7 @@ class CreateAuditionRulesTable extends Migration
             $table->integer('jury_num');
             $table->integer('month');
             $table->integer('day');
-            $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
+            $table->integer('status')->default(1)->comment('0 = unactive, 1= active');
             $table->timestamps();
         });
     }
