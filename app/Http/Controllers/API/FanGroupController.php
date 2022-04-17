@@ -401,11 +401,13 @@ class FanGroupController extends Controller
 
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->latest()->get();
         $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->get();
+        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->get();
 
         return response()->json([
             'status' => 200,
             'fanPost' => $fanPost,
             'fanMedia' => $fanMedia,
+            'fanVideo' => $fanVideo,
             // 'useFanGroup' => $useFanGroup,
         ]);
     }
