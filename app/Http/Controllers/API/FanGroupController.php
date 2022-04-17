@@ -35,7 +35,7 @@ class FanGroupController extends Controller
     }
 
     public function fanGroupStore(Request $request){
-        $id = Auth::user()->id;
+        $id = auth('sanctum')->user()->id;
         $anotherStar =  $request->another_star;
 
         $adminId = User::find($anotherStar);
@@ -81,7 +81,7 @@ class FanGroupController extends Controller
         ]);
     }
     public function updateFanGroup(Request $request, $slug){
-        // $id = Auth::user()->id;
+        // $id = auth('sanctum')->user()->id;
         // $anotherStar =  $request->another_star;
 
         // $adminId = User::find($anotherStar);
@@ -167,7 +167,7 @@ class FanGroupController extends Controller
     }
 
     public function statusStar(){
-        $id = Auth::user()->id;
+        $id = auth('sanctum')->user()->id;
 
         // $starActive = FanGroup::where('my_star', $id)->orWhere('another_star', $id)->get();
 
@@ -236,7 +236,7 @@ class FanGroupController extends Controller
         ]);
     }
     public function statusAdminStar(){
-        $id = Auth::user()->id;
+        $id = auth('sanctum')->user()->id;
         // $user = FanGroup::where('created_by', $id);
         // another_star_admin_id
 
@@ -344,7 +344,7 @@ class FanGroupController extends Controller
     }
 
     public function fanGroupDetails($slug){
-        $id = Auth::user()->id;
+        $id = auth('sanctum')->user()->id;
         $starId = User::find($id);
 
         $fanDetails = FanGroup::where('slug', $slug)->first();
@@ -359,7 +359,7 @@ class FanGroupController extends Controller
 
     public function fanGroupActive($slug, $id){
         $fanDetails = FanGroup::where('slug', $slug)->first();
-        // $id = Auth::user()->id;
+        // $id = auth('sanctum')->user()->id;
 
         if($fanDetails->my_star == $id){
             $fanDetails->my_star_status = 1;
@@ -378,7 +378,7 @@ class FanGroupController extends Controller
 
     public function fanGroupIgnore($slug, $id){
         $fanDetails = FanGroup::where('slug', $slug)->first();
-        // $id = Auth::user()->id;
+        // $id = auth('sanctum')->user()->id;
 
         if($fanDetails->my_star == $id){
             $fanDetails->my_star_status = 2;
@@ -397,7 +397,7 @@ class FanGroupController extends Controller
 
     public function getFanPostShow($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
-        // $id = Auth::user()->id;
+        // $id = auth('sanctum')->user()->id;
 
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->latest()->get();
         $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->get();
@@ -414,7 +414,7 @@ class FanGroupController extends Controller
 
     public function getFanGroupList(){
         $fanList = FanGroup::where('status', 1)->latest()->get();
-        $id = Auth::user()->id;
+        $id = auth('sanctum')->user()->id;
 
         $useFan = User::where('id', $id)->first();
 
@@ -469,7 +469,7 @@ class FanGroupController extends Controller
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->get();
         $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->get();
 
-        $fanId = Auth::user()->id;
+        $fanId = auth('sanctum')->user()->id;
 
         // return $fanId;
 
@@ -521,7 +521,7 @@ class FanGroupController extends Controller
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->get();
         $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->get();
 
-        $id = Auth::user()->id;
+        $id = auth('sanctum')->user()->id;
         $my_star = User::find($id);
         $fanId = $my_star->	parent_user;
 
@@ -574,7 +574,7 @@ class FanGroupController extends Controller
     }
 
     public function getFanGroupStore(Request $request){
-        $id = Auth::user()->id;
+        $id = auth('sanctum')->user()->id;
 
         $fan_group_id = $request->fan_group_id;
 
@@ -637,7 +637,7 @@ class FanGroupController extends Controller
     }
 
     public function getFanPostStore(Request $request){
-        $id = Auth::user()->id;
+        $id = auth('sanctum')->user()->id;
 
         $slug = $request->slug;
         $fan_id = FanGroup::where('slug', $slug)->first();
@@ -712,7 +712,7 @@ class FanGroupController extends Controller
 
     public function getFanGroupJoinId($id){
 
-        $userId = Auth::user()->id;
+        $userId = auth('sanctum')->user()->id;
         $fanJoinDetails = Fan_Group_Join::where('fan_group_id', $id)->where('user_id', $userId)->first();
 
         return response()->json([
