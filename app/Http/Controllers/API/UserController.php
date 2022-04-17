@@ -203,7 +203,7 @@ class UserController extends Controller
 
     public function getAllLiveChatEventByStar($id)
     {
-        $livechats = LiveChat::where('star_id',$id)->orderBy('id', 'DESC')->get();
+        $livechats = LiveChat::where('star_id', $id)->orderBy('id', 'DESC')->get();
 
         return response()->json([
             'status' => 200,
@@ -213,7 +213,7 @@ class UserController extends Controller
     }
     public function getAllPostWithForSingleStar($star_id)
     {
-        $post = Post::where('user_id',$star_id)->latest()->get();
+        $post = Post::where('user_id', $star_id)->latest()->get();
 
         return response()->json([
             'status' => 200,
@@ -614,7 +614,8 @@ class UserController extends Controller
 
     public function getUpcomingAuditions()
     {
-        $upcomingAuditions = Audition::with('judge.user')->where('status', 1)->latest()->get();
+        $upcomingAuditions = Audition::orderBy('id', 'DESC')->with('judge.user')->where('status', 1)->latest()->get();
+
         return response()->json([
             'status' => 200,
             'upcomingAuditions' => $upcomingAuditions,
@@ -753,7 +754,7 @@ class UserController extends Controller
 
     public function get_message($id)
     {
-        $message = Message::where('conversation_id',1)->get();
+        $message = Message::where('conversation_id', 1)->get();
 
         return response()->json([
             'status' => 200,

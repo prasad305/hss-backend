@@ -120,7 +120,7 @@ Super Admin
                         @if (isset($categories[0]))
                             @foreach ($categories as $key => $category)
                                 <label class="container"><span style="color:#F8EE00">{{ $category->name }}</span>
-                                    <input type="radio" name="category_id" id="category_id" value="{{ $category->id }}"{{ $key == 0 ? 'checked' : '' }} onchange="resetAll()">
+                                    <input type="radio" name="category_id" id="category_id" value="{{ $category->id }}" {{ $key == 0 ? 'checked' : '' }} onchange="resetAll()">
                                     <span class="checkmark"></span>
                                 </label>
                             @endforeach
@@ -139,10 +139,10 @@ Super Admin
 
                     <div class=" border-warning mx-5 mt-2 mb-3">
                         <div class="centeredSX">
-                            <span data-decrease class="minus NumAdd">-</span>
+                            <span data-decrease class="minus btn btn-sm  NumAdd">-</span>
                             <input data-value id="round" class="Number text-center fw-bold p-3 mx-2 " type="text" value="0" min="0"
                                 disabled />
-                            <span class="minus NumAdd" data-increase>+</span>
+                            <span class="btn btn-sm minus NumAdd" data-increase>+</span>
                         </div>
 
                         <div class="centeredSXS text-center">
@@ -163,9 +163,9 @@ Super Admin
 
                     <div class=" border-warning mx-5 mt-2 mb-3">
                         <div class="centeredSX">
-                            <span data-decrease class="minus NumAdd">-</span>
+                            <span data-decrease class="btn btn-sm minus NumAdd">-</span>
                             <input data-value id="superstar" class="Number text-center fw-bold  p-3 mx-2 " type="text" value="0" />
-                            <span class="minus NumAdd" data-increase>+</span>
+                            <span class="btn btn-sm minus NumAdd" data-increase>+</span>
                         </div>
                         <div class="centeredSXS text-center">
                             <b class="text-danger">#Note:</b><br>
@@ -185,9 +185,9 @@ Super Admin
 
                     <div class=" border-warning mx-5 mt-2 mb-3">
                         <div class="centeredSX">
-                            <span data-decrease class="minus NumAdd">-</span>
+                            <span data-decrease class="btn btn-sm minus NumAdd">-</span>
                             <input data-value id="jury" class="Number text-center fw-bold  p-3 mx-2 " type="text" value="0" />
-                            <span class="minus NumAdd" data-increase>+</span>
+                            <span class="btn btn-sm minus NumAdd" data-increase>+</span>
                         </div>
                         <div class="centeredSXS text-center">
                             <b class="text-danger">#Note:</b><br>
@@ -210,8 +210,8 @@ Super Admin
 
                         <div class="sds">
                             <div class="row justify-content-around mb-2">
-                                <span class="d-flex ms-2 NumAdd" onclick="increment3()">+</span>
-                                <span class="d-flex ms-2 NumAdd" onclick="increment4()">+</span>
+                                <span class="btn btn-sm d-flex ms-2 NumAdd" onclick="increment3()">+</span>
+                                <span class="btn btn-sm d-flex ms-2 NumAdd" onclick="increment4()">+</span>
                             </div>
                             <div class="bg-dark card mb-2 py-1">
                                 <div class="row justify-content-around py-2">
@@ -226,8 +226,8 @@ Super Admin
                             </div>
 
                             <div class="row justify-content-around mt-2">
-                                <span class="d-flex ms-2 NumAdd" onclick="decrement3()">-</span>
-                                <span class="d-flex ms-2 NumAdd" onclick="decrement4()">-</span>
+                                <span class="btn btn-sm d-flex ms-2 NumAdd" onclick="decrement3()">-</span>
+                                <span class="btn btn-sm d-flex ms-2 NumAdd" onclick="decrement4()">-</span>
                             </div>
                         </div>
 
@@ -239,11 +239,8 @@ Super Admin
 
             <center>
                 <div class="Footerbtn">
-                    {{-- <a href="{{ route('superAdmin.events.edit',1) }}"> <li class="breadcrumb-item active">Events
-                        List</li></a> --}}
-                    <a href="{{ route('superAdmin.audition-rules.index') }}"><button class="btn Back">Back</button></a>
+                    <a href="{{ route('superAdmin.audition-rules.index') }}" class="btn Back">Back</a>
                     <button class="btn Confirm" id="submitAuditionRules" >Confirm</button>
-                    {{-- <button class="btn Confirm" data-toggle="modal" id="submitAuditionRules" data-target="#exampleModalCenter">Confirm</button> --}}
                 </div>
             </center>
 
@@ -280,11 +277,14 @@ Super Admin
 
 <script>
     function resetAll() {
+        alert('Resetting');
+    //    $("#category_id").val();
        $("#round").val("0");
        $("#superstar").val("0");
        $("#jury").val("0");
        $("#root3").text("0");
        $("#root4").text("0");
+       
     }
     $(document).on('click','#submitAuditionRules',function (event) {
                 event.preventDefault();
@@ -296,8 +296,9 @@ Super Admin
                 var jury_num = $("#jury").val();
                 var month = $("#root3").text();
                 var day = $("#root4").text();
+                console.log('Category_id',category_id);
+                
 
-                // console.log('submitted data month: ',month+" day: "+day);
                 var formData = new FormData(form);
                 formData.append('category_id',category_id);
                 formData.append('round_num',round_num);
@@ -307,49 +308,50 @@ Super Admin
                 formData.append('day',day);
 
                 // Set header if need any otherwise remove setup part
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
-                    }
-                });
-                $.ajax({
-                    url: "{{route('superAdmin.audition-rules.store')}}",// your request url
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    success: function (data) {
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: data.type,
-                            title: data.message,
-                            showConfirmButton: false,
-                            // timer: 1500
-                        })
-                        setTimeout(function() {
-                            location.reload();
-                        }, 1000);
-                        // console.log('success')
-                    },
-                    error: function (data) {
-                        var errorMessage = '<div class="card bg-danger">\n' +
-                                    '<div class="card-body text-center p-5">\n' +
-                                    '<span class="text-white">';
-                        $.each(data.responseJSON.errors, function(key, value) {
-                            errorMessage += ('' + value + '<br>');
-                        });
-                        errorMessage += '</span>\n' +
-                            '</div>\n' +
-                            '</div>';
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            footer: errorMessage
-                        });
+                // $.ajaxSetup({
+                //     headers: {
+                //         'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
+                //     }
+                // });
 
-                        console.log(data);
-                    }
-                });
+                // $.ajax({
+                //     url: "{{route('superAdmin.audition-rules.store')}}",// your request url
+                //     data: formData,
+                //     processData: false,
+                //     contentType: false,
+                //     type: 'POST',
+                //     success: function (data) {
+                //         Swal.fire({
+                //             position: 'top-end',
+                //             icon: data.type,
+                //             title: data.message,
+                //             showConfirmButton: false,
+                //             // timer: 1500
+                //         })
+                //         setTimeout(function() {
+                //             location.reload();
+                //         }, 1000);
+                //         // console.log('success')
+                //     },
+                //     error: function (data) {
+                //         var errorMessage = '<div class="card bg-danger">\n' +
+                //                     '<div class="card-body text-center p-5">\n' +
+                //                     '<span class="text-white">';
+                //         $.each(data.responseJSON.errors, function(key, value) {
+                //             errorMessage += ('' + value + '<br>');
+                //         });
+                //         errorMessage += '</span>\n' +
+                //             '</div>\n' +
+                //             '</div>';
+                //         Swal.fire({
+                //             icon: 'error',
+                //             title: 'Oops...',
+                //             footer: errorMessage
+                //         });
+
+                //         console.log(data);
+                //     }
+                // });
         });
 
   

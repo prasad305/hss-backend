@@ -26,6 +26,8 @@
     background: #302f2f;
     color: white;
     font-weight: 600;
+    /* padding: 9px;
+    cursor: pointer; */
     font-size: 20px;
     border: 1px solid gold !important;
 }

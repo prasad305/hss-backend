@@ -80,4 +80,31 @@ class UserMobileAppController extends Controller
             'message'=>'Success',
         ]);
     }
+
+    public function greetingStatus($star_id){
+        $greetingsRegistration = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
+
+        $greeting = Greeting::where([['star_id', $star_id], ['star_approve_status', '>', 0]])->first();
+
+        if (isset($greeting)) {
+            $is_this_star_have_greeting = true;
+        } else {
+            $is_this_star_have_greeting = false;
+        }
+
+
+        if (isset($greetingsRegistration)) {
+            $is_registered_already = true;
+        } else {
+            $is_registered_already = false;
+        }
+
+        return response()->json([
+            'status' => 200,
+            'is_registered_already' => $is_registered_already,
+            'is_this_star_have_greeting' => $is_this_star_have_greeting,
+            'greeting_registration' => $greetingsRegistration,
+            'greeting' => $greeting,
+        ]);
+    }
 }
