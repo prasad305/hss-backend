@@ -466,6 +466,10 @@ class FanGroupController extends Controller
 
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->get();
         $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->get();
+        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->get();
+        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->get();
+
+        $fanWarning = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('warning_count', '!=', 0)->get();
 
         $fanId = Auth::user()->id;
 
@@ -504,11 +508,54 @@ class FanGroupController extends Controller
             'status' => 200,
             'fanDetails' => $fanDetails,
             'fanMember' => $fanMember,
+            'fanMedia' => $fanMedia,
+            'fanVideo' => $fanVideo,
+            'fanWarning' => $fanWarning,
             'fanPost' => $fanPost,
             'allFanPost' => $allFanPost,
             'fanId' => $fanId,
             'userJoin' => $userJoin,
             'myStar' => $myStar,
+        ]);
+    }
+    public function deleteSettingsFan($id){
+
+        $fanWarning = Fan_Group_Join::find($id);
+
+       
+        $fanWarning->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Fan Group Deleted Successfully',
+        ]);
+    }
+    public function noWarningSettingsFan($id){
+
+        $fanWarning = Fan_Group_Join::find($id);
+
+       
+        $fanWarning->warning_count = 0;
+
+        $fanWarning->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Admin Removed Warning',
+        ]);
+    }
+    public function warningSettingsFan($id, $fanid){
+
+        $fanWarning = Fan_Group_Join::where('user_id', $id)->where('fan_group_id', $fanid)->first();
+
+       
+        $fanWarning->warning_count++;
+
+        $fanWarning->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Admin Removed Warning',
         ]);
     }
 
@@ -518,6 +565,11 @@ class FanGroupController extends Controller
 
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->get();
         $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->get();
+
+        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->get();
+        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->get();
+
+        $fanWarning = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('warning_count', '!=', 0)->get();
 
         $id = Auth::user()->id;
         $my_star = User::find($id);
@@ -562,7 +614,10 @@ class FanGroupController extends Controller
             'status' => 200,
             'fanDetails' => $fanDetails,
             'fanMember' => $fanMember,
+            'fanWarning' => $fanWarning,
             'fanPost' => $fanPost,
+            'fanMedia' => $fanMedia,
+            'fanVideo' => $fanVideo,
             'allFanPost' => $allFanPost,
             'fanId' => $fanId,
             'userJoin' => $userJoin,
@@ -706,6 +761,29 @@ class FanGroupController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Fan Group Post Successfully',
+        ]);
+    }
+
+    public function updateImageFanGroup(Request $request, $slug){
+
+        $fanImage = FanGroup::where('slug', $slug)->first();
+        
+
+        if ($request->hasfile('banner')) {
+
+            $file = $request->file('banner');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/fangroup/' . time() . '.' . $extension;
+
+            Image::make($file)->resize(800, 300)->save($filename, 100);
+            $fanImage->banner = $filename;
+        }
+
+        $fanImage->save();
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'Fan Group Image updated Successfully',
         ]);
     }
 
