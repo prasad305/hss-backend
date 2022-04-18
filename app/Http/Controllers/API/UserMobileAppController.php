@@ -18,8 +18,10 @@ use App\Models\User;
 use App\Models\UserInfo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
+
 
 class UserMobileAppController extends Controller
 {
@@ -111,7 +113,7 @@ class UserMobileAppController extends Controller
         ]);
     }
 
-    public function userInformationUpdate(Request $request){
+     public function userInformationUpdate(Request $request){
         $user = User::find(auth('sanctum')->user()->id);
         $userInfo = new UserInfo();
         

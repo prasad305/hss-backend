@@ -14,4 +14,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
             Route::get('greeting-status/{star_id}', [UserMobileAppController::class, 'greetingStatus']);
         });
     });
+
+    Route::post('mobile/userInformation_update', [UserMobileAppController::class, 'userInformationUpdate']);
 });
