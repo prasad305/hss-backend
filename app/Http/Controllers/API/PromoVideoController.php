@@ -8,6 +8,19 @@ use Illuminate\Http\Request;
 
 class PromoVideoController extends Controller
 {
+
+    public function adminAllPromoVideos()
+    {
+
+        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('admin_id', auth()->user()->id)->get();
+
+
+        return response()->json([
+            'status' => 200,
+            'promoVideos' => $promoVideos,
+        ]);
+    }
+
     public function videoStore(Request $request)
     {
         // return $request->all();
@@ -16,6 +29,7 @@ class PromoVideoController extends Controller
             'admin_id' => auth()->user()->id,
             'star_id' => $request->star_id,
             'title' => $request->title,
+            'star_approval' => 0,
         ]);
         if ($request->hasFile('video_url')) {
 
@@ -68,6 +82,18 @@ class PromoVideoController extends Controller
 
     // Star Portal
 
+    public function starPromovideoAll()
+    {
+
+        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('star_id', auth()->user()->id)->get();
+
+
+        return response()->json([
+            'status' => 200,
+            'promoVideos' => $promoVideos,
+        ]);
+    }
+
     public function starPromopendingVideos()
     {
 
@@ -100,6 +126,45 @@ class PromoVideoController extends Controller
             'status' => 200,
             'pendingTotal' => $pendingTotal,
             'liveTotal' => $liveTotal,
+        ]);
+    }
+
+    public function starVideosDetails($id)
+    {
+
+        $promoVideos = PromoVideo::findOrFail($id);
+
+        return response()->json([
+            'status' => 200,
+            'promoVideos' => $promoVideos,
+
+        ]);
+    }
+
+
+
+    public function starPromoVideoApproved($id)
+    {
+
+        $promoVideos = PromoVideo::where('id',$id)->update(['star_approval' => 1]);
+
+        return response()->json([
+            'status' => 200,
+            'promoVideos' => $promoVideos,
+            'message' => "Video Approved Done"
+
+        ]);
+    }
+    public function starPromoVideoDecline($id)
+    {
+
+        $promoVideos = PromoVideo::where('id',$id)->update(['star_approval' => 2]);
+
+        return response()->json([
+            'status' => 200,
+            'promoVideos' => $promoVideos,
+            'message' => "Video Decline Done"
+
         ]);
     }
 }
