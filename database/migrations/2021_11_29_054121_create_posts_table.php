@@ -18,6 +18,8 @@ class CreatePostsTable extends Migration
             $table->string('type')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('event_id')->nullable();
+            $table->integer('category_id')->default(0);
+            $table->integer('sub_category_id')->default(0);
             $table->integer('comment_number')->default(0);
             $table->integer('react_number')->default(0);
             $table->integer('share_number')->default(0);
