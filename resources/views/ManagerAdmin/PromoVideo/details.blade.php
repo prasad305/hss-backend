@@ -12,12 +12,12 @@ Manager Admin
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Live Chat Event</h1>
+                <h1 class="m-0">Promo Video</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Live Chat Event Details</li>
+                    <li class="breadcrumb-item active">Promo Video Details</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -31,13 +31,9 @@ Manager Admin
 
         <div class="row">
             <div class="col-md-6">
-                @if($post->image)
-                <img src="{{ asset($post->image) }}" style="width: 100%" />
-                @else
-                <iframe width="420" height="315" src="{{ $post->video }}">
-                </iframe>
-                @endif
-
+                <video width="800" controls>
+                    <source src="{{asset('http://localhost:8000/'.$promoVideo->video_url)}}" />
+                </video>
             </div>
         </div>
 
@@ -46,20 +42,7 @@ Manager Admin
 
             <div class="col-md-8 ">
                 <div class="row card p-5">
-                    <h3>{{ $post->title }}</h3>
-                    <p>
-                        {!! $post->description !!}
-                    </p>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 card py-3">
-                        Date
-                        <h4 class="text-warning">{{ \Carbon\Carbon::parse($post->date)->format('d F,Y')}}</h4>
-                    </div>
-                    <div class="col-md-6 card py-3">
-                        Time
-                        <h4 class="text-warning">{{ \Carbon\Carbon::parse($post->start_time)->format('h:i A')}} - {{ \Carbon\Carbon::parse($post->end_time)->format('h:i A')}}</h4>
-                    </div>
+                    <h3>{{ $promoVideo->title }}</h3>
                 </div>
             </div>
 
@@ -67,20 +50,20 @@ Manager Admin
                 <div class="card px-5 py-3">
                     <div class="row">
                         <div class="col-xs-6 content-center">
-                            <img src="{{ asset($post->star->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                            <img src="{{ asset($promoVideo->star->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                         </div>
                         <div class="col-xs-6">
                             Star
-                            <h3>{{ $post->star->first_name }} {{ $post->star->last_name }}</h3>
+                            <h3>{{ $promoVideo->star->first_name }} {{ $promoVideo->star->last_name }}</h3>
                         </div>
                     </div>
                     <div class="row py-3">
                         <div class="col-xs-6 content-center">
-                            <img src="{{ asset($post->admin->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                            <img src="{{ asset($promoVideo->admin->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                         </div>
                         <div class="col-xs-6">
                             Admin
-                            <h3>{{ $post->admin->first_name }} {{ $post->admin->last_name }}</h3>
+                            <h3>{{ $promoVideo->admin->first_name }} {{ $promoVideo->admin->last_name }}</h3>
                         </div>
                     </div>
                 </div>
@@ -90,12 +73,12 @@ Manager Admin
 
 
         <div class="container row">
-            @if($post->status != 1)
-            <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.simplePost.set_publish', [$post->id]) }}">Publish Now</a>
-            @elseif($post->status != 0)
-            <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.simplePost.set_publish', [$post->id]) }}">Remove From Publish</a>
+            @if($promoVideo->status != 1)
+            <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.promoVideo.set_publish', [$promoVideo->id]) }}">Publish Now</a>
+            @elseif($promoVideo->status != 0)
+            <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.promoVideo.set_publish', [$promoVideo->id]) }}">Remove From Publish</a>
             @endif
-            <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Post','{{ route('managerAdmin.simplePost.edit', $post->id) }}')">Edit</a>
+            <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Post','{{ route('managerAdmin.promoVideo.edit', $promoVideo->id) }}')">Edit</a>
         </div>
 
 

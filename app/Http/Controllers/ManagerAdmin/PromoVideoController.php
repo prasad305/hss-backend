@@ -32,8 +32,7 @@ class PromoVideoController extends Controller
 
     public function details($id)
     {
-        $promoVideo = PromoVideo::find($id);
-
+        $promoVideo = PromoVideo::with(['star', 'admin'])->find($id);
         return view('ManagerAdmin.PromoVideo.details', compact('promoVideo'));
     }
 
@@ -71,7 +70,7 @@ class PromoVideoController extends Controller
             if ($promoVideo) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Meetup Event Updated Successfully'
+                    'message' => 'Promo Video Updated'
                 ]);
             }
         } catch (\Exception $exception) {
