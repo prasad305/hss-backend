@@ -19,6 +19,7 @@ use App\Http\Controllers\SuperAdmin\CityController;
 use App\Http\Controllers\SuperAdmin\EventsController;
 use App\Http\Controllers\SuperAdmin\GreetingController;
 use App\Http\Controllers\SuperAdmin\InterestTypeController;
+use App\Http\Controllers\SuperAdmin\JurysAuditionController;
 use App\Http\Controllers\SuperAdmin\SubCategoryController;
 use App\Models\PaymentMethod;
 use App\Models\Slider;
@@ -48,8 +49,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // Audition Round Rules
     Route::resource('audition-round-rules', AuditionRoundRulesController::class);
 
-     // Audition Round Rules
-     Route::resource('audition-admin', AdminAuditionController::class);
+    // Audition Round Rules
+    Route::resource('audition-admin', AdminAuditionController::class);
+
+    // Audition Round Rules
+    Route::resource('audition-jury', JurysAuditionController::class);
 
 
 
