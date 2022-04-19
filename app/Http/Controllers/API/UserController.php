@@ -25,6 +25,7 @@ use App\Models\SimplePost;
 use App\Models\ChoiceList;
 use App\Models\InterestType;
 use App\Models\Message;
+use App\Models\PromoVideo;
 use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
@@ -785,29 +786,39 @@ class UserController extends Controller
         ]);
     }
 
-     //group message Controlling
-     public function group_message(Request $request)
-     {
-         $message = new FanGroupMessage();
+    //group message Controlling
+    public function group_message(Request $request)
+    {
+        $message = new FanGroupMessage();
 
-         $message->group_id = $request->group_id;
-         $message->sender_id = $request->sender_id;
-         $message->text = $request->text;
-         $message->save();
+        $message->group_id = $request->group_id;
+        $message->sender_id = $request->sender_id;
+        $message->text = $request->text;
+        $message->save();
 
-         return response()->json([
-             'status' => 200,
-             'message' => $message,
-         ]);
-     }
+        return response()->json([
+            'status' => 200,
+            'message' => $message,
+        ]);
+    }
 
-     public function get_group_message($id)
-     {
-         $message = FanGroupMessage::where('group_id',$id)->get();
+    public function get_group_message($id)
+    {
+        $message = FanGroupMessage::where('group_id', $id)->get();
 
-         return response()->json([
-             'status' => 200,
-             'message' => $message,
-         ]);
-     }
+        return response()->json([
+            'status' => 200,
+            'message' => $message,
+        ]);
+    }
+
+    public function getPromoVideo()
+    {
+
+        $promoVideos = PromoVideo::select('video_url')->where('status', 1)->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'promoVideos' => $promoVideos,
+        ]);
+    }
 }

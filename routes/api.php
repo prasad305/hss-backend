@@ -169,6 +169,10 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/audition/participate/video/{id}', [UserController::class, 'videoDetails']);
     Route::get('/user/audition/enrolled', [UserController::class, 'enrolledAuditions']);
     Route::get('/user/pendingEnrollAudition', [UserController::class, 'enrolledAuditionsPending']);
+
+    // Promo Videos
+
+    Route::get('/user/PromoVideos', [UserController::class, 'getPromoVideo']);
 });
 
 
