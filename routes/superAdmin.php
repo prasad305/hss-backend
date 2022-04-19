@@ -5,6 +5,7 @@ use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\DashboardController;
 use App\Http\Controllers\SuperAdmin\ManagerAdminController;
 use App\Http\Controllers\SuperAdmin\AdminController;
+use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
 use App\Http\Controllers\SuperAdmin\AuditionRulesController;
 use App\Http\Controllers\SuperAdmin\SuperStarController;
 use App\Http\Controllers\SuperAdmin\JuryBoardController;
@@ -35,6 +36,15 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // Audition Rules
     Route::resource('audition-rules', AuditionRulesController::class);
+
+    // Audition Round Rules
+    Route::resource('audition-round-rules', AuditionRoundRulesController::class);
+
+
+
+
+
+
 
     // Events
     Route::resource('events', EventsController::class);
