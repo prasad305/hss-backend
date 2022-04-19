@@ -5,6 +5,7 @@ use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\DashboardController;
 use App\Http\Controllers\SuperAdmin\ManagerAdminController;
 use App\Http\Controllers\SuperAdmin\AdminController;
+use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
 use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
 use App\Http\Controllers\SuperAdmin\AuditionRulesController;
 use App\Http\Controllers\SuperAdmin\SuperStarController;
@@ -33,6 +34,12 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // category
     Route::resource('category', CategoryController::class);
+
+
+
+
+    // Audition Dashboard
+    Route::resource('audition-dashboard', AuditionDashboardController::class);
 
     // Audition Rules
     Route::resource('audition-rules', AuditionRulesController::class);

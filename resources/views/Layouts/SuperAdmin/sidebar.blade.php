@@ -64,7 +64,7 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.audition-rules.index') }}"
+                    <a href="{{ route('superAdmin.audition-dashboard.index') }}"
                     class="nav-link ">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Audition Dashboard</p>

@@ -274,8 +274,21 @@
   }
 
 
+  .AdminImg {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+}
 
-
+.completedMeetupBlack {
+    background-color: #151515 !important;
+    border-radius: 10px;
+  }
+  .BlueBtn{
+    background: linear-gradient(90deg, #FFCE00 0%, #DFA434 100%);
+    border-radius: 25px;
+  }
 
 .custom-control-label {
   margin-bottom: .5rem;

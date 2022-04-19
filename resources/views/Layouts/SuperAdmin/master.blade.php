@@ -22,6 +22,7 @@
     <!-- Custom style -->
   <link rel="stylesheet" href="{{ asset('assets/custom-style.css')}}">
   <link rel="stylesheet" href="{{ asset('assets/super-admin/Events.css')}}">
+  
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
