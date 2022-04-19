@@ -22,6 +22,7 @@ use App\Models\Notification;
 use App\Models\Post;
 use App\Models\React;
 use App\Models\SimplePost;
+use App\Models\ChoiceList;
 use App\Models\InterestType;
 use App\Models\Message;
 use App\Models\User;
@@ -54,7 +55,16 @@ class UserController extends Controller
 
     public function all_post()
     {
-        $post = Post::latest()->get();
+        $id = auth('sanctum')->user()->id;
+        $selectedCategory = ChoiceList::where('user_id' ,$id)->first();
+
+        $selectedCategory = json_decode($selectedCategory->category);
+
+        $post = Post::select("*")
+                    ->whereIn('category_id', $selectedCategory)
+                    ->latest()->get();
+
+        // $post = Post::latest()->get();
 
         return response()->json([
             'status' => 200,

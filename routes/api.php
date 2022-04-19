@@ -547,6 +547,7 @@ Route::post('jury-register', [JuryAuthController::class, 'register']);
 
 
 Route::get('view-category', [CategoryController::class, 'index']);
+Route::get('/user/selected/category', [CategoryController::class, 'selectedCategory']);
 Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
 
 
