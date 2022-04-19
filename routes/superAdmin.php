@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SuperAdmin\AdminAuditionController;
 use App\Http\Controllers\SuperAdmin\AuditionAdminController;
 use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\DashboardController;
@@ -46,6 +47,9 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // Audition Round Rules
     Route::resource('audition-round-rules', AuditionRoundRulesController::class);
+
+     // Audition Round Rules
+     Route::resource('audition-admin', AdminAuditionController::class);
 
 
 
