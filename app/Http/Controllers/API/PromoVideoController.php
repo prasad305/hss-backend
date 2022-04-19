@@ -25,6 +25,8 @@ class PromoVideoController extends Controller
     {
         // return $request->all();
 
+
+
         $promo = PromoVideo::create([
             'admin_id' => auth()->user()->id,
             'star_id' => $request->star_id,
@@ -146,7 +148,7 @@ class PromoVideoController extends Controller
     public function starPromoVideoApproved($id)
     {
 
-        $promoVideos = PromoVideo::where('id',$id)->update(['star_approval' => 1]);
+        $promoVideos = PromoVideo::where('id', $id)->update(['star_approval' => 1]);
 
         return response()->json([
             'status' => 200,
@@ -158,7 +160,7 @@ class PromoVideoController extends Controller
     public function starPromoVideoDecline($id)
     {
 
-        $promoVideos = PromoVideo::where('id',$id)->update(['star_approval' => 2]);
+        $promoVideos = PromoVideo::where('id', $id)->update(['star_approval' => 2]);
 
         return response()->json([
             'status' => 200,
