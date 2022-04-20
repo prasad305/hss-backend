@@ -112,6 +112,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('audition/admin-assign', [AuditionAdminController::class, 'adminAssign'])->name('audition.adminAssign');
     Route::get('audition/admin-assign-submit', [AuditionAdminController::class, 'adminAssignSubmit'])->name('audition.adminAssignSubmit');
     Route::get('audition/dashboard', [AuditionAdminController::class, 'auditionDashboard'])->name('audition.auditionDashboard');
+    Route::get('audition/juries', [AuditionAdminController::class, 'auditionJuries'])->name('audition.juries');
+    Route::get('audition/events', [AuditionAdminController::class, 'auditionEvents'])->name('audition.events');
 
 
     // Jury Audition Routes

@@ -63,10 +63,10 @@
                         <p class="AtifAdmin">Atif Aslam</p>
 
                         <!-- <a class="btn btn-sm btn-info">
-                                                                                                                        <i class="fa fa-edit text-white"></i></a> -->
+                                                                                                                                        <i class="fa fa-edit text-white"></i></a> -->
 
                         <!-- <button class="btn btn-sm btn-warning" ><i class="fa fa-trash"></i>
-                                                                                                                    </button> -->
+                                                                                                                                    </button> -->
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -98,10 +98,10 @@
                         <p class="AtifAdmin">Atif Aslam</p>
 
                         <!-- <a class="btn btn-sm btn-info">
-                                                                                                                        <i class="fa fa-edit text-white"></i></a> -->
+                                                                                                                                        <i class="fa fa-edit text-white"></i></a> -->
 
                         <!-- <button class="btn btn-sm btn-warning" ><i class="fa fa-trash"></i>
-                                                                                                                    </button> -->
+                                                                                                                                    </button> -->
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -130,13 +130,14 @@
 
 
 
-                        <p class="AtifAdmin">Atif Aslam</p>
+                        <p class="AtifAdmin">
+                            Atif Aslam</p>
 
                         <!-- <a class="btn btn-sm btn-info">
-                                                                                                                        <i class="fa fa-edit text-white"></i></a> -->
+                                                                                                                                        <i class="fa fa-edit text-white"></i></a> -->
 
                         <!-- <button class="btn btn-sm btn-warning" ><i class="fa fa-trash"></i>
-                                                                                                                    </button> -->
+                                                                                                                                    </button> -->
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -169,10 +170,10 @@
                         <p class="AtifAdmin">Atif Aslam</p>
 
                         <!-- <a class="btn btn-sm btn-info">
-                                                                                                                        <i class="fa fa-edit text-white"></i></a> -->
+                                                                                                                                        <i class="fa fa-edit text-white"></i></a> -->
 
                         <!-- <button class="btn btn-sm btn-warning" ><i class="fa fa-trash"></i>
-                                                                                                                    </button> -->
+                                                                                                                                    </button> -->
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -204,10 +205,10 @@
                         <p class="AtifAdmin">Atif Aslam</p>
 
                         <!-- <a class="btn btn-sm btn-info">
-                                                                                                                        <i class="fa fa-edit text-white"></i></a> -->
+                                                                                                                                        <i class="fa fa-edit text-white"></i></a> -->
 
                         <!-- <button class="btn btn-sm btn-warning" ><i class="fa fa-trash"></i>
-                                                                                                                    </button> -->
+                                                                                                                                    </button> -->
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -239,10 +240,10 @@
                         <p class="AtifAdmin">Atif Aslam</p>
 
                         <!-- <a class="btn btn-sm btn-info">
-                                                                                                                        <i class="fa fa-edit text-white"></i></a> -->
+                                                                                                                                        <i class="fa fa-edit text-white"></i></a> -->
 
                         <!-- <button class="btn btn-sm btn-warning" ><i class="fa fa-trash"></i>
-                                                                                                                    </button> -->
+                                                                                                                                    </button> -->
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -335,10 +336,10 @@
                         <p class="AtifAdmin">Atif Aslam</p>
 
                         <!-- <a class="btn btn-sm btn-info">
-                                                                                                                        <i class="fa fa-edit text-white"></i></a> -->
+                                                                                                                                        <i class="fa fa-edit text-white"></i></a> -->
 
                         <!-- <button class="btn btn-sm btn-warning" ><i class="fa fa-trash"></i>
-                                                                                                                    </button> -->
+                                                                                                                                    </button> -->
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -351,48 +352,9 @@
 
 
 
-    <!-- <div class="row">
 
 
-                                                                                                    <div class="col-md-3 col-sm-6 col-12">
-                                                                                                        <div class="info-box shadow-none bg-light pt-4 pb-4">
-                                                                                                            <img src="{{ asset('assets/manager-admin/avatarProfile.png') }}" alt="Admin Image"
-                                                                                                                class="img-fluid AdminImg mr-3 mt-4">
 
-                                                                                                           
-                                                                                                           
-                                                                                                                <div class="px-2" style="border-left: 1px solid gray">
-
-                                                                                                                <a >
-                                                                                                                    <span class="info-box-text AdminName">
-                                                                                                                        <h5>Aktaruzzaman Joti</h5>
-                                                                                                                    </span>
-                                                                                                                    <b class="AdminMusic">Music</b> <br />
-                                                                                                                </a><p>Music</p>
-
-                                                                                                             
-                                                                                                                <span class="right badge bg-danger my-2">Assigned</span>
-                                                                                                                <i class="fa-solid fa-bahai px-2 text-danger"></i><br>
-                                                                                                          
-                                                                                                                <span class="right badge border border-success my-2">Free Now</span> 🏳️<br>
-
-                                                                                                                <p class="AtifAdmin">Atif Aslam</p>
-                                                                                                                <p class="">dfgdfgyd</p>
-                                                                                                                <a class="btn btn-sm btn-info"
-                                                                                                                    "><i
-                                                                                                                        class="fa fa-edit text-white"></i></a>
-
-                                                                                                                <button class="btn btn-sm btn-warning"
-                                                                                                                 ><i class="fa fa-trash"></i>
-                                                                                                                </button>
-                                                                                                            </div>
-                                                                                                            <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-    </div>
-
-
-    </div> -->
 
 
     <style>
@@ -519,8 +481,8 @@
         }
 
         /* .testing {
-                                                                                            position: relative;
-                                                                                        } */
+                                                                                                            position: relative;
+                                                                                                        } */
 
         .AdminImg {
             width: 100px;
