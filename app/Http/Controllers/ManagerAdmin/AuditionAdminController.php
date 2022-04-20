@@ -426,5 +426,8 @@ class AuditionAdminController extends Controller
     public function adminAssignSubmit(){
         return view('ManagerAdmin.Audition.adminAssignSubmit');
     }
+    public function auditionDashboard(){
+        return view('ManagerAdmin.Audition.auditionAdminDashboard');
+    }
 }
 
