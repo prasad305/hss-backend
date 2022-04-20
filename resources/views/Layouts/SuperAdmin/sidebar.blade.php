@@ -64,7 +64,7 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.audition-rules.index') }}"
+                    <a href="{{ route('superAdmin.audition-dashboard.index') }}"
                     class="nav-link ">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Audition Dashboard</p>
@@ -85,21 +85,23 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('superAdmin.audition-admin.index') }}"
+                    class="nav-link ">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Admins</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href=""
                     class="nav-link ">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Manager</p>
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a href=""
-                    class="nav-link ">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Admins</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="pages/charts/flot.html" class="nav-link">
+                    <a href="{{ route('superAdmin.audition-jury.index') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Jurys</p>
                     </a>
