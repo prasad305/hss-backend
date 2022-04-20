@@ -16,6 +16,7 @@ use App\Http\Controllers\API\SimplePostController;
 use App\Http\Controllers\API\FanGroupController;
 use App\Http\Controllers\API\LearningSessionController;
 use App\Http\Controllers\API\AuditionController;
+use App\Http\Controllers\API\PromoVideoController;
 use App\Http\Controllers\SuperAdmin\Audition\AuditionController as AuditionAuditionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -53,6 +54,9 @@ Route::get('/user_info/{id}', [AuthController::class, 'user_data']);
 
 Route::post('/chatting/message', [UserController::class, 'message']);
 Route::get('/chatting/message/{id}', [UserController::class, 'get_message']);
+
+Route::post('/group/message', [UserController::class, 'group_message']);
+Route::get('/group/message/{id}', [UserController::class, 'get_group_message']);
 
 
 
@@ -190,6 +194,10 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
     Route::post('/admin/fan-group/join/{slug}/{data}', [FanGroupController::class, 'joinFanGroup']);
     Route::post('/admin/fan-group/post/{slug}/{data}', [FanGroupController::class, 'postFanGroup']);
+    Route::post('/admin/fan/group/image/update/{slug}', [FanGroupController::class, 'updateImageFanGroup']);
+    Route::get('/admin/fan/group/settings/delete/{id}', [FanGroupController::class, 'deleteSettingsFan']);
+    Route::post('/admin/fan/group/settings/no-warning/{id}', [FanGroupController::class, 'noWarningSettingsFan']);
+    Route::post('/admin/fan/group/approval/warning/{id}/{fanid}', [FanGroupController::class, 'warningSettingsFan']);
 
 
 
@@ -293,6 +301,13 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/audition/pendings', [AuditionController::class, 'starAdminPendingAudition']);
     Route::get('/admin/audition/live', [AuditionController::class, 'starAdminLiveAudition']);
     Route::get('/admin/audition/details/{id}', [AuditionController::class, 'starAdminDetailsAudition']);
+
+    // Promo Videos
+    Route::get('/admin/promoVideo/all', [PromoVideoController::class, 'adminAllPromoVideos']);
+    Route::post('/admin/promoVideo/store', [PromoVideoController::class, 'videoStore']);
+    Route::get('/admin/promoVideo/pending', [PromoVideoController::class, 'pendingVideos']);
+    Route::get('/admin/promoVideo/live', [PromoVideoController::class, 'liveVideos']);
+    Route::get('/admin/promoVideo/count', [PromoVideoController::class, 'promoVideoCount']);
 });
 
 
@@ -319,6 +334,10 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     Route::post('/star/fan-group/join/{slug}/{data}', [FanGroupController::class, 'joinFanGroup']);
     Route::post('/star/fan-group/post/{slug}/{data}', [FanGroupController::class, 'postFanGroup']);
+    Route::post('/star/fan/group/image/update/{slug}', [FanGroupController::class, 'updateImageFanGroup']);
+    Route::get('/star/fan/group/settings/delete/{id}', [FanGroupController::class, 'deleteSettingsFan']);
+    Route::post('/star/fan/group/settings/no-warning/{id}', [FanGroupController::class, 'noWarningSettingsFan']);
+    Route::post('/star/fan/group/approval/warning/{id}/{fanid}', [FanGroupController::class, 'warningSettingsFan']);
 
     // Marketplace Section
     Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);
@@ -412,6 +431,16 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/selectVideo/{id}', [AuditionController::class, 'getStarVideos']);
     Route::post('/star/starMarking', [AuditionController::class, 'starMarking']);
     Route::get('/star/starMarkingDone/videos/{id}', [AuditionController::class, 'starMarkingDone']);
+
+    // Promo Vidoes
+    Route::get('/star/promoVideo/all', [PromoVideoController::class, 'starPromovideoAll']);
+    Route::post('/star/promoVideo/store', [PromoVideoController::class, 'starPromovideoStore']);
+    Route::get('/star/promoVideo/pending', [PromoVideoController::class, 'starPromopendingVideos']);
+    Route::get('/star/promoVideo/pending/{id}', [PromoVideoController::class, 'starVideosDetails']);
+    Route::get('/star/promoVideo/live', [PromoVideoController::class, 'starPromoliveVideos']);
+    Route::get('/star/promoVideo/count', [PromoVideoController::class, 'starPromoVideoCount']);
+    Route::get('/star/promoVideo/approved/{id}', [PromoVideoController::class, 'starPromoVideoApproved']);
+    Route::get('/star/promoVideo/decline/{id}', [PromoVideoController::class, 'starPromoVideoDecline']);
 });
 
 

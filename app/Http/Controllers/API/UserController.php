@@ -9,6 +9,7 @@ use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPayment;
 use App\Models\Bidding;
+use App\Models\FanGroupMessage;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
 use App\Models\LearningSession;
@@ -342,7 +343,8 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'message' => "Your request time is pending,Wating for approval",
-            'greeting' => $single_greeting
+            'greeting' => $single_greeting,
+            'greeting_registration' => $greetings,
         ]);
     }
     /**
@@ -634,19 +636,31 @@ class UserController extends Controller
     }
     public function participantRegister(Request $request)
     {
+
         $user = User::find(auth()->user()->id);
+
         if (Hash::check($request->password, $user->password)) {
-            $participant = AuditionParticipant::create([
 
-                'audition_id' => $request->audition_id,
-                'user_id' => $user->id,
-                'accept_status' => 0,
-            ]);
-            return response()->json([
 
-                'status' => 200,
-                'data' => $participant,
-            ]);
+            if (AuditionParticipant::where('user_id', $user->id)->exists()) {
+                return response()->json([
+                    'status' => 201,
+                    'message' => 'User already Registered'
+                ]);
+            } else {
+
+                $participant = AuditionParticipant::create([
+
+                    'audition_id' => $request->audition_id,
+                    'user_id' => $user->id,
+                    'accept_status' => 0,
+                ]);
+                return response()->json([
+
+                    'status' => 200,
+                    'data' => $participant,
+                ]);
+            }
         } else {
             return response()->json([
                 'status' => 201,
@@ -680,7 +694,7 @@ class UserController extends Controller
 
 
 
-        if ($request->hasFile('video_url')) {
+        if ($request->hasFile('video_url') && $audition->video_url == null) {
 
 
             $file        = $request->file('video_url');
@@ -701,7 +715,7 @@ class UserController extends Controller
     public function videoDetails($id)
     {
         $participateAudition = Audition::with(['judge.user', 'participant' => function ($query) {
-            return $query->whereNotIn('user_id', [auth()->user()->id])->get();
+            return $query->whereNotIn('user_id', [auth()->user()->id])->whereNotNull('video_url')->get();
         }])->where('id', $id)->get();
 
         $ownVideo = AuditionParticipant::where('user_id', Auth::user()->id)->where('audition_id', $id)->first();
@@ -760,4 +774,30 @@ class UserController extends Controller
             'message' => $message,
         ]);
     }
+
+     //group message Controlling
+     public function group_message(Request $request)
+     {
+         $message = new FanGroupMessage();
+
+         $message->group_id = $request->group_id;
+         $message->sender_id = $request->sender_id;
+         $message->text = $request->text;
+         $message->save();
+
+         return response()->json([
+             'status' => 200,
+             'message' => $message,
+         ]);
+     }
+
+     public function get_group_message($id)
+     {
+         $message = FanGroupMessage::where('group_id',$id)->get();
+
+         return response()->json([
+             'status' => 200,
+             'message' => $message,
+         ]);
+     }
 }
