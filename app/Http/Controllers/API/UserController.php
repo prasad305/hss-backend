@@ -882,4 +882,15 @@ class UserController extends Controller
             'message' => "Image Photo updated"
         ]);
     }
+
+    public function userPhotos()
+    {
+        $userPhotos = Activity::where('user_id', auth()->user()->id)->get();
+
+
+        return response()->json([
+            'status' => 200,
+            'userPhotos' => $userPhotos
+        ]);
+    }
 }

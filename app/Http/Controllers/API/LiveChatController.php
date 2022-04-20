@@ -140,8 +140,8 @@ class LiveChatController extends Controller
             $liveChat = new LiveChat();
             $liveChat->title = $request->input('title');
             $liveChat->star_id = $request->input('star_id');
-            $liveChat->category_id = $superStar->category_id;
-            $liveChat->admin_id = $superStar->admin_id;
+            // $liveChat->category_id = $superStar->category_id;
+            // $liveChat->admin_id = $superStar->admin_id;
             $liveChat->created_by_id = auth('sanctum')->user()->id;
             $liveChat->description = $request->input('description');
             $liveChat->date = $request->input('date');
