@@ -30,6 +30,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,6 +39,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use PhpParser\Node\Expr\FuncCall;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -57,13 +59,13 @@ class UserController extends Controller
     public function all_post()
     {
         $id = auth('sanctum')->user()->id;
-        $selectedCategory = ChoiceList::where('user_id' ,$id)->first();
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
 
         $selectedCategory = json_decode($selectedCategory->category);
 
         $post = Post::select("*")
-                    ->whereIn('category_id', $selectedCategory)
-                    ->latest()->get();
+            ->whereIn('category_id', $selectedCategory)
+            ->latest()->get();
 
         // $post = Post::latest()->get();
 
@@ -819,6 +821,65 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'promoVideos' => $promoVideos,
+        ]);
+    }
+
+    // User Profile Update
+
+    public function updateCover(Request $request, $id)
+    {
+
+        // return $request->all();
+
+        $userInfo = User::findOrfail($id);
+
+        if ($request->hasfile('cover_photo')) {
+
+            $destination = $userInfo->cover_photo;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+
+            $file = $request->file('cover_photo');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/userPhotos/' . time() . '.' . $extension;
+
+            Image::make($file)->resize(900, 400)->save($filename, 100);
+            $userInfo->cover_photo = $filename;
+        }
+        $userInfo->update();
+
+        return response()->json([
+            'status' => 200,
+            'message' => "Cover Photo updated"
+        ]);
+    }
+    public function updateProfile(Request $request, $id)
+    {
+
+        // return $request->all();
+
+        $userInfo = User::findOrfail($id);
+
+        if ($request->hasfile('image')) {
+
+            $destination = $userInfo->image;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/userPhotos/' . time() . '.' . $extension;
+
+            Image::make($file)->resize(900, 400)->save($filename, 100);
+            $userInfo->image = $filename;
+        }
+        $userInfo->update();
+
+        return response()->json([
+            'status' => 200,
+            'message' => "Image Photo updated"
         ]);
     }
 }

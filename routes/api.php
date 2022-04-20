@@ -173,6 +173,11 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     // Promo Videos
 
     Route::get('/user/PromoVideos', [UserController::class, 'getPromoVideo']);
+
+    // User Profile
+
+    Route::post('/user/coverUpdate/{id}', [UserController::class, 'updateCover']);
+    Route::post('/user/profileUpdate/{id}', [UserController::class, 'updateProfile']);
 });
 
 
