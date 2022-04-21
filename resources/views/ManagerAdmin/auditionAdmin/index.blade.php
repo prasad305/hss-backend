@@ -33,8 +33,10 @@ Audition Admin
                 <i class=" fa fa-filter"></i> Filter
             </button>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="{{ route('managerAdmin.auditionAdmin_assinged') }}">Show assigned audition admins</a>
-                <a class="dropdown-item" href="{{ route('managerAdmin.auditionAdmin_notAssinged') }}">Show available audition admins</a>
+                <a class="dropdown-item" href="{{ route('managerAdmin.auditionAdmin_assinged') }}">Show assigned
+                    audition admins</a>
+                <a class="dropdown-item" href="{{ route('managerAdmin.auditionAdmin_notAssinged') }}">Show available
+                    audition admins</a>
                 <a class="dropdown-item" href="{{ route('managerAdmin.auditionAdmin.index') }}">All Audition Admins</a>
             </div>
             <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;" onclick=""><i
@@ -74,13 +76,15 @@ Audition Admin
                         @endif
 
                         {{-- <p class="AtifAdmin">Atif Aslam</p> --}}
-                        <p class="{{ $auditionAdmin->status == 0 ? 'text-danger' : 'text-success' }}">{{ $auditionAdmin->status == 0 ? 'Pending For Approval' : 'Approved' }}</p>
+                        <p class="{{ $auditionAdmin->status == 0 ? 'text-danger' : 'text-success' }}">
+                            {{ $auditionAdmin->status == 0 ? 'Pending For Approval' : 'Approved' }}</p>
                         <a class="btn btn-sm btn-info"
                             onclick="Show('Edit Audition Admin','{{ route('managerAdmin.auditionAdmin.edit', $auditionAdmin->id) }}')"><i
                                 class="fa fa-edit text-white"></i></a>
 
                         <button class="btn btn-sm btn-warning" onclick="delete_function(this)"
-                            value="{{ route('managerAdmin.auditionAdmin.destroy', $auditionAdmin->id) }}"><i class="fa fa-trash"></i>
+                            value="{{ route('managerAdmin.auditionAdmin.destroy', $auditionAdmin->id) }}"><i
+                                class="fa fa-trash"></i>
                         </button>
                     </div>
                     <!-- /.info-box-content -->
@@ -91,7 +95,7 @@ Audition Admin
 
         </div>
 
-</div> <!-- container -->
+    </div> <!-- container -->
 </div> <!-- content -->
 
 <style>
@@ -115,7 +119,7 @@ Audition Admin
     .AtifAdmin {
         color: #FF602E;
     }
-    
+
 
     @media only screen and (min-width: 1100px) and (max-width: 1400px) {
 

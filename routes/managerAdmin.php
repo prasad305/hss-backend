@@ -13,6 +13,7 @@ use App\Http\Controllers\ManagerAdmin\MarketplaceController;
 use App\Http\Controllers\ManagerAdmin\FanGroupController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\ManagerAdmin\AuctionController;
+use App\Http\Controllers\ManagerAdmin\PromoVideoController;
 use Illuminate\Support\Facades\Route;
 
 // manager Admin route
@@ -110,6 +111,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('audition/admins', [AuditionAdminController::class, 'auditionAdmins'])->name('audition.admins');
     Route::get('audition/admin-assign', [AuditionAdminController::class, 'adminAssign'])->name('audition.adminAssign');
     Route::get('audition/admin-assign-submit', [AuditionAdminController::class, 'adminAssignSubmit'])->name('audition.adminAssignSubmit');
+    Route::get('audition/dashboard', [AuditionAdminController::class, 'auditionDashboard'])->name('audition.auditionDashboard');
 
 
     // Jury Audition Routes
@@ -176,4 +178,15 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     //audition create
     Route::post('audition-assign/{admin_id}', [JobAssign::class, 'auditionStore'])->name('AuditionAssign');
+
+    // Promo Video
+
+    Route::get('promoVideo/pending', [PromoVideoController::class, 'pending'])->name('promoVideo.pending');
+    Route::get('promoVideo/published', [PromoVideoController::class, 'published'])->name('promoVideo.published');
+    Route::get('promoVideo/all', [PromoVideoController::class, 'all'])->name('promoVideo.all');
+
+    Route::get('promoVideo/details/{id}', [PromoVideoController::class, 'details'])->name('promoVideo.details');
+    Route::get('promoVideo/edit/{id}', [PromoVideoController::class, 'edit'])->name('promoVideo.edit');
+    Route::put('promoVideo/edit/{id}', [PromoVideoController::class, 'update'])->name('promoVideo.update');
+    Route::get('promoVideo/set_publish/{id}', [PromoVideoController::class, 'set_publish'])->name('promoVideo.set_publish');
 });

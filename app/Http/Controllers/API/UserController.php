@@ -22,12 +22,15 @@ use App\Models\Notification;
 use App\Models\Post;
 use App\Models\React;
 use App\Models\SimplePost;
+use App\Models\ChoiceList;
 use App\Models\InterestType;
 use App\Models\Message;
+use App\Models\PromoVideo;
 use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -36,6 +39,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use PhpParser\Node\Expr\FuncCall;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -54,7 +58,16 @@ class UserController extends Controller
 
     public function all_post()
     {
-        $post = Post::latest()->get();
+        $id = auth('sanctum')->user()->id;
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
+
+        $selectedCategory = json_decode($selectedCategory->category);
+
+        $post = Post::select("*")
+            ->whereIn('category_id', $selectedCategory)
+            ->latest()->get();
+
+        // $post = Post::latest()->get();
 
         return response()->json([
             'status' => 200,
@@ -343,7 +356,8 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'message' => "Your request time is pending,Wating for approval",
-            'greeting' => $single_greeting
+            'greeting' => $single_greeting,
+            'greeting_registration' => $greetings,
         ]);
     }
     /**
@@ -635,19 +649,31 @@ class UserController extends Controller
     }
     public function participantRegister(Request $request)
     {
+
         $user = User::find(auth()->user()->id);
+
         if (Hash::check($request->password, $user->password)) {
-            $participant = AuditionParticipant::create([
 
-                'audition_id' => $request->audition_id,
-                'user_id' => $user->id,
-                'accept_status' => 0,
-            ]);
-            return response()->json([
 
-                'status' => 200,
-                'data' => $participant,
-            ]);
+            if (AuditionParticipant::where('user_id', $user->id)->exists()) {
+                return response()->json([
+                    'status' => 201,
+                    'message' => 'User already Registered'
+                ]);
+            } else {
+
+                $participant = AuditionParticipant::create([
+
+                    'audition_id' => $request->audition_id,
+                    'user_id' => $user->id,
+                    'accept_status' => 0,
+                ]);
+                return response()->json([
+
+                    'status' => 200,
+                    'data' => $participant,
+                ]);
+            }
         } else {
             return response()->json([
                 'status' => 201,
@@ -681,7 +707,7 @@ class UserController extends Controller
 
 
 
-        if ($request->hasFile('video_url')) {
+        if ($request->hasFile('video_url') && $audition->video_url == null) {
 
 
             $file        = $request->file('video_url');
@@ -702,7 +728,7 @@ class UserController extends Controller
     public function videoDetails($id)
     {
         $participateAudition = Audition::with(['judge.user', 'participant' => function ($query) {
-            return $query->whereNotIn('user_id', [auth()->user()->id])->get();
+            return $query->whereNotIn('user_id', [auth()->user()->id])->whereNotNull('video_url')->get();
         }])->where('id', $id)->get();
 
         $ownVideo = AuditionParticipant::where('user_id', Auth::user()->id)->where('audition_id', $id)->first();
@@ -762,29 +788,109 @@ class UserController extends Controller
         ]);
     }
 
-     //group message Controlling
-     public function group_message(Request $request)
-     {
-         $message = new FanGroupMessage();
+    //group message Controlling
+    public function group_message(Request $request)
+    {
+        $message = new FanGroupMessage();
 
-         $message->group_id = $request->group_id;
-         $message->sender_id = $request->sender_id;
-         $message->text = $request->text;
-         $message->save();
+        $message->group_id = $request->group_id;
+        $message->sender_id = $request->sender_id;
+        $message->text = $request->text;
+        $message->save();
 
-         return response()->json([
-             'status' => 200,
-             'message' => $message,
-         ]);
-     }
+        return response()->json([
+            'status' => 200,
+            'message' => $message,
+        ]);
+    }
 
-     public function get_group_message($id)
-     {
-         $message = FanGroupMessage::where('group_id',$id)->get();
+    public function get_group_message($id)
+    {
+        $message = FanGroupMessage::where('group_id', $id)->get();
 
-         return response()->json([
-             'status' => 200,
-             'message' => $message,
-         ]);
-     }
+        return response()->json([
+            'status' => 200,
+            'message' => $message,
+        ]);
+    }
+
+    public function getPromoVideo()
+    {
+
+        $promoVideos = PromoVideo::select('video_url')->where('status', 1)->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'promoVideos' => $promoVideos,
+        ]);
+    }
+
+    // User Profile Update
+
+    public function updateCover(Request $request, $id)
+    {
+
+        // return $request->all();
+
+        $userInfo = User::findOrfail($id);
+
+        if ($request->hasfile('cover_photo')) {
+
+            $destination = $userInfo->cover_photo;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+
+            $file = $request->file('cover_photo');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/userPhotos/' . time() . '.' . $extension;
+
+            Image::make($file)->resize(900, 400)->save($filename, 100);
+            $userInfo->cover_photo = $filename;
+        }
+        $userInfo->update();
+
+        return response()->json([
+            'status' => 200,
+            'message' => "Cover Photo updated"
+        ]);
+    }
+    public function updateProfile(Request $request, $id)
+    {
+
+        // return $request->all();
+
+        $userInfo = User::findOrfail($id);
+
+        if ($request->hasfile('image')) {
+
+            $destination = $userInfo->image;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/userPhotos/' . time() . '.' . $extension;
+
+            Image::make($file)->resize(900, 400)->save($filename, 100);
+            $userInfo->image = $filename;
+        }
+        $userInfo->update();
+
+        return response()->json([
+            'status' => 200,
+            'message' => "Image Photo updated"
+        ]);
+    }
+
+    public function userPhotos()
+    {
+        $userPhotos = Activity::where('user_id', auth()->user()->id)->get();
+
+
+        return response()->json([
+            'status' => 200,
+            'userPhotos' => $userPhotos
+        ]);
+    }
 }

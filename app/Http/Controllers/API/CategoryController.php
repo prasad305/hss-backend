@@ -24,6 +24,24 @@ class CategoryController extends Controller
         ]);
     }
 
+    public function selectedCategory()
+    {
+        $id = auth('sanctum')->user()->id;
+        $selectedCategory = ChoiceList::where('user_id' ,$id)->first();
+
+        $selectedCategory = json_decode($selectedCategory->category);
+
+        $userCategory = Category::select("*")
+                    ->whereIn('id', $selectedCategory)
+                    ->get();
+
+        return response()->json([
+            'status' => 200,
+            'selectedCategory' => $selectedCategory,
+            'userCategory' => $userCategory,
+        ]);
+    }
+
     public function fetch_subcategory($id)
     {
         $category = SubCategory::where('category_id', $id)->get();

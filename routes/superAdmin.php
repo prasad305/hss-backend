@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\SuperAdmin\AdminAuditionController;
 use App\Http\Controllers\SuperAdmin\AuditionAdminController;
 use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\DashboardController;
 use App\Http\Controllers\SuperAdmin\ManagerAdminController;
 use App\Http\Controllers\SuperAdmin\AdminController;
+use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
+use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
 use App\Http\Controllers\SuperAdmin\AuditionRulesController;
 use App\Http\Controllers\SuperAdmin\SuperStarController;
 use App\Http\Controllers\SuperAdmin\JuryBoardController;
@@ -16,6 +19,7 @@ use App\Http\Controllers\SuperAdmin\CityController;
 use App\Http\Controllers\SuperAdmin\EventsController;
 use App\Http\Controllers\SuperAdmin\GreetingController;
 use App\Http\Controllers\SuperAdmin\InterestTypeController;
+use App\Http\Controllers\SuperAdmin\JurysAuditionController;
 use App\Http\Controllers\SuperAdmin\SubCategoryController;
 use App\Models\PaymentMethod;
 use App\Models\Slider;
@@ -33,8 +37,29 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // category
     Route::resource('category', CategoryController::class);
 
+
+
+
+    // Audition Dashboard
+    Route::resource('audition-dashboard', AuditionDashboardController::class);
+
     // Audition Rules
     Route::resource('audition-rules', AuditionRulesController::class);
+
+    // Audition Round Rules
+    Route::resource('audition-round-rules', AuditionRoundRulesController::class);
+
+    // Audition Round Rules
+    Route::resource('audition-admin', AdminAuditionController::class);
+
+    // Audition Round Rules
+    Route::resource('audition-jury', JurysAuditionController::class);
+
+
+
+
+
+
 
     // Events
     Route::resource('events', EventsController::class);

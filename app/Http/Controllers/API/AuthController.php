@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\UserInfo;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 //use Auth;
 use Illuminate\Support\Facades\File;
@@ -104,6 +105,7 @@ class AuthController extends Controller
                 }
 
 
+
                 return response()->json([
                     'status' => 200,
                     'email' => $user->email,
@@ -149,25 +151,25 @@ class AuthController extends Controller
             ]);
         } else {
             // AuditionEventRegistration
-            if( $modelName == 'MeetupEventRegistration'){
-                $countValue  = MeetupEventRegistration::where('user_id',$user->id)->where('meetup_event_id',$eventId)->count();
+            if ($modelName == 'MeetupEventRegistration') {
+                $countValue  = MeetupEventRegistration::where('user_id', $user->id)->where('meetup_event_id', $eventId)->count();
             }
-            if( $modelName == 'LearningSessionRegistration'){
-                $countValue  = LearningSessionRegistration::where('user_id',$user->id)->where('learning_session_id',$eventId)->count();
+            if ($modelName == 'LearningSessionRegistration') {
+                $countValue  = LearningSessionRegistration::where('user_id', $user->id)->where('learning_session_id', $eventId)->count();
             }
-            if( $modelName == 'LiveChatRegistration'){
-                $countValue  = LiveChatRegistration::where('user_id',$user->id)->where('live_chat_id',$eventId)->count();
+            if ($modelName == 'LiveChatRegistration') {
+                $countValue  = LiveChatRegistration::where('user_id', $user->id)->where('live_chat_id', $eventId)->count();
             }
-            if( $modelName == 'GreetingsRegistration'){
-                $countValue  = GreetingsRegistration::where('user_id',$user->id)->where('greeting_id',$eventId)->count();
+            if ($modelName == 'GreetingsRegistration') {
+                $countValue  = GreetingsRegistration::where('user_id', $user->id)->where('greeting_id', $eventId)->count();
             }
             // if( $modelName == 'AuditionParticipant'){
             //     $countValue  = AuditionParticipant::where('user_id',$user->id)->where('audition_id',$eventId)->count();
             // }
 
-            if($countValue > 0){
+            if ($countValue > 0) {
                 $is_already_registered = true;
-            }else{
+            } else {
                 $is_already_registered = false;
             }
             return response()->json([
@@ -175,7 +177,6 @@ class AuthController extends Controller
                 'message' => 'Verified',
                 'is_already_registered' => $is_already_registered,
             ]);
-
         }
     }
 
@@ -207,12 +208,14 @@ class AuthController extends Controller
         if ($request->otp == $user->otp) {
 
             $user->user_type = 'user';
-            $user->update();
+            $user->otp_verified_at = Carbon::now();
+            $user->save();
 
             return response()->json([
                 'status' => 200,
                 'message' => 'Registration Successful!',
                 'phone' => $user->phone,
+
             ]);
         } else {
             return response()->json([
