@@ -18,9 +18,29 @@ class CategoryController extends Controller
     {
         $category = Category::all();
 
+        $id = auth('sanctum')->user()->id;
+        $selectedCategory = ChoiceList::where('user_id' ,$id)->first();
+
+        $selectedCategory = json_decode($selectedCategory->category);
+
         return response()->json([
             'status' => 200,
             'category' => $category,
+            'selectedCategory' => $selectedCategory,
+        ]);
+    }
+    public function selectedCategoryStore(Request $request)
+    {
+
+        $id = auth('sanctum')->user()->id;
+        $cat = ChoiceList::where('user_id' ,$id)->first();
+
+        $cat->category = $request->category;
+        $cat->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Admin category added',
         ]);
     }
 
