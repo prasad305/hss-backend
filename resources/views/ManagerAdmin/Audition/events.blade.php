@@ -41,10 +41,11 @@
             border: 1px solid rgb(0, 183, 255) !important;
         }
 
-        /* .ImgBlue{
-            height: 150px;
-            width: 100% !important;
-        } */
+        .bottomBlackLine {
+            border-bottom: 2px solid white;
+        }
+
+        
 
     </style>
 
@@ -102,7 +103,7 @@
         <div class="row">
             <div class="col-md-12 mx-2 mt-3">
                 <h4>Previous Events list</h4>
-                <hr>
+                <div class='bottomBlackLine'></div>
             </div>
         </div>
 
