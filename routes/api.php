@@ -178,6 +178,10 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::post('/user/coverUpdate/{id}', [UserController::class, 'updateCover']);
     Route::post('/user/profileUpdate/{id}', [UserController::class, 'updateProfile']);
+
+    // User Photos
+
+    Route::get('/user/learningPhotos', [UserController::class, 'userPhotos']);
 });
 
 
