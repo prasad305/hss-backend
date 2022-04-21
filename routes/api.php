@@ -181,7 +181,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // User Photos
 
-    Route::get('/user/learningPhotos', [UserController::class, 'userPhotos']);
+    Route::get('/user/activitiesData', [UserController::class, 'userPhotos']);
 });
 
 
