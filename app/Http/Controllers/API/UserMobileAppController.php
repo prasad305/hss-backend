@@ -51,12 +51,12 @@ class UserMobileAppController extends Controller
             $eventRegistration->live_chat_id = $eventId;
             $activity->type = 'liveChat';
         }
-        if( $modelName == 'GreetingsRegistration'){
-            $eventRegistration = new GreetingsRegistration();
-            $event = Greeting::find($eventId);
-            $eventRegistration->greeting_id = $eventId;
-            $activity->type = 'greeting';
-        }
+        // if( $modelName == 'GreetingsRegistration'){
+        //     $eventRegistration = new GreetingsRegistration();
+        //     $event = Greeting::find($eventId);
+        //     $eventRegistration->greeting_id = $eventId;
+        //     $activity->type = 'greeting';
+        // }
         if( $modelName == 'AuditionParticipant'){
             $eventRegistration = new AuditionParticipant();
             $event = Audition::find($eventId);
@@ -87,7 +87,7 @@ class UserMobileAppController extends Controller
     }
 
     public function greetingStatus($star_id){
-        $greetingsRegistration = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
+        $greetingsRegistration = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->orderBy('id','DESC')->first();
 
         $greeting = Greeting::where([['star_id', $star_id], ['star_approve_status', '>', 0]])->first();
 
@@ -99,7 +99,11 @@ class UserMobileAppController extends Controller
 
 
         if (isset($greetingsRegistration)) {
-            $is_registered_already = true;
+            if($greetingsRegistration->status == 2){
+                $is_registered_already = false;
+            }else{
+                $is_registered_already = true;
+            }
         } else {
             $is_registered_already = false;
         }
@@ -116,16 +120,16 @@ class UserMobileAppController extends Controller
      public function userInformationUpdate(Request $request){
         $user = User::find(auth('sanctum')->user()->id);
         $userInfo = new UserInfo();
-        
-       
-       
+
+
+
         try {
              if($request->img['data']){
 
             $originalExtension = str_ireplace("image/","",$request->img['type']);
-            
+
             $folder_path       = 'uploads/images/users/';
-            
+
             $image_new_name    = Str::random(20).'-'.now()->timestamp.'.'.$originalExtension;
             $decodedBase64 = $request->img['data'];
         }
@@ -137,7 +141,7 @@ class UserMobileAppController extends Controller
             $userInfo->country=  $request->country;
             $userInfo->occupation=  $request->occupation;
             $userInfo->edu_level=  $request->edu;
-           
+
             $userInfo->save();
             $user->save();
             return response()->json([
@@ -145,7 +149,7 @@ class UserMobileAppController extends Controller
                 "status"=>"200",
                 "userInfo" =>  $user
             ]);
-        } catch (\Exception $exception) {   
+        } catch (\Exception $exception) {
             return response()->json([
                 "message"=>"Image field required, invalid image !",
                 "error"=>$exception->getMessage(),
