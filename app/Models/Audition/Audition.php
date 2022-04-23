@@ -2,55 +2,24 @@
 
 namespace App\Models\Audition;
 
-use App\Models\AssignJury;
-use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Audition extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
-    protected $fillable = [
-        'category_id',
-        'creater_id',
-        'admin_id',
-        'title',
-        'slug',
-        'description',
-        'banner',
-        'video',
-        'start_time',
-        'end_time',
-        'round_stattus',
-        'template_id',
-        'status'
-    ];
-
-    protected $with = ['judge'];
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class, 'category_id', 'id');
+    public function auditionRules(){
+        return $this->belongsTo(AuditionRules::class);
+    }
+    public function auditionRoundRules(){
+        return $this->belongsTo(AuditionRoundRule::class);
     }
 
-    public function assignAdmin()
-    {
-        return $this->hasOne(AssignAdmin::class, 'job_id', 'id');
-    }
-
-    public function judge()
-    {
-        return $this->hasMany(AssignJudge::class, 'audition_id', 'id');
-    }
-
-    public function jury()
-    {
-        return $this->hasMany(AssignJury::class, 'audition_id', 'id');
-    }
-
-    public function participant()
-    {
-        return $this->hasMany(AuditionParticipant::class, 'audition_id', 'id');
+    public function creator(){
+        return $this->belongsTo(User::class,'creator_id');
     }
 }
+    
