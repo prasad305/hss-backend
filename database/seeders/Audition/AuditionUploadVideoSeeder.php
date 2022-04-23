@@ -16,7 +16,7 @@ class AuditionUploadVideoSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        for ($i = 1; $i < 21; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $auditionUploadVideo = new AuditionUploadVideo();
             $auditionUploadVideo->audition_id       =  $faker->numberBetween(1, 10);
             $auditionUploadVideo->user_id           =  $faker->numberBetween(1, 10);
