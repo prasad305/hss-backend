@@ -38,8 +38,12 @@ class DatabaseSeeder extends Seeder
         $this->call(AuditionCommentSeeder::class);
         $this->call(LiveChatRegistrationSeeder::class);
         $this->call(SuperStartSeeder::class);
-        $this->call(AuditionSeeder::class);
         $this->call(Audition\AuditionJudgeInstructionSeeder::class);
         $this->call(Audition\AuditionUploadVideoSeeder::class);
+        $this->call(Audition\AuditionRulesSeeder::class);
+        $this->call(Audition\AuditionRoundRulesSeeder::class);
+        $this->call(Audition\AuditionSeeder::class);
+        $this->call(Audition\AuditionAssignJudgeSeeder::class);
+        $this->call(Audition\AuditionParticipantsSeeder::class);
     }
 }
