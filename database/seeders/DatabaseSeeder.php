@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\LearningSessionRegistration;
-use App\Models\MeetupEventRegistration;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -39,7 +37,9 @@ class DatabaseSeeder extends Seeder
         $this->call(LiveChatRegistrationSeeder::class);
         $this->call(SuperStartSeeder::class);
         $this->call(PaymentSeeder::class);
-        // $this->call(AuditionSeeder::class);
+
+        // audition related seeder
+        $this->call(AuditionSeeder::class);
         $this->call(Audition\AuditionJudgeInstructionSeeder::class);
         $this->call(Audition\AuditionUploadVideoSeeder::class);
         $this->call(Audition\AuditionUserVotingSeeder::class);
