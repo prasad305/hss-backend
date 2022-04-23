@@ -25,7 +25,7 @@ class AuditionJudgeInstruction extends Model
 
     public function audition()
     {
-        return $this->belongsTo(User::class, 'audition_id');
+        return $this->belongsTo(Audition::class, 'audition_id');
     }
 
     public function star()
@@ -33,8 +33,8 @@ class AuditionJudgeInstruction extends Model
         return $this->belongsTo(User::class, 'star_id');
     }
 
-    public function round()
-    {
-        return $this->belongsTo(User::class, 'round_id');
-    }
+    // public function round()
+    // {
+    //     return $this->belongsTo(Round::class, 'round_id');
+    // }
 }
