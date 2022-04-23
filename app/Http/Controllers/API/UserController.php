@@ -886,6 +886,7 @@ class UserController extends Controller
 
     public function userPhotos()
     {
+
         $userPhotos = Activity::where('user_id', auth()->user()->id)->get();
 
 
