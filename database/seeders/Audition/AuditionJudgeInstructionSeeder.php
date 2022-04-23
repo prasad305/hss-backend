@@ -17,7 +17,7 @@ class AuditionJudgeInstructionSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        for ($i = 1; $i < 21; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $auditionJudgeInstruction = new AuditionJudgeInstruction();
             $auditionJudgeInstruction->audition_id =  $faker->numberBetween(1, 10);
             $auditionJudgeInstruction->star_id =  $faker->numberBetween(1, 10);
