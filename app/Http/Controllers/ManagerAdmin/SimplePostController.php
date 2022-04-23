@@ -106,11 +106,14 @@ class SimplePostController extends Controller
             $spost->status = 1;
             $spost->update();
 
+            $starCat = SuperStar::where('star_id', $spost->star_id)->first();
             // Create New post //
             $post = new Post();
             $post->type='general';
             $post->user_id=$spost->star_id;
             $post->event_id = $spost->id;
+            $post->category_id=$starCat->category_id;
+            $post->sub_category_id=$starCat->sub_category_id;
             $post->save();
         }
         else
