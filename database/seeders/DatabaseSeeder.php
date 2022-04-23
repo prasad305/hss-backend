@@ -44,5 +44,6 @@ class DatabaseSeeder extends Seeder
         $this->call(Audition\AuditionUploadVideoSeeder::class);
         $this->call(Audition\AuditionUserVotingSeeder::class);
         $this->call(Audition\AuditionJudgeMarkSeeder::class);
+        $this->call(Audition\AuditionAssignJurySeeder::class);
     }
 }
