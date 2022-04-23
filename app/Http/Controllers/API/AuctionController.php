@@ -54,9 +54,9 @@ class AuctionController extends Controller
             $filename = $image->getClientOriginalName();
             $image->move($destinationPath, $filename);
             array_push($images, $filename);
-            
+
         }
-        $data['product_image'] = json_encode($images);     
+        $data['product_image'] = json_encode($images);
  */
             $file        = $request->file('product_image');
             $path        = 'uploads/images/auction';
@@ -232,6 +232,17 @@ class AuctionController extends Controller
         ]);
     }
 
+    public function notify_bidder($id)
+    {
+        $bidding = Bidding::find($id);
+        $bidding->notify_status = 1;
+        $bidding->update();
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+
 
 
     //<========================= Star Section ==============================>
@@ -281,9 +292,9 @@ class AuctionController extends Controller
             $filename = $image->getClientOriginalName();
             $image->move($destinationPath, $filename);
             array_push($images, $filename);
-            
+
         }
-        $data['product_image'] = json_encode($images);     
+        $data['product_image'] = json_encode($images);
  */
             $file        = $request->file('product_image');
             $path        = 'uploads/images/auction';
