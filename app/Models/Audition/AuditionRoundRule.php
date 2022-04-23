@@ -10,8 +10,11 @@ class AuditionRoundRule extends Model
     use HasFactory;
     protected $guarded = [];
     
+    public function auditionRules(){
+        return $this->belongsTo(AuditionRules::class,'audition_rules_id');
+    }
     public function auditions(){
-        return $this->hasMany(Audition::class,'audition_round_rules_id');
+        return $this->hasMany(Audition::class);
     }
   
 }
