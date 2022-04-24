@@ -55,6 +55,16 @@ class UserController extends Controller
         ]);
     }
 
+    public function total_notification_count()
+    {
+        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->count();
+
+        return response()->json([
+            'status' => 200,
+            'totalNotification' => $notification,
+        ]);
+    }
+
 
     public function all_post()
     {
@@ -531,7 +541,7 @@ class UserController extends Controller
      */
     public function checkUserNotifiaction()
     {
-        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->get();
+        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->latest()->get();
         $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
         if ($greeting_reg)
             $greeting_info = Greeting::find($greeting_reg->greeting_id);

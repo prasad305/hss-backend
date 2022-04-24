@@ -17,8 +17,8 @@ class CreateNotificationsTable extends Migration
             $table->id();
             $table->string('notification_id')->nullValue();
             $table->string('user_id')->nullValue();
-            $table->boolean('status')->nullValue();
-            $table->string('view_status')->nullValue();
+            $table->boolean('status')->default(0);
+            $table->string('view_status')->default(0);
             $table->timestamps();
         });
     }
