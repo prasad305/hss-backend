@@ -5,6 +5,7 @@ Super Admin
 @endpush
 
 @section('content')
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <!-- Content Header (Page header) -->
 <div class="content-header BorderRpo">
@@ -27,14 +28,28 @@ Super Admin
 
 <!-- /.content-header -->
 <ul class="nav nav-tabs m-4" role="tablist">
-    <li class="nav-item custom-nav-item m-2 TextBH">
+
+    @foreach ($categories as $key => $category)
+    <li class="nav-item custom-nav-item m-2 TextBH {{ $key == 0 ? 'active' : '' }}" onclick="selectedCategory('{{ $category->id }}')">
+        <a class="nav-link border-warning " data-toggle="tab" href="#tabs-{{ $category->id }}" role="tab">
+            <center>
+                <img src="{{ asset($category->icon) }}" class="ARRimg pt-2" alt={{ $category->name }} icon>
+            </center>
+            <a class="btn border-warning nav-link  {{ $key == 0 ? 'active' : '' }}"  data-toggle="tab" href="#tabs-{{ $category->id }}" role="tab">{{ $category->name }}</a>
+        </a>
+    </li>      
+    @endforeach
+
+
+
+
+    {{-- <li class="nav-item custom-nav-item m-2 TextBH">
         <a class="nav-link border-warning " data-toggle="tab" href="#tabs-1" role="tab">
             <center>
                 <img src="{{ asset('assets/super-admin/images/Music.png') }}" class="ARRimg pt-2" alt="">
             </center>
             <a class="btn border-warning nav-link active " data-toggle="tab" href="#tabs-1" role="tab">Music</a>
         </a>
-
     </li>
     <li class="nav-item custom-nav-item m-2 ">
         <a class="nav-link border-warning" data-toggle="tab" href="#tabs-2" role="tab">
@@ -99,8 +114,10 @@ Super Admin
             </center>
         </a>
         <p class="btn nav-link border-warning mnssa" data-toggle="tab" href="#tabs-9" role="tab">Extra</p>
-    </li>
-</ul><!-- Tab panes -->
+    </li> --}}
+
+
+</ul>
 
 <div class="tab-content m-4">
     <h3>Audition List Edit</h3>
@@ -109,7 +126,126 @@ Super Admin
 
 <div class="tab-content m-4">
 
-    <div class="tab-pane active" id="tabs-1" role="tabpanel">
+    @foreach ($categories as $key => $category)
+    <div class="tab-pane {{ $key == 0 ? 'active' : '' }}" id="tabs-{{ $category->id }}" role="tabpanel">
+        <p>{{ $category->name }} Panel</p>
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item custom-nav-item m-2 TextBH">
+                <a class="nav-link border-warning text-warning font-weight-bold" data-toggle="tab" href="#tabs-1"
+                    role="tab">
+                    <center class="mb-2">
+                        <h4>Round</h4>
+                        <span class="bg-gray p-1 btn ">01</span>
+                    </center>
+                    <a class="btn border-warning nav-link " data-toggle="tab" href="#tabs-90" role="tab">Rolls</a>
+                </a>
+            </li>
+            <li class="nav-item custom-nav-item m-2 TextBH">
+                <a class="nav-link border-warning text-warning font-weight-bold " data-toggle="tab" href="#tabs-91"
+                    role="tab">
+                    <center class="mb-2">
+                        <h4>Round</h4>
+                        <span class="bg-gray p-1 btn ">02</span>
+                    </center>
+                    <a class="btn border-warning nav-link " data-toggle="tab" href="#tabs-91" role="tab">Rolls</a>
+                </a>
+            </li>
+            <li class="nav-item custom-nav-item m-2 TextBH">
+                <a class="nav-link border-warning text-warning font-weight-bold " data-toggle="tab" href="#tabs-92"
+                    role="tab">
+                    <center class="mb-2">
+                        <h4>Round</h4>
+                        <span class="bg-gray p-1 btn ">03</span>
+                    </center>
+                    <a class="btn border-warning nav-link " data-toggle="tab" href="#tabs-92" role="tab">Rolls</a>
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="tab-content m-4">
+            <div class="tab-pane " id="tabs-90" role="tabpanel">
+                <div class="container">
+
+                    <div class="row">
+
+                        <div class="d-flex  justify-content-between BorderInSA p-2 m-1 col-md-12">
+                            <div class="text-light mt-1">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" id="customCheckbox2" name="customCheck"
+                                        class="custom-control-input">
+                                    <label class="custom-control-label" for="customCheckbox2"><span class="px-3">User Vote</span></label>
+                                </div>
+                            </div>
+                            <div class="text-light"><input type="text" class="Chexka form-control" placeholder="NA">
+                            </div>
+                        </div>
+                        <div class="d-flex  justify-content-between BorderInSA p-2 m-1 col-md-12">
+                            <div class="text-light mt-1">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" id="customCheckbox2" name="customCheck"
+                                        class="custom-control-input">
+                                    <label class="custom-control-label" for="customCheckbox2"><span class="px-3">Jury Mark</span></label>
+                                </div>
+                            </div>
+                            <div class="text-light"><input type="text" class="Chexka form-control" placeholder="30">
+                            </div>
+                        </div>
+                        <div class="d-flex  justify-content-between BorderInSA p-2 m-1 col-md-12">
+                            <div class="text-light mt-1">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" id="customCheckbox2" name="customCheck"
+                                        class="custom-control-input">
+                                    <label class="custom-control-label" for="customCheckbox2"><span class="px-3">Stae Mark</span></label>
+                                </div>
+                            </div>
+                            <div class="text-light"><input type="text" class="Chexka form-control" placeholder="40">
+                            </div>
+                        </div>
+                        <div class="d-flex col-md-12 justify-content-center mt-4 mb-4">
+                            <button class="btn bg-warning px-3 BTNdone"  data-toggle="modal" data-target="#exampleModalCenter">Done</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane " id="tabs-91" role="tabpanel">
+                <p>ewr Panel</p>
+            </div>
+            <div class="tab-pane " id="tabs-92" role="tabpanel">
+                <p>93 Panel</p>
+            </div>
+        </div>
+
+
+        <!-- Modal -->
+        {{-- <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" style="background: #151515;
+                border: 1px solid #FFD910;
+                box-sizing: border-box;
+                border-radius: 10px;">
+                    <center>
+                        <img src="{{ asset('assets/super-admin/images/modal.png') }}" width="150" class="p-3" alt="">
+                        <div>
+                            <h5 class="text-warning">Event Create</h5>
+                            <h4 class="text-warning"> <b> Succesfully Done!!</b></h4>
+                        </div>
+
+                        <button type="button" class="btn  px-3 m-4" data-dismiss="modal" style="
+                        background: #ADF1E7;color:black;
+                        border-radius: 10px;">Done</button>
+                    </center>
+                </div>
+            </div>
+        </div> --}}
+    </div>
+    @endforeach
+
+
+
+    {{-- <div class="tab-pane" id="tabs-1" role="tabpanel">
 
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item custom-nav-item m-2 TextBH">
@@ -226,7 +362,7 @@ Super Admin
     </div>
 
     <div class="tab-pane" id="tabs-2" role="tabpanel">
-        <p>Second Panel</p>
+        <p>Sports Panel</p>
     </div>
     <div class="tab-pane" id="tabs-3" role="tabpanel">
         <p>Third Panel</p>
@@ -250,7 +386,50 @@ Super Admin
     </div>
     <div class="tab-pane" id="tabs-9" role="tabpanel">
         <p>9 Panel</p>
-    </div>
+    </div> --}}
 </div>
+
+<script>
+    function selectedCategory(category_id){
+       
+        
+        // var category_id = $('.selectedCategory').text();
+        console.log('category', category_id);
+        var url = "{{ url('super-admin/audition-round-rules/') }}";
+
+
+            $.ajax({
+                url: url + "/" + category_id, // your request url
+                type: 'GET',
+                success: function(data) {
+                    // console.log('get data', data);
+                    // $("#round").val(data.rules.round_num);
+                    // $("#superstar").val(data.rules.judge_num);
+                    // $("#jury").val(data.rules.jury_num);
+                    // $("#root3").text(data.rules.month);
+                    // $("#root4").text(data.rules.day);
+                },
+                error: function(data) {
+                    var errorMessage = '<div class="card bg-danger">\n' +
+                        '<div class="card-body text-center p-5">\n' +
+                        '<span class="text-white">';
+                    $.each(data.responseJSON.errors, function(key, value) {
+                        errorMessage += ('' + value + '<br>');
+                    });
+                    errorMessage += '</span>\n' +
+                        '</div>\n' +
+                        '</div>';
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        footer: errorMessage
+                    });
+
+                    console.log(data);
+                }
+            });
+        
+    };
+</script>
 
 @endsection

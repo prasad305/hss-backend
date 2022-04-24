@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionRules;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class AuditionRulesController extends Controller
     public function index()
     {
         $data = [
-            'rules' => AuditionRules::where('status',1)->get(),
+            'rules' => AuditionRules::where('status',1)->latest()->get(),
         ];
         return view('SuperAdmin.AuditionRules.index',$data);
     }
@@ -26,6 +27,7 @@ class AuditionRulesController extends Controller
     {
         $data = [
             'categories' => Category::where('status',1)->orderBy('id', 'DESC')->get(),
+            'rules' => AuditionRules::where('status',1)->latest()->get(),
         ];
         return view('SuperAdmin.AuditionRules.create',$data);
     }
@@ -42,19 +44,33 @@ class AuditionRulesController extends Controller
             'day' => 'required',
         ]);
 
-      $audition_rules = new  AuditionRules();
+      $audition_rules = AuditionRules::where('category_id',$request->category_id)->first();
       $audition_rules->fill($request->all());
       $audition_rules->save();
+
+      if ($audition_rules) {
+        for ($i=0; $i < (int)$audition_rules->round_num; $i++) { 
+            AuditionRoundRule::create([
+                'audition_rules_id' => $audition_rules->id,
+            ]);
+        }
+      }
+     
         return response()->json([
             'status' => 'success',
-            'message' => 'Rules Created Successfully!',
+            'message' => 'Rules Updated Successfully!',
         ]);
     }
 
   
     public function show($id)
     {
-        //
+        // return $id;
+        $rules = AuditionRules::where('category_id',$id)->first();
+        return response()->json([
+            'status' => 'success',
+            'rules' => $rules,
+        ]);
     }
 
  

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Audition\AuditionRules;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class AuditionRoundRulesController extends Controller
@@ -14,7 +16,10 @@ class AuditionRoundRulesController extends Controller
      */
     public function index()
     {
-        return view('SuperAdmin.AuditionRoundRules.index');
+        $data = [
+            'categories' => Category::where('status',1)->latest()->get(),
+        ];
+        return view('SuperAdmin.AuditionRoundRules.index',$data);
     }
 
     /**
