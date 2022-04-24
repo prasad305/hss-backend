@@ -21,6 +21,7 @@
         href="{{ asset('assets/manager-admin/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     <!-- Custom style -->
     <link rel="stylesheet" href="{{ asset('assets/custom-style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/super-admin/Events.css') }}">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 

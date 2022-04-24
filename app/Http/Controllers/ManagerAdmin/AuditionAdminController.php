@@ -429,5 +429,11 @@ class AuditionAdminController extends Controller
     public function auditionDashboard(){
         return view('ManagerAdmin.Audition.auditionAdminDashboard');
     }
+    public function auditionJuries(){
+        return view('ManagerAdmin.Audition.juries');
+    }
+    public function auditionEvents(){
+        return view('ManagerAdmin.Audition.events');
+    }
 }
 
