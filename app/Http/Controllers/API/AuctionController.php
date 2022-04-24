@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Auction;
 use App\Models\Bidding;
+use App\Models\Notification;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -237,6 +238,14 @@ class AuctionController extends Controller
         $bidding = Bidding::find($id);
         $bidding->notify_status = 1;
         $bidding->update();
+
+        //Create New Notification
+        $notification = new Notification();
+        $notification->notification_id = 3;
+        $notification->user_id = $bidding->user_id;
+        $notification->save();
+
+        return $notification;
 
         return response()->json([
             'status' => 200,
