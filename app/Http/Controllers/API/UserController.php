@@ -388,7 +388,7 @@ class UserController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->orderBy('id','DESC')->first();
+            $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->orderBy('id', 'DESC')->first();
             $greeting_reg->name = $request->name;
             $greeting_reg->birth_date = $request->date_b;
             $greeting_reg->greeting_contex = $request->greetings_context;

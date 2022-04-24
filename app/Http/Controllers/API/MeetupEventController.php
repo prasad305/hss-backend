@@ -21,7 +21,7 @@ class MeetupEventController extends Controller
         $meetup->created_by_id = auth('sanctum')->user()->id;
         $meetup->star_id = $request->input('star_id');
         $meetup->title = $request->input('title');
-        $meetup->event_link= $request->input('event_link');
+        $meetup->event_link = $request->input('event_link');
         $meetup->meetup_type = $request->input('meetup_type');
         $meetup->date = $request->input('date');
         $meetup->start_time = $request->input('start_time');
@@ -31,51 +31,61 @@ class MeetupEventController extends Controller
         $meetup->total_seat = $request->input('slots');
         $meetup->fee = $request->input('fee');
 
-        if($request->hasfile('banner'))
-            {
-                $destination = $meetup->banner;
-                if(File::exists($destination))
-                {
-                    File::delete($destination);
-                }
-                $file = $request->file('banner');
-                $extension = $file->getClientOriginalExtension();
-                $filename = 'uploads/images/meetup/'.time(). '.' . $extension;
+        if ($request->hasfile('banner')) {
+            $destination = $meetup->banner;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+            $file = $request->file('banner');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/meetup/' . time() . '.' . $extension;
 
-                Image::make($file)->resize(900,400)
+            Image::make($file)->resize(900, 400)
                 ->save($filename, 50);
 
-                $meetup->banner = $filename;
+            $meetup->banner = $filename;
+        }
+        if ($request->hasfile('video')) {
+            $destination = $meetup->video;
+            if (File::exists($destination)) {
+                File::delete($destination);
             }
+            $file = $request->file('video');
+            $path = 'uploads/videos/meetup';
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move($path, $filename);
+            $meetup->video = $path . '/' . $filename;
+        }
 
         $meetup->save();
 
         return response()->json([
-            'status'=>200,
-            'meetup_id'=>$meetup->id,
-            'message'=>'Meetup Event Added',
+            'status' => 200,
+            'meetup_id' => $meetup->id,
+            'message' => 'Meetup Event Added',
         ]);
     }
 
     public function pending_list()
     {
-        $meetup = MeetupEvent::where('status','<>',1)->latest()->get();
+        $meetup = MeetupEvent::where('status', '<>', 1)->latest()->get();
 
         return response()->json([
-            'status'=>200,
-            'meetup'=>$meetup,
-            'message'=>'Success',
+            'status' => 200,
+            'meetup' => $meetup,
+            'message' => 'Success',
         ]);
     }
 
     public function approved_list()
     {
-        $meetup = MeetupEvent::where('status',1)->latest()->get();
+        $meetup = MeetupEvent::where('status', 1)->latest()->get();
 
         return response()->json([
-            'status'=>200,
-            'meetup'=>$meetup,
-            'message'=>'Success',
+            'status' => 200,
+            'meetup' => $meetup,
+            'message' => 'Success',
         ]);
     }
 
@@ -84,9 +94,9 @@ class MeetupEventController extends Controller
         $meetup = MeetupEvent::find($id);
 
         return response()->json([
-            'status'=>200,
-            'meetup'=>$meetup,
-            'message'=>'Success',
+            'status' => 200,
+            'meetup' => $meetup,
+            'message' => 'Success',
         ]);
     }
 
@@ -98,33 +108,33 @@ class MeetupEventController extends Controller
         $slot = MeetupEvent::find($id)->total_seat;
 
         return response()->json([
-            'status'=>200,
-            'meetup'=>$meetup,
-            'count'=>$meetup->count(),
+            'status' => 200,
+            'meetup' => $meetup,
+            'count' => $meetup->count(),
             'empty_slot' => $slot - $meetup->count(),
-            'message'=>'Success',
+            'message' => 'Success',
         ]);
     }
 
     public function star_pending_list()
     {
-        $meetup = MeetupEvent::where([['star_id',auth('sanctum')->user()->id],['star_approval',0]])->latest()->get();
+        $meetup = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 0]])->latest()->get();
 
         return response()->json([
-            'status'=>200,
-            'meetup'=>$meetup,
-            'message'=>'Success',
+            'status' => 200,
+            'meetup' => $meetup,
+            'message' => 'Success',
         ]);
     }
 
     public function star_approved_list()
     {
-        $meetup = MeetupEvent::where([['star_id',auth('sanctum')->user()->id],['star_approval',1]])->latest()->get();
+        $meetup = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 1]])->latest()->get();
 
         return response()->json([
-            'status'=>200,
-            'meetup'=>$meetup,
-            'message'=>'Success',
+            'status' => 200,
+            'meetup' => $meetup,
+            'message' => 'Success',
         ]);
     }
 
@@ -136,9 +146,9 @@ class MeetupEventController extends Controller
 
 
         return response()->json([
-            'status'=>200,
-            'meetup'=>$meetup,
-            'message'=>'Approved',
+            'status' => 200,
+            'meetup' => $meetup,
+            'message' => 'Approved',
         ]);
     }
 
@@ -148,7 +158,7 @@ class MeetupEventController extends Controller
     public function manager_pending()
     {
         $upcommingEvent = MeetupEvent::where([
-            ['star_approval',1],['status',0]
+            ['star_approval', 1], ['status', 0]
         ])->latest()->get();
 
         return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
@@ -157,7 +167,7 @@ class MeetupEventController extends Controller
     public function manager_published()
     {
         $upcommingEvent = MeetupEvent::where([
-            ['status',1]
+            ['status', 1]
         ])->latest()->latest()->get();
 
         return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
@@ -179,9 +189,9 @@ class MeetupEventController extends Controller
 
 
         return response()->json([
-            'status'=>200,
-            'meetup'=>$meetup,
-            'message'=>'Approved',
+            'status' => 200,
+            'meetup' => $meetup,
+            'message' => 'Approved',
         ]);
     }
 
@@ -191,9 +201,9 @@ class MeetupEventController extends Controller
         $meetup = MeetupEvent::find($id);
 
         return response()->json([
-            'status'=>200,
-            'meetup'=>$meetup,
-            'message'=>'Approved',
+            'status' => 200,
+            'meetup' => $meetup,
+            'message' => 'Approved',
         ]);
     }
 
@@ -217,8 +227,7 @@ class MeetupEventController extends Controller
     {
         $meetup = MeetupEvent::find($id);
 
-        if($meetup->status != 1)
-        {
+        if ($meetup->status != 1) {
             $meetup->manager_approval = 1;
             $meetup->status = 1;
 
@@ -228,27 +237,23 @@ class MeetupEventController extends Controller
 
             // Create New post //
             $post = new Post();
-            $post->type='meetup';
-            $post->user_id=$meetup->star_id;
+            $post->type = 'meetup';
+            $post->user_id = $meetup->star_id;
             $post->event_id = $meetup->id;
-            $post->category_id=$starCat->category_id;
-            $post->sub_category_id=$starCat->sub_category_id;
+            $post->category_id = $starCat->category_id;
+            $post->sub_category_id = $starCat->sub_category_id;
             $post->save();
-        }
-        else
-        {
+        } else {
             $meetup->manager_approval = 0;
             $meetup->status = 0;
             $meetup->update();
 
             //Remove post //
-            $post = Post::where('event_id',$id)->first();
+            $post = Post::where('event_id', $id)->first();
             $post->delete();
         }
 
         return redirect()->back()->with('success', 'Published');
-
-
     }
 
 
@@ -257,25 +262,25 @@ class MeetupEventController extends Controller
 
     public function meetup_event_list()
     {
-        $meetup = MeetupEvent::where('status',1)->latest()->get();
+        $meetup = MeetupEvent::where('status', 1)->latest()->get();
 
         return response()->json([
-            'status'=>200,
-            'meetup'=>$meetup,
-            'message'=>'Success',
+            'status' => 200,
+            'meetup' => $meetup,
+            'message' => 'Success',
         ]);
     }
 
     public function meetup_event_booking($star_id, $event_id)
     {
-        $star = SuperStar::where('star_id',$star_id)->first();
+        $star = SuperStar::where('star_id', $star_id)->first();
         $meetup = MeetupEvent::find($event_id);
 
         return response()->json([
-            'status'=>200,
-            'star'=>$star,
-            'meetup'=>$meetup,
-            'message'=>'Success',
+            'status' => 200,
+            'star' => $star,
+            'meetup' => $meetup,
+            'message' => 'Success',
         ]);
     }
 
@@ -302,9 +307,9 @@ class MeetupEventController extends Controller
         $activity->save();
 
         return response()->json([
-            'status'=>200,
-            'meetup'=>$meetup,
-            'message'=>'Success',
+            'status' => 200,
+            'meetup' => $meetup,
+            'message' => 'Success',
         ]);
     }
 
@@ -332,36 +337,34 @@ class MeetupEventController extends Controller
         $meetup->total_seat = $request->input('slots');
         $meetup->fee = $request->input('fee');
 
-        if($request->hasfile('image'))
-            {
-                $destination = $meetup->banner;
-                if(File::exists($destination))
-                {
-                    File::delete($destination);
-                }
-                $file = $request->file('image');
-                $extension = $file->getClientOriginalExtension();
-                $filename = 'uploads/images/meetup/'.time(). '.' . $extension;
+        if ($request->hasfile('image')) {
+            $destination = $meetup->banner;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/meetup/' . time() . '.' . $extension;
 
-                Image::make($file)->resize(900,400)
+            Image::make($file)->resize(900, 400)
                 ->save($filename, 50);
 
-                $meetup->banner = $filename;
-            }
+            $meetup->banner = $filename;
+        }
 
-            try {
-                $meetup->update();
-                if($meetup){
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Meetup Event Updated Successfully'
-                    ]);
-                }
-            } catch (\Exception $exception) {
+        try {
+            $meetup->update();
+            if ($meetup) {
                 return response()->json([
-                    'type' => 'error',
-                    'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+                    'success' => true,
+                    'message' => 'Meetup Event Updated Successfully'
                 ]);
             }
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+            ]);
+        }
     }
 }
