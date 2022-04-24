@@ -336,8 +336,8 @@
         </li>
 
 
-        <li class="nav-item">
-            <a href="#" class="nav-link">
+        <li class="nav-item {{ \Illuminate\Support\Facades\Request::is('manager-admin/audition*') ? 'menu-open ' : '' }}">
+            <a href="#" class="nav-link {{ \Illuminate\Support\Facades\Request::is('manager-admin/audition*') ? 'active ' : '' }}">
                 <i class="nav-icon fas fa-chart-pie"></i>
                 <p>Audition
                     <i class="right fas fa-angle-left"></i>
@@ -357,7 +357,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.admins') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.audition.auditionAdmin.index') }}" class="nav-link {{ Request::routeIs('managerAdmin.audition.auditionAdmin.index') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Admins</p>
                     </a>

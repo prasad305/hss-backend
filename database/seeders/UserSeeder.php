@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\SuperStar;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use PhpParser\Node\Expr\New_;
+use Faker\Generator as Faker;
+
 
 class UserSeeder extends Seeder
 {
@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(Faker $faker)
     {
         $user = new User();
         $user->first_name = 'Mr. Super';
@@ -142,7 +142,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Mr.';
         $user->last_name = 'Jury';
         $user->email = 'jury@gmail.com';
-        $user->image = 'uploads/images/users/lzg-1643882523.jpg';
+        $user->image = null;
         $user->cover_photo = 'uploads/images/users/1642659396.jpg';
         $user->phone = '01700000010';
         $user->password = Hash::make('12345');
@@ -151,5 +151,19 @@ class UserSeeder extends Seeder
         $user->otp = '123456';
         $user->save();
 
+        for ($i=1; $i < 11; $i++) {
+            $user = new User();
+            $user->first_name = 'Mr. Audition';
+            $user->last_name = 'Admin '.$i;
+            $user->email = 'audition-admin'.$i.'@gmail.com';
+            $user->image = null;
+            $user->cover_photo = null;
+            $user->phone = '016000000'.$i;
+            $user->password = Hash::make('12345');
+            $user->user_type = 'audition-admin';
+            $user->status = $faker->numberBetween(0, 1);
+            $user->otp = '123456';
+            $user->save();
+        }
     }
 }

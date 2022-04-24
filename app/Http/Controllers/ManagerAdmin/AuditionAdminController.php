@@ -33,7 +33,7 @@ class AuditionAdminController extends Controller
                 array_push($userIds, $jury->jury_id);
             }
         }
-        
+
         $avaiable_juries = User::whereNotIn('id', $userIds)->where('user_type','jury')->orderBy('id', 'DESC')->get();
 
         $filter_videos = AuditionParticipant::where([['audition_id',$audition_id],['accept_status', 1],['filter_status', 1],['send_manager_admin',1],['jury_id', null]])->get();
@@ -44,7 +44,7 @@ class AuditionAdminController extends Controller
         $videoPackArray = [];
        if($total_jury > 0){
             $video_pack = floor($total_video / $total_jury);
-            for ($total_jury; $total_jury > 0; $total_jury--) { 
+            for ($total_jury; $total_jury > 0; $total_jury--) {
                 if($total_jury == 1){
                     array_push($videoPackArray, $total_video);
                 }else{
@@ -53,7 +53,7 @@ class AuditionAdminController extends Controller
                 }
             }
        }
-        
+
         $data = [
             'filter_videos' => $filter_videos,
             'avaiable_juries' => $avaiable_juries,
@@ -256,42 +256,6 @@ class AuditionAdminController extends Controller
             return response()->json([
                 'type' => 'success',
                 'message' => 'Successfully Deleted'
-            ]);
-        } catch (\Exception $exception) {
-            return response()->json([
-                'type' => 'error',
-                'message' => $exception->getMessage()
-            ]);
-        }
-    }
-
-    public function activeNow($id)
-    {
-        $user = User::findOrFail($id);
-        $user->status = 1;
-        try {
-            $user->save();
-            return response()->json([
-                'type' => 'success',
-                'message' => 'Successfully Updated'
-            ]);
-        } catch (\Exception $exception) {
-            return response()->json([
-                'type' => 'error',
-                'message' => $exception->getMessage()
-            ]);
-        }
-    }
-
-    public function inactiveNow($id)
-    {
-        $user = User::findOrFail($id);
-        $user->status = 0;
-        try {
-            $user->save();
-            return response()->json([
-                'type' => 'success',
-                'message' => 'Successfully Updated'
             ]);
         } catch (\Exception $exception) {
             return response()->json([
