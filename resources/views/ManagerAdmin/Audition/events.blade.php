@@ -45,7 +45,15 @@
             border-bottom: 2px solid white;
         }
 
-        
+        .displaySide {
+            display: flex;
+            justify-content: center
+        }
+
+        .fontBold {
+            font-size: 40px;
+            font-weight: 800;
+        }
 
     </style>
 
@@ -73,26 +81,34 @@
         <li class="nav-item custom-nav-item m-2 TextBH">
             <a class="nav-link border-warning " data-toggle="tab" href="#tabs-1" role="tab">
                 <center>
-                    <img src="{{ asset('assets/super-admin/images/Music.png') }}" class="ARRimg pt-2" alt="">
+                    <div class='displaySide'>
+                        <img src="{{ asset('assets/manager-admin/instagram-live.png') }}" class="ARRimg pt-2" alt="">
+                        <div class='fontBold'>00</div>
+                    </div>
+
                 </center>
-                <a class="btn border-warning nav-link active " data-toggle="tab" href="#tabs-1" role="tab">Music</a>
+                <a class="btn border-warning nav-link active " data-toggle="tab" href="#tabs-1" role="tab">Live Audition</a>
             </a>
 
         </li>
         <li class="nav-item custom-nav-item m-2 ">
             <a class="nav-link border-warning" data-toggle="tab" href="#tabs-2" role="tab">
                 <center>
-                    <img src="{{ asset('assets/super-admin/images/sports.png') }}" class="ARRimg pt-2" alt="">
+                    <div class='displaySide'>
+                        <img src="{{ asset('assets/manager-admin/Group1176.png') }}" class="ARRimg pt-2" alt="">
+                        <div class='fontBold'>00</div>
+                    </div>
                 </center>
-                <a class="btn border-warning nav-link " data-toggle="tab" href="#tabs-2" role="tab">Sports</a>
+                <a class="btn border-warning nav-link " data-toggle="tab" href="#tabs-2" role="tab">Request for Approval</a>
             </a>
         </li>
         <li class="nav-item custom-nav-item m-2 ">
             <a class="nav-link border-warning" data-toggle="tab" href="#tabs-3" role="tab">
-                <center>
-                    <img src="{{ asset('assets/super-admin/images/dance.png') }}" class="ARRimg pt-2" alt="">
+                <center class="displaySide">
+                    <img src="{{ asset('assets/manager-admin/pending-audition.png') }}" class="ARRimg pt-2" alt="">
+                    <div class='fontBold'>00</div>
                 </center>
-                <a class="btn border-warning nav-link " data-toggle="tab" href="#tabs-3" role="tab">Dance</a>
+                <a class="btn border-warning nav-link " data-toggle="tab" href="#tabs-3" role="tab">Pending Audition</a>
             </a>
         </li>
 
@@ -171,7 +187,31 @@
         </div>
 
         <div class="tab-pane" id="tabs-2" role="tabpanel">
-            <p>Second Panel</p>
+            {{-- <p>Second Panel</p> --}}
+
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="row info-box bg-dark shadow-none pb-4 m-3 BGa">
+                        <img src="{{ asset('assets/super-admin/images/unsplash_hUHzaiAHuUc (1).png') }}" alt="Admin Image"
+                            class="img-fluid ImgBlue mr-3 mb-2">
+
+                        <div className="d-flex py-3 justify-contnet-center ">
+                            <div>
+                                <h5 class="text-center text-bold">Guitar Competition</h5>
+                                <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
+                                    industry. Lorem
+                                    Ipsum has been. </p>
+                                <center><button class="text-center btn GoldBtn px-4 text-bold ">On Going</button></center>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+           
+
+            </div>
+
         </div>
         <div class="tab-pane" id="tabs-3" role="tabpanel">
             <p>Third Panel</p>
