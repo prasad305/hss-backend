@@ -178,6 +178,10 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::post('/user/coverUpdate/{id}', [UserController::class, 'updateCover']);
     Route::post('/user/profileUpdate/{id}', [UserController::class, 'updateProfile']);
+
+    // User Photos
+
+    Route::get('/user/activitiesData', [UserController::class, 'userPhotos']);
 });
 
 
@@ -304,6 +308,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/live/allProduct', [AuctionController::class, 'allLiveProduct']);
     Route::get('/admin/liveBidding/auction/{auction_id}', [AuctionController::class, 'liveBidding']);
     Route::get('/admin/topBidder/auction/{auction_id}', [AuctionController::class, 'topBidder']);
+    Route::get('/admin/topBidder/auction/notify/{id}', [AuctionController::class, 'notify_bidder']);
 
     // audition routes
     //Route::get('/admin/audition/status', [AuditionController::class, 'starAdminPendingAudtion']);
@@ -557,6 +562,7 @@ Route::post('jury-register', [JuryAuthController::class, 'register']);
 
 Route::get('view-category', [CategoryController::class, 'index']);
 Route::get('/user/selected/category', [CategoryController::class, 'selectedCategory']);
+Route::post('/user/selected/category/store', [CategoryController::class, 'selectedCategoryStore']);
 Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
 
 

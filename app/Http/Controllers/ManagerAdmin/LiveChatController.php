@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ManagerAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\LiveChat;
 use App\Models\Post;
+use App\Models\SuperStar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -14,9 +15,10 @@ use Intervention\Image\ImageManagerStatic as Image;
 class LiveChatController extends Controller
 {
 
-    public function show()
+    public function show($id)
     {
-        return view('auth.confirm-password');
+        $event = LiveChat::find($id);
+        return view('ManagerAdmin.LiveChat.details', compact('event'));
     }
 
 
@@ -62,11 +64,15 @@ class LiveChatController extends Controller
             $event->status = 1;
             $event->update();
 
+            $starCat = SuperStar::where('star_id', $event->star_id)->first();
+
             // Create New post //
             $post = new Post();
             $post->type='livechat';
             $post->user_id=$event->star_id;
             $post->event_id = $event->id;
+            $post->category_id=$starCat->category_id;
+            $post->sub_category_id=$starCat->sub_category_id;
 
             $post->save();
         }

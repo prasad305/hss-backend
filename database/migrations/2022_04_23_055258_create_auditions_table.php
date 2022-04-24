@@ -16,8 +16,10 @@ class CreateAuditionsTable extends Migration
         Schema::create('auditions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('audition_rules_id')->nullable();
+            $table->unsignedBigInteger('audition_round_rules_id')->nullable();
             $table->unsignedBigInteger('creater_id')->nullable();
-            $table->unsignedBigInteger('admin_id')->nullable();
+            $table->unsignedBigInteger('audition_admin_id')->nullable();
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
             $table->longText('description')->nullable();
@@ -25,12 +27,6 @@ class CreateAuditionsTable extends Migration
             $table->string('video')->nullable();
             $table->timestamp('start_time')->nullable();
             $table->timestamp('end_time')->nullable();
-            $table->integer('round_status')->nullable();
-            $table->integer('star_approval')->default(0);
-            $table->double('fee')->nullable();
-            $table->integer('setJuryMark')->nullable();
-            $table->integer('setJudgeMark')->nullable();
-            $table->unsignedBigInteger('template_id')->nullable();
             $table->boolean('status')->default(0);
             $table->timestamps();
         });

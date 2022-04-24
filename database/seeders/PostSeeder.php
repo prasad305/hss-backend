@@ -27,6 +27,7 @@ class PostSeeder extends Seeder
             $Post->title = $faker->text(20);
             $Post->details = $faker->text(100);
             $Post->share_link = null;
+            $Post->category_id = 1;
             $Post->status = 1;
             $Post->save();
         };

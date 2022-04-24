@@ -367,7 +367,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'date_b' => 'required',
+            // 'date_b' => 'required',
             'phone' => 'required',
             'greetings_context' => 'required',
             'password' => 'required'
@@ -378,10 +378,11 @@ class UserController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
+            $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->orderBy('id','DESC')->first();
             $greeting_reg->name = $request->name;
             $greeting_reg->birth_date = $request->date_b;
             $greeting_reg->greeting_contex = $request->greetings_context;
+            $greeting_reg->additional_message = $request->additional_message;
             $greeting_reg->phone = $request->phone;
             $greeting_reg->password = Hash::make($request->password);
             $greeting_reg->status = 2;
@@ -880,6 +881,18 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'message' => "Image Photo updated"
+        ]);
+    }
+
+    public function userPhotos()
+    {
+
+        $userPhotos = Activity::where('user_id', auth()->user()->id)->get();
+
+
+        return response()->json([
+            'status' => 200,
+            'userPhotos' => $userPhotos
         ]);
     }
 }

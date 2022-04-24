@@ -224,11 +224,15 @@ class MeetupEventController extends Controller
 
             $meetup->update();
 
+            $starCat = SuperStar::where('star_id', $meetup->star_id)->first();
+
             // Create New post //
             $post = new Post();
             $post->type='meetup';
             $post->user_id=$meetup->star_id;
             $post->event_id = $meetup->id;
+            $post->category_id=$starCat->category_id;
+            $post->sub_category_id=$starCat->sub_category_id;
             $post->save();
         }
         else

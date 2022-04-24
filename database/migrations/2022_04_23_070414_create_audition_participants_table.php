@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBiddingsTable extends Migration
+class CreateAuditionParticipantsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateBiddingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('biddings', function (Blueprint $table) {
+        Schema::create('audition_participants', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('auction_id')->nullable();
-            $table->string('name');
-            $table->integer('amount');
-            $table->integer('notify_status')->default(0);
-            $table->integer('win_status')->defaule(0);
-            $table->boolean('status')->nullable();
+            $table->unsignedBigInteger('audition_id')->nullable();
+            $table->string('wining_status')->nullable();
+            $table->string('certificates')->nullable();
+            $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
             $table->timestamps();
         });
     }
@@ -33,6 +31,6 @@ class CreateBiddingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('biddings');
+        Schema::dropIfExists('audition_participants');
     }
 }
