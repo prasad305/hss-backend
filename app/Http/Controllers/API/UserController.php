@@ -13,6 +13,7 @@ use App\Models\FanGroupMessage;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
 use App\Models\LearningSession;
+use App\Models\SubCategory;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChat;
 use App\Models\LiveChatRegistration;
@@ -71,13 +72,23 @@ class UserController extends Controller
         $id = auth('sanctum')->user()->id;
         $selectedCategory = ChoiceList::where('user_id', $id)->first();
 
-        $selectedCategory = json_decode($selectedCategory->category);
+        $selectedCat = json_decode($selectedCategory->category);
+        $selectedSubCat = json_decode($selectedCategory->subcategory);
+        $selectedSubSubCat = json_decode($selectedCategory->star_id);
 
-        $post = Post::select("*")
-            ->whereIn('category_id', $selectedCategory)
+        $cat_post = Post::select("*")
+            ->whereIn('category_id', $selectedCat)
             ->latest()->get();
 
-        // $post = Post::latest()->get();
+        $sub_cat_post = Post::select("*")
+            ->whereIn('sub_category_id', $selectedSubCat)
+            ->latest()->get();
+
+        $sub_sub_cat_post = Post::select("*")
+            ->whereIn('user_id', $selectedSubSubCat)
+            ->latest()->get();
+
+        $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
 
         return response()->json([
             'status' => 200,
@@ -85,6 +96,27 @@ class UserController extends Controller
             'livechats' => $post,
         ]);
     }
+
+    public function allSubcategoryList($catId){
+
+        $allSubCat = SubCategory::where('category_id', $catId)
+                            ->latest()
+                            ->get();
+
+        // $someSubCat = SubCategory::where('category_id', $catId)
+        //                     ->whereIn('id', subcategory)
+        //                     ->latest()
+        //                     ->get();
+        // return $allSubCat;
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'allSubCat' => $allSubCat,
+            // 'someSubCat' => $someSubCat,
+        ]);
+    }
+
+    
 
     public function getAllLearningSession()
     {
