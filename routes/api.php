@@ -35,6 +35,7 @@ Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 
 // Home Page All Post
 Route::get('/user/all_post', [UserController::class, 'all_post']);
+Route::get('/user/subcategory/{id}', [UserController::class, 'allSubcategoryList']);
 
 
 Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
