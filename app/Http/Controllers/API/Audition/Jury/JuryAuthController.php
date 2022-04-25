@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Audition\Jury;
 
+use App\Http\Controllers\Controller;
 use App\Models\JuryBoard;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -29,7 +30,6 @@ class JuryAuthController extends Controller
 
         else
         {
-
             $user = new User();
 
             $user->first_name = $request->input('first_name');
@@ -100,69 +100,4 @@ class JuryAuthController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\JuryBoard  $juryBoard
-     * @return \Illuminate\Http\Response
-     */
-    public function show(JuryBoard $juryBoard)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\JuryBoard  $juryBoard
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(JuryBoard $juryBoard)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\JuryBoard  $juryBoard
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, JuryBoard $juryBoard)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\JuryBoard  $juryBoard
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(JuryBoard $juryBoard)
-    {
-        //
-    }
 }

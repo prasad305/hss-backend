@@ -1,67 +1,72 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\Audition\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Audition\Audition;
 use App\Models\User;
+use App\Models\SuperStar;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Models\Audition\AssignJudge;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionMark;
-use App\Models\Audition\FilterVideo;
 use App\Models\JudgeMarks;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use PhpParser\Node\Expr\Assign;
 
 class AuditionController extends Controller
 {
-
-    public function index()
+    //Count
+    public function count()
     {
-        //
-    }
-
-    public function auditionAdminStatus()
-    {
-        $live = Audition::where([['admin_id', auth('sanctum')->user()->id], ['status', 1]])->count();
-        $pending = Audition::where([['admin_id', auth('sanctum')->user()->id], ['status', 0]])->count();
+        $live = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 1]])->count();
+        $pending = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 0]])->count();
         return response()->json([
             'status' => 200,
             'live' => $live,
             'pending' => $pending,
         ]);
     }
-
-
-
-    public function auditionAdminPendings()
+    
+    // Pending Auditions
+    public function pending()
     {
-        $pendings = Audition::where([['admin_id', auth('sanctum')->user()->id], ['status', 0]])->get();
+        $pendings = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 0]])->get();
         return response()->json([
             'status' => 200,
             'pendings' => $pendings,
         ]);
     }
-    public function auditionAdminLive()
+
+    // Live Auditions
+    public function live()
     {
-        $lives = Audition::where([['admin_id', auth('sanctum')->user()->id], ['status', 1]])->get();
+        $lives = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 1]])->get();
         return response()->json([
             'status' => 200,
             'lives' => $lives,
         ]);
     }
-    public function auditionStatus($audition_id)
+
+    //Stars Under Audition Admin Category
+    public function stars($category_id)
     {
-        $auditionStatus = Audition::with('judge', 'judge.user')->where([['admin_id', auth('sanctum')->user()->id], ['id', $audition_id]])->get();
+        $stars = SuperStar::where([['category_id', $category_id], ['status', 1]])->get();
+
         return response()->json([
             'status' => 200,
-            'auditionStatus' => $auditionStatus,
+            'stars' => $stars,
         ]);
     }
+
+
+
+
+
+
+    // Send to Manager Admin
     public function sendManager($audition_id)
     {
         $total_audition = AssignJudge::where('audition_id', $audition_id)->count();
@@ -73,39 +78,13 @@ class AuditionController extends Controller
         ]);
     }
 
-
-    public function confirmedAudition($audition_id)
-    {
-        $confirmedAudition = Audition::where([['admin_id', auth('sanctum')->user()->id], ['id', $audition_id]])->update(['star_approval' => 1]);
-        return response()->json([
-            'status' => 200,
-            'confirmedAudition' => $confirmedAudition,
-        ]);
-    }
-
-    public function stars()
-    {
-        $stars = User::where([['user_type', 'star'], ['status', 1]])->get();
-        return response()->json([
-            'status' => 200,
-            'stars' => $stars,
-        ]);
-    }
-
-
-    public function create()
-    {
-        //
-    }
-
-
+    // Audition Modification by Audition Admin
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
             'star_ids' => 'required',
-            //'video' => 'mimes:mp4,mkv,3gp',
         ]);
 
 
@@ -182,8 +161,7 @@ class AuditionController extends Controller
     }
 
 
-
-
+    // Audition Details
     public function getAudition($audition_id)
     {
         $audition = Audition::with(['judge', 'participant'])->find($audition_id);
@@ -193,8 +171,6 @@ class AuditionController extends Controller
             array_push($judge_ids, $star->judge_id);
         }
 
-        // return $judge_ids;
-
         return response()->json([
             'status' => 200,
             'audition' => $audition,
@@ -203,7 +179,6 @@ class AuditionController extends Controller
     }
 
     // Star  Audition Start
-
     public function starPendingAudtion()
     {
         $pendingAuditions = Audition::with('judge')

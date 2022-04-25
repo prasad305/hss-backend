@@ -61,6 +61,7 @@ class AuditionRoundRulesController extends Controller
      */
     public function show($id)
     {
+        
         $round_rules = AuditionRoundRule::where('audition_rules_id', $id)->get();
 
         return response()->json([
