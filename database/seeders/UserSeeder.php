@@ -162,6 +162,7 @@ class UserSeeder extends Seeder
             $user->password = Hash::make('12345');
             $user->user_type = 'audition-admin';
             $user->status = $faker->numberBetween(0, 1);
+            $user->category_id = $faker->numberBetween(1, 8);
             $user->otp = '123456';
             $user->save();
         }
