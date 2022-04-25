@@ -59,38 +59,37 @@
         }
     });
     $.ajax({
-        url: "{{route('managerAdmin.admin.store')}}",// your request url
+        url: "{{route('managerAdmin.audition.auditionAdmin.store')}}",// your request url
         data: formData,
         processData: false,
         contentType: false,
         type: 'POST',
         success: function (data) {
             Swal.fire(
-                    'Success!',
-                    'Audition Admin has been Added. ' + data.message,
-                    'success'
-                )
-                setTimeout(function() {
-                    location.reload();
-                }, 1000);
+                'Success!',
+                'Audition Admin has been Added. ' + data.message,
+                'success'
+            )
+            setTimeout(function() {
+                location.reload();
+            }, 1000);
         },
         error: function (data) {
             var errorMessage = '<div class="card bg-danger">\n' +
-                        '<div class="card-body text-center p-5">\n' +
-                        '<span class="text-white">';
-                    $.each(data.responseJSON.errors, function(key, value) {
-                        errorMessage += ('' + value + '<br>');
-                    });
-                    errorMessage += '</span>\n' +
-                        '</div>\n' +
-                        '</div>';
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        footer: errorMessage
-                    })
+                '<div class="card-body text-center p-5">\n' +
+                '<span class="text-white">';
+            $.each(data.responseJSON.errors, function(key, value) {
+                errorMessage += ('' + value + '<br>');
+            });
+            errorMessage += '</span>\n' +
+                '</div>\n' +
+                '</div>';
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                footer: errorMessage
+            })
         }
     });
-
 });
 </script>

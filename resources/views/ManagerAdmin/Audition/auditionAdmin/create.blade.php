@@ -55,11 +55,9 @@
                     accept=".jfif,.jpg,.jpeg,.png,.gif" required>
             </div>
         </span>
-
       <div class="row float-right">
         <button style="padding: 10px 20px; background: #3A8FF2; border-radius: 5px;" type="submit" class="btn btn-primary mr-4 align-right" id="btnSendData">Submit</button>
       </div>
-
     </form>
 </div>
 
@@ -108,6 +106,5 @@
                 })
             }
         });
-
     });
 </script>
