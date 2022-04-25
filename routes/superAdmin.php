@@ -48,6 +48,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // Audition Round Rules
     Route::resource('audition-round-rules', AuditionRoundRulesController::class);
+    Route::get('audition-round-rules/mark/{rules_id}', [AuditionRoundRulesController::class,'getMark']);
 
     // Audition Round Rules
     Route::resource('audition-admin', AdminAuditionController::class);
