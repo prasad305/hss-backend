@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionRules;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -17,9 +18,10 @@ class AuditionRoundRulesController extends Controller
     public function index()
     {
         $data = [
-            'categories' => Category::where('status',1)->latest()->get(),
+            'categories' => Category::where('status', 1)->latest()->get(),
+            'rules_categories' => AuditionRules::with('category')->where('status', 1)->latest()->get(),
         ];
-        return view('SuperAdmin.AuditionRoundRules.index',$data);
+        return view('SuperAdmin.AuditionRoundRules.index', $data);
     }
 
     /**
@@ -40,7 +42,15 @@ class AuditionRoundRulesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $round = AuditionRoundRule::find($request->round_id);
+        $round->user_vote_mark = $request->user_vote_mark;
+        $round->jury_mark = $request->jury_mark;
+        $round->judge_mark = $request->judge_mark;
+        $round->save();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Round Rules Save Successfully'
+        ]);
     }
 
     /**
@@ -51,7 +61,21 @@ class AuditionRoundRulesController extends Controller
      */
     public function show($id)
     {
-        //
+        $round_rules = AuditionRoundRule::where('audition_rules_id', $id)->get();
+
+        return response()->json([
+            'status' => 'success',
+            'round_rules' => $round_rules
+        ]);
+    }
+    public function getMark($id)
+    {
+        $mark = AuditionRoundRule::find($id);
+
+        return response()->json([
+            'status' => 'success',
+            'mark' => $mark
+        ]);
     }
 
     /**
