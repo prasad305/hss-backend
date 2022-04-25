@@ -61,6 +61,8 @@ Super Admin
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                         <tr>
+                            <th>SL</th>
+                            <th>Rules ID</th>
                             <th>Envet Name</th>
                             <th>Rounds</th>
                             <th>SuperStar</th>
@@ -73,6 +75,8 @@ Super Admin
 
                         @foreach ($rules as $rule)
                         <tr>
+                            <td>{{ $loop->iteration }}  </td>
+                            <td>{{ $rule->id }}  </td>
                             <td>{{ $rule->category ? $rule->category->name : '' }}  Audition</td>
                             <td> Rounds Number {{ $rule->round_num }} </td>
                             <td>Super Star {{ $rule->judge_num }}</td>
