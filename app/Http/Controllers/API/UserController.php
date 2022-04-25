@@ -97,11 +97,12 @@ class UserController extends Controller
         ]);
     }
 
-    public function allSubcategoryList($catId){
+    public function allSubcategoryList($catId)
+    {
 
         $allSubCat = SubCategory::where('category_id', $catId)
-                            ->latest()
-                            ->get();
+            ->latest()
+            ->get();
 
         // $someSubCat = SubCategory::where('category_id', $catId)
         //                     ->whereIn('id', subcategory)
@@ -116,7 +117,7 @@ class UserController extends Controller
         ]);
     }
 
-    
+
 
     public function getAllLearningSession()
     {
@@ -154,7 +155,7 @@ class UserController extends Controller
         // New Activity Add For Learning Session Registrartion
         $activity = new Activity();
         $activity->user_id = auth('sanctum')->user()->id;
-        $activity->event_id = $learnigSession->id;
+        $activity->event_id = $request->input('post_id');
         $activity->type = 'learningSession';
         $activity->save();
 
@@ -363,7 +364,7 @@ class UserController extends Controller
         // New Activity Add for Live Chat Register
         $activity = new Activity();
         $activity->user_id = auth('sanctum')->user()->id;
-        $activity->event_id = $liveChatReg->id;
+        $activity->event_id = $request->event_id;
         $activity->type = 'liveChat';
         $activity->save();
 
@@ -926,15 +927,15 @@ class UserController extends Controller
         ]);
     }
 
-    public function userPhotos()
+    public function userActivites()
     {
 
-        $userPhotos = Activity::where('user_id', auth()->user()->id)->get();
+        $userActivites = Activity::orderBy('id', 'DESC')->where('user_id', auth()->user()->id)->get();
 
 
         return response()->json([
             'status' => 200,
-            'userPhotos' => $userPhotos
+            'userActivites' => $userActivites
         ]);
     }
 }

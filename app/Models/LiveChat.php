@@ -31,6 +31,7 @@ class LiveChat extends Model
         'publish_status',
         'status',
     ];
+    protected $with = ['star'];
 
     public function admin()
     {
@@ -63,5 +64,4 @@ class LiveChat extends Model
     {
         return $this->hasOne(Category::class, 'id');
     }
-
 }
