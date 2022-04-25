@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Models\Audition\AssignAdmin;
+use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionMark;
+use App\Models\Category;
 use App\Models\Audition\AuditionParticipant;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -224,10 +226,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Auction::class, 'created_by_id');
     }
-    public function assignAudition()
-    {
-        return $this->hasOne(AssignAdmin::class, 'assign_person');
-    }
 
     public function jury()
     {
@@ -241,4 +239,17 @@ class User extends Authenticatable
     public function markingVideo(){
         return $this->hasMany(AuditionMark::class, 'jury_id');
     }
+
+
+    // all of this below relation is for audition admin user
+    public function assignedAudition()
+    {
+        return $this->hasOne(Audition::class, 'audition_admin_id');
+    }
+    public function auditionCategory()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+
 }
