@@ -22,7 +22,7 @@ class AuditionSeeder extends Seeder
             $audition->audition_rules_id =  $faker->numberBetween(1, 8);
             $audition->audition_round_rules_id =  $faker->numberBetween(1, 10);
             $audition->creater_id =  2;
-            $audition->audition_admin_id =  20;
+            $audition->audition_admin_id =  $faker->numberBetween(12, 21);
             $audition->title =  $faker->text(10);
             $audition->slug =  str_replace('_', ' ', $faker->text(10));
             $audition->description = $faker->text(100);

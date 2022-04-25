@@ -48,8 +48,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     // Audition Admin route
     Route::resource('auditionAdmin', AuditionAdminController::class);
-    Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');
-    Route::post('auditionAdmin/inactive/{id}', [AuditionAdminController::class, 'inactiveNow'])->name('auditionAdmin.inactiveNow');
+
     Route::get('auditionAdmin-assinged', [AuditionAdminController::class, 'assinged'])->name('auditionAdmin_assinged');
     Route::get('auditionAdmin-free', [AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin_notAssinged');
 
@@ -101,6 +100,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::group(['prefix' => 'audition/', 'as' => 'audition.'], function () {
         // audition admin
        Route::resource('auditionAdmin', App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class);
+       Route::get('assinged', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'assinged'])->name('auditionAdmin.assinged');
+       Route::get('free', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin.notAssinged');
 
 
         Route::get('pending', [AuditionAdminController::class, 'pending'])->name('pending');

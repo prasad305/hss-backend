@@ -23,10 +23,20 @@
                 <br>
 
                 <div>
-                    <button class='btn filterBtn'><i class="fa-solid fa-arrow-down-short-wide"></i> Filter</button>
+                    <button data-toggle="dropdown" class='btn filterBtn'><i class="fa-solid fa-arrow-down-short-wide"></i>
+                        Filter</button>
+                    <div class="dropdown-menu" style="background-color: #3c506f;">
+                        <a class="dropdown-item" href="{{ route('managerAdmin.audition.auditionAdmin.assinged') }}">Show assigned audition
+                            admins</a>
+                        <a class="dropdown-item" href="{{ route('managerAdmin.audition.auditionAdmin.notAssinged') }}">Show available
+                            audition admins</a>
+                        <a class="dropdown-item" href="{{ route('managerAdmin.audition.auditionAdmin.index') }}">All Admins</a>
+                    </div>
                 </div>
                 <div class='mx-2'>
-                    <a class='btn filterBtn'  onclick="Show('New Audition Admin','{{ route('managerAdmin.audition.auditionAdmin.create') }}')"><i class="fa-solid fa-circle-plus"></i> New</a>
+                    <a class='btn filterBtn'
+                        onclick="Show('New Audition Admin','{{ route('managerAdmin.audition.auditionAdmin.create') }}')"><i
+                            class="fa-solid fa-circle-plus"></i> New</a>
                 </div>
             </div>
         </div>
@@ -35,30 +45,6 @@
         </div>
 
         <div class="row">
-            {{-- @foreach ($auditionAdmins as $auditionAdmin)
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="info-box shadow-none bg-light pt-4 pb-4">
-                        <img src="{{ asset($auditionAdmin->image ?? get_static_option('user')) }}" alt="Admin Image"
-                            class="img-fluid AdminImg mr-3 mt-4">
-
-                        <div class="px-2" style="border-left: 1px solid gray">
-
-                            <a href="{{ route('managerAdmin.auditionAdmin.show', $auditionAdmin->id) }}">
-                                <span class="info-box-text AdminName">
-                                    <h5>{{ $auditionAdmin->first_name }} {{ $auditionAdmin->last_name }}</h5>
-                                </span>
-                                <b class="AdminMusic">Music</b> <br />
-                            </a>
-                            @if ($auditionAdmin->assignAudition)
-                            <span class="right badge bg-danger my-2">Assigned</span>
-                            <i class="fa-solid fa-bahai px-2 text-danger"></i><br>
-                            @else
-                            @endif
-
-                        </div>
-                    </div>
-                </div>
-            @endforeach --}}
             @foreach ($auditionAdmins as $auditionAdmin)
                 <div class="col-md-3 col-sm-6 col-12">
                     <div class="info-box bg-dark shadow-none pt-4 pb-4 m-3">
@@ -84,7 +70,7 @@
 
 
                             <a class="btn btn-sm btn-info"
-                                onclick="Show('Edit Audition Admin','{{ route('managerAdmin.auditionAdmin.edit', $auditionAdmin->id) }}')"><i
+                                onclick="Show('Edit Audition Admin','{{ route('managerAdmin.audition.auditionAdmin.edit', $auditionAdmin->id) }}')"><i
                                     class="fa fa-edit text-white"></i></a>
 
                             <button class="btn btn-sm btn-warning" onclick="delete_function(this)"
