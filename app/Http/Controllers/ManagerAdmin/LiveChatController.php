@@ -25,7 +25,7 @@ class LiveChatController extends Controller
     public function pending()
     {
         $upcommingEvent = LiveChat::where([
-            ['star_approve_status',1],['status',null]
+            ['star_approve_status', 1], ['status', null]
         ])->latest()->get();
 
         return view('ManagerAdmin.LiveChat.index', compact('upcommingEvent'));
@@ -34,7 +34,7 @@ class LiveChatController extends Controller
     public function published()
     {
         $upcommingEvent = LiveChat::where([
-            ['status',1]
+            ['status', 1]
         ])->latest()->latest()->get();
 
         return view('ManagerAdmin.LiveChat.index', compact('upcommingEvent'));
@@ -59,8 +59,7 @@ class LiveChatController extends Controller
     {
         $event = LiveChat::find($id);
 
-        if($event->status != 1)
-        {
+        if ($event->status != 1) {
             $event->status = 1;
             $event->update();
 
@@ -68,20 +67,19 @@ class LiveChatController extends Controller
 
             // Create New post //
             $post = new Post();
-            $post->type='livechat';
-            $post->user_id=$event->star_id;
+            $post->type = 'livechat';
+            $post->user_id = $event->star_id;
             $post->event_id = $event->id;
-            $post->category_id=$starCat->category_id;
-            $post->sub_category_id=$starCat->sub_category_id;
+            // $post->category_id=$starCat->category_id;
+            // $post->sub_category_id=$starCat->sub_category_id;
 
             $post->save();
-        }
-        else{
+        } else {
             $event->status = NULL;
             $event->update();
 
             // Remove post //
-            $post = Post::where('event_id',$id)->first();
+            $post = Post::where('event_id', $id)->first();
             $post->delete();
         }
 
@@ -99,48 +97,45 @@ class LiveChatController extends Controller
 
     public function update(Request $request, $id)
     {
-            $liveChat = LiveChat::findOrFail($id);
-            $liveChat->fill($request->except('_token'));
+        $liveChat = LiveChat::findOrFail($id);
+        $liveChat->fill($request->except('_token'));
 
-            $liveChat->title = $request->input('title');
-            $liveChat->description = $request->input('description');
+        $liveChat->title = $request->input('title');
+        $liveChat->description = $request->input('description');
 
-            // $liveChat->date = $request->input('date');
-            // $liveChat->start_time = Carbon::parse($request->input('start_time'));
-            // $liveChat->end_time = Carbon::parse($request->input('end_time'));
+        // $liveChat->date = $request->input('date');
+        // $liveChat->start_time = Carbon::parse($request->input('start_time'));
+        // $liveChat->end_time = Carbon::parse($request->input('end_time'));
 
-            $liveChat->fee = $request->input('fee');
-            $liveChat->total_seat = $request->input('slots');
+        $liveChat->fee = $request->input('fee');
+        $liveChat->total_seat = $request->input('slots');
 
-            if($request->hasfile('image'))
-            {
-                $destination = $liveChat->banner;
-                if(File::exists($destination))
-                {
-                    File::delete($destination);
-                }
-                $file = $request->file('image');
-                $extension = $file->getClientOriginalExtension();
-                $filename = 'uploads/images/live_chat/'.time(). '.' . $extension;
-
-                Image::make($file)->resize(900,400)->save($filename, 100);
-                $liveChat->banner = $filename;
+        if ($request->hasfile('image')) {
+            $destination = $liveChat->banner;
+            if (File::exists($destination)) {
+                File::delete($destination);
             }
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/live_chat/' . time() . '.' . $extension;
 
-            try {
-                $liveChat->update();
-                if($liveChat){
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'LiveChat Event Updated Successfully'
-                    ]);
-                }
-            } catch (\Exception $exception) {
+            Image::make($file)->resize(900, 400)->save($filename, 100);
+            $liveChat->banner = $filename;
+        }
+
+        try {
+            $liveChat->update();
+            if ($liveChat) {
                 return response()->json([
-                    'type' => 'error',
-                    'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+                    'success' => true,
+                    'message' => 'LiveChat Event Updated Successfully'
                 ]);
             }
-
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+            ]);
+        }
     }
 }

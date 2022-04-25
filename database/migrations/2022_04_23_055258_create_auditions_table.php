@@ -20,11 +20,14 @@ class CreateAuditionsTable extends Migration
             $table->unsignedBigInteger('audition_round_rules_id')->nullable();
             $table->unsignedBigInteger('creater_id')->nullable();
             $table->unsignedBigInteger('audition_admin_id')->nullable();
+            $table->unsignedBigInteger('admin_id')->nullable();
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
             $table->longText('description')->nullable();
             $table->string('banner')->nullable();
             $table->string('video')->nullable();
+            $table->string('round_status')->nullable();
+            $table->string('template_id')->nullable();
             $table->timestamp('start_time')->nullable();
             $table->timestamp('end_time')->nullable();
             $table->boolean('status')->default(0);
