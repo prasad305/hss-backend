@@ -363,9 +363,9 @@
                         showConfirmButton: false,
                         // timer: 1500
                     })
-                    setTimeout(function() {
-                        location.reload();
-                    }, 1000);
+                    // setTimeout(function() {
+                    //     location.reload();
+                    // }, 1000);
                     // console.log('success')
                 },
                 error: function(data) {
