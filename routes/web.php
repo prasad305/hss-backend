@@ -40,6 +40,11 @@ Route::get('/', function () {
 Route::get('/chat', function () {
     return view('chatroom');
 });
+Route::get('/test-view', function () {
+
+    return "Please add a view !";
+    // return view('SuperAdmin.JurysAuditoin.index');
+});
 
 
 // For system reboot

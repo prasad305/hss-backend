@@ -1,11 +1,17 @@
 @extends('Layouts.ManagerAdmin.master')
 
 @push('title')
-    Admin
+    Audition Admin
+@endpush
+
+@push('css')
+     <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/manager-admin/dist/css/adminlte.min.css') }}">
 @endpush
 
 @section('content')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
     <div>
         <div class="content text-center px-5 adminAssignPadding">
             <div class="container-fluid widgetUserPadding">
@@ -74,21 +80,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="row justify-content-center mt-5">
-                            <ul class="nav nav-tabs">
-                                <li class="nav-item">
-                                    <button class="nav-link active btn  mx-2 bg-light" data-toggle="tab" href="#home">Cancel
-                                    </button>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('managerAdmin.audition.adminAssignSubmit') }}">
-                                        <button
-                                            class="nav-link btn  mx-2 bg-info">Assign
-                                        </button>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div> --}}
 
                         <div class="row justify-content-center mt-5">
                             <ul class="nav nav-tabs">
@@ -118,8 +109,8 @@
                                 <div class="card my-4">
                                     @if ($auditionAdmin->assignAudition)
                                     @else
-                                        <form action="{{ route('managerAdmin.AuditionAssign', $auditionAdmin->id) }}"
-                                            method="post">
+                                        <form action="{{ route('managerAdmin.audition.store') }}"
+                                            method="POST">
                                             @csrf
                                             <div class="card-body">
                                                 <div class="form-group row">
@@ -127,7 +118,8 @@
                                                         <label>Admin Name</label>
                                                     </div>
                                                     <div class="col-10">
-                                                        <input type="text" name="admin_name" class="form-control" readonly value="{{ $auditionAdmin->first_name .' '.$auditionAdmin->last_name }}">
+                                                        <input type="hidden" name="admin_id" value="{{ $auditionAdmin->id }}">
+                                                        <input type="text" name="admin_name" class="form-control" readonly value="{{ $auditionAdmin->first_name . ' ' . $auditionAdmin->last_name }}">
                                                         @error('admin_name')
                                                             <p class="text-danger">{{ $message }}</p>
                                                         @enderror
@@ -173,47 +165,56 @@
                                                         <label>Select Juries</label>
                                                     </div>
                                                     <div class="col-10">
-                                                        {{-- <select class="select2"   name="juries[]" multiple="multiple" data-placeholder="Select Juries" style="width: 100%;">
-                                                            <option value="Alabama">Alabama</option>
-                                                            <option value="Alaska">Alaska</option>
-                                                            <option value="California">California</option>
-                                                            <option value="Delaware">Delaware</option>
-                                                            <option value="Tennessee">Tennessee</option>
-                                                            <option value="Texas">Texas</option>
-                                                            <option value="Washington">Washington</option>
-                                                          </select> --}}
-
-
-
-                                                          <div class="form-group">
-                                                            <label>Multiple</label>
-                                                            <select class="select2" multiple="multiple" data-placeholder="Select a State" style="width: 100%;">
-                                                              <option>Alabama</option>
-                                                              <option>Alaska</option>
-                                                              <option>California</option>
-                                                              <option>Delaware</option>
-                                                              <option>Tennessee</option>
-                                                              <option>Texas</option>
-                                                              <option>Washington</option>
-                                                            </select>
-                                                          </div>
-
-
-                                                        {{-- <select multiple class="form-control"  name="juries[]">
-                                                            <option  value="audition">Audition</option>
-                                                            <option  value="fghf">dgfdh</option>
-                                                            <option  value="fhfjh">fgjtyjkyrj</option>
-                                                        </select> --}}
+                                                        <select name="jury[]" class="select2" multiple="multiple"
+                                                        style="width: 100%;">
+                                                            @foreach ( $juries as $jury)
+                                                                <option value="{{ $jury->id }}">{{ $jury->first_name .' '.$jury->last_name }}</option>
+                                                            @endforeach
+                                                        </select>
                                                         @error('juries')
                                                             <p class="text-danger">{{ $message }}</p>
                                                         @enderror
                                                     </div>
                                                 </div>
+                                                <div class="form-group row">
+                                                    <div class="col-2">
+                                                        <label>Select Judges</label>
+                                                    </div>
+                                                    <div class="col-10">
+                                                        <select name="judge[]" class="select2" multiple="multiple"
+                                                        style="width: 100%;">
+                                                            @foreach ( $judges as $judge)
+                                                                <option value="{{ $judge->id }}">{{ $judge->first_name .' '.$judge->last_name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('judges')
+                                                            <p class="text-danger">{{ $message }}</p>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-2">
+                                                        <label>Event Start</label>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <input type="date" name="start_date" id="start_date" class="form-control">
+                                                        @error('start_date')
+                                                            <p class="text-danger">{{ $message }}</p>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <label>Event End</label>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <input type="date" name="end_date" id="end_date" class="form-control">
+                                                        @error('end_date')
+                                                            <p class="text-danger">{{ $message }}</p>
+                                                        @enderror
+                                                    </div>
+                                                </div>
                                                 <div class=" float-right">
-
                                                     <button type="submit" class="btn btn-primary">Submit</button>
                                                 </div>
-
                                             </div>
                                         </form>
                                     @endif
@@ -282,5 +283,25 @@
             border: 2px solid gray;
             border-radius: 10px;
         }
+
     </style>
 @endsection
+
+
+@push('js')
+    <!-- Select2 -->
+    <script src="{{ asset('assets/manager-admin/plugins/select2/js/select2.full.min.js') }}"></script>
+
+
+    <script>
+        $(function() {
+            //Initialize Select2 Elements
+            $('.select2').select2()
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+        });
+    </script>
+@endpush

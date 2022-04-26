@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\JuryBoard;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Faker\Generator as Faker;
@@ -36,6 +37,7 @@ class UserSeeder extends Seeder
         $user->password = Hash::make('12345');
         $user->user_type = 'manager-admin'; // Manager Admin user_type == 'manager-admin'
         $user->status = 1;
+        $user->category_id = 1;
         $user->otp = '123456';
         $user->save();
 
@@ -151,6 +153,7 @@ class UserSeeder extends Seeder
         $user->otp = '123456';
         $user->save();
 
+        // audition-admin
         for ($i=1; $i < 11; $i++) {
             $user = new User();
             $user->first_name = 'Mr. Audition';
@@ -161,8 +164,55 @@ class UserSeeder extends Seeder
             $user->phone = '016000000'.$i;
             $user->password = Hash::make('12345');
             $user->user_type = 'audition-admin';
-            $user->status = $faker->numberBetween(0, 1);
-            $user->category_id = $faker->numberBetween(1, 8);
+            // $user->status = $faker->numberBetween(0, 1);
+            $user->status = 1;
+            // $user->category_id = $faker->numberBetween(1, 8);
+            $user->category_id = 1;
+            $user->otp = '123456';
+            $user->save();
+        }
+
+
+        // jury
+        for ($i=1; $i < 11; $i++) {
+            $user = new User();
+            $user->first_name = 'Mr. ';
+            $user->last_name = 'Jury '.$i;
+            $user->email = 'jury'.$i.'@gmail.com';
+            $user->image = null;
+            $user->cover_photo = null;
+            $user->phone = '016110000'.$i;
+            $user->password = Hash::make('12345');
+            $user->user_type = 'jury';
+            $user->status = 1;
+            // $user->status = $faker->numberBetween(0, 1);
+            // $user->category_id = $faker->numberBetween(1, 8);
+            $user->category_id = 1;
+            $user->otp = '123456';
+            $user->save();
+
+            $jury = new JuryBoard();
+            $jury->star_id =  $user->id;
+            $jury->manager_admin_id =  $user->id;
+            $jury->category_id = 1;
+            $jury->terms_and_condition = $faker->text;
+            $jury->description = $faker->text;
+            $jury->qr_code = $faker->numberBetween(100000, 999999);
+            $jury->save();
+        }
+        // star against 1st category (soprts)
+        for ($i=1; $i < 11; $i++) {
+            $user = new User();
+            $user->first_name = 'Star '.$i;
+            $user->last_name = '(Sports)';
+            $user->email = 'star'.$i.'sports@gmail.com';
+            $user->image = null;
+            $user->cover_photo = null;
+            $user->phone = '011000000'.$i;
+            $user->category_id = 1;
+            $user->password = Hash::make('12345');
+            $user->user_type = 'star';
+            $user->status = 1;
             $user->otp = '123456';
             $user->save();
         }
