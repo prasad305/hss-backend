@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class AuditionAdminController extends Controller
 {
@@ -75,7 +76,7 @@ class AuditionAdminController extends Controller
             'last_name' => 'required',
             'email' => 'required|unique:users',
             'phone' => 'required|unique:users',
-            'category' => 'required|exists:categories,id',
+            // 'category' => 'required|exists:categories,id',
         ]);
 
         $user = new User();
@@ -87,7 +88,7 @@ class AuditionAdminController extends Controller
         $user->user_type = 'audition-admin'; // Admin user_type == 'audition-admin'
         $user->otp = rand(100000, 999999);
         $user->status = 0;
-        $user->category_id = $request->category;
+        $user->category_id = Auth::user()->category_id;
 
         if ($request->hasFile('image')) {
             $image             = $request->file('image');
@@ -134,7 +135,10 @@ class AuditionAdminController extends Controller
             session()->flash('error', 'This Admin Need to Approval First');
             return redirect()->back();
         }
-        return view('ManagerAdmin.Audition.auditionAdmin.show')->with('auditionAdmin', $auditionAdmin);
+        // $auditionRules = A
+        $juries  = User::where('user_type', 'jury')->where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->get();
+        $judges  = User::where('user_type', 'star')->where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->get();
+        return view('ManagerAdmin.Audition.auditionAdmin.show', compact('auditionAdmin', 'juries', 'judges'));
     }
 
     /**
@@ -163,7 +167,7 @@ class AuditionAdminController extends Controller
             'last_name' => 'required',
             'email' => 'required|unique:users,email,'.$id,
             'phone' => 'required|unique:users,phone,'.$id,
-            'category' => 'required|exists:categories,id',
+            // 'category' => 'required|exists:categories,id',
         ]);
 
         $user = User::find($id);
@@ -171,7 +175,7 @@ class AuditionAdminController extends Controller
         $user->last_name = $request->last_name;
         $user->phone = $request->phone;
         $user->email = $request->email;
-        $user->category_id = $request->category;
+        // $user->category_id = $request->category;
 
         if ($request->hasFile('image')) {
             if($user->image != null){

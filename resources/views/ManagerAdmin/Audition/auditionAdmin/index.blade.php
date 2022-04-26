@@ -1,7 +1,7 @@
 @extends('Layouts.ManagerAdmin.master')
 
 @push('title')
-    Admin
+    Audition Admin
 @endpush
 
 @section('content')
@@ -56,7 +56,7 @@
                                     <h5 class="text-light">{{ $auditionAdmin->first_name }}
                                         {{ $auditionAdmin->last_name }}</h5>
                                 </span>
-                                <b class="AdminMusic">{{ $auditionAdmin->auditionCategory->name }}</b> <br />
+                                <b class="AdminMusic">{{ $auditionAdmin->auditionCategory->name ?? '' }}</b> <br />
                                 <p class="{{ $auditionAdmin->status == 0 ? 'text-danger' : 'text-success' }}">
                                     {{ $auditionAdmin->status == 0 ? 'Pending For Approval' : 'Approved' }}</p>
                             </a>

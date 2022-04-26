@@ -21,7 +21,7 @@
             <input type="email" class="form-control" id="email" required name="email"
             value="{{ $auditionAdmin->email }}">
         </div>
-        <div class="row form-group">
+        {{-- <div class="row form-group">
             <label for="category">Select Category</label>
             <select name="category" id="category" class="form-control">
                 <option value="" disabled selected >select One</option>
@@ -29,7 +29,7 @@
                     <option @if($category->id == $auditionAdmin->category_id) selected @endif value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach
             </select>
-        </div>
+        </div> --}}
         <span class="row">
             <div class="form-group col-md-6">
                 <label for="icon">image</label>

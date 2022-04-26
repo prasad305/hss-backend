@@ -98,6 +98,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     // Audition Routes
     Route::group(['prefix' => 'audition/', 'as' => 'audition.'], function () {
+                // audition
+        Route::post('store', [App\Http\Controllers\ManagerAdmin\Audition\AuditionController::class, 'store'])->name('store');
         // audition admin
        Route::resource('auditionAdmin', App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class);
        Route::get('assinged', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'assinged'])->name('auditionAdmin.assinged');
