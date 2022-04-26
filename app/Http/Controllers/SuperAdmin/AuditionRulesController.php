@@ -50,11 +50,11 @@ class AuditionRulesController extends Controller
         $diff = $new_round_num - $previous_round_num;
         // return abs($diff);
 
-        
+
         $audition_rules->fill($request->all());
         $audition_rules->save();
 
-        
+
             if ($diff > 0) {
                 for ($i = 0; $i < $diff; $i++) {
                     AuditionRoundRule::create([
@@ -66,11 +66,11 @@ class AuditionRulesController extends Controller
             if ($diff < 0) {
 
               AuditionRoundRule::orderBy('id', 'desc')->take(abs($diff))->delete();
-            
-            }
-       
 
-        
+            }
+
+
+
 
         return response()->json([
             'status' => 'success',

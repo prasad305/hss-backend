@@ -31,13 +31,13 @@ Super Admin
 
     @foreach ($rules_categories as $key => $rules)
     <li class="nav-item custom-nav-item m-2 TextBH {{ $key == 0 ? 'active' : '' }}" onclick="selectedCategory('{{ $rules->id }}')">
-        <a class="nav-link border-warning " data-toggle="tab" href="#tabs-{{ $rules->category->id }}" role="tab">
+        <a class="nav-link border-warning " data-toggle="tab" href="#tabs-{{ $rules->category ? $rules->category->id : '' }}" role="tab">
             <center>
-                <img src="{{ asset($rules->category->icon) }}" class="ARRimg pt-2" alt={{ $rules->category->name }} icon>
+                <img src="{{ asset($rules->category ? $rules->category->icon : '') }}" class="ARRimg pt-2" alt={{ $rules->category ? $rules->category->name : '' }} icon>
             </center>
-            <a class="btn border-warning nav-link  {{ $key == 0 ? 'active' : '' }}"  data-toggle="tab" href="#tabs-{{ $rules->category->id }}" role="tab">{{ $rules->category->name }}</a>
+            <a class="btn border-warning nav-link  {{ $key == 0 ? 'active' : '' }}"  data-toggle="tab" href="#tabs-{{ $rules->category->id ?? '' }}" role="tab">{{ $rules->category ? $rules->category->name : '' }}</a>
         </a>
-    </li>      
+    </li>
     @endforeach
 </ul>
 
@@ -53,7 +53,7 @@ Super Admin
 <div class="m-4" id="show-rules" style="display:none">
     <div class="tab-pane " id="tabs-90" role="tabpanel">
         <div class="container">
-        
+
             <form id="create-form">
                 @csrf
 
@@ -103,14 +103,14 @@ Super Admin
             </form>
         </div>
     </div>
-    
+
 </div>
 
 
 <script>
     function selectedCategory(rules_id){
-       
-        
+
+
         // var rules_id = $('.selectedCategory').text();
         console.log('category', rules_id);
         var url = "{{ url('super-admin/audition-round-rules/') }}";
@@ -142,7 +142,7 @@ Super Admin
                             '<ul class="nav nav-tabs" role="tablist">'+single_round+'</ul>'+
                         '</div>'
                     );
-                  
+
                 },
                 error: function(data) {
                     var errorMessage = '<div class="card bg-danger">\n' +
@@ -163,7 +163,7 @@ Super Admin
                     console.log(data);
                 }
             });
-        
+
     };
 
     function showRules(round_id){
@@ -176,7 +176,7 @@ Super Admin
                 type: 'GET',
                 success: function(data) {
                     console.log('get data', data);
-                    
+
                     if (data.mark.user_vote_mark > 0) {
                         $('#checkbox1').attr('checked', 'checked');
                         $('#textbox1').attr("style", "display:block");
@@ -206,8 +206,8 @@ Super Admin
                         $('#textbox3').attr("style", "display:none");
                         $('#textbox3').val(0);
                     }
-                    
-                  
+
+
                 },
                 error: function(data) {
                     var errorMessage = '<div class="card bg-danger">\n' +
@@ -230,7 +230,7 @@ Super Admin
             });
 
 
-        
+
         $('#show-rules').attr("style", "display:block");
 
         $(document).on('click', '#SubmitRules', function(event) {
@@ -306,10 +306,10 @@ Super Admin
             });
     }
 
-            
+
         });
-      
-   
+
+
     }
 $(document).ready(function () {
     // $('#textbox1').val($(this).is(':checked'));
@@ -317,7 +317,7 @@ $(document).ready(function () {
      $('#textbox1').attr("style", "display:none");
      $('#textbox2').attr("style", "display:none");
      $('#textbox3').attr("style", "display:none");
-    
+
     $('#checkbox1').change(function() {
         if($(this).is(":checked")) {
             $('#textbox1').attr("style", "display:block");
@@ -350,7 +350,7 @@ $(document).ready(function () {
     //     alert('Total Mark Will Not Be More Than 100');
     // }
 });
-    
+
 </script>
 
 @endsection
