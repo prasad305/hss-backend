@@ -50,6 +50,7 @@ class DatabaseSeeder extends Seeder
         $this->call(Audition\AuditionRoundRulesSeeder::class);
         $this->call(Audition\AuditionAssignJudgeSeeder::class);
         $this->call(Audition\AuditionParticipantsSeeder::class);
+        $this->call(Audition\AuditionRulesSeeder::class);
 
     }
 }
