@@ -29,14 +29,14 @@ class AuditionController extends Controller
             'pending' => $pending,
         ]);
     }
-    
+
     // Pending Auditions
     public function pending()
     {
-        $pendings = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 0]])->get();
+        $event = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 0]])->get();
         return response()->json([
             'status' => 200,
-            'pendings' => $pendings,
+            'event' => $event,
         ]);
     }
 
