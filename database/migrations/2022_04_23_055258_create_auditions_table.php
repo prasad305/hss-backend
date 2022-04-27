@@ -20,7 +20,7 @@ class CreateAuditionsTable extends Migration
             $table->unsignedBigInteger('audition_round_rules_id')->nullable();
             $table->unsignedBigInteger('creater_id')->nullable();
             $table->unsignedBigInteger('audition_admin_id')->nullable();
-            $table->unsignedBigInteger('admin_id')->nullable();
+            $table->unsignedBigInteger('manager_admin_id')->nullable();
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
             $table->longText('description')->nullable();

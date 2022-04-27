@@ -361,11 +361,11 @@
                         icon: data.type,
                         title: data.message,
                         showConfirmButton: false,
-                        // timer: 1500
+                        timer: 1500
                     })
-                    setTimeout(function() {
-                        location.reload();
-                    }, 1000);
+                    // setTimeout(function() {
+                    //     location.reload();
+                    // }, 1000);
                     // console.log('success')
                 },
                 error: function(data) {
@@ -375,6 +375,8 @@
                     $.each(data.responseJSON.errors, function(key, value) {
                         errorMessage += ('' + value + '<br>');
                     });
+
+                    errorMessage += ('' + data.responseJSON.message + '<br>');
                     errorMessage += '</span>\n' +
                         '</div>\n' +
                         '</div>';

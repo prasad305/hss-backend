@@ -4,7 +4,7 @@ use App\Http\Controllers\API\AuctionController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\LiveChatController;
 use App\Http\Controllers\API\StarAuthController;
-use App\Http\Controllers\API\JuryAuthController;
+use App\Http\Controllers\API\Audition\Jury\JuryAuthController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\SubCategoryController;
 use App\Http\Controllers\API\UserController;
@@ -15,9 +15,8 @@ use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\API\SimplePostController;
 use App\Http\Controllers\API\FanGroupController;
 use App\Http\Controllers\API\LearningSessionController;
-use App\Http\Controllers\API\AuditionController;
+use App\Http\Controllers\API\Audition\Admin\AuditionController;
 use App\Http\Controllers\API\PromoVideoController;
-use App\Http\Controllers\SuperAdmin\Audition\AuditionController as AuditionAuditionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -182,7 +181,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // User Photos
 
-    Route::get('/user/activitiesData', [UserController::class, 'userPhotos']);
+    Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
 });
 
 
@@ -273,12 +272,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/livechat_event_details/{id}', [LiveChatController::class, 'details']);
     Route::get('/admin/live_chat_slots/{id}', [LiveChatController::class, 'slots']);
     Route::get('/admin/live_chat/count', [LiveChatController::class, 'count']);
-
-
-
-
-
-
 
 
 
@@ -466,18 +459,17 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
         return response()->json(['message' => 'You are in as Audition Admin', 'status' => 200], 200);
     });
 
-    // Marketplace Section
-    // Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
+    // Audition Route For Audition Admin
+    Route::get('/audition-admin/audition/count', [AuditionController::class, 'count']);
+    Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'pending']);
+    Route::get('/audition-admin/audition/request', [AuditionController::class, 'request']);
+    Route::get('/audition-admin/audition/lives', [AuditionController::class, 'live']);
 
-
-    // Monir Audition Part 1
-    Route::get('/audition-admin/audition/status', [AuditionController::class, 'auditionAdminStatus']);
-    Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'auditionAdminPendings']);
-    Route::get('/audition-admin/audition/lives', [AuditionController::class, 'auditionAdminlive']);
-    Route::get('/audition-admin/audition/stars', [AuditionController::class, 'stars']);
+    Route::get('/audition-admin/audition/{slug}', [AuditionController::class, 'getAudition']);
+    Route::get('/audition-admin/audition/stars/{category_id}', [AuditionController::class, 'stars']);
     Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
-    Route::get('/audition-admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
-    // Srabon Auditon Part 2
+
+
     Route::get('/audition-admin/auditionStatus/{audition_id}', [AuditionController::class, 'auditionStatus']);
     Route::get('/audition-admin/sendManager/{audition_id}', [AuditionController::class, 'sendManager']);
     Route::put('/audition-admin/confirmed/audition/{audition_id}', [AuditionController::class, 'confirmedAudition']);
@@ -514,16 +506,6 @@ Route::middleware(['auth:sanctum', 'isAPIJuryBoard'])->group(function () {
     Route::get('/jury/selectVideo', [AuditionController::class, 'getJuryVideos']);
     Route::post('/jury/juryMarking', [AuditionController::class, 'juryMarking']);
     Route::get('/jury/juryMarkingDone/videos', [AuditionController::class, 'markingDone']);
-
-
-    // Route::get('/jury/audition/time/{aud_id}', [AuditionController::class, 'juryTime']);
-    // Monir Jury Board
-    //   Route::get('/audition-admin/audition/status', [AuditionController::class, 'auditionAdminStatus']);
-    //   Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'auditionAdminPendings']);
-    //   Route::get('/audition-admin/audition/stars', [AuditionController::class, 'stars']);
-    //   Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
-
-    //   Route::get('/audition-admin/audition/{audition_id}', [AuditionController::class, 'getAudition']);
 
 });
 

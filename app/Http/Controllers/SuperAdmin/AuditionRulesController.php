@@ -13,26 +13,26 @@ use Carbon\Carbon;
 
 class AuditionRulesController extends Controller
 {
-    
+
     public function index()
     {
         $data = [
-            'rules' => AuditionRules::where('status',1)->latest()->get(),
+            'rules' => AuditionRules::where('status', 1)->latest()->get(),
         ];
-        return view('SuperAdmin.AuditionRules.index',$data);
+        return view('SuperAdmin.AuditionRules.index', $data);
     }
 
-   
+
     public function create()
     {
         $data = [
-            'categories' => Category::where('status',1)->orderBy('id', 'DESC')->get(),
-            'rules' => AuditionRules::where('status',1)->latest()->get(),
+            'categories' => Category::where('status', 1)->orderBy('id', 'DESC')->get(),
+            'rules' => AuditionRules::where('status', 1)->latest()->get(),
         ];
-        return view('SuperAdmin.AuditionRules.create',$data);
+        return view('SuperAdmin.AuditionRules.create', $data);
     }
 
-    
+
     public function store(Request $request)
     {
         $request->validate([
@@ -44,46 +44,65 @@ class AuditionRulesController extends Controller
             'day' => 'required',
         ]);
 
-      $audition_rules = AuditionRules::where('category_id',$request->category_id)->first();
-      $audition_rules->fill($request->all());
-      $audition_rules->save();
+        $audition_rules = AuditionRules::where('category_id', $request->category_id)->first();
+        $previous_round_num = (int)$audition_rules->round_num;
+        $new_round_num = $request->round_num;
+        $diff = $new_round_num - $previous_round_num;
+        // return abs($diff);
 
-      if ($audition_rules) {
-        for ($i=0; $i < (int)$audition_rules->round_num; $i++) { 
-            AuditionRoundRule::create([
-                'audition_rules_id' => $audition_rules->id,
-            ]);
-        }
-      }
-     
+
+        $audition_rules->fill($request->all());
+        $audition_rules->save();
+
+
+            if ($diff > 0) {
+                for ($i = 0; $i < $diff; $i++) {
+                    AuditionRoundRule::create([
+                        'audition_rules_id' => $audition_rules->id,
+                    ]);
+                }
+            }
+
+            if ($diff < 0) {
+
+              AuditionRoundRule::where('audition_rules_id',$audition_rules->id)->orderBy('id', 'desc')->take(abs($diff))->delete();
+
+            }
+
+
+
+
         return response()->json([
             'status' => 'success',
             'message' => 'Rules Updated Successfully!',
         ]);
     }
 
-  
+
+
+
+
     public function show($id)
     {
         // return $id;
-        $rules = AuditionRules::where('category_id',$id)->first();
+        $rules = AuditionRules::where('category_id', $id)->first();
         return response()->json([
             'status' => 'success',
             'rules' => $rules,
         ]);
     }
 
- 
+
     public function edit($id)
     {
         $data = [
             'rules' => AuditionRules::find($id),
-            'categories' => Category::where('status',1)->orderBy('id', 'DESC')->get(),
+            'categories' => Category::where('status', 1)->orderBy('id', 'DESC')->get(),
         ];
-        return view('SuperAdmin.AuditionRules.edit',$data);
+        return view('SuperAdmin.AuditionRules.edit', $data);
     }
 
-   
+
     public function update(Request $request, $id)
     {
         // return $request->all();
@@ -96,16 +115,16 @@ class AuditionRulesController extends Controller
             'day' => 'required',
         ]);
 
-      $audition_rules = AuditionRules::find($id);
-      $audition_rules->fill($request->all());
-      $audition_rules->save();
+        $audition_rules = AuditionRules::find($id);
+        $audition_rules->fill($request->all());
+        $audition_rules->save();
         return response()->json([
             'status' => 'success',
             'message' => 'Rules Updated Successfully!',
         ]);
     }
 
-   
+
     public function destroy($id)
     {
         //

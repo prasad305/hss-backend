@@ -11,15 +11,91 @@ class AuditionRulesSeeder extends Seeder
 
     public function run(Faker $faker)
     {
-        for ($i = 1; $i < 8; $i++) {
-            $auditionRules = new AuditionRules();
-            $auditionRules->category_id =  $faker->numberBetween(1, 8);
-            $auditionRules->round_num = $faker->numberBetween(1, 3);
-            $auditionRules->judge_num = $faker->numberBetween(1, 3);
-            $auditionRules->jury_num = $faker->numberBetween(1, 3);
-            $auditionRules->month = $faker->numberBetween(1, 12);
-            $auditionRules->day = $faker->numberBetween(1, 31);
-            $auditionRules->save();
-        }
+        AuditionRules::create( [
+
+            'category_id'=>7,
+            'round_num'=>0,
+            'judge_num'=>3,
+            'jury_num'=>3,
+            'month'=>5,
+            'day'=>3,
+            'status'=>1,
+            ] );
+
+            AuditionRules::create( [
+
+            'category_id'=>1,
+            'round_num'=>0,
+            'judge_num'=>3,
+            'jury_num'=>3,
+            'month'=>1,
+            'day'=>12,
+            'status'=>1,
+            ] );
+
+            AuditionRules::create( [
+
+            'category_id'=>4,
+            'round_num'=>0,
+            'judge_num'=>3,
+            'jury_num'=>2,
+            'month'=>3,
+            'day'=>1,
+            'status'=>1,
+            ] );
+
+            AuditionRules::create( [
+
+            'category_id'=>5,
+            'round_num'=>0,
+            'judge_num'=>3,
+            'jury_num'=>2,
+            'month'=>8,
+            'day'=>7,
+            'status'=>1,
+            ] );
+
+            AuditionRules::create( [
+
+            'category_id'=>6,
+            'round_num'=>0,
+            'judge_num'=>4,
+            'jury_num'=>5,
+            'month'=>7,
+            'day'=>7,
+            'status'=>1,
+            ] );
+
+            AuditionRules::create( [
+
+            'category_id'=>3,
+            'round_num'=>0,
+            'judge_num'=>3,
+            'jury_num'=>3,
+            'month'=>7,
+            'day'=>22,
+            'status'=>1,
+            ] );
+
+            AuditionRules::create( [
+
+            'category_id'=>2,
+            'round_num'=>0,
+            'judge_num'=>2,
+            'jury_num'=>2,
+            'month'=>2,
+            'day'=>2,
+            'status'=>1,
+            ] );
+
+            AuditionRules::create( [
+            'category_id'=>8,
+            'round_num'=>0,
+            'judge_num'=>4,
+            'jury_num'=>4,
+            'month'=>4,
+            'day'=>4,
+            'status'=>1,
+            ] );
     }
 }

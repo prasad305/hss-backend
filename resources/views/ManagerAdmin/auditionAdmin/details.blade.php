@@ -123,7 +123,9 @@ Audition Admin
 
                 <!-- Tab panes -->
                 <div class="tab-content mt-3">
-                    <div id="home" class="tab-pane active mb-5"></div>
+                    <div id="home" class="tab-pane active mb-5">
+
+                    </div>
 
                     <div id="menu1" class=" tab-pane fade">
 

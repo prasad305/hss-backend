@@ -302,7 +302,7 @@ class MeetupEventController extends Controller
         // New Activity Add For Activity
         $activity = new Activity();
         $activity->user_id = auth('sanctum')->user()->id;
-        $activity->event_id = $meetup->id;
+        $activity->event_id = $request->input('meetup_event_id');
         $activity->type = 'meetup';
         $activity->save();
 

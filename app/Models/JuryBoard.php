@@ -9,10 +9,9 @@ class JuryBoard extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         'star_id',
-        'admin_id',
+        'manager_admin_id',
         'category_id',
         'sub_category_id',
         'terms_and_condition',

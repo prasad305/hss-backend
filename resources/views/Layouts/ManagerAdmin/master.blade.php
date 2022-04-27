@@ -30,6 +30,7 @@
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/summernote/summernote-bs4.min.css') }}">
 
+    @stack('css')
 
 
 </head>
@@ -309,6 +310,8 @@
     <!-- ChartJS -->
     <script src="{{ asset('assets/manager-admin/plugins/chart.js/Chart.min.js') }}"></script>
 
+
+
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('assets/manager-admin/dist/js/demo.js') }}"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
@@ -318,6 +321,8 @@
 
     <!-- Summernote -->
     <script src="{{ asset('assets/manager-admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
+
+    @stack('js')
 
     @if (session()->has('success'))
         <script type="text/javascript">
@@ -341,8 +346,8 @@
                     position: 'center',
                     icon: 'error',
                     title: '{{ Session::get('error') }}',
-                    showConfirmButton: false,
-                    timer: 1500
+                    showConfirmButton: true,
+                    // timer: 1500
                 })
             });
         </script>
