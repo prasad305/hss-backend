@@ -97,25 +97,6 @@ class UserController extends Controller
         ]);
     }
 
-    public function allSubcategoryList($catId){
-
-        $allSubCat = SubCategory::where('category_id', $catId)
-                            ->latest()
-                            ->get();
-
-        // $someSubCat = SubCategory::where('category_id', $catId)
-        //                     ->whereIn('id', subcategory)
-        //                     ->latest()
-        //                     ->get();
-        // return $allSubCat;
-        return response()->json([
-            'status' => 200,
-            'message' => 'Ok',
-            'allSubCat' => $allSubCat,
-            // 'someSubCat' => $someSubCat,
-        ]);
-    }
-
     
 
     public function getAllLearningSession()
