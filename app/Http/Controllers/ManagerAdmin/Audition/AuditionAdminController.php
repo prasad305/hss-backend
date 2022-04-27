@@ -5,6 +5,9 @@ namespace App\Http\Controllers\ManagerAdmin\Audition;
 use App\Http\Controllers\Controller;
 use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\Audition;
+use App\Models\Audition\AuditionRules;
+use App\Models\Audition\AuditionAssignJury;
+use App\Models\Audition\AuditionAssignJudge;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -135,10 +138,27 @@ class AuditionAdminController extends Controller
             session()->flash('error', 'This Admin Need to Approval First');
             return redirect()->back();
         }
-        // $auditionRules = A
-        $juries  = User::where('user_type', 'jury')->where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->get();
-        $judges  = User::where('user_type', 'star')->where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->get();
-        return view('ManagerAdmin.Audition.auditionAdmin.show', compact('auditionAdmin', 'juries', 'judges'));
+        $auditionRule = AuditionRules::where('category_id', Auth::user()->category_id)->orderBy('id','DESC')->first();
+
+        // for not assigned juries
+        $auditionAssignJurys = AuditionAssignJury::select('jury_id')->get();
+
+        $userIds = [];
+        foreach ($auditionAssignJurys as $AuditionAssignJury) {
+            array_push($userIds, $AuditionAssignJury->jury_id);
+        }
+        $juries = User::whereNotIn('id', $userIds)->where('user_type', 'jury')->where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->get();
+
+        // for not assigned judge
+        $auditionAssignJudges = AuditionAssignJudge::select('judge_id')->get();
+
+        $userIds = [];
+        foreach ($auditionAssignJudges as $AuditionAssignJudge) {
+            array_push($userIds, $AuditionAssignJudge->judge_id);
+        }
+        $judges = User::whereNotIn('id', $userIds)->where('user_type', 'judge')->where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->get();
+
+        return view('ManagerAdmin.Audition.auditionAdmin.show', compact('auditionAdmin', 'juries', 'judges','auditionRule'));
     }
 
     /**

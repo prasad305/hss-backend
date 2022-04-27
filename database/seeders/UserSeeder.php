@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\JuryBoard;
+use App\Models\SuperStar;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Faker\Generator as Faker;
@@ -215,6 +216,36 @@ class UserSeeder extends Seeder
             $user->status = 1;
             $user->otp = '123456';
             $user->save();
+        }
+
+
+        // judge
+        for ($i=1; $i < 11; $i++) {
+            $user = new User();
+            $user->first_name = 'Mr. ';
+            $user->last_name = 'Judge '.$i;
+            $user->email = 'judge'.$i.'@gmail.com';
+            $user->image = null;
+            $user->cover_photo = null;
+            $user->phone = '016110022'.$i;
+            $user->password = Hash::make('12345');
+            $user->user_type = 'judge';
+            $user->status = 1;
+            // $user->status = $faker->numberBetween(0, 1);
+            // $user->category_id = $faker->numberBetween(1, 8);
+            $user->category_id = 1;
+            $user->otp = '123456';
+            $user->save();
+
+            $star = new SuperStar();
+
+            $star->star_id = $user->id;
+            $star->admin_id = 1;
+            $star->category_id = 1;
+            // $star->sub_category_id = $request->input('subcategory_id');
+            $star->terms_and_condition =  $faker->text;
+            $star->qr_code = rand( 10000000 , 99999999 );
+            $star->save();
         }
     }
 }

@@ -5,9 +5,10 @@
 @endpush
 
 @push('css')
-     <!-- Select2 -->
+    <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/select2/css/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('assets/manager-admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/manager-admin/dist/css/adminlte.min.css') }}">
 @endpush
 
@@ -109,8 +110,7 @@
                                 <div class="card my-4">
                                     @if ($auditionAdmin->assignAudition)
                                     @else
-                                        <form action="{{ route('managerAdmin.audition.store') }}"
-                                            method="POST">
+                                        <form action="{{ route('managerAdmin.audition.store') }}" method="POST">
                                             @csrf
                                             <div class="card-body">
                                                 <div class="form-group row">
@@ -118,8 +118,12 @@
                                                         <label>Admin Name</label>
                                                     </div>
                                                     <div class="col-10">
-                                                        <input type="hidden" name="admin_id" value="{{ $auditionAdmin->id }}">
-                                                        <input type="text" name="admin_name" class="form-control" readonly value="{{ $auditionAdmin->first_name . ' ' . $auditionAdmin->last_name }}">
+                                                        <input type="hidden" name="audition_admin_id"
+                                                            value="{{ $auditionAdmin->id }}">
+                                                        <input type="hidden" name="audition_rule_id"
+                                                            value="{{ $auditionRule->id ?? '' }}">
+                                                        <input type="text" name="admin_name" class="form-control" readonly
+                                                            value="{{ $auditionAdmin->first_name . ' ' . $auditionAdmin->last_name }}">
                                                         @error('admin_name')
                                                             <p class="text-danger">{{ $message }}</p>
                                                         @enderror
@@ -166,12 +170,14 @@
                                                     </div>
                                                     <div class="col-10">
                                                         <select name="jury[]" class="select2" multiple="multiple"
-                                                        style="width: 100%;">
-                                                            @foreach ( $juries as $jury)
-                                                                <option value="{{ $jury->id }}">{{ $jury->first_name .' '.$jury->last_name }}</option>
+                                                            style="width: 100%;">
+                                                            @foreach ($juries as $jury)
+                                                                <option value="{{ $jury->id }}">
+                                                                    {{ $jury->first_name . ' ' . $jury->last_name }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
-                                                        @error('juries')
+                                                        @error('jury')
                                                             <p class="text-danger">{{ $message }}</p>
                                                         @enderror
                                                     </div>
@@ -182,12 +188,14 @@
                                                     </div>
                                                     <div class="col-10">
                                                         <select name="judge[]" class="select2" multiple="multiple"
-                                                        style="width: 100%;">
-                                                            @foreach ( $judges as $judge)
-                                                                <option value="{{ $judge->id }}">{{ $judge->first_name .' '.$judge->last_name }}</option>
+                                                            style="width: 100%;">
+                                                            @foreach ($judges as $judge)
+                                                                <option value="{{ $judge->id }}">
+                                                                    {{ $judge->first_name . ' ' . $judge->last_name }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
-                                                        @error('judges')
+                                                        @error('judge')
                                                             <p class="text-danger">{{ $message }}</p>
                                                         @enderror
                                                     </div>
@@ -197,7 +205,8 @@
                                                         <label>Event Start</label>
                                                     </div>
                                                     <div class="col-4">
-                                                        <input type="date" name="start_date" id="start_date" class="form-control">
+                                                        <input type="date" onchange="setEndDate()" name="start_date"
+                                                            id="start_date" class="form-control">
                                                         @error('start_date')
                                                             <p class="text-danger">{{ $message }}</p>
                                                         @enderror
@@ -206,7 +215,8 @@
                                                         <label>Event End</label>
                                                     </div>
                                                     <div class="col-4">
-                                                        <input type="date" name="end_date" id="end_date" class="form-control">
+                                                        <input type="text" readonly name="end_date" id="end_date"
+                                                            class="form-control">
                                                         @error('end_date')
                                                             <p class="text-danger">{{ $message }}</p>
                                                         @enderror
@@ -289,19 +299,31 @@
 
 
 @push('js')
+    <script>
+        function setEndDate() {
+            var start_date = document.getElementById('start_date').value;
+            var month = '{{ $auditionRule->month ?? 0 }}';
+            var day = '{{ $auditionRule->day ?? 0 }}';
+            var total_day = (parseInt(month*30)) + parseInt(day) ;
+
+            var end_date = new Date(start_date);
+            end_date.setDate(end_date.getDate() + total_day);
+
+            var final_date  = parseInt(parseInt(end_date.getMonth()) + 1)+'/'+end_date.getDate()+'/'+end_date.getFullYear()
+            document.getElementById('end_date').value = final_date;
+        }
+    </script>
     <!-- Select2 -->
     <script src="{{ asset('assets/manager-admin/plugins/select2/js/select2.full.min.js') }}"></script>
 
 
     <script>
-        $(function() {
-            //Initialize Select2 Elements
-            $('.select2').select2()
+        //Initialize Select2 Elements
+        $('.select2').select2();
 
-            //Initialize Select2 Elements
-            $('.select2bs4').select2({
-                theme: 'bootstrap4'
-            })
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
         });
     </script>
 @endpush
