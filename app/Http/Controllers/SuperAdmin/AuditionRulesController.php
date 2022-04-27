@@ -65,7 +65,7 @@ class AuditionRulesController extends Controller
 
             if ($diff < 0) {
 
-              AuditionRoundRule::orderBy('id', 'desc')->take(abs($diff))->delete();
+              AuditionRoundRule::where('audition_rules_id',$audition_rules->id)->orderBy('id', 'desc')->take(abs($diff))->delete();
 
             }
 
