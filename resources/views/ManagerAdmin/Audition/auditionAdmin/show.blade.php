@@ -166,7 +166,8 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-2">
-                                                        <label>Select Juries</label>
+                                                        <label>Select Juries</label> <br>
+                                                        <span class="text-danger">You have to select {{ $auditionRule->jury_num }} jury !</span>
                                                     </div>
                                                     <div class="col-10">
                                                         <select name="jury[]" class="select2" multiple="multiple"
@@ -184,7 +185,8 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-2">
-                                                        <label>Select Judges</label>
+                                                        <label>Select Judges</label> <br>
+                                                        <span class="text-danger">You have to select {{ $auditionRule->judge_num }} judge !</span>
                                                     </div>
                                                     <div class="col-10">
                                                         <select name="judge[]" class="select2" multiple="multiple"

@@ -40,7 +40,7 @@ class AuditionAdminController extends Controller
         }
         $auditionAdmins = User::whereIn('id', $userIds)->orderBy('id', 'DESC')->get();
 
-         return view('ManagerAdmin.Audition.auditionAdmin.index', compact('auditionAdmins'));
+        return view('ManagerAdmin.Audition.auditionAdmin.index', compact('auditionAdmins'));
     }
 
     public function notAssinged()
