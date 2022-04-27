@@ -34,5 +34,19 @@ class Audition extends Model
     public function participant(){
         return $this->hasMany(AuditionParticipant::class);
     }
+
+    public function judge()
+    {
+        return $this->hasMany(AuditionAssignJudge::class, 'audition_id', 'id');
+    }
+
+    public function jury()
+    {
+        return $this->hasMany(AuditionAssignJury::class,'audition_id', 'id');
+    }
+    public function admin()
+    {
+        return $this->hasMany(AuditionAssignJudge::class,'audition_id', 'id');
+    }
 }
 

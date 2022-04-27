@@ -156,7 +156,7 @@ class AuditionAdminController extends Controller
         foreach ($auditionAssignJudges as $AuditionAssignJudge) {
             array_push($userIds, $AuditionAssignJudge->judge_id);
         }
-        $judges = User::whereNotIn('id', $userIds)->where('user_type', 'judge')->where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->get();
+        $judges = User::whereNotIn('id', $userIds)->where('user_type', 'star')->where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->get();
 
         return view('ManagerAdmin.Audition.auditionAdmin.show', compact('auditionAdmin', 'juries', 'judges','auditionRule'));
     }
