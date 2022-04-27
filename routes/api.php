@@ -463,6 +463,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     // Audition Route For Audition Admin
     Route::get('/audition-admin/audition/count', [AuditionController::class, 'count']);
     Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'pending']);
+    Route::get('/audition-admin/audition/request', [AuditionController::class, 'request']);
     Route::get('/audition-admin/audition/lives', [AuditionController::class, 'live']);
 
     Route::get('/audition-admin/audition/{slug}', [AuditionController::class, 'getAudition']);

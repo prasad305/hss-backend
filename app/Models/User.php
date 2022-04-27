@@ -66,13 +66,13 @@ class User extends Authenticatable
 
 
     //Relation For API
-    protected $with = ['userInfo'];
+    protected $with = ['userInfo', 'admin'];
 
 
 
-    public function parent()
+    public function admin()
     {
-        return $this->hasOne(User::class, 'parent_user');
+        return $this->belongsTo(User::class, 'parent_user');
     }
 
     public function star()

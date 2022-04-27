@@ -40,10 +40,20 @@ class AuditionController extends Controller
         ]);
     }
 
+    // Pending Auditions
+    public function request()
+    {
+        $event = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 1]])->get();
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+        ]);
+    }
+
     // Live Auditions
     public function live()
     {
-        $lives = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 1]])->get();
+        $lives = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 2]])->get();
         return response()->json([
             'status' => 200,
             'lives' => $lives,
@@ -82,9 +92,9 @@ class AuditionController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
-            'description' => 'required',
-            'star_ids' => 'required',
+            // 'title' => 'required',
+            // 'description' => 'required',
+            // 'star_ids' => 'required',
         ]);
 
 
@@ -97,11 +107,10 @@ class AuditionController extends Controller
             $audition = Audition::find($request->audition_id);
             $audition->title = $request->title;
             $audition->description = $request->description;
-            $audition->start_time = $request->start_time;
-            $audition->end_time = $request->end_time;
-            $audition->round_status = $request->round_status;
+            $audition->status = 1;
 
             if ($request->hasfile('banner')) {
+
                 $destination = $audition->banner;
 
                 if (File::exists($destination)) {
@@ -110,7 +119,6 @@ class AuditionController extends Controller
                 $file = $request->file('banner');
                 $extension = $file->getClientOriginalExtension();
                 $filename = 'uploads/images/auditions/' . time() . '.' . $extension;
-
                 Image::make($file)->resize(900, 400)->save($filename, 50);
 
                 $audition->banner = $filename;
@@ -127,54 +135,25 @@ class AuditionController extends Controller
                 $audition->video = $path . '/' . $file_name;
             }
 
+            $audition->save();
 
-            try {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Audition Judge Added successfully'
+            ]);
 
-                $audition->save();
-
-                $star_ids = array_map('intval', explode(',', $request->star_ids));
-
-                AssignJudge::whereNotIn('id', $star_ids)->where('audition_id', $audition->id)->delete();
-
-                foreach ($star_ids as $key => $star) {
-                    if (!AssignJudge::where('judge_id', $star)->where('audition_id', $audition->id)->first()) {
-                        $assign_star = AssignJudge::create([
-                            'audition_id' => $audition->id,
-                            'judge_id' => $star,
-                        ]);
-                    }
-                }
-                return response()->json([
-                    'status' => 200,
-                    'stars' => $assign_star,
-                    'audition' => $audition,
-                    'message' => 'Audition Judge Added successfully'
-                ]);
-            } catch (\Exception $exception) {
-                return response()->json([
-                    'status' => 30,
-                    'type' => 'error',
-                    'message' => $exception->getMessage()
-                ]);
-            }
         }
     }
 
 
     // Audition Details
-    public function getAudition($audition_id)
+    public function getAudition($slug)
     {
-        $audition = Audition::with(['judge', 'participant'])->find($audition_id);
-
-        $judge_ids = [];
-        foreach ($audition->judge as $key => $star) {
-            array_push($judge_ids, $star->judge_id);
-        }
+        $event = Audition::with(['assignJudge', 'participant'])->where('slug', $slug)->first();
 
         return response()->json([
             'status' => 200,
-            'audition' => $audition,
-            'judge_ids' => $judge_ids
+            'event' => $event,
         ]);
     }
 

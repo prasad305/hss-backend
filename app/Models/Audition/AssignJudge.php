@@ -26,9 +26,8 @@ class AssignJudge extends Model
     {
         return $this->hasMany(Audition::class, 'id', 'audition_id');
     }
-
     public function user()
     {
-        return $this->belongsTo(User::class, 'judge_id', 'id');
+        return $this->belongsTo(User::class, 'judge_id');
     }
 }
