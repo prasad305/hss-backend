@@ -34,7 +34,6 @@ Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 
 // Home Page All Post
 Route::get('/user/all_post', [UserController::class, 'all_post']);
-Route::get('/user/subcategory/{id}', [UserController::class, 'allSubcategoryList']);
 
 
 Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
@@ -545,8 +544,14 @@ Route::post('jury-register', [JuryAuthController::class, 'register']);
 
 
 Route::get('view-category', [CategoryController::class, 'index']);
+Route::get('/user/subcategory/{id}', [CategoryController::class, 'allSubcategoryList']);
+Route::get('/user/left/subcategory/{slug}', [CategoryController::class, 'allLeftSubcategoryList']);
+Route::get('/user/starcategory/{id}', [CategoryController::class, 'allStarCategoryList']);
+Route::get('/user/selected/starcategory', [CategoryController::class, 'starFollowingList']);
 Route::get('/user/selected/category', [CategoryController::class, 'selectedCategory']);
 Route::post('/user/selected/category/store', [CategoryController::class, 'selectedCategoryStore']);
+Route::post('/user/selected/subcategory/store', [CategoryController::class, 'selectedSubCategoryStore']);
+Route::post('/user/selected/starcategory/store', [CategoryController::class, 'selectedStarCategoryStore']);
 Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
 
 
