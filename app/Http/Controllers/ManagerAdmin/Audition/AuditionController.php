@@ -65,7 +65,7 @@ class AuditionController extends Controller
                 session()->flash('success', 'Audition added successfully !');
             }
         }else{
-            session()->flash('error', 'Opps.. No audition found !');
+            session()->flash('error', 'Opps.. No audition rules found !');
         }
         return back();
     }

@@ -28,8 +28,11 @@ class Audition extends Model
     public function auditionAdmin(){
         return $this->belongsTo(User::class,'audition_admin_id');
     }
-    public function assignJudge(){
+    public function assignedJudges(){
         return $this->hasMany(AuditionAssignJudge::class);
+    }
+    public function assignedJuries(){
+        return $this->hasMany(AuditionAssignJury::class);
     }
     public function participant(){
         return $this->hasMany(AuditionParticipant::class);
