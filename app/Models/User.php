@@ -231,6 +231,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(JuryBoard::class, 'star_id');
     }
+    
 
     public function participant_jury(){
         return $this->hasMany(AuditionParticipant::class, 'jury_id');

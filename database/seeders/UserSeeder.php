@@ -229,7 +229,7 @@ class UserSeeder extends Seeder
             $user->cover_photo = null;
             $user->phone = '016110022'.$i;
             $user->password = Hash::make('12345');
-            $user->user_type = 'judge';
+            $user->user_type = 'star';
             $user->status = 1;
             // $user->status = $faker->numberBetween(0, 1);
             // $user->category_id = $faker->numberBetween(1, 8);
