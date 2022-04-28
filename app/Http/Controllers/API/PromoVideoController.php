@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\PromoVideo;
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class PromoVideoController extends Controller
 {
@@ -40,6 +41,14 @@ class PromoVideoController extends Controller
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
             $promo->video_url = $path . '/' . $file_name;
+        }
+        if ($request->hasFile('thumbnail')) {
+
+            $file        = $request->file('thumbnail');
+            $path        = 'uploads/videos/promos/';
+            $file_name   = $path . time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            Image::make($file)->resize(900, 400)->save($file_name);
+            $promo->thumbnail = $file_name;
         }
         $promo->save();
         return response()->json([
