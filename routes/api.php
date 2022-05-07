@@ -16,6 +16,7 @@ use App\Http\Controllers\API\SimplePostController;
 use App\Http\Controllers\API\FanGroupController;
 use App\Http\Controllers\API\LearningSessionController;
 use App\Http\Controllers\API\Audition\Admin\AuditionController;
+use App\Http\Controllers\API\Audition\Judge\JudgeAuditionController;
 use App\Http\Controllers\API\PromoVideoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,7 +35,6 @@ Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 
 // Home Page All Post
 Route::get('/user/all_post', [UserController::class, 'all_post']);
-Route::get('/user/subcategory/{id}', [UserController::class, 'allSubcategoryList']);
 
 
 Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
@@ -431,11 +431,11 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
 
     // Super Star Audtion Routes
-    Route::get('superstar/audition/pendings', [AuditionController::class, 'starPendingAudtion']);
-    Route::get('superstar/audition/live', [AuditionController::class, 'starLiveAudtion']);
-    Route::get('/star/audition/{id}', [AuditionController::class, 'starSingleAudition']);
-    Route::put('/star/approved/audition/{id}', [AuditionController::class, 'starApprovedAudition']);
-    Route::put('/star/decline/audition/{id}', [AuditionController::class, 'starDeclineAudition']);
+    Route::get('superstar/audition/pendings', [JudgeAuditionController::class, 'starPendingAudtion']);
+    Route::get('superstar/audition/live', [JudgeAuditionController::class, 'starLiveAudtion']);
+    Route::get('/star/audition/{id}', [JudgeAuditionController::class, 'starSingleAudition']);
+    Route::put('/star/approved/audition/{id}', [JudgeAuditionController::class, 'starApprovedAudition']);
+    Route::put('/star/decline/audition/{id}', [JudgeAuditionController::class, 'starDeclineAudition']);
 
     Route::get('/star/selectVideo/{id}', [AuditionController::class, 'getStarVideos']);
     Route::post('/star/starMarking', [AuditionController::class, 'starMarking']);
@@ -553,8 +553,14 @@ Route::post('jury-register', [JuryAuthController::class, 'register']);
 
 
 Route::get('view-category', [CategoryController::class, 'index']);
+Route::get('/user/subcategory/{id}', [CategoryController::class, 'allSubcategoryList']);
+Route::get('/user/left/subcategory/{slug}', [CategoryController::class, 'allLeftSubcategoryList']);
+Route::get('/user/starcategory/{id}', [CategoryController::class, 'allStarCategoryList']);
+Route::get('/user/selected/starcategory', [CategoryController::class, 'starFollowingList']);
 Route::get('/user/selected/category', [CategoryController::class, 'selectedCategory']);
 Route::post('/user/selected/category/store', [CategoryController::class, 'selectedCategoryStore']);
+Route::post('/user/selected/subcategory/store', [CategoryController::class, 'selectedSubCategoryStore']);
+Route::post('/user/selected/starcategory/store', [CategoryController::class, 'selectedStarCategoryStore']);
 Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
 
 

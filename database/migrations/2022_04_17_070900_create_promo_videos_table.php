@@ -19,6 +19,7 @@ class CreatePromoVideosTable extends Migration
             $table->unsignedBigInteger('star_id')->nullable();
             $table->string('title')->nullable();
             $table->string('video_url')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->boolean('star_approval')->nullable()->comment("0=pending,1=approved");
             $table->string('status')->default(0);
             $table->timestamps();

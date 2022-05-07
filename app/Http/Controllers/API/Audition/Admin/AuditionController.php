@@ -194,60 +194,12 @@ class AuditionController extends Controller
         ]);
     }
 
-    // Star  Audition Start
-    public function starPendingAudtion()
-    {
-        $pendingAuditions = Audition::with('judge')
-            ->whereHas('judge', function ($q) {
-                $q->where([['judge_id', auth('sanctum')->user()->id], ['approved_by_judge', 0]]);
-            })->get();
-
-        return response()->json([
-            'status' => 200,
-            'pending_auditions' => $pendingAuditions,
-        ]);
-    }
-
-    public function starLiveAudtion()
-    {
-        $liveAuditions = Audition::with('judge')
-            ->whereHas('judge', function ($q) {
-                $q->where([['judge_id', auth('sanctum')->user()->id], ['approved_by_judge', 1]]);
-            })->get();
-
-        return response()->json([
-            'status' => 200,
-            'liveAuditions' => $liveAuditions,
-        ]);
-    }
+ 
 
 
-    public function starSingleAudition($id)
-    {
 
-        $pending_auditions = Audition::with(['judge', 'judge.user'])->where('id', $id)->get();
-        return response()->json([
 
-            'status' => 200,
-            'pending_audition' => $pending_auditions,
-        ]);
-    }
-    public function starApprovedAudition($id)
-    {
-        AssignJudge::where('audition_id', $id)->where('judge_id', auth('sanctum')->user()->id)->update(['approved_by_judge' => 1]);
-
-        return response()->json([
-            'status' => 200,
-        ]);
-    }
-    public function starDeclineAudition($id)
-    {
-        AssignJudge::where('audition_id', $id)->where('judge_id', auth('sanctum')->user()->id)->update(['approved_by_judge' => 2]);
-
-        return response()->json([
-            'status' => 200,
-        ]);
-    }
+    
 
 
     // Star Audtion End
@@ -287,7 +239,7 @@ class AuditionController extends Controller
 
     public function starAdminDetailsAudition($id)
     {
-        $pending_auditions = Audition::with(['judge', 'judge.user'])->where('id', $id)->get();
+        $pending_auditions = Audition::with(['judge', 'jury','admin'])->where('id', $id)->get();
         return response()->json([
 
             'status' => 200,

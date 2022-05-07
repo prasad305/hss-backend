@@ -16,9 +16,15 @@ class SubCategoryController extends Controller
         $category = Category::where('slug',$slug)->first();
         $subcategory = SubCategory::where('category_id',$category->id)->get();
 
+        $id = auth('sanctum')->user()->id;
+        $selectedCategory = ChoiceList::where('user_id' ,$id)->first();
+
+        $selectedCategory = json_decode($selectedCategory->category);
+
         return response()->json([
             'status' => 200,
             'subcategory' => $subcategory,
+            'selectedCategory' => $selectedCategory,
         ]);
     }
 

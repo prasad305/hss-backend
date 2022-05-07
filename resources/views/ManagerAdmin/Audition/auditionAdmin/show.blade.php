@@ -21,10 +21,12 @@
                         style="background-image: url({{ asset($auditionAdmin->cover_photo ?? get_static_option('no_image')) }})">
                         <div class="centeredImg">
                             <img class="img-circle ImGAdmin"
-                                src="{{ asset($auditionAdmin->photo ?? get_static_option('no_image')) }}"
+                                src="{{ asset($auditionAdmin->image ?? get_static_option('no_image')) }}"
                                 alt="User Avatar">
-                            <h4 class="text-center nameAdmin">Abdullah Al Zaber</h4>
-                            <span class=" text-center fw-bold text-warning"><b>Music</b></span>
+                            <h4 class="text-center nameAdmin">
+                                {{ $auditionAdmin->first_name . ' ' . $auditionAdmin->last_name }}</h4>
+                            <span
+                                class=" text-center fw-bold text-warning"><b>{{ $auditionAdmin->category->name ?? '' }}</b></span>
                         </div>
                     </div>
                     <br /> <br /> <br />
@@ -103,12 +105,85 @@
 
                             </div>
                             <div id="Details" class="tab-pane fade">
+                                @if ($auditionAdmin->assignedAudition)
+                                    <div class="card-body">
+                                        <div class="container">
+                                            <h2 class="auditionTitle">{{ $auditionAdmin->assignedAudition->title ?? '' }}
+                                            </h2> <br>
+                                            <p class="auditionDescription">
+                                                {{ $auditionAdmin->assignedAudition->description ?? '' }}</p>
+                                            <div class="bannerDiv">
+                                                <img class="bannerImage" width="100%" height="350px;"
+                                                    src="{{ asset($auditionAdmin->assignedAudition->banner ?? get_static_option('no_image')) }}"
+                                                    alt="Banner">
+                                            </div>
+                                            <div class="videoDiv">
+                                                <video class="bannerVideo" width="100%" height="350px;" controls>
+                                                    <source
+                                                        src="{{ url($auditionAdmin->assignedAudition->video ?? 'http://www.youtube.com/watch?v=nOEw9iiopwI') }}"
+                                                        type="video/mp4">
+                                                </video>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="card card-row card-primary">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title">
+                                                                Jury panel
+                                                            </h3>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="card card-primary card-outline">
+                                                                @foreach ($auditionAdmin->assignedAudition->assignedJuries as $assignedJury)
+                                                                    <div class="card-header d-flex justify-content-between">
+                                                                        <img height="50px;" width="50px;" src="{{ asset($assignedJury->jury->image ?? get_static_option('no_image')) }}" alt="Jury">
 
+                                                                        <p class="card-title">{{ $assignedJury->jury->first_name }} {{ $assignedJury->jury->last_name }}</p>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="card card-row card-primary">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title">
+                                                                Jugde panel
+                                                            </h3>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="card card-primary card-outline">
+                                                                @foreach ($auditionAdmin->assignedAudition->assignedJudges as $assignedJudge)
+                                                                    <div class="card-header d-flex justify-content-between">
+                                                                        <img height="50px;" width="50px;" src="{{ asset($assignedJudge->judge->image ?? get_static_option('no_image')) }}" alt="judge">
+
+                                                                        <p class="card-title">{{ $assignedJudge->judge->first_name }} {{ $assignedJudge->judge->last_name }}</p>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="card-body">
+                                        <p class="card-text">
+                                            Sorry This audition admin doesn't assigned to any audition.
+                                        </p>
+                                    </div>
+                                @endif
                             </div>
-
                             <div id="Assign" class=" tab-pane fade">
                                 <div class="card my-4">
-                                    @if ($auditionAdmin->assignAudition)
+                                    @if ($auditionAdmin->assignedAudition)
+                                        <div class="card-body">
+                                            <p class="card-text">
+                                                Sorry This audition admin already assigned to an audition.
+                                            </p>
+                                        </div>
                                     @else
                                         <form action="{{ route('managerAdmin.audition.store') }}" method="POST">
                                             @csrf
@@ -166,7 +241,9 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-2">
-                                                        <label>Select Juries</label>
+                                                        <label>Select Juries</label> <br>
+                                                        <span class="text-danger">You have to select
+                                                            {{ $auditionRule->jury_num ?? '' }} jury !</span>
                                                     </div>
                                                     <div class="col-10">
                                                         <select name="jury[]" class="select2" multiple="multiple"
@@ -184,7 +261,9 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-2">
-                                                        <label>Select Judges</label>
+                                                        <label>Select Judges</label> <br>
+                                                        <span class="text-danger">You have to select
+                                                            {{ $auditionRule->judge_num ?? '' }} judge !</span>
                                                     </div>
                                                     <div class="col-10">
                                                         <select name="judge[]" class="select2" multiple="multiple"
@@ -294,6 +373,40 @@
             border-radius: 10px;
         }
 
+        .auditionTitle {
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 32px;
+            line-height: 48px;
+            color: #3A8FF2;
+            text-align: left;
+        }
+
+        .auditionDescription {
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 30px;
+            color: #D2C3C3;
+            text-align: left;
+        }
+
+        .bannerImage {
+            border: 2px solid gold;
+            border-radius: 20px;
+        }
+
+        .videoDiv {
+            margin: 20px 0;
+        }
+
+        .bannerVideo {
+            border: 2px solid gold;
+            border-radius: 20px;
+        }
+
     </style>
 @endsection
 
@@ -304,12 +417,13 @@
             var start_date = document.getElementById('start_date').value;
             var month = '{{ $auditionRule->month ?? 0 }}';
             var day = '{{ $auditionRule->day ?? 0 }}';
-            var total_day = (parseInt(month*30)) + parseInt(day) ;
+            var total_day = (parseInt(month * 30)) + parseInt(day);
 
             var end_date = new Date(start_date);
             end_date.setDate(end_date.getDate() + total_day);
 
-            var final_date  = parseInt(parseInt(end_date.getMonth()) + 1)+'/'+end_date.getDate()+'/'+end_date.getFullYear()
+            var final_date = parseInt(parseInt(end_date.getMonth()) + 1) + '/' + end_date.getDate() + '/' + end_date
+                .getFullYear()
             document.getElementById('end_date').value = final_date;
         }
     </script>

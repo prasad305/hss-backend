@@ -11,7 +11,7 @@ class AuditionAssignJudge extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $with = ['user'];
+    protected $with = ['user','admin'];
 
     public function judge(){
         return $this->belongsTo(User::class,'judge_id');
@@ -22,5 +22,9 @@ class AuditionAssignJudge extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'judge_id');
+    }
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'judge_admin_id');
     }
 }

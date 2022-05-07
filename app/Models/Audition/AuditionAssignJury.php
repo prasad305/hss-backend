@@ -2,8 +2,10 @@
 
 namespace App\Models\Audition;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class AuditionAssignJury extends Model
 {
@@ -16,14 +18,16 @@ class AuditionAssignJury extends Model
         'approved_by_jury',
         'status',
     ];
-
+    protected $with = ['user'];
     public function audition()
     {
         return $this->belongsTo(Audition::class, 'audition_id');
     }
 
-    public function jury()
+    public function user()
     {
         return $this->belongsTo(User::class, 'jury_id');
     }
+
+
 }
