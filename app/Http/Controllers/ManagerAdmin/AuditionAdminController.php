@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\Audition;
+use App\Models\Audition\AuditionAssignJudge;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Post;
 use App\Models\User;
@@ -269,31 +270,28 @@ class AuditionAdminController extends Controller
 
     public function all()
     {
-        $audition = Audition::where('star_approval', 1)->orWhere('status', 1)->latest()->get();
+        $audition = Audition::where('status','>',1)->latest()->get();
 
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
 
     public function pending()
     {
-        $audition = Audition::where('star_approval', 1)->latest()->get();
-
+        $audition = Audition::where('status', 2)->latest()->get();
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
 
     public function published()
     {
-        $audition = Audition::where('status', 1)->latest()->get();
-
+        $audition = Audition::where('status', 3)->latest()->get();
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
 
     public function details($id)
     {
-        $audition = Audition::with(['judge.user'])->find($id);
-        // dd($audition);
-
-        return view('ManagerAdmin.Audition.details', compact('audition'));
+        $audition = Audition::find($id);
+        $judges = AuditionAssignJudge::where('audition_id',$audition->id)->get();
+        return view('ManagerAdmin.Audition.details')->with('audition',$audition)->with('judges', $judges);
     }
 
 
@@ -354,12 +352,11 @@ class AuditionAdminController extends Controller
     public function set_publish($id)
     {
         $audition = Audition::find($id);
-        if ($audition->status != 0) {
-
-            $audition->status = 0;
+        if ($audition->status == 3) {
+            $audition->status = 2;
             $audition->update();
         } else {
-            $audition->status = 1;
+            $audition->status = 3;
             $audition->update();
             $post =  Post::where('type','audition')->where('event_id',$audition->id)->first();
             if (!isset($post)) {
