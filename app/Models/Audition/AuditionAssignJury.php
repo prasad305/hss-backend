@@ -5,7 +5,6 @@ namespace App\Models\Audition;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 
 class AuditionAssignJury extends Model
 {
@@ -27,6 +26,10 @@ class AuditionAssignJury extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'jury_id');
+    }
+
+    public function jury(){
+        return $this->belongsTo(User::class,'jury_id');
     }
 
 

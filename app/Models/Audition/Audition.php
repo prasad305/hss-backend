@@ -10,6 +10,7 @@ class Audition extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    protected $with = ['assignedJudges','participant'];
 
     public function category(){
         return $this->belongsTo(Category::class,'category_id');
