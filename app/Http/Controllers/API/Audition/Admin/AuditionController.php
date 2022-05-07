@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Models\Audition\AssignJudge;
+use App\Models\Audition\AuditionAssignJudge;
+use App\Models\Audition\AuditionAssignJury;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionMark;
 use App\Models\JudgeMarks;
@@ -72,6 +74,41 @@ class AuditionController extends Controller
     }
 
 
+    public function getAssignedJudge($slug)
+    {
+        $audition = Audition::where('slug', $slug)->first();
+        $judge = AuditionAssignJudge::where('audition_id', $audition->id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'judge' => $judge,
+        ]);
+    }
+
+
+    public function totalJudgeApproval($slug)
+    {
+        $audition = Audition::where('slug', $slug)->first();
+        $total_judge = AuditionAssignJudge::where('audition_id', $audition->id)->count();
+        $total_judge_approval = AuditionAssignJudge::where([['audition_id', $audition->id],['approved_by_judge',1]])->count();
+
+        return response()->json([
+            'status' => 200,
+            'approve_status' => $total_judge == $total_judge_approval,
+        ]);
+    }
+
+    public function approvalRequestForManagerAdmin($slug)
+    {
+        $audition = Audition::where('slug', $slug)->first();
+        $audition->status = 2;
+        $audition->save();
+
+        return response()->json([
+            'status' => 200,
+            'event' => $audition,
+        ]);
+    }
 
 
 

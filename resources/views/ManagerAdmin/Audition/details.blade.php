@@ -63,13 +63,13 @@ Manager Admin
             <div class="col-md-4">
                 <div class="card px-5 py-3">
                     <h3> Judge Panel</h3>
-                    @foreach($audition->judge as $star)
+                    @foreach($judges as $star)
                     <div class="row">
                         <div class="col-xs-6 content-center">
-                            <img src="{{ asset($star->user->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                            <img src="{{ asset($star->user ? $star->user->image : '') }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                         </div>
                         <div class="col-xs-6">
-                            <h3>{{ $star->user->first_name}} {{ $star->user->last_name}}</h3>
+                            <h3>{{ $star->user ? $star->user->first_name : ''}} {{ $star->user ? $star->user->last_name : ''}}</h3>
                         </div>
                     </div>
                     @endforeach
@@ -81,9 +81,9 @@ Manager Admin
 
 
         <div class="container row">
-            @if($audition->status != 1)
+            @if($audition->status < 3)
             <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.audition.set_publish', $audition->id) }}">Publish Now</a>
-            @elseif($audition->status != 0)
+            @elseif($audition->status == 3)
             <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.audition.set_publish', [$audition->id]) }}">Remove From Publish</a>
             @endif
             <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Post','{{ route('managerAdmin.audition.edit', $audition->id) }}')">Edit</a>
