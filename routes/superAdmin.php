@@ -29,6 +29,15 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin']], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    Route::get('/auditions', [DashboardController::class, 'auditions'])->name('auditions');
+    Route::get('/meetup-events', [DashboardController::class, 'meetupEvents'])->name('meetupEvents');
+    Route::get('/learning-session', [DashboardController::class, 'learningSessions'])->name('learningSessions');
+    Route::get('/live-chats', [DashboardController::class, 'liveChats'])->name('liveChats');
+    Route::get('/fan-group', [DashboardController::class, 'fanGroup'])->name('fanGroup');
+    Route::get('/greetings', [DashboardController::class, 'greetings'])->name('greetings');
+    Route::get('/user-posts', [DashboardController::class, 'userPosts'])->name('userPosts');
+    Route::get('/wallet', [DashboardController::class, 'wallets'])->name('wallets');
+
     Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
 
     // manager admin

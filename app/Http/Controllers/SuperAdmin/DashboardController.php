@@ -14,8 +14,33 @@ use Illuminate\Support\Facades\Auth;
 class DashboardController extends Controller
 {
     public function dashboard(){
-      return view('SuperAdmin.dashboard');
+      return view('SuperAdmin.dashboard.index');
     }
+    public function auditions(){
+      return view('SuperAdmin.dashboard.auditions');
+    }
+    public function meetupEvents(){
+      return view('SuperAdmin.dashboard.meetup-events');
+    }
+    public function learningSessions(){
+      return view('SuperAdmin.dashboard.learning-sessions');
+    }
+    public function liveChats(){
+      return view('SuperAdmin.dashboard.live-chats');
+    }
+    public function fanGroup(){
+      return view('SuperAdmin.dashboard.fan-group');
+    }
+    public function greetings(){
+      return view('SuperAdmin.dashboard.greetings');
+    }
+    public function userPosts(){
+      return view('SuperAdmin.dashboard.user-posts');
+    }
+    public function wallets(){
+      return view('SuperAdmin.dashboard.wallets');
+    }
+   
 
     public function profile(){
         $user = Auth::user();
