@@ -239,11 +239,16 @@ class AuditionController extends Controller
 
     public function starAdminDetailsAudition($id)
     {
-        $pending_auditions = Audition::with(['judge', 'jury','admin'])->where('id', $id)->get();
+        $event = Audition::find($id);
+        $judges = AuditionAssignJudge::where('audition_id',$id)->get();
+        $juries = AuditionAssignJury::where('audition_id',$id)->get();
+        $approve_status = AuditionAssignJudge::where('judge_admin_id',auth('sanctum')->user()->id)->first();
         return response()->json([
-
             'status' => 200,
-            'pending_audition' => $pending_auditions,
+            'event' => $event,
+            'judges' => $judges,
+            'juries' => $juries,
+            'approve_status' => $approve_status,
         ]);
     }
 
