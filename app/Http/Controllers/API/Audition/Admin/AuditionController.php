@@ -186,7 +186,7 @@ class AuditionController extends Controller
     // Audition Details
     public function getAudition($slug)
     {
-        $event = Audition::with(['assignJudge', 'participant'])->where('slug', $slug)->first();
+        $event = Audition::with(['assignedJudges', 'participant'])->where('slug', $slug)->first();
 
         return response()->json([
             'status' => 200,
@@ -194,12 +194,12 @@ class AuditionController extends Controller
         ]);
     }
 
- 
 
 
 
 
-    
+
+
 
 
     // Star Audtion End

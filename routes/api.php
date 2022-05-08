@@ -170,6 +170,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/audition/participate/video/{id}', [UserController::class, 'videoDetails']);
     Route::get('/user/audition/enrolled', [UserController::class, 'enrolledAuditions']);
     Route::get('/user/pendingEnrollAudition', [UserController::class, 'enrolledAuditionsPending']);
+    Route::get('/user/audition/details/{slug}', [UserController::class, 'UserAuditionDetails']);
 
     // Promo Videos
 
@@ -310,6 +311,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/audition/pendings', [AuditionController::class, 'starAdminPendingAudition']);
     Route::get('/admin/audition/live', [AuditionController::class, 'starAdminLiveAudition']);
     Route::get('/admin/audition/details/{id}', [AuditionController::class, 'starAdminDetailsAudition']);
+
 
     // Promo Videos
     Route::get('/admin/promoVideo/all', [PromoVideoController::class, 'adminAllPromoVideos']);
