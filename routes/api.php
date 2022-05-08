@@ -433,7 +433,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     // Super Star Audtion Routes
     Route::get('superstar/audition/pendings', [JudgeAuditionController::class, 'starPendingAudtion']);
     Route::get('superstar/audition/live', [JudgeAuditionController::class, 'starLiveAudtion']);
-    Route::get('/star/audition/{id}', [JudgeAuditionController::class, 'starSingleAudition']);
+    Route::get('/star/pending-audition/{id}', [JudgeAuditionController::class, 'starSingleAudition']);
     Route::put('/star/approved/audition/{id}', [JudgeAuditionController::class, 'starApprovedAudition']);
     Route::put('/star/decline/audition/{id}', [JudgeAuditionController::class, 'starDeclineAudition']);
 

@@ -13,16 +13,14 @@ class AuditionAssignJudge extends Model
 
     protected $with = ['user','admin'];
 
-    public function judge(){
+    public function user(){
         return $this->belongsTo(User::class,'judge_id');
     }
+
     public function audition(){
         return $this->belongsTo(Audition::class,'audition_id');
     }
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'judge_id');
-    }
+    
     public function admin()
     {
         return $this->belongsTo(User::class, 'judge_admin_id');
