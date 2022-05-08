@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Audition\Judge;
 use App\Http\Controllers\Controller;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionAssignJudge;
+use App\Models\Audition\AuditionAssignJury;
 
 class JudgeAuditionController extends Controller
 {
@@ -39,10 +40,16 @@ class JudgeAuditionController extends Controller
     public function starSingleAudition($id)
     {
 
-        $pending_auditions = Audition::with(['judge', 'jury','admin'])->where('id', $id)->where('status',1)->get();
+        // $pending_auditions = Audition::with(['judge', 'jury','admin'])->where('id', $id)->where('status',1)->get();
+        $event = Audition::find($id);
+        $judges = AuditionAssignJudge::where('audition_id', $id)->get();
+        $juries = AuditionAssignJury::where('audition_id', $id)->get();
+
         return response()->json([
             'status' => 200,
-            'pending_audition' => $pending_auditions,
+            'event' => $event,
+            'judges' => $judges,
+            'juries' => $juries,
         ]);
     }
 

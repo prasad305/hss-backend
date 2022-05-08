@@ -23,12 +23,15 @@ class AuditionController extends Controller
     //Count
     public function count()
     {
-        $live = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 1]])->count();
+        $live = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 3]])->count();
         $pending = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 0]])->count();
+        $request_approval_pending = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 1]])->count();
+
         return response()->json([
             'status' => 200,
             'live' => $live,
             'pending' => $pending,
+            'request_approval_pending'=> $request_approval_pending,
         ]);
     }
 
@@ -55,7 +58,7 @@ class AuditionController extends Controller
     // Live Auditions
     public function live()
     {
-        $lives = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 2]])->get();
+        $lives = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 3]])->get();
         return response()->json([
             'status' => 200,
             'lives' => $lives,
@@ -186,7 +189,9 @@ class AuditionController extends Controller
     // Audition Details
     public function getAudition($slug)
     {
+
         $event = Audition::with(['assignedJudges', 'participant'])->where('slug', $slug)->first();
+
 
         return response()->json([
             'status' => 200,
@@ -239,11 +244,16 @@ class AuditionController extends Controller
 
     public function starAdminDetailsAudition($id)
     {
-        $pending_auditions = Audition::with(['judge', 'jury','admin'])->where('id', $id)->get();
+        $event = Audition::find($id);
+        $judges = AuditionAssignJudge::where('audition_id',$id)->get();
+        $juries = AuditionAssignJury::where('audition_id',$id)->get();
+        $approve_status = AuditionAssignJudge::where('judge_admin_id',auth('sanctum')->user()->id)->first();
         return response()->json([
-
             'status' => 200,
-            'pending_audition' => $pending_auditions,
+            'event' => $event,
+            'judges' => $judges,
+            'juries' => $juries,
+            'approve_status' => $approve_status,
         ]);
     }
 

@@ -136,9 +136,9 @@
                                                             <div class="card card-primary card-outline">
                                                                 @foreach ($auditionAdmin->assignedAudition->assignedJuries as $assignedJury)
                                                                     <div class="card-header d-flex justify-content-between">
-                                                                        <img height="50px;" width="50px;" src="{{ asset($assignedJury->jury->image ?? get_static_option('no_image')) }}" alt="Jury">
+                                                                        <img height="50px;" width="50px;" src="{{ asset($assignedJury->user->image ?? get_static_option('no_image')) }}" alt="Jury">
 
-                                                                        <p class="card-title">{{ $assignedJury->jury->first_name }} {{ $assignedJury->jury->last_name }}</p>
+                                                                        <p class="card-title">{{ $assignedJury->user ? $assignedJury->user->first_name : '' }} {{ $assignedJury->user ? $assignedJury->user->last_name : '' }}</p>
                                                                     </div>
                                                                 @endforeach
                                                             </div>
@@ -156,9 +156,9 @@
                                                             <div class="card card-primary card-outline">
                                                                 @foreach ($auditionAdmin->assignedAudition->assignedJudges as $assignedJudge)
                                                                     <div class="card-header d-flex justify-content-between">
-                                                                        <img height="50px;" width="50px;" src="{{ asset($assignedJudge->judge->image ?? get_static_option('no_image')) }}" alt="judge">
+                                                                        <img height="50px;" width="50px;" src="{{ asset($assignedJudge->user->image ?? get_static_option('no_image')) }}" alt="judge">
 
-                                                                        <p class="card-title">{{ $assignedJudge->judge->first_name }} {{ $assignedJudge->judge->last_name }}</p>
+                                                                        <p class="card-title">{{ $assignedJudge->user->first_name ?? '' }} {{ $assignedJudge->user->last_name ?? '' }}</p>
                                                                     </div>
                                                                 @endforeach
                                                             </div>

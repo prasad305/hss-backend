@@ -435,7 +435,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     // Super Star Audtion Routes
     Route::get('superstar/audition/pendings', [JudgeAuditionController::class, 'starPendingAudtion']);
     Route::get('superstar/audition/live', [JudgeAuditionController::class, 'starLiveAudtion']);
-    Route::get('/star/audition/{id}', [JudgeAuditionController::class, 'starSingleAudition']);
+    Route::get('/star/pending-audition/{id}', [JudgeAuditionController::class, 'starSingleAudition']);
     Route::put('/star/approved/audition/{id}', [JudgeAuditionController::class, 'starApprovedAudition']);
     Route::put('/star/decline/audition/{id}', [JudgeAuditionController::class, 'starDeclineAudition']);
 
@@ -472,8 +472,6 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/assigned-judge/{slug}', [AuditionController::class, 'getAssignedJudge']);
     Route::get('/audition-admin/audition/total-judge-approval/{slug}', [AuditionController::class, 'totalJudgeApproval']);
     Route::get('/audition-admin/audition/approval-request-for-manager-admin/{slug}', [AuditionController::class, 'approvalRequestForManagerAdmin']);
-
-
 
 
 
