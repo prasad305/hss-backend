@@ -134,11 +134,14 @@
                                                         </div>
                                                         <div class="card-body">
                                                             <div class="card card-primary card-outline">
+                                                                @php
+                                                                    // dd($auditionAdmin->assignedAudition->assignedJuries);
+                                                                @endphp
                                                                 @foreach ($auditionAdmin->assignedAudition->assignedJuries as $assignedJury)
                                                                     <div class="card-header d-flex justify-content-between">
                                                                         <img height="50px;" width="50px;" src="{{ asset($assignedJury->jury->image ?? get_static_option('no_image')) }}" alt="Jury">
 
-                                                                        <p class="card-title">{{ $assignedJury->jury->first_name }} {{ $assignedJury->jury->last_name }}</p>
+                                                                        <p class="card-title">{{ $assignedJury->jury ? $assignedJury->jury->first_name : '' }} {{ $assignedJury->jury ? $assignedJury->jury->last_name : '' }}</p>
                                                                     </div>
                                                                 @endforeach
                                                             </div>

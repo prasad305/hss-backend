@@ -16,7 +16,7 @@ class AuditionAdminController extends Controller
     public function index()
     {
         $data = [
-            'admins' => User::where('user_type','audition-admin')->get(),
+            'admins' => User::where('user_type','audition-admin')->orderBy('id','desc')->get(),
         ];
 
         return view('SuperAdmin.auditionAdmin.index',$data);

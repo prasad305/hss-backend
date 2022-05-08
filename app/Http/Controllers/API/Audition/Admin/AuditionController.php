@@ -186,7 +186,7 @@ class AuditionController extends Controller
     // Audition Details
     public function getAudition($slug)
     {
-        $event = Audition::with(['assignJudge', 'participant'])->where('slug', $slug)->first();
+        $event = Audition::where('slug', $slug)->first();
 
         return response()->json([
             'status' => 200,
