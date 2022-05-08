@@ -473,8 +473,6 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 
 
 
-
-
     Route::get('/audition-admin/audition/stars/{category_id}', [AuditionController::class, 'stars']);
     Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
 

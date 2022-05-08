@@ -66,7 +66,7 @@ Manager Admin
                     @foreach($judges as $star)
                     <div class="row">
                         <div class="col-xs-6 content-center">
-                            <img src="{{ asset($star->user ? $star->user->image : '') }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                            <img src="{{ asset( $star->user->image ?? get_static_option('no_image')) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                         </div>
                         <div class="col-xs-6">
                             <h3>{{ $star->user ? $star->user->first_name : ''}} {{ $star->user ? $star->user->last_name : ''}}</h3>
