@@ -18,6 +18,8 @@ class AuditionController extends Controller
     public function store(Request $request){
 
         $auditionRule = AuditionRules::find($request->audition_rule_id);
+        // dd($auditionRule);
+        // dd($auditionRule->roundRules->first()->id);
         if($auditionRule){
             $request->validate([
                 'audition_admin_id' => 'required',
@@ -32,9 +34,14 @@ class AuditionController extends Controller
                 session()->flash('error', 'Opps.. You have to select '.$auditionRule->judge_num.' judge !');
                 return back();
             }else{
+                if(!$auditionRule->roundRules->first()->id){
+                    session()->flash('error', 'Opps.. There is no round rules. Please add some round rules first');
+                    return back();
+                }
                 $audition                       = new Audition();
                 $audition->category_id          = Auth::user()->category_id;
                 $audition->audition_rules_id    = $request->audition_rule_id;
+                $audition->audition_round_rules_id  = $auditionRule->roundRules->first()->id;
                 $audition->creater_id           = Auth::user()->id;
                 $audition->audition_admin_id    =  $request->audition_admin_id;
                 $audition->manager_admin_id     =  Auth::user()->id;
@@ -43,7 +50,7 @@ class AuditionController extends Controller
                 $audition->description          =  $request->description;
                 $audition->round_status         =  0;
                 $audition->start_time           =  Carbon::parse($request->start_date);
-                $audition->end_time           =  Carbon::parse($request->start_date)->addDays($auditionRule->day)->addMonths($auditionRule->month);
+                $audition->end_time             =  Carbon::parse($request->start_date)->addDays($auditionRule->day)->addMonths($auditionRule->month);
                 $audition->status               =  0;
                 $audition->save();
 

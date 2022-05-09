@@ -52,5 +52,8 @@ class Audition extends Model
     {
         return $this->hasMany(AuditionAssignJudge::class,'audition_id', 'id');
     }
+    public function judgeInstructions(){
+        return $this->hasMany(AuditionJudgeInstruction::class,'audition_id', 'id');
+    }
 }
 

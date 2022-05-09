@@ -17,10 +17,63 @@ use App\Models\Audition\AuditionMark;
 use App\Models\JudgeMarks;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Svg\Tag\Rect;
 
 class AuditionController extends Controller
 {
-    //Count
+    public function singleAuditionRounds($audition_id){
+        $audition = Audition::find($audition_id);
+        $audition_rule = $audition->auditionRules;
+        $audition_round_rules = $audition_rule->roundRules;
+
+        if($audition->judgeInstructions->count() > 0){
+            $is_already_submitted = true;
+            if($audition->judgeInstructions->where('status',0)->count() > 0){
+                $is_all_star_responsed = false;
+            }else{
+                $is_all_star_responsed = true;
+            }
+        }else{
+            $is_already_submitted = false;
+            $is_all_star_responsed = false;
+        }
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
+            'audition_rule' => $audition_rule,
+            'audition_judge_instructions'=> $audition->judgeInstructions,
+            'audition_round_rules'=> $audition_round_rules,
+            'is_already_submitted'=> $is_already_submitted,
+            'is_all_star_responsed'=> $is_all_star_responsed,
+        ]);
+    }
+    public function sendDummyInstructionToJudges(Request $request){
+        // $audition = Audition::find($audition_id);
+        // $audition_rule = $audition->auditionRules;
+        // $audition_round_rules = $audition_rule->roundRules;
+
+        // if($audition->judgeInstructions->count() > 0){
+        //     $is_already_submitted = true;
+        //     if($audition->judgeInstructions->where('status',0)->count() > 0){
+        //         $is_all_star_responsed = false;
+        //     }else{
+        //         $is_all_star_responsed = true;
+        //     }
+        // }else{
+        //     $is_already_submitted = false;
+        //     $is_all_star_responsed = false;
+        // }
+        // return response()->json([
+        //     'status' => 200,
+        //     'audition' => $audition,
+        //     'audition_rule' => $audition_rule,
+        //     'audition_judge_instructions'=> $audition->judgeInstructions,
+        //     'audition_round_rules'=> $audition_round_rules,
+        //     'is_already_submitted'=> $is_already_submitted,
+        //     'is_all_star_responsed'=> $is_all_star_responsed,
+        // ]);
+    }
+
     public function count()
     {
         $live = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 3]])->count();
