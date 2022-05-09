@@ -312,6 +312,7 @@
 <script src="{{ asset('assets/super-admin/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
 <!-- ChartJS -->
 <script src="{{ asset('assets/super-admin/plugins/chart.js/Chart.min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('assets/super-admin/dist/js/demo.js')}}"></script>
