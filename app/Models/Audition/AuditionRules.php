@@ -15,8 +15,8 @@ class AuditionRules extends Model
         return $this->belongsTo(Category::class,'category_id');
     }
 
-    public function roundRule(){
-        return $this->hasOne(AuditionRoundRule::class);
+    public function roundRules(){
+        return $this->hasMany(AuditionRoundRule::class,'audition_rules_id');
     }
 
     public function auditionRules(){
