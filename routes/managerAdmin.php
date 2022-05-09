@@ -22,8 +22,17 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
 
+    // Dashboard Routes By Srabon
 
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
+    Route::get('learning-sessions', [DashboardController::class, 'learningSessions'])->name('dashboard.learningSession');
+    Route::get('meetup-events', [DashboardController::class, 'meetupEvents'])->name('dashboard.meetupEvent');
+    Route::get('greetings', [DashboardController::class, 'greetings'])->name('dashboard.greeting');
+    Route::get('live-chats', [DashboardController::class, 'liveChats'])->name('dashboard.liveChat');
+    Route::get('auditions', [DashboardController::class, 'auditions'])->name('dashboard.audition');
+    Route::get('fan-group', [DashboardController::class, 'fanGroups'])->name('dashboard.fanGroup');
+
+
     //up commingevent
     Route::get('upcomming-events', [LiveEventController::class, 'UpcommingEvent'])->name('UpcommingEvent');
     //event details
@@ -98,12 +107,12 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     // Audition Routes
     Route::group(['prefix' => 'audition/', 'as' => 'audition.'], function () {
-                // audition
+        // audition
         Route::post('store', [App\Http\Controllers\ManagerAdmin\Audition\AuditionController::class, 'store'])->name('store');
         // audition admin
-       Route::resource('auditionAdmin', App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class);
-       Route::get('assinged', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'assinged'])->name('auditionAdmin.assinged');
-       Route::get('free', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin.notAssinged');
+        Route::resource('auditionAdmin', App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class);
+        Route::get('assinged', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'assinged'])->name('auditionAdmin.assinged');
+        Route::get('free', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin.notAssinged');
 
 
         Route::get('pending', [AuditionAdminController::class, 'pending'])->name('pending');
