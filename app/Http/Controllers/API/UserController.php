@@ -80,13 +80,23 @@ class UserController extends Controller
             ->whereIn('category_id', $selectedCat)
             ->latest()->get();
 
-        $sub_cat_post = Post::select("*")
+        if(isset($sub_cat_post))
+        {
+            $sub_cat_post = Post::select("*")
             ->whereIn('sub_category_id', $selectedSubCat)
             ->latest()->get();
+        }else{
+            $sub_cat_post = [];
+        }
 
-        $sub_sub_cat_post = Post::select("*")
+        if(isset($sub_sub_cat_post))
+        {
+            $sub_sub_cat_post = Post::select("*")
             ->whereIn('user_id', $selectedSubSubCat)
             ->latest()->get();
+        }else{
+            $sub_sub_cat_post = [];
+        }
 
         $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
 
@@ -937,6 +947,16 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'userActivites' => $userActivites
+        ]);
+    }
+
+    public function UserAuditionDetails($slug)
+    {
+        $audition = Audition::where('slug',$slug)->first();
+
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
         ]);
     }
 }

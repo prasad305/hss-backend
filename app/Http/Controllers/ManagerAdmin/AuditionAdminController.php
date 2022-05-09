@@ -11,6 +11,7 @@ use App\Models\Audition\AuditionAssignJudge;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\File;
@@ -352,16 +353,26 @@ class AuditionAdminController extends Controller
     public function set_publish($id)
     {
         $audition = Audition::find($id);
+
         if ($audition->status == 3) {
             $audition->status = 2;
             $audition->update();
+
+            $post =  Post::where('type','audition')->where('event_id',$audition->id)->first();
+            if ($post) {
+                $post->delete();
+            }
+
         } else {
             $audition->status = 3;
             $audition->update();
             $post =  Post::where('type','audition')->where('event_id',$audition->id)->first();
+            $category_id = Auth::user()->category_id;
+
             if (!isset($post)) {
                 Post::create([
                     'type' => 'audition',
+                    'category_id' => $category_id,
                     'user_id' => '1',
                     'event_id' => $audition->id,
                     'title' => $audition->title,
