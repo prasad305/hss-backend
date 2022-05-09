@@ -28,10 +28,10 @@
       <div class="row">
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box">
-            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">CPU Traffic</span>
+              <span class="info-box-text">Total Users</span>
               <span class="info-box-number">
                 10
                 <small>%</small>
@@ -44,10 +44,10 @@
         <!-- /.col -->
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3">
-            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
+            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-users"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Likes</span>
+              <span class="info-box-text">Total Manager Admins</span>
               <span class="info-box-number">41,410</span>
             </div>
             <!-- /.info-box-content -->
@@ -61,10 +61,10 @@
 
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3">
-            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-users"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Sales</span>
+              <span class="info-box-text">Total Superstars</span>
               <span class="info-box-number">760</span>
             </div>
             <!-- /.info-box-content -->
@@ -77,7 +77,131 @@
             <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">New Members</span>
+              <span class="info-box-text">Total Admins</span>
+              <span class="info-box-number">2,000</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box">
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-edit"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Total Categories</span>
+              <span class="info-box-number">
+                10
+                <small>%</small>
+              </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box mb-3">
+            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-plus-square"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Total SubCategories</span>
+              <span class="info-box-number">41,410</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- fix for small devices only -->
+        <div class="clearfix hidden-md-up"></div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box mb-3">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-flag"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Total Countries</span>
+              <span class="info-box-number">760</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box mb-3">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-flag"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Total States</span>
+              <span class="info-box-number">2,000</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box">
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-map-signs""></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Total Cities</span>
+              <span class="info-box-number">
+                10
+                <small>%</small>
+              </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box mb-3">
+            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-th"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Total Interest Types</span>
+              <span class="info-box-number">41,410</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- fix for small devices only -->
+        <div class="clearfix hidden-md-up"></div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box mb-3">
+            <span class="info-box-icon bg-success elevation-1"><i class="fa-brands fa-product-hunt"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Total Marketplace Products</span>
+              <span class="info-box-number">760</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box mb-3">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fa-brands fa-product-hunt"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Total Souvenir Products</span>
               <span class="info-box-number">2,000</span>
             </div>
             <!-- /.info-box-content -->
@@ -87,7 +211,172 @@
         <!-- /.col -->
       </div>
       <!-- /.row -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Monthly Visitors</h5>
 
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown">
+                    <i class="fas fa-wrench"></i>
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-right" role="menu">
+                    <a href="#" class="dropdown-item">Action</a>
+                    <a href="#" class="dropdown-item">Another action</a>
+                    <a href="#" class="dropdown-item">Something else here</a>
+                    <a class="dropdown-divider"></a>
+                    <a href="#" class="dropdown-item">Separated link</a>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <p class="text-center">
+                    <strong>Visitors</strong>
+                  </p>
+
+                  <div class="chart">
+                    <!-- Sales Chart Canvas -->
+                    <canvas id="salesChart" height="180" style="height: 180px;"></canvas>
+                  </div>
+                  <!-- /.chart-responsive -->
+                </div>
+               
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+            </div>
+            <!-- ./card-body -->
+            <div class="card-footer">
+              <div class="row">
+                <div class="col-sm-3 col-6">
+                  <div class="description-block border-right">
+                    <a href="{{ route('superAdmin.auditions') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    
+                    <h5 class="description-header">$35,210.43</h5>
+                    <span class="description-text">Audition</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-3 col-6">
+                  <div class="description-block border-right">
+                    <a href="{{ route('superAdmin.learningSessions') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">$10,390.90</h5>
+                    <span class="description-text">Learning Session</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-3 col-6">
+                  <div class="description-block border-right">
+                    <a href="{{ route('superAdmin.meetupEvents') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">$24,813.53</h5>
+                    <span class="description-text">Meetup Events</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-3 col-6">
+                  <div class="description-block">
+                    <a href="{{ route('superAdmin.liveChats') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">1200</h5>
+                    <span class="description-text">Live Chats</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+              </div>
+              <!-- /.row -->
+            </div>
+            <!-- /.card-footer -->
+          </div>
+
+          <div class="card">
+            <div class="card-footer">
+              <div class="row">
+                <div class="col-sm-3 col-6">
+                  <div class="description-block border-right">
+                    <a href="{{ route('superAdmin.fanGroup') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">$35,210.43</h5>
+                    <span class="description-text">Fan Group</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-3 col-6">
+                  <div class="description-block border-right">
+                    <a href="{{ route('superAdmin.greetings') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">$10,390.90</h5>
+                    <span class="description-text">Greetings</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-3 col-6">
+                  <div class="description-block border-right">
+                    <a href="{{ route('superAdmin.userPosts') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">$24,813.53</h5>
+                    <span class="description-text">User Posts</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-3 col-6">
+                  <div class="description-block">
+                    <a href="{{ route('superAdmin.wallets') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">1200</h5>
+                    <span class="description-text">Wallet</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+              </div>
+              <!-- /.row -->
+            </div>
+          </div>
+
+
+          
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+
+      
+
+
+
+      <br><br><br><br><br><br><br>
+
+      <br><br><br><br><br><br><br>
+
+      <br><br><br><br><br><br><br>
       <div class="row">
         <div class="col-md-12">
           <div class="card">
@@ -307,7 +596,7 @@
                         <span class="direct-chat-timestamp float-right">23 Jan 2:00 pm</span>
                       </div>
                       <!-- /.direct-chat-infos -->
-                      <img class="direct-chat-img" src="dist/img/user1-128x128.jpg" alt="message user image">
+                      <img class="direct-chat-img" src="{{ asset('assets/manager-admin/dist/img/user1-128x128.jpg') }}" alt="message user image">
                       <!-- /.direct-chat-img -->
                       <div class="direct-chat-text">
                         Is this template really for free? That's unbelievable!
@@ -323,7 +612,7 @@
                         <span class="direct-chat-timestamp float-left">23 Jan 2:05 pm</span>
                       </div>
                       <!-- /.direct-chat-infos -->
-                      <img class="direct-chat-img" src="dist/img/user3-128x128.jpg" alt="message user image">
+                      <img class="direct-chat-img" src="{{ asset('assets/manager-admin/dist/img/user3-128x128.jpg') }}" alt="message user image">
                       <!-- /.direct-chat-img -->
                       <div class="direct-chat-text">
                         You better believe it!
@@ -339,7 +628,7 @@
                         <span class="direct-chat-timestamp float-right">23 Jan 5:37 pm</span>
                       </div>
                       <!-- /.direct-chat-infos -->
-                      <img class="direct-chat-img" src="dist/img/user1-128x128.jpg" alt="message user image">
+                      <img class="direct-chat-img" src="{{ asset('assets/manager-admin/dist/img/user1-128x128.jpg') }}" alt="message user image">
                       <!-- /.direct-chat-img -->
                       <div class="direct-chat-text">
                         Working with AdminLTE on a great new app! Wanna join?
@@ -355,7 +644,7 @@
                         <span class="direct-chat-timestamp float-left">23 Jan 6:10 pm</span>
                       </div>
                       <!-- /.direct-chat-infos -->
-                      <img class="direct-chat-img" src="dist/img/user3-128x128.jpg" alt="message user image">
+                      <img class="direct-chat-img" src="{{ asset('assets/manager-admin/dist/img/user3-128x128.jpg') }}" alt="message user image">
                       <!-- /.direct-chat-img -->
                       <div class="direct-chat-text">
                         I would love to.
@@ -372,7 +661,7 @@
                     <ul class="contacts-list">
                       <li>
                         <a href="#">
-                          <img class="contacts-list-img" src="dist/img/user1-128x128.jpg" alt="User Avatar">
+                          <img class="contacts-list-img" src="{{ asset('assets/manager-admin/dist/img/user1-128x128.jpg') }}" alt="User Avatar">
 
                           <div class="contacts-list-info">
                             <span class="contacts-list-name">
@@ -387,7 +676,7 @@
                       <!-- End Contact Item -->
                       <li>
                         <a href="#">
-                          <img class="contacts-list-img" src="dist/img/user7-128x128.jpg" alt="User Avatar">
+                          <img class="contacts-list-img" src="{{ asset('assets/manager-admin/dist/img/user7-128x128.jpg') }}" alt="User Avatar">
 
                           <div class="contacts-list-info">
                             <span class="contacts-list-name">
@@ -402,7 +691,7 @@
                       <!-- End Contact Item -->
                       <li>
                         <a href="#">
-                          <img class="contacts-list-img" src="dist/img/user3-128x128.jpg" alt="User Avatar">
+                          <img class="contacts-list-img" src="{{ asset('assets/manager-admin/dist/img/user3-128x128.jpg') }}" alt="User Avatar">
 
                           <div class="contacts-list-info">
                             <span class="contacts-list-name">
@@ -417,7 +706,7 @@
                       <!-- End Contact Item -->
                       <li>
                         <a href="#">
-                          <img class="contacts-list-img" src="dist/img/user5-128x128.jpg" alt="User Avatar">
+                          <img class="contacts-list-img" src="{{ asset('assets/manager-admin/dist/img/user5-128x128.jpg') }}" alt="User Avatar">
 
                           <div class="contacts-list-info">
                             <span class="contacts-list-name">
@@ -432,7 +721,7 @@
                       <!-- End Contact Item -->
                       <li>
                         <a href="#">
-                          <img class="contacts-list-img" src="dist/img/user6-128x128.jpg" alt="User Avatar">
+                          <img class="contacts-list-img" src="{{ asset('assets/manager-admin/dist/img/user6-128x128.jpg') }}" alt="User Avatar">
 
                           <div class="contacts-list-info">
                             <span class="contacts-list-name">
@@ -447,7 +736,7 @@
                       <!-- End Contact Item -->
                       <li>
                         <a href="#">
-                          <img class="contacts-list-img" src="dist/img/user8-128x128.jpg" alt="User Avatar">
+                          <img class="contacts-list-img" src="{{ asset('assets/manager-admin/dist/img/user8-128x128.jpg') }}" alt="User Avatar">
 
                           <div class="contacts-list-info">
                             <span class="contacts-list-name">
@@ -502,42 +791,42 @@
                 <div class="card-body p-0">
                   <ul class="users-list clearfix">
                     <li>
-                      <img src="{{('assets/manager-admin/dist/img/user1-128x128.jpg')}}" alt="User Image">
+                      <img src="{{asset('assets/manager-admin/dist/img/user1-128x128.jpg')}}" alt="User Image">
                       <a class="users-list-name" href="#">Alexander Pierce</a>
                       <span class="users-list-date">Today</span>
                     </li>
                     <li>
-                      <img src="{{('assets/manager-admin/dist/img/user8-128x128.jpg')}}" alt="User Image">
+                      <img src="{{ asset('assets/manager-admin/dist/img/user8-128x128.jpg')}}" alt="User Image">
                       <a class="users-list-name" href="#">Norman</a>
                       <span class="users-list-date">Yesterday</span>
                     </li>
                     <li>
-                      <img src="{{('assets/manager-admin/dist/img/user7-128x128.jpg')}}" alt="User Image">
+                      <img src="{{ asset('assets/manager-admin/dist/img/user7-128x128.jpg')}}" alt="User Image">
                       <a class="users-list-name" href="#">Jane</a>
                       <span class="users-list-date">12 Jan</span>
                     </li>
                     <li>
-                      <img src="{{('assets/manager-admin/dist/img/user6-128x128.jpg')}}" alt="User Image">
+                      <img src="{{ asset('assets/manager-admin/dist/img/user6-128x128.jpg')}}" alt="User Image">
                       <a class="users-list-name" href="#">John</a>
                       <span class="users-list-date">12 Jan</span>
                     </li>
                     <li>
-                      <img src="{{('assets/manager-admin/dist/img/user2-160x160.jpg')}}" alt="User Image">
+                      <img src="{{ asset('assets/manager-admin/dist/img/user2-160x160.jpg')}}" alt="User Image">
                       <a class="users-list-name" href="#">Alexander</a>
                       <span class="users-list-date">13 Jan</span>
                     </li>
                     <li>
-                      <img src="{{('assets/manager-admin/dist/img/user5-128x128.jpg')}}" alt="User Image">
+                      <img src="{{ asset('assets/manager-admin/dist/img/user5-128x128.jpg')}}" alt="User Image">
                       <a class="users-list-name" href="#">Sarah</a>
                       <span class="users-list-date">14 Jan</span>
                     </li>
                     <li>
-                      <img src="{{('assets/manager-admin/dist/img/user4-128x128.jpg')}}" alt="User Image">
+                      <img src="{{ asset('assets/manager-admin/dist/img/user4-128x128.jpg')}}" alt="User Image">
                       <a class="users-list-name" href="#">Nora</a>
                       <span class="users-list-date">15 Jan</span>
                     </li>
                     <li>
-                      <img src="{{('assets/manager-admin/dist/img/user3-128x128.jpg')}}" alt="User Image">
+                      <img src="{{ asset('assets/manager-admin/dist/img/user3-128x128.jpg')}}" alt="User Image">
                       <a class="users-list-name" href="#">Nadia</a>
                       <span class="users-list-date">15 Jan</span>
                     </li>
@@ -787,7 +1076,7 @@
               <ul class="products-list product-list-in-card pl-2 pr-2">
                 <li class="item">
                   <div class="product-img">
-                    <img src="dist/img/default-150x150.png" alt="Product Image" class="img-size-50">
+                    <img src="{{ asset('assets/manager-admin/dist/img/default-150x150.png') }}" alt="Product Image" class="img-size-50">
                   </div>
                   <div class="product-info">
                     <a href="javascript:void(0)" class="product-title">Samsung TV
@@ -800,7 +1089,7 @@
                 <!-- /.item -->
                 <li class="item">
                   <div class="product-img">
-                    <img src="dist/img/default-150x150.png" alt="Product Image" class="img-size-50">
+                    <img src="{{ asset('assets/manager-admin/dist/img/default-150x150.png') }}" alt="Product Image" class="img-size-50">
                   </div>
                   <div class="product-info">
                     <a href="javascript:void(0)" class="product-title">Bicycle
@@ -813,7 +1102,7 @@
                 <!-- /.item -->
                 <li class="item">
                   <div class="product-img">
-                    <img src="dist/img/default-150x150.png" alt="Product Image" class="img-size-50">
+                    <img src="{{ asset('assets/manager-admin/dist/img/default-150x150.png') }}" alt="Product Image" class="img-size-50">
                   </div>
                   <div class="product-info">
                     <a href="javascript:void(0)" class="product-title">
@@ -829,7 +1118,7 @@
                 <!-- /.item -->
                 <li class="item">
                   <div class="product-img">
-                    <img src="dist/img/default-150x150.png" alt="Product Image" class="img-size-50">
+                    <img src="{{ asset('assets/manager-admin/dist/img/default-150x150.png') }}" alt="Product Image" class="img-size-50">
                   </div>
                   <div class="product-info">
                     <a href="javascript:void(0)" class="product-title">PlayStation 4
