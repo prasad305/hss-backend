@@ -36,7 +36,7 @@
                             10
                             <small>%</small>
                         </span>
-                        <a href="{{route('managerAdmin.dashboard.learningSession')}}">
+                        <a href="{{route('managerAdmin.dashboard.learningSessionData')}}">
                             <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                         </a>
                     </div>
@@ -52,7 +52,7 @@
                     <div class="info-box-content">
                         <span class="info-box-text">Completed</span>
                         <span class="info-box-number">41,410</span>
-                        <a href="{{route('managerAdmin.dashboard.learningSession')}}">
+                        <a href="{{route('managerAdmin.dashboard.learningSessionData')}}">
                             <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                         </a>
                     </div>
@@ -72,7 +72,7 @@
                     <div class="info-box-content">
                         <span class="info-box-text">Upcoming</span>
                         <span class="info-box-number">760</span>
-                        <a href="{{route('managerAdmin.dashboard.learningSession')}}">
+                        <a href="{{route('managerAdmin.dashboard.learningSessionData')}}">
                             <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                         </a>
                     </div>
@@ -136,7 +136,7 @@
                     <span class="info-box-icon bg-info elevation-1"><i class="fa-solid fa-square-poll-vertical"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Total Auction Product</span>
+                        <span class="info-box-text">Weekly Income</span>
                         <span class="info-box-number">
                             10
                             <small>%</small>
@@ -152,7 +152,7 @@
                     <span class="info-box-icon bg-danger elevation-1"><i class="fa-solid fa-square-poll-vertical"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Total MarketPlace Product</span>
+                        <span class="info-box-text">Monthly Income</span>
                         <span class="info-box-number">41,410</span>
                     </div>
                     <!-- /.info-box-content -->
@@ -169,8 +169,8 @@
                     <span class="info-box-icon bg-success elevation-1"><i class="fas fa-book"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Total Star </span>
-                        <span class="info-box-number"><i class="fas fa-eye"></i> View</span>
+                        <span class="info-box-text">Yearly Income</span>
+                        <span class="info-box-number">100k</span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>

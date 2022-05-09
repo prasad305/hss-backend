@@ -26,29 +26,35 @@
     <div class="container-fluid">
         <!-- Info boxes -->
         <div class="row">
-            <div class="col-12 col-sm-6 col-md-3">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box">
                     <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Total Users</span>
+                        <span class="info-box-text">Total</span>
                         <span class="info-box-number">
                             10
                             <small>%</small>
                         </span>
+                        <a href="{{route('managerAdmin.dashboard.meetupEventData')}}">
+                            <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
+                        </a>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
                 <!-- /.info-box -->
             </div>
             <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-3">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box mb-3">
                     <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-users"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Total Superstar Admin</span>
+                        <span class="info-box-text">Completed</span>
                         <span class="info-box-number">41,410</span>
+                        <a href="{{route('managerAdmin.dashboard.meetupEventData')}}">
+                            <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
+                        </a>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -59,26 +65,16 @@
             <!-- fix for small devices only -->
             <div class="clearfix hidden-md-up"></div>
 
-            <div class="col-12 col-sm-6 col-md-3">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box mb-3">
                     <span class="info-box-icon bg-success elevation-1"><i class="fas fa-users"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Total Super Star</span>
+                        <span class="info-box-text">Upcoming</span>
                         <span class="info-box-number">760</span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Total Visitors</span>
-                        <span class="info-box-number">2,000</span>
+                        <a href="{{route('managerAdmin.dashboard.meetupEventData')}}">
+                            <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
+                        </a>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -87,12 +83,12 @@
             <!-- /.col -->
         </div>
         <div class="row">
-            <div class="col-12 col-sm-6 col-md-3">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box">
                     <span class="info-box-icon bg-info elevation-1"><i class="fas fa-flag"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Total Country</span>
+                        <span class="info-box-text">Weekly Users</span>
                         <span class="info-box-number">
                             10
                             <small>%</small>
@@ -103,12 +99,12 @@
                 <!-- /.info-box -->
             </div>
             <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-3">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box mb-3">
                     <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-map"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Total State</span>
+                        <span class="info-box-text">Monthly Users</span>
                         <span class="info-box-number">41,410</span>
                     </div>
                     <!-- /.info-box-content -->
@@ -120,12 +116,12 @@
             <!-- fix for small devices only -->
             <div class="clearfix hidden-md-up"></div>
 
-            <div class="col-12 col-sm-6 col-md-3">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box mb-3">
                     <span class="info-box-icon bg-success elevation-1"><i class="fas fa-map-location"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Total City</span>
+                        <span class="info-box-text">Yearly Users</span>
                         <span class="info-box-number">760</span>
                     </div>
                     <!-- /.info-box-content -->
@@ -133,27 +129,14 @@
                 <!-- /.info-box -->
             </div>
             <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-list"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Total Interest Type </span>
-                        <span class="info-box-number">2,000</span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
         </div>
         <div class="row">
-            <div class="col-12 col-sm-6 col-md-3">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box">
                     <span class="info-box-icon bg-info elevation-1"><i class="fa-solid fa-square-poll-vertical"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Total Auction Product</span>
+                        <span class="info-box-text">Weekly Income</span>
                         <span class="info-box-number">
                             10
                             <small>%</small>
@@ -164,12 +147,12 @@
                 <!-- /.info-box -->
             </div>
             <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-3">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box mb-3">
                     <span class="info-box-icon bg-danger elevation-1"><i class="fa-solid fa-square-poll-vertical"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Total MarketPlace Product</span>
+                        <span class="info-box-text">Monthly Income</span>
                         <span class="info-box-number">41,410</span>
                     </div>
                     <!-- /.info-box-content -->
@@ -181,88 +164,13 @@
             <!-- fix for small devices only -->
             <div class="clearfix hidden-md-up"></div>
 
-            <div class="col-12 col-sm-6 col-md-3">
+            <div class="col-12 col-sm-6 col-md-4">
                 <div class="info-box mb-3">
                     <span class="info-box-icon bg-success elevation-1"><i class="fas fa-book"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Learning Session </span>
-                        <span class="info-box-number"><i class="fas fa-eye"></i> View</span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                    <span class="info-box-icon bg-warning elevation-1"><i class="fa fa-handshake"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Meetup Events</span>
-                        <span class="info-box-number"><i class="fas fa-eye"></i> View</span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-        </div>
-        <div class="row">
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box">
-                    <span class="info-box-icon bg-info elevation-1"><i class="fa-solid fa-envelope"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text"> Greetings</span>
-                        <span class="info-box-number">
-                            <i class="fas fa-eye"></i>
-                            View
-
-                        </span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                    <span class="info-box-icon bg-danger elevation-1"><i class="fa-solid fa-bullhorn"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Auditions</span>
-                        <span class="info-box-number"><i class="fas fa-eye"></i> View</span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-
-            <!-- fix for small devices only -->
-            <div class="clearfix hidden-md-up"></div>
-
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-comment"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Live Chats </span>
-                        <span class="info-box-number"><i class="fas fa-eye"></i> View</span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Fan Group</span>
-                        <span class="info-box-number"><i class="fas fa-eye"></i> View</span>
+                        <span class="info-box-text">Yearly Income</span>
+                        <span class="info-box-number">100k</span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>

@@ -25,12 +25,36 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     // Dashboard Routes By Srabon
 
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
-    Route::get('learning-sessions', [DashboardController::class, 'learningSessions'])->name('dashboard.learningSession');
+
+
     Route::get('meetup-events', [DashboardController::class, 'meetupEvents'])->name('dashboard.meetupEvent');
+    Route::get('meetup-events-data', [DashboardController::class, 'meetupEventsData'])->name('dashboard.meetupEventData');
+    Route::get('meetup-events-details', [DashboardController::class, 'meetupEventsDetails'])->name('dashboard.meetupEventDetails');
+
+
     Route::get('greetings', [DashboardController::class, 'greetings'])->name('dashboard.greeting');
+    Route::get('greetings-data', [DashboardController::class, 'greetingsData'])->name('dashboard.greetingData');
+    Route::get('greetings-details', [DashboardController::class, 'greetingsDetails'])->name('dashboard.greetingDetails');
+
+
     Route::get('live-chats', [DashboardController::class, 'liveChats'])->name('dashboard.liveChat');
+    Route::get('live-chats-data', [DashboardController::class, 'liveChatsData'])->name('dashboard.liveChatData');
+    Route::get('live-chats-details', [DashboardController::class, 'liveChatsDetails'])->name('dashboard.liveChatDetails');
+
+
     Route::get('auditions', [DashboardController::class, 'auditions'])->name('dashboard.audition');
+    Route::get('auditions-data', [DashboardController::class, 'auditionsData'])->name('dashboard.auditionData');
+    Route::get('auditions-details', [DashboardController::class, 'auditionsDetails'])->name('dashboard.auditionDetails');
+
+
     Route::get('fan-group', [DashboardController::class, 'fanGroups'])->name('dashboard.fanGroup');
+    Route::get('fan-group-data', [DashboardController::class, 'fanGroupsData'])->name('dashboard.fanGroupData');
+    Route::get('fan-group-details', [DashboardController::class, 'fanGroupsDetails'])->name('dashboard.fanGroupDetails');
+
+    //  learing Session
+    Route::get('learning-sessions', [DashboardController::class, 'learningSessions'])->name('dashboard.learningSession');
+    Route::get('learning-session', [DashboardController::class, 'learninSessionData'])->name('dashboard.learningSessionData');
+    Route::get('learning-session-details', [DashboardController::class, 'learninSessionDetails'])->name('dashboard.learninSessionDetails');
 
 
     //up commingevent
