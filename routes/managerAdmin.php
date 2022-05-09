@@ -106,6 +106,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
        Route::get('free', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin.notAssinged');
 
 
+        Route::get('instruction', [AuditionAdminController::class, 'instruction'])->name('instruction');
+
         Route::get('pending', [AuditionAdminController::class, 'pending'])->name('pending');
         Route::get('published', [AuditionAdminController::class, 'published'])->name('published');
         Route::get('all', [AuditionAdminController::class, 'all'])->name('all');

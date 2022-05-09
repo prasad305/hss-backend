@@ -91,6 +91,11 @@ class AuditionAdminController extends Controller
         return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins'));
     }
 
+
+    public function instruction(){
+        return view('ManagerAdmin.Audition.instruction');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

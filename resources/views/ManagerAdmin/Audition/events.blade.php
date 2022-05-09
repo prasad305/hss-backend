@@ -133,14 +133,16 @@
                             class="img-fluid ImgBlue mr-3 mb-2">
 
                         <div className="d-flex py-3 justify-contnet-center ">
-                            <div>
-                                <h5 class="text-center text-bold">Guitar Competition</h5>
-                                <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
-                                    industry. Lorem
-                                    Ipsum has been. </p>
-                                <center><button class="text-center btn GoldBtn px-4 text-bold ">On Going</button></center>
-
-                            </div>
+                            
+                                <div>
+                                    <h5 class="text-center text-bold">Guitar Competition</h5>
+                                    <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
+                                        industry. Lorem
+                                        Ipsum has been. </p>
+                                    <center><button class="text-center btn GoldBtn px-4 text-bold ">On Going</button></center>
+    
+                                </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -196,6 +198,7 @@
                             class="img-fluid ImgBlue mr-3 mb-2">
 
                         <div className="d-flex py-3 justify-contnet-center ">
+                            <a href="{{ route('managerAdmin.audition.instruction') }}">
                             <div>
                                 <h5 class="text-center text-bold">Guitar Competition</h5>
                                 <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -204,6 +207,7 @@
                                 <center><button class="text-center btn GoldBtn px-4 text-bold ">On Going</button></center>
 
                             </div>
+                            </a>
                         </div>
                     </div>
                 </div>
