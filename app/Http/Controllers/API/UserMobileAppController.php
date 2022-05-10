@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
+use App\Models\AuditionEventRegistration;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
 use App\Models\LiveChatRegistration;
@@ -58,10 +59,15 @@ class UserMobileAppController extends Controller
         //     $activity->type = 'greeting';
         // }
         if( $modelName == 'AuditionParticipant'){
-            $eventRegistration = new AuditionParticipant();
+            $eventRegistration = new AuditionEventRegistration();
             $event = Audition::find($eventId);
-            $eventRegistration->audition_id = $eventId;
+            $eventRegistration->audition_event_id = $eventId;
             $activity->type = 'audition';
+
+            $participant = new AuditionParticipant();
+            $participant->user_id = $user->id;
+            $participant->audition_id = $eventId;
+            $participant->save();
         }
 
         $eventRegistration->user_id = $user->id;

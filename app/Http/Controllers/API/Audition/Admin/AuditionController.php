@@ -310,13 +310,7 @@ class AuditionController extends Controller
         ]);
     }
 
-
-
     // Star Admin Adution End
-
-
-
-
     public function getAuditionVideos($audition_id)
     {
         $audition_videos =  AuditionParticipant::where('audition_id', $audition_id)->where('filter_status', 0)->get();
