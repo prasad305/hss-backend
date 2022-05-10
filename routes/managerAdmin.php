@@ -26,27 +26,29 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
 
-
+    // Meetup Events
     Route::get('meetup-events', [DashboardController::class, 'meetupEvents'])->name('dashboard.meetupEvent');
     Route::get('meetup-events-data', [DashboardController::class, 'meetupEventsData'])->name('dashboard.meetupEventData');
     Route::get('meetup-events-details', [DashboardController::class, 'meetupEventsDetails'])->name('dashboard.meetupEventDetails');
 
-
+    // Greetings
     Route::get('greetings', [DashboardController::class, 'greetings'])->name('dashboard.greeting');
     Route::get('greetings-data', [DashboardController::class, 'greetingsData'])->name('dashboard.greetingData');
     Route::get('greetings-details', [DashboardController::class, 'greetingsDetails'])->name('dashboard.greetingDetails');
-
+    // Live Chats
 
     Route::get('live-chats', [DashboardController::class, 'liveChats'])->name('dashboard.liveChat');
     Route::get('live-chats-data', [DashboardController::class, 'liveChatsData'])->name('dashboard.liveChatData');
     Route::get('live-chats-details', [DashboardController::class, 'liveChatsDetails'])->name('dashboard.liveChatDetails');
 
-
+    // Auditions
     Route::get('auditions', [DashboardController::class, 'auditions'])->name('dashboard.audition');
     Route::get('auditions-data', [DashboardController::class, 'auditionsData'])->name('dashboard.auditionData');
     Route::get('auditions-details', [DashboardController::class, 'auditionsDetails'])->name('dashboard.auditionDetails');
+    Route::get('auditions-judge', [DashboardController::class, 'auditionsJudgeData'])->name('dashboard.auditionsJudgeData');
+    Route::get('auditions-jury', [DashboardController::class, 'auditionsJuryData'])->name('dashboard.auditionsJuryData');
 
-
+    // fan Group
     Route::get('fan-group', [DashboardController::class, 'fanGroups'])->name('dashboard.fanGroup');
     Route::get('fan-group-data', [DashboardController::class, 'fanGroupsData'])->name('dashboard.fanGroupData');
     Route::get('fan-group-details', [DashboardController::class, 'fanGroupsDetails'])->name('dashboard.fanGroupDetails');

@@ -92,4 +92,12 @@ class DashboardController extends Controller
     {
         return view('ManagerAdmin.LearningSession.sessionDetails');
     }
+    public function auditionsJudgeData()
+    {
+        return view('ManagerAdmin.Audition.auditionsJudges');
+    }
+    public function auditionsJuryData()
+    {
+        return view('ManagerAdmin.Audition.auditionsJuries');
+    }
 }
