@@ -961,5 +961,16 @@ class UserController extends Controller
         ]);
     }
 
+    public function UserAuditionRegistrationChecker($slug)
+    {
+        $audition = Audition::where('slug',$slug)->first();
+        $participant = AuditionParticipant::where([['user_id',auth('sanctum')->user()->id],['audition_id',$audition->id]])->first();
+
+        return response()->json([
+            'status' => 200,
+            'participant' => $participant,
+        ]);
+    }
+
 
 }

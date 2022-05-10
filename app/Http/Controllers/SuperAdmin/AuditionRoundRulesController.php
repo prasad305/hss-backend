@@ -42,6 +42,7 @@ class AuditionRoundRulesController extends Controller
      */
     public function store(Request $request)
     {
+
         $round = AuditionRoundRule::find($request->round_id);
         $round->user_vote_mark = $request->user_vote_mark;
         $round->jury_mark = $request->jury_mark;
@@ -49,7 +50,7 @@ class AuditionRoundRulesController extends Controller
         $round->save();
         return response()->json([
             'status' => 'success',
-            'message' => 'Round Rules Save Successfully'
+            'message' => 'Round Rules Save Successfully'.$round
         ]);
     }
 
@@ -61,7 +62,7 @@ class AuditionRoundRulesController extends Controller
      */
     public function show($id)
     {
-        
+
         $round_rules = AuditionRoundRule::where('audition_rules_id', $id)->get();
 
         return response()->json([

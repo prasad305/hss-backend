@@ -171,6 +171,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/audition/enrolled', [UserController::class, 'enrolledAuditions']);
     Route::get('/user/pendingEnrollAudition', [UserController::class, 'enrolledAuditionsPending']);
     Route::get('/user/audition/details/{slug}', [UserController::class, 'UserAuditionDetails']);
+    Route::get('/user/registration_checker/audition/{slug}', [UserController::class, 'UserAuditionRegistrationChecker']);
+
 
     // Promo Videos
 
@@ -475,35 +477,27 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/total-judge-approval/{slug}', [AuditionController::class, 'totalJudgeApproval']);
     Route::get('/audition-admin/audition/approval-request-for-manager-admin/{slug}', [AuditionController::class, 'approvalRequestForManagerAdmin']);
 
-
-
     Route::get('/audition-admin/audition/stars/{category_id}', [AuditionController::class, 'stars']);
     Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
-
 
     Route::get('/audition-admin/auditionStatus/{audition_id}', [AuditionController::class, 'auditionStatus']);
     Route::get('/audition-admin/sendManager/{audition_id}', [AuditionController::class, 'sendManager']);
     Route::put('/audition-admin/confirmed/audition/{audition_id}', [AuditionController::class, 'confirmedAudition']);
 
-
     Route::get('audition-admin/audtion-videos/{audition_id}', [AuditionController::class, 'getAuditionVideos']);
     Route::post('audition-admin/filter-video/submit', [AuditionController::class, 'submitFilterVideo']);
     Route::get('audition-admin/accepted-videos/{audition_id}', [AuditionController::class, 'acceptedVideo']);
     Route::get('audition-admin/rejected-videos/{audition_id}', [AuditionController::class, 'rejectedVideo']);
-
     Route::post('audition-admin/send-manager-admin', [AuditionController::class, 'videoSendManagerAdmin']);
 
     // Selected Jury Marking on Audition Video
     Route::get('audition-admin/jury-selected-videos/{audition_id}', [AuditionController::class, 'juryMarkingVideos']);
-
-
     Route::get('audition-admin/jury-marking-videos/{jury_id}', [AuditionController::class, 'getJuryMarkingVideos']);
-
     Route::get('audition-admin/get-mark-wise-videos/{audition_id}/{mark}', [AuditionController::class, 'getMarkWiseVideos']);
 
     Route::post('audition-admin/selected-top-videos', [AuditionController::class, 'selectedTop']);
     Route::post('audition-admin/rejected-videos-message', [AuditionController::class, 'rejectedMessage']);
-    Route::get('audition-admin/participant/list', [AuditionController::class, 'participantList']);
+    Route::get('/audition-admin/participant/list/{id}', [AuditionController::class, 'participantList']);
 });
 
 

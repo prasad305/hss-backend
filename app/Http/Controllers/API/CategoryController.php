@@ -132,7 +132,7 @@ class CategoryController extends Controller
         }else{
             $suggFollowingStarCategory = Superstar::latest()->get();
         }
-        
+
 
         return response()->json([
             'status' => 200,
@@ -155,17 +155,17 @@ class CategoryController extends Controller
 
         $subCat=array();
         $starCat=array();
-        
+
         $catLen=count($category);
         $subCatLen=count($subcategory);
-        $starCatLen=count($starcategory);
+        $starCatLen=count($starcategory ? $starcategory : []);
 
         for($x=0; $x<$subCatLen; $x++){
             $ok= false;
             for($y=0; $y<$catLen; $y++){
                 $scat = SubCategory::find($subcategory[$x]);
                 if($category[$y] == $scat->category_id){
-                    $ok= true; 
+                    $ok= true;
                 }
             }
             if($ok === false){
@@ -179,7 +179,7 @@ class CategoryController extends Controller
             for($y=0; $y<$catLen; $y++){
                 $scat = SuperStar::find($starcategory[$x]);
                 if($category[$y] == $scat->category_id){
-                    $ok= true; 
+                    $ok= true;
                 }
             }
             if($ok === false){
@@ -209,7 +209,7 @@ class CategoryController extends Controller
         $starcategory = json_decode($cat->star_id);
 
         $starCat=array();
-        
+
         $subCatLen=count($subcategory);
         $starLen=count($starcategory);
 
@@ -218,7 +218,7 @@ class CategoryController extends Controller
             for($y=0; $y<$subCatLen; $y++){
                 $scat = SuperStar::find($starcategory[$x]);
                 if($subcategory[$y] == $scat->sub_category_id){
-                    $ok= true; 
+                    $ok= true;
                 }
             }
             if($ok === false){
