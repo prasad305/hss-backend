@@ -8,7 +8,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Greetings</h1>
+          <h1 class="m-0" style="font-size: 25px; color: #fff3b4; font-weight: 600;">Greetings</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -26,7 +26,7 @@
     <div class="container-fluid">
 
        <!-- /.row -->
-       <div class="row">
+      <div class="row">
         <div class="col-md-12">
 
           <div class="card">
@@ -106,61 +106,33 @@
               <!-- /.row -->
             </div>
           </div>
-
-          <div class="card">
-            <div class="card-header">
-              <h5 class="card-title">Monthly Visitors</h5>
-
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                  <i class="fas fa-minus"></i>
-                </button>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown">
-                    <i class="fas fa-wrench"></i>
-                  </button>
-                  <div class="dropdown-menu dropdown-menu-right" role="menu">
-                    <a href="#" class="dropdown-item">Action</a>
-                    <a href="#" class="dropdown-item">Another action</a>
-                    <a href="#" class="dropdown-item">Something else here</a>
-                    <a class="dropdown-divider"></a>
-                    <a href="#" class="dropdown-item">Separated link</a>
-                  </div>
-                </div>
-                <button type="button" class="btn btn-tool" data-card-widget="remove">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <p class="text-center">
-                    <strong>Visitors</strong>
-                  </p>
-
-                  <div class="chart">
-                    <!-- Sales Chart Canvas -->
-                    <canvas id="salesChart" height="180" style="height: 180px;"></canvas>
-                  </div>
-                  <!-- /.chart-responsive -->
-                </div>
-               
-                <!-- /.col -->
-              </div>
-              <!-- /.row -->
-            </div>
-            <!-- ./card-body -->
-            
-            <!-- /.card-footer -->
-          </div>
-
-         
           
           <!-- /.card -->
         </div>
         <!-- /.col -->
+      </div>
+
+
+      <div class="row">
+        <div class="col-md-12 ">
+            <div class="card">
+                <h5 class="card-header" style="font-size: 20px; color: gold; font-weight: 600;">User Visitor Count</h5>
+                <div class="panel-body">
+                    <canvas id="canvas" height="280" width="600"></canvas>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12 ">
+              <div class="card">
+                  <h5 class="card-header" style="font-size: 20px; color: gold; font-weight: 600;">Payment History</h5>
+                  <div class="panel-body">
+                      {{-- <canvas id="canvas" height="280" width="600"></canvas> --}}
+                      <canvas id="myChart"></canvas>
+                  </div>
+              </div>
+          </div>
       </div>
 
 
@@ -169,5 +141,70 @@
     </div><!--/. container-fluid -->
   </section>
   <!-- /.content -->
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const labels = ['Jan','Feb','Mar','Apr','May','Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: 'Payment',
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: ['2017','1158','2019','20','586','2022', '2417','1158','2019','20','586','222'],
+    }]
+  };
+
+  const config = {
+    type: 'bar',
+    data: data,
+    options: {}
+  };
+</script>
+
+<script>
+  const myChart = new Chart(
+    document.getElementById('myChart'),
+    config
+  );
+</script>
+
+<script>
+  var year = <?php echo $year; ?>;
+  var user = <?php echo $user; ?>;
+  var barChartData = {
+      labels: year,
+      datasets: [{
+          label: 'User',
+          backgroundColor: "#faebd736",
+          data: user
+      }]
+  };
+
+  window.onload = function() {
+      var ctx = document.getElementById("canvas").getContext("2d");
+      window.myBar = new Chart(ctx, {
+          type: 'line',
+          data: barChartData,
+          options: {
+              elements: {
+                  rectangle: {
+                      borderWidth: 2,
+                      borderColor: '#gold',
+                      borderSkipped: 'bottom'
+                  }
+              },
+              responsive: true,
+              title: {
+                  display: true,
+                  text: 'Yearly Visitor Count'
+              }
+          }
+      });
+  };
+</script>
+
 @endsection
 
