@@ -14,6 +14,7 @@ use App\Models\Audition\AuditionAssignJudge;
 use App\Models\Audition\AuditionAssignJury;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionMark;
+use App\Models\Audition\AuditionRoundRule;
 use App\Models\JudgeMarks;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -657,5 +658,66 @@ class AuditionController extends Controller
             'status' => 200,
             'accepted_videos' => $accepted_videos,
         ]);
+    }
+
+
+    public function saveRoundInstruction(Request $request){
+       
+        // return $request->all();
+
+        $validator = Validator::make($request->all(), [
+            // 'title' => 'required',
+            // 'description' => 'required',
+            // 'star_ids' => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $audition = AuditionRoundRule::find($request->audition_round_rule_id);
+            $audition->title = $request->title;
+            $audition->description = $request->description;
+            $audition->uploade_date = $request->uploade_date;
+            $audition->status = 1;
+
+            if ($request->hasfile('banner')) {
+            
+                $destination = $audition->banner;
+
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('banner');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/auditions/instructions/' . time() . '.' . $extension;
+                Image::make($file)->resize(900, 400)->save($filename, 50);
+
+                $audition->banner = $filename;
+            }
+
+            if ($request->hasFile('video')) {
+                return 'get video';
+                if ($audition->video != null && file_exists($audition->video)) {
+                    unlink($audition->video);
+                }
+                $file        = $request->file('video');
+                $path        = 'uploads/videos/auditions/instructions';
+                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                $file->move($path, $file_name);
+                $audition->video = $path . '/' . $file_name;
+            }
+
+            $audition->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Audition Instruction Send to Manager Admin successfully'
+            ]);
+
+        }
     }
 }

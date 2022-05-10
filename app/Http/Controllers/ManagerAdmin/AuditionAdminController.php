@@ -9,6 +9,7 @@ use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionAssignJudge;
 use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\AuditionRoundRule;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -92,8 +93,30 @@ class AuditionAdminController extends Controller
     }
 
 
-    public function instruction(){
-        return view('ManagerAdmin.Audition.instruction');
+    public function instruction($audition_id){
+        $audition = Audition::find($audition_id);
+         $data = [
+            'instruction' => AuditionRoundRule::find($audition->audition_round_rules_id),
+            'audition' => $audition,
+        ];
+        return view('ManagerAdmin.Audition.instruction',$data);
+    }
+
+    public function sendInstructionToParticipant($audition_id){
+
+        $audition = Audition::find($audition_id);
+
+        $instruction = AuditionRoundRule::find($audition->audition_round_rules_id);
+        $instruction->status = 2;
+        $instruction->save();
+
+        $participants = AuditionParticipant::where('audition_id',$audition_id)->update([
+            'audition_round_rules_id' => $audition->audition_round_rules_id,
+        ]);
+
+        session()->flash('success','Send To Participant Successfully');
+        return redirect()->back();
+        
     }
 
     /**
@@ -410,7 +433,19 @@ class AuditionAdminController extends Controller
         return view('ManagerAdmin.Audition.juries');
     }
     public function auditionEvents(){
-        return view('ManagerAdmin.Audition.events');
+
+        
+       $round_rules = AuditionRoundRule::where('status',1)->get();
+       
+       foreach ($round_rules as $key => $rule) {
+            $auditions = Audition::where('audition_round_rules_id',[$rule->id])->get();
+       }
+
+         $data = [
+            'pending_instructions' => $round_rules,
+            'auditions' => $auditions,
+        ];
+        return view('ManagerAdmin.Audition.events',$data);
     }
 }
 

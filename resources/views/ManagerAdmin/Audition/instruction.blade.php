@@ -42,75 +42,39 @@ Manager Admin
 }
 </style>
 <div class="auditionDes">
+ 
     <div class="p-3">
       <p class="titleInstruction">Audition Instruction</p>
     </div>
     <div class="bottomLineGold"></div>
     <div class="p-3">
       <h2 class="fw-bold text-center audiHeadTitle mb-3">
-        Guitar Audition Description
+        {{ $audition->title }}
       </h2>
       <p class="text-light">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ab atque
-        aperiam incidunt voluptate porro odit voluptas earum repellat eius
-        eaque voluptatum asperiores ex nihil perspiciatis quis esse recusandae
-        ratione aliquid ullam laudantium, eveniet et perferendis ipsa?
-        Provident perspiciatis omnis rem!
+       {{$instruction->title}}
       </p>
     </div>
     <div class="bottomLineGold"></div>
 
     <div class="p-3">
       <h2 class="fw-bold text-center audiHeadTitle my-3">
-        Guitar Audition Instructions
+        {{ $audition->title }} Instructions
       </h2>
 
       <div class="d-flex px-2 my-1">
         <img height="35px" src={auditionDescriptionIcon} alt="" />
         <p class="text-muted mx-2 descriptionPara">
-          Your updated video must be upto 480P
+         {!! $instruction->description !!}
         </p>
       </div>
-      <div class="d-flex px-2 my-1">
-        <img height="35px" src={auditionDescriptionIcon} alt="" />
-        <p class="text-muted mx-2 descriptionPara">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-          esse est reiciendis accusamus voluptas temporibus libero natus
-          itaque aut quod?
-        </p>
-      </div>
-      <div class="d-flex px-2 my-1">
-        <img height="35px" src={auditionDescriptionIcon} alt="" />
-        <p class="text-muted mx-2 descriptionPara">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam
-          sit itaque quibusdam doloribus in quaerat.
-        </p>
-      </div>
-      <div class="d-flex px-2 my-1">
-        <img height="35px" src={auditionDescriptionIcon} alt="" />
-        <p class="text-muted mx-2 descriptionPara">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam,
-          tempora.
-        </p>
-      </div>
-      <div class="d-flex px-2 my-1">
-        <img height="35px" src={auditionDescriptionIcon} alt="" />
-        <p class="text-muted mx-2 descriptionPara">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Provident?
-        </p>
-      </div>
-      <div class="d-flex px-2 my-1">
-        <img height="35px" src={auditionDescriptionIcon} alt="" />
-        <p class="text-muted mx-2 descriptionPara">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-        </p>
-      </div>
+      
     </div>
     <div class="bottomLineGold"></div>
 
     <div class="p-3 d-flex justify-content-center">
       <video width="520" controls class="img-fluid">
-        <source src="https://www.youtube.com/watch?v=3WfVm-ih4BA&ab_channel=NotoutNoman" type="video/mp4">
+        <source src="{{ asset($instruction->video) }}" type="video/mp4">
       </video>
     </div>
 
@@ -119,23 +83,40 @@ Manager Admin
         <img height="40px" src={flag} alt="" />
         <div class="px-2">
           <span class="text-light">Starts</span>
-          <h3 class="text-light fw-bold">2 April 2022</h3>
+          <h3 class="text-light fw-bold">{{ date('d F Y',strtotime($audition->start_time)) }}</h3>
         </div>
       </div>
       <div class="endDiv d-flex p-2 my-2">
         <img height="40px" src={ends} alt="" />
         <div class="px-2">
           <span class="text-light">Ends</span>
-          <h3 class="text-light fw-bold">16 April 2022</h3>
+          <h3 class="text-light fw-bold">{{ date('d F Y',strtotime($audition->end_time)) }}</h3>
         </div>
       </div>
-      <div class="startDiv d-flex p-2 my-2">
+      <div class="bg-dark d-flex p-2 my-2">
         <img height="40px" src={youtube} alt="" />
         <div class="px-2">
           <span class="text-light">User upload slot</span>
-          <h3 class="text-light fw-bold">4 Video</h3>
+          <h3 class="text-light fw-bold">{{ $instruction->num_of_videos }} Video</h3>
         </div>
       </div>
+
+      <div class="startDiv d-flex p-2 my-2">
+        <div class="px-2">
+          <span class="text-light">Uploade Last Date</span>
+          <h3 class="text-light fw-bold">{{ date('d F Y',strtotime($instruction->uploade_date))  }}</h3>
+        </div>
+      </div>
+
+     
+    </div>
+    <div class="col-md-4 offset-md-4 mt-5">
+      @if ($instruction->status == 2)
+       <a href="" class="btn btn-danger">Already Send to Participant</a>
+      @endif
+      @if ($instruction->status == 1)
+      <a href="{{ route('managerAdmin.audition.sendInstruction',$audition->id) }}" class="btn btn-success">Send To All Participant Of This Audition</a>
+      @endif
     </div>
   </div>
 
