@@ -14,7 +14,16 @@ use Illuminate\Support\Facades\Auth;
 class DashboardController extends Controller
 {
     public function dashboard(){
-      return view('SuperAdmin.dashboard.index');
+
+      $year = ['Jan','Feb','Mar','Apr','May','Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      $user = ['2017','1158','2019','20','586','2022', '2417','1158','2019','20','586','222'];
+      // foreach ($year as $key => $value) {
+      //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
+      // }
+
+    return view('SuperAdmin.dashboard.index')->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('user',json_encode($user,JSON_NUMERIC_CHECK));
+      // return view('SuperAdmin.dashboard.index');
     }
     public function auditions(){
       return view('SuperAdmin.dashboard.auditions');

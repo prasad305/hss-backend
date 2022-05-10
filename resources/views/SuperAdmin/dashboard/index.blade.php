@@ -36,6 +36,9 @@
                 10
                 <small>%</small>
               </span>
+              <a href="">
+                <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
+              </a>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -49,6 +52,9 @@
             <div class="info-box-content">
               <span class="info-box-text">Total Manager Admins</span>
               <span class="info-box-number">41,410</span>
+              <a href="">
+                <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
+              </a>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -66,6 +72,9 @@
             <div class="info-box-content">
               <span class="info-box-text">Total Superstars</span>
               <span class="info-box-number">760</span>
+              <a href="">
+                <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
+              </a>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -79,6 +88,9 @@
             <div class="info-box-content">
               <span class="info-box-text">Total Admins</span>
               <span class="info-box-number">2,000</span>
+              <a href="">
+                <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
+              </a>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -98,6 +110,9 @@
                 10
                 <small>%</small>
               </span>
+              <a href="">
+                <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
+              </a>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -111,6 +126,9 @@
             <div class="info-box-content">
               <span class="info-box-text">Total SubCategories</span>
               <span class="info-box-number">41,410</span>
+              <a href="">
+                <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
+              </a>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -128,6 +146,9 @@
             <div class="info-box-content">
               <span class="info-box-text">Total Countries</span>
               <span class="info-box-number">760</span>
+              <a href="">
+                <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
+              </a>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -141,6 +162,9 @@
             <div class="info-box-content">
               <span class="info-box-text">Total States</span>
               <span class="info-box-number">2,000</span>
+              <a href="">
+                <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
+              </a>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -160,6 +184,9 @@
                 10
                 <small>%</small>
               </span>
+              <a href="">
+                <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
+              </a>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -173,6 +200,9 @@
             <div class="info-box-content">
               <span class="info-box-text">Total Interest Types</span>
               <span class="info-box-number">41,410</span>
+              <a href="">
+                <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
+              </a>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -190,6 +220,9 @@
             <div class="info-box-content">
               <span class="info-box-text">Total Marketplace Products</span>
               <span class="info-box-number">760</span>
+              <a href="">
+                <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
+              </a>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -203,6 +236,9 @@
             <div class="info-box-content">
               <span class="info-box-text">Total Souvenir Products</span>
               <span class="info-box-number">2,000</span>
+              <a href="">
+                <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
+              </a>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -210,105 +246,34 @@
         </div>
         <!-- /.col -->
       </div>
+
+
+      <div class="row">
+          <div class="col-md-12 ">
+              <div class="card">
+                  <h5 class="card-header">User Visitor Count</h5>
+                  <div class="panel-body">
+                      <canvas id="canvas" height="280" width="600"></canvas>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12 ">
+              <div class="card">
+                  <h5 class="card-header">User Visitor Count</h5>
+                  <div class="panel-body">
+                      {{-- <canvas id="canvas" height="280" width="600"></canvas> --}}
+                      <canvas id="myChart"></canvas>
+                  </div>
+              </div>
+          </div>
+      </div>
+
       <!-- /.row -->
       <div class="row">
         <div class="col-md-12">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="card-title">Monthly Visitors</h5>
-
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                  <i class="fas fa-minus"></i>
-                </button>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown">
-                    <i class="fas fa-wrench"></i>
-                  </button>
-                  <div class="dropdown-menu dropdown-menu-right" role="menu">
-                    <a href="#" class="dropdown-item">Action</a>
-                    <a href="#" class="dropdown-item">Another action</a>
-                    <a href="#" class="dropdown-item">Something else here</a>
-                    <a class="dropdown-divider"></a>
-                    <a href="#" class="dropdown-item">Separated link</a>
-                  </div>
-                </div>
-                <button type="button" class="btn btn-tool" data-card-widget="remove">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <p class="text-center">
-                    <strong>Visitors</strong>
-                  </p>
-
-                  <div class="chart">
-                    <!-- Sales Chart Canvas -->
-                    <canvas id="salesChart" height="180" style="height: 180px;"></canvas>
-                  </div>
-                  <!-- /.chart-responsive -->
-                </div>
-               
-                <!-- /.col -->
-              </div>
-              <!-- /.row -->
-            </div>
-            <!-- ./card-body -->
-            <div class="card-footer">
-              <div class="row">
-                <div class="col-sm-3 col-6">
-                  <div class="description-block border-right">
-                    <a href="{{ route('superAdmin.auditions') }}">
-                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
-                    </a>
-                    
-                    <h5 class="description-header">$35,210.43</h5>
-                    <span class="description-text">Audition</span>
-                  </div>
-                  <!-- /.description-block -->
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-3 col-6">
-                  <div class="description-block border-right">
-                    <a href="{{ route('superAdmin.learningSessions') }}">
-                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
-                    </a>
-                    <h5 class="description-header">$10,390.90</h5>
-                    <span class="description-text">Learning Session</span>
-                  </div>
-                  <!-- /.description-block -->
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-3 col-6">
-                  <div class="description-block border-right">
-                    <a href="{{ route('superAdmin.meetupEvents') }}">
-                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
-                    </a>
-                    <h5 class="description-header">$24,813.53</h5>
-                    <span class="description-text">Meetup Events</span>
-                  </div>
-                  <!-- /.description-block -->
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-3 col-6">
-                  <div class="description-block">
-                    <a href="{{ route('superAdmin.liveChats') }}">
-                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
-                    </a>
-                    <h5 class="description-header">1200</h5>
-                    <span class="description-text">Live Chats</span>
-                  </div>
-                  <!-- /.description-block -->
-                </div>
-              </div>
-              <!-- /.row -->
-            </div>
-            <!-- /.card-footer -->
-          </div>
+          
 
           <div class="card">
             <div class="card-footer">
@@ -1143,7 +1108,72 @@
       </div>
       <!-- /.row -->
     </div><!--/. container-fluid -->
-  </section>
-  <!-- /.content -->
+</section>
+<!-- /.content -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const labels = ['Jan','Feb','Mar','Apr','May','Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: 'My First dataset',
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: ['2017','1158','2019','20','586','2022', '2417','1158','2019','20','586','222'],
+    }]
+  };
+
+  const config = {
+    type: 'bar',
+    data: data,
+    options: {}
+  };
+</script>
+
+<script>
+  const myChart = new Chart(
+    document.getElementById('myChart'),
+    config
+  );
+</script>
+
+<script>
+  var year = <?php echo $year; ?>;
+  var user = <?php echo $user; ?>;
+  var barChartData = {
+      labels: year,
+      datasets: [{
+          label: 'User',
+          backgroundColor: "pink",
+          data: user
+      }]
+  };
+
+  window.onload = function() {
+      var ctx = document.getElementById("canvas").getContext("2d");
+      window.myBar = new Chart(ctx, {
+          type: 'line',
+          data: barChartData,
+          options: {
+              elements: {
+                  rectangle: {
+                      borderWidth: 2,
+                      borderColor: '#gold',
+                      borderSkipped: 'bottom'
+                  }
+              },
+              responsive: true,
+              title: {
+                  display: true,
+                  text: 'Yearly Visitor Count'
+              }
+          }
+      });
+  };
+</script>
+
 @endsection
 
