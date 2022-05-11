@@ -21,13 +21,19 @@ class CategoryController extends Controller
         $id = auth('sanctum')->user()->id;
         $selectedCategory = ChoiceList::where('user_id' ,$id)->first();
 
+        if($selectedCategory)
+        {
+            $selectedCategory = json_decode($selectedCategory->category);
 
-        $selectedCategory = json_decode($selectedCategory->category);
-
-        // $sugg_category = Category::whereNotIn('id', $selectedCategory)->get();
-        $sugg_category = Category::select("*")
-                    ->whereNotIn('id', $selectedCategory)
-                    ->get();
+            // $sugg_category = Category::whereNotIn('id', $selectedCategory)->get();
+            $sugg_category = Category::select("*")
+                        ->whereNotIn('id', $selectedCategory)
+                        ->get();
+        }else{
+            $selectedCategory = [];
+            $sugg_category = [];
+        }
+        
 
 
         return response()->json([
