@@ -96,7 +96,7 @@
                 <center>
                     <div class='displaySide'>
                         <img src="{{ asset('assets/manager-admin/Group1176.png') }}" class="ARRimg pt-2" alt="">
-                        <div class='fontBold'>00</div>
+                        <div class='fontBold'>{{ $pending_instructions->count() }}</div>
                     </div>
                 </center>
                 <a class="btn border-warning nav-link " data-toggle="tab" href="#tabs-2" role="tab">Request for Approval</a>
@@ -133,16 +133,16 @@
                             class="img-fluid ImgBlue mr-3 mb-2">
 
                         <div className="d-flex py-3 justify-contnet-center ">
-                            
-                                <div>
-                                    <h5 class="text-center text-bold">Guitar Competition</h5>
-                                    <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
-                                        industry. Lorem
-                                        Ipsum has been. </p>
-                                    <center><button class="text-center btn GoldBtn px-4 text-bold ">On Going</button></center>
-    
-                                </div>
-                            
+
+                            <div>
+                                <h5 class="text-center text-bold">Guitar Competition</h5>
+                                <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
+                                    industry. Lorem
+                                    Ipsum has been. </p>
+                                <center><button class="text-center btn GoldBtn px-4 text-bold ">On Going</button></center>
+
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -192,27 +192,35 @@
             {{-- <p>Second Panel</p> --}}
 
             <div class="row">
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="row info-box bg-dark shadow-none pb-4 m-3 BGa">
-                        <img src="{{ asset('assets/super-admin/images/unsplash_hUHzaiAHuUc (1).png') }}" alt="Admin Image"
-                            class="img-fluid ImgBlue mr-3 mb-2">
+             
 
-                        <div className="d-flex py-3 justify-contnet-center ">
-                            <a href="{{ route('managerAdmin.audition.instruction') }}">
-                            <div>
-                                <h5 class="text-center text-bold">Guitar Competition</h5>
-                                <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
-                                    industry. Lorem
-                                    Ipsum has been. </p>
-                                <center><button class="text-center btn GoldBtn px-4 text-bold ">On Going</button></center>
+                @if (isset($auditions[0]))
+                    @foreach ($auditions as $key => $audition)
+                        <div class="col-md-3 col-sm-6 col-12">
+                            <div class="row info-box bg-dark shadow-none pb-4 m-3 BGa">
+                                <img src="{{ asset($audition->banner) }}"
+                                    alt="Admin Image" class="img-fluid ImgBlue mr-3 mb-2">
+
+                                <div className="d-flex py-3 justify-contnet-center ">
+                                    <a href="{{ route('managerAdmin.audition.instruction',$audition->id) }}">
+                                        <div>
+                                            <h5 class="text-center text-bold">{{ $audition->title }}</h5>
+                                            <p class="text-center">{!! $audition->description !!} </p>
+                                            <center><button class="text-center btn GoldBtn px-4 text-bold ">On
+                                                    Going</button></center>
+
+                                        </div>
+                                    </a>
+                                </div>
 
                             </div>
-                            </a>
                         </div>
-                    </div>
-                </div>
+                    @endforeach
+                @endif
 
-           
+
+
+
 
             </div>
 

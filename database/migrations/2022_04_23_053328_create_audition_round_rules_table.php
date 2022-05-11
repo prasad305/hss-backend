@@ -19,12 +19,13 @@ class CreateAuditionRoundRulesTable extends Migration
             $table->double('judge_mark')->nullable();
             $table->double('jury_mark')->nullable();
             $table->double('user_vote_mark')->nullable();
+            $table->text('title')->nullable();
             $table->text('description')->nullable();
-            $table->text('instruction')->nullable();
             $table->text('video_instruction')->nullable();
             $table->string('num_of_videos')->nullable();
-            $table->timestamp('video_start_time')->nullable();
-            $table->timestamp('video_end_time')->nullable();
+            $table->timestamp('uploade_date')->nullable();
+            $table->text('banner')->nullable();
+            $table->text('video')->nullable();
             $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
             $table->timestamps();
         });
