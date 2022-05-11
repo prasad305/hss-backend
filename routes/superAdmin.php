@@ -13,6 +13,7 @@ use App\Http\Controllers\SuperAdmin\SuperStarController;
 use App\Http\Controllers\SuperAdmin\JuryBoardController;
 use App\Http\Controllers\SuperAdmin\CategoryController;
 use App\Http\Controllers\SuperAdmin\CountryController;
+use App\Http\Controllers\SuperAdmin\PackageController;
 use App\Http\Controllers\SuperAdmin\StateController;
 use App\Http\Controllers\SuperAdmin\MarketplaceController;
 use App\Http\Controllers\SuperAdmin\CityController;
@@ -37,6 +38,10 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/greetings', [DashboardController::class, 'greetings'])->name('greetings');
     Route::get('/user-posts', [DashboardController::class, 'userPosts'])->name('userPosts');
     Route::get('/wallet', [DashboardController::class, 'wallets'])->name('wallets');
+
+    Route::get('/package', [DashboardController::class, 'package'])->name('package');
+    Route::get('/add-package', [DashboardController::class, 'addPackage'])->name('addPackage');
+    Route::post('/store-package', [DashboardController::class, 'packageStore'])->name('packageStore');
 
     Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
 
@@ -93,6 +98,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::resource('country', CountryController::class);
     Route::post('admin/country-active/{id}', [CountryController::class, 'activeNow'])->name('country.activeNow');
     Route::post('admin/country-inactive/{id}', [CountryController::class, 'inactiveNow'])->name('country.inactiveNow');
+
+    // Package
+    Route::resource('package', PackageController::class);
+    Route::post('admin/package-active/{id}', [PackageController::class, 'activeNow'])->name('package.activeNow');
+    Route::post('admin/package-inactive/{id}', [PackageController::class, 'inactiveNow'])->name('package.inactiveNow');
 
     // State
     Route::resource('state', StateController::class);

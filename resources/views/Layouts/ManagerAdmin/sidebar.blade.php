@@ -110,12 +110,12 @@
                 </p>
             </a>
             <ul class="nav nav-treeview">
-                {{-- <li class="nav-item">
-            <a href="{{ route('managerAdmin.audition.jury_published') }}" class="nav-link">
+                <li class="nav-item">
+            <a href="{{ route('managerAdmin.dashboard.audition') }}" class="nav-link">
         <i class="far fa-circle nav-icon"></i>
-        <p>Jury Published</p>
+        <p>Dashboard</p>
         </a>
-    </li> --}}
+    </li>
                 <li class="nav-item">
                     <a href="{{ route('managerAdmin.audition.published') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
@@ -217,6 +217,12 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
+                    <a href="{{ route('managerAdmin.dashboard.fanGroup') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('managerAdmin.fangroup.published') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Published</p>
@@ -256,6 +262,12 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
+                    <a href="{{ route('managerAdmin.dashboard.meetupEvent') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('managerAdmin.meetupEvent.published') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Published</p>
@@ -286,6 +298,12 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
+                    <a href="{{ route('managerAdmin.dashboard.liveChat') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('managerAdmin.liveChat.published') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Published</p>
@@ -314,6 +332,12 @@
                 </p>
             </a>
             <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.dashboard.learningSession') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Dashbaord</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('managerAdmin.learningSession.published') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>

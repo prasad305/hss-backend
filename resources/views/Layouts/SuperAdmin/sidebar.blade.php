@@ -3,14 +3,75 @@
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class
            with font-awesome or any other icon font library -->
+
+
         <li class="nav-item">
-            <a href="{{ route('superAdmin.dashboard') }}"
-                class="nav-link {{ Request::routeIs('superAdmin.dashboard') ? 'active' : '' }} ">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
+            <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-bullhorn"></i>
                 <p>
                     Dashboard
+                    <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.dashboard') }}"
+                    class="nav-link {{ Request::routeIs('superAdmin.dashboard') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Main Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.auditions') }}"
+                    class="nav-link {{ Request::routeIs('superAdmin.auditions') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Auditions Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.meetupEvents') }}"
+                    class="nav-link {{ Request::routeIs('superAdmin.meetupEvents') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Meetup Events</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.learningSessions') }}"
+                    class="nav-link {{ Request::routeIs('superAdmin.learningSessions') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Learning Sessions</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.liveChats') }}"
+                    class="nav-link {{ Request::routeIs('superAdmin.liveChats') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Live Chats</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.fanGroup') }}"
+                    class="nav-link {{ Request::routeIs('superAdmin.fanGroup') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Fan Group</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.greetings') }}"
+                    class="nav-link {{ Request::routeIs('superAdmin.greetings') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Greetings</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.userPosts') }}"
+                    class="nav-link {{ Request::routeIs('superAdmin.userPosts') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>User Posts</p>
+                    </a>
+                </li>
+               
+            </ul>
         </li>
 
         <li class="nav-item">
@@ -22,6 +83,28 @@
                 </p>
             </a>
         </li>
+
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-bullhorn"></i>
+                <p>
+                    Package
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.package.index') }}"
+                    class="nav-link {{ Request::routeIs('superAdmin.package.index') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>View Package</p>
+                    </a>
+                </li>
+            
+              
+            </ul>
+        </li>
+
 
         <li class="nav-item">
             <a href="{{ route('superAdmin.subCategory.index') }}"

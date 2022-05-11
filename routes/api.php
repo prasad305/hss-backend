@@ -498,6 +498,14 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::post('audition-admin/selected-top-videos', [AuditionController::class, 'selectedTop']);
     Route::post('audition-admin/rejected-videos-message', [AuditionController::class, 'rejectedMessage']);
     Route::get('/audition-admin/participant/list/{id}', [AuditionController::class, 'participantList']);
+
+    Route::get('audition-admin/participant/list', [AuditionController::class, 'participantList']);
+
+
+    Route::post('audition-admin/audition-round-instruction', [AuditionController::class, 'saveRoundInstruction']);
+
+
+
 });
 
 
