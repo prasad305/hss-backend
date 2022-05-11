@@ -126,7 +126,6 @@
             </a>
         </li>
 
-
         <li class="nav-item">
             <a href="{{ route('superAdmin.audition.index') }}"
                 class="nav-link {{ Request::routeIs('superAdmin.audition.index') ? 'active' : '' }}">
