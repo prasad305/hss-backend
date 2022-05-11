@@ -15,8 +15,14 @@ class CreatePackagesTable extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->string('type')->nullable();
-            $table->boolean('status')->default(0)->comment('0 = deactive, 1 = active');
+            $table->string('title')->nullable();
+            $table->string('club_points')->nullable();
+            $table->string('auditions')->default(0);
+            $table->string('learning_session')->default(0);
+            $table->string('live_chats')->default(0);
+            $table->string('meetup')->default(0);
+            $table->string('greetings')->default(0);
+            $table->string('status')->default(1);
             $table->float('price')->nullable();
             $table->timestamps();
         });

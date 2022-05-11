@@ -8,7 +8,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Dashboard</h1>
+          <h1 class="m-0" style="font-size: 25px; color: #fff3b4; font-weight: 600;">Dashboard</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -251,7 +251,7 @@
       <div class="row">
           <div class="col-md-12 ">
               <div class="card">
-                  <h5 class="card-header">User Visitor Count</h5>
+                  <h5 class="card-header" style="font-size: 20px; color: gold; font-weight: 600;">User Visitor Count</h5>
                   <div class="panel-body">
                       <canvas id="canvas" height="280" width="600"></canvas>
                   </div>
@@ -261,7 +261,7 @@
       <div class="row">
           <div class="col-md-12 ">
               <div class="card">
-                  <h5 class="card-header">User Visitor Count</h5>
+                  <h5 class="card-header" style="font-size: 20px; color: gold; font-weight: 600;">Payment History</h5>
                   <div class="panel-body">
                       {{-- <canvas id="canvas" height="280" width="600"></canvas> --}}
                       <canvas id="myChart"></canvas>
@@ -274,6 +274,56 @@
       <div class="row">
         <div class="col-md-12">
           
+          <div class="card">
+            <div class="card-footer">
+              <div class="row">
+                <div class="col-sm-3 col-6">
+                  <div class="description-block border-right">
+                    <a href="{{ route('superAdmin.learningSessions') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">$35,210.43</h5>
+                    <span class="description-text">Learning Session</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-3 col-6">
+                  <div class="description-block border-right">
+                    <a href="{{ route('superAdmin.meetupEvents') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">$10,390.90</h5>
+                    <span class="description-text">Meetup Events</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-3 col-6">
+                  <div class="description-block border-right">
+                    <a href="{{ route('superAdmin.auditions') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">$24,813.53</h5>
+                    <span class="description-text">Auditions</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-3 col-6">
+                  <div class="description-block">
+                    <a href="{{ route('superAdmin.liveChats') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">1200</h5>
+                    <span class="description-text">Live Chat</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+              </div>
+              <!-- /.row -->
+            </div>
+          </div>
 
           <div class="card">
             <div class="card-footer">
@@ -1119,7 +1169,7 @@
   const data = {
     labels: labels,
     datasets: [{
-      label: 'My First dataset',
+      label: 'Payment',
       backgroundColor: 'rgb(255, 99, 132)',
       borderColor: 'rgb(255, 99, 132)',
       data: ['2017','1158','2019','20','586','2022', '2417','1158','2019','20','586','222'],
@@ -1147,7 +1197,7 @@
       labels: year,
       datasets: [{
           label: 'User',
-          backgroundColor: "pink",
+          backgroundColor: "#faebd736",
           data: user
       }]
   };
