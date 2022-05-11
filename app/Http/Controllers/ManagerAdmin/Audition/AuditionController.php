@@ -34,15 +34,16 @@ class AuditionController extends Controller
                 session()->flash('error', 'Opps.. You have to select '.$auditionRule->judge_num.' judge !');
                 return back();
             }else{
+           
                 if(!$auditionRule->roundRules->first()->id){
                     session()->flash('error', 'Opps.. There is no round rules. Please add some round rules first');
                     return back();
                 }
                 $audition                       = new Audition();
-                $audition->category_id          = Auth::user()->category_id;
+                $audition->category_id          =  Auth::user()->category_id;
                 $audition->audition_rules_id    = $request->audition_rule_id;
                 $audition->audition_round_rules_id  = $auditionRule->roundRules->first()->id;
-                $audition->creater_id           = Auth::user()->id;
+                $audition->creater_id           =  Auth::user()->id;
                 $audition->audition_admin_id    =  $request->audition_admin_id;
                 $audition->manager_admin_id     =  Auth::user()->id;
                 $audition->title                =  $request->title;

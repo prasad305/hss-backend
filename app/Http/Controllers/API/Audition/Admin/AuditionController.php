@@ -767,7 +767,6 @@ class AuditionController extends Controller
             }
 
             if ($request->hasFile('video')) {
-                return 'get video';
                 if ($audition->video != null && file_exists($audition->video)) {
                     unlink($audition->video);
                 }
