@@ -642,9 +642,11 @@ class AuditionController extends Controller
             'message' => 'Rejected Videos and Message Send Successfully',
         ]);
     }
-    public function participantList()
+
+
+    public function participantList($id)
     {
-        $participantList = AuditionParticipant::with(['auditions', 'user'])->orderBy('id', 'DESC')->get();
+        $participantList = AuditionParticipant::with(['audition', 'participant'])->where('audition_id',$id)->latest()->get();
 
         return response()->json([
 
