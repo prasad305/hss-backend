@@ -20,7 +20,7 @@ class CreateAuditionCommentsTable extends Migration
             $table->unsignedBigInteger('parent_comment_id')->nullable();
             $table->string('comment')->nullable();
             $table->integer('react_no')->nullable();
-            $table->string('status')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }

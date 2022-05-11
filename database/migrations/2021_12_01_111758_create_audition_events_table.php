@@ -20,17 +20,17 @@ class CreateAuditionEventsTable extends Migration
             $table->string('title')->nullable();
             $table->timestamp('registration_end_date')->nullable();
             $table->timestamp('registration_start_date')->nullable();
-            $table->text('description')->nullable();
+            $table->longText('description')->nullable();
             $table->string('venue')->nullable();
-            $table->string('total_seat')->nullable();
+            $table->integer('total_seat')->nullable();
             $table->string('banner')->nullable();
-            $table->string('participant_number')->nullable();
+            $table->integer('participant_number')->nullable();
             $table->string('video')->nullable();
             $table->timestamp('date')->nullable();
             $table->time('time')->nullable();
             $table->float('fee')->nullable();
             $table->boolean('status')->default(0)->comment('0 = deactive, 1 = active');
-            $table->string('total_amount')->nullable();
+            $table->float('total_amount')->nullable();
             $table->timestamps();
         });
     }

@@ -18,8 +18,8 @@ class CreateLiveChatRegistrationsTable extends Migration
             $table->unsignedBigInteger('live_chat_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('payment_method')->nullable();
-            $table->string('payment_status')->nullable();
-            $table->string('payment_date')->nullable();
+            $table->boolean('payment_status')->nullable();
+            $table->timestamp('payment_date')->nullable();
             $table->float('amount')->nullable();
             $table->string('card_holder_name')->nullable();
             $table->string('account_no')->nullable();
@@ -27,8 +27,8 @@ class CreateLiveChatRegistrationsTable extends Migration
             $table->timestamp('live_chat_end_time')->nullable();
             $table->timestamp('live_chat_date')->nullable();
             $table->string('video')->nullable();
-            $table->string('comment_count')->nullable();
-            $table->string('publish_status')->nullable();
+            $table->integer('comment_count')->nullable();
+            $table->integer('publish_status')->nullable();
             $table->timestamps();
         });
     }

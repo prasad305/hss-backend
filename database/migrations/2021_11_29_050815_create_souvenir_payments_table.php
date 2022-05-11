@@ -18,11 +18,11 @@ class CreateSouvenirPaymentsTable extends Migration
             $table->unsignedBigInteger('souvenir_order_id')->nullable();
             $table->timestamp('payment_date')->nullable();
             $table->string('payment_method')->nullable();
-            $table->string('payment_status')->nullable();
+            $table->boolean('payment_status')->nullable();
             $table->string('card_holder_name')->nullable();
-            $table->string('amount')->nullable();
+            $table->float('amount')->nullable();
             $table->string('transaction_id')->nullable();
-            $table->string('status')->nullable();
+            $table->integer('status')->nullable();
             $table->string('ccv')->nullable();
 
 

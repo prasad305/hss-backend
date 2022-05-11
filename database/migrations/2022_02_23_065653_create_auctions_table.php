@@ -17,6 +17,7 @@ class CreateAuctionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('created_by_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->string('name');
             $table->string('title');
             $table->string('keyword')->nullable();

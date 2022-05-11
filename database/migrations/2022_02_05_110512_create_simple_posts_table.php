@@ -15,8 +15,8 @@ class CreateSimplePostsTable extends Migration
     {
         Schema::create('simple_posts', function (Blueprint $table) {
             $table->id();
-            $table->string('created_by_id')->nullable();
-            $table->string('star_id')->nullable();
+            $table->unsignedBigInteger('created_by_id')->nullable();
+            $table->unsignedBigInteger('star_id')->nullable();
             $table->string('title')->nullable();
             $table->longText('description')->nullable();
             $table->string('image')->nullable();

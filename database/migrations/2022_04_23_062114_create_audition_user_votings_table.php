@@ -20,7 +20,7 @@ class CreateAuditionUserVotingsTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('round_id')->nullable();
             $table->string('comments')->nullable();
-            $table->string('status')->nullable()->default(0);
+            $table->integer('status')->nullable()->default(0);
             $table->timestamps();
         });
     }

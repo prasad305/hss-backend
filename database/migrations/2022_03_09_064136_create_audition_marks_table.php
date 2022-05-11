@@ -19,7 +19,7 @@ class CreateAuditionMarksTable extends Migration
             $table->unsignedBigInteger('judge_id')->nullable();
             $table->unsignedBigInteger('participant_id')->nullable();
             $table->unsignedBigInteger('jury_id')->nullable();
-            $table->string('marks')->nullable();
+            $table->integer('marks')->nullable();
             $table->text('comments')->nullable();
             $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
             $table->boolean('participant_status')->default(0)->comment('0 = rejected, 1= selected');

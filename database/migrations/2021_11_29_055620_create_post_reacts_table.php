@@ -17,7 +17,7 @@ class CreatePostReactsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('post_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('react')->default(0)->comment('0=like, 1=love, 2=other');
+            $table->integer('react')->default(0)->comment('0=like, 1=love, 2=other');
             $table->timestamps();
         });
     }

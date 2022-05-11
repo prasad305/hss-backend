@@ -17,9 +17,9 @@ class CreateWalletsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('club_point')->nullable();
-            $table->string('audition_cost')->nullable();
-            $table->string('amount')->nullable();
-            $table->string('status')->nullable();
+            $table->float('audition_cost')->nullable();
+            $table->float('amount')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }

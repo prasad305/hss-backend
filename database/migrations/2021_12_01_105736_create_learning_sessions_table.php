@@ -17,15 +17,16 @@ class CreateLearningSessionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('created_by_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
             $table->timestamp('registration_end_date')->nullable();
             $table->timestamp('registration_start_date')->nullable();
             $table->text('description')->nullable();
             $table->string('venue')->nullable();
-            $table->string('total_seat')->nullable();
+            $table->integer('total_seat')->nullable();
             $table->string('banner')->nullable();
-            $table->string('participant_number')->nullable();
+            $table->integer('participant_number')->nullable();
             $table->string('video')->nullable();
             $table->timestamp('date')->nullable();
             $table->time('start_time')->nullable();
@@ -34,7 +35,7 @@ class CreateLearningSessionsTable extends Migration
             $table->string('room_id')->nullable();
             $table->float('star_approval')->default(0)->comment('0 = deactive, 1 = active');
             $table->boolean('status')->default(0)->comment('0 = deactive, 1 = active');
-            $table->string('total_amount')->nullable();
+            $table->float('total_amount')->nullable();
             $table->timestamps();
         });
     }

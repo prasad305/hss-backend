@@ -21,7 +21,7 @@ class CreateAuditionJudgeInstructionsTable extends Migration
             $table->string('title')->nullable();
             $table->string('banner')->nullable();
             $table->string('video')->nullable();
-            $table->string('status')->nullable();
+            $table->integer('status')->nullable();
             $table->longText('description')->nullable();
             $table->timestamp('time_boundary')->nullable();
             $table->timestamp('date')->nullable();

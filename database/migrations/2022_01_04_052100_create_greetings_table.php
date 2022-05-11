@@ -23,13 +23,13 @@ class CreateGreetingsTable extends Migration
             $table->longText('description')->nullable();
             $table->string('banner')->nullable();
             $table->string('video')->nullable();
-            $table->integer('cost')->nullable();
+            $table->float('cost')->nullable();
             $table->date('date')->nullable();
             $table->integer('participant_number')->nullable();
             $table->timestamp('registration_start_date')->nullable();
             $table->timestamp('registration_end_date')->nullable();
             $table->boolean('publish_status')->default(1);
-            $table->string('star_approve_status')->default(0)->comment('1 = star approve | 2 = super Admin Approved');
+            $table->integer('star_approve_status')->default(0)->comment('1 = star approve | 2 = super Admin Approved');
             $table->boolean('status')->nullable();
             $table->timestamps();
         });

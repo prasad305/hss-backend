@@ -16,6 +16,7 @@ class CreateMarketplacesTable extends Migration
         Schema::create('marketplaces', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->string('slug')->nullable();
             $table->string('description')->nullable();
             $table->string('unit_price')->nullable();

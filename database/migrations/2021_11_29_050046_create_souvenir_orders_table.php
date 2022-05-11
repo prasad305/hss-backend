@@ -18,11 +18,11 @@ class CreateSouvenirOrdersTable extends Migration
             $table->unsignedBigInteger('souvenir_id')->nullable();
             $table->timestamp('order_date')->nullable();
             $table->integer('quantity')->nullable();
-            $table->string('delivery_status')->nullable();
+            $table->integer('delivery_status')->nullable();
             $table->timestamp('delivery_date')->nullable();
             $table->float('amount')->nullable();
             $table->float('price')->nullable();
-            $table->string('status')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }

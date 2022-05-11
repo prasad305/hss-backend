@@ -18,8 +18,8 @@ class CreateLearningSessionRegistrationsTable extends Migration
             $table->unsignedBigInteger('learning_session_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('payment_method')->nullable();
-            $table->string('payment_status')->nullable();
-            $table->string('payment_date')->nullable();
+            $table->boolean('payment_status')->nullable();
+            $table->timestamp('payment_date')->nullable();
             $table->float('amount')->nullable();
             $table->string('card_holder_name')->nullable();
             $table->string('account_no')->nullable();

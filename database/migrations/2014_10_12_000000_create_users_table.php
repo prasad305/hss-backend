@@ -26,13 +26,13 @@ class CreateUsersTable extends Migration
             $table->string('image')->nullable();
             $table->string('fan_group')->nullable();
             $table->string('cover_photo')->nullable();
-            $table->string('status')->nullable();
+            $table->integer('status')->nullable();
             $table->string('email_send_status')->nullable();
             $table->string('user_type')->nullable();
             $table->string('password')->nullable();
             $table->unsignedBigInteger('parent_user')->nullable();
-            $table->integer('category_id')->nullable();
-            $table->integer('is_online')->default(0);
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->boolean('is_online')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
