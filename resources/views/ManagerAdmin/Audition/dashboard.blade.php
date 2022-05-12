@@ -36,7 +36,7 @@
                             <span class="info-box-number">
                                 {{ $total }}
                             </span>
-                            <a href="{{ route('managerAdmin.dashboard.auditionData') }}">
+                            <a href="{{ route('managerAdmin.dashboard.auditionData', 'total') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
@@ -52,7 +52,7 @@
                         <div class="info-box-content">
                             <span class="info-box-text">Completed</span>
                             <span class="info-box-number">{{ $complete }}</span>
-                            <a href="{{ route('managerAdmin.dashboard.auditionData') }}">
+                            <a href="{{ route('managerAdmin.dashboard.auditionData', 'complete') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
@@ -72,7 +72,7 @@
                         <div class="info-box-content">
                             <span class="info-box-text">Upcoming</span>
                             <span class="info-box-number">{{ $upcoming }}</span>
-                            <a href="{{ route('managerAdmin.dashboard.auditionData') }}">
+                            <a href="{{ route('managerAdmin.dashboard.auditionData', 'upcoming') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
@@ -92,7 +92,7 @@
                             <span class="info-box-number">
                                 {{ $running }}
                             </span>
-                            <a href="{{ route('managerAdmin.dashboard.auditionData') }}">
+                            <a href="{{ route('managerAdmin.dashboard.auditionData', 'running') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>

@@ -19,6 +19,7 @@ class FanGroup extends Model
         'min_member',
         'max_member',
         'banner',
+        'category_id',
     ];
     //Relation For API
     protected $with = ['another_admin', 'another_superstar', 'my_superstar', 'my_admin'];
@@ -38,5 +39,13 @@ class FanGroup extends Model
     public function another_admin()
     {
         return $this->belongsTo(User::class, 'another_star_admin_id');
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+    public function star()
+    {
+        return $this->belongsTo(User::class, 'my_star');
     }
 }

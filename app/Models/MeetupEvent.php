@@ -31,10 +31,11 @@ class MeetupEvent extends Model
         'manager_approval',
         'status',
         'total_amount',
+        'category_id'
     ];
 
     //Relation For API
-    protected $with = ['star','admin'];
+    protected $with = ['star', 'admin'];
 
     public function createdUser()
     {
@@ -44,6 +45,10 @@ class MeetupEvent extends Model
     public function star()
     {
         return $this->belongsTo(User::class, 'star_id');
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     public function admin()
@@ -55,5 +60,4 @@ class MeetupEvent extends Model
     {
         return $this->hasMany(MeetupEventRegistration::class, 'meetup_event_id');
     }
-
 }

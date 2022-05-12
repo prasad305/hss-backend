@@ -73,7 +73,7 @@
                         <div class="info-box-content">
                             <span class="info-box-text">Total Fan Post</span>
                             <span class="info-box-number">{{ $totalFanPost }}</span>
-                            <a href="{{ route('managerAdmin.dashboard.fanGroupData') }}">
+                            <a href="{{ route('managerAdmin.dashboard.fanGroupsPost') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>

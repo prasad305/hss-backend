@@ -21,36 +21,24 @@
                     <thead>
                         <tr>
                             <th>#SL</th>
-                            <th>Title</th>
+                            <th>Name</th>
                             <th>Category</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Star</th>
+                            <th>Audition Title</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-
-                        @foreach ($portalData as $key => $data)
+                        @foreach ($juryList as $key => $jury)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                                <td>{{ $data->title }}</td>
-                                <td>{{ $data->category->name }}</td>
-                                <td>{!! date('d-m-y', strtotime($data->created_at)) !!}</td>
-                                <td>
-                                    @if ($data->status === 10)
-                                        <span class="badge badge-success">Completed</span>
-                                    @else
-                                        <span class="badge badge-warning">Upcoming</span>
-                                    @endif
-                                </td>
+                                <td>{{ $jury->user->first_name }} {{ $jury->user->last_name }}</td>
+                                <td><span class="badge badge-success">{{ $jury->user->category->name }}</span></td>
                                 <td>
                                     <div class="sparkbar" data-color="#00a65a" data-height="20">
-                                        {{ $data->star ? $data->star->first_name : '' }}
-                                        {{ $data->star ? $data->star->last_name : '' }}</div>
+                                        {{ $jury->auditions->title }}</div>
                                 </td>
                                 <td>
-                                    <a href="{{ route('managerAdmin.dashboard.learninSessionDetails') }} "
+                                    <a href="{{ route('managerAdmin.dashboard.auditionDetails') }} "
                                         class="btn btn-primary"><i class="fas fa-eye"></i> View </a>
                                 </td>
                             </tr>
@@ -63,8 +51,7 @@
         </div>
 
         <div class="card-footer clearfix">
-            <a href="{{ route('managerAdmin.dashboard.learningSession') }}" class="btn btn-sm btn-info float-left">Go
-                Back</a>
+            <a href="{{ route('managerAdmin.dashboard.audition') }}" class="btn btn-sm btn-info float-left">Go Back</a>
             <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">View All</a>
         </div>
 

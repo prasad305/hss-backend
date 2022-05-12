@@ -12,6 +12,7 @@ use App\Models\Category;
 use App\Models\Fan_Group_Join;
 use App\Models\FanGroup;
 use App\Models\FanPost;
+use App\Models\Greeting;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChat;
@@ -65,6 +66,23 @@ class DashboardController extends Controller
 
         return view('ManagerAdmin.LearningSession.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome']));
     }
+    public function learninSessionData($type)
+    {
+
+        if ($type == 'total') {
+            $portalData = LearningSession::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'upcoming') {
+            $portalData = LearningSession::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = LearningSession::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
+        }
+
+        return view('ManagerAdmin.LearningSession.learningSessionData', compact('portalData'));
+    }
+    public function learninSessionDetails()
+    {
+        return view('ManagerAdmin.LearningSession.sessionDetails');
+    }
     public function meetupEvents()
     {
         // Total
@@ -85,9 +103,16 @@ class DashboardController extends Controller
         $yearlyIncome = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
         return view('ManagerAdmin.MeetupEvents.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome']));
     }
-    public function meetupEventsData()
+    public function meetupEventsData($type)
     {
-        return view('ManagerAdmin.MeetupEvents.meetupEventsData');
+        if ($type == 'total') {
+            $portalData = MeetupEvent::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'upcoming') {
+            $portalData = MeetupEvent::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = MeetupEvent::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
+        }
+        return view('ManagerAdmin.MeetupEvents.meetupEventsData', compact('portalData'));
     }
     public function meetupEventsDetails()
     {
@@ -97,9 +122,16 @@ class DashboardController extends Controller
     {
         return view('ManagerAdmin.LearningSession.dashboard');
     }
-    public function greetingsData()
+    public function greetingsData($type)
     {
-        return view('ManagerAdmin.LearningSession.dashboard');
+        if ($type == 'total') {
+            $portalData = Greeting::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'upcoming') {
+            $portalData = Greeting::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = Greeting::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
+        }
+        return view('ManagerAdmin.LearningSession.dashboard', compact('portalData'));
     }
     public function greetingsDetails()
     {
@@ -125,9 +157,16 @@ class DashboardController extends Controller
         $yearlyIncome = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
         return view('ManagerAdmin.LiveChat.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome']));
     }
-    public function liveChatsData()
+    public function liveChatsData($type)
     {
-        return view('ManagerAdmin.LiveChat.liveChatsData');
+        if ($type == 'total') {
+            $portalData = LiveChat::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'upcoming') {
+            $portalData = LiveChat::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = LiveChat::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
+        }
+        return view('ManagerAdmin.LiveChat.liveChatsData', compact('portalData'));
     }
     public function liveChatsDetails()
     {
@@ -156,9 +195,18 @@ class DashboardController extends Controller
         $yearlyIncome = AuditionEventRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
         return view('ManagerAdmin.Audition.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'running', 'totalJudge', 'totalJury']));
     }
-    public function auditionsData()
+    public function auditionsData($type)
     {
-        return view('ManagerAdmin.Audition.auditionsData');
+        if ($type == 'total') {
+            $portalData = Audition::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'upcoming') {
+            $portalData = Audition::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'complete') {
+            $portalData = Audition::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = Audition::with(['star', 'category'])->where('status', 1)->where('category_id', auth()->user()->category_id)->get();
+        }
+        return view('ManagerAdmin.Audition.auditionsData', compact('portalData'));
     }
     public function auditionsDetails()
     {
@@ -166,7 +214,7 @@ class DashboardController extends Controller
     }
     public function fanGroups()
     {
-        $total = FanGroup::count();
+        $total = FanGroup::where('category_id', auth()->user()->category_id)->count();
         $totalFanPost = FanPost::count();
         $totalUser = Fan_Group_Join::count();
 
@@ -178,26 +226,34 @@ class DashboardController extends Controller
     }
     public function fanGroupsData()
     {
-        return view('ManagerAdmin.fangroup.fanGroupData');
+
+        $portalData = FanGroup::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+
+        return view('ManagerAdmin.fangroup.fanGroupData', compact('portalData'));
     }
+    public function fanGroupsPost()
+    {
+
+        $portalData = FanPost::with(['category'])->where('category_id', auth()->user()->category_id)->get();
+
+        return view('ManagerAdmin.fangroup.fanGroupData', compact('portalData'));
+    }
+
     public function fanGroupsDetails()
     {
         return view('ManagerAdmin.fangroup.fanGroupDetails');
     }
-    public function learninSessionData()
-    {
-        return view('ManagerAdmin.LearningSession.learningSessionData');
-    }
-    public function learninSessionDetails()
-    {
-        return view('ManagerAdmin.LearningSession.sessionDetails');
-    }
+
     public function auditionsJudgeData()
     {
-        return view('ManagerAdmin.Audition.auditionsJudges');
+        $judgeList = AssignJudge::with(['user', 'auditions'])->where('category_id', auth()->user()->category_id)->get();
+
+        // dd($judgeList);
+        return view('ManagerAdmin.Audition.auditionsJudges', compact('judgeList'));
     }
     public function auditionsJuryData()
     {
-        return view('ManagerAdmin.Audition.auditionsJuries');
+        $juryList = AssignJury::with(['user', 'auditions'])->where('category_id', auth()->user()->category_id)->get();
+        return view('ManagerAdmin.Audition.auditionsJuries', compact('juryList'));
     }
 }
