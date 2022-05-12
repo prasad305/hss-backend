@@ -64,17 +64,24 @@ class PackageController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|unique:countries',
+            'title' => 'required|unique:packages',
         ]);
 
         $package = Package::findOrFail($id);
-        $package->name = $request->input('name');
+        $package->title = $request->title;
+        $package->club_points = $request->club_points;
+        $package->auditions = $request->auditions;
+        $package->learning_session = $request->learning_session;
+        $package->live_chats = $request->live_chats;
+        $package->meetup = $request->meetup;
+        $package->greetings = $request->greetings;
+        $package->price = $request->price;
 
         try {
             $package->save();
             return response()->json([
                 'success' => 'success',
-                'message' => 'package Updated Successfully'
+                'message' => 'Package Updated Successfully'
             ]);
         } catch (\Exception $exception) {
             return response()->json([

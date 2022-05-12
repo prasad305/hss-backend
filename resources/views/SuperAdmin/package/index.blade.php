@@ -53,8 +53,22 @@
                     
                       <div class="col-md-3">
                         <div class="card text-center">
-                            <div class="card-header" style=" background-color: #ffad00; height: 50px; margin-bottom: 20px; ">
+                            <div class="card-header" style=" background-color: #ffad00; height: 50px; margin-bottom: 20px; font-weight: 600; font-size: 20px; ">
                               {{ $data->title }}
+
+                                @if ($data->status == 0)
+                                    <button class="btn btn-primary btn-sm" style="float: right;" onclick="activeNow(this)" value="{{ route('superAdmin.package.activeNow', $data->id) }}">
+                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    </button>
+                                @elseif($data->status == 1)
+                                    <button class="btn btn-danger btn-sm" style="float: right;" onclick="inactiveNow(this)" value="{{ route('superAdmin.package.inactiveNow', $data->id) }}">
+                                        <i class="fa fa-close"></i>
+                                    </button>
+                                @endif
+
+                              <a class="btn btn-sm btn-info" style="float: right; margin-right: 8px;"
+                        onclick="Show('Edit Package','{{ route('superAdmin.package.edit', $data->id) }}')"><i
+                            class="fa fa-edit text-white"></i></a>
                             </div>
                             <div class="card-body">
                               <p class=""><i class="fa {{ $data->club_points ? 'fa-check check' : 'fa-xmark xmark' }}"></i> Club Points :: {{ $data->club_points }} </p>
@@ -65,7 +79,7 @@
                               <p class=""><i class="fa {{ $data->greetings ? 'fa-check check' : 'fa-xmark xmark' }}" style=""></i> Greetings :: {{ $data->greetings }} </p>
                             </div>
                             <div class="card-footer text-muted" style="color: #f0e25e !important; font-size: 30px; font-weight: 600;">
-                              Price :: {{ $data->price }}
+                              Price :: {{ $data->price }} Tk
                             </div>
                           </div>
                       </div>

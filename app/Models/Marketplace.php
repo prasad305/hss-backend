@@ -20,11 +20,15 @@ class Marketplace extends Model
     ];
 
     //Relation For API
-    protected $with = ['superstar'];
+    protected $with = ['superstar', 'starAdmin'];
 
 
     public function superstar()
     {
         return $this->belongsTo(User::class, 'superstar_id');
+    }
+    public function starAdmin()
+    {
+        return $this->belongsTo(User::class, 'superstar_admin_id');
     }
 }
