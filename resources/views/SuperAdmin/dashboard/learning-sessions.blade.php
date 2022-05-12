@@ -34,8 +34,10 @@
               <div class="row">
                 <div class="col-sm-4 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
-                    <h5 class="description-header">$35,210.43</h5>
+                    <a href="{{ route('superAdmin.allLearningSession') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">{{$allLearningCount}}</h5>
                     <span class="description-text">Total Learning Session</span>
                   </div>
                   <!-- /.description-block -->
@@ -43,8 +45,10 @@
                 <!-- /.col -->
                 <div class="col-sm-4 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span>
-                    <h5 class="description-header">$10,390.90</h5>
+                    <a href="{{ route('superAdmin.allCompleteLearningSession') }}">
+                      <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span>
+                    </a>
+                    <h5 class="description-header">{{ $completeLearningCount }}</h5>
                     <span class="description-text">Completed Learning Session</span>
                   </div>
                   <!-- /.description-block -->
@@ -53,8 +57,10 @@
                 <!-- /.col -->
                 <div class="col-sm-4 col-6">
                   <div class="description-block">
-                    <span class="description-percentage text-success"><i class="fas fa-eye"></i> view</span>
-                    <h5 class="description-header">1200</h5>
+                    <a href="{{ route('superAdmin.allUpcomingLearningSession') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view</span>
+                    </a>
+                    <h5 class="description-header">{{ $upcomingLearningCount }}</h5>
                     <span class="description-text">Upcoming Learning Session</span>
                   </div>
                   <!-- /.description-block -->
@@ -69,8 +75,8 @@
               <div class="row">
                 <div class="col-sm-6 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
-                    <h5 class="description-header">$35,210.43</h5>
+                    {{-- <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span> --}}
+                    <h5 class="description-header">{{ $userLearningCount }}</h5>
                     <span class="description-text">Total Registered User in Learning Session</span>
                   </div>
                   <!-- /.description-block -->
@@ -78,8 +84,8 @@
                 <!-- /.col -->
                 <div class="col-sm-6 col-6">
                   <div class="description-block">
-                    <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span>
-                    <h5 class="description-header">$10,390.90</h5>
+                    {{-- <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span> --}}
+                    <h5 class="description-header">{{ $amountLearningCount }} $</h5>
                     <span class="description-text">Total Payment in Learning Session</span>
                   </div>
                   <!-- /.description-block -->

@@ -35,24 +35,24 @@
                   <!-- /.col -->
                 <div class="col-sm-4 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span>
-                    <h5 class="description-header">$10,390.90</h5>
+                    {{-- <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span> --}}
+                    <h5 class="description-header">{{ $allFanGroup }}</h5>
                     <span class="description-text">Total Fan Group</span>
                   </div>
                   <!-- /.description-block -->
                 </div>
                 <div class="col-sm-4 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
-                    <h5 class="description-header">$35,210.43</h5>
+                    {{-- <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span> --}}
+                    <h5 class="description-header">{{ $allFanGroupJoin }}</h5>
                     <span class="description-text">Total Joined User in Fan Group</span>
                   </div>
                   <!-- /.description-block -->
                 </div>
                 <div class="col-sm-4 col-6">
                   <div class="description-block">
-                    <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
-                    <h5 class="description-header">$35,210.43</h5>
+                    {{-- <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span> --}}
+                    <h5 class="description-header">{{ $allFanPost }}</h5>
                     <span class="description-text">Total Post in Fan Group</span>
                   </div>
                   <!-- /.description-block -->

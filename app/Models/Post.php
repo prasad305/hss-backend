@@ -26,7 +26,7 @@ class Post extends Model
         'status',
     ];
 
-    protected $with = ['star', 'meetup', 'livechat', 'general', 'react', 'learningSession','audition'];
+    protected $with = ['star', 'meetup', 'livechat', 'general', 'react', 'learningSession','audition', 'category', 'subCategory'];
 
     public function star()
     {
@@ -61,6 +61,14 @@ class Post extends Model
     public function react()
     {
         return $this->hasMany(React::class, 'post_id');
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class, 'sub_category_id');
     }
 
     // public function liked()

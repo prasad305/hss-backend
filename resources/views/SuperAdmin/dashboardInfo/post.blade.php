@@ -13,12 +13,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">{{ $meetUpType }} MeetUp Events</h1>
+          <h1 class="m-0">{{ $learningType }} Post</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-            <li class="breadcrumb-item active">{{ $meetUpType }} MeetUp</li>
+            <li class="breadcrumb-item active">{{ $learningType }} Post</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -36,7 +36,7 @@
 
             <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">All {{ $meetUpType }} MeetUp Events Lists</h3>
+                  <h3 class="card-title">{{ $learningType }} Post Lists</h3>
                   {{-- <a class="btn btn-success btn-sm" style="float: right;" onclick="Show('New Interest Type','{{ route('superAdmin.interest-type.create') }}')"><i class=" fa fa-plus"></i>&nbsp;New Interest Type</a> --}}
                   <a href="{{ route('superAdmin.dashboard') }}" class="btn btn-success btn-sm" style="float: right;" ><i class=" fa fa-angle-left"></i>&nbsp;Back</a>
                 </div>
@@ -46,28 +46,30 @@
                     <thead>
                         <tr>
                             <th>SL</th>
-                            <th>Title</th>
-                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Post Type</th>
+                            <th>Category</th>
+                            <th>Sub Category</th>
+                            <th>React</th>
                             <th>Date</th>
-                            <th>Fee</th>
                             <th>Status</th>
                             {{-- <th style="width: 150px">Action</th> --}}
                         </tr>
                     </thead>
                     <tbody>
-
                         @foreach ($allMeetUp as $key => $data)
                             <tr>
                                 <td>{{ ++$key }}</td>
-                                <td title="{{ $data->title }}">{{ Str::limit($data->title, 20) }}</td>
+                                <td>{{ $data->star->first_name }} {{ $data->star->last_name }}</td>
+                                {{-- <td title="{{ $data->meetup->title }}">{{ Str::limit($data->meetup->title, 20) }}</td> --}}
                                 <td>
-                                    <img src="{{ asset($data->banner)}}" alt="" style=" height: 50px; width: 50px; ">
+                                    <span class="badge badge-success" style="width: 100px;">{{ $data->type }}</span>
                                 </td>
-                                <td>
-                                    <p>{{ date('d M Y', strtotime($data->date)) }}</p>
-                                    {{ $data->start_time }} - {{ $data->end_time }}
+                                <td>{{ $data->category->name }}</td>
+                                <td>{{ $data->subCategory->name }}</td>
+                                <td>{{ $data->react_number }}</td>
+                                <td>{{ $data->created_at->diffForHumans() }}
                                 </td>
-                                <td>{{ $data->fee }}</td>
                                 <td>
                                   @if($data->status)
                                   <span class="badge badge-info" style="width: 70px;">Active</span>

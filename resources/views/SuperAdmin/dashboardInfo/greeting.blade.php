@@ -13,12 +13,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">{{ $meetUpType }} MeetUp Events</h1>
+          <h1 class="m-0">{{ $learningType }} Greetings</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-            <li class="breadcrumb-item active">{{ $meetUpType }} MeetUp</li>
+            <li class="breadcrumb-item active">{{ $learningType }} Greetings</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -36,7 +36,7 @@
 
             <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">All {{ $meetUpType }} MeetUp Events Lists</h3>
+                  <h3 class="card-title">All {{ $learningType }} Greetings Lists</h3>
                   {{-- <a class="btn btn-success btn-sm" style="float: right;" onclick="Show('New Interest Type','{{ route('superAdmin.interest-type.create') }}')"><i class=" fa fa-plus"></i>&nbsp;New Interest Type</a> --}}
                   <a href="{{ route('superAdmin.dashboard') }}" class="btn btn-success btn-sm" style="float: right;" ><i class=" fa fa-angle-left"></i>&nbsp;Back</a>
                 </div>
@@ -63,11 +63,9 @@
                                 <td>
                                     <img src="{{ asset($data->banner)}}" alt="" style=" height: 50px; width: 50px; ">
                                 </td>
-                                <td>
-                                    <p>{{ date('d M Y', strtotime($data->date)) }}</p>
-                                    {{ $data->start_time }} - {{ $data->end_time }}
+                                <td>{{ date('d M Y', strtotime($data->registration_start_date)) }} - {{ date('d M Y', strtotime($data->	registration_end_date)) }}
                                 </td>
-                                <td>{{ $data->fee }}</td>
+                                <td>{{ $data->cost }}</td>
                                 <td>
                                   @if($data->status)
                                   <span class="badge badge-info" style="width: 70px;">Active</span>
