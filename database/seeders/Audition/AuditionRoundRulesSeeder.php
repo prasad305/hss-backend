@@ -15,9 +15,22 @@ class AuditionRoundRulesSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        for ($i = 1; $i < 10; $i++) {
+        for ($i = 1; $i < 4; $i++) {
             $auditionRoundRules = new AuditionRoundRule();
-            $auditionRoundRules->audition_rules_id =  $faker->numberBetween(1, 8);
+            $auditionRoundRules->audition_rules_id =  10;
+            $auditionRoundRules->judge_mark = 30;
+            $auditionRoundRules->jury_mark = 40;
+            $auditionRoundRules->user_vote_mark = 30;
+            $auditionRoundRules->description = $faker->text();
+            $auditionRoundRules->title = $faker->title;
+            $auditionRoundRules->video_instruction = $faker->text();
+            $auditionRoundRules->num_of_videos = $faker->numberBetween(1, 4);
+            $auditionRoundRules->uploade_date = $faker->date;
+            $auditionRoundRules->save();
+        }
+        for ($i = 1; $i < 4; $i++) {
+            $auditionRoundRules = new AuditionRoundRule();
+            $auditionRoundRules->audition_rules_id =  1;
             $auditionRoundRules->judge_mark = 30;
             $auditionRoundRules->jury_mark = 40;
             $auditionRoundRules->user_vote_mark = 30;

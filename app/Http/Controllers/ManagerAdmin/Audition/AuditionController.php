@@ -12,15 +12,16 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
+use function PHPUnit\Framework\isEmpty;
 
 class AuditionController extends Controller
 {
     public function store(Request $request){
 
+        // dd($request->all());
         $auditionRule = AuditionRules::find($request->audition_rule_id);
-        // dd($auditionRule);
-        // dd($auditionRule->roundRules->first()->id);
         if($auditionRule){
+            // dd($auditionRule->roundRules->count());
             $request->validate([
                 'audition_admin_id' => 'required',
                 'title' => 'required',
@@ -34,8 +35,7 @@ class AuditionController extends Controller
                 session()->flash('error', 'Opps.. You have to select '.$auditionRule->judge_num.' judge !');
                 return back();
             }else{
-           
-                if(!$auditionRule->roundRules->first()->id){
+                if($auditionRule->roundRules->count() == 0){
                     session()->flash('error', 'Opps.. There is no round rules. Please add some round rules first');
                     return back();
                 }
