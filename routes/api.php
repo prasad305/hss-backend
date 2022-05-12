@@ -174,6 +174,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/audition/round-instruction/{round_id}', [UserController::class, 'roundInstruction']);
     Route::get('/user/registration_checker/audition/{slug}', [UserController::class, 'UserAuditionRegistrationChecker']);
 
+    Route::post('/user/audition/round-video-upload', [UserController::class, 'userRoundVideoUpload']);
+
 
     // Promo Videos
 

@@ -9,6 +9,7 @@ use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPayment;
 use App\Models\Audition\AuditionRoundRule;
+use App\Models\Audition\AuditionUploadVideo;
 use App\Models\Bidding;
 use App\Models\FanGroupMessage;
 use App\Models\Greeting;
@@ -35,13 +36,10 @@ use DateTimeZone;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\array_sort;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use PhpParser\Node\Expr\FuncCall;
 use Intervention\Image\Facades\Image;
+
 
 class UserController extends Controller
 {
@@ -754,6 +752,34 @@ class UserController extends Controller
             'status' => 200,
         ]);
     }
+
+    public function userRoundVideoUpload(Request $request){
+        // $array = explode(',',$request->videos);
+        //  return $array;
+        
+        foreach ($request->videos as $key => $video) {
+           
+            $audition_video = new AuditionUploadVideo();
+            $audition_video->audition_id = $request->audition_id;
+            $audition_video->round_id = $request->round_id;
+
+            $file        = $video;
+            $path        = 'uploads/videos/auditions';
+            $file_name   = time() .$key. rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $audition_video->video = $path . '/' . $file_name;
+            $audition_video->save();
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Audition Videos Uploaded Successfully!',
+            'request' => $request->all()
+        ]);
+    }
+
+
+
     public function videoUpload(Request $request)
     {
 
