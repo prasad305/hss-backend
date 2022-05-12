@@ -30,6 +30,7 @@ Super Admin
 <ul class="nav nav-tabs m-4" role="tablist">
 
     @foreach ($rules_categories as $key => $rules)
+    @if($rules->category)
     <li class="nav-item custom-nav-item m-2 TextBH {{ $key == 0 ? 'active' : '' }}" onclick="selectedCategory('{{ $rules->id }}')">
         <a class="nav-link border-warning " data-toggle="tab" href="#tabs-{{ $rules->category ? $rules->category->id : '' }}" role="tab">
             <center>
@@ -38,6 +39,7 @@ Super Admin
             <a class="btn border-warning nav-link  {{ $key == 0 ? 'active' : '' }}"  data-toggle="tab" href="#tabs-{{ $rules->category->id ?? '' }}" role="tab">{{ $rules->category ? $rules->category->name : '' }}</a>
         </a>
     </li>
+    @endif
     @endforeach
 </ul>
 

@@ -50,7 +50,7 @@ class AuditionRoundRulesController extends Controller
         $round->save();
         return response()->json([
             'status' => 'success',
-            'message' => 'Round Rules Save Successfully'.$round
+            'message' => 'Round Rules Save Successfully'
         ]);
     }
 
