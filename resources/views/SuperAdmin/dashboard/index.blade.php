@@ -33,10 +33,9 @@
             <div class="info-box-content">
               <span class="info-box-text">Total Users</span>
               <span class="info-box-number">
-                10
-                <small>%</small>
+                {{ $userCount }}
               </span>
-              <a href="">
+              <a href="{{ route('superAdmin.allUser') }}">
                 <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
               </a>
             </div>
@@ -51,8 +50,8 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Total Manager Admins</span>
-              <span class="info-box-number">41,410</span>
-              <a href="">
+              <span class="info-box-number">{{ $managerAdminCount }}</span>
+              <a href="{{ route('superAdmin.managerAdmin.index') }}">
                 <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
               </a>
             </div>
@@ -71,8 +70,8 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Total Superstars</span>
-              <span class="info-box-number">760</span>
-              <a href="">
+              <span class="info-box-number">{{ $starCount }}</span>
+              <a href="{{ route('superAdmin.allStar') }}">
                 <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
               </a>
             </div>
@@ -87,8 +86,8 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Total Admins</span>
-              <span class="info-box-number">2,000</span>
-              <a href="">
+              <span class="info-box-number">{{ $adminCount }}</span>
+              <a href="{{ route('superAdmin.allAdmin') }}">
                 <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
               </a>
             </div>
@@ -107,10 +106,9 @@
             <div class="info-box-content">
               <span class="info-box-text">Total Categories</span>
               <span class="info-box-number">
-                10
-                <small>%</small>
+                {{ $categoryCount }}
               </span>
-              <a href="">
+              <a href="{{ route('superAdmin.category.index') }}">
                 <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
               </a>
             </div>
@@ -125,8 +123,8 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Total SubCategories</span>
-              <span class="info-box-number">41,410</span>
-              <a href="">
+              <span class="info-box-number">{{ $subCategoryCount }}</span>
+              <a href="{{ route('superAdmin.subCategory.index') }}">
                 <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
               </a>
             </div>
@@ -145,8 +143,8 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Total Countries</span>
-              <span class="info-box-number">760</span>
-              <a href="">
+              <span class="info-box-number">{{ $countryCount }}</span>
+              <a href="{{ route('superAdmin.country.index') }}">
                 <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
               </a>
             </div>
@@ -161,8 +159,8 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Total States</span>
-              <span class="info-box-number">2,000</span>
-              <a href="">
+              <span class="info-box-number">{{ $stateCount }}</span>
+              <a href="{{ route('superAdmin.state.index') }}">
                 <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
               </a>
             </div>
@@ -181,10 +179,9 @@
             <div class="info-box-content">
               <span class="info-box-text">Total Cities</span>
               <span class="info-box-number">
-                10
-                <small>%</small>
+                {{ $cityCount }}
               </span>
-              <a href="">
+              <a href="{{ route('superAdmin.city.index') }}">
                 <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
               </a>
             </div>
@@ -199,8 +196,8 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Total Interest Types</span>
-              <span class="info-box-number">41,410</span>
-              <a href="">
+              <span class="info-box-number">{{ $interestTypeCount }}</span>
+              <a href="{{ route('superAdmin.interest-type.index') }}">
                 <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
               </a>
             </div>
@@ -219,8 +216,8 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Total Marketplace Products</span>
-              <span class="info-box-number">760</span>
-              <a href="">
+              <span class="info-box-number">{{ $marketplaceCount }}</span>
+              <a href="{{ route('superAdmin.allMarketplace') }}">
                 <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
               </a>
             </div>
@@ -235,8 +232,8 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Total Souvenir Products</span>
-              <span class="info-box-number">2,000</span>
-              <a href="">
+              <span class="info-box-number">{{ $auctionCount }}</span>
+              <a href="{{ route('superAdmin.allAuction') }}">
                 <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
               </a>
             </div>

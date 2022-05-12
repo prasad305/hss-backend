@@ -15,6 +15,7 @@ class CreateAuditionParticipantsTable extends Migration
     {
         Schema::create('audition_participants', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('audition_round_rules_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('audition_id')->nullable();
             $table->integer('wining_status')->nullable();

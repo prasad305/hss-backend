@@ -47,8 +47,10 @@
               <div class="row">
                 <div class="col-sm-4 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
-                    <h5 class="description-header">$35,210.43</h5>
+                    <a href="{{ route('superAdmin.allMeetUp') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">{{ $meetUpOnlineCount }}</h5>
                     <span class="description-text">Total Meetup Events</span>
                   </div>
                   <!-- /.description-block -->
@@ -167,7 +169,7 @@
               <div class="col-sm-4 col-6">
                 <div class="description-block border-right">
                   <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
-                  <h5 class="description-header">$35,210.43</h5>
+                  <h5 class="description-header">{{ $meetUpOfflineCount }}</h5>
                   <span class="description-text">Total Meetup Events</span>
                 </div>
                 <!-- /.description-block -->

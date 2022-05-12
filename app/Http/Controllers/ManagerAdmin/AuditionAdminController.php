@@ -306,7 +306,7 @@ class AuditionAdminController extends Controller
 
     public function pending()
     {
-        $audition = Audition::where('status', 2CategoryController)->latest()->get();
+        $audition = Audition::where('status', 2)->latest()->get();
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
 

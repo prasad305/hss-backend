@@ -11,7 +11,9 @@ class Audition extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    protected $with = ['assignedJudges', 'participant'];
+
+    protected $with = ['assignedJudges','participant','auditionRules'];
+
 
     public function category()
     {
@@ -69,4 +71,5 @@ class Audition extends Model
     {
         return $this->hasMany(AuditionJudgeInstruction::class, 'audition_id', 'id');
     }
+    
 }

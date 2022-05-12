@@ -11,6 +11,7 @@ use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
 use App\Http\Controllers\SuperAdmin\AuditionRulesController;
 use App\Http\Controllers\SuperAdmin\SuperStarController;
 use App\Http\Controllers\SuperAdmin\JuryBoardController;
+use App\Http\Controllers\SuperAdmin\DashboardInfoController;
 use App\Http\Controllers\SuperAdmin\CategoryController;
 use App\Http\Controllers\SuperAdmin\CountryController;
 use App\Http\Controllers\SuperAdmin\PackageController;
@@ -42,6 +43,16 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/package', [DashboardController::class, 'package'])->name('package');
     Route::get('/add-package', [DashboardController::class, 'addPackage'])->name('addPackage');
     Route::post('/store-package', [DashboardController::class, 'packageStore'])->name('packageStore');
+
+    //Dashboard Information
+    Route::get('/all/user', [DashboardInfoController::class, 'allUser'])->name('allUser');
+    Route::get('/all/star', [DashboardInfoController::class, 'allStar'])->name('allStar');
+    Route::get('/all/admin', [DashboardInfoController::class, 'allAdmin'])->name('allAdmin');
+    Route::get('/all/marketplace', [DashboardInfoController::class, 'allMarketplace'])->name('allMarketplace');
+    Route::get('/all/auction', [DashboardInfoController::class, 'allAuction'])->name('allAuction');
+
+    //MeetUp Events
+    Route::get('/all/meetup', [DashboardInfoController::class, 'allMeetUp'])->name('allMeetUp');
 
     Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
 

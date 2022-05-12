@@ -8,6 +8,7 @@ use App\Models\Auction;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPayment;
+use App\Models\Audition\AuditionRoundRule;
 use App\Models\Bidding;
 use App\Models\FanGroupMessage;
 use App\Models\Greeting;
@@ -954,10 +955,21 @@ class UserController extends Controller
     public function UserAuditionDetails($slug)
     {
         $audition = Audition::where('slug',$slug)->first();
+        
 
         return response()->json([
             'status' => 200,
             'audition' => $audition,
+        ]);
+    }
+
+    public function roundInstruction($rule_id){
+        $instruction = AuditionRoundRule::find($rule_id);
+        $audition = Audition::where('audition_round_rules_id',$instruction->id)->first();
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
+            'instruction' => $instruction,
         ]);
     }
 
