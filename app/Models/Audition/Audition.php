@@ -10,7 +10,7 @@ class Audition extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    protected $with = ['assignedJudges','participant'];
+    protected $with = ['assignedJudges','participant','auditionRules'];
 
     public function category(){
         return $this->belongsTo(Category::class,'category_id');
@@ -55,5 +55,6 @@ class Audition extends Model
     public function judgeInstructions(){
         return $this->hasMany(AuditionJudgeInstruction::class,'audition_id', 'id');
     }
+    
 }
 

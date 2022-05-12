@@ -22,11 +22,10 @@ class AuditionRoundRulesSeeder extends Seeder
             $auditionRoundRules->jury_mark = 40;
             $auditionRoundRules->user_vote_mark = 30;
             $auditionRoundRules->description = $faker->text();
-            $auditionRoundRules->instruction = $faker->title;
+            $auditionRoundRules->title = $faker->title;
             $auditionRoundRules->video_instruction = $faker->text();
             $auditionRoundRules->num_of_videos = $faker->numberBetween(1, 4);
-            $auditionRoundRules->video_start_time = $faker->date;
-            $auditionRoundRules->video_end_time = $faker->date;
+            $auditionRoundRules->uploade_date = $faker->date;
             $auditionRoundRules->save();
         }
     }

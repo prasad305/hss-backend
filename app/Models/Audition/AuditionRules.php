@@ -10,6 +10,7 @@ class AuditionRules extends Model
 {
     protected $guarded = [];
     use HasFactory;
+    protected $with = ['roundRules'];
 
     public function category(){
         return $this->belongsTo(Category::class,'category_id');
