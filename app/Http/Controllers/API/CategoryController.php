@@ -33,7 +33,7 @@ class CategoryController extends Controller
             $selectedCategory = [];
             $sugg_category = [];
         }
-        
+
 
 
         return response()->json([
@@ -153,9 +153,17 @@ class CategoryController extends Controller
     {
 
         $id = auth('sanctum')->user()->id;
+        $category = json_decode($request->category);
+
         $cat = ChoiceList::where('user_id' ,$id)->first();
 
-        $category = json_decode($request->category);
+        if(!isset($cat))
+        {
+            $cat = new ChoiceList();
+            $cat->user_id = $id;
+            $cat->save();
+        }
+
         $subcategory = json_decode($cat->subcategory);
         $starcategory = json_decode($cat->star_id);
 
@@ -163,7 +171,7 @@ class CategoryController extends Controller
         $starCat=array();
 
         $catLen=count($category);
-        $subCatLen=count($subcategory);
+        $subCatLen=count($subcategory ? $subcategory : []);
         $starCatLen=count($starcategory ? $starcategory : []);
 
         for($x=0; $x<$subCatLen; $x++){

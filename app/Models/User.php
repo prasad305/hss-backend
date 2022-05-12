@@ -69,7 +69,6 @@ class User extends Authenticatable
     protected $with = ['userInfo', 'admin'];
 
 
-
     public function admin()
     {
         return $this->belongsTo(User::class, 'parent_user');
@@ -231,7 +230,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(JuryBoard::class, 'star_id');
     }
-    
+
 
     public function participant_jury(){
         return $this->hasMany(AuditionParticipant::class, 'jury_id');

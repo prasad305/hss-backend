@@ -28,10 +28,10 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-
-
         $validator = Validator::make($request->all(), [
-            'email' => 'required|unique:users,email',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|unique:users,email|email:rfc,dns|email',
             'phone' => 'required|unique:users,phone',
             'password' => 'required|min:4'
 
@@ -43,6 +43,7 @@ class AuthController extends Controller
             ]);
         } else {
             $user = User::create([
+                'username'=> $request->first_name.now()->timestamp,
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'email' => $request->email,
@@ -70,7 +71,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required',
+            'email' => 'required|email',
             'password' => 'required|min:4'
         ]);
 
@@ -79,7 +80,7 @@ class AuthController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $user = User::where('email', $request->email)->orWhere('phone', $request->email)->first();
+            $user = User::where([['email', $request->email],['user_type','user']])->orWhere([['phone', $request->email],['user_type','user']])->first();
 
             if (!$user || !Hash::check($request->password, $user->password)) {
                 return response()->json([
@@ -103,8 +104,6 @@ class AuthController extends Controller
                     $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
                     $role = 0;
                 }
-
-
 
                 return response()->json([
                     'status' => 200,
