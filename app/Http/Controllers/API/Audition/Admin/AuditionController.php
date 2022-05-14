@@ -46,9 +46,19 @@ class AuditionController extends Controller
             'audition' => $audition,
             'audition_rule' => $audition_rule,
             'audition_judge_instructions' => $audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id),
+            'active_audition_judge_instruction_id' => $audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id)->first()->id,
             'audition_round_rules' => $audition_round_rules,
             'is_already_submitted' => $is_already_submitted,
             'is_all_star_responsed' => $is_all_star_responsed,
+        ]);
+    }
+    public function singleAuditionInstruction($id)
+    {
+       $auditionJudgeInstruction = AuditionJudgeInstruction::find($id);
+
+        return response()->json([
+            'status' => 200,
+            'auditionJudgeInstruction' => $auditionJudgeInstruction,
         ]);
     }
     public function sendDummyInstructionToJudges(Request $request)

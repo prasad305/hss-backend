@@ -116,7 +116,7 @@ class AuditionAdminController extends Controller
 
         session()->flash('success','Send To Participant Successfully');
         return redirect()->back();
-        
+
     }
 
     /**
@@ -433,15 +433,13 @@ class AuditionAdminController extends Controller
         return view('ManagerAdmin.Audition.juries');
     }
     public function auditionEvents(){
-
-        
        $round_rules = AuditionRoundRule::where('status',1)->get();
-       
-       foreach ($round_rules as $key => $rule) {
+       $auditions = [];
+        foreach ($round_rules as $key => $rule) {
             $auditions = Audition::where('audition_round_rules_id',[$rule->id])->get();
-       }
+        }
 
-         $data = [
+        $data = [
             'pending_instructions' => $round_rules,
             'auditions' => $auditions,
         ];
