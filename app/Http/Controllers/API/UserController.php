@@ -682,13 +682,13 @@ class UserController extends Controller
     }
     //=============== Audition Logic By Srabon ===================
 
-    public function getUpcomingAuditions()
+    public function audition_list()
     {
         $upcomingAuditions = Audition::orderBy('id', 'DESC')->with('judge.user')->where('status', 1)->latest()->get();
 
         return response()->json([
             'status' => 200,
-            'upcomingAuditions' => $upcomingAuditions,
+            'event' => $upcomingAuditions,
         ]);
     }
     public function participateAudition($id)
@@ -955,7 +955,7 @@ class UserController extends Controller
     public function UserAuditionDetails($slug)
     {
         $audition = Audition::where('slug',$slug)->first();
-        
+
 
         return response()->json([
             'status' => 200,
