@@ -318,12 +318,10 @@
     @if (session()->has('success'))
     <script type="text/javascript">
         $(document).ready(function() {
-            // notify('{{ session()->get('success') }}','success');
             Swal.fire({
                 position: 'center',
                 icon: 'success',
-                title: '{{ Session::get('
-                success ') }}',
+                title: '{{ Session::get('success') }}',
                 showConfirmButton: false,
                 timer: 1500
             })
@@ -333,21 +331,16 @@
     @if (session()->has('error'))
     <script type="text/javascript">
         $(document).ready(function() {
-            // notify('{{ session()->get('success') }}','success');
             Swal.fire({
                 position: 'center',
                 icon: 'error',
-                title: '{{ Session::get('
-                error ') }}',
+                title: '{{ Session::get('error') }}',
                 showConfirmButton: true,
                 // timer: 1500
             })
         });
     </script>
     @endif
-
-
-
 
 
     <script>

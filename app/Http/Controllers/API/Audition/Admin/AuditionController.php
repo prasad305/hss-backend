@@ -17,6 +17,7 @@ use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionMark;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\JudgeMarks;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -29,9 +30,9 @@ class AuditionController extends Controller
         $audition_rule = $audition->auditionRules;
         $audition_round_rules = $audition_rule->roundRules;
 
-        if ($audition->judgeInstructions->where('round_id',$audition->audition_round_rules_id)->count() > 0) {
+        if ($audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id)->count() > 0) {
             $is_already_submitted = true;
-            if ($audition->judgeInstructions->where('status', 0)->count() > 0) {
+            if ($audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id)->where('status', 0)->count() > 0) {
                 $is_all_star_responsed = false;
             } else {
                 $is_all_star_responsed = true;
@@ -44,7 +45,7 @@ class AuditionController extends Controller
             'status' => 200,
             'audition' => $audition,
             'audition_rule' => $audition_rule,
-            'audition_judge_instructions' => $audition->judgeInstructions,
+            'audition_judge_instructions' => $audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id),
             'audition_round_rules' => $audition_round_rules,
             'is_already_submitted' => $is_already_submitted,
             'is_all_star_responsed' => $is_all_star_responsed,
@@ -55,7 +56,7 @@ class AuditionController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
-            'time_boundery' => 'required',
+            'time_boundary' => 'required',
             'banner' => 'required',
             'video' => 'required',
             'number_of_videos' => 'required',
@@ -71,79 +72,61 @@ class AuditionController extends Controller
             $auditionRoundRule = AuditionRoundRule::find($request->audition_round_id);
 
             try {
-            foreach ($audition->assignedJudges as $key => $assignedJudge) {
-                $auditionJudgeInstruction               = new AuditionJudgeInstruction();
-                $auditionJudgeInstruction->audition_id  =  $audition->id;
-                $auditionJudgeInstruction->star_id      =  $assignedJudge->judge_id;
-                $auditionJudgeInstruction->round_id     =  $auditionRoundRule->id;
-                $auditionJudgeInstruction->title        =  $request->title;
-                $auditionJudgeInstruction->status       =  0;
-                $auditionJudgeInstruction->description  =  $request->description;
-                $auditionJudgeInstruction->time_boundary =  $request->time_boundary;
+                if ($request->hasfile('banner')) {
+                    $image             = $request->banner;
+                    $image_folder_path       = 'uploads/images/auditions/';
+                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                    // save to server
+                    $request->banner->move($image_folder_path, $image_new_name);
+                }
+                if ($request->hasfile('video')) {
+                    $file             = $request->video;
+                    $folder_path       = 'uploads/videos/auditions/';
+                    $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
+                    // save to server
+                    $request->video->move($folder_path, $file_new_name);
+                }
+                foreach ($audition->assignedJudges as $assignedJudge) {
+                    $auditionJudgeInstruction               = new AuditionJudgeInstruction();
+                    $auditionJudgeInstruction->audition_id  =  $audition->id;
+                    $auditionJudgeInstruction->star_id      =  $assignedJudge->judge_id;
+                    $auditionJudgeInstruction->round_id     =  $auditionRoundRule->id;
+                    $auditionJudgeInstruction->title        =  $request->title;
+                    $auditionJudgeInstruction->status       =  0;
+                    $auditionJudgeInstruction->description  =  $request->description;
+                    $auditionJudgeInstruction->time_boundary =  Carbon::parse($request->time_boundary);
 
-                // if ($request->hasfile('banner')) {
-                //     $file             = $request->banner;
-                //     $folder_path       = 'uploads/images/auditions/';
-                //     $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
-                //     // save to server
-                //     $request->banner->move($folder_path, $file_new_name);
-                //     $auditionJudgeInstruction->banner = $folder_path . $file_new_name;
-                // }
-
-                // if ($request->hasfile('video')) {
-                //     $file             = $request->video;
-                //     $folder_path       = 'uploads/videos/auditions/';
-                //     $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
-                //     // save to server
-                //     $request->video->move($folder_path, $file_new_name);
-                //     $auditionJudgeInstruction->video = $folder_path . $file_new_name;
-                // }
-
-                    // if ($request->hasFile('banner')) {
-
-                    //     $file        = $request->file('banner');
-                    //     $path        = 'uploads/images/auditions';
-
-                    //     $file_name   = rand('0000', '9999') .$key. '-' . $file->getClientOriginalName();
-                    //     $auditionJudgeInstruction->banner = $$file_name;
-                    //     // $file->move($path, $file_name);
-                    //     Image::make($file)->save($file_name);
-
-                    //     // $auditionJudgeInstruction->banner = $path . '/' . $file_name;
-                    // }
-
-
-                    if ($request->hasfile('banner')) {
-                        $file = $request->file('banner');
-                        $extension = $file->getClientOriginalExtension();
-                        $filename = 'uploads/images/auditions/' . time() .  Str::random(10) . '-' . now()->timestamp .'.' . $extension;
-                        Image::make($file)->save($filename);
-                        $auditionJudgeInstruction->banner = $filename;
-                    }
-
-                    if ($request->hasFile('video')) {
-                        $file        = $request->file('video');
-                        $path        = 'uploads/videos/auditions/';
-                        $file_name   = time() . rand('0000', '9999') .$key. '-' . $file->getClientOriginalName();
-                        // move_uploaded_file($file,$path.$file_name);
-
-                        $file->store($path.$file_name);
-                        $auditionJudgeInstruction->video = $path . $file_name;
-                    }
+                    $auditionJudgeInstruction->banner = $image_folder_path . $image_new_name;
+                    $auditionJudgeInstruction->video = $folder_path . $file_new_name;
 
                     $auditionJudgeInstruction->save();
-
                 }
+
+                if ($audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id)->count() > 0) {
+                    $is_already_submitted = true;
+                    if ($audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id)->where('status', 0)->count() > 0) {
+                        $is_all_star_responsed = false;
+                    } else {
+                        $is_all_star_responsed = true;
+                    }
+                } else {
+                    $is_already_submitted = false;
+                    $is_all_star_responsed = false;
+                }
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Audition instruction submitted successfully !!',
+                    'audition_judge_instructions' => $audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id),
+                    'is_already_submitted' => $is_already_submitted,
+                    'is_all_star_responsed' => $is_all_star_responsed,
+                ]);
             } catch (\Exception $exception) {
                 return response()->json([
                     'status' => 200,
                     'message' =>  $exception->getMessage(),
                 ]);
             }
-            return response()->json([
-                'status' => 200,
-                'message' => 'Audition instruction submitted successfully !!'
-            ]);
         }
     }
 
@@ -646,7 +629,7 @@ class AuditionController extends Controller
 
     public function participantList($id)
     {
-        $participantList = AuditionParticipant::with(['audition', 'participant'])->where('audition_id',$id)->latest()->get();
+        $participantList = AuditionParticipant::with(['audition', 'participant'])->where('audition_id', $id)->latest()->get();
 
         return response()->json([
 
@@ -728,8 +711,9 @@ class AuditionController extends Controller
     }
 
 
-    public function saveRoundInstruction(Request $request){
-       
+    public function saveRoundInstruction(Request $request)
+    {
+
         // return $request->all();
 
         $validator = Validator::make($request->all(), [
@@ -752,7 +736,7 @@ class AuditionController extends Controller
             $audition->status = 1;
 
             if ($request->hasfile('banner')) {
-            
+
                 $destination = $audition->banner;
 
                 if (File::exists($destination)) {
@@ -783,7 +767,6 @@ class AuditionController extends Controller
                 'status' => 200,
                 'message' => 'Audition Instruction Send to Manager Admin successfully'
             ]);
-
         }
     }
 }
