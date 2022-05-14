@@ -757,24 +757,39 @@ class UserController extends Controller
         // $array = explode(',',$request->videos);
         //  return $array;
         
-        foreach ($request->videos as $key => $video) {
+        $data = explode(",", $request->videos[0]);
+        // return gettype($data);
+
+        // if($request->hasFile('demoImage')){
+        //     foreach ($request->file('demoImage') as $key => $file) {
+                
+        //     }
+        // }
+        
+        
+        foreach ($data as $key => $file) {
            
             $audition_video = new AuditionUploadVideo();
             $audition_video->audition_id = $request->audition_id;
             $audition_video->round_id = $request->round_id;
 
-            $file        = $video;
-            $path        = 'uploads/videos/auditions';
-            $file_name   = time() .$key. rand('0000', '9999') . '.' . $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $audition_video->video = $path . '/' . $file_name;
-            $audition_video->save();
+            $fileInfo=fileInfo($file);
+            $name=date('YmdHis').'-'.rand().'-'.rand().'.'.$fileInfo['extension'];
+            $file_path = 'uploads/videos/auditions';
+            $upload=fileUpload($file,$file_path,$name);
+            if($upload){
+            // array_push($new_certificates, array(
+            //     'file' => $name,
+            //     'info' => $fileInfo,
+            // ));
+            $audition_video->video = $file_path.'/'.$name;
+            }
         }
 
         return response()->json([
             'status' => 200,
             'message' => 'Audition Videos Uploaded Successfully!',
-            'request' => $request->all()
+            'request' =>$request->all(),
         ]);
     }
 
