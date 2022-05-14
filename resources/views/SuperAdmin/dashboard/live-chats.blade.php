@@ -34,8 +34,10 @@
               <div class="row">
                 <div class="col-sm-3 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
-                    <h5 class="description-header">$35,210.43</h5>
+                    <a href="{{ route('superAdmin.allLiveChat') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">{{ $allLiveChatCount }}</h5>
                     <span class="description-text">Total Live Chats</span>
                   </div>
                   <!-- /.description-block -->
@@ -43,8 +45,10 @@
                 <!-- /.col -->
                 <div class="col-sm-3 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span>
-                    <h5 class="description-header">$10,390.90</h5>
+                    <a href="{{ route('superAdmin.allCompleteLiveChat') }}">
+                      <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span>
+                    </a>
+                    <h5 class="description-header">{{ $completeLiveChatCount }}</h5>
                     <span class="description-text">Completed Live Chats</span>
                   </div>
                   <!-- /.description-block -->
@@ -52,22 +56,26 @@
                 <!-- /.col -->
                 <div class="col-sm-3 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span>
-                    <h5 class="description-header">$10,390.90</h5>
+                    <a href="{{ route('superAdmin.allRunningLiveChat') }}">
+                      <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span>
+                    </a>
+                    <h5 class="description-header">{{ $runningLiveChatCount }}</h5>
                     <span class="description-text">Running Live Chats</span>
                   </div>
                   <!-- /.description-block -->
                 </div>
-   
-                <!-- /.col -->
+
                 <div class="col-sm-3 col-6">
                   <div class="description-block">
-                    <span class="description-percentage text-success"><i class="fas fa-eye"></i> view</span>
-                    <h5 class="description-header">1200</h5>
+                    <a href="{{ route('superAdmin.allUpcomingLiveChat') }}">
+                      <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span>
+                    </a>
+                    <h5 class="description-header">{{ $upcomingLiveChatCount }}</h5>
                     <span class="description-text">Upcoming Live Chats</span>
                   </div>
                   <!-- /.description-block -->
                 </div>
+   
               </div>
               <!-- /.row -->
             </div>
@@ -78,8 +86,8 @@
               <div class="row">
                 <div class="col-sm-6 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
-                    <h5 class="description-header">$35,210.43</h5>
+                    {{-- <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span> --}}
+                    <h5 class="description-header">{{ $userLiveChatCount }}</h5>
                     <span class="description-text">Total Registered User in Live Chats</span>
                   </div>
                   <!-- /.description-block -->
@@ -87,8 +95,8 @@
                 <!-- /.col -->
                 <div class="col-sm-6 col-6">
                   <div class="description-block">
-                    <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span>
-                    <h5 class="description-header">$10,390.90</h5>
+                    {{-- <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span> --}}
+                    <h5 class="description-header">{{ $amountLiveChatCount }} $</h5>
                     <span class="description-text">Total Payment in Live Chats</span>
                   </div>
                   <!-- /.description-block -->

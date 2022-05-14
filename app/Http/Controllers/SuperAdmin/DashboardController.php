@@ -14,20 +14,42 @@ use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
 use App\Models\InterestType;
+use App\Models\FanGroup;
+use App\Models\Fan_Group_Join;
+use App\Models\FanPost;
+use App\Models\LearningSession;
+use App\Models\Greeting;
+use App\Models\Post;
+use App\Models\LiveChat;
+use App\Models\LiveChatRegistration;
+use App\Models\LearningSessionRegistration;
 use App\Models\Marketplace;
 use App\Models\Auction;
 use App\Models\MeetupEvent;
+use App\Models\MeetupEventRegistration;
 use App\Models\Vaccination;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function dashboard(){
-
+      $january = 150;
+      $february = 259;
+      $march =  56;
+      $april =  800;
+      $may =  600;
+      $june =  588;
+      $july =  38;
+      $august =  237;
+      $september =  52;
+      $octobar =  5;
+      $november =  349;
+      $december =  429;
       $year = ['Jan','Feb','Mar','Apr','May','Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-      $user = ['2017','1158','2019','20','586','2022', '2417','1158','2019','20','586','222'];
+      $user = [$january, $february, $march, $april, $may, $june, $july, $august, $september, $octobar, $november, $december];
       // foreach ($year as $key => $value) {
       //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
       // }
@@ -75,6 +97,13 @@ class DashboardController extends Controller
 
       $data['meetUpOnlineCount'] = MeetupEvent::where('meetup_type', 'Online')->count();
       $data['meetUpOfflineCount'] = MeetupEvent::where('meetup_type', 'Offline')->count();
+      $data['completeMeetUpOfflineCount'] = MeetupEvent::where('meetup_type', 'Offline')->whereDate('date', '>', Carbon::now())->count();
+      $data['completeMeetUpOnlineCount'] = MeetupEvent::where('meetup_type', 'Offline')->whereDate('date', '>', Carbon::now())->count();
+      $data['upcomingMeetUpOfflineCount'] = MeetupEvent::where('meetup_type', 'Offline')->whereDate('date', '<', Carbon::now())->count();
+      $data['upcomingMeetUpOnlineCount'] = MeetupEvent::where('meetup_type', 'Online')->whereDate('date', '<', Carbon::now())->count();
+
+      $data['userMeetUpOnlineCount'] = MeetupEventRegistration::count();
+      $data['registerUserAmount'] = MeetupEventRegistration::sum('amount');
 
     return view('SuperAdmin.dashboard.meetup-events', $data);
     }
@@ -87,7 +116,16 @@ class DashboardController extends Controller
       //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
       // }
 
-    return view('SuperAdmin.dashboard.learning-sessions')->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('user',json_encode($user,JSON_NUMERIC_CHECK));
+      $data['year'] = json_encode($year,JSON_NUMERIC_CHECK);
+      $data['user'] = json_encode($user,JSON_NUMERIC_CHECK);
+
+      $data['allLearningCount'] = LearningSession::count();
+      $data['completeLearningCount'] = LearningSession::whereDate('date', '>', Carbon::now())->count();
+      $data['upcomingLearningCount'] = LearningSession::whereDate('date', '<', Carbon::now())->count();
+      $data['userLearningCount'] = LearningSessionRegistration::count();
+      $data['amountLearningCount'] = LearningSessionRegistration::sum('amount');
+
+    return view('SuperAdmin.dashboard.learning-sessions', $data);
     }
 
     public function liveChats(){
@@ -98,7 +136,19 @@ class DashboardController extends Controller
       //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
       // }
 
-    return view('SuperAdmin.dashboard.live-chats')->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('user',json_encode($user,JSON_NUMERIC_CHECK));
+
+
+    $data['year'] = json_encode($year,JSON_NUMERIC_CHECK);
+    $data['user'] = json_encode($user,JSON_NUMERIC_CHECK);
+
+    $data['allLiveChatCount'] = LiveChat::count();
+    $data['completeLiveChatCount'] = LiveChat::whereDate('date', '>', Carbon::now())->count();
+    $data['upcomingLiveChatCount'] = LiveChat::whereDate('date', '<', Carbon::now())->count();
+    $data['runningLiveChatCount'] = LiveChat::whereDate('date', '=', Carbon::now())->count();
+    $data['userLiveChatCount'] = LiveChatRegistration::count();
+    $data['amountLiveChatCount'] = LiveChatRegistration::sum('amount');
+
+    return view('SuperAdmin.dashboard.live-chats', $data);
     }
 
     public function fanGroup(){
@@ -109,7 +159,14 @@ class DashboardController extends Controller
       //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
       // }
 
-    return view('SuperAdmin.dashboard.fan-group')->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('user',json_encode($user,JSON_NUMERIC_CHECK));
+      $data['year'] = json_encode($year,JSON_NUMERIC_CHECK);
+      $data['user'] = json_encode($user,JSON_NUMERIC_CHECK);
+
+      $data['allFanGroup'] = FanGroup::count();
+      $data['allFanGroupJoin'] = Fan_Group_Join::count();
+      $data['allFanPost'] = FanPost::count();
+
+    return view('SuperAdmin.dashboard.fan-group', $data);
     }
 
     public function greetings(){
@@ -119,8 +176,16 @@ class DashboardController extends Controller
       // foreach ($year as $key => $value) {
       //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
       // }
+      
+      $data['year'] = json_encode($year,JSON_NUMERIC_CHECK);
+      $data['user'] = json_encode($user,JSON_NUMERIC_CHECK);
+      
+  
+    $data['allGreetingCount'] = Greeting::count();
+    $data['completeGreetingCount'] = Greeting::whereDate('date', '>', Carbon::now())->count();
+    $data['upcomingGreetingCount'] = Greeting::whereDate('date', '<', Carbon::now())->count();
 
-    return view('SuperAdmin.dashboard.greetings')->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('user',json_encode($user,JSON_NUMERIC_CHECK));
+    return view('SuperAdmin.dashboard.greetings', $data);
     }
 
     public function userPosts(){
@@ -131,7 +196,22 @@ class DashboardController extends Controller
       //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
       // }
 
-    return view('SuperAdmin.dashboard.user-posts')->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('user',json_encode($user,JSON_NUMERIC_CHECK));
+      $data['year'] = json_encode($year,JSON_NUMERIC_CHECK);
+      $data['user'] = json_encode($user,JSON_NUMERIC_CHECK);
+
+      $data['allPostCount'] = Post::count();
+      $data['dailyPostCount'] = Post::whereDate('created_at', '=', Carbon::now())->count();
+      $data['weeklyPostCount'] = Post::whereBetween('created_at', [
+                                          Carbon::parse('last monday')->startOfDay(),
+                                          Carbon::parse('next friday')->endOfDay(),
+                                      ])->count();
+      $data['monthlyPostCount'] = Post::whereMonth('created_at',date('m'))->count();
+
+      $data['likesPost'] = Post::sum('react_number');
+      $data['commentPost'] = Post::sum('comment_number');
+      $data['sharePost'] = Post::sum('share_number');
+
+    return view('SuperAdmin.dashboard.user-posts', $data);
     }
     
     public function wallets(){

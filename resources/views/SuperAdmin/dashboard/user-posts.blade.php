@@ -24,6 +24,7 @@
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
+      
 
        <!-- /.row -->
       <div class="row">
@@ -34,8 +35,10 @@
               <div class="row">
                 <div class="col-sm-3 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
-                    <h5 class="description-header">$35,210.43</h5>
+                    <a href="{{ route('superAdmin.allPost') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
+                    </a>
+                    <h5 class="description-header">{{ $allPostCount }}</h5>
                     <span class="description-text">Total User Posts</span>
                   </div>
                   <!-- /.description-block -->
@@ -43,8 +46,10 @@
                 <!-- /.col -->
                 <div class="col-sm-3 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span>
-                    <h5 class="description-header">$10,390.90</h5>
+                    <a href="{{ route('superAdmin.weeklyPost') }}">
+                      <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span>
+                    </a>
+                    <h5 class="description-header">{{ $weeklyPostCount }}</h5>
                     <span class="description-text">Weekly User Posts</span>
                   </div>
                   <!-- /.description-block -->
@@ -53,8 +58,10 @@
                 <!-- /.col -->
                 <div class="col-sm-3 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-success"><i class="fas fa-eye"></i> view</span>
-                    <h5 class="description-header">1200</h5>
+                    <a href="{{ route('superAdmin.monthlyPost') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view</span>
+                    </a>
+                    <h5 class="description-header">{{ $monthlyPostCount }}</h5>
                     <span class="description-text">Monthly User Posts</span>
                   </div>
                   <!-- /.description-block -->
@@ -63,8 +70,10 @@
                 <!-- /.col -->
                 <div class="col-sm-3 col-6">
                   <div class="description-block">
-                    <span class="description-percentage text-success"><i class="fas fa-eye"></i> view</span>
-                    <h5 class="description-header">1200</h5>
+                    <a href="{{ route('superAdmin.dailyPost') }}">
+                      <span class="description-percentage text-success"><i class="fas fa-eye"></i> view</span>
+                    </a>
+                    <h5 class="description-header">{{ $dailyPostCount }}</h5>
                     <span class="description-text">Daily User Posts</span>
                   </div>
                   <!-- /.description-block -->
@@ -79,8 +88,8 @@
               <div class="row">
                 <div class="col-sm-4 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span>
-                    <h5 class="description-header">$35,210.43</h5>
+                    {{-- <span class="description-percentage text-success"><i class="fas fa-eye"></i> view </span> --}}
+                    <h5 class="description-header">{{ $likesPost }}</h5>
                     <span class="description-text">Total Likes in Posts</span>
                   </div>
                   <!-- /.description-block -->
@@ -88,8 +97,8 @@
                 <!-- /.col -->
                 <div class="col-sm-4 col-6">
                   <div class="description-block border-right">
-                    <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span>
-                    <h5 class="description-header">$10,390.90</h5>
+                    {{-- <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span> --}}
+                    <h5 class="description-header">{{ $commentPost }}</h5>
                     <span class="description-text">Total Comments in Posts</span>
                   </div>
                   <!-- /.description-block -->
@@ -97,8 +106,8 @@
                 <!-- /.col -->
                 <div class="col-sm-4 col-6">
                   <div class="description-block">
-                    <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span>
-                    <h5 class="description-header">$10,390.90</h5>
+                    {{-- <span class="description-percentage text-warning"><i class="fas fa-eye"></i> view</span> --}}
+                    <h5 class="description-header">{{ $sharePost }}</h5>
                     <span class="description-text">Total Share in Posts</span>
                   </div>
                   <!-- /.description-block -->

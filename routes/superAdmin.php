@@ -53,6 +53,33 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     //MeetUp Events
     Route::get('/all/meetup', [DashboardInfoController::class, 'allMeetUp'])->name('allMeetUp');
+    Route::get('/all/offline/meetup', [DashboardInfoController::class, 'allOfflineMeetUp'])->name('allOfflineMeetUp');
+    Route::get('/all/offline/complete/meetup', [DashboardInfoController::class, 'allCompleteOfflineMeetUp'])->name('allCompleteOfflineMeetUp');
+    Route::get('/all/online/complete/meetup', [DashboardInfoController::class, 'allCompleteOnlineMeetUp'])->name('allCompleteOnlineMeetUp');
+    Route::get('/all/online/upcoming/meetup', [DashboardInfoController::class, 'allUpcomingOnlineMeetUp'])->name('allUpcomingOnlineMeetUp');
+    Route::get('/all/offline/upcoming/meetup', [DashboardInfoController::class, 'allUpcomingOfflineMeetUp'])->name('allUpcomingOfflineMeetUp');
+
+    //Learning Session
+    Route::get('/all/learning-session', [DashboardInfoController::class, 'allLearningSession'])->name('allLearningSession');
+    Route::get('/all/complete/learning-session', [DashboardInfoController::class, 'allCompleteLearningSession'])->name('allCompleteLearningSession');
+    Route::get('/all/upcoming/learning-session', [DashboardInfoController::class, 'allUpcomingLearningSession'])->name('allUpcomingLearningSession');
+
+    //Live Chats
+    Route::get('/all/live-chat', [DashboardInfoController::class, 'allLiveChat'])->name('allLiveChat');
+    Route::get('/all/complete/live-chat', [DashboardInfoController::class, 'allCompleteLiveChat'])->name('allCompleteLiveChat');
+    Route::get('/all/upcoming/live-chat', [DashboardInfoController::class, 'allUpcomingLiveChat'])->name('allUpcomingLiveChat');
+    Route::get('/all/running/live-chat', [DashboardInfoController::class, 'allRunningLiveChat'])->name('allRunningLiveChat');
+
+    //Greetings
+    Route::get('/all/greetings', [DashboardInfoController::class, 'allGreeting'])->name('allGreeting');
+    Route::get('/all/complete/greetings', [DashboardInfoController::class, 'allCompleteGreeting'])->name('allCompleteGreeting');
+    Route::get('/all/upcoming/greetings', [DashboardInfoController::class, 'allUpcomingGreeting'])->name('allUpcomingGreeting');
+
+    //Post
+    Route::get('/all/post/list', [DashboardInfoController::class, 'allPost'])->name('allPost');
+    Route::get('/all/post/daily', [DashboardInfoController::class, 'dailyPost'])->name('dailyPost');
+    Route::get('/all/post/weekly', [DashboardInfoController::class, 'weeklyPost'])->name('weeklyPost');
+    Route::get('/all/post/monthly', [DashboardInfoController::class, 'monthlyPost'])->name('monthlyPost');
 
     Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
 
