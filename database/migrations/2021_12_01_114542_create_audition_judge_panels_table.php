@@ -17,7 +17,7 @@ class CreateAuditionJudgePanelsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('audition_event_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
-            $table->string('status')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }

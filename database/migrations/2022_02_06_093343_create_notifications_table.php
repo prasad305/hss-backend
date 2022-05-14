@@ -15,10 +15,10 @@ class CreateNotificationsTable extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->string('notification_id')->nullValue();
-            $table->string('user_id')->nullValue();
-            $table->boolean('status')->default(0);
-            $table->string('view_status')->default(0);
+            $table->unsignedBigInteger('notification_id')->nullValue();
+            $table->unsignedBigInteger('user_id')->nullValue();
+            $table->integer('status')->default(0);
+            $table->integer('view_status')->default(0);
             $table->timestamps();
         });
     }

@@ -18,10 +18,10 @@ class CreateSuperStarsTable extends Migration
             $table->unsignedBigInteger('star_id');
             $table->string('star_type')->nullable();
             $table->unsignedBigInteger('admin_id');
-            $table->integer('category_id')->nullable();
-            $table->integer('sub_category_id')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('sub_category_id')->nullable();
             $table->text('terms_and_condition')->nullable();
-            $table->text('description')->nullable();
+            $table->longText('description')->nullable();
             $table->string('qr_code')->nullable();
             $table->string('image')->nullable();
             $table->string('agreement')->nullable();

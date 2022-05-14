@@ -17,9 +17,9 @@ class CreateAuditionInterectsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('audition_id')->nullable();
-            $table->string('like')->nullable();
+            $table->integer('like')->nullable();
             $table->string('comments')->nullable();
-            $table->string('vote')->nullable();
+            $table->integer('vote')->nullable();
             $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
             $table->timestamps();
         });

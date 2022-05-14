@@ -28,15 +28,15 @@ class CreateLiveChatsTable extends Migration
             $table->string('banner')->nullable();
             $table->string('video')->nullable();
             $table->integer('total_seat')->nullable();
-            $table->integer('total_amount')->nullable();
-            $table->integer('fee')->nullable();
+            $table->float('total_amount')->nullable();
+            $table->float('fee')->nullable();
             $table->integer('participant_number')->nullable();
             $table->timestamp('registration_start_date')->nullable();
             $table->timestamp('registration_end_date')->nullable();
             $table->string('max_time_per_person')->nullable();
             $table->boolean('publish_status')->default(1);
             $table->boolean('star_approve_status')->default(0);
-            $table->boolean('status')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }

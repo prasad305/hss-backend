@@ -17,6 +17,7 @@ class CreateMeetupEventsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('created_by_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->string('meetup_type')->nullable();
             $table->string('title')->nullable();
             $table->text('event_link')->nullable();
@@ -24,9 +25,9 @@ class CreateMeetupEventsTable extends Migration
             $table->time('end_time')->nullable();
             $table->longText('description')->nullable();
             $table->string('venue')->nullable();
-            $table->string('total_seat')->nullable();
+            $table->integer('total_seat')->nullable();
             $table->string('banner')->nullable();
-            $table->string('participant_number')->nullable();
+            $table->integer('participant_number')->nullable();
             $table->string('video')->nullable();
             $table->date('date')->nullable();
             $table->time('time')->nullable();

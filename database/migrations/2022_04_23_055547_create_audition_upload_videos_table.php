@@ -23,7 +23,7 @@ class CreateAuditionUploadVideosTable extends Migration
             $table->string('video')->nullable();
             $table->string('approval_status')->nullable()->default(0);
             $table->string('comments')->nullable();
-            $table->string('status')->nullable()->default(0);
+            $table->integer('status')->nullable()->default(0);
             $table->timestamps();
         });
     }

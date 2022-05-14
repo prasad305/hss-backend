@@ -16,7 +16,7 @@ class CreateGreetingTypesTable extends Migration
         Schema::create('greeting_types', function (Blueprint $table) {
             $table->id();
             $table->string('greeting_type')->nullable();
-            $table->string('status')->default(0);
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

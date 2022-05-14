@@ -18,7 +18,7 @@ class CreateBiddingsTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('auction_id')->nullable();
             $table->string('name');
-            $table->integer('amount');
+            $table->float('amount');
             $table->integer('notify_status')->default(0);
             $table->integer('win_status')->defaule(0);
             $table->boolean('status')->nullable();

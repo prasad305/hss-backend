@@ -17,9 +17,9 @@ class CreateAuditionJudgeMarksTable extends Migration
             $table->id();
             $table->unsignedBigInteger('judge_id')->nullable();
             $table->unsignedBigInteger('participant_id')->nullable();
-            $table->string('marks')->nullable();
+            $table->integer('marks')->nullable();
             $table->string('comments')->nullable();
-            $table->string('status')->nullable()->default(0);
+            $table->integer('status')->nullable()->default(0);
             $table->timestamps();
         });
     }

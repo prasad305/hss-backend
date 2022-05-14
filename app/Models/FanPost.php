@@ -19,6 +19,7 @@ class FanPost extends Model
         'status',
         'fan_group_id',
         'user_id',
+        'category_id',
     ];
 
     protected $with = ['user', 'star'];
@@ -31,5 +32,9 @@ class FanPost extends Model
     public function star()
     {
         return $this->belongsTo(User::class, 'star_id');
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 }

@@ -15,7 +15,7 @@ class CreateAssignAdminsTable extends Migration
     {
         Schema::create('assign_admins', function (Blueprint $table) {
             $table->id();
-            $table->string('job_id')->nullable();
+            $table->unsignedBigInteger('job_id')->nullable();
             $table->string('job_type')->nullable();
             $table->string('category')->nullable();
             $table->string('assign_person')->nullable();

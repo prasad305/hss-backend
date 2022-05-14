@@ -16,7 +16,7 @@ class CreateInterestTypesTable extends Migration
         Schema::create('interest_types', function (Blueprint $table) {
             $table->id();
             $table->string('interest_type')->nullable();
-            $table->string('status')->default(0);
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

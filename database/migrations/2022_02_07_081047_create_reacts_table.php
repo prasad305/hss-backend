@@ -15,8 +15,8 @@ class CreateReactsTable extends Migration
     {
         Schema::create('reacts', function (Blueprint $table) {
             $table->id();
-            $table->integer('post_id')->nullable();
-            $table->integer('user_id')->nullable();
+            $table->unsignedBigInteger('post_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
         });
     }

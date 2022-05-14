@@ -18,7 +18,7 @@ class CreateMeetupEventRegistrationsTable extends Migration
             $table->unsignedBigInteger('meetup_event_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('payment_method')->nullable();
-            $table->string('payment_status')->nullable();
+            $table->boolean('payment_status')->nullable();
             $table->string('payment_date')->nullable();
             $table->float('amount')->nullable();
             $table->string('card_holder_name')->nullable();

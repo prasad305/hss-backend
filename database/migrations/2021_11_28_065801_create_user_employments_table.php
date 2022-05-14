@@ -18,10 +18,10 @@ class CreateUserEmploymentsTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('occupation')->nullable();
             $table->string('company')->nullable();
-            $table->string('salary')->nullable();
-            $table->string('yearly_income')->nullable();
-            $table->string('start_time')->nullable();
-            $table->string('end_time')->nullable();
+            $table->float('salary')->nullable();
+            $table->float('yearly_income')->nullable();
+            $table->timestamp('start_time')->nullable();
+            $table->timestamp('end_time')->nullable();
             $table->timestamps();
         });
     }

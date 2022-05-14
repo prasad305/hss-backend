@@ -17,7 +17,7 @@ class CreatePostImagesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('post_id')->nullable();
             $table->string('image')->nullable();
-            $table->string('status')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }

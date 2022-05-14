@@ -22,6 +22,9 @@ class CreateAuditionRoundRulesTable extends Migration
             $table->text('title')->nullable();
             $table->text('description')->nullable();
             $table->text('video_instruction')->nullable();
+            $table->text('video_start_time')->nullable();
+            $table->text('video_end_time')->nullable();
+            $table->text('instruction')->nullable();
             $table->string('num_of_videos')->nullable();
             $table->timestamp('uploade_date')->nullable();
             $table->text('banner')->nullable();
@@ -41,5 +44,3 @@ class CreateAuditionRoundRulesTable extends Migration
         Schema::dropIfExists('audition_round_rules');
     }
 }
-
-

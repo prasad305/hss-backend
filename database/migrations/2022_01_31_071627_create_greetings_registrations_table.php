@@ -15,8 +15,8 @@ class CreateGreetingsRegistrationsTable extends Migration
     {
         Schema::create('greetings_registrations', function (Blueprint $table) {
             $table->id();
-            $table->string('greeting_id')->nullable();
-            $table->string('user_id')->nullable();
+            $table->unsignedBigInteger('greeting_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamp('notification_at')->nullable();
             $table->string('name')->nullable();
             $table->string('phone')->nullable();
@@ -26,7 +26,7 @@ class CreateGreetingsRegistrationsTable extends Migration
             $table->string('location')->nullable();
             $table->longText('additional_message')->nullable();
             $table->string('password')->nullable();
-            $table->string('status')->default(0);
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }
