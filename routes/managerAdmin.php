@@ -29,7 +29,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     // Meetup Events
     Route::get('meetup-events', [DashboardController::class, 'meetupEvents'])->name('dashboard.meetupEvent');
     Route::get('meetup-events-data/{type}', [DashboardController::class, 'meetupEventsData'])->name('dashboard.meetupEventData');
-    Route::get('meetup-events-details', [DashboardController::class, 'meetupEventsDetails'])->name('dashboard.meetupEventDetails');
+    Route::get('meetup-events-details/{id}', [DashboardController::class, 'meetupEventsDetails'])->name('dashboard.meetupEventDetails');
 
     // Greetings
     Route::get('greetings', [DashboardController::class, 'greetings'])->name('dashboard.greeting');
@@ -39,12 +39,12 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     Route::get('live-chats', [DashboardController::class, 'liveChats'])->name('dashboard.liveChat');
     Route::get('live-chats-data/{type}', [DashboardController::class, 'liveChatsData'])->name('dashboard.liveChatData');
-    Route::get('live-chats-details', [DashboardController::class, 'liveChatsDetails'])->name('dashboard.liveChatDetails');
+    Route::get('live-chats-details/{id}', [DashboardController::class, 'liveChatsDetails'])->name('dashboard.liveChatDetails');
 
     // Auditions
     Route::get('auditions', [DashboardController::class, 'auditions'])->name('dashboard.audition');
     Route::get('auditions-data/{type}', [DashboardController::class, 'auditionsData'])->name('dashboard.auditionData');
-    Route::get('auditions-details', [DashboardController::class, 'auditionsDetails'])->name('dashboard.auditionDetails');
+    Route::get('auditions-details/{id}', [DashboardController::class, 'auditionsDetails'])->name('dashboard.auditionDetails');
     Route::get('auditions-judge', [DashboardController::class, 'auditionsJudgeData'])->name('dashboard.auditionsJudgeData');
     Route::get('auditions-jury', [DashboardController::class, 'auditionsJuryData'])->name('dashboard.auditionsJuryData');
 
@@ -52,12 +52,12 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('fan-group', [DashboardController::class, 'fanGroups'])->name('dashboard.fanGroup');
     Route::get('fan-group-data', [DashboardController::class, 'fanGroupsData'])->name('dashboard.fanGroupData');
     Route::get('fan-group-post', [DashboardController::class, 'fanGroupsPost'])->name('dashboard.fanGroupsPost');
-    Route::get('fan-group-details', [DashboardController::class, 'fanGroupsDetails'])->name('dashboard.fanGroupDetails');
+    Route::get('fan-group-details/{id}', [DashboardController::class, 'fanGroupsDetails'])->name('dashboard.fanGroupDetails');
 
     //  learing Session
     Route::get('learning-sessions', [DashboardController::class, 'learningSessions'])->name('dashboard.learningSession');
     Route::get('learning-session/{type}', [DashboardController::class, 'learninSessionData'])->name('dashboard.learningSessionData');
-    Route::get('learning-session-details', [DashboardController::class, 'learninSessionDetails'])->name('dashboard.learninSessionDetails');
+    Route::get('learning-session-details/{id}', [DashboardController::class, 'learninSessionDetails'])->name('dashboard.learninSessionDetails');
 
 
     //up commingevent
