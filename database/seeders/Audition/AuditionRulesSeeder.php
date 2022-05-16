@@ -13,8 +13,18 @@ class AuditionRulesSeeder extends Seeder
     {
         AuditionRules::create([
 
-            'category_id' => 7,
-            'round_num' => 4,
+            'category_id' => 1,
+            'round_num' => 0,
+            'judge_num' => 3,
+            'jury_num' => 3,
+            'month' => 1,
+            'day' => 12,
+            'status' => 1,
+        ]);
+        AuditionRules::create([
+
+            'category_id' => 2,
+            'round_num' => 0,
             'judge_num' => 3,
             'jury_num' => 3,
             'month' => 5,
@@ -22,20 +32,10 @@ class AuditionRulesSeeder extends Seeder
             'status' => 1,
         ]);
 
-        AuditionRules::create([
-
-            'category_id' => 1,
-            'round_num' => 3,
-            'judge_num' => 3,
-            'jury_num' => 3,
-            'month' => 1,
-            'day' => 12,
-            'status' => 1,
-        ]);
 
         AuditionRules::create([
 
-            'category_id' => 4,
+            'category_id' => 3,
             'round_num' => 0,
             'judge_num' => 3,
             'jury_num' => 2,
@@ -46,7 +46,7 @@ class AuditionRulesSeeder extends Seeder
 
         AuditionRules::create([
 
-            'category_id' => 5,
+            'category_id' => 4,
             'round_num' => 0,
             'judge_num' => 3,
             'jury_num' => 2,
@@ -54,7 +54,16 @@ class AuditionRulesSeeder extends Seeder
             'day' => 7,
             'status' => 1,
         ]);
+        AuditionRules::create([
 
+            'category_id' => 5,
+            'round_num' => 0,
+            'judge_num' => 3,
+            'jury_num' => 3,
+            'month' => 7,
+            'day' => 22,
+            'status' => 1,
+        ]);
         AuditionRules::create([
 
             'category_id' => 6,
@@ -66,20 +75,11 @@ class AuditionRulesSeeder extends Seeder
             'status' => 1,
         ]);
 
-        AuditionRules::create([
 
-            'category_id' => 3,
-            'round_num' => 0,
-            'judge_num' => 3,
-            'jury_num' => 3,
-            'month' => 7,
-            'day' => 22,
-            'status' => 1,
-        ]);
 
         AuditionRules::create([
 
-            'category_id' => 2,
+            'category_id' => 7,
             'round_num' => 0,
             'judge_num' => 2,
             'jury_num' => 2,

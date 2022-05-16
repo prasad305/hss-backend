@@ -20,7 +20,7 @@ class JudgeAuditionController extends Controller
         $pendingAuditions = Audition::with('judge')
             ->whereHas('judge', function ($q) {
                 $q->where([['judge_id', auth('sanctum')->user()->id], ['approved_by_judge', 0]]);
-            })
+            })->where('status',1)
             ->get();
 
         return response()->json([
