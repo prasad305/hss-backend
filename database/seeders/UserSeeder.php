@@ -135,7 +135,7 @@ class UserSeeder extends Seeder
         $user->cover_photo = 'uploads/images/users/1642659396.jpg';
         $user->phone = '01700000009';
         $user->password = Hash::make('12345');
-        $user->user_type = 'star';
+        $user->user_type = 'user';
         $user->status = 1;
         $user->otp = '123456';
         $user->save();
@@ -246,6 +246,21 @@ class UserSeeder extends Seeder
             $star->terms_and_condition =  $faker->text;
             $star->qr_code = rand( 10000000 , 99999999 );
             $star->save();
+        }
+
+        for ($i=2; $i < 7; $i++) {
+            $user = new User();
+            $user->first_name = 'Mr.';
+            $user->last_name = 'User '.$i;
+            $user->email = 'user'.$i.'@gmail.com';
+            $user->image = null;
+            $user->cover_photo = null;
+            $user->phone = '017001000'.$i;
+            $user->password = Hash::make('12345');
+            $user->user_type = 'user';
+            $user->status = 1;
+            $user->otp = '123456';
+            $user->save();
         }
     }
 }
