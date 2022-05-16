@@ -682,13 +682,15 @@ class UserController extends Controller
 
     public function audition_list()
     {
-        $upcomingAuditions = Audition::orderBy('id', 'DESC')->with('judge.user')->where('status', 1)->latest()->get();
+        $upcomingAuditions = Audition::where('status',3)->latest()->get();
 
         return response()->json([
             'status' => 200,
             'event' => $upcomingAuditions,
         ]);
     }
+
+
     public function participateAudition($id)
     {
         $participateAudition = Audition::with('judge.user')->where('id', $id)->get();
@@ -756,9 +758,9 @@ class UserController extends Controller
     public function userRoundVideoUpload(Request $request){
         // $array = explode(',',$request->videos);
         //  return $array;
-        
+
         foreach ($request->videos as $key => $video) {
-           
+
             $audition_video = new AuditionUploadVideo();
             $audition_video->audition_id = $request->audition_id;
             $audition_video->round_id = $request->round_id;
