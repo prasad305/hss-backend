@@ -34,12 +34,19 @@ class AuditionController extends Controller
             $is_already_submitted = true;
             if ($audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id)->where('status', 0)->count() > 0) {
                 $is_all_star_responsed = false;
+                if($audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id)->where('status', 1)->count() > 0){
+                    $is_any_star_responsed  = true;
+                }else{
+                    $is_any_star_responsed  = false;
+                }
             } else {
                 $is_all_star_responsed = true;
+                $is_any_star_responsed  = true;
             }
         } else {
             $is_already_submitted = false;
             $is_all_star_responsed = false;
+            $is_any_star_responsed  = false;
         }
         return response()->json([
             'status' => 200,
@@ -48,8 +55,53 @@ class AuditionController extends Controller
             'audition_judge_instructions' => $audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id),
             'active_audition_judge_instruction_id' => $audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id)->first()->id,
             'audition_round_rules' => $audition_round_rules,
+            'first_audition_round_rule' => $audition_round_rules->first(),
             'is_already_submitted' => $is_already_submitted,
             'is_all_star_responsed' => $is_all_star_responsed,
+            'is_any_star_responsed' => $is_any_star_responsed,
+        ]);
+    }
+    public function singleAuditionRoundWithRoundId($audition_id, $audition_round_id)
+    {
+        $audition = Audition::find($audition_id);
+        $audition_rule = $audition->auditionRules;
+        $audition_round_rules = $audition_rule->roundRules;
+
+        if ($audition->judgeInstructions->where('round_id', $audition_round_id)->count() > 0) {
+            $is_already_submitted = true;
+            if ($audition->judgeInstructions->where('round_id', $audition_round_id)->where('status', 0)->count() > 0) {
+                $is_all_star_responsed = false;
+                if($audition->judgeInstructions->where('round_id', $audition_round_id)->where('status', 1)->count() > 0){
+                    $is_any_star_responsed  = true;
+                }else{
+                    $is_any_star_responsed  = false;
+                }
+            } else {
+                $is_all_star_responsed = true;
+                $is_any_star_responsed  = true;
+            }
+        } else {
+            $is_already_submitted = false;
+            $is_all_star_responsed = false;
+            $is_any_star_responsed  = false;
+        }
+
+       if($audition->judgeInstructions->where('round_id', $audition_round_id)->first()){
+        $active_audition_judge_instruction_id = $audition->judgeInstructions->where('round_id', $audition_round_id)->first()->id;
+       }else{
+        $active_audition_judge_instruction_id = null;
+       }
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
+            'audition_rule' => $audition_rule,
+            'audition_judge_instructions' => $audition->judgeInstructions->where('round_id', $audition_round_id),
+            'active_audition_judge_instruction_id' => $active_audition_judge_instruction_id,
+            'audition_round_rules' => $audition_round_rules,
+            'first_audition_round_rule' => AuditionRoundRule::find($audition_round_id),
+            'is_already_submitted' => $is_already_submitted,
+            'is_all_star_responsed' => $is_all_star_responsed,
+            'is_any_star_responsed' => $is_any_star_responsed,
         ]);
     }
     public function singleAuditionInstruction($id)
@@ -116,12 +168,19 @@ class AuditionController extends Controller
                     $is_already_submitted = true;
                     if ($audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id)->where('status', 0)->count() > 0) {
                         $is_all_star_responsed = false;
+                        if($audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id)->where('status', 1)->count() > 0){
+                            $is_any_star_responsed  = true;
+                        }else{
+                            $is_any_star_responsed  = false;
+                        }
                     } else {
                         $is_all_star_responsed = true;
+                        $is_any_star_responsed  = true;
                     }
                 } else {
                     $is_already_submitted = false;
                     $is_all_star_responsed = false;
+                    $is_any_star_responsed = false;
                 }
 
                 return response()->json([
@@ -130,6 +189,7 @@ class AuditionController extends Controller
                     'audition_judge_instructions' => $audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id),
                     'is_already_submitted' => $is_already_submitted,
                     'is_all_star_responsed' => $is_all_star_responsed,
+                    'is_any_star_responsed' => $is_any_star_responsed,
                 ]);
             } catch (\Exception $exception) {
                 return response()->json([
