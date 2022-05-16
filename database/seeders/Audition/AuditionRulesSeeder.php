@@ -12,7 +12,6 @@ class AuditionRulesSeeder extends Seeder
     public function run(Faker $faker)
     {
         AuditionRules::create([
-
             'category_id' => 1,
             'round_num' => 0,
             'judge_num' => 3,
@@ -22,7 +21,6 @@ class AuditionRulesSeeder extends Seeder
             'status' => 1,
         ]);
         AuditionRules::create([
-
             'category_id' => 2,
             'round_num' => 0,
             'judge_num' => 3,
@@ -31,10 +29,7 @@ class AuditionRulesSeeder extends Seeder
             'day' => 3,
             'status' => 1,
         ]);
-
-
         AuditionRules::create([
-
             'category_id' => 3,
             'round_num' => 0,
             'judge_num' => 3,
@@ -43,9 +38,7 @@ class AuditionRulesSeeder extends Seeder
             'day' => 1,
             'status' => 1,
         ]);
-
         AuditionRules::create([
-
             'category_id' => 4,
             'round_num' => 0,
             'judge_num' => 3,
@@ -55,7 +48,6 @@ class AuditionRulesSeeder extends Seeder
             'status' => 1,
         ]);
         AuditionRules::create([
-
             'category_id' => 5,
             'round_num' => 0,
             'judge_num' => 3,
@@ -65,7 +57,6 @@ class AuditionRulesSeeder extends Seeder
             'status' => 1,
         ]);
         AuditionRules::create([
-
             'category_id' => 6,
             'round_num' => 0,
             'judge_num' => 4,
@@ -74,11 +65,7 @@ class AuditionRulesSeeder extends Seeder
             'day' => 7,
             'status' => 1,
         ]);
-
-
-
         AuditionRules::create([
-
             'category_id' => 7,
             'round_num' => 0,
             'judge_num' => 2,
@@ -87,7 +74,6 @@ class AuditionRulesSeeder extends Seeder
             'day' => 2,
             'status' => 1,
         ]);
-
         AuditionRules::create([
             'category_id' => 8,
             'round_num' => 0,
