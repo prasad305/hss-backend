@@ -106,6 +106,47 @@ class UserController extends Controller
         ]);
     }
 
+    public function single_type_post($type)
+    {
+        $id = auth('sanctum')->user()->id;
+
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
+        $selectedCat = json_decode($selectedCategory->category);
+        $selectedSubCat = json_decode($selectedCategory->subcategory);
+        $selectedSubSubCat = json_decode($selectedCategory->star_id);
+
+        $cat_post = Post::select("*")
+            ->whereIn('category_id', $selectedCat)
+            ->where('type',$type)
+            ->latest()->get();
+
+        if(isset($sub_cat_post))
+        {
+            $sub_cat_post = Post::select("*")
+            ->whereIn('sub_category_id', $selectedSubCat)
+            ->latest()->get();
+        }else{
+            $sub_cat_post = [];
+        }
+
+        if(isset($sub_sub_cat_post))
+        {
+            $sub_sub_cat_post = Post::select("*")
+            ->whereIn('user_id', $selectedSubSubCat)
+            ->latest()->get();
+        }else{
+            $sub_sub_cat_post = [];
+        }
+
+        $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'post' => $post,
+        ]);
+    }
+
 
     public function allSubcategoryList($catId)
     {
@@ -312,6 +353,17 @@ class UserController extends Controller
             'starInfo' =>  $starInfo
         ]);
     }
+
+    public function liveChatDetails($slug)
+    {
+        $event = LiveChat::where('slug',$slug)->first();
+
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+        ]);
+    }
+
 
     public function getLiveChatTiemSlot($minute, $id)
     {

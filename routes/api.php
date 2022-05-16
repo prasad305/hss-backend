@@ -35,6 +35,7 @@ Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 
 // Home Page All Post
 Route::get('/user/all_post', [UserController::class, 'all_post']);
+Route::get('/user/post/{type}', [UserController::class, 'single_type_post']);
 
 
 Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
@@ -87,6 +88,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/sinlgeLiveChat/{id}', [UserController::class, 'sinlgeLiveChat']);
     Route::get('/user/getSingleLiveChatEvent/{id}', [UserController::class, 'getSingleLiveChatEvent']);
     Route::get('/user/getSingleLiveChatEvent/{minute}/{id}', [UserController::class, 'getLiveChatTiemSlot']);
+
+    //live chat
+    Route::get('/user/live-chat/{slug}', [UserController::class, 'liveChatDetails']);
 
 
     Route::get('view-country', [CategoryController::class, 'index']);
@@ -145,6 +149,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     // auction product
     Route::get('/auction-product/all', [UserController::class, 'auctionProduct']);
     Route::get('/user/getStarAuction/{star_id}', [UserController::class, 'starAuction']);
+
+
 
 
 

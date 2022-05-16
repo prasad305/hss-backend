@@ -20,6 +20,7 @@ class CreateLiveChatsTable extends Migration
             $table->unsignedBigInteger('star_id')->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->string('title')->nullable();
+            $table->string('slug')->nullable();
             $table->longText('description')->nullable();
             $table->timestamp('date')->nullable();
             $table->timestamp('start_time')->nullable();
