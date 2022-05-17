@@ -30,7 +30,7 @@ class CreateAuditionsTable extends Migration
             $table->string('template_id')->nullable();
             $table->timestamp('start_time')->nullable();
             $table->timestamp('end_time')->nullable();
-            $table->boolean('status')->default(0);
+            $table->integer('status')->default(0)->comment('3 = live');
             $table->timestamps();
         });
     }

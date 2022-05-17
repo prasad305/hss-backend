@@ -30,5 +30,22 @@ class AuditionSeeder extends Seeder
             $audition->end_time = Carbon::now();
             $audition->save();
         };
+
+        $audition = new Audition();
+        $audition->category_id = 1;
+        $audition->audition_rules_id =  1;
+        $audition->audition_round_rules_id = 1;
+        $audition->creater_id =  2;
+        $audition->audition_admin_id =  12;
+        $audition->status  =  3;
+        $audition->title = "Monir Talent Hunt 2022";
+        $audition->round_status = 0;
+        $audition->slug = "monir-talent-hunt-2022";
+        $audition->video = "uploads/videos/auditions/16526815938462.10-sec.mp4";
+        $audition->banner = "uploads/images/auditions/1652681593.jpg";
+        $audition->description = "<p>Monir Talent Hunt 2022 . description</p>";
+        $audition->start_time = Carbon::parse("2022-05-20 00:00:00");
+        $audition->end_time = Carbon::parse("2022-07-01 00:00:00");
+        $audition->save();
     }
 }

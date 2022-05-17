@@ -24,6 +24,42 @@ use Illuminate\Support\Str;
 
 class AuditionController extends Controller
 {
+    public function singleAuditionVideos($audition_id)
+    {
+        $audition = Audition::find($audition_id);
+        $audition_rule = $audition->auditionRules;
+        $audition_round_rules = $audition_rule->roundRules;
+
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
+            'audition_rule' => $audition_rule,
+            'audition_round_rules' => $audition_round_rules,
+            'pending_videos' => $audition->uploadedVideos->where('round_id', $audition->audition_round_rules_id)->where('status',0),
+            'pending_videos_num' => $audition->uploadedVideos->where('round_id', $audition->audition_round_rules_id)->where('status',0)->count(),
+            'approved_videos' => $audition->uploadedVideos->where('round_id', $audition->audition_round_rules_id)->where('status',1),
+            'approved_videos_num' => $audition->uploadedVideos->where('round_id', $audition->audition_round_rules_id)->where('status',1)->count(),
+            'first_audition_round_rule' => $audition_round_rules->first(),
+        ]);
+    }
+    public function singleAuditionVideoWithRoundId($audition_id, $audition_round_id)
+    {
+        $audition = Audition::find($audition_id);
+        $audition_rule = $audition->auditionRules;
+        $audition_round_rules = $audition_rule->roundRules;
+
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
+            'audition_rule' => $audition_rule,
+            'audition_round_rules' => $audition_round_rules,
+            'pending_videos' => $audition->uploadedVideos->where('round_id', $audition_round_id)->where('status',0),
+            'pending_videos_num' => $audition->uploadedVideos->where('round_id', $audition_round_id)->where('status',0)->count(),
+            'approved_videos' => $audition->uploadedVideos->where('round_id', $audition_round_id)->where('status',1),
+            'approved_videos_num' => $audition->uploadedVideos->where('round_id', $audition_round_id)->where('status',1)->count(),
+            'first_audition_round_rule' => AuditionRoundRule::find($audition_round_id),
+        ]);
+    }
     public function singleAuditionRounds($audition_id)
     {
         $audition = Audition::find($audition_id);
