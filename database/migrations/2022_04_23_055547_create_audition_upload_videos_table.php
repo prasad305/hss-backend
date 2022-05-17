@@ -23,7 +23,7 @@ class CreateAuditionUploadVideosTable extends Migration
             $table->unsignedBigInteger('audition_admin_id')->nullable();
             $table->string('video')->nullable();
 
-            $table->string('approval_status')->nullable()->default(0)->comment('0 = not reviewed , 1 = approved, 2 = rejected');
+            $table->integer('approval_status')->nullable()->default(0)->comment('0 = not reviewed , 1 = approved, 2 = rejected');
             $table->integer('judge_approval_status')->nullable()->default(0);
 
             $table->string('audition_admin_comment')->nullable();
