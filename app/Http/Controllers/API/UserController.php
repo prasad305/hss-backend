@@ -38,7 +38,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManagerStatic as Image;
+
 
 
 class UserController extends Controller
@@ -808,44 +809,48 @@ class UserController extends Controller
     }
 
     public function userRoundVideoUpload(Request $request){
-        // $array = explode(',',$request->videos);
-        //  return $array;
-
-        $data = explode(",", $request->videos[0]);
-        // return gettype($data);
-
-        // if($request->hasFile('demoImage')){
-        //     foreach ($request->file('demoImage') as $key => $file) {
-
-        //     }
-        // }
-
-
-        foreach ($data as $key => $file) {
-
-            $audition_video = new AuditionUploadVideo();
-            $audition_video->audition_id = $request->audition_id;
-            $audition_video->round_id = $request->round_id;
-
-            $fileInfo=fileInfo($file);
-            $name=date('YmdHis').'-'.rand().'-'.rand().'.'.$fileInfo['extension'];
-            $file_path = 'uploads/videos/auditions';
-            $upload=fileUpload($file,$file_path,$name);
-            if($upload){
-            // array_push($new_certificates, array(
-            //     'file' => $name,
-            //     'info' => $fileInfo,
-            // ));
-            $audition_video->video = $file_path.'/'.$name;
-            }
-        }
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Audition Videos Uploaded Successfully!',
-            'request' =>$request->all(),
+        $validator = Validator::make($request->all(), [
+            'file.*' => 'required',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+
+            foreach ($request->file as $key => $file) {
+                 $audition_video = new AuditionUploadVideo();
+                 $audition_video->audition_id = $request->audition_id;
+                 $audition_video->round_id = $request->round_id;
+                 $audition_video->user_id = auth()->user()->id;
+
+                $file_name   = time() . rand('0000', '9999') . $key.'.' . $file->getClientOriginalName();
+                $file_path = 'uploads/videos/auditions/';
+                $file->move($file_path,$file_name);
+                $audition_video->video = $file_path.$file_name;
+                $audition_video->save();
+            }
+            return response()->json([
+                'status' => 200,
+                'message' => 'Audition Videos Uploaded Successfully!',
+            ]);
+        }
     }
+
+    // public function checkAuditionVideoUpload($audition_id){
+      
+    //         $is_video_uploaded = false;
+    //         if(AuditionUploadVideo::where('audition_id',$audition_id)->where('user_id',auth()->user()->id)->count() > 0){
+    //             $is_video_uploaded  = true;
+    //         }else{
+    //             $is_video_uploaded  = false;
+    //         }
+            
+      
+
+    // }
 
 
 
@@ -1061,10 +1066,20 @@ class UserController extends Controller
     public function roundInstruction($rule_id){
         $instruction = AuditionRoundRule::find($rule_id);
         $audition = Audition::where('audition_round_rules_id',$instruction->id)->first();
+
+        // for user audition video uploaded or not
+        $is_video_uploaded = false;
+        if($audition->uploadedVideos->where('round_id', $audition->audition_round_rules_id)->where('user_id',auth()->user()->id)->count() > 0){
+            $is_video_uploaded  = true;
+        }else{
+            $is_video_uploaded  = false;
+        }
+        
         return response()->json([
             'status' => 200,
             'audition' => $audition,
             'instruction' => $instruction,
+            'is_video_uploaded' => $is_video_uploaded,
         ]);
     }
 
