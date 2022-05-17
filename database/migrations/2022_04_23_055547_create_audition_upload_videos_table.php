@@ -20,10 +20,15 @@ class CreateAuditionUploadVideosTable extends Migration
             $table->unsignedBigInteger('round_id')->nullable();
             $table->unsignedBigInteger('jury_id')->nullable();
             $table->unsignedBigInteger('judge_id')->nullable();
+            $table->unsignedBigInteger('audition_admin_id')->nullable();
             $table->string('video')->nullable();
-            $table->string('approval_status')->nullable()->default(0);
-            $table->string('comments')->nullable();
-            $table->integer('status')->nullable()->default(0);
+
+            $table->string('approval_status')->nullable()->default(0)->comment('0 = not reviewed , 1 = approved, 2 = rejected');
+            $table->integer('judge_approval_status')->nullable()->default(0);
+
+            $table->string('audition_admin_comment')->nullable();
+            $table->string('judge_comment')->nullable();
+            $table->string('jury_comment')->nullable();
             $table->timestamps();
         });
     }

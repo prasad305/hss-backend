@@ -76,5 +76,4 @@ class Audition extends Model
     {
         return $this->hasMany(AuditionUploadVideo::class, 'audition_id', 'id');
     }
-
 }

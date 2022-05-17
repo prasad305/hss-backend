@@ -6,11 +6,6 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
     public function run()
     {
         // \App\Models\User::factory(10)->create();
@@ -47,7 +42,7 @@ class DatabaseSeeder extends Seeder
         $this->call(Audition\AuditionAssignJurySeeder::class);
 
         $this->call(Audition\AuditionRulesSeeder::class);
-        // $this->call(Audition\AuditionRoundRulesSeeder::class);
+        $this->call(Audition\AuditionRoundRulesSeeder::class);
         $this->call(Audition\AuditionAssignJudgeSeeder::class);
         $this->call(Audition\AuditionParticipantsSeeder::class);
 
