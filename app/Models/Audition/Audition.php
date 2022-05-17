@@ -72,4 +72,9 @@ class Audition extends Model
         return $this->hasMany(AuditionJudgeInstruction::class, 'audition_id', 'id');
     }
 
+    public function uploadedVideos()
+    {
+        return $this->hasMany(AuditionUploadVideo::class, 'audition_id', 'id');
+    }
+
 }
