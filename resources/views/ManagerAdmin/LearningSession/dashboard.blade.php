@@ -236,9 +236,11 @@
             //--------------
 
             // Get context with jQuery - using jQuery's .get() method.
+            var labels = <?php echo $labels; ?>;
+            var data = <?php echo $data; ?>;
 
             var areaChartData = {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: labels,
                 datasets: [{
                     label: 'Learning Session',
                     backgroundColor: 'rgba(60,141,188,0.9)',
@@ -248,7 +250,7 @@
                     pointStrokeColor: 'rgba(60,141,188,1)',
                     pointHighlightFill: '#fff',
                     pointHighlightStroke: 'rgba(60,141,188,1)',
-                    data: [28, 48, 40, 19, 86, 27, 90]
+                    data: data
                 }, ]
             }
 

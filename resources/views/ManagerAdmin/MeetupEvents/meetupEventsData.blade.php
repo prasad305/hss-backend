@@ -50,7 +50,7 @@
                                         {{ $data->star ? $data->star->last_name : '' }}</div>
                                 </td>
                                 <td>
-                                    <a href="{{ route('managerAdmin.dashboard.meetupEventDetails') }} "
+                                    <a href="{{ route('managerAdmin.dashboard.meetupEventDetails', $data->id) }} "
                                         class="btn btn-primary"><i class="fas fa-eye"></i> View </a>
                                 </td>
                             </tr>

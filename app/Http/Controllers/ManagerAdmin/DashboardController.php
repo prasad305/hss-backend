@@ -13,6 +13,7 @@ use App\Models\Fan_Group_Join;
 use App\Models\FanGroup;
 use App\Models\FanPost;
 use App\Models\Greeting;
+use App\Models\JuryBoard;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChat;
@@ -21,6 +22,7 @@ use App\Models\Marketplace;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
 use App\Models\User;
+use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,13 +66,20 @@ class DashboardController extends Controller
         $monthlyIncome = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
         $yearlyIncome = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
-        return view('ManagerAdmin.LearningSession.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome']));
+        $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+        $data = [];
+        foreach ($labels as $key => $value) {
+            $data[] = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        }
+
+
+        return view('ManagerAdmin.LearningSession.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome']))->with('labels', json_encode($labels, JSON_NUMERIC_CHECK))->with('data', json_encode($data, JSON_NUMERIC_CHECK));
     }
     public function learninSessionData($type)
     {
 
         if ($type == 'total') {
-            $portalData = LearningSession::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+            $portalData = LearningSession::with(['star', 'category'])->orderBy('id', 'DESC')->where('category_id', auth()->user()->category_id)->get();
         } elseif ($type == 'upcoming') {
             $portalData = LearningSession::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
         } else {
@@ -79,9 +88,13 @@ class DashboardController extends Controller
 
         return view('ManagerAdmin.LearningSession.learningSessionData', compact('portalData'));
     }
-    public function learninSessionDetails()
+    public function learninSessionDetails($id)
     {
-        return view('ManagerAdmin.LearningSession.sessionDetails');
+        $totalParticipant = LearningSessionRegistration::where('learning_session_id', $id)->where('payment_status', 1)->count();
+        $totalFee = LearningSessionRegistration::where('learning_session_id', $id)->where('payment_status', 1)->sum('amount');
+        $data = LearningSession::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->find($id);
+
+        return view('ManagerAdmin.LearningSession.sessionDetails', compact(['data', 'totalParticipant', 'totalFee']));
     }
     public function meetupEvents()
     {
@@ -114,9 +127,13 @@ class DashboardController extends Controller
         }
         return view('ManagerAdmin.MeetupEvents.meetupEventsData', compact('portalData'));
     }
-    public function meetupEventsDetails()
+    public function meetupEventsDetails($id)
     {
-        return view('ManagerAdmin.MeetupEvents.meetupEventsDetails');
+        $totalParticipant = MeetupEventRegistration::where('meetup_event_id', $id)->where('payment_status', 1)->count();
+        $totalFee = MeetupEventRegistration::where('meetup_event_id', $id)->where('payment_status', 1)->sum('amount');
+        $data = MeetupEvent::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->find($id);
+
+        return view('ManagerAdmin.MeetupEvents.meetupEventsDetails', compact(['data', 'totalParticipant', 'totalFee']));
     }
     public function greetings()
     {
@@ -168,9 +185,13 @@ class DashboardController extends Controller
         }
         return view('ManagerAdmin.LiveChat.liveChatsData', compact('portalData'));
     }
-    public function liveChatsDetails()
+    public function liveChatsDetails($id)
     {
-        return view('ManagerAdmin.LiveChat.liveChatsDetails');
+        $totalParticipant = LiveChatRegistration::where('live_chat_id', $id)->where('payment_status', 1)->count();
+        $totalFee = LiveChatRegistration::where('live_chat_id', $id)->where('payment_status', 1)->sum('amount');
+        $data = LiveChat::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->find($id);
+
+        return view('ManagerAdmin.LiveChat.liveChatsDetails', compact(['totalParticipant', 'totalFee', 'data']));
     }
     public function auditions()
     {
@@ -208,9 +229,17 @@ class DashboardController extends Controller
         }
         return view('ManagerAdmin.Audition.auditionsData', compact('portalData'));
     }
-    public function auditionsDetails()
+    public function auditionsDetails($id)
     {
-        return view('ManagerAdmin.Audition.auditionsDetails');
+
+        $judges = AssignJudge::with('user')->where('audition_id', $id)->get();
+        $totalJudge = AssignJudge::where('category_id', auth()->user()->category_id)->count();
+        $totalJury = AssignJury::where('category_id', auth()->user()->category_id)->count();
+        $totalParticipant = AuditionEventRegistration::where('audition_event_id', $id)->where('payment_status', 1)->count();
+        $totalFee = AuditionEventRegistration::where('audition_event_id', $id)->where('payment_status', 1)->sum('amount');
+        $data = Audition::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->find($id);
+
+        return view('ManagerAdmin.Audition.auditionsDetails', compact(['totalParticipant', 'totalFee', 'data', 'totalJudge', 'totalJury', 'judges']));
     }
     public function fanGroups()
     {
@@ -239,9 +268,10 @@ class DashboardController extends Controller
         return view('ManagerAdmin.fangroup.fanGroupData', compact('portalData'));
     }
 
-    public function fanGroupsDetails()
+    public function fanGroupsDetails($id)
     {
-        return view('ManagerAdmin.fangroup.fanGroupDetails');
+        $data = FanGroup::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->find($id);
+        return view('ManagerAdmin.fangroup.fanGroupDetails', compact('data'));
     }
 
     public function auditionsJudgeData()
