@@ -1064,6 +1064,7 @@ class UserController extends Controller
     }
 
     public function roundInstruction($rule_id){
+        
         $instruction = AuditionRoundRule::find($rule_id);
         $audition = Audition::where('audition_round_rules_id',$instruction->id)->first();
 
