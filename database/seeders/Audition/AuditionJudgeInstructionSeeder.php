@@ -35,13 +35,13 @@ class AuditionJudgeInstructionSeeder extends Seeder
 
 
         AuditionJudgeInstruction::create([
-            'audition_id' => 10,
-            'star_id' => 44,
-            'round_id' => 1,
+            'audition_id' => '10',
+            'star_id' => '44',
+            'round_id' => '1',
             'title' => 'fvb kb dfbgdb dbhfdb',
             'banner' => 'uploads/images/auditions/9TsP4nyDlXLOpyhPxzK6-1652682816.jpg',
             'video' => 'uploads/videos/auditions/qgJF2QPBlj5W2VBuCVd5-1652682816.png',
-            'status' => 0,
+            'status' => '1',
             'description' => 'asdfhbsd sdgbdxbgdkbg',
             'time_boundary' => '2022-05-20 06:32:51',
             'date' => NULL,
@@ -50,14 +50,15 @@ class AuditionJudgeInstructionSeeder extends Seeder
         ]);
 
 
+
         AuditionJudgeInstruction::create([
-            'audition_id' => 10,
-            'star_id' => 43,
-            'round_id' => 1,
+            'audition_id' => '10',
+            'star_id' => '43',
+            'round_id' => '1',
             'title' => 'fvb kb dfbgdb dbhfdb',
             'banner' => 'uploads/images/auditions/9TsP4nyDlXLOpyhPxzK6-1652682816.jpg',
             'video' => 'uploads/videos/auditions/qgJF2QPBlj5W2VBuCVd5-1652682816.png',
-            'status' => 0,
+            'status' => '1',
             'description' => 'asdfhbsd sdgbdxbgdkbg',
             'time_boundary' => '2022-05-20 06:32:51',
             'date' => NULL,
@@ -66,14 +67,15 @@ class AuditionJudgeInstructionSeeder extends Seeder
         ]);
 
 
+
         AuditionJudgeInstruction::create([
-            'audition_id' => 10,
-            'star_id' => 42,
-            'round_id' => 1,
+            'audition_id' => '10',
+            'star_id' => '42',
+            'round_id' => '1',
             'title' => 'fvb kb dfbgdb dbhfdb',
             'banner' => 'uploads/images/auditions/9TsP4nyDlXLOpyhPxzK6-1652682816.jpg',
             'video' => 'uploads/videos/auditions/qgJF2QPBlj5W2VBuCVd5-1652682816.png',
-            'status' => 0,
+            'status' => '1',
             'description' => 'asdfhbsd sdgbdxbgdkbg',
             'time_boundary' => '2022-05-20 06:32:51',
             'date' => NULL,
