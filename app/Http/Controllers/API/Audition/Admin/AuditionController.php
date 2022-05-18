@@ -71,7 +71,7 @@ class AuditionController extends Controller
             'approved_videos_num' => $audition->uploadedVideos->where('round_id',  $audition->audition_round_rules_id)->where('approval_status',1)->count(),
             'check_video_num' => $audition->uploadedVideos->where('round_id',  $audition->audition_round_rules_id)->whereIn('approval_status',[1,2])->count(),
             'reject_video_num' => $audition->uploadedVideos->where('round_id',  $audition->audition_round_rules_id)->where('approval_status',2)->count(),
-            'first_audition_round_rule' =>  $audition_round_rules->first(),
+            'first_audition_round_rule' =>  AuditionRoundRule::find($audition->audition_round_rules_id)
         ]);
     }
     public function singleAuditionVideoWithRoundId($audition_id, $audition_round_id)
@@ -133,7 +133,7 @@ class AuditionController extends Controller
             'audition_judge_instructions' => $audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id),
             'active_audition_judge_instruction_id' => $active_audition_judge_instruction_id,
             'audition_round_rules' => $audition_round_rules,
-            'first_audition_round_rule' => $audition_round_rules->first(),
+            'first_audition_round_rule' => AuditionRoundRule::find($audition->audition_round_rules_id),
             'is_already_submitted' => $is_already_submitted,
             'is_all_star_responsed' => $is_all_star_responsed,
             'is_any_star_responsed' => $is_any_star_responsed,
