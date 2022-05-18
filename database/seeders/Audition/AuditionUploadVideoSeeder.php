@@ -32,7 +32,7 @@ class AuditionUploadVideoSeeder extends Seeder
 
 
         AuditionUploadVideo::create([
-            'audition_id' => '7',
+            'audition_id' => '10',
             'user_id' => '6',
             'round_id' => '3',
             'jury_id' => '9',
@@ -51,7 +51,7 @@ class AuditionUploadVideoSeeder extends Seeder
 
 
         AuditionUploadVideo::create([
-            'audition_id' => '9',
+            'audition_id' => '10',
             'user_id' => '53',
             'round_id' => '1',
             'jury_id' => NULL,
@@ -69,7 +69,7 @@ class AuditionUploadVideoSeeder extends Seeder
 
 
         AuditionUploadVideo::create([
-            'audition_id' => '9',
+            'audition_id' => '10',
             'user_id' => '53',
             'round_id' => '1',
             'jury_id' => NULL,
@@ -88,7 +88,7 @@ class AuditionUploadVideoSeeder extends Seeder
 
 
         AuditionUploadVideo::create([
-            'audition_id' => '9',
+            'audition_id' => '10',
             'user_id' => '10',
             'round_id' => '1',
             'jury_id' => NULL,
@@ -108,7 +108,7 @@ class AuditionUploadVideoSeeder extends Seeder
 
 
         AuditionUploadVideo::create([
-            'audition_id' => '9',
+            'audition_id' => '10',
             'user_id' => '10',
             'round_id' => '1',
             'jury_id' => NULL,
@@ -126,7 +126,7 @@ class AuditionUploadVideoSeeder extends Seeder
 
 
         AuditionUploadVideo::create([
-            'audition_id' => '9',
+            'audition_id' => '10',
             'user_id' => '52',
             'round_id' => '1',
             'jury_id' => NULL,
@@ -145,7 +145,7 @@ class AuditionUploadVideoSeeder extends Seeder
 
 
         AuditionUploadVideo::create([
-            'audition_id' => '9',
+            'audition_id' => '10',
             'user_id' => '52',
             'round_id' => '1',
             'jury_id' => NULL,
