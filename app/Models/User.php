@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\Audition;
+use App\Models\Audition\AuditionAssignJury;
 use App\Models\Audition\AuditionMark;
 use App\Models\Category;
 use App\Models\Audition\AuditionParticipant;
@@ -250,6 +251,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+
+      // all of this below relation is for jury user
+      public function assignedAuditionsJury()
+      {
+          return $this->hasMany(AuditionAssignJury::class, 'jury_id');
+      }
 
 
 }
