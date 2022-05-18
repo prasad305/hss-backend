@@ -20,7 +20,7 @@ class AuditionAssignJury extends Model
         'status',
     ];
 
-    protected $with = ['user'];
+    protected $with = ['user','assignedVideos'];
 
     public function audition()
     {
@@ -34,5 +34,9 @@ class AuditionAssignJury extends Model
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
+    }
+    public function assignedVideos()
+    {
+        return $this->hasMany(AuditionUploadVideo::class, 'jury_id');
     }
 }
