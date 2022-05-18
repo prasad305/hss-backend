@@ -29,6 +29,7 @@ class CreateAuditionUploadVideosTable extends Migration
             $table->string('audition_admin_comment')->nullable();
             $table->string('judge_comment')->nullable();
             $table->string('jury_comment')->nullable();
+            $table->timestamp('jury_mark_deadline')->nullable();
             $table->timestamps();
         });
     }

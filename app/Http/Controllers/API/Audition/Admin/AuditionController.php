@@ -975,6 +975,7 @@ class AuditionController extends Controller
         } else {
             AuditionUploadVideo::where([['audition_id',$request->audition_id],['round_id',$request->round_rules_id],['jury_id',null]])->take($request->num_of_videos)->update([
                 'jury_id' => $request->jury_id,
+                'jury_mark_deadline' => $request->uploade_date,
             ]);
             return response()->json([
                 'status' => 200,
@@ -1002,6 +1003,7 @@ class AuditionController extends Controller
                 foreach ($request->num_of_videos as $key => $num_of_video) {
                     AuditionUploadVideo::where([['audition_id',$request->audition_id],['round_id',$request->round_rules_id],['jury_id',null]])->take($num_of_video)->update([
                         'jury_id' => $requiredJuries[$key],
+                        'jury_mark_deadline' => $request->uploade_date,
                     ]);
                 }
             return response()->json([
