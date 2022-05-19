@@ -934,9 +934,6 @@ class AuditionController extends Controller
             }
         }
 
-
-
-
         $accepted_videos = $audition->uploadedVideos->where('approval_status',1)->where('round_id',$round_rules_id)->where('jury_id',null);
         $assigned_juries = AuditionAssignJury::whereIn('jury_id',$juryIds)->where('audition_id',$audition_id)->get();
         $total_jury = count($assigned_juries);
@@ -1018,5 +1015,22 @@ class AuditionController extends Controller
             ]);
 
         }
+    }
+
+    public function juryMarkOnVideosStatus($audition_id,$round_rules_id){
+        $audition = Audition::find($audition_id);
+        $juryIds = $audition->assignedJuries->pluck('jury_id');
+        $juryAssignVideos = $audition->uploadedVideos->whereIn('jury_id',$juryIds)->where('round_id',$round_rules_id);
+        $juryMarkingVideos = $juryAssignVideos->whereIn('jury_approval_status',[1,2]);
+        $juryPassedVideos = $juryMarkingVideos->where([['jury_approval_status',1],['mark','!=',null]]);
+        $juryFailedVideos = $juryMarkingVideos->where([['jury_approval_status',2],['mark','!=',null]]);
+        return response()->json([
+            'status' => 200,
+            'juryAssignvideos' => $juryAssignVideos,
+            'juryMarkingVideos' => $juryMarkingVideos,
+            'juryPassedVideos' => $juryPassedVideos,
+            'juryFailedVideos' => $juryFailedVideos,
+        ]);
+
     }
 }
