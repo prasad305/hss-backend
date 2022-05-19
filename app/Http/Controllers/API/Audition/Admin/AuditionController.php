@@ -57,19 +57,21 @@ class AuditionController extends Controller
         $audition = Audition::find($audition_id);
         $audition_rule = $audition->auditionRules;
         $audition_round_rules = $audition_rule->roundRules;
-        // $data = $audition->uploadedVideos->where('round_id', $audition->audition_round_rules_id)->where('status',0);
-        // return $data;
 
         return response()->json([
             'status' => 200,
             'audition' => $audition,
             'audition_rule' => $audition_rule,
             'audition_round_rules' => $audition_round_rules,
-            'pending_videos' => AuditionUploadVideo::where('audition_id',$audition_id)->where('round_id', $audition->audition_round_rules_id)->where('approval_status',0)->get(),
-            'approved_videos' => AuditionUploadVideo::where('audition_id',$audition_id)->where('round_id', $audition->audition_round_rules_id)->where('approval_status',1)->get(),
-            'pending_videos_num' => $audition->uploadedVideos->where('round_id', $audition->audition_round_rules_id)->where('approval_status',0)->count(),
-            'approved_videos_num' => $audition->uploadedVideos->where('round_id', $audition->audition_round_rules_id)->where('approval_status',1)->count(),
-            'first_audition_round_rule' => $audition_round_rules->first(),
+            'pending_videos' => AuditionUploadVideo::where('audition_id',$audition_id)->where('round_id',  $audition->audition_round_rules_id)->where('approval_status',0)->get(),
+            'reject_videos' => AuditionUploadVideo::where('audition_id',$audition_id)->where('round_id',  $audition->audition_round_rules_id)->where('approval_status',2)->get(),
+            'approved_videos' => AuditionUploadVideo::where('audition_id',$audition_id)->where('round_id',  $audition->audition_round_rules_id)->where('approval_status',1)->get(),
+            'check_videos' => AuditionUploadVideo::where('audition_id',$audition_id)->where('round_id',  $audition->audition_round_rules_id)->whereIn('approval_status',[1,2])->get(),
+            'pending_videos_num' => $audition->uploadedVideos->where('round_id',  $audition->audition_round_rules_id)->where('approval_status',0)->count(),
+            'approved_videos_num' => $audition->uploadedVideos->where('round_id',  $audition->audition_round_rules_id)->where('approval_status',1)->count(),
+            'check_video_num' => $audition->uploadedVideos->where('round_id',  $audition->audition_round_rules_id)->whereIn('approval_status',[1,2])->count(),
+            'reject_video_num' => $audition->uploadedVideos->where('round_id',  $audition->audition_round_rules_id)->where('approval_status',2)->count(),
+            'first_audition_round_rule' =>  AuditionRoundRule::find($audition->audition_round_rules_id)
         ]);
     }
     public function singleAuditionVideoWithRoundId($audition_id, $audition_round_id)
@@ -84,9 +86,13 @@ class AuditionController extends Controller
             'audition_rule' => $audition_rule,
             'audition_round_rules' => $audition_round_rules,
             'pending_videos' => AuditionUploadVideo::where('audition_id',$audition_id)->where('round_id', $audition_round_id)->where('approval_status',0)->get(),
+            'reject_videos' => AuditionUploadVideo::where('audition_id',$audition_id)->where('round_id', $audition_round_id)->where('approval_status',2)->get(),
             'approved_videos' => AuditionUploadVideo::where('audition_id',$audition_id)->where('round_id', $audition_round_id)->where('approval_status',1)->get(),
+            'check_videos' => AuditionUploadVideo::where('audition_id',$audition_id)->where('round_id', $audition_round_id)->whereIn('approval_status',[1,2])->get(),
             'pending_videos_num' => $audition->uploadedVideos->where('round_id', $audition_round_id)->where('approval_status',0)->count(),
             'approved_videos_num' => $audition->uploadedVideos->where('round_id', $audition_round_id)->where('approval_status',1)->count(),
+            'check_video_num' => $audition->uploadedVideos->where('round_id', $audition_round_id)->whereIn('approval_status',[1,2])->count(),
+            'reject_video_num' => $audition->uploadedVideos->where('round_id', $audition_round_id)->where('approval_status',2)->count(),
             'first_audition_round_rule' => AuditionRoundRule::find($audition_round_id),
         ]);
     }
@@ -127,7 +133,7 @@ class AuditionController extends Controller
             'audition_judge_instructions' => $audition->judgeInstructions->where('round_id', $audition->audition_round_rules_id),
             'active_audition_judge_instruction_id' => $active_audition_judge_instruction_id,
             'audition_round_rules' => $audition_round_rules,
-            'first_audition_round_rule' => $audition_round_rules->first(),
+            'first_audition_round_rule' => AuditionRoundRule::find($audition->audition_round_rules_id),
             'is_already_submitted' => $is_already_submitted,
             'is_all_star_responsed' => $is_all_star_responsed,
             'is_any_star_responsed' => $is_any_star_responsed,
