@@ -30,31 +30,11 @@ class AuditionUploadVideoSeeder extends Seeder
         //     $auditionUploadVideo->save();
         // }
 
-
-        AuditionUploadVideo::create([
-            'audition_id' => '10',
-            'user_id' => '6',
-            'round_id' => '3',
-            'jury_id' => '9',
-            'judge_id' => '5',
-            'audition_admin_id' => NULL,
-            'video' => NULL,
-            'approval_status' => '0',
-            'judge_approval_status' => '0',
-            'audition_admin_comment' => 'Mr.',
-            'judge_comment' => NULL,
-            'jury_comment' => NULL,
-            'created_at' => '2022-05-17 09:48:11',
-            'updated_at' => '2022-05-17 09:48:11'
-        ]);
-
-
-
         AuditionUploadVideo::create([
             'audition_id' => '10',
             'user_id' => '53',
             'round_id' => '1',
-            'jury_id' => NULL,
+            'jury_id' => 31,
             'judge_id' => NULL,
             'audition_admin_id' => NULL,
             'video' => 'uploads/videos/auditions/165278180624360.Nature Beautiful short video 720p HD.mp4',
@@ -72,7 +52,7 @@ class AuditionUploadVideoSeeder extends Seeder
             'audition_id' => '10',
             'user_id' => '53',
             'round_id' => '1',
-            'jury_id' => NULL,
+            'jury_id' => 31,
             'judge_id' => NULL,
             'audition_admin_id' => NULL,
             'video' => 'uploads/videos/auditions/165278180658481.ami_probashi.mp4',
@@ -91,7 +71,7 @@ class AuditionUploadVideoSeeder extends Seeder
             'audition_id' => '10',
             'user_id' => '10',
             'round_id' => '1',
-            'jury_id' => NULL,
+            'jury_id' => 31,
             'judge_id' => NULL,
             'audition_admin_id' => NULL,
             'video' => 'uploads/videos/auditions/165278303645250.Nature Beautiful short video 720p HD.mp4',
@@ -111,7 +91,7 @@ class AuditionUploadVideoSeeder extends Seeder
             'audition_id' => '10',
             'user_id' => '10',
             'round_id' => '1',
-            'jury_id' => NULL,
+            'jury_id' => 31,
             'judge_id' => NULL,
             'audition_admin_id' => NULL,
             'video' => 'uploads/videos/auditions/165278303646291.ami_probashi.mp4',
@@ -129,7 +109,7 @@ class AuditionUploadVideoSeeder extends Seeder
             'audition_id' => '10',
             'user_id' => '52',
             'round_id' => '1',
-            'jury_id' => NULL,
+            'jury_id' => 31,
             'judge_id' => NULL,
             'audition_admin_id' => NULL,
             'video' => 'uploads/videos/auditions/165278312727250.audition.mp4',
@@ -148,7 +128,7 @@ class AuditionUploadVideoSeeder extends Seeder
             'audition_id' => '10',
             'user_id' => '52',
             'round_id' => '1',
-            'jury_id' => NULL,
+            'jury_id' => 31,
             'judge_id' => NULL,
             'audition_admin_id' => NULL,
             'video' => 'uploads/videos/auditions/165278312796731.ami_probashi.mp4',

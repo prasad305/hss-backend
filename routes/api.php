@@ -522,7 +522,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 
 
     Route::post('audition-admin/audition-round-instruction', [AuditionController::class, 'saveRoundInstruction']);
-    
+
     Route::get('audition-admin/jury-num-assinged-videos/{audition_id}/{round_rule_id}', [AuditionController::class, 'juryNumberOfVideosApply']);
     Route::post('audition-admin/submit-jury-assign-video', [AuditionController::class, 'updateJuryAssignVideo']);
     Route::post('audition-admin/submit-jury-auto-assign-video', [AuditionController::class, 'updateJuryAutoAssignVideo']);
@@ -547,7 +547,8 @@ Route::middleware(['auth:sanctum', 'isAPIJuryBoard'])->group(function () {
 
     Route::get('/jury/audition/lives', [JuryAuditionController::class, 'live']);
     Route::get('/jury/audition/singleAuditionVideos/{audition_id}', [JuryAuditionController::class, 'singleAuditionVideos']);
-
+    Route::get('/jury/audition/singleAuditionVideoWithRoundId/{audition_id}/{audition_round_id}', [JuryAuditionController::class, 'singleAuditionVideoWithRoundId']);
+    Route::post('/jury/audition/videoStatusChange', [JuryAuditionController::class, 'videoStatusChange']);
 });
 
 

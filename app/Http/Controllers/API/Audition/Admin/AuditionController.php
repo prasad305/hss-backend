@@ -29,7 +29,7 @@ class AuditionController extends Controller
 
         $validator = Validator::make($request->all(), [
             'video_id' => 'required',
-            'comment' => 'required',
+            // 'comment' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -918,17 +918,17 @@ class AuditionController extends Controller
         }
     }
 
-   
+
 
 
     public function juryNumberOfVideosApply($audition_id,$round_rules_id){
         $audition = Audition::find($audition_id);
-        
+
         $juryIds = [];
         foreach ($audition->assignedJuries as $key => $jury) {
-            
+
             if(AuditionUploadVideo::where('jury_id',$jury->jury_id)->count() > 0){
-                
+
             }else{
                 array_push($juryIds,$jury->jury_id);
             }
@@ -991,7 +991,7 @@ class AuditionController extends Controller
         }
     }
     public function updateJuryAutoAssignVideo(Request $request){
-        
+
         $validator = Validator::make($request->all(), [
             'num_of_videos' => 'required',
         ]);
