@@ -12,7 +12,7 @@ class Audition extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $with = ['assignedJudges','participant','auditionRules','assignedJuries'];
+    protected $with = ['assignedJudges','participant','auditionRules','assignedJuries','uploadedVideos'];
 
 
     public function category()

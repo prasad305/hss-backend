@@ -917,4 +917,106 @@ class AuditionController extends Controller
             ]);
         }
     }
+
+   
+
+
+    public function juryNumberOfVideosApply($audition_id,$round_rules_id){
+        $audition = Audition::find($audition_id);
+        
+        $juryIds = [];
+        foreach ($audition->assignedJuries as $key => $jury) {
+            
+            if(AuditionUploadVideo::where('jury_id',$jury->jury_id)->count() > 0){
+                
+            }else{
+                array_push($juryIds,$jury->jury_id);
+            }
+        }
+
+
+
+
+        $accepted_videos = $audition->uploadedVideos->where('approval_status',1)->where('round_id',$round_rules_id)->where('jury_id',null);
+        $assigned_juries = AuditionAssignJury::whereIn('jury_id',$juryIds)->where('audition_id',$audition_id)->get();
+        $total_jury = count($assigned_juries);
+        $total_video = count($accepted_videos);
+
+        $videoPackArray = [];
+       if($total_jury > 0){
+            $video_pack = floor($total_video / $total_jury);
+            for ($total_jury; $total_jury > 0; $total_jury--) {
+
+
+                if($total_jury == 1){
+                    array_push($videoPackArray, $total_video);
+                }else{
+                    array_push($videoPackArray, $video_pack);
+                    $total_video = $total_video - $video_pack;
+                }
+            }
+       }
+
+       return response()->json([
+            'status' => 200,
+            'videoPack' => $videoPackArray,
+            'assigned_juries' => $assigned_juries,
+
+        ]);
+
+
+    }
+
+    public function updateJuryAssignVideo(Request $request){
+        $validator = Validator::make($request->all(), [
+            'num_of_videos' => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            AuditionUploadVideo::where([['audition_id',$request->audition_id],['round_id',$request->round_rules_id],['jury_id',null]])->take($request->num_of_videos)->update([
+                'jury_id' => $request->jury_id,
+                'jury_mark_deadline' => $request->uploade_date,
+            ]);
+            return response()->json([
+                'status' => 200,
+                'message' => 'Video Assign To Jury Successfully!',
+            ]);
+
+        }
+    }
+    public function updateJuryAutoAssignVideo(Request $request){
+        
+        $validator = Validator::make($request->all(), [
+            'num_of_videos' => 'required',
+        ]);
+        $audition = Audition::find($request->audition_id);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $juryIds = $audition->uploadedVideos->whereIn('jury_id',$audition->assignedJuries->pluck('jury_id'))->pluck('jury_id');
+
+            $requiredJuries = $audition->assignedJuries->whereNotIn('jury_id',$juryIds)->pluck('jury_id');
+                foreach ($request->num_of_videos as $key => $num_of_video) {
+                    AuditionUploadVideo::where([['audition_id',$request->audition_id],['round_id',$request->round_rules_id],['jury_id',null]])->take($num_of_video)->update([
+                        'jury_id' => $requiredJuries[$key],
+                        'jury_mark_deadline' => $request->uploade_date,
+                    ]);
+                }
+            return response()->json([
+                'status' => 200,
+                'message' => 'Video Assign To Jury Successfully!',
+            ]);
+
+        }
+    }
 }

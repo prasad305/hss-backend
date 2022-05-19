@@ -26,6 +26,8 @@ class AuditionAdminController extends Controller
     }
 
 
+
+    
     public function juryPublished($audition_id)
     {
         $assignJuries = AuditionParticipant::select('jury_id')->get();
@@ -66,6 +68,9 @@ class AuditionAdminController extends Controller
 
         return view('ManagerAdmin.Audition.jury_published',$data);
     }
+
+
+
 
     public function assinged()
     {

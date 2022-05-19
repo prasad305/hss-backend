@@ -522,6 +522,12 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 
 
     Route::post('audition-admin/audition-round-instruction', [AuditionController::class, 'saveRoundInstruction']);
+    
+    Route::get('audition-admin/jury-num-assinged-videos/{audition_id}/{round_rule_id}', [AuditionController::class, 'juryNumberOfVideosApply']);
+    Route::post('audition-admin/submit-jury-assign-video', [AuditionController::class, 'updateJuryAssignVideo']);
+    Route::post('audition-admin/submit-jury-auto-assign-video', [AuditionController::class, 'updateJuryAutoAssignVideo']);
+
+
 
 
 
