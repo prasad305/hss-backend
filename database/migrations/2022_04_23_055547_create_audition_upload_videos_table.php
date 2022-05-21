@@ -24,6 +24,7 @@ class CreateAuditionUploadVideosTable extends Migration
             $table->string('video')->nullable();
 
             $table->integer('approval_status')->nullable()->default(0)->comment('0 = not reviewed , 1 = approved, 2 = rejected');
+            $table->integer('jury_approval_status')->nullable()->default(0);
             $table->integer('judge_approval_status')->nullable()->default(0);
 
             $table->string('audition_admin_comment')->nullable();
