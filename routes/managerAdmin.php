@@ -75,12 +75,14 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('category/{id}', [LiveEventController::class, 'events'])->name('events');
 
 
-    // Admin route
+    //For Super Star Admin route
     Route::resource('admin', AdminController::class);
-    // Route::post('admin/active/{id}', [AdminController::class, 'activeNow'])->name('admin.activeNow');
-    // Route::post('admin/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('admin.inactiveNow');
-    Route::get('admin-assinged', [AdminController::class, 'assinged'])->name('admin_assinged');
-    Route::get('admin-free', [AdminController::class, 'notAssinged'])->name('admin_notAssinged');
+    Route::post('admin/active/{id}', [AdminController::class, 'activeNow'])->name('admin.activeNow');
+    Route::post('admin/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('admin.inactiveNow');
+    // Route::get('admin-assinged', [AdminController::class, 'assinged'])->name('admin_assinged');
+    // Route::get('admin-free', [AdminController::class, 'notAssinged'])->name('admin_notAssinged');
+
+
 
     // Audition Admin route
     Route::resource('auditionAdmin', AuditionAdminController::class);

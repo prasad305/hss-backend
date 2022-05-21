@@ -59,7 +59,7 @@
     });
 
     $.ajax({
-        url: "{{ route('managerAdmin.auditionAdmin.update',$admin->id) }}",// your request url
+        url: "{{ route('managerAdmin.admin.update',$admin->id) }}",// your request url
         data: formData,
         processData: false,
         contentType: false,

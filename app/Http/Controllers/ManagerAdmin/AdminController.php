@@ -42,24 +42,16 @@ class AdminController extends Controller
         return view('ManagerAdmin.admins.index', compact('admins'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         return view('ManagerAdmin.admins.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+   
     public function store(Request $request)
     {
+        
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -68,16 +60,14 @@ class AdminController extends Controller
         ]);
 
         $user = new User();
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->phone = $request->phone;
-        $user->email = $request->email;
+        $user->fill($request->except(['_token','image','cover']));
         $user->password = Hash::make('12345');
         $user->user_type = 'admin'; // Admin user_type == 'admin'
         $user->otp = rand(100000, 999999);
         // $user->status = 0;
 
         if ($request->hasFile('image')) {
+
             $image             = $request->file('image');
             $folder_path       = 'uploads/images/users/';
             $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
@@ -87,6 +77,7 @@ class AdminController extends Controller
         }
 
         if ($request->hasFile('cover')) {
+
             $image             = $request->file('cover');
             $folder_path       = 'uploads/images/users/';
             $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
@@ -202,7 +193,15 @@ class AdminController extends Controller
     public function destroy(User $admin)
     {
         try {
+            if ($admin->cover_photo != null)
+                File::delete(public_path($admin->cover_photo)); 
+
+            if ($admin->image != null)
+                File::delete(public_path($admin->image)); 
+
+            
             $admin->delete();
+            
             return response()->json([
                 'type' => 'success',
                 'message' => 'Successfully Deleted'
@@ -218,7 +217,7 @@ class AdminController extends Controller
     public function activeNow($id)
     {
         $user = User::findOrFail($id);
-        $user->status = 1;
+        $user->active_status = 1;
         try {
             $user->save();
             return response()->json([
@@ -236,7 +235,7 @@ class AdminController extends Controller
     public function inactiveNow($id)
     {
         $user = User::findOrFail($id);
-        $user->status = 0;
+        $user->active_status = 0;
         try {
             $user->save();
             return response()->json([

@@ -4,6 +4,13 @@
  Admin
 @endpush
 
+@push('css')
+      <!-- DataTables -->
+  <link rel="stylesheet" href="{{asset('assets/manager-admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{asset('assets/manager-admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{asset('assets/manager-admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
+@endpush
+
 @section('content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -24,74 +31,94 @@
 <!-- /.content-header -->
 
 <div class="content">
-
     <div class="container-fluid">
-
-        <div class="row float-right">
-            <button type="button" class="btn btn-success btn-sm mr-4" data-toggle="dropdown"
-                style="float: right; margin-bottom: 10px;">
-                <i class=" fa fa-filter"></i> Filter
-            </button>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="{{ route('managerAdmin.admin_assinged') }}">Show assigned audition admins</a>
-                <a class="dropdown-item" href="{{ route('managerAdmin.admin_notAssinged') }}">Show available audition admins</a>
-                <a class="dropdown-item" href="{{ route('managerAdmin.admin.index') }}">All  Admins</a>
-            </div>
-            <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;" onclick=""><i
-                    class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
-            <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;"
-                onclick="Show('New  Admin','{{ route('managerAdmin.admin.create') }}')"><i
-                    class=" fa fa-plus"></i>&nbsp;Add New</a>
-        </div>
-
-        <!-- =========================================================== -->
-        <h4 class="mb-2"> Admin List</h4>
-
-        <hr>
-        <div class="row">
-
-            @foreach ($admins as $admin)
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box shadow-none bg-light pt-4 pb-4">
-                    <img src="{{ asset($admin->image ?? get_static_option('user')) }}" alt="Admin Image"
-                        class="img-fluid AdminImg mr-3 mt-4">
-
-                    <div class="px-2" style="border-left: 1px solid gray">
-
-                        <a href="{{ route('managerAdmin.admin.show', $admin->id) }}">
-                            <span class="info-box-text AdminName">
-                                <h5>{{ $admin->first_name }} {{ $admin->last_name }}</h5>
-                            </span>
-                            <b class="AdminMusic">Music</b> <br />
-                        </a>
-                        {{-- <p>Music</p> --}}
-
-                        @if ($admin->assign)
-                        <span class="right badge bg-danger my-2">Assigned</span>
-                        <i class="fa-solid fa-bahai px-2 text-danger"></i><br>
-                        @else
-                        {{-- <span class="right badge border border-success my-2">Free Now</span> 🏳️<br> --}}
-                        @endif
-
-                        {{-- <p class="AtifAdmin">Atif Aslam</p> --}}
-                        {{-- <p class="{{ $admin->status == 0 ? 'text-danger' : 'text-success' }}">{{ $admin->status == 0 ? 'Pending For Approval' : 'Approved' }}</p> --}}
-                        <a class="btn btn-sm btn-info"
-                            onclick="Show('Edit  Admin','{{ route('managerAdmin.admin.edit', $admin->id) }}')"><i
-                                class="fa fa-edit text-white"></i></a>
-
-                        <button class="btn btn-sm btn-warning" onclick="delete_function(this)"
-                            value="{{ route('managerAdmin.admin.destroy', $admin->id) }}"><i class="fa fa-trash"></i>
-                        </button>
-                    </div>
-                    <!-- /.info-box-content -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-header">
+                    {{-- <h3 class="card-title">DataTable with default features</h3> --}}
+                    <a class="btn btn-success btn-sm" style="float: right;"
+                        onclick="Show('New Admin','{{ route('managerAdmin.admin.create') }}')"><i
+                            class=" fa fa-plus"></i>&nbsp;New Admin</a>
                 </div>
-                <!-- /.info-box -->
             </div>
-            @endforeach
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>SL.</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Image</th>
+                        <th>Cover</th>
+                        <th>Approve Status</th>
+                        <th>Active Status</th>
+                        <th style="width: 150px">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-        </div>
+                    @foreach ($admins as $admin)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $admin->first_name . ' ' . $admin->last_name }}</td>
+                            <td>{{ $admin->email }}</td>
+                            <td>{{ $admin->phone }}</td>
+                            <td>
+                                <img src="{{ asset($admin->image) }}" alt="" height="50px" width="50px">
+                            </td>
+                            <td>
+                                <img src="{{ asset($admin->cover_photo) }}" alt="" height="50px" width="50px">
+                            </td>
 
-</div> <!-- container -->
+                            <td>
+                                @if ($admin->status == 0)
+                                    <span class="badge badge-danger">Pending</span>
+                                @endif
+                                @if ($admin->status == 1)
+                                    <span class="badge badge-success">Approved</span>
+                                @endif
+                            </td>
+                            
+                            <td>
+                                @if ($admin->active_status == 0)
+                                    <span class="badge badge-danger">InActive</span>
+                                @endif
+                                @if ($admin->active_status == 1)
+                                    <span class="badge badge-success">Active</span>
+                                @endif
+                            </td>
+
+                            <td style="width: 150px">
+                                @if ($admin->active_status == 0)
+                                <button class="btn btn-sm btn-success" onclick="activeNow(this)" value="{{ route('managerAdmin.admin.activeNow', $admin->id) }}">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </button>
+                            @elseif($admin->active_status == 1)
+                                <button class="btn btn-sm btn-danger" onclick="inactiveNow(this)" value="{{ route('managerAdmin.admin.inactiveNow', $admin->id) }}">
+                                    <i class="fa fa-close"></i>
+                                </button>
+                            @endif
+                                <a class="btn btn-sm btn-info"
+                                    onclick="Show('Edit Audition Admin','{{ route('managerAdmin.admin.edit', $admin->id) }}')"><i
+                                        class="fa fa-edit text-white"></i>
+                                </a>
+                                <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
+                                    value="{{ route('managerAdmin.admin.destroy', $admin) }}"><i
+                                        class="fa fa-trash"></i>
+                                </button>
+
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+           
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+    </div> <!-- container -->
 </div> <!-- content -->
 
 <style>
@@ -213,3 +240,35 @@
     }
 </script>
 @endsection
+
+@push('js')
+<script src="{{asset('assets/manager-admin/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/manager-admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('assets/manager-admin/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('assets/manager-admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+<script src="{{asset('assets/manager-admin/plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('assets/manager-admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{asset('assets/manager-admin/plugins/jszip/jszip.min.js')}}"></script>
+<script src="{{asset('assets/manager-admin/plugins/pdfmake/pdfmake.min.js')}}"></script>
+<script src="{{asset('assets/manager-admin/plugins/pdfmake/vfs_fonts.js')}}"></script>
+<script src="{{asset('assets/manager-admin/plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+<script src="{{asset('assets/manager-admin/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+<script src="{{asset('assets/manager-admin/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
+<script>
+    $(function () {
+      $("#example1").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+  </script>
+@endpush

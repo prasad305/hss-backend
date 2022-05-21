@@ -23,26 +23,23 @@
     </div>
     <span class="row">
         <div class="form-group col-md-6">
-            <label for="icon">image</label>
-            <br><img id="icon1" onchange="validateMultipleImage('icon1')" alt="image" src="" height="180px" width="180px" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required/>
-
+            <label for="image">Image</label>
+            <br><img id="image1" onchange="validateMultipleImage('image1')" alt="icon" src="{{ asset(get_static_option('no_image')) }}" height="180px" width="180px" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required/>
             <br><br>
+            <input type="file" class="mt-2" id="image" name="image" onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
+      </div>
+      <div class="form-group col-md-6">
+          <label for="image">Cover</label>
+          <br><img id="image2" onchange="validateMultipleImage('image2')" alt="icon" src="{{asset(get_static_option('no_image'))}}" height="180px" width="180px" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required/>
 
-            <input type="file" class="mt-2" id="image" name="image" onchange="document.getElementById('icon1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
+          <br><br>
 
-          </div>
-          <div class="form-group col-md-6">
-              <label for="image">Cover</label>
-              <br><img id="image1" onchange="validateMultipleImage('image1')" alt="icon" src="" height="180px" width="180px" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required/>
+          <input type="file" class="mt-2" id="cover" name="cover" onchange="document.getElementById('image2').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
 
-              <br><br>
-
-              <input type="file" class="mt-2" id="cover" name="cover" onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
-
-        </div>
+    </div>
     </span>
 
-    <button type="submit"  class="btn btn-primary" id="btnSendData"><i class="fa fa-save"></i>&nbsp; Save Audition Admin</button>
+    <button type="submit"  class="btn btn-primary" id="btnSendData"><i class="fa fa-save"></i>&nbsp; Save Admin</button>
 
 </form>
 
@@ -59,7 +56,7 @@
         }
     });
     $.ajax({
-        url: "{{route('managerAdmin.audition.auditionAdmin.store')}}",// your request url
+        url: "{{route('managerAdmin.admin.store')}}",// your request url
         data: formData,
         processData: false,
         contentType: false,
@@ -67,7 +64,7 @@
         success: function (data) {
             Swal.fire(
                 'Success!',
-                'Audition Admin has been Added. ' + data.message,
+                'Admin has been Added. ' + data.message,
                 'success'
             )
             setTimeout(function() {
