@@ -9,15 +9,39 @@ use Illuminate\Support\Str;
 
 class SubCategorySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
+   
     public function run(Faker $faker)
     {
+        // for flim star //
         $SubCategorty = new SubCategory();
         $SubCategorty->category_id = 1;
+        $SubCategorty->name = 'Bollywood';
+        $SubCategorty->slug = 'bollywood';
+        $SubCategorty->icon = 'uploads/category/icon/qycnhsXozmXY9CKJqdrN-1639889893.png';
+        $SubCategorty->image = 'uploads/category/icon/qycnhsXozmXY9CKJqdrN-1639889893.png';
+        $SubCategorty->status = true;
+        $SubCategorty->save();
+
+        $SubCategorty = new SubCategory();
+        $SubCategorty->category_id = 1;
+        $SubCategorty->name = 'Dhallywood';
+        $SubCategorty->slug = 'dhallywood';
+        $SubCategorty->icon = 'uploads/category/icon/qycnhsXozmXY9CKJqdrN-1639889893.png';
+        $SubCategorty->image = 'uploads/category/icon/qycnhsXozmXY9CKJqdrN-1639889893.png';
+        $SubCategorty->status = true;
+        $SubCategorty->save();
+
+        $SubCategorty = new SubCategory();
+        $SubCategorty->category_id = 1;
+        $SubCategorty->name = 'Tollywood';
+        $SubCategorty->slug = 'tollywood';
+        $SubCategorty->icon = 'uploads/category/icon/qycnhsXozmXY9CKJqdrN-1639889893.png';
+        $SubCategorty->image = 'uploads/category/icon/qycnhsXozmXY9CKJqdrN-1639889893.png';
+        $SubCategorty->status = true;
+        $SubCategorty->save();
+
+        $SubCategorty = new SubCategory();
+        $SubCategorty->category_id = 2;
         $SubCategorty->name = 'Football';
         $SubCategorty->slug = 'football';
         $SubCategorty->icon = 'uploads/category/icon/qycnhsXozmXY9CKJqdrN-1639889893.png';
@@ -26,7 +50,7 @@ class SubCategorySeeder extends Seeder
         $SubCategorty->save();
 
         $SubCategorty = new SubCategory();
-        $SubCategorty->category_id = 1;
+        $SubCategorty->category_id = 2;
         $SubCategorty->name = 'Cricket';
         $SubCategorty->slug = 'cricket';
         $SubCategorty->icon = 'uploads/category/icon/tIJUBSq67x1o03zWRi00-1639890035.png';
@@ -35,18 +59,28 @@ class SubCategorySeeder extends Seeder
         $SubCategorty->save();
 
         $SubCategorty = new SubCategory();
-        $SubCategorty->category_id = 1;
-        $SubCategorty->name = 'Tennis';
-        $SubCategorty->slug = 'Tennis';
+        $SubCategorty->category_id = 2;
+        $SubCategorty->name = 'Badminton';
+        $SubCategorty->slug = 'badminton';
         $SubCategorty->icon = 'uploads/category/icon/ripCtvWh2gH5cNaoR905-1639890829.png';
         $SubCategorty->image = 'uploads/category/icon/ripCtvWh2gH5cNaoR905-1639890829.png';
         $SubCategorty->status = true;
         $SubCategorty->save();
 
+
         $SubCategorty = new SubCategory();
-        $SubCategorty->category_id = 1;
-        $SubCategorty->name = 'Others';
-        $SubCategorty->slug = 'others';
+        $SubCategorty->category_id = 3;
+        $SubCategorty->name = 'Folk Music';
+        $SubCategorty->slug = 'folk-music';
+        $SubCategorty->icon = 'uploads/category/icon/qycnhsXozmXY9CKJqdrN-1639889893.png';
+        $SubCategorty->image = 'uploads/category/icon/qycnhsXozmXY9CKJqdrN-1639889893.png';
+        $SubCategorty->status = true;
+        $SubCategorty->save();
+
+        $SubCategorty = new SubCategory();
+        $SubCategorty->category_id = 3;
+        $SubCategorty->name = 'Rock Music';
+        $SubCategorty->slug = 'rock-music';
         $SubCategorty->icon = 'uploads/category/icon/qycnhsXozmXY9CKJqdrN-1639889893.png';
         $SubCategorty->image = 'uploads/category/icon/qycnhsXozmXY9CKJqdrN-1639889893.png';
         $SubCategorty->status = true;
