@@ -18,7 +18,16 @@
                 <i class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-th"></i>
                 <p>
                     Admins
-                    <span class="right badge badge-danger">New</span>
+                    {{-- <span class="right badge badge-danger">New</span> --}}
+                </p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{{ route('managerAdmin.star.index') }}" class="nav-link">
+                <i class="nav-icon {{ Request::routeIs('managerAdmin.star.index') ? 'active' : '' }} fas fa-th"></i>
+                <p>
+                    Super Stars
                 </p>
             </a>
         </li>

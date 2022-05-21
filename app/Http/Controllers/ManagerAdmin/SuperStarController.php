@@ -4,51 +4,22 @@ namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Audition\AssignAdmin;
-use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\File;
 
-class AdminController extends Controller
+class SuperStarController extends Controller
 {
     public function index()
     {
-        $admins = User::where('user_type', 'admin')->orderBy('id', 'DESC')->get();
-        return view('ManagerAdmin.admins.index', compact('admins'));
+        $stars = User::where('user_type', 'star')->orderBy('id', 'DESC')->get();
+        return view('ManagerAdmin.stars.index', compact('stars'));
     }
-
-    public function assinged()
-    {
-        $assignAdmins = AssignAdmin::select('assign_person')->get();
-
-        $userIds = [];
-        foreach ($assignAdmins as $assignAdmin) {
-            array_push($userIds, $assignAdmin->assign_person);
-        }
-        $admins = User::whereIn('id', $userIds)->orderBy('id', 'DESC')->get();
-        return view('ManagerAdmin.admins.index', compact('admins'));
-    }
-
-    public function notAssinged()
-    {
-        $assignAdmins = AssignAdmin::select('assign_person')->get();
-
-        $userIds = [];
-        foreach ($assignAdmins as $assignAdmin) {
-            array_push($userIds, $assignAdmin->assign_person);
-        }
-        $admins = User::whereNotIn('id', $userIds)->where('user_type', 'admin')->orderBy('id', 'DESC')->get();
-        return view('ManagerAdmin.admins.index', compact('admins'));
-    }
-
 
     public function create()
-    {   $data = [
-            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBY('id','desc')->get(),
-        ];
-        return view('ManagerAdmin.admins.create',$data);
+    {
+        return view('ManagerAdmin.stars.create');
     }
 
    
@@ -67,7 +38,6 @@ class AdminController extends Controller
         $user->password = Hash::make('12345');
         $user->user_type = 'admin'; // Admin user_type == 'admin'
         $user->otp = rand(100000, 999999);
-        $user->sub_category_id = $request->sub_category_id;
         // $user->status = 0;
 
         if ($request->hasFile('image')) {
@@ -105,37 +75,21 @@ class AdminController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $admin
-     * @return \Illuminate\Http\Response
-     */
+  
     public function show(User $admin)
     {
  
-        return view('ManagerAdmin.admins.details')->with('auditionAdmin', $admin);
+        return view('ManagerAdmin.stars.details')->with('auditionAdmin', $admin);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $admin
-     * @return \Illuminate\Http\Response
-     */
+ 
     public function edit(User $admin)
     {
         $data['admin'] = $admin;
-        return view('ManagerAdmin.admins.edit', $data);
+        return view('ManagerAdmin.stars.edit', $data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $admin
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -188,12 +142,7 @@ class AdminController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $admin
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy(User $admin)
     {
         try {

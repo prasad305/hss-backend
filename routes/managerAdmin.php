@@ -14,6 +14,7 @@ use App\Http\Controllers\ManagerAdmin\FanGroupController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\ManagerAdmin\AuctionController;
 use App\Http\Controllers\ManagerAdmin\PromoVideoController;
+use App\Http\Controllers\ManagerAdmin\SuperStarController;
 use Illuminate\Support\Facades\Route;
 
 // manager Admin route
@@ -79,6 +80,14 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::resource('admin', AdminController::class);
     Route::post('admin/active/{id}', [AdminController::class, 'activeNow'])->name('admin.activeNow');
     Route::post('admin/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('admin.inactiveNow');
+    
+    //For Super Star route
+    Route::resource('star', SuperStarController::class);
+    Route::post('admin/active/{id}', [AdminController::class, 'activeNow'])->name('admin.activeNow');
+    Route::post('admin/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('admin.inactiveNow');
+
+
+
     // Route::get('admin-assinged', [AdminController::class, 'assinged'])->name('admin_assinged');
     // Route::get('admin-free', [AdminController::class, 'notAssinged'])->name('admin_notAssinged');
 
