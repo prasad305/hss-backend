@@ -107,6 +107,17 @@ class LearningSessionController extends Controller
         ]);
     }
 
+    public function evaluation_list()
+    {
+        $events = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', 3]]);
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
+        ]);
+    }
+
     public function completed_list()
     {
         $events = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', 9]]);

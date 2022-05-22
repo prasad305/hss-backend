@@ -253,6 +253,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
     Route::get('/admin/learning_session/pending', [LearningSessionController::class, 'pending_list']);
     Route::get('/admin/learning_session/live', [LearningSessionController::class, 'live_list']);
+    Route::get('/admin/learning_session/evaluation', [LearningSessionController::class, 'evaluation_list']);
     Route::get('/admin/learning_session/completed', [LearningSessionController::class, 'completed_list']);
 
     Route::get('/admin/learning_session/pending/{id}', [LearningSessionController::class, 'pending_details']);

@@ -34,7 +34,7 @@ class CreateLearningSessionsTable extends Migration
             $table->float('fee')->nullable();
             $table->string('room_id')->nullable();
             $table->float('star_approval')->default(0)->comment('0 = deactive, 1 = active');
-            $table->integer('status')->default(0)->comment('0 = pending, 1 = star_approval, 2 = posted by Manager Admin, 9 = completed, 10 = removed, 11 = rejeced by Star, 22 = rejected by Manager Admin');
+            $table->integer('status')->default(0)->comment('0 = pending, 1 = star_approval, 2 = posted by Manager Admin, 3 = evaluation, 9 = completed, 10 = removed, 11 = rejeced by Star, 22 = rejected by Manager Admin');
             $table->float('total_amount')->nullable();
             $table->timestamps();
         });
