@@ -15,6 +15,10 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('parent_user')->nullable()->comment('this is for star admin id'); 
+            $table->unsignedBigInteger('user_creator_id')->nullable()->comment('this is for creator or manager admin id');
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('sub_category_id')->nullable();
             $table->string('username')->nullable()->unique();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
@@ -26,13 +30,12 @@ class CreateUsersTable extends Migration
             $table->string('image')->nullable();
             $table->string('fan_group')->nullable();
             $table->string('cover_photo')->nullable();
-            $table->integer('status')->nullable();
             $table->string('email_send_status')->nullable();
             $table->string('user_type')->nullable();
             $table->string('password')->nullable();
-            $table->unsignedBigInteger('parent_user')->nullable();
-            $table->unsignedBigInteger('category_id')->nullable();
             $table->boolean('is_online')->default(0);
+            $table->integer('active_status')->nullable()->comment('1 = active, 0 = inactive');
+            $table->integer('status')->nullable()->comment('0= inapproved, 1 = approved');
             $table->rememberToken();
             $table->timestamps();
         });

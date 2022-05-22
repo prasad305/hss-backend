@@ -1,16 +1,5 @@
 <form id="create-form" enctype="multipart/form-data">
     @csrf
-    <div class="col-md-10 offset-md-1">
-        <label for="first_name">Select Sub Category</label>
-        <select name="sub_category_id" id="sub_category_id" class="form-control">
-            <option value="">Select One</option>
-            @if(isset($sub_categories[0]))
-                @foreach ($sub_categories as $key => $subCategory)
-                    <option value="{{$subCategory->id}}">{{$subCategory->name}}</option>
-                @endforeach
-            @endif
-        </select>
-   </div>
     <div class="row form-group">
         <div class="col-md-6">
               <label for="first_name">First Name</label>
@@ -24,12 +13,8 @@
 
     <div class="form-group row">
         <div class="col-md-6">
-          <label for="phone">Phone</label>
-          <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter Audition Admin Phone">
-        </div>
-        <div class="col-md-6">
-             <label for="email">Email</label>
-             <input type="text" class="form-control" id="email" name="email" placeholder="Enter Audition Admin Email">
+          <label for="phone">DOB</label>
+          <input type="text" class="form-control" id="dob" name="dob" placeholder="Enter Date Of Birth">
         </div>
     </div>
     <span class="row">

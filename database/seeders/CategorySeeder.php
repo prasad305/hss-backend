@@ -19,16 +19,41 @@ class CategorySeeder extends Seeder
         
 
             $Categorty = new Category();
-            $Categorty->name = 'Sports';
-            $Categorty->slug = 'Sports';
+            $Categorty->name = 'Flim Stars';
+            $Categorty->slug = 'flim-stars';
             $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
             $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
             $Categorty->status = true;
             $Categorty->save();
 
             $Categorty = new Category();
-            $Categorty->name = 'Music';
-            $Categorty->slug = 'Music';
+            
+            $Categorty->name = 'Sports';
+            $Categorty->slug = 'sports';
+            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
+            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
+            $Categorty->status = true;
+            $Categorty->save();
+
+            $Categorty = new Category();
+            $Categorty->name = 'Musician';
+            $Categorty->slug = 'musician';
+            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
+            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
+            $Categorty->status = true;
+            $Categorty->save();
+
+            $Categorty = new Category();
+            $Categorty->name = 'Dancers';
+            $Categorty->slug = 'dancers';
+            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
+            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
+            $Categorty->status = true;
+            $Categorty->save();
+
+            $Categorty = new Category();
+            $Categorty->name = 'Chefs';
+            $Categorty->slug = 'chefs';
             $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
             $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
             $Categorty->status = true;
@@ -36,23 +61,7 @@ class CategorySeeder extends Seeder
 
             $Categorty = new Category();
             $Categorty->name = 'Drama';
-            $Categorty->slug = 'Drama';
-            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
-            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
-            $Categorty->status = true;
-            $Categorty->save();
-
-            $Categorty = new Category();
-            $Categorty->name = 'Movie';
-            $Categorty->slug = 'Movie';
-            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
-            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
-            $Categorty->status = true;
-            $Categorty->save();
-
-            $Categorty = new Category();
-            $Categorty->name = 'Comedy';
-            $Categorty->slug = 'Comedy';
+            $Categorty->slug = 'drama';
             $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
             $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
             $Categorty->status = true;
@@ -60,23 +69,31 @@ class CategorySeeder extends Seeder
 
             $Categorty = new Category();
             $Categorty->name = 'Tech';
-            $Categorty->slug = 'Tech';
+            $Categorty->slug = 'tech';
             $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
             $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
             $Categorty->status = true;
             $Categorty->save();
 
             $Categorty = new Category();
-            $Categorty->name = 'Polytics';
-            $Categorty->slug = 'Polytics';
+            $Categorty->name = 'Motivational Speaker';
+            $Categorty->slug = 'motivational-speaker';
             $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
             $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
             $Categorty->status = true;
             $Categorty->save();
 
             $Categorty = new Category();
-            $Categorty->name = 'Dance';
-            $Categorty->slug = 'Dance';
+            $Categorty->name = 'Religion';
+            $Categorty->slug = 'religion';
+            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
+            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
+            $Categorty->status = true;
+            $Categorty->save();
+
+            $Categorty = new Category();
+            $Categorty->name = 'Comedians';
+            $Categorty->slug = 'comedians';
             $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
             $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
             $Categorty->status = true;

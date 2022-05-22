@@ -17,12 +17,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0"> Admin</h1>
+                <h1 class="m-0"> Star</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active"> Admin List</li>
+                    <li class="breadcrumb-item active"> Star List</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -37,8 +37,8 @@
                 <div class="card-header">
                     {{-- <h3 class="card-title">DataTable with default features</h3> --}}
                     <a class="btn btn-success btn-sm" style="float: right;"
-                        onclick="Show('New Admin','{{ route('managerAdmin.admin.create') }}')"><i
-                            class=" fa fa-plus"></i>&nbsp;New Admin</a>
+                        onclick="Show('New Star','{{ route('managerAdmin.star.create') }}')"><i
+                            class=" fa fa-plus"></i>&nbsp;New Star</a>
                 </div>
             </div>
             <!-- /.card-header -->
@@ -48,10 +48,8 @@
                     <tr>
                         <th>SL.</th>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Image</th>
-                        <th>Cover</th>
+                        <th>DOB</th>
+                        <th>Address</th>
                         <th>Approve Status</th>
                         <th>Active Status</th>
                         <th style="width: 150px">Action</th>
@@ -59,53 +57,46 @@
                 </thead>
                 <tbody>
 
-                    @foreach ($admins as $admin)
+                    @foreach ($stars as $star)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $admin->first_name . ' ' . $admin->last_name }}</td>
-                            <td>{{ $admin->email }}</td>
-                            <td>{{ $admin->phone }}</td>
+                            <td>{{ $star->first_name . ' ' . $star->last_name }}</td>
+                            <td>{{ $star->adderess }}</td>
+                            <td>{{ $star->phone }}</td>
                             <td>
-                                <img src="{{ asset($admin->image) }}" alt="" height="50px" width="50px">
-                            </td>
-                            <td>
-                                <img src="{{ asset($admin->cover_photo) }}" alt="" height="50px" width="50px">
-                            </td>
-
-                            <td>
-                                @if ($admin->status == 0)
+                                @if ($star->status == 0)
                                     <span class="badge badge-danger">Pending</span>
                                 @endif
-                                @if ($admin->status == 1)
+                                @if ($star->status == 1)
                                     <span class="badge badge-success">Approved</span>
                                 @endif
                             </td>
                             
                             <td>
-                                @if ($admin->active_status == 0)
+                                @if ($star->active_status == 0)
                                     <span class="badge badge-danger">InActive</span>
                                 @endif
-                                @if ($admin->active_status == 1)
+                                @if ($star->active_status == 1)
                                     <span class="badge badge-success">Active</span>
                                 @endif
                             </td>
 
                             <td style="width: 150px">
-                                @if ($admin->active_status == 0)
-                                <button class="btn btn-sm btn-success" onclick="activeNow(this)" value="{{ route('managerAdmin.admin.activeNow', $admin->id) }}">
+                                @if ($star->active_status == 0)
+                                <button class="btn btn-sm btn-success" onclick="activeNow(this)" value="{{ route('managerAdmin.admin.activeNow', $star->id) }}">
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 </button>
-                            @elseif($admin->active_status == 1)
-                                <button class="btn btn-sm btn-danger" onclick="inactiveNow(this)" value="{{ route('managerAdmin.admin.inactiveNow', $admin->id) }}">
+                            @elseif($star->active_status == 1)
+                                <button class="btn btn-sm btn-danger" onclick="inactiveNow(this)" value="{{ route('managerAdmin.admin.inactiveNow', $star->id) }}">
                                     <i class="fa fa-close"></i>
                                 </button>
                             @endif
                                 <a class="btn btn-sm btn-info"
-                                    onclick="Show('Edit Audition Admin','{{ route('managerAdmin.admin.edit', $admin->id) }}')"><i
+                                    onclick="Show('Edit Audition Admin','{{ route('managerAdmin.admin.edit', $star->id) }}')"><i
                                         class="fa fa-edit text-white"></i>
                                 </a>
                                 <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
-                                    value="{{ route('managerAdmin.admin.destroy', $admin) }}"><i
+                                    value="{{ route('managerAdmin.admin.destroy', $star) }}"><i
                                         class="fa fa-trash"></i>
                                 </button>
 
