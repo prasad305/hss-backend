@@ -27,6 +27,7 @@ use App\Models\React;
 use App\Models\SimplePost;
 use App\Models\ChoiceList;
 use App\Models\InterestType;
+use App\Models\LiveChatRoom;
 use App\Models\Message;
 use App\Models\PromoVideo;
 use App\Models\User;
@@ -80,21 +81,19 @@ class UserController extends Controller
             ->whereIn('category_id', $selectedCat)
             ->latest()->get();
 
-        if(isset($sub_cat_post))
-        {
+        if (isset($sub_cat_post)) {
             $sub_cat_post = Post::select("*")
-            ->whereIn('sub_category_id', $selectedSubCat)
-            ->latest()->get();
-        }else{
+                ->whereIn('sub_category_id', $selectedSubCat)
+                ->latest()->get();
+        } else {
             $sub_cat_post = [];
         }
 
-        if(isset($sub_sub_cat_post))
-        {
+        if (isset($sub_sub_cat_post)) {
             $sub_sub_cat_post = Post::select("*")
-            ->whereIn('user_id', $selectedSubSubCat)
-            ->latest()->get();
-        }else{
+                ->whereIn('user_id', $selectedSubSubCat)
+                ->latest()->get();
+        } else {
             $sub_sub_cat_post = [];
         }
 
@@ -118,24 +117,22 @@ class UserController extends Controller
 
         $cat_post = Post::select("*")
             ->whereIn('category_id', $selectedCat)
-            ->where('type',$type)
+            ->where('type', $type)
             ->latest()->get();
 
-        if(isset($sub_cat_post))
-        {
+        if (isset($sub_cat_post)) {
             $sub_cat_post = Post::select("*")
-            ->whereIn('sub_category_id', $selectedSubCat)
-            ->latest()->get();
-        }else{
+                ->whereIn('sub_category_id', $selectedSubCat)
+                ->latest()->get();
+        } else {
             $sub_cat_post = [];
         }
 
-        if(isset($sub_sub_cat_post))
-        {
+        if (isset($sub_sub_cat_post)) {
             $sub_sub_cat_post = Post::select("*")
-            ->whereIn('user_id', $selectedSubSubCat)
-            ->latest()->get();
-        }else{
+                ->whereIn('user_id', $selectedSubSubCat)
+                ->latest()->get();
+        } else {
             $sub_sub_cat_post = [];
         }
 
@@ -265,7 +262,7 @@ class UserController extends Controller
 
     public function registeredLivechat()
     {
-        $post = LiveChatRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+        $post = LiveChatRegistration::with('liveChatRoom')->where('user_id', auth('sanctum')->user()->id)->latest()->get();
 
         return response()->json([
             'status' => 200,
@@ -357,7 +354,7 @@ class UserController extends Controller
 
     public function liveChatDetails($slug)
     {
-        $event = LiveChat::where('slug',$slug)->first();
+        $event = LiveChat::where('slug', $slug)->first();
 
         return response()->json([
             'status' => 200,
@@ -430,6 +427,16 @@ class UserController extends Controller
         $activity->event_id = $request->event_id;
         $activity->type = 'liveChat';
         $activity->save();
+
+        //live chat room create
+        $liveChatRoom = new LiveChatRoom();
+        $liveChatRoom->live_chat_id = $request->event_id;
+        $liveChatRoom->star_id = $request->star_id;
+        $liveChatRoom->user_id = auth('sanctum')->user()->id;
+        $liveChatRoom->room_id = $request->room_id;
+        $liveChatRoom->status = 0;
+        $liveChatRoom->save();
+
 
         return response()->json([
             'status' => 200,
@@ -735,7 +742,7 @@ class UserController extends Controller
 
     public function audition_list()
     {
-        $upcomingAuditions = Audition::where('status',3)->latest()->get();
+        $upcomingAuditions = Audition::where('status', 3)->latest()->get();
 
         return response()->json([
             'status' => 200,
@@ -808,7 +815,8 @@ class UserController extends Controller
         ]);
     }
 
-    public function userRoundVideoUpload(Request $request){
+    public function userRoundVideoUpload(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'file.*' => 'required',
         ]);
@@ -821,15 +829,15 @@ class UserController extends Controller
         } else {
 
             foreach ($request->file as $key => $file) {
-                 $audition_video = new AuditionUploadVideo();
-                 $audition_video->audition_id = $request->audition_id;
-                 $audition_video->round_id = $request->round_id;
-                 $audition_video->user_id = auth()->user()->id;
+                $audition_video = new AuditionUploadVideo();
+                $audition_video->audition_id = $request->audition_id;
+                $audition_video->round_id = $request->round_id;
+                $audition_video->user_id = auth()->user()->id;
 
-                $file_name   = time() . rand('0000', '9999') . $key.'.' . $file->getClientOriginalName();
+                $file_name   = time() . rand('0000', '9999') . $key . '.' . $file->getClientOriginalName();
                 $file_path = 'uploads/videos/auditions/';
-                $file->move($file_path,$file_name);
-                $audition_video->video = $file_path.$file_name;
+                $file->move($file_path, $file_name);
+                $audition_video->video = $file_path . $file_name;
                 $audition_video->save();
             }
             return response()->json([
@@ -840,15 +848,15 @@ class UserController extends Controller
     }
 
     // public function checkAuditionVideoUpload($audition_id){
-      
+
     //         $is_video_uploaded = false;
     //         if(AuditionUploadVideo::where('audition_id',$audition_id)->where('user_id',auth()->user()->id)->count() > 0){
     //             $is_video_uploaded  = true;
     //         }else{
     //             $is_video_uploaded  = false;
     //         }
-            
-      
+
+
 
     // }
 
@@ -1054,7 +1062,7 @@ class UserController extends Controller
 
     public function UserAuditionDetails($slug)
     {
-        $audition = Audition::where('slug',$slug)->first();
+        $audition = Audition::where('slug', $slug)->first();
 
 
         return response()->json([
@@ -1063,19 +1071,20 @@ class UserController extends Controller
         ]);
     }
 
-    public function roundInstruction($rule_id){
-        
+    public function roundInstruction($rule_id)
+    {
+
         $instruction = AuditionRoundRule::find($rule_id);
-        $audition = Audition::where('audition_round_rules_id',$instruction->id)->first();
+        $audition = Audition::where('audition_round_rules_id', $instruction->id)->first();
 
         // for user audition video uploaded or not
         $is_video_uploaded = false;
-        if($audition->uploadedVideos->where('round_id', $audition->audition_round_rules_id)->where('user_id',auth()->user()->id)->count() > 0){
+        if ($audition->uploadedVideos->where('round_id', $audition->audition_round_rules_id)->where('user_id', auth()->user()->id)->count() > 0) {
             $is_video_uploaded  = true;
-        }else{
+        } else {
             $is_video_uploaded  = false;
         }
-        
+
         return response()->json([
             'status' => 200,
             'audition' => $audition,
@@ -1086,14 +1095,12 @@ class UserController extends Controller
 
     public function UserAuditionRegistrationChecker($slug)
     {
-        $audition = Audition::where('slug',$slug)->first();
-        $participant = AuditionParticipant::where([['user_id',auth('sanctum')->user()->id],['audition_id',$audition->id]])->first();
+        $audition = Audition::where('slug', $slug)->first();
+        $participant = AuditionParticipant::where([['user_id', auth('sanctum')->user()->id], ['audition_id', $audition->id]])->first();
 
         return response()->json([
             'status' => 200,
             'participant' => $participant,
         ]);
     }
-
-
 }

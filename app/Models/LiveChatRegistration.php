@@ -27,7 +27,7 @@ class LiveChatRegistration extends Model
         'publish_status',
     ];
 
-    protected $with = ['user','liveChat'];
+    protected $with = ['user', 'liveChat'];
 
     public function liveChat()
     {
@@ -37,5 +37,10 @@ class LiveChatRegistration extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function liveChatRoom()
+    {
+        return $this->belongsTo(LiveChatRoom::class, 'live_chat_id', 'live_chat_id');
     }
 }
