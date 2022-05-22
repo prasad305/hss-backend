@@ -266,30 +266,42 @@ class LiveChatController extends Controller
         ]);
     }
 
-    public function approved_list()
-    {
-        $event = LiveChat::where([['created_by_id', auth('sanctum')->user()->id], ['status', 1]])->latest()->get();
 
-        $event_count = LiveChat::where('created_by_id', auth('sanctum')->user()->id)->count();
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Ok',
-            'event' => $event,
-            'event_count' => $event_count,
-        ]);
-    }
 
     public function pending_list()
     {
-        $event = LiveChat::where([['created_by_id', auth('sanctum')->user()->id], ['status', null]])->latest()->get();
+        $events = LiveChat::where([['created_by_id', auth('sanctum')->user()->id], ['status', '<', 2]]);
 
         return response()->json([
             'status' => 200,
-            'message' => 'Ok',
-            'event' => $event,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
         ]);
     }
+
+    public function live_list()
+    {
+        $events = LiveChat::where([['created_by_id', auth('sanctum')->user()->id], ['status', 2]]);
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
+        ]);
+    }
+
+    public function completed_list()
+    {
+        $events = LiveChat::where([['created_by_id', auth('sanctum')->user()->id], ['status', 9]]);
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
+        ]);
+    }
+
+
 
     public function detials($id)
     {

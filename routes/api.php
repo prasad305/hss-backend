@@ -250,7 +250,11 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('admin/add_learning_session', [LearningSessionController::class, 'add']);
     Route::get('/admin/learning_session/all', [LearningSessionController::class, 'all']);
     Route::get('/admin/learning_session/count', [LearningSessionController::class, 'count']);
+
     Route::get('/admin/learning_session/pending', [LearningSessionController::class, 'pending_list']);
+    Route::get('/admin/learning_session/live', [LearningSessionController::class, 'live_list']);
+    Route::get('/admin/learning_session/completed', [LearningSessionController::class, 'completed_list']);
+
     Route::get('/admin/learning_session/pending/{id}', [LearningSessionController::class, 'pending_details']);
     Route::get('/admin/learning_session/approved', [LearningSessionController::class, 'approved_list']);
 
@@ -283,7 +287,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/livechat_event_profile', [LiveChatController::class, 'profile']);
     Route::post('/admin/add_live_chat', [LiveChatController::class, 'add']);
     Route::get('/admin/live_chat/pending', [LiveChatController::class, 'pending_list']);
-    Route::get('/admin/live_chat/approved', [LiveChatController::class, 'approved_list']);
+    Route::get('/admin/live_chat/live', [LiveChatController::class, 'live_list']);
+    Route::get('/admin/live_chat/completed', [LiveChatController::class, 'completed_list']);
     Route::get('/admin/livechat_event_details/{id}', [LiveChatController::class, 'details']);
     Route::get('/admin/live_chat_slots/{id}', [LiveChatController::class, 'slots']);
     Route::get('/admin/live_chat/count', [LiveChatController::class, 'count']);

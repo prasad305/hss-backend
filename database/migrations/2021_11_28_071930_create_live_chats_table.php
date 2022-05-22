@@ -37,7 +37,7 @@ class CreateLiveChatsTable extends Migration
             $table->string('max_time_per_person')->nullable();
             $table->boolean('publish_status')->default(1);
             $table->boolean('star_approve_status')->default(0);
-            $table->integer('status')->nullable();
+            $table->integer('status')->default(0)->comment('0 = pending, 1 = star_approval, 2 = posted by Manager Admin, 9 = completed, 10 = removed, 11 = rejeced by Star, 22 = rejected by Manager Admin');
             $table->timestamps();
         });
     }

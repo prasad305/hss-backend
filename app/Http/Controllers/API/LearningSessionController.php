@@ -87,14 +87,34 @@ class LearningSessionController extends Controller
 
     public function pending_list()
     {
-        $post = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', 0]])->latest()->get();
-        $count = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', 0]])->count();
+        $events = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', '<', 2]]);
 
         return response()->json([
             'status' => 200,
-            'post' => $post,
-            'count' => $count,
-            'message' => 'Success',
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
+        ]);
+    }
+
+    public function live_list()
+    {
+        $events = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', 2]]);
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
+        ]);
+    }
+
+    public function completed_list()
+    {
+        $events = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', 9]]);
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
         ]);
     }
 
