@@ -23,12 +23,19 @@
         </div>  
     </div>
     <div class="form-group row">
-        <div class="col-12">
+        <div class="col-6">
             <label for="name">Category</label>
-            <select name="category_id" id="category_id" class="form-control select2">
+            <select name="category_id" id="category_id" class="form-control select2" onchange="getSubCategory()">
                 @foreach($categories as $data)
                     <option @if($data->id == $admin->category_id) selected @endif value="{{ $data->id }}">{{ $data->name }}</option>
                 @endforeach
+            </select>
+        </div>  
+
+        <div class="col-6">
+            <label for="name">Sub Category</label>
+            <select name="sub_category_id" id="sub_category_id" class="form-control select2">
+                
             </select>
         </div>  
     </div>
@@ -69,7 +76,7 @@
     });
 
     $.ajax({
-        url: "{{ route('superAdmin.managerAdmin.update',$admin->id) }}",// your request url
+        url: "{{ route('superAdmin.admin.update',$admin->id) }}",// your request url
         data: formData,
         processData: false,
         contentType: false,
@@ -85,7 +92,7 @@
                 setTimeout(function() {
                     location.reload();
                 }, 1000);
-            console.log(data);
+            // console.log(data);
         },
         error: function (data) {
             console.log(data);
@@ -106,5 +113,31 @@
         }
     });
 
+  
+
 });
+
+getSubCategory();
+
+function getSubCategory(){
+    console.log('getSubCategory');
+    $.ajax({
+      url: "{{url('super-admin/admin')}}/"+$('#category_id').val()+"/get-subcategory",
+      type: 'GET',
+      dataType: 'json',
+      data: {},
+    })
+    .done(function(response) {
+      var subcategory='';
+      var sub_category_id = '{{$admin->sub_category_id}}';
+      $.each(response, function(index, val) {
+          var selected = sub_category_id == val.id ? 'selected' : '';
+        subcategory+='<option value="'+val.id+'" '+selected+'>'+val.name+'</option>';
+      });
+      $('#sub_category_id').html(subcategory);
+    })
+    .fail(function() {
+      $('#sub_category_id').html('');
+    });
+  }
 </script>

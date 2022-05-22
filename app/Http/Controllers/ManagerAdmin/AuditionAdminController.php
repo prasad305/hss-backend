@@ -11,6 +11,7 @@ use App\Models\Audition\AuditionAssignJudge;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Post;
+use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -124,40 +125,41 @@ class AuditionAdminController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function create()
     {
-        return view('ManagerAdmin.auditionAdmin.create');
+        $data = [
+            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBy('name','asc')->get(),            
+        ];
+        return view('ManagerAdmin.auditionAdmin.create',$data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $request->validate([
+            'sub_category_id' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|unique:users',
-            'phone' => 'required|unique:users',
+            'phone' => 'required|numeric|min:11|unique:users',
+            'image' => 'mimes:jpeg,jpg,png,gif|max:2000',
+            'cover' => 'mimes:jpeg,jpg,png,gif|max:2000',
+        ],[
+            'sub_category_id.required' => 'The Category Field is Required',
         ]);
 
+       
+
         $user = new User();
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->phone = $request->phone;
-        $user->email = $request->email;
+        $user->fill($request->except(['_token','image','cover']));
         $user->password = Hash::make('12345');
         $user->user_type = 'audition-admin'; // Admin user_type == 'audition-admin'
         $user->otp = rand(100000, 999999);
-        $user->status = 0;
+        $user->category_id = auth()->user()->category_id;
+        $user->sub_category_id = $request->sub_category_id;
+        $user->created_by = createdBy();
+        // $user->status = 0;
 
         if ($request->hasFile('image')) {
             $image             = $request->file('image');
@@ -181,7 +183,7 @@ class AuditionAdminController extends Controller
             if ($user) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Admin Added Successfully'
+                    'message' => 'Audition Admin Added Successfully'
                 ]);
             }
         } catch (\Exception $exception) {
@@ -192,51 +194,47 @@ class AuditionAdminController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $auditionAdmin
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $auditionAdmin)
+ 
+    public function show($search)
     {
-        if ($auditionAdmin->status == 0) {
-            session()->flash('error', 'This Admin Need to Approval First');
-            return redirect()->back();
-        }
-        return view('ManagerAdmin.auditionAdmin.details')->with('auditionAdmin', $auditionAdmin);
+        $search_text = $search;
+        $auditionAdmins = User::when($search != null,function($query) use($search){
+            return $query->where('first_name','like','%'.$search.'%')->orWhere('last_name','like','%'.$search.'%');
+        })->where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
+
+        return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins','search_text'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $auditionAdmin
-     * @return \Illuminate\Http\Response
-     */
+ 
     public function edit(User $auditionAdmin)
     {
-        $data['auditionAdmin'] = $auditionAdmin;
+        $data = [
+            'auditionAdmin' => $auditionAdmin,
+            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBy('name','asc')->get(),            
+        ];
         return view('ManagerAdmin.auditionAdmin.edit', $data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $auditionAdmin
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $request->validate(
+            [
+            'sub_category_id' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-        ]);
+            // 'email' => 'required',
+            // 'phone' => 'required',
+            'image' => 'mimes:jpeg,jpg,png,gif|max:2000',
+            'cover' => 'mimes:jpeg,jpg,png,gif|max:2000',
+            ],[
+                'sub_category_id.required' => 'The Category Field is Required',
+            ]
+        );
 
         $user = User::findOrFail($id);
         $user->fill($request->except('_token'));
+        $user->sub_category_id = $request->sub_category_id;
+        $user->updated_by = updatedBy();
 
         if ($request->hasFile('image')) {
             if ($user->image != null)
@@ -267,7 +265,7 @@ class AuditionAdminController extends Controller
             if ($user) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Admin Updated Successfully'
+                    'message' => 'Audition Admin Updated Successfully'
                 ]);
             }
         } catch (\Exception $exception) {
@@ -278,19 +276,60 @@ class AuditionAdminController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $auditionAdmin
-     * @return \Illuminate\Http\Response
-     */
+    public function customSearch($text){
+        return $text;
+    }
+
+   
     public function destroy(User $auditionAdmin)
     {
         try {
+            if ($auditionAdmin->cover_photo != null)
+                File::delete(public_path($auditionAdmin->cover_photo)); 
+
+            if ($auditionAdmin->image != null)
+                File::delete(public_path($auditionAdmin->image)); 
+
             $auditionAdmin->delete();
             return response()->json([
                 'type' => 'success',
                 'message' => 'Successfully Deleted'
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => $exception->getMessage()
+            ]);
+        }
+    }
+
+    public function activeNow($id)
+    {
+        $user = User::findOrFail($id);
+        $user->active_status = 1;
+        try {
+            $user->save();
+            return response()->json([
+                'type' => 'success',
+                'message' => 'Successfully Updated'
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => $exception->getMessage()
+            ]);
+        }
+    }
+
+    public function inactiveNow($id)
+    {
+        $user = User::findOrFail($id);
+        $user->active_status = 0;
+        try {
+            $user->save();
+            return response()->json([
+                'type' => 'success',
+                'message' => 'Successfully Updated'
             ]);
         } catch (\Exception $exception) {
             return response()->json([

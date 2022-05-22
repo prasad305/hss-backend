@@ -39,7 +39,6 @@
                     class="nav-icon {{ Request::routeIs('managerAdmin.auditionAdmin.index') ? 'active' : '' }} fas fa-th"></i>
                 <p>
                     Audition Admins
-                    <span class="right badge badge-danger">New</span>
                 </p>
             </a>
         </li>
@@ -49,7 +48,6 @@
                 <i class="nav-icon {{ Request::routeIs('managerAdmin.jury.index') ? 'active' : '' }} fas fa-th"></i>
                 <p>
                     Jury
-                    <span class="right badge badge-danger">New</span>
                 </p>
             </a>
         </li>

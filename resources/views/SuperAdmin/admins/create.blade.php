@@ -21,6 +21,7 @@
              <input type="text" class="form-control" id="email" name="email" placeholder="Enter Admin Email">
         </div>
     </div>
+
     <div class="form-group row">
         <div class="col-12">
             <label for="name">Category</label>
@@ -31,6 +32,18 @@
             </select>
         </div>
     </div>
+
+    <div class="form-group row">
+        <div class="col-12">
+            <label for="name">Sub Category</label>
+            <select name="sub_category_id" id="sub_category_id" class="form-control select2">
+                @foreach($sub_categories as $sub_category)
+                    <option value="{{ $sub_category->id }}">{{ $sub_category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
     <span class="row">
         <div class="form-group col-md-6">
             <label for="icon">image</label>

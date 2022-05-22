@@ -53,20 +53,24 @@ Super Admin
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>First name</th>
-                        <th>Last name</th>
+                        <th>SL</th>
+                        <th>Category</th>
+                        <th>Sub Category</th>
+                        <th>Name</th>
                         <th>Photo</th>
                         <th>Phone</th>
-                        <th>Status</th>
+                        <th>Active Status</th>
+                        <th>Approve Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($admins as $admin)
                     <tr>
-                        <td>{{ $admin->first_name }}</td>
-                        <td>{{ $admin->last_name }}</td>
-
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $admin->category ? $admin->category->name : '' }}</td>
+                        <td>{{ $admin->subCategory ? $admin->subCategory->name : '' }}</td>
+                        <td>{{ $admin->first_name.' '.$admin->last_name }}</td>
                         <td>
                             @if ($admin->image)
                             <a href="{{ asset($admin->image) }}" target="_blank">
@@ -80,10 +84,17 @@ Super Admin
                         </td>
                         <td>{{ $admin->phone }}</td>
                         <td>
-                            @if ($admin->status == 0)
-                            <span class="badge badge-danger">Inactive</span>
-                            @elseif($admin->status == 1)
+                            @if ($admin->active_status == 0)
+                            <span class="badge badge-danger">Unactive</span>
+                            @elseif($admin->active_status == 1)
                             <span class="badge badge-success">Active</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($admin->status == 0)
+                            <span class="badge badge-danger">Unapproved</span>
+                            @elseif($admin->status == 1)
+                            <span class="badge badge-success">Approved</span>
                             @endif
                         </td>
                         <td style="width: 150px">
@@ -106,11 +117,14 @@ Super Admin
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>First name</th>
-                        <th>Last name</th>
+                        <th>SL</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Sub Category</th>
                         <th>Photo</th>
                         <th>Phone</th>
-                        <th>Status</th>
+                        <th>Active Status</th>
+                        <th>Approve Status</th>
                         <th>Action</th>
                     </tr>
                 </tfoot>

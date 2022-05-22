@@ -47,9 +47,9 @@
                 <thead>
                     <tr>
                         <th>SL.</th>
+                        <th>Sub Category</th>
                         <th>Name</th>
                         <th>DOB</th>
-                        <th>Address</th>
                         <th>Approve Status</th>
                         <th>Active Status</th>
                         <th style="width: 150px">Action</th>
@@ -60,9 +60,9 @@
                     @foreach ($stars as $star)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ $star->subCategory ? $star->subCategory->name : '' }}</td>
                             <td>{{ $star->first_name . ' ' . $star->last_name }}</td>
-                            <td>{{ $star->adderess }}</td>
-                            <td>{{ $star->phone }}</td>
+                            <td>{{date('Y-m-d',strtotime($star->dob))}}</td>
                             <td>
                                 @if ($star->status == 0)
                                     <span class="badge badge-danger">Pending</span>
@@ -83,20 +83,20 @@
 
                             <td style="width: 150px">
                                 @if ($star->active_status == 0)
-                                <button class="btn btn-sm btn-success" onclick="activeNow(this)" value="{{ route('managerAdmin.admin.activeNow', $star->id) }}">
+                                <button class="btn btn-sm btn-success" onclick="activeNow(this)" value="{{ route('managerAdmin.star.activeNow', $star->id) }}">
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 </button>
                             @elseif($star->active_status == 1)
-                                <button class="btn btn-sm btn-danger" onclick="inactiveNow(this)" value="{{ route('managerAdmin.admin.inactiveNow', $star->id) }}">
+                                <button class="btn btn-sm btn-danger" onclick="inactiveNow(this)" value="{{ route('managerAdmin.star.inactiveNow', $star->id) }}">
                                     <i class="fa fa-close"></i>
                                 </button>
                             @endif
                                 <a class="btn btn-sm btn-info"
-                                    onclick="Show('Edit Audition Admin','{{ route('managerAdmin.admin.edit', $star->id) }}')"><i
+                                    onclick="Show('Edit Audition Admin','{{ route('managerAdmin.star.edit', $star->id) }}')"><i
                                         class="fa fa-edit text-white"></i>
                                 </a>
                                 <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
-                                    value="{{ route('managerAdmin.admin.destroy', $star) }}"><i
+                                    value="{{ route('managerAdmin.star.destroy', $star) }}"><i
                                         class="fa fa-trash"></i>
                                 </button>
 

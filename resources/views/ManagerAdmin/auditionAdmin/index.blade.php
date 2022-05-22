@@ -28,18 +28,8 @@ Audition Admin
     <div class="container-fluid">
 
         <div class="row float-right">
-            <button type="button" class="btn btn-success btn-sm mr-4" data-toggle="dropdown"
-                style="float: right; margin-bottom: 10px;">
-                <i class=" fa fa-filter"></i> Filter
-            </button>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="{{ route('managerAdmin.auditionAdmin_assinged') }}">Show assigned
-                    audition admins</a>
-                <a class="dropdown-item" href="{{ route('managerAdmin.auditionAdmin_notAssinged') }}">Show available
-                    audition admins</a>
-                <a class="dropdown-item" href="{{ route('managerAdmin.auditionAdmin.index') }}">All Audition Admins</a>
-            </div>
-            <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;" onclick=""><i
+            <input type="search" name="search_text" id="search_text" class="form-control" style="width:200px!important; margin-right: 5px!important">
+            <a class="btn btn-success btn-md mr-4" style="float: right; margin-bottom: 10px;" onclick="openLink('{{ url('manager-admin/auditionAdmin') }}/'+$('#search_text').val())" value="{{isset($search_text) ? $search_text : ''}}"><i
                     class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
             <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;"
                 onclick="Show('New Audition Admin','{{ route('managerAdmin.auditionAdmin.create') }}')"><i
@@ -64,7 +54,7 @@ Audition Admin
                             <span class="info-box-text AdminName">
                                 <h5>{{ $auditionAdmin->first_name }} {{ $auditionAdmin->last_name }}</h5>
                             </span>
-                            <b class="AdminMusic">Music</b> <br />
+                            <b class="AdminMusic">{{$auditionAdmin->subCategory ? $auditionAdmin->subCategory->name : ''}}</b> <br />
                         </a>
                         {{-- <p>Music</p> --}}
 
@@ -78,6 +68,19 @@ Audition Admin
                         {{-- <p class="AtifAdmin">Atif Aslam</p> --}}
                         <p class="{{ $auditionAdmin->status == 0 ? 'text-danger' : 'text-success' }}">
                             {{ $auditionAdmin->status == 0 ? 'Pending For Approval' : 'Approved' }}</p>
+
+                        <p class="{{ $auditionAdmin->active_status == 0 ? 'text-danger' : 'text-success' }}">
+                            {{ $auditionAdmin->active_status == 0 ? 'Inactive' : 'Active' }}</p>
+
+                        @if ($auditionAdmin->active_status == 0)
+                            <button class="btn btn-sm btn-success" onclick="activeNow(this)" value="{{ route('managerAdmin.auditionAdmin.activeNow', $auditionAdmin->id) }}">
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            </button>
+                        @elseif($auditionAdmin->active_status == 1)
+                            <button class="btn btn-sm btn-danger" onclick="inactiveNow(this)" value="{{ route('managerAdmin.auditionAdmin.inactiveNow', $auditionAdmin->id) }}">
+                                <i class="fa fa-close"></i>
+                            </button>
+                        @endif
                         <a class="btn btn-sm btn-info"
                             onclick="Show('Edit Audition Admin','{{ route('managerAdmin.auditionAdmin.edit', $auditionAdmin->id) }}')"><i
                                 class="fa fa-edit text-white"></i></a>
@@ -97,6 +100,97 @@ Audition Admin
 
     </div> <!-- container -->
 </div> <!-- content -->
+
+<script>
+     function activeNow(objButton) {
+        var url = objButton.value;
+        // alert(objButton.value)
+        Swal.fire({
+            title: 'Are you sure?'
+            , text: "You won't be able to revert this!"
+            , icon: 'warning'
+            , showCancelButton: true
+            , confirmButtonColor: '#3085d6'
+            , cancelButtonColor: '#d33'
+            , confirmButtonText: 'Yes, Active !'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    },
+                    success: function(data) {
+                        if (data.type == 'success') {
+                            Swal.fire(
+                                'Activated !',
+                                'This account has been Activated. ' + data.message,
+                                'success'
+                            )
+                            setTimeout(function() {
+                                location.reload();
+                            }, 800);
+                        } else {
+                            Swal.fire(
+                                'Wrong !',
+                                'Something going wrong. ' + data.message,
+                                'warning'
+                            )
+                        }
+                    }
+                , })
+            }
+        })
+    }
+
+    function inactiveNow(objButton) {
+        var url = objButton.value;
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Inactive !'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    }
+                    ,success: function(data) {
+                        if (data.type == 'success') {
+                            Swal.fire(
+                                'Inactivated !',
+                                'This account has been Inactivated. ' + data.message,
+                                'success'
+                            )
+                            setTimeout(function() {
+                                location.reload();
+                            }, 800);
+                        } else {
+                            Swal.fire(
+                                'Wrong !',
+                                'Something going wrong. ' + data.message,
+                                'warning'
+                            )
+                        }
+                    },
+                })
+            }
+        })
+    }
+
+    function openLink(link,type='_parent') {
+        window.open(link,type); 
+    }
+</script>
 
 <style>
     .AdminImg {

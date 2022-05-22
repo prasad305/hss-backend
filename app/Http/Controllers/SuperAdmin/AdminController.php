@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -31,16 +32,14 @@ class AdminController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        return view('SuperAdmin.admins.create', compact('categories'));
+        $data = [
+            'categories' =>  Category::all(),
+            'sub_categories' => SubCategory::orderBy('id','desc')->get(),
+        ];
+        return view('SuperAdmin.admins.create',$data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+   
     public function store(Request $request)
     {
         $request->validate([
@@ -92,23 +91,13 @@ class AdminController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $admin
-     * @return \Illuminate\Http\Response
-     */
+ 
     public function show(User $admin)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $admin
-     * @return \Illuminate\Http\Response
-     */
+  
     public function edit(User $admin)
     {
         $categories = Category::all();
@@ -117,25 +106,33 @@ class AdminController extends Controller
         return view('SuperAdmin.admins.edit',$data);
 
     }
+    
+    public function getSubCategory($category_id){
+        return SubCategory::where('status',1)
+        ->when($category_id>0,function($query) use($category_id){
+            return $query->where('category_id',$category_id);
+        })
+        ->orderBy('name','asc')
+        ->get();
+    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $admin
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
         $request->validate([
+            'sub_category_id' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required',
             'phone' => 'required',
         ]);
 
+        // return $request->sub_category_id;
+
         $user = User::findOrFail($id);
         $user->fill($request->except('_token'));
+        $user->sub_category_id = $request->sub_category_id;
+        $user->updated_by = updatedBy();
 
         if ($request->hasFile('image')) {
             if ($user->image != null)
@@ -176,12 +173,7 @@ class AdminController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $admin
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(User $admin)
     {
         try {

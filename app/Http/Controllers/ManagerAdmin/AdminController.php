@@ -56,19 +56,25 @@ class AdminController extends Controller
     {
         
         $request->validate([
+            'sub_category_id' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|unique:users',
-            'phone' => 'required|unique:users',
+            'phone' => 'required|numeric|min:11|unique:users',
+            'image' => 'mimes:jpeg,jpg,png,gif|max:2000',
+            'cover' => 'mimes:jpeg,jpg,png,gif|max:2000',
         ]);
+
+     
 
         $user = new User();
         $user->fill($request->except(['_token','image','cover']));
         $user->password = Hash::make('12345');
         $user->user_type = 'admin'; // Admin user_type == 'admin'
         $user->otp = rand(100000, 999999);
+        $user->category_id = auth()->user()->category_id;
         $user->sub_category_id = $request->sub_category_id;
-        // $user->status = 0;
+        $user->created_by = createdBy();
 
         if ($request->hasFile('image')) {
 
@@ -105,27 +111,20 @@ class AdminController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $admin
-     * @return \Illuminate\Http\Response
-     */
+  
     public function show(User $admin)
     {
  
         return view('ManagerAdmin.admins.details')->with('auditionAdmin', $admin);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $admin
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(User $admin)
     {
-        $data['admin'] = $admin;
+        $data = [
+            'admin' => $admin,
+            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBY('id','desc')->get(),
+        ];
         return view('ManagerAdmin.admins.edit', $data);
     }
 
@@ -139,6 +138,7 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'sub_category_id' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required',
@@ -147,6 +147,8 @@ class AdminController extends Controller
 
         $user = User::findOrFail($id);
         $user->fill($request->except('_token'));
+        $user->sub_category_id = $request->sub_category_id;
+        $user->updated_by = updatedBy();
 
         if ($request->hasFile('image')) {
             if ($user->image != null)

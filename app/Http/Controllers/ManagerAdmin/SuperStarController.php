@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +20,10 @@ class SuperStarController extends Controller
 
     public function create()
     {
-        return view('ManagerAdmin.stars.create');
+        $data = [
+            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBY('id','desc')->get(),
+        ];
+        return view('ManagerAdmin.stars.create',$data);
     }
 
    
@@ -27,44 +31,27 @@ class SuperStarController extends Controller
     {
         
         $request->validate([
+            'sub_category_id' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required|unique:users',
-            'phone' => 'required|unique:users',
+            'dob' => 'required',
         ]);
 
         $user = new User();
-        $user->fill($request->except(['_token','image','cover']));
-        $user->password = Hash::make('12345');
-        $user->user_type = 'admin'; // Admin user_type == 'admin'
-        $user->otp = rand(100000, 999999);
-        // $user->status = 0;
-
-        if ($request->hasFile('image')) {
-
-            $image             = $request->file('image');
-            $folder_path       = 'uploads/images/users/';
-            $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
-            //resize and save to server
-            Image::make($image->getRealPath())->save($folder_path . $image_new_name);
-            $user->image   = $folder_path . $image_new_name;
-        }
-
-        if ($request->hasFile('cover')) {
-
-            $image             = $request->file('cover');
-            $folder_path       = 'uploads/images/users/';
-            $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
-            //resize and save to server
-            Image::make($image->getRealPath())->resize(879, 200)->save($folder_path . $image_new_name);
-            $user->cover_photo   = $folder_path . $image_new_name;
-        }
+        $user->fill($request->except('_token'));
+        $user->user_type = 'star'; // Admin user_type == 'star'
+        $user->category_id = auth()->user()->category_id;
+        $user->sub_category_id = $request->sub_category_id;
+        $user->dob = $request->dob;
+        $user->address = $request->address;
+        $user->details = $request->details;
+        $user->created_by = createdBy();
         try {
             $user->save();
             if ($user) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Admin Added Successfully'
+                    'message' => 'Star Added Successfully'
                 ]);
             }
         } catch (\Exception $exception) {
@@ -76,16 +63,19 @@ class SuperStarController extends Controller
     }
 
   
-    public function show(User $admin)
+    public function show(User $star)
     {
  
-        return view('ManagerAdmin.stars.details')->with('auditionAdmin', $admin);
+        return view('ManagerAdmin.stars.details')->with('auditionAdmin', $star);
     }
 
  
-    public function edit(User $admin)
+    public function edit(User $star)
     {
-        $data['admin'] = $admin;
+        $data = [
+            'star' => $star,
+            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBY('id','desc')->get(),
+        ];
         return view('ManagerAdmin.stars.edit', $data);
     }
 
@@ -93,45 +83,26 @@ class SuperStarController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'sub_category_id' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
+            'dob' => 'required',
         ]);
 
         $user = User::findOrFail($id);
         $user->fill($request->except('_token'));
-
-        if ($request->hasFile('image')) {
-            if ($user->image != null)
-                File::delete(public_path($user->image)); //Old image delete
-
-            $image             = $request->file('image');
-            $folder_path       = 'uploads/images/users/';
-            $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
-            //resize and save to server
-            Image::make($image->getRealPath())->save($folder_path . $image_new_name);
-            $user->image   = $folder_path . $image_new_name;
-        }
-
-        if ($request->hasFile('cover')) {
-            if ($user->cover_photo != null)
-                File::delete(public_path($user->cover_photo)); //Old image delete
-
-            $image             = $request->file('cover');
-            $folder_path       = 'uploads/images/users/';
-            $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
-            //resize and save to server
-            Image::make($image->getRealPath())->resize(879, 200)->save($folder_path . $image_new_name);
-            $user->cover_photo   = $folder_path . $image_new_name;
-        }
+        $user->dob = $request->dob;
+        $user->address = $request->address;
+        $user->details = $request->details;
+        $user->sub_category_id = $request->sub_category_id;
+        $user->updated_by = updatedBy();
 
         try {
             $user->save();
             if ($user) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Admin Updated Successfully'
+                    'message' => 'Star Updated Successfully'
                 ]);
             }
         } catch (\Exception $exception) {
@@ -143,17 +114,17 @@ class SuperStarController extends Controller
     }
 
     
-    public function destroy(User $admin)
+    public function destroy(User $star)
     {
         try {
-            if ($admin->cover_photo != null)
-                File::delete(public_path($admin->cover_photo)); 
+            if ($star->cover_photo != null)
+                File::delete(public_path($star->cover_photo)); 
 
-            if ($admin->image != null)
-                File::delete(public_path($admin->image)); 
+            if ($star->image != null)
+                File::delete(public_path($star->image)); 
 
             
-            $admin->delete();
+            $star->delete();
             
             return response()->json([
                 'type' => 'success',

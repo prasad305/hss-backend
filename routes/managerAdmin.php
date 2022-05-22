@@ -83,8 +83,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     
     //For Super Star route
     Route::resource('star', SuperStarController::class);
-    Route::post('admin/active/{id}', [AdminController::class, 'activeNow'])->name('admin.activeNow');
-    Route::post('admin/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('admin.inactiveNow');
+    Route::post('star/active/{id}', [AdminController::class, 'activeNow'])->name('star.activeNow');
+    Route::post('star/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('star.inactiveNow');
 
 
 
@@ -95,6 +95,9 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     // Audition Admin route
     Route::resource('auditionAdmin', AuditionAdminController::class);
+    // Route::get('auditionAdmin/{search_text}/', [AuditionAdminController::class, 'customSearch']);
+    Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');
+    Route::post('auditionAdmin/inactive/{id}', [AuditionAdminController::class, 'inactiveNow'])->name('auditionAdmin.inactiveNow');
 
     Route::get('auditionAdmin-assinged', [AuditionAdminController::class, 'assinged'])->name('auditionAdmin_assinged');
     Route::get('auditionAdmin-free', [AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin_notAssinged');
