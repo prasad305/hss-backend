@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class MarketplaceController extends Controller
@@ -117,6 +118,32 @@ class MarketplaceController extends Controller
 
     public function marketplaceStore(Request $request){
 
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'category_id' => 'required',
+            'description' => 'required',
+            'image' => 'required|image',
+            'unit_price' => 'required',
+            'total_items' => 'required',
+            'superstar_id' => 'required',
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'category_id.required' => "Category Field Is Required",
+            'description.required' => 'Description Field Is Required',
+            'image.required' => "Image Field Is Required",
+            'unit_price.required' => "Unit Price Field Is Required",
+            'total_items.required' => "Total Item Field Is Required",
+            'superstar_id.required' => "Superstar Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
         $id = Auth::user()->id;
         $parent_id = User::find($id);
         // return $request->all();
@@ -156,7 +183,7 @@ class MarketplaceController extends Controller
     }
 
     public function allProductList(){
-        $approved = Marketplace::where('status', 1)
+        $approved = Marketplace::orderBy('id','DESC')->where('status', 1)
                                 ->where('superstar_admin_id', Auth::user()->id)
                                 ->get();
         $approvedCount = Marketplace::where('status', 1)
@@ -173,7 +200,7 @@ class MarketplaceController extends Controller
     public function orderAdminProductList(){
         $totalOrder = Order::where('superstar_admin_id', Auth::user()->id)
         ->count();
-        $orderList = Order::where('superstar_admin_id', Auth::user()->id)
+        $orderList = Order::orderBy('id','DESC')->where('superstar_admin_id', Auth::user()->id)
                                 ->get();
 
         return response()->json([
@@ -184,7 +211,7 @@ class MarketplaceController extends Controller
     }
 
     public function liveProductList(){
-        $live = Marketplace::whereColumn('total_items','>','total_selling')
+        $live = Marketplace::orderBy('id','DESC')->whereColumn('total_items','>','total_selling')
                             ->where('status',1)
                             ->where('superstar_admin_id', Auth::user()->id)
                             ->where('post_status',1)
@@ -200,7 +227,7 @@ class MarketplaceController extends Controller
     }
 
     public function pendingProductList(){
-        $pending = Marketplace::where('post_status', 0)
+        $pending = Marketplace::orderBy('id','DESC')->where('post_status', 0)
                                 ->where('superstar_admin_id', Auth::user()->id)
                                 ->get();
         $pendingCount = Marketplace::where('post_status', 0)
@@ -303,7 +330,7 @@ class MarketplaceController extends Controller
         $id = Auth::user()->id;
         $parent_id = User::find($id);
 
-        $approved = Marketplace::where('status', 1)
+        $approved = Marketplace::orderBy('id','DESC')->where('status', 1)
                                 ->where('superstar_admin_id', $parent_id->parent_user)
                                 ->get();
 
@@ -322,7 +349,7 @@ class MarketplaceController extends Controller
         $id = Auth::user()->id;
         $parent_id = User::find($id);
 
-        $live = Marketplace::whereColumn('total_items','>','total_selling')
+        $live = Marketplace::orderBy('id','DESC')->whereColumn('total_items','>','total_selling')
                             ->where('status',1)
                             ->where('post_status', 1)
                             ->where('superstar_admin_id', $parent_id->parent_user)
@@ -341,7 +368,7 @@ class MarketplaceController extends Controller
         $id = Auth::user()->id;
         $parent_id = User::find($id);
 
-        $pending = Marketplace::where('post_status', 0)
+        $pending = Marketplace::orderBy('id','DESC')->where('post_status', 0)
                             ->where('superstar_admin_id', $parent_id->parent_user)
                             ->get();
         $pendingCount = Marketplace::where('post_status', 0)
