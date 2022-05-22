@@ -99,12 +99,15 @@ class AuctionController extends Controller
 
     public function updateProduct(Request $request, $id)
     {
-        // $request->validate([
-        //     'name' => 'required',
-        //     'title' => 'required',
-        //     'base_price' => 'required',
-        //     'status' => 'required',
-        // ]);
+        $request->validate([
+            'name' => 'required',
+            'title' => 'required',
+            'base_price' => 'required',
+            'status' => 'required',
+        ]);
+        $product = Auction::findOrFail($id);
+        $data = $request->all();
+
 
 
         if ($request->hasFile('product_image')) {
@@ -123,17 +126,19 @@ class AuctionController extends Controller
             $data['banner'] = $path . '/' . $file_name;
         }
 
-        $product = Auction::findOrfail($id)->update([
-            'name' => $request->name,
-            'title' => $request->title,
-            'base_price' => $request->base_price,
-            //'details' => $request->status,
-            'status' => $request->status,
-        ]);
+        // $product = Auction::findOrfail($id)->update([
+        //     'name' => $request->name,
+        //     'title' => $request->title,
+        //     'base_price' => $request->base_price,
+        //     //'details' => $request->status,
+        //     'status' => $request->status,
+        // ]);
+
+        $product->update($data);
 
 
         return response()->json([
-            'status' => '200',
+            'status' => 200,
             'products' => $product,
             'message' => 'success',
         ]);

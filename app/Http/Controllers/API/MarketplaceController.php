@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
 use App\Models\Marketplace;
 use App\Models\User;
 use App\Models\Country;
@@ -12,6 +11,7 @@ use App\Models\State;
 use App\Models\Order;
 use App\Models\City;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -171,12 +171,15 @@ class MarketplaceController extends Controller
     }
 
     public function orderAdminProductList(){
+        $totalOrder = Order::where('superstar_admin_id', Auth::user()->id)
+        ->count();
         $orderList = Order::where('superstar_admin_id', Auth::user()->id)
                                 ->get();
 
         return response()->json([
             'status' => 200,
             'orderList' => $orderList,
+            'totalOrder' => $totalOrder,
         ]);
     }
 
