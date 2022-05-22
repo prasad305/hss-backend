@@ -12,6 +12,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
         Route::post('event-register', [UserMobileAppController::class, 'eventRegister']);
         Route::group(['prefix' => 'mobile-app/', 'as' => 'mobileApp.'], function () {
             Route::get('greeting-status/{star_id}', [UserMobileAppController::class, 'greetingStatus']);
+            Route::get('menu', [UserMobileAppController::class, 'menu']);
         });
     });
 
