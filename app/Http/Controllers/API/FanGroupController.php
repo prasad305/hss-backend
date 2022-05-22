@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class FanGroupController extends Controller
 {
@@ -26,6 +27,8 @@ class FanGroupController extends Controller
         ]);
     }
     public function someStarList($data){
+        $user =  User::find($data);
+
         $someStar = User::where('user_type', 'star')->where('id', '!=', $data)->get();
 
         return response()->json([
@@ -35,6 +38,18 @@ class FanGroupController extends Controller
     }
 
     public function fanGroupStore(Request $request){
+        $validator = Validator::make($request->all(), [
+            'group_name' => 'required',
+            'description' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'min_member' => 'required',
+            'max_member' => 'required',
+            'my_star' => 'required',
+            'another_star' => 'required',
+            'banner' => 'required',
+        ]);
+
         $id = auth('sanctum')->user()->id;
         $anotherStar =  $request->another_star;
 
@@ -56,7 +71,10 @@ class FanGroupController extends Controller
         $fangroup->my_star_status = 0;
 
         $fangroup->another_star = $anotherStar;
-        $fangroup->another_star_admin_id = $adminId->parent_user;
+        if($adminId){
+            $fangroup->another_star_admin_id = $adminId->parent_user;
+        }
+        
         $fangroup->another_star_status = 0;
 
         if ($request->hasfile('banner')) {
@@ -75,10 +93,19 @@ class FanGroupController extends Controller
 
         $fangroup->save();
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Fan Group Added Successfully',
-        ]);
+        
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->messages(),
+            ]);
+        }else{
+            return response()->json([
+                'status' => 200,
+                'message' => 'Fan Group Added Successfully',
+            ]);
+        }
     }
     public function updateFanGroup(Request $request, $slug){
         // $id = auth('sanctum')->user()->id;
