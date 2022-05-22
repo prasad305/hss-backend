@@ -129,9 +129,9 @@ class LearningSessionController extends Controller
         ]);
     }
 
-    public function pending_details($id)
+    public function pending_details($slug)
     {
-        $post = LearningSession::find($id);
+        $post = LearningSession::where('slug',$slug)->first();
 
         return response()->json([
             'status' => 200,
