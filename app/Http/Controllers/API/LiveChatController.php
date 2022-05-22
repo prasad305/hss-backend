@@ -113,7 +113,7 @@ class LiveChatController extends Controller
     public function registeredUserList($live_chat_id)
     {
         $event = LiveChat::find($live_chat_id);
-        $registeredLiveChats = LiveChatRegistration::where('live_chat_id', $live_chat_id)->get();
+        $registeredLiveChats = LiveChatRegistration::with('liveChatRoom')->where('live_chat_id', $live_chat_id)->get();
 
 
         return response()->json([
