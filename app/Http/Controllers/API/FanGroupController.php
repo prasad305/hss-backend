@@ -29,7 +29,9 @@ class FanGroupController extends Controller
     public function someStarList($data){
         $user =  User::find($data);
 
-        $someStar = User::where('user_type', 'star')->where('id', '!=', $data)->get();
+        $sub_cat_Id = $user->sub_category_id;
+
+        $someStar = User::where('user_type', 'star')->where('id', '!=', $data)->where('sub_category_id', $sub_cat_Id)->get();
 
         return response()->json([
             'status' => 200,
@@ -43,11 +45,9 @@ class FanGroupController extends Controller
             'description' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
-            'min_member' => 'required',
-            'max_member' => 'required',
             'my_star' => 'required',
             'another_star' => 'required',
-            'banner' => 'required',
+            'banner' => 'required | mimes:jpeg,jpg,png,webp | max:1000',
         ]);
 
         $id = auth('sanctum')->user()->id;
@@ -73,6 +73,8 @@ class FanGroupController extends Controller
         $fangroup->another_star = $anotherStar;
         if($adminId){
             $fangroup->another_star_admin_id = $adminId->parent_user;
+            $fangroup->category_id = $adminId->category_id;
+            $fangroup->sub_category_id = $adminId->sub_category_id;
         }
         
         $fangroup->another_star_status = 0;
@@ -93,8 +95,6 @@ class FanGroupController extends Controller
 
         $fangroup->save();
 
-        
-
         if ($validator->fails()) {
             return response()->json([
                 'status' => 422,
@@ -113,6 +113,13 @@ class FanGroupController extends Controller
 
         // $adminId = User::find($anotherStar);
         // return $request->all();
+
+        $validator = Validator::make($request->all(), [
+            'group_name' => 'required',
+            'description' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+        ]);
 
         $fangroup = FanGroup::where('slug', $slug)->first();
 
@@ -134,6 +141,11 @@ class FanGroupController extends Controller
 
         if ($request->hasfile('banner')) {
 
+            $destination = $fangroup->banner;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+
             $file = $request->file('banner');
             $extension = $file->getClientOriginalExtension();
             $filename = 'uploads/images/fangroup/' . time() . '.' . $extension;
@@ -148,13 +160,27 @@ class FanGroupController extends Controller
 
         $fangroup->save();
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Fan Group Updated Successfully',
-        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->messages(),
+            ]);
+        }else{
+            return response()->json([
+                'status' => 200,
+                'message' => 'Fan Group Updated Successfully',
+            ]);
+        }
     }
     public function deleteFanGroup($slug){
+        
         $fangroup = FanGroup::where('slug', $slug)->first();
+
+        $destination = $fangroup->banner;
+        if (File::exists($destination)) {
+            File::delete($destination);
+        }
+
         $fangroup->delete();
 
         return response()->json([
@@ -218,16 +244,18 @@ class FanGroupController extends Controller
             orWhere(function ($query) use($id) {
                     $query->where('another_star_status', 0)
                         ->where('another_star',$id);
-                })->get();
+                })->orderBy('id', 'DESC')->get();
 
         $starApproved = FanGroup::where(function ($query) use($id) {
             $query->where('my_star_status', 1)
-                ->where('my_star', $id);
+                ->where('my_star', $id)
+                ->where('status', 0);
             })->
             orWhere(function ($query) use($id) {
                     $query->where('another_star_status', 1)
-                        ->where('another_star',$id);
-                })->get();
+                        ->where('another_star',$id)
+                        ->where('status', 0);
+                })->orderBy('id', 'DESC')->get();
 
         $starRejected = FanGroup::where(function ($query) use($id) {
             $query->where('my_star_status', 2)
@@ -236,7 +264,7 @@ class FanGroupController extends Controller
             orWhere(function ($query) use($id) {
                     $query->where('another_star_status', 2)
                         ->where('another_star',$id);
-                })->get();
+                })->orderBy('id', 'DESC')->get();
 
         $today = Carbon::now();
 
@@ -248,8 +276,8 @@ class FanGroupController extends Controller
                                     })
                                     ->whereDate('start_date','<=', $today)
                                     ->whereDate('end_date','>=', $today)
+                                    ->orderBy('id', 'DESC')
                                     ->get();
-
 
         // return $star;
 
@@ -284,6 +312,7 @@ class FanGroupController extends Controller
                     ->where('my_star_status', 1)
                     ->where('status', 1)
                     ->where('another_star_status', 1)
+                    ->orderBy('id', 'DESC')
                     ->get();
 
         $fanApprovedCount = FanGroup::where(function ($query) use($id) {
@@ -312,7 +341,7 @@ class FanGroupController extends Controller
             orWhere(function ($query) use($id) {
                     $query->where('another_star_status', 0)
                         ->where('another_star_admin_id',$id);
-                })->orWhere('status', 0)->get();
+                })->orWhere('status', 0)->orderBy('id', 'DESC')->get();
 
         $fanPendingCount = FanGroup::where(function ($query) use($id) {
             $query->where('my_star_status', 0)
@@ -335,6 +364,7 @@ class FanGroupController extends Controller
                                     ->where('another_star_status', 1)
                                     ->whereDate('start_date','<=', $today)
                                     ->whereDate('end_date','>=', $today)
+                                    ->orderBy('id', 'DESC')
                                     ->get();
 
 
@@ -426,9 +456,9 @@ class FanGroupController extends Controller
         $fanDetails = FanGroup::where('slug', $slug)->first();
         // $id = auth('sanctum')->user()->id;
 
-        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->latest()->get();
-        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->get();
-        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->get();
+        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->latest()->orderBy('id', 'DESC')->get();
+        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->get();
+        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->get();
 
         return response()->json([
             'status' => 200,
@@ -493,12 +523,12 @@ class FanGroupController extends Controller
         $fanDetails = FanGroup::where('slug', $slug)->first();
         $fanMember = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('approveStatus', 0)->get();
 
-        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->get();
-        $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->get();
-        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->get();
-        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->get();
+        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->orderBy('id', 'DESC')->get();
+        $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->orderBy('id', 'DESC')->get();
+        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->get();
+        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->get();
 
-        $fanWarning = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('warning_count', '!=', 0)->get();
+        $fanWarning = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('warning_count', '!=', 0)->orderBy('id', 'DESC')->get();
 
         $fanId = auth('sanctum')->user()->id;
 
@@ -590,10 +620,10 @@ class FanGroupController extends Controller
 
     public function showStarFanGroup($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
-        $fanMember = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('approveStatus', 0)->get();
+        $fanMember = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('approveStatus', 0)->orderBy('id', 'DESC')->get();
 
-        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->get();
-        $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->get();
+        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->orderBy('id', 'DESC')->get();
+        $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->orderBy('id', 'DESC')->get();
 
         $id = auth('sanctum')->user()->id;
         $my_star = User::find($id);
