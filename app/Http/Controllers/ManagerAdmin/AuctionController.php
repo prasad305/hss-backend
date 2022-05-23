@@ -5,27 +5,28 @@ namespace App\Http\Controllers\ManagerAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Auction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class AuctionController extends Controller
 {
     public function all()
     {
-        $product = Auction::where('star_approval',1)->latest()->get();
+        $product = Auction::orderBy('id','DESC')->where('star_approval',1)->where('category_id',auth()->user()->category_id)->latest()->get();
 
         return view('ManagerAdmin.Auction.index', compact('product'));
     }
 
     public function pending()
     {
-        $product = Auction::where([['status', 0], ['star_approval', 1]])->latest()->get();
+        $product = Auction::orderBy('id','DESC')->where([['status', 0], ['star_approval', 1]])->where('category_id',auth()->user()->category_id)->latest()->get();
 
         return view('ManagerAdmin.Auction.index', compact('product'));
     }
 
     public function published()
     {
-        $product = Auction::where('status', 1)->latest()->get();
+        $product = Auction::orderBy('id','DESC')->where('status', 1)->where('category_id',auth()->user()->category_id)->latest()->get();
 
         return view('ManagerAdmin.Auction.index', compact('product'));
     }
@@ -51,7 +52,7 @@ class AuctionController extends Controller
         $product = Auction::findOrFail($id);
         $product->fill($request->except('_token'));
 
-        $product->name = $request->input('name');
+        $product->title = $request->input('title');
         $product->details = $request->input('details');
 
         // $meetup->event_link= $request->input('event_link');

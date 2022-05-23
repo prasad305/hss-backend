@@ -127,10 +127,12 @@ class MarketplaceController extends Controller
             'unit_price' => 'required',
             'total_items' => 'required',
             'superstar_id' => 'required',
+            'subcategory_id' => 'required',
 
         ],[
             'title.required' => 'Title Field Is Required',
             'category_id.required' => "Category Field Is Required",
+            'subcategory_id.required' => "Subcategory Field Is Required",
             'description.required' => 'Description Field Is Required',
             'image.required' => "Image Field Is Required",
             'unit_price.required' => "Unit Price Field Is Required",
@@ -152,6 +154,7 @@ class MarketplaceController extends Controller
 
         $marketplace->title = $request->title;
         $marketplace->category_id = $request->category_id;
+        $marketplace->subcategory_id = $request->subcategory_id;
         $marketplace->slug = Str::slug($request->input('title'));
         $marketplace->description = $request->description;
         $marketplace->unit_price = $request->unit_price;
@@ -161,7 +164,7 @@ class MarketplaceController extends Controller
         $marketplace->status = 0;
         $marketplace->total_selling = 0;
         $marketplace->created_by = $id;
-        $marketplace->superstar_id = $request->star_id;
+        $marketplace->superstar_id = $request->superstar_id;
         $marketplace->superstar_admin_id = $id;
 
         if ($request->hasfile('image')) {
@@ -250,6 +253,27 @@ class MarketplaceController extends Controller
         ]);
     }
     public function storeAdminProductList(Request $request ,$id){
+
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'description' => 'required',
+            'unit_price' => 'required',
+            'total_items' => 'required',
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'unit_price.required' => "Unit Price Field Is Required",
+            'total_items.required' => "Total Item Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
         $marketplace = Marketplace::find($id);
 
         $marketplace->title = $request->title;
@@ -290,6 +314,28 @@ class MarketplaceController extends Controller
     public function starMarketplaceStore(Request $request){
 
         // return $request->all();
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'description' => 'required',
+            'image' => 'required|image',
+            'unit_price' => 'required',
+            'total_items' => 'required',
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'image.required' => "Image Field Is Required",
+            'unit_price.required' => "Unit Price Field Is Required",
+            'total_items.required' => "Total Item Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
         $id = Auth::user()->id;
         $parent_id = User::find($id);
 
@@ -307,6 +353,9 @@ class MarketplaceController extends Controller
         $marketplace->superstar_admin_id = $parent_id->parent_user;
         $marketplace->superstar_id = $id;
         $marketplace->created_by = $id;
+        $marketplace->category_id = Auth::user()->category_id;
+        $marketplace->subcategory_id = Auth::user()->sub_category_id;
+
 
         if ($request->hasfile('image')) {
 
@@ -392,6 +441,27 @@ class MarketplaceController extends Controller
     }
 
     public function storeStarProductList(Request $request ,$id){
+
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'description' => 'required',
+            'unit_price' => 'required',
+            'total_items' => 'required',
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'unit_price.required' => "Unit Price Field Is Required",
+            'total_items.required' => "Total Item Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
         $marketplace = Marketplace::find($id);
 
         $marketplace->title = $request->title;

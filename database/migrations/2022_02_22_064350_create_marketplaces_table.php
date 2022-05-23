@@ -17,6 +17,7 @@ class CreateMarketplacesTable extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('subcategory_id')->nullable();
             $table->string('slug')->nullable();
             $table->longText('description')->nullable();
             $table->integer('unit_price')->nullable();

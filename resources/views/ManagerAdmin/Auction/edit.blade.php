@@ -4,7 +4,7 @@
     <div class="row form-group">
         <div class="col-md-12">
             <label for="first_name">Title</label>
-            <input type="text" class="form-control" id="title" name="name" placeholder="Enter Admin First Name" value="{{$product->name }}">
+            <input type="text" class="form-control" id="title" name="title" placeholder="Enter Admin First Name" value="{{$product->title }}">
         </div>
     </div>
 
