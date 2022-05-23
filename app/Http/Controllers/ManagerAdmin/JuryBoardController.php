@@ -3,16 +3,12 @@
 namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
-use App\Models\AssignJury;
 use Illuminate\Http\Request;
 use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\AuditionParticipant;
-use App\Models\Category;
 use App\Models\JuryBoard;
 use App\Models\SubCategory;
-use App\Models\SuperStar;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\File;
 
@@ -21,7 +17,7 @@ class JuryBoardController extends Controller
     public function index()
     {
         $data = [
-            'juries' =>  User::where('user_type', 'jury')->orderBy('id', 'DESC')->get(),
+            'juries' =>  User::where([['category_id',auth()->user()->category_id],['user_type', 'jury']])->orderBy('id', 'DESC')->get(),
 
         ];
         return view('ManagerAdmin.jury.index', $data);
@@ -83,41 +79,41 @@ class JuryBoardController extends Controller
     public function create()
     {
         $data = [
-            'categories' => Category::where('status', 1)->orderBy('name', 'asc')->get(),
-            'sub_categories' => SubCategory::where('status', 1)->orderBy('name', 'asc')->get()
+            'sub_categories' => SubCategory::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('name', 'asc')->get()
         ];
         return view('ManagerAdmin.jury.create', $data);
-    }
-
-    public function getSubCategory($category_id)
-    {
-        return SubCategory::when($category_id > 0, function ($query) use ($category_id) {
-            return $query->where('category_id', $category_id);
-        })->orderBy('id', 'DESC')->get();
     }
 
 
     public function store(Request $request)
     {
-        $request->validate([
+        $request->validate(
+            [
             'first_name' => 'required',
             'last_name' => 'required',
-            'category_id' => 'required',
             'sub_category_id' => 'required',
-        ]);
+            'image' => 'mimes:jpeg,jpg,png,gif|max:2000',
+            'cover' => 'mimes:jpeg,jpg,png,gif|max:2000',
+            'terms_and_condition' => 'required',
+            ],[
+                'sub_category_id.required' => 'The sub category field is required',
+            ]
+        );
 
-        // return $request->all();
 
         $user = new User();
 
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
         $user->user_type = 'jury';
-        $user->parent_user = auth()->user()->id;
+        $user->category_id = auth()->user()->category_id;
+        $user->sub_category_id = $request->sub_category_id;
+        $user->created_by = createdBy();
+        // $user->parent_user = auth()->user()->id;
 
         if ($request->hasFile('image')) {
             $image             = $request->file('image');
-            $folder_path       = 'uploads/images/users/';
+            $folder_path       = 'uploads/images/users/juries/';
             $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->save($folder_path . $image_new_name);
@@ -126,7 +122,7 @@ class JuryBoardController extends Controller
 
         if ($request->hasFile('cover')) {
             $image             = $request->file('cover');
-            $folder_path       = 'uploads/images/users/';
+            $folder_path       = 'uploads/images/users/juries/';
             $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->resize(879, 200)->save($folder_path . $image_new_name);
@@ -137,15 +133,12 @@ class JuryBoardController extends Controller
             $user->save();
 
             $jury = new JuryBoard();
-
             $jury->star_id = $user->id;
-            $jury->admin_id = auth()->user()->id;
-            $jury->category_id = $request->category_id;
-            $jury->sub_category_id = $request->sub_category_id;
+            // $jury->admin_id = auth()->user()->id;
+            // $jury->category_id = $request->category_id;
+            // $jury->sub_category_id = $request->sub_category_id;
             $jury->terms_and_condition = $request->terms_and_condition;
             $jury->qr_code = rand(10000000, 99999999);
-
-
             $jury->save();
 
             if ($jury) {
@@ -162,46 +155,56 @@ class JuryBoardController extends Controller
         }
     }
 
-    public function show(User $jury)
+    public function show($search)
     {
-        if ($jury->status == 0) {
-            session()->flash('error', 'This Admin Need to Approval First');
-            return redirect()->back();
-        }
         $data = [
-            'jury' => $jury,
+            'juries' =>  User::when($search != null,function($query) use($search){
+                return $query->where('first_name','like','%'.$search.'%')->orWhere('last_name','like','%'.$search.'%');
+            })->where('user_type', 'jury')->orderBy('id', 'DESC')->get(),
+            'search' => $search,
+
         ];
-        return view('ManagerAdmin.jury.details', $data);
+        return view('ManagerAdmin.jury.index', $data);
     }
 
     public function edit(User $jury)
     {
         $data = [
             'jury' => $jury,
-            'categories' => Category::where('status', 1)->orderBy('id', 'DESC')->get(),
-            'sub_categories' => SubCategory::where('status', 1)->orderBy('id', 'DESC')->get()
+            'sub_categories' => SubCategory::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('id', 'DESC')->get()
         ];
         return view('ManagerAdmin.jury.edit', $data);
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $request->validate(
+            [
             'first_name' => 'required',
             'last_name' => 'required',
-            'category_id' => 'required',
             'sub_category_id' => 'required',
-        ]);
+            'image' => 'mimes:jpeg,jpg,png,gif|max:2000',
+            'cover' => 'mimes:jpeg,jpg,png,gif|max:2000',
+            'terms_and_condition' => 'required',
+            ],[
+                'sub_category_id.required' => 'The sub category field is required',
+            ]
+        );
 
         $user = User::find($id);
 
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
-        $user->parent_user = auth()->user()->id;
+        $user->category_id = auth()->user()->category_id;
+        $user->sub_category_id = $request->sub_category_id;
+        $user->created_by = updatedBy();
 
         if ($request->hasFile('image')) {
+            if ($user->image != null)
+                File::delete(public_path($user->image)); //Old image delete
+
             $image             = $request->file('image');
-            $folder_path       = 'uploads/images/users/';
+            $folder_path       = 'uploads/images/users/juries/';
             $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->save($folder_path . $image_new_name);
@@ -209,8 +212,11 @@ class JuryBoardController extends Controller
         }
 
         if ($request->hasFile('cover')) {
+            if ($user->cover_photo != null)
+                File::delete(public_path($user->cover_photo)); //Old image delete
+
             $image             = $request->file('cover');
-            $folder_path       = 'uploads/images/users/';
+            $folder_path       = 'uploads/images/users/juries/';
             $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->resize(879, 200)->save($folder_path . $image_new_name);
@@ -221,17 +227,13 @@ class JuryBoardController extends Controller
             $user->save();
 
             $jury = JuryBoard::where('star_id', $user->id)->first();
-
-            $jury->category_id = $request->category_id;
-            $jury->sub_category_id = $request->sub_category_id;
             $jury->terms_and_condition = $request->terms_and_condition;
-
             $jury->save();
 
             if ($jury) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Jury Updated Successfully'
+                    'message' => 'Jury Updated Successfully!'
                 ]);
             }
         } catch (\Exception $exception) {
@@ -242,10 +244,22 @@ class JuryBoardController extends Controller
         }
     }
 
-    public function destroy(User $auditionAdmin)
+    public function destroy(User $jury)
     {
+        $id = $jury->id;
         try {
-            $auditionAdmin->delete();
+            if ($jury->image != null)
+                File::delete(public_path($jury->image)); //Old image delete
+
+            if ($jury->cover_photo != null)
+                File::delete(public_path($jury->cover_photo)); //Old image delete
+
+            $delete = $jury->delete();
+
+            if ($delete) {
+                JuryBoard::find($id)->delete();
+            }
+            
             return response()->json([
                 'type' => 'success',
                 'message' => 'Successfully Deleted'
@@ -261,7 +275,7 @@ class JuryBoardController extends Controller
     public function activeNow($id)
     {
         $user = User::findOrFail($id);
-        $user->status = 1;
+        $user->active_status = 1;
         try {
             $user->save();
             return response()->json([
@@ -279,7 +293,7 @@ class JuryBoardController extends Controller
     public function inactiveNow($id)
     {
         $user = User::findOrFail($id);
-        $user->status = 0;
+        $user->active_status = 0;
         try {
             $user->save();
             return response()->json([

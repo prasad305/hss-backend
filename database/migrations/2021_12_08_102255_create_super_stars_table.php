@@ -24,6 +24,8 @@ class CreateSuperStarsTable extends Migration
             $table->longText('description')->nullable();
             $table->string('qr_code')->nullable();
             $table->string('image')->nullable();
+            $table->text('star_file_one')->nullable();
+            $table->text('star_file_two')->nullable();
             $table->string('agreement')->nullable();
             $table->boolean('status')->default(0)->comment('0 = active , 1 = deactive');
             $table->timestamps();

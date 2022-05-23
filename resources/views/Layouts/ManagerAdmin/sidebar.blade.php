@@ -52,6 +52,15 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a href="{{ route('managerAdmin.assigned.index') }}" class="nav-link">
+                <i class="nav-icon {{ Request::routeIs('managerAdmin.assigned.index') ? 'active' : '' }} fas fa-th"></i>
+                <p>
+                    Assign
+                </p>
+            </a>
+        </li>
+
 
         <li class="nav-item">
             <a href="#" class="nav-link">

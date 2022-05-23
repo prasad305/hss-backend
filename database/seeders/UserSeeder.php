@@ -477,8 +477,6 @@ class UserSeeder extends Seeder
 
             $jury = new JuryBoard();
             $jury->star_id =  $user->id;
-            $jury->manager_admin_id =  $user->id;
-            $jury->category_id = 1;
             $jury->terms_and_condition = $faker->text;
             $jury->description = $faker->text;
             $jury->qr_code = $faker->numberBetween(100000, 999999);

@@ -17,7 +17,7 @@ class JuryBoardController extends Controller
      */
     public function index()
     {
-        $juries = User::where('user_type', 'jury')->latest()->get();
+        $juries = User::where('user_type', 'jury')->orderBy('id','desc')->get();
         // dd($jurys);
         return view('SuperAdmin.jury.index', compact('juries'));
     }
