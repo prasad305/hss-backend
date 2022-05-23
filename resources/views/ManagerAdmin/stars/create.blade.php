@@ -1,47 +1,57 @@
 <form id="create-form" enctype="multipart/form-data">
     @csrf
+    
     <div class="row form-group">
         <div class="col-md-6">
               <label for="first_name">First Name</label>
-              <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter Audition Admin First Name">
+              <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter Star First Name">
+              <span class="text-danger" id="first_name_error"></span>
          </div>
          <div class="col-md-6">
               <label for="last_name">Last Name</label>
-              <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Audition Admin Last Name">
+              <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Star Last Name">
+              <span class="text-danger" id="last_name_error"></span>
         </div>
      </div>
 
     <div class="form-group row">
         <div class="col-md-6">
-          <label for="phone">DOB</label>
-          <input type="text" class="form-control" id="dob" name="dob" placeholder="Enter Date Of Birth">
+          <label for="dob">DOB</label>
+          <input type="date" class="form-control" id="dob" name="dob" placeholder="Enter Date Of Birth">
+          <span class="text-danger" id="dob_error"></span>
         </div>
+        <div class="col-md-6">
+            <label for="first_name">Select Sub Category</label>
+            <select name="sub_category_id" id="sub_category_id" class="form-control">
+                <option value="">Select One</option>
+                @if(isset($sub_categories[0]))
+                    @foreach ($sub_categories as $key => $subCategory)
+                        <option value="{{$subCategory->id}}">{{$subCategory->name}}</option>
+                    @endforeach
+                @endif
+            </select>
+            <span class="text-danger" id="sub_category_error"></span>
+       </div>
     </div>
-    <span class="row">
-        <div class="form-group col-md-6">
-            <label for="image">Image</label>
-            <br><img id="image1" onchange="validateMultipleImage('image1')" alt="icon" src="{{ asset(get_static_option('no_image')) }}" height="180px" width="180px" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required/>
-            <br><br>
-            <input type="file" class="mt-2" id="image" name="image" onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
-      </div>
-      <div class="form-group col-md-6">
-          <label for="image">Cover</label>
-          <br><img id="image2" onchange="validateMultipleImage('image2')" alt="icon" src="{{asset(get_static_option('no_image'))}}" height="180px" width="180px" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required/>
 
-          <br><br>
-
-          <input type="file" class="mt-2" id="cover" name="cover" onchange="document.getElementById('image2').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
-
+    <div class="col-md-12">
+        <label for="dob">Address</label>
+        <textarea name="address" class="form-control textarea" id="" cols="30" rows="10"></textarea>
     </div>
-    </span>
 
-    <button type="submit"  class="btn btn-primary" id="btnSendData"><i class="fa fa-save"></i>&nbsp; Save Admin</button>
+    <div class="col-md-12">
+        <label for="dob">Details</label>
+        <textarea name="details" class="form-control textarea" id="" cols="30" rows="10"></textarea>
+    </div>
+    <button type="submit"  class="btn btn-success" id="btnSendData"><i class="fa fa-save"></i>&nbsp; Save Super Star</button>
 
 </form>
 
 <script>
+    $('.textarea').summernote()
    $(document).on('click','#btnSendData',function (event) {
     event.preventDefault();
+    ErrorMessageClear(); //this function on master page for clear error message 
     var form = $('#create-form')[0];
     var formData = new FormData(form);
 
@@ -52,7 +62,7 @@
         }
     });
     $.ajax({
-        url: "{{route('managerAdmin.admin.store')}}",// your request url
+        url: "{{route('managerAdmin.star.store')}}",// your request url
         data: formData,
         processData: false,
         contentType: false,
@@ -68,20 +78,9 @@
             }, 1000);
         },
         error: function (data) {
-            var errorMessage = '<div class="card bg-danger">\n' +
-                '<div class="card-body text-center p-5">\n' +
-                '<span class="text-white">';
             $.each(data.responseJSON.errors, function(key, value) {
-                errorMessage += ('' + value + '<br>');
+                ErrorMessage(key,value); //this function on master page for showing error message
             });
-            errorMessage += '</span>\n' +
-                '</div>\n' +
-                '</div>';
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                footer: errorMessage
-            })
         }
     });
 });

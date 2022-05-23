@@ -370,6 +370,45 @@
                 footer: ''
             });
         }
+
+    function ErrorMessage(key,value) {
+        if (key == 'sub_category_id') {
+            $('#sub_category_error').html(value);
+        }
+        if (key == 'first_name') {
+            $('#first_name_error').html(value);
+        }
+        if (key == 'last_name') {
+            $('#last_name_error').html(value);
+        }
+        if (key == 'email') {
+            $('#email_error').html(value);
+        }
+        if (key == 'phone') {
+            $('#phone_error').html(value);
+        }
+        if (key == 'image') {
+            $('#image_error').html(value);
+        }
+        if (key == 'cover') {
+            $('#cover_error').html(value);
+        }
+
+        if (key == 'dob') {
+            $('#dob_error').html(value);
+        }
+    }
+
+function ErrorMessageClear() {
+    $('#sub_category_error').html('');  
+    $('#first_name_error').html('');
+    $('#last_name_error').html('');
+    $('#email_error').html('');
+    $('#phone_error').html('');
+    $('#image_error').html('');
+    $('#cover_error').html('');
+    $('#dob_error').html('');
+  }
     </script>
 
 

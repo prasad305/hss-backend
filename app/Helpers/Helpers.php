@@ -172,4 +172,13 @@ if (!function_exists('random_code')) {
         }
         return false;
     }
+
+    function createdBy(){
+        return auth()->user()->id;
+    }
+
+    function updatedBy(){
+        return auth()->user()->id;
+    }
+
 }

@@ -47,11 +47,11 @@
                 <thead>
                     <tr>
                         <th>SL.</th>
+                        <th>SubCategory</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Image</th>
-                        <th>Cover</th>
                         <th>Approve Status</th>
                         <th>Active Status</th>
                         <th style="width: 150px">Action</th>
@@ -62,16 +62,13 @@
                     @foreach ($admins as $admin)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ $admin->subCategory ? $admin->subCategory->name : '' }}</td>
                             <td>{{ $admin->first_name . ' ' . $admin->last_name }}</td>
                             <td>{{ $admin->email }}</td>
                             <td>{{ $admin->phone }}</td>
                             <td>
                                 <img src="{{ asset($admin->image) }}" alt="" height="50px" width="50px">
                             </td>
-                            <td>
-                                <img src="{{ asset($admin->cover_photo) }}" alt="" height="50px" width="50px">
-                            </td>
-
                             <td>
                                 @if ($admin->status == 0)
                                     <span class="badge badge-danger">Pending</span>

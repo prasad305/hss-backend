@@ -79,16 +79,12 @@ class JuryBoardController extends Controller
        return redirect()->back();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function create()
     {
         $data = [
-            'categories' => Category::where('status', 1)->orderBy('id', 'DESC')->get(),
-            'sub_categories' => SubCategory::where('status', 1)->orderBy('id', 'DESC')->get()
+            'categories' => Category::where('status', 1)->orderBy('name', 'asc')->get(),
+            'sub_categories' => SubCategory::where('status', 1)->orderBy('name', 'asc')->get()
         ];
         return view('ManagerAdmin.jury.create', $data);
     }
