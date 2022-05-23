@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 
 class AuctionController extends Controller
@@ -29,15 +30,38 @@ class AuctionController extends Controller
         //return response()->json($request->all());
 
 
+        $validator = Validator::make($request->all(), [
 
-        $request->validate([
-
-            'name' => 'required',
             'title' => 'required',
-            'base_price' => 'required',
+            'bid_from' => 'required',
+            'bid_to' => 'required',
+            'product_image' => 'required|image',
+            'banner' => 'required|image',
+            'category_id' => 'required',
             'details' => 'required',
-            'status' => 'required',
+            'base_price' => 'required',
+            'star_id' => 'required',
+            'subcategory_id' => 'required',
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'bid_from.required' => 'Date Field Is Required',
+            'bid_to.required' => 'Date Field Is Required',
+            'category_id.required' => "Category Field Is Required",
+            'subcategory_id.required' => "Subcategory Field Is Required",
+            'details.required' => 'Description Field Is Required',
+            'product_image.required' => "Image Field Is Required",
+            'banner.required' => "Image Field Is Required",
+            'base_price.required' => "Price Field Is Required",
+            'star_id.required' => "Superstar Field Is Required",
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
 
         $data = $request->except(['_token', 'product_image', 'banner']);
         $data['created_by_id'] = Auth::user()->id;
@@ -99,12 +123,37 @@ class AuctionController extends Controller
 
     public function updateProduct(Request $request, $id)
     {
-        // $request->validate([
-        //     'name' => 'required',
-        //     'title' => 'required',
-        //     'base_price' => 'required',
-        //     'status' => 'required',
-        // ]);
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'bid_from' => 'required',
+            'bid_to' => 'required',
+            'category_id' => 'required',
+            'details' => 'required',
+            'base_price' => 'required',
+            'star_id' => 'required',
+            'subcategory_id' => 'required',
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'bid_from.required' => 'Date Field Is Required',
+            'bid_to.required' => 'Date Field Is Required',
+            'category_id.required' => "Category Field Is Required",
+            'subcategory_id.required' => "Subcategory Field Is Required",
+            'details.required' => 'Description Field Is Required',
+            'base_price.required' => "Price Field Is Required",
+            'star_id.required' => "Superstar Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
+        $product = Auction::findOrFail($id);
+        $data = $request->all();
+
 
 
         if ($request->hasFile('product_image')) {
@@ -123,17 +172,19 @@ class AuctionController extends Controller
             $data['banner'] = $path . '/' . $file_name;
         }
 
-        $product = Auction::findOrfail($id)->update([
-            'name' => $request->name,
-            'title' => $request->title,
-            'base_price' => $request->base_price,
-            //'details' => $request->status,
-            'status' => $request->status,
-        ]);
+        // $product = Auction::findOrfail($id)->update([
+        //     'name' => $request->name,
+        //     'title' => $request->title,
+        //     'base_price' => $request->base_price,
+        //     //'details' => $request->status,
+        //     'status' => $request->status,
+        // ]);
+
+        $product->update($data);
 
 
         return response()->json([
-            'status' => '200',
+            'status' => 200,
             'products' => $product,
             'message' => 'success',
         ]);
@@ -272,20 +323,40 @@ class AuctionController extends Controller
 
 
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
 
-            'name' => 'required',
             'title' => 'required',
-            'base_price' => 'required',
+            'bid_from' => 'required',
+            'bid_to' => 'required',
+            'product_image' => 'required|image',
+            'banner' => 'required|image',
             'details' => 'required',
-            'status' => 'required',
+            'base_price' => 'required',
 
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'bid_from.required' => 'Date Field Is Required',
+            'bid_to.required' => 'Date Field Is Required',
+            'details.required' => 'Description Field Is Required',
+            'product_image.required' => "Image Field Is Required",
+            'banner.required' => "Image Field Is Required",
+            'base_price.required' => "Price Field Is Required",
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
 
         $data = $request->except(['_token', 'product_image', 'banner']);
         $data['star_approval'] = 1;
         $data['star_id'] = Auth::user()->id;
         $data['created_by_id'] = Auth::user()->id;
+        $data['category_id'] = Auth::user()->category_id;
+        $data['subcategory_id'] = Auth::user()->sub_category_id;
+
 
 
         if ($request->hasFile('product_image')) {
@@ -385,7 +456,6 @@ class AuctionController extends Controller
         }
 
         $product = Auction::findOrfail($id)->update([
-            'name' => $request->name,
             'title' => $request->title,
             'base_price' => $request->base_price,
             //'details' => $request->status,
