@@ -35,10 +35,10 @@ class LiveChatSeeder extends Seeder
             $liveChat->total_amount = 39;
             $liveChat->fee = $faker->numberBetween(100, 5000);;
             $liveChat->participant_number = 20;
-            $liveChat->registration_start_date = $demoDate->addDays(-10);
-            $liveChat->registration_end_date = $demoDate->addDays(-2);
+            $liveChat->registration_end_date =  Carbon::now()->addDays(20);
+            $liveChat->registration_start_date =  Carbon::now();
             $liveChat->max_time_per_person = 90;
-            // $liveChat->publish_status = 10; // SUPER Admin user_type == 'super-admin'
+            // $liveChat->publish_status = 10;
             $liveChat->status = true;
             $liveChat->save();
         }

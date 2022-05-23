@@ -26,12 +26,24 @@ use Illuminate\Support\Str;
 
 class UserMobileAppController extends Controller
 {
+    public function menu(){
+        $activities = Activity::where('user_id', auth('sanctum')->user()->id)->orderBy('id','DESC')->get();
+
+        return response()->json([
+            'status' => 200,
+            'activity_length' => $activities->count(),
+            'greeting_activities' => $activities->where('type','greeting'),
+            'learning_session_activities' => $activities->where('type','learningSession'),
+            'live_chat_activities' => $activities->where('type','liveChat'),
+            'meetup_activities' => $activities->where('type','meetup'),
+        ]);
+    }
     public function eventRegister(Request $request){
         $user = User::find(auth('sanctum')->user()->id);
         $eventId = (string)$request->event_id;
         $modelName = $request->model_name;
 
-        // New Activity Add For Activity
+        // New Activity Add For event register
         $activity = new Activity();
 
         if( $modelName == 'MeetupEventRegistration'){

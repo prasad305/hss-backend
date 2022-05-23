@@ -21,8 +21,8 @@ class AuditionEventSeeder extends Seeder
             $MeetEvent->created_by_id =  $faker->numberBetween(4, 5);
             $MeetEvent->star_id =  $faker->numberBetween(4, 5);
             $MeetEvent->title =  $faker->text(10);
-            $MeetEvent->registration_end_date =  Carbon::now()->addDays(-2);
-            $MeetEvent->registration_start_date =  Carbon::now()->addDays(-10);
+            $MeetEvent->registration_end_date =  Carbon::now()->addDays(20);
+            $MeetEvent->registration_start_date =  Carbon::now();
             $MeetEvent->description =  $faker->text(50);
             $MeetEvent->venue =  $faker->country();
             $MeetEvent->total_seat =  $faker->numberBetween(200, 500);

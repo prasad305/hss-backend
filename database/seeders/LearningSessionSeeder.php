@@ -21,8 +21,8 @@ class LearningSessionSeeder extends Seeder
             $LearningSession->created_by_id =  $faker->numberBetween(1, 4);
             $LearningSession->star_id =  $faker->numberBetween(4, 5);
             $LearningSession->title =  $faker->text(10);
-            $LearningSession->registration_end_date =  Carbon::now()->addDays(-2);
-            $LearningSession->registration_start_date =  Carbon::now()->addDays(-10);
+            $LearningSession->registration_end_date =  Carbon::now()->addDays(20);
+            $LearningSession->registration_start_date =  Carbon::now();
             $LearningSession->description =  $faker->text(50);
             $LearningSession->venue =  $faker->country();
             $LearningSession->total_seat =  $faker->numberBetween(200, 500);
