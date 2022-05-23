@@ -69,7 +69,40 @@ class MeetupEventController extends Controller
 
     public function pending_list()
     {
-        $meetup = MeetupEvent::where('status', '<>', 1)->latest()->get();
+        $events = MeetupEvent::where([['created_by_id', auth('sanctum')->user()->id], ['status', '<', 2]]);
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
+        ]);
+    }
+
+    public function live_list()
+    {
+        $events = MeetupEvent::where([['created_by_id', auth('sanctum')->user()->id], ['status', 2]]);
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
+        ]);
+    }
+
+    public function completed()
+    {
+        $events = MeetupEvent::where([['created_by_id', auth('sanctum')->user()->id], ['status', 9]]);
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
+        ]);
+    }
+
+    public function details($slug)
+    {
+        $meetup = MeetupEvent::where('slug',$slug)->first();
 
         return response()->json([
             'status' => 200,
@@ -78,34 +111,13 @@ class MeetupEventController extends Controller
         ]);
     }
 
-    public function approved_list()
-    {
-        $meetup = MeetupEvent::where('status', 1)->latest()->get();
-
-        return response()->json([
-            'status' => 200,
-            'meetup' => $meetup,
-            'message' => 'Success',
-        ]);
-    }
-
-    public function details($id)
-    {
-        $meetup = MeetupEvent::find($id);
-
-        return response()->json([
-            'status' => 200,
-            'meetup' => $meetup,
-            'message' => 'Success',
-        ]);
-    }
-
-    public function slots($id)
+    public function slots($slug)
     {
 
-        $meetup = MeetupEventRegistration::where('meetup_event_id', $id)->get();
+        $event = MeetupEvent::where('slug',$slug)->first();
 
-        $slot = MeetupEvent::find($id)->total_seat;
+        $meetup = MeetupEventRegistration::where('meetup_event_id', $event->id)->get();
+        $slot = $event->total_seat;
 
         return response()->json([
             'status' => 200,

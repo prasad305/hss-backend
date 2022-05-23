@@ -20,6 +20,7 @@ class CreateMeetupEventsTable extends Migration
             $table->unsignedBigInteger('category_id')->nullable();
             $table->string('meetup_type')->nullable();
             $table->string('title')->nullable();
+            $table->string('slug')->nullable();
             $table->text('event_link')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();

@@ -259,7 +259,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/learning_session/evaluation', [LearningSessionController::class, 'evaluation_list']);
     Route::get('/admin/learning_session/completed', [LearningSessionController::class, 'completed_list']);
 
-    Route::get('/admin/learning_session/pending/{id}', [LearningSessionController::class, 'pending_details']);
+    Route::get('/admin/learning_session/pending/{slug}', [LearningSessionController::class, 'pending_details']);
     Route::get('/admin/learning_session/approved', [LearningSessionController::class, 'approved_list']);
 
     // Live Session Section
@@ -283,9 +283,10 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
     Route::post('/admin/add_meetup', [MeetupEventController::class, 'add']);
     Route::get('/admin/meetup_event/pending', [MeetupEventController::class, 'pending_list']);
-    Route::get('/admin/meetup_event/approved', [MeetupEventController::class, 'approved_list']);
-    Route::get('/admin/meetup_event_details/{id}', [MeetupEventController::class, 'details']);
-    Route::get('/admin/meetup_event_slots/{id}', [MeetupEventController::class, 'slots']);
+    Route::get('/admin/meetup_event/live', [MeetupEventController::class, 'live_list']);
+    Route::get('/admin/meetup_event/completed', [MeetupEventController::class, 'completed']);
+    Route::get('/admin/meetup_event/details/{slug}', [MeetupEventController::class, 'details']);
+    Route::get('/admin/meetup_event_slots/{slug}', [MeetupEventController::class, 'slots']);
 
     Route::post('/admin/add_livechat_profile', [LiveChatController::class, 'profile_create']);
     Route::get('/admin/livechat_event_profile', [LiveChatController::class, 'profile']);
@@ -293,7 +294,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/live_chat/pending', [LiveChatController::class, 'pending_list']);
     Route::get('/admin/live_chat/live', [LiveChatController::class, 'live_list']);
     Route::get('/admin/live_chat/completed', [LiveChatController::class, 'completed_list']);
-    Route::get('/admin/livechat_event_details/{id}', [LiveChatController::class, 'details']);
+    Route::get('/admin/livechat_event_details/{slug}', [LiveChatController::class, 'details']);
     Route::get('/admin/live_chat_slots/{id}', [LiveChatController::class, 'slots']);
     Route::get('/admin/live_chat/count', [LiveChatController::class, 'count']);
 
