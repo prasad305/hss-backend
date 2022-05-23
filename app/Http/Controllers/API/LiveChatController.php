@@ -63,7 +63,7 @@ class LiveChatController extends Controller
             'status' => 200,
             'message' => 'Ok',
             'event' => $event,
-            'details' => '"' . $event->description . '"',
+            'details' => '"' . $event ? $event->description : '' . '"',
         ]);
     }
 
@@ -111,10 +111,10 @@ class LiveChatController extends Controller
         ]);
     }
 
-    public function registeredUserList($live_chat_id)
+    public function registeredUserList($live_chat_slug)
     {
-        $event = LiveChat::find($live_chat_id);
-        $registeredLiveChats = LiveChatRegistration::with('liveChatRoom')->where('live_chat_id', $live_chat_id)->get();
+        $event = LiveChat::where('slug', $live_chat_slug)->first();
+        $registeredLiveChats = LiveChatRegistration::with('liveChatRoom')->where('live_chat_id', $event->id)->get();
 
 
         return response()->json([
