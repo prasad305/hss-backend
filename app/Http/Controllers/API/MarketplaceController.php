@@ -379,11 +379,11 @@ class MarketplaceController extends Controller
         $id = Auth::user()->id;
         $parent_id = User::find($id);
 
-        $approved = Marketplace::orderBy('id','DESC')->where('status', 1)
+        $approved = Marketplace::orderBy('id','DESC')->where('post_status', 1)
                                 ->where('superstar_admin_id', $parent_id->parent_user)
                                 ->get();
 
-        $approvedCount = Marketplace::where('status', 1)
+        $approvedCount = Marketplace::where('post_status', 1)
                                 ->where('superstar_admin_id', $parent_id->parent_user)
                                 ->count();
 
