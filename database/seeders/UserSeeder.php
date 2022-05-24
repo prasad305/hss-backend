@@ -146,7 +146,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Akshay ';
         $user->last_name = 'Kumar';
         $user->email = 'akshay@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000011';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -160,7 +160,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Sanjay ';
         $user->last_name = 'Dutt';
         $user->email = 'sanjay@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000012';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -174,7 +174,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Shah Rukh ';
         $user->last_name = 'Khan';
         $user->email = 'shahrukhkahn@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000013';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -190,7 +190,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Srabanti ';
         $user->last_name = 'Chatterjee';
         $user->email = 'srabanti@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000014';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -205,7 +205,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Rituparna ';
         $user->last_name = 'Sengupta';
         $user->email = 'rituparna@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000015';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -219,7 +219,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Jeet ';
         $user->last_name = ' ';
         $user->email = 'jeet@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000016';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -235,7 +235,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Shakib  ';
         $user->last_name = 'Khan';
         $user->email = 'shakib-khan@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000017';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -249,7 +249,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Ferdous ';
         $user->last_name = 'Ahmed';
         $user->email = 'ferdous@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000018';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -263,7 +263,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Purnima ';
         $user->last_name = ' ';
         $user->email = 'purnima@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000019';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -280,7 +280,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Shakib';
         $user->last_name = 'Al Hasan';
         $user->email = 'shakib75@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000020';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -294,7 +294,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Mushfiqur ';
         $user->last_name = 'Rahim';
         $user->email = 'mushfiq@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000021';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -308,7 +308,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Tamim ';
         $user->last_name = 'Iqbal';
         $user->email = 'tamim@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000022';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -324,7 +324,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Messi ';
         $user->last_name = '';
         $user->email = 'messi@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000030';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -338,7 +338,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Neymar ';
         $user->last_name = '';
         $user->email = 'neymar@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000023';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -352,7 +352,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Ronaldo ';
         $user->last_name = '';
         $user->email = 'ronaldo@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000024';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -385,7 +385,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'James';
         $user->last_name = '';
         $user->email = 'james@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000026';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';
@@ -399,7 +399,7 @@ class UserSeeder extends Seeder
         $user->first_name = 'Chirkutt';
         $user->last_name = ' ';
         $user->email = 'chirkutt@gmail.com';
-        $user->image = '';
+        $user->image = null;
         $user->phone = '01700000027';
         $user->password = Hash::make('12345');
         $user->user_type = 'star';

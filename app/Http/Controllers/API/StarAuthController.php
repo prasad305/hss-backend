@@ -56,9 +56,9 @@ class StarAuthController extends Controller
             $user->save();
 
             if ($user) {
-                
-                if (SuperStar::find($user->id)) {
-                    $star = SuperStar::find($user->id);
+                $star_profile = SuperStar::where('star_id',$user->id)->first();
+                if (isset($star_profile) && $star_profile->id) {
+                    $star = $star_profile;
                 }else{
                     $star = new SuperStar();
                 }
