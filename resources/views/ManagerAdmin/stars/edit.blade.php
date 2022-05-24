@@ -41,7 +41,7 @@
 
     <div class="col-md-12">
         <label for="dob">Details</label>
-        <textarea name="details" class="form-control textarea" id="" cols="30" rows="10">{{$star->details}}</textarea>
+        <textarea name="details" class="form-control " id="summernote" cols="30" rows="10">{{$star->details}}</textarea>
     </div>
 
     <button type="submit" class="btn btn-success" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update Star</button>
@@ -50,7 +50,11 @@
 
 
 <script>
-    $('.textarea').summernote()
+    $('.textarea').summernote();
+    $('#summernote').summernote({
+  height: 300,
+  focus: true
+});
    $(document).on('click','#btnUpdateData',function (event) {
     event.preventDefault();
     ErrorMessageClear()

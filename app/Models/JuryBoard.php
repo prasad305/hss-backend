@@ -11,9 +11,6 @@ class JuryBoard extends Model
 
     protected $fillable = [
         'star_id',
-        'manager_admin_id',
-        'category_id',
-        'sub_category_id',
         'terms_and_condition',
         'description',
         'qr_code',

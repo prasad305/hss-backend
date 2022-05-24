@@ -21,6 +21,7 @@ class StarAuthController extends Controller
     public function register(Request $request)
     {
 
+        // return $request->all();
         $validator = Validator::make($request->all(),[
             // 'email' => 'required|unique:users,email',
             // 'phone' => 'required|unique:users,phone',
@@ -37,68 +38,63 @@ class StarAuthController extends Controller
         else
         {
 
-            $user = new User();
+            $user = User::find($request->star_id);
 
-            $user->first_name = $request->input('first_name');
-            $user->last_name = $request->input('last_name');
-            $user->user_type = 'star';
-            $user->parent_user = auth('sanctum')->user()->id;
-
-
-            if($request->hasfile('image'))
-            {
+            if ($request->hasfile('image')) {
                 $destination = $user->image;
-                if(File::exists($destination))
-                {
+                if (File::exists($destination)) {
                     File::delete($destination);
                 }
                 $file = $request->file('image');
                 $extension = $file->getClientOriginalExtension();
-                $filename = 'uploads/images/users/'.time(). '.' . $extension;
-
-                Image::make($file)->resize(400,400)
-                ->save($filename, 100);
-
-                $user->image = $filename;
-            }
-
-            if($request->hasfile('imagem[]'))
-            {
-
-                return response()->json([
-                    'status'=>200,
-                    'message'=> 'Multi Image Working',
-                ]);
-
-                $destination = $user->image;
-                if(File::exists($destination))
-                {
-                    File::delete($destination);
-                }
-                $file = $request->file('image');
-                $extension = $file->getClientOriginalExtension();
-                $filename = 'uploads/images/users/'.time(). '.' . $extension;
-
-                Image::make($file)->resize(400,400)
-                ->save($filename, 100);
+                $filename = 'uploads/images/users/stars' . time() . '.' . $extension;
+                Image::make($file)->resize(900, 400)->save($filename, 50);
 
                 $user->image = $filename;
             }
 
             $user->save();
 
+            if ($user) {
+                
+                if (SuperStar::find($user->id)) {
+                    $star = SuperStar::find($user->id);
+                }else{
+                    $star = new SuperStar();
+                }
+               
 
-            $star = new SuperStar();
+                $star->star_id = $user->id;
+                $star->admin_id = auth('sanctum')->user()->id;
+                $star->category_id = auth('sanctum')->user()->category_id;
+                $star->sub_category_id =  auth('sanctum')->user()->sub_category_id;
+                $star->terms_and_condition = $request->input('terms_and_condition');
+                $star->qr_code = rand( 10000000 , 99999999 );
+    
+                if ($request->hasFile('profile_file_one')) {
+                    if ($star->star_file_one != null && file_exists($star->star_file_one)) {
+                        unlink($star->star_file_one);
+                    }
+                    $file        = $request->file('profile_file_one');
+                    $path        = 'uploads/images/users/stars';
+                    $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                    $file->move($path, $file_name);
+                    $star->star_file_one = $path . '/' . $file_name;
+                }
 
-            $star->star_id = $user->id;
-            $star->admin_id = auth('sanctum')->user()->id;
-            $star->category_id = $request->input('category_id');
-            $star->sub_category_id = $request->input('subcategory_id');
-            $star->terms_and_condition = $request->input('terms&condition');
-            $star->qr_code = rand( 10000000 , 99999999 );
-
-
-            $star->save();
+                if ($request->hasFile('profile_file_two')) {
+                    if ($star->star_file_two != null && file_exists($star->star_file_two)) {
+                        unlink($star->star_file_two);
+                    }
+                    $file        = $request->file('profile_file_two');
+                    $path        = 'uploads/images/users/stars';
+                    $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                    $file->move($path, $file_name);
+                    $star->star_file_two = $path . '/' . $file_name;
+                }
+    
+                $star->save();
+            }
 
             return response()->json([
                 'status'=>200,

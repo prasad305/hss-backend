@@ -372,6 +372,9 @@
         }
 
     function ErrorMessage(key,value) {
+        if (key == 'category_id') {
+            $('#category_error').html(value);
+        }
         if (key == 'sub_category_id') {
             $('#sub_category_error').html(value);
         }
@@ -397,6 +400,12 @@
         if (key == 'dob') {
             $('#dob_error').html(value);
         }
+        if (key == 'terms_and_condition') {
+            $('#terms_error').html(value);
+        }
+        if (key == 'star_id') {
+            $('#star_error').html(value);
+        }
     }
 
 function ErrorMessageClear() {
@@ -408,6 +417,9 @@ function ErrorMessageClear() {
     $('#image_error').html('');
     $('#cover_error').html('');
     $('#dob_error').html('');
+    $('#terms_error').html('');
+    $('#category_id').html('');
+    $('#star_id').html('');
   }
     </script>
 

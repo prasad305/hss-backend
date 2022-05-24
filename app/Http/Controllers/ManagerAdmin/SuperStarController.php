@@ -14,7 +14,7 @@ class SuperStarController extends Controller
 {
     public function index()
     {
-        $stars = User::where('user_type', 'star')->orderBy('id', 'DESC')->get();
+        $stars = User::where([['category_id',auth()->user()->category_id],['user_type', 'star']])->orderBy('id', 'DESC')->get();
         return view('ManagerAdmin.stars.index', compact('stars'));
     }
 
