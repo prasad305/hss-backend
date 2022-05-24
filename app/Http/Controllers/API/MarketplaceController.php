@@ -508,7 +508,7 @@ class MarketplaceController extends Controller
 
     public function declineStarProductList($id){
         $marketplace = Marketplace::find($id);
-        $marketplace->post_status = 0;
+        $marketplace->post_status = 2;
         $marketplace->save();
 
         return response()->json([

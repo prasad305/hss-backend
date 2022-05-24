@@ -394,6 +394,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/simple_post/pending/{id}', [SimplePostController::class, 'star_pending_details']);
     Route::get('/star/simple_post/approved', [SimplePostController::class, 'star_approved_list']);
     Route::get('/star/approve_post/{id}', [SimplePostController::class, 'approve_post']);
+    Route::get('/star/decline_post/{id}', [SimplePostController::class, 'decline_post']);
 
     // Learning Session Section
     Route::post('/star/add_learning_session', [LearningSessionController::class, 'star_add']);
