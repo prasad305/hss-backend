@@ -19,8 +19,10 @@ class CreateSimplePostsTable extends Migration
             $table->unsignedBigInteger('star_id')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('subcategory_id')->nullable();
+            $table->string('title')->nullable();
             $table->integer('fee')->default(0);
             $table->string('type')->nullable();
+            $table->string('payment_status')->nullable();
             $table->longText('description')->nullable();
             $table->string('image')->nullable();
             $table->string('video')->nullable();

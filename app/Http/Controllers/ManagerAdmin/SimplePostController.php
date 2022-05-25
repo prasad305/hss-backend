@@ -80,6 +80,24 @@ class SimplePostController extends Controller
 
 
         }
+        
+        if ($request->hasfile('video')) {
+
+            // $destination = $meetup->image;
+            // if (File::exists($destination)) {
+            //     File::delete($destination);
+            // }
+            if ($request->hasFile('video')) {
+    
+                $file        = $request->file('video');
+                $path        = 'uploads/videos/post';
+                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                $file->move($path, $file_name);
+                $meetup->video = $path . '/' . $file_name;
+            }
+
+
+        }
 
 
             try {
@@ -113,11 +131,11 @@ class SimplePostController extends Controller
             $post->type='general';
             $post->user_id=$spost->star_id;
             $post->event_id = $spost->id;
-            $post->category_id=$starCat->category_id;
+            $post->category_id=$spost->category_id;
             $post->title=$spost->title;
             $post->details=$spost->description;
             $post->status=1;
-            $post->sub_category_id=$starCat->sub_category_id;
+            $post->sub_category_id=$spost->subcategory_id;
             $post->save();
         }
         else
