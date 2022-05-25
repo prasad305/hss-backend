@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ManagerAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\SimplePost;
 use App\Models\Post;
+use App\Models\SuperStar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -14,21 +15,21 @@ class SimplePostController extends Controller
     //
     public function all()
     {
-        $post = SimplePost::latest()->get();
+        $post = SimplePost::where('category_id',auth()->user()->category_id)->where('status',1)->orWhere('star_approval',1)->latest()->get();
 
         return view('ManagerAdmin.SimplePost.index', compact('post'));
     }
 
     public function pending()
     {
-        $post = SimplePost::where([['status',0],['star_approval',1]])->latest()->get();
+        $post = SimplePost::where('category_id',auth()->user()->category_id)->where([['status',0],['star_approval',1]])->latest()->get();
 
         return view('ManagerAdmin.SimplePost.index', compact('post'));
     }
 
     public function published()
     {
-        $post = SimplePost::where('status',1)->latest()->get();
+        $post = SimplePost::where('category_id',auth()->user()->category_id)->where('status',1)->latest()->get();
 
         return view('ManagerAdmin.SimplePost.index', compact('post'));
     }
@@ -106,13 +107,16 @@ class SimplePostController extends Controller
             $spost->status = 1;
             $spost->update();
 
-            $starCat = SuperStar::where('star_id', $spost->star_id)->first();
+            $starCat = SuperStar::find($spost->star_id);
             // Create New post //
             $post = new Post();
             $post->type='general';
             $post->user_id=$spost->star_id;
             $post->event_id = $spost->id;
             $post->category_id=$starCat->category_id;
+            $post->title=$spost->title;
+            $post->details=$spost->description;
+            $post->status=1;
             $post->sub_category_id=$starCat->sub_category_id;
             $post->save();
         }

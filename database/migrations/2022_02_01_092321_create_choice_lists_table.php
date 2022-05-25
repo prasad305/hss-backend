@@ -16,9 +16,9 @@ class CreateChoiceListsTable extends Migration
         Schema::create('choice_lists', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('category')->nullable();
-            $table->string('subcategory')->nullable();
-            $table->unsignedBigInteger('star_id')->nullable();
+            $table->text('category')->nullable();
+            $table->text('subcategory')->nullable();
+            $table->text('star_id')->nullable();
             $table->timestamps();
         });
     }

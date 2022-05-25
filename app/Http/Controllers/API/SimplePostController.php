@@ -7,16 +7,44 @@ use Illuminate\Http\Request;
 use App\Models\SimplePost;
 use App\Models\Post;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
+use Vonage\Client\Exception\Validation;
 
 class SimplePostController extends Controller
 {
     //
     public function add(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'description' => 'required',
+            'star_id' => 'required',
+            'type' => 'required',
+
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'star_id.required' => "Star Field Is Required",
+            'type.required' => "This  Field Is Required",
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
+
         $post = new SimplePost();
         $post->title = $request->input('title');
         $post->created_by_id = auth('sanctum')->user()->id;
+        $post->category_id = auth('sanctum')->user()->category_id;
+        $post->subcategory_id = auth('sanctum')->user()->sub_category_id;
         $post->star_id = $request->input('star_id');
         $post->description = $request->input('description');
         $post->fee = $request->input('fee');
@@ -215,15 +243,47 @@ class SimplePostController extends Controller
         ]);
     }
 
+    public function decline_post($id){
+        $declinePost = SimplePost::findOrFail($id)->update(['star_approval'=>2]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success',
+        ]);
+    }
+
     public function star_add(Request $request)
     {
         //return $request->all();
 
 
+        
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'description' => 'required',
+            'type' => 'required',
+
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'type.required' => "This  Field Is Required",
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
         $post = new SimplePost();
         $post->title = $request->input('title');
         $post->created_by_id = auth('sanctum')->user()->id;
         $post->star_id = auth('sanctum')->user()->id;
+        $post->category_id = auth('sanctum')->user()->category_id;
+        $post->subcategory_id = auth('sanctum')->user()->sub_category_id;
         $post->description = $request->input('description');
         $post->fee = $request->input('fee');
         $post->video = $request->input('video');
