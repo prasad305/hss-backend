@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\PromoVideo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class PromoVideoController extends Controller
@@ -25,36 +26,53 @@ class PromoVideoController extends Controller
     public function videoStore(Request $request)
     {
         // return $request->all();
-
-
-
-        $promo = PromoVideo::create([
-            'admin_id' => auth()->user()->id,
-            'star_id' => $request->star_id,
-            'title' => $request->title,
-            'star_approval' => 0,
+        $validator = Validator::make($request->all(),[
+            'star_id' => 'required',
+            'title' => 'required',
+            'video_url' => 'required|mimes:mp4,mov,ogg',
+            'thumbnail' => 'required|mimes:jpeg,jpg,png,webp | max:1000'
         ]);
-        if ($request->hasFile('video_url')) {
 
-            $file        = $request->file('video_url');
-            $path        = 'uploads/videos/promos';
-            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
-            $file->move($path, $file_name);
-            $promo->video_url = $path . '/' . $file_name;
+        if($validator->fails())
+        {
+            return response()->json([
+                'validation_errors'=>$validator->errors(),
+            ]);
+        }else{
+            $promo = PromoVideo::create([
+                'admin_id' => auth()->user()->id,
+                'star_id' => $request->star_id,
+                'title' => $request->title,
+                'star_approval' => 0,
+            ]);
+    
+            if ($request->hasFile('video_url')) {
+    
+                $file        = $request->file('video_url');
+                $path        = 'uploads/videos/promos';
+                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                $file->move($path, $file_name);
+                $promo->video_url = $path . '/' . $file_name;
+            }
+            if ($request->hasFile('thumbnail')) {
+    
+                $file        = $request->file('thumbnail');
+                $path        = 'uploads/videos/promos/';
+                $file_name   = $path . time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                Image::make($file)->resize(900, 400)->save($file_name);
+                $promo->thumbnail = $file_name;
+            }
+    
+            $promo->save();
+    
+            return response()->json([
+                'status' => 200,
+                'message' => "Video Uploaded Successfully"
+            ]);
         }
-        if ($request->hasFile('thumbnail')) {
 
-            $file        = $request->file('thumbnail');
-            $path        = 'uploads/videos/promos/';
-            $file_name   = $path . time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
-            Image::make($file)->resize(900, 400)->save($file_name);
-            $promo->thumbnail = $file_name;
-        }
-        $promo->save();
-        return response()->json([
-            'status' => 200,
-            'message' => "Video Uploaded Successfully"
-        ]);
+
+       
     }
     public function pendingVideos()
     {

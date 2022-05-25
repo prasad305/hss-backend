@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Audition\Jury;
+namespace App\Http\Controllers\API\Audition\Jury;
 
 use App\Http\Controllers\Controller;
 use App\Models\JuryBoard;

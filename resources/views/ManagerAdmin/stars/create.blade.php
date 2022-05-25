@@ -41,7 +41,7 @@
 
     <div class="col-md-12">
         <label for="dob">Details</label>
-        <textarea name="details" class="form-control textarea" id="" cols="30" rows="10"></textarea>
+        <textarea name="details" class="form-control" id="summernote" rows="15" style="height: 500px!important"></textarea>
     </div>
     <button type="submit"  class="btn btn-success" id="btnSendData"><i class="fa fa-save"></i>&nbsp; Save Super Star</button>
 
@@ -49,6 +49,12 @@
 
 <script>
     $('.textarea').summernote()
+
+    $('#summernote').summernote({
+  height: 300,
+  focus: true
+});
+
    $(document).on('click','#btnSendData',function (event) {
     event.preventDefault();
     ErrorMessageClear(); //this function on master page for clear error message 

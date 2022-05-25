@@ -52,19 +52,20 @@ Super Admin | Jury Board
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>Id</th>
+                        <th>Sl</th>
                         <th>First name</th>
                         <th>Last name</th>
                         <th>Photo</th>
                         <th>Phone</th>
-                        <th>Status</th>
+                        <th>Active Status</th>
+                        <th>Approve Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($juries as $jury)
                     <tr>
-                        <td>{{ $jury->id }}</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $jury->first_name }}</td>
                         <td>{{ $jury->last_name }}</td>
 
@@ -81,10 +82,17 @@ Super Admin | Jury Board
                         </td>
                         <td>{{ $jury->phone }}</td>
                         <td>
-                            @if ($jury->status == 0)
+                            @if ($jury->active_status == 0)
                             <span class="badge badge-danger">Inactive</span>
-                            @elseif($jury->status == 1)
+                            @elseif($jury->active_status == 1)
                             <span class="badge badge-success">Active</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($jury->status == 0)
+                            <span class="badge badge-danger">Pending</span>
+                            @elseif($jury->status == 1)
+                            <span class="badge badge-success">Approved</span>
                             @endif
                         </td>
                         <td style="width: 150px">
@@ -107,12 +115,13 @@ Super Admin | Jury Board
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>Id</th>
+                        <th>Sl</th>
                         <th>First name</th>
                         <th>Last name</th>
                         <th>Photo</th>
                         <th>Phone</th>
-                        <th>Status</th>
+                        <th>Active Status</th>
+                        <th>Pending Status</th>
                         <th>Action</th>
                     </tr>
                 </tfoot>
@@ -148,8 +157,8 @@ Super Admin | Jury Board
                     success: function(data) {
                         if (data.type == 'success') {
                             Swal.fire(
-                                'Activated !',
-                                'This account has been Activated. ' + data.message,
+                                'Approved !',
+                                'This account has been Approved. ' + data.message,
                                 'success'
                             )
                             setTimeout(function() {
@@ -190,8 +199,8 @@ Super Admin | Jury Board
                     ,success: function(data) {
                         if (data.type == 'success') {
                             Swal.fire(
-                                'Inactivated !',
-                                'This account has been Inactivated. ' + data.message,
+                                'Unapproved !',
+                                'This account has been Unapproved. ' + data.message,
                                 'success'
                             )
                             setTimeout(function() {

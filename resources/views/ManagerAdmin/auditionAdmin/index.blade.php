@@ -28,8 +28,8 @@ Audition Admin
     <div class="container-fluid">
 
         <div class="row float-right">
-            <input type="search" name="search_text" id="search_text" class="form-control" style="width:200px!important; margin-right: 5px!important">
-            <a class="btn btn-success btn-md mr-4" style="float: right; margin-bottom: 10px;" onclick="openLink('{{ url('manager-admin/auditionAdmin') }}/'+$('#search_text').val())" value="{{isset($search_text) ? $search_text : ''}}"><i
+            <input type="search" name="search_text" id="search_text" class="form-control" style="width:200px!important; margin-right: 5px!important" value="{{isset($search_text) ? $search_text : ''}}">
+            <a class="btn btn-success btn-md mr-4" style="float: right; margin-bottom: 10px;" onclick="openLink('{{ url('manager-admin/auditionAdmin') }}/'+$('#search_text').val())" ><i
                     class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
             <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;"
                 onclick="Show('New Audition Admin','{{ route('managerAdmin.auditionAdmin.create') }}')"><i

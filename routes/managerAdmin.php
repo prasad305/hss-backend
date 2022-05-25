@@ -14,6 +14,7 @@ use App\Http\Controllers\ManagerAdmin\FanGroupController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\ManagerAdmin\AuctionController;
 use App\Http\Controllers\ManagerAdmin\PromoVideoController;
+use App\Http\Controllers\ManagerAdmin\StarAssignedController;
 use App\Http\Controllers\ManagerAdmin\SuperStarController;
 use Illuminate\Support\Facades\Route;
 
@@ -104,15 +105,21 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     // Jury Board route
     Route::resource('jury', JuryBoardController::class);
-    Route::get('get-subcategory/{category_id}', [JuryBoardController::class, 'getSubCategory']);
-    Route::post('jury/active/{id}', [JuryBoardController::class, 'activeNow'])->name('juryBoard.activeNow');
-    Route::post('jury/inactive/{id}', [JuryBoardController::class, 'inactiveNow'])->name('juryBoard.inactiveNow');
+    
+    Route::post('jury/active/{id}', [JuryBoardController::class, 'activeNow'])->name('jury.activeNow');
+    Route::post('jury/inactive/{id}', [JuryBoardController::class, 'inactiveNow'])->name('jury.inactiveNow');
+
     Route::get('jury-assinged', [JuryBoardController::class, 'assinged'])->name('juryBoard_assinged');
     Route::get('jury-free', [JuryBoardController::class, 'notAssinged'])->name('juryBoard_notAssinged');
     Route::get('jury-view/{jury_id}', [JuryBoardController::class, 'views'])->name('jury.views');
-
-
+    
+    
     Route::post('jury-video-assign', [JuryBoardController::class, 'assignVideo'])->name('jury.AssingVideos');
+    
+    
+    // assigned route for admin to star or star to admin
+    Route::resource('assigned',StarAssignedController::class);
+
 
 
 

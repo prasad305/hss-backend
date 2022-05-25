@@ -15,7 +15,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $admins = User::where('user_type', 'admin')->orderBy('id', 'DESC')->get();
+        $admins = User::where([['category_id',auth()->user()->category_id],['user_type', 'admin']])->orderBy('id', 'DESC')->get();
         return view('ManagerAdmin.admins.index', compact('admins'));
     }
 
@@ -79,7 +79,7 @@ class AdminController extends Controller
         if ($request->hasFile('image')) {
 
             $image             = $request->file('image');
-            $folder_path       = 'uploads/images/users/';
+            $folder_path       = 'uploads/images/users/admins/';
             $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->save($folder_path . $image_new_name);
@@ -89,7 +89,7 @@ class AdminController extends Controller
         if ($request->hasFile('cover')) {
 
             $image             = $request->file('cover');
-            $folder_path       = 'uploads/images/users/';
+            $folder_path       = 'uploads/images/users/admins/';
             $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->resize(879, 200)->save($folder_path . $image_new_name);
@@ -155,7 +155,7 @@ class AdminController extends Controller
                 File::delete(public_path($user->image)); //Old image delete
 
             $image             = $request->file('image');
-            $folder_path       = 'uploads/images/users/';
+            $folder_path       = 'uploads/images/users/admins/';
             $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->save($folder_path . $image_new_name);
@@ -167,7 +167,7 @@ class AdminController extends Controller
                 File::delete(public_path($user->cover_photo)); //Old image delete
 
             $image             = $request->file('cover');
-            $folder_path       = 'uploads/images/users/';
+            $folder_path       = 'uploads/images/users/admins/';
             $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->resize(879, 200)->save($folder_path . $image_new_name);

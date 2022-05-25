@@ -33,10 +33,11 @@ class UserMobileAppController extends Controller
         return response()->json([
             'status' => 200,
             'activity_length' => $activities->count(),
-            'greeting_activities' => $activities->where('type', 'greeting'),
-            'learning_session_activities' => $activities->where('type', 'learningSession'),
-            'live_chat_activities' => $activities->where('type', 'liveChat'),
-            'meetup_activities' => $activities->where('type', 'meetup'),
+            'greeting_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type','greeting')->orderBy('id','DESC')->get(),
+            'learning_session_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type','learningSession')->orderBy('id','DESC')->get(),
+            'live_chat_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type','liveChat')->orderBy('id','DESC')->get(),
+            'meetup_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type','meetup')->orderBy('id','DESC')->get(),
+
         ]);
     }
     public function eventRegister(Request $request)

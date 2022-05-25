@@ -28,19 +28,8 @@ Jury Board
     <div class="container-fluid">
 
         <div class="row float-right">
-            <button type="button" class="btn btn-success btn-sm mr-4" data-toggle="dropdown"
-                style="float: right; margin-bottom: 10px;">
-                <i class=" fa fa-filter"></i> Filter
-            </button>
-            {{-- <div class="dropdown-menu">
-                <a class="dropdown-item" href="{{ route('managerAdmin.auditionAdmin_assinged') }}">Show assigned
-            audition admins</a>
-            <a class="dropdown-item" href="{{ route('managerAdmin.auditionAdmin_notAssinged') }}">Show available
-                audition admins</a>
-            <a class="dropdown-item" href="{{ route('managerAdmin.jury.index') }}">All Jury Boards</a>
-        </div> --}}
-        <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;" onclick=""><i
-                class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
+            <input type="search" name="search_text" id="search_text" class="form-control" style="width:200px!important; margin-right: 5px!important" value="{{isset($search) ? $search : ''}}">
+            <a class="btn btn-success btn-md mr-4" style="float: right; margin-bottom: 10px;" onclick="openLink('{{ url('manager-admin/jury') }}/'+$('#search_text').val())"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
         <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;"
             onclick="Show('New Jury Board','{{ route('managerAdmin.jury.create') }}')"><i
                 class=" fa fa-plus"></i>&nbsp;Add New</a>
@@ -64,7 +53,7 @@ Jury Board
                         <span class="info-box-text AdminName">
                             <h5>{{ $jury->first_name }} {{ $jury->last_name }}</h5>
                         </span>
-                        <b class="AdminMusic">Music</b> <br />
+                        <b class="AdminMusic">{{$jury->subCategory ? $jury->subCategory->name : ''}}</b> <br />
                     </a>
 
                     @if ($jury->assignAudition)
@@ -75,7 +64,23 @@ Jury Board
 
                     <p class="{{ $jury->status == 0 ? 'text-danger' : 'text-success' }}">
                         {{ $jury->status == 0 ? 'Pending For Approval' : 'Approved' }}</p>
+
+                    <p class="{{ $jury->active_status == 0 ? 'text-danger' : 'text-success' }}">
+                        {{ $jury->active_status == 0 ? 'Inactive' : 'Active' }}</p>
+
+                   
+
                     <p class="text-success">{{ $jury->jury ? $jury->jury->qr_code : '' }}</p>
+                     {{--  for active and inactive --}}
+                     @if ($jury->active_status == 0)
+                     <button class="btn btn-sm btn-success" onclick="activeNow(this)" value="{{ route('managerAdmin.jury.activeNow', $jury->id) }}">
+                         <i class="fa fa-check" aria-hidden="true"></i>
+                     </button>
+                 @elseif($jury->active_status == 1)
+                     <button class="btn btn-sm btn-danger" onclick="inactiveNow(this)" value="{{ route('managerAdmin.jury.inactiveNow', $jury->id) }}">
+                         <i class="fa fa-close"></i>
+                     </button>
+                 @endif
                     <a class="btn btn-sm btn-info"
                         onclick="Show('Edit Jury Board','{{ route('managerAdmin.jury.edit', $jury->id) }}')"><i
                             class="fa fa-edit text-white"></i></a>
@@ -132,6 +137,11 @@ Jury Board
 </style>
 
 <script>
+
+    function openLink(link,type='_parent') {
+        window.open(link,type); 
+    }
+
     function activeNow(objButton) {
         var url = objButton.value;
         // alert(objButton.value)
