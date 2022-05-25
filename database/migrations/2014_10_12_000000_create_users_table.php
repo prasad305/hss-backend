@@ -37,8 +37,8 @@ class CreateUsersTable extends Migration
             $table->string('user_type')->nullable();
             $table->string('password')->nullable();
             $table->boolean('is_online')->default(0);
-            $table->integer('active_status')->nullable()->comment('1 = active, 0 = inactive');
-            $table->integer('status')->nullable()->comment('0= inapproved, 1 = approved');
+            $table->integer('active_status')->default(1)->comment('1 = active, 0 = inactive');
+            $table->integer('status')->nullable(0)->comment('0= unapproved, 1 = approved');
             $table->rememberToken();
             $table->timestamps();
         });

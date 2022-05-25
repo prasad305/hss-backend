@@ -68,7 +68,7 @@ class User extends Authenticatable
 
 
     //Relation For API
-    protected $with = ['userInfo', 'admin','star'];
+    protected $with = ['userInfo', 'admin','star','category','subCategory'];
 
 
     public function admin()
