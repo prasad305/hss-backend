@@ -362,38 +362,53 @@ class UserController extends Controller
         ]);
     }
 
+    public function meetupDetails($slug)
+    {
+        $event = MeetupEvent::where('slug', $slug)->first();
+
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+        ]);
+    }
+
 
     public function getLiveChatTiemSlot($minute, $id)
     {
         $livechat = LiveChat::find($id);
-        // $availableTime = $livechat
 
-        $start_date = new DateTime($livechat->start_time, new DateTimeZone('Pacific/Nauru'));
-        $end_date = new DateTime($livechat->end_time, new DateTimeZone('Pacific/Nauru'));
+        $user_start_time = $livechat->available_start_time ? $livechat->available_start_time : $livechat->start_time;
+        $user_end_time = Carbon::parse($user_start_time)->addMinutes($minute)->format('H:i:s');
+
+        $start_date = new DateTime($user_start_time, new DateTimeZone('Asia/Dhaka'));
+        $end_date = new DateTime($livechat->end_time, new DateTimeZone('Asia/Dhaka'));
+
         $interval = $start_date->diff($end_date);
         $hours   = $interval->format('%h');
         $minutes = $interval->format('%i');
 
         $available_minutes = ($hours * 60 + $minutes);
-        $taken_minute = $livechat->slot_counter;
-        $available_time = $available_minutes - $taken_minute;
+        // $available_time = $available_minutes - $taken_minute;
 
-        if ($available_time >= $minute) {
-            $msg = "slot available";
+        if ($available_minutes >= $minute) {
+            $msg = "Congratulation! Slot is available for You";
             $available_status = true;
         } else {
-            $msg = "slot not available";
+            $msg = "Sorry! Slot is not available";
             $available_status = false;
         }
 
 
         return response()->json([
             'status' => 200,
+            'start_time' => $user_start_time,
+            'end_time' => $user_end_time,
             'available' => $available_status,
             'message' =>  $msg,
-
         ]);
     }
+
+
     public function liveChatRigister(Request $request)
     {
         // return $request->all();
@@ -1057,6 +1072,30 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'userActivites' => $userActivites
+        ]);
+    }
+
+    public function registration_checker($type, $slug)
+    {
+        if($type == 'livechat')
+        {
+            $event = LiveChat::where('slug', $slug)->first();
+            $participant = LiveChatRegistration::where([['user_id', auth('sanctum')->user()->id], ['live_chat_id', $event->id]])->first();
+        }
+        if($type == 'learningSession')
+        {
+            $event = LearningSession::where('slug', $slug)->first();
+            $participant = LearningSessionRegistration::where([['user_id', auth('sanctum')->user()->id], ['learning_session_id', $event->id]])->first();
+        }
+        if($type == 'meetup')
+        {
+            $event = MeetupEvent::where('slug', $slug)->first();
+            $participant = MeetupEventRegistration::where([['user_id', auth('sanctum')->user()->id], ['meetup_event_id', $event->id]])->first();
+        }
+
+        return response()->json([
+            'status' => 200,
+            'participant' => $participant,
         ]);
     }
 

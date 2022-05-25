@@ -46,23 +46,30 @@ class UserMobileAppController extends Controller
         // New Activity Add For event register
         $activity = new Activity();
 
-        if( $modelName == 'MeetupEventRegistration'){
+        if( $modelName == 'meetup'){
             $eventRegistration = new MeetupEventRegistration();
             $event = MeetupEvent::find($eventId);
             $eventRegistration->meetup_event_id = $eventId;
+            $eventRegistration->amount = $event->fee;
             $activity->type = 'meetup';
         }
-        if( $modelName == 'LearningSessionRegistration'){
+        if( $modelName == 'learningSession'){
             $eventRegistration = new LearningSessionRegistration();
             $event = LearningSession::find($eventId);
             $eventRegistration->learning_session_id = $eventId;
+            $eventRegistration->amount = $event->fee;
             $activity->type = 'learningSession';
         }
-        if( $modelName == 'LiveChatRegistration'){
+        if( $modelName == 'livechat'){
             $eventRegistration = new LiveChatRegistration();
             $event = LiveChat::find($eventId);
+            $event->available_start_time = Carbon::parse($request->end_time)->addMinutes(1)->format('H:i:s');
             $eventRegistration->live_chat_id = $eventId;
-            $activity->type = 'liveChat';
+            $eventRegistration->amount = $request->fee;
+            $eventRegistration->live_chat_start_time = Carbon::parse($request->start_time)->format('H:i:s');
+            $eventRegistration->live_chat_end_time = Carbon::parse($request->end_time)->format('H:i:s');
+            $activity->type = 'livechat';
+            $event->update();
         }
         // if( $modelName == 'GreetingsRegistration'){
         //     $eventRegistration = new GreetingsRegistration();
@@ -74,11 +81,13 @@ class UserMobileAppController extends Controller
             $eventRegistration = new AuditionEventRegistration();
             $event = Audition::find($eventId);
             $eventRegistration->audition_event_id = $eventId;
+            $eventRegistration->amount = $event->fee;
             $activity->type = 'audition';
 
             $participant = new AuditionParticipant();
             $participant->user_id = $user->id;
             $participant->audition_id = $eventId;
+            $eventRegistration->amount = $event->fee;
             $participant->save();
         }
 
@@ -86,7 +95,6 @@ class UserMobileAppController extends Controller
         $eventRegistration->card_holder_name = $request->card_holder_name;
         $eventRegistration->account_no = $request->card_number;
         $eventRegistration->payment_date = Carbon::now();
-        $eventRegistration->amount = $event->fee;
         $eventRegistration->payment_status = 1;
         $eventRegistration->save();
 

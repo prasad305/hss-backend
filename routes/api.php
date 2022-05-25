@@ -51,15 +51,11 @@ Route::get('/user/learning_session/all', [LearningSessionController::class, 'use
 Route::get('/user/live_chat/all', [LiveChatController::class, 'userAll']);
 
 
-
 Route::get('/user_info/{id}', [AuthController::class, 'user_data']);
-
 Route::post('/chatting/message', [UserController::class, 'message']);
 Route::get('/chatting/message/{id}', [UserController::class, 'get_message']);
-
 Route::post('/group/message', [UserController::class, 'group_message']);
 Route::get('/group/message/{id}', [UserController::class, 'get_group_message']);
-
 
 
 // Registered & Verified User Middleware
@@ -92,6 +88,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     //live chat
     Route::get('/user/live-chat/{slug}', [UserController::class, 'liveChatDetails']);
+
+    //Meetup Event
+    Route::get('/user/meetup/{slug}', [UserController::class, 'meetupDetails']);
 
 
     Route::get('view-country', [CategoryController::class, 'index']);
@@ -151,10 +150,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/auction-product/all', [UserController::class, 'auctionProduct']);
     Route::get('/user/getStarAuction/{star_id}', [UserController::class, 'starAuction']);
 
-
-
-
-
     //Event Registaion By User (Learning Session + Live Chat + Greeting + Meetup Event)
     Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
 
@@ -171,7 +166,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('user/liveBidding/history/{auction_id}', [UserController::class, 'bidHistory']);
 
     // Audition
-
     Route::get('/user/audition/all', [UserController::class, 'audition_list']);
     Route::get('/user/audition/participate/{id}', [UserController::class, 'participateAudition']);
     Route::post('/user/register/participate', [UserController::class, 'participantRegister']);
@@ -183,23 +177,22 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/audition/details/{slug}', [UserController::class, 'UserAuditionDetails']);
     Route::get('/user/audition/round-instruction/{round_id}', [UserController::class, 'roundInstruction']);
     Route::get('/user/registration_checker/audition/{slug}', [UserController::class, 'UserAuditionRegistrationChecker']);
-
     Route::post('/user/audition/round-video-upload', [UserController::class, 'userRoundVideoUpload']);
     // Route::post('user/audition/videos/{audition_id}', [UserController::class, 'checkAuditionVideoUpload']);
 
-
     // Promo Videos
-
     Route::get('/user/PromoVideos', [UserController::class, 'getPromoVideo']);
 
     // User Profile
-
     Route::post('/user/coverUpdate/{id}', [UserController::class, 'updateCover']);
     Route::post('/user/profileUpdate/{id}', [UserController::class, 'updateProfile']);
 
     // User Photos
-
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
+
+    //Registration Checker
+    Route::get('/user/registration_checker/{type}/{slug}', [UserController::class, 'registration_checker']);
+
 });
 
 
