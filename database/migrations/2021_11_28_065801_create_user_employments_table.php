@@ -20,8 +20,8 @@ class CreateUserEmploymentsTable extends Migration
             $table->string('company')->nullable();
             $table->float('salary')->nullable();
             $table->float('yearly_income')->nullable();
-            $table->timestamp('start_time')->nullable();
-            $table->timestamp('end_time')->nullable();
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
             $table->timestamps();
         });
     }

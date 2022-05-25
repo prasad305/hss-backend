@@ -24,8 +24,8 @@ class CreateLiveChatsTable extends Migration
             $table->longText('description')->nullable();
             $table->longText('instruction')->nullable();
             $table->timestamp('date')->nullable();
-            $table->timestamp('start_time')->nullable();
-            $table->timestamp('end_time')->nullable();
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
             $table->unsignedBigInteger('slot_counter')->nullable();
             $table->string('banner')->nullable();
             $table->string('video')->nullable();
