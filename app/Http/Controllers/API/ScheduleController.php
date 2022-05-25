@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Schedule;
+use App\Models\User;
 
 class ScheduleController extends Controller
 {
@@ -13,40 +14,40 @@ class ScheduleController extends Controller
     public function add_schedule(Request $request)
     {
 
-        //Schedule::insert($request->info,['date'=>'2020/12/12']);
+      
 
-        //return $request->all();
-
+        //  return gettype($request->{'0'}['date']);
         foreach ($request->all() as $key => $req) {
-
-            Schedule::insert([
-                'admin_id' => auth('sanctum')->user()->id,
-                'event_type' => $req['event_type'],
-                'from' => $req['from'],
-                'to' => $req['to'],
-                'date' => $req['date'],
-                'month' => Carbon::parse($req['date'])->format('M'),
-                'updated_at' => date("Y-m-d h:i:s"),
-                'created_at' => date("Y-m-d h:i:s"),
-            ]);
+            $star = User::where('parent_user',auth()->user()->id)->first();
+            if (isset($req['id'])) {
+                // return 'id has found';
+                // Schedule::whereNotIn('id',$req['id'])->where('date',$request->{'0'}['date'])->delete();
+                Schedule::where('id',$req['id'])->update([
+                    'event_type' => $req['event_type'],
+                    'from' => $req['from'],
+                    'to' => $req['to'],
+                    'date' => $req['date'],
+                ]);
+            }else{
+                Schedule::insert([
+                    'admin_id' => auth('sanctum')->user()->id,
+                    'event_type' => $req['event_type'],
+                    'star_id' => $star->id,
+                    'from' => $req['from'],
+                    'to' => $req['to'],
+                    'date' => $req['date'],
+                    'month' => Carbon::parse($req['date'])->format('M'),
+                    'updated_at' => date("Y-m-d h:i:s"),
+                    'created_at' => date("Y-m-d h:i:s"),
+                ]);
+            }
+        
         }
-
-
-
-
-
-        // if ($schedule) {
-        //     return response()->json([
-        //         'status'=>200,
-        //         'result'=> $schedule,
-        //         'message'=>'Greetings Session Added',
-        //     ]);
-        // }
 
         return response()->json([
             'status'=>200,
-            'result'=> $request->all(),
-            'message'=>'Added Successfully',
+            // 'result'=> $request->all(),
+            'message'=>'Schedule Added Successfully',
         ]);
 
 
@@ -68,6 +69,16 @@ class ScheduleController extends Controller
             'status'=>200,
             'schedule'=> $date,
             'message'=>'Added Successfully',
+        ]);
+
+    }
+
+    public function dateWiseSchedule($date)
+    {
+        $schedule = Schedule::where([['admin_id',auth('sanctum')->user()->id],['date',$date]])->get();
+        return response()->json([
+            'status'=>200,
+            'schedule'=> $schedule,
         ]);
 
     }

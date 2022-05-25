@@ -15,6 +15,8 @@ class CreatePromoVideosTable extends Migration
     {
         Schema::create('promo_videos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('sub_category_id')->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
             $table->string('title')->nullable();
