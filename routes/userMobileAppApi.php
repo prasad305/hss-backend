@@ -17,4 +17,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     });
 
     Route::post('mobile/userInformation_update', [UserMobileAppController::class, 'userInformationUpdate']);
+    /**
+     * all upcomming events get
+     */
+    Route::get('/mobile/all-upcomming-event', [UserMobileAppController::class, 'allUpcommingEvent']);
 });

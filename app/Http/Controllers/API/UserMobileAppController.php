@@ -26,19 +26,21 @@ use Illuminate\Support\Str;
 
 class UserMobileAppController extends Controller
 {
-    public function menu(){
-        $activities = Activity::where('user_id', auth('sanctum')->user()->id)->orderBy('id','DESC')->get();
+    public function menu()
+    {
+        $activities = Activity::where('user_id', auth('sanctum')->user()->id)->orderBy('id', 'DESC')->get();
 
         return response()->json([
             'status' => 200,
             'activity_length' => $activities->count(),
-            'greeting_activities' => $activities->where('type','greeting'),
-            'learning_session_activities' => $activities->where('type','learningSession'),
-            'live_chat_activities' => $activities->where('type','liveChat'),
-            'meetup_activities' => $activities->where('type','meetup'),
+            'greeting_activities' => $activities->where('type', 'greeting'),
+            'learning_session_activities' => $activities->where('type', 'learningSession'),
+            'live_chat_activities' => $activities->where('type', 'liveChat'),
+            'meetup_activities' => $activities->where('type', 'meetup'),
         ]);
     }
-    public function eventRegister(Request $request){
+    public function eventRegister(Request $request)
+    {
         $user = User::find(auth('sanctum')->user()->id);
         $eventId = (string)$request->event_id;
         $modelName = $request->model_name;
@@ -46,19 +48,19 @@ class UserMobileAppController extends Controller
         // New Activity Add For event register
         $activity = new Activity();
 
-        if( $modelName == 'MeetupEventRegistration'){
+        if ($modelName == 'MeetupEventRegistration') {
             $eventRegistration = new MeetupEventRegistration();
             $event = MeetupEvent::find($eventId);
             $eventRegistration->meetup_event_id = $eventId;
             $activity->type = 'meetup';
         }
-        if( $modelName == 'LearningSessionRegistration'){
+        if ($modelName == 'LearningSessionRegistration') {
             $eventRegistration = new LearningSessionRegistration();
             $event = LearningSession::find($eventId);
             $eventRegistration->learning_session_id = $eventId;
             $activity->type = 'learningSession';
         }
-        if( $modelName == 'LiveChatRegistration'){
+        if ($modelName == 'LiveChatRegistration') {
             $eventRegistration = new LiveChatRegistration();
             $event = LiveChat::find($eventId);
             $eventRegistration->live_chat_id = $eventId;
@@ -70,7 +72,7 @@ class UserMobileAppController extends Controller
         //     $eventRegistration->greeting_id = $eventId;
         //     $activity->type = 'greeting';
         // }
-        if( $modelName == 'AuditionParticipant'){
+        if ($modelName == 'AuditionParticipant') {
             $eventRegistration = new AuditionEventRegistration();
             $event = Audition::find($eventId);
             $eventRegistration->audition_event_id = $eventId;
@@ -96,16 +98,17 @@ class UserMobileAppController extends Controller
         $activity->save();
 
         return response()->json([
-            'status'=>200,
-            'eventRegistration'=>$eventRegistration,
-            'modelName'=>$modelName,
-            'eventId'=>$eventId,
-            'message'=>'Success',
+            'status' => 200,
+            'eventRegistration' => $eventRegistration,
+            'modelName' => $modelName,
+            'eventId' => $eventId,
+            'message' => 'Success',
         ]);
     }
 
-    public function greetingStatus($star_id){
-        $greetingsRegistration = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->orderBy('id','DESC')->first();
+    public function greetingStatus($star_id)
+    {
+        $greetingsRegistration = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->orderBy('id', 'DESC')->first();
 
         $greeting = Greeting::where([['star_id', $star_id], ['star_approve_status', '>', 0]])->first();
 
@@ -117,9 +120,9 @@ class UserMobileAppController extends Controller
 
 
         if (isset($greetingsRegistration)) {
-            if($greetingsRegistration->status == 2){
+            if ($greetingsRegistration->status == 2) {
                 $is_registered_already = false;
-            }else{
+            } else {
                 $is_registered_already = true;
             }
         } else {
@@ -135,44 +138,63 @@ class UserMobileAppController extends Controller
         ]);
     }
 
-     public function userInformationUpdate(Request $request){
+    public function userInformationUpdate(Request $request)
+    {
         $user = User::find(auth('sanctum')->user()->id);
         $userInfo = new UserInfo();
 
 
 
         try {
-             if($request->img['data']){
+            if ($request->img['data']) {
 
-            $originalExtension = str_ireplace("image/","",$request->img['type']);
+                $originalExtension = str_ireplace("image/", "", $request->img['type']);
 
-            $folder_path       = 'uploads/images/users/';
+                $folder_path       = 'uploads/images/users/';
 
-            $image_new_name    = Str::random(20).'-'.now()->timestamp.'.'.$originalExtension;
-            $decodedBase64 = $request->img['data'];
-        }
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->img['data'];
+            }
 
-            Image::make($decodedBase64)->save($folder_path.$image_new_name);
-            $user->image = $folder_path.$image_new_name;
+            Image::make($decodedBase64)->save($folder_path . $image_new_name);
+            $user->image = $folder_path . $image_new_name;
 
-            $userInfo->user_id= $user->id;
-            $userInfo->country=  $request->country;
-            $userInfo->occupation=  $request->occupation;
-            $userInfo->edu_level=  $request->edu;
+            $userInfo->user_id = $user->id;
+            $userInfo->country =  $request->country;
+            $userInfo->occupation =  $request->occupation;
+            $userInfo->edu_level =  $request->edu;
 
             $userInfo->save();
             $user->save();
             return response()->json([
-                "message"=>"Profile image updated ",
-                "status"=>"200",
+                "message" => "Profile image updated ",
+                "status" => "200",
                 "userInfo" =>  $user
             ]);
         } catch (\Exception $exception) {
             return response()->json([
-                "message"=>"Image field required, invalid image !",
-                "error"=>$exception->getMessage(),
-                "status"=>"0",
+                "message" => "Image field required, invalid image !",
+                "error" => $exception->getMessage(),
+                "status" => "0",
             ]);
         }
+    }
+
+    /**
+     * all upcomming events get
+     */
+    public function allUpcommingEvent()
+    {
+        $learningSessions = LearningSession::where('status', 2)->orderBy('id', 'DESC')->get();
+        $liveChats = LiveChat::where('status', 2)->orderBy('id', 'DESC')->get();
+        $auditions = Audition::where('status', 2)->orderBy('id', 'DESC')->get();
+        $meetups = MeetupEvent::where('status', 2)->orderBy('id', 'DESC')->get();
+
+        return response()->json([
+            "learningSessions" => $learningSessions,
+            "liveChats" => $liveChats,
+            "auditions" =>  $auditions,
+            "meetups" => $meetups
+        ]);
     }
 }
