@@ -300,8 +300,11 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
 
 
-    Route::post('/admin/add_schedule', [ScheduleController::class, 'add_schedule']);
+    Route::post('/admin/add_schedule/', [ScheduleController::class, 'add_schedule']);
+
     Route::get('/admin/schedule', [ScheduleController::class, 'selected_schedule']);
+    Route::get('/admin/schedule/{date}', [ScheduleController::class, 'dateWiseSchedule']);
+
     Route::get('/admin/schedule_list', [ScheduleController::class, 'schedule_list']);
 
     //greetings Activety check

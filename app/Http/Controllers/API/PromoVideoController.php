@@ -40,6 +40,9 @@ class PromoVideoController extends Controller
             ]);
         }else{
             $promo = PromoVideo::create([
+                'category_id' => auth()->user()->category_id,
+                'sub_category_id' => auth()->user()->sub_category_id,
+                'admin_id' => auth()->user()->id,
                 'admin_id' => auth()->user()->id,
                 'star_id' => $request->star_id,
                 'title' => $request->title,
