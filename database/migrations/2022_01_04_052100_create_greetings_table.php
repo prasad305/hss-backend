@@ -20,6 +20,7 @@ class CreateGreetingsTable extends Migration
             $table->unsignedBigInteger('star_id')->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->string('title')->nullable();
+            $table->longText('instruction')->nullable();
             $table->string('banner')->nullable();
             $table->string('video')->nullable();
             $table->float('cost')->nullable();
