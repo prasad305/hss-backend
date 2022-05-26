@@ -19,6 +19,7 @@ use App\Http\Controllers\API\Audition\Admin\AuditionController;
 use App\Http\Controllers\API\Audition\Jury\JuryAuditionController;
 use App\Http\Controllers\API\Audition\Judge\JudgeAuditionController;
 use App\Http\Controllers\API\PromoVideoController;
+use App\Http\Controllers\API\StarScheduleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -299,6 +300,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/schedule/{date}', [ScheduleController::class, 'dateWiseSchedule']);
 
     Route::get('/admin/schedule_list', [ScheduleController::class, 'schedule_list']);
+    Route::get('/admin/current_year_schedule_list', [ScheduleController::class, 'current_year_schedule_list']);
 
     //greetings Activety check
     Route::get('/admin/greetings_star_status', [GreetingController::class, 'greetingsCreateStatusAdmin']);
@@ -351,6 +353,13 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/livechat', [LiveChatController::class, 'livechat']);
     Route::get('/sinlgeLiveChat/{id}', [LiveChatController::class, 'sinlgeLiveChat']);
 
+    // schdedule
+    Route::post('/star/add_schedule/', [StarScheduleController::class, 'add_schedule']);
+
+    Route::get('/star/schedule', [StarScheduleController::class, 'selected_schedule']);
+    Route::get('/star/schedule/{date}', [StarScheduleController::class, 'dateWiseSchedule']);
+    Route::get('/star/schedule_list', [StarScheduleController::class, 'schedule_list']);
+    Route::get('/star/current_week_schedule_list', [StarScheduleController::class, 'current_week_schedule_list']);
 
     // Fan Group Section
     Route::get('star/fan/group/starlist/status', [FanGroupController::class, 'statusStar']);

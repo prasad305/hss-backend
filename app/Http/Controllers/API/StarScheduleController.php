@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\API;
-use Carbon\Carbon;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Schedule;
 use App\Models\User;
 
-class ScheduleController extends Controller
+class StarScheduleController extends Controller
 {
     //
     public function add_schedule(Request $request)
@@ -36,9 +36,9 @@ class ScheduleController extends Controller
                 ]);
             }else{
                 Schedule::insert([
-                    'admin_id' => auth('sanctum')->user()->id,
+                    'admin_id' => auth('sanctum')->user()->parent_user,
                     'event_type' => $req['event_type'],
-                    'star_id' => $star->id,
+                    'star_id' => auth()->user()->id,
                     'from' => $req['from'],
                     'to' => $req['to'],
                     'date' => $req['date'],
@@ -81,7 +81,7 @@ class ScheduleController extends Controller
 
     public function dateWiseSchedule($date)
     {
-        $schedule = Schedule::where([['admin_id',auth('sanctum')->user()->id],['date',$date]])->get();
+        $schedule = Schedule::where([['star_id',auth('sanctum')->user()->id],['date',$date]])->get();
         return response()->json([
             'status'=>200,
             'schedule'=> $schedule,
@@ -91,7 +91,7 @@ class ScheduleController extends Controller
 
     public function schedule_list()
     {
-        $schedule = Schedule::select('date','status')->distinct()->where('admin_id',auth('sanctum')->user()->id)->orderBy('date', 'DESC')->get();
+        $schedule = Schedule::select('date','status')->distinct()->where('star_id',auth('sanctum')->user()->id)->orderBy('date', 'DESC')->get();
         
         // $date = [];
         // foreach ($schedule as $key => $value) {
@@ -106,11 +106,11 @@ class ScheduleController extends Controller
         ]);
     }
 
-    public function current_year_schedule_list()
+    public function current_week_schedule_list()
     {
 
-        $schedule = Schedule::select(['event_type as title','date as startDate','from','to'])->whereBetween('date', 
-        [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where('admin_id',auth('sanctum')->user()->id)->get();
+        $schedule = Schedule::select(['event_type as title','date as startDate','from','to'])->whereBetween('date',
+        [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where('star_id',auth('sanctum')->user()->id)->get();
 
         return response()->json([
             'status'=>200,
