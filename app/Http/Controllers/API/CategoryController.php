@@ -295,13 +295,10 @@ class CategoryController extends Controller
 
     public function star_list()
     {
-        $star = User::where('parent_user',auth('sanctum')->user()->id)->first();
-        $star_details = SuperStar::where('star_id',$star->id)->first();
-        
+        $star = User::where('parent_user',auth('sanctum')->user()->id)->get();
         return response()->json([
             'status' => 200,
             'star' => $star,
-            'star_details' => $star_details,
         ]);
     }
 
