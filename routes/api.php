@@ -116,6 +116,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('user/fan/group/join/{join_id}', [FanGroupController::class, 'getFanGroupJoinId']);
     Route::post('/user/fan/group/post/store', [FanGroupController::class, 'getFanPostStore']);
     Route::get('/user/fan/group/post/show/{slug}', [FanGroupController::class, 'getFanPostShow']);
+    Route::get('/user/fan/group/post/like/{id}', [FanGroupController::class, 'getFanPostLike']);
+    Route::post('/user/fan/group/post/like/{id}', [FanGroupController::class, 'postFanPostLike']);
 
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);

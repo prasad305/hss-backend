@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\FanGroup;
 use App\Models\User;
+use App\Models\Post;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Carbon\Carbon;
@@ -94,16 +95,35 @@ class FanGroupController extends Controller
     {
         $spost = FanGroup::find($id);
 
+
         if($spost->status != 1)
         {
             $spost->status = 1;
             $spost->update();
+
+            $post = new Post();
+            $post->type = 'fangroup';
+            // $post->user_id = $event->star_id;
+            $post->event_id = $spost->id;
+            $post->category_id=$spost->category_id;
+            $post->sub_category_id=$spost->sub_category_id;
+            $post->title = $spost->group_name;
+            $post->details = $spost->description;
+            $post->status = 1;
+
+            $post->save();
+
             return redirect()->back()->with('success', 'Published');
         }
         else
         {
             $spost->status = 0;
             $spost->update();
+
+            // Remove post //
+            $post = Post::where('event_id', $id)->first();
+            $post->delete();
+
             return redirect()->back()->with('success', 'Not Published');
         }
 

@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="{{ asset('assets/custom-style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/super-admin/Events.css') }}">
 
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -423,6 +425,36 @@ function ErrorMessageClear() {
   }
     </script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+  <!-- <script>
+  $( function() {
+    $( "#datepicker" ).datepicker();
+  } );
+  </script>
+  <script>
+  $( function() {
+    $( "#datepicker1" ).datepicker();
+  } );
+  </script> -->
+
+
+<script>
+    $('#datepicker').datepicker(
+         { 
+            minDate: 0,
+            beforeShow: function() {
+            $(this).datepicker('option', 'maxDate', $('#datepicker1').val());
+          }
+       });
+    //     $('#datepicker1').datepicker({
+    //         defaultDate: "+1w",
+    //         beforeShow: function() {
+    //             $(this).datepicker('option', 'minDate', $('#datepicker').val());
+    //             if ($('#datepicker').val() === '') $(this).datepicker('option', 'minDate', 0);                             
+    //         }
+    //    });
+</script>
 
 </body>
 

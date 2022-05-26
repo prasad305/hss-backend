@@ -118,6 +118,19 @@ Manager Admin
                     </div>
                 </div>
 
+                <div class="row card p-5">
+                <div class="col-md-6 form-group">
+                        <label for="">Start Date</label>
+                        <input type="text" id="datepicker" readonly name="start_date" class="form-control" />
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="">End Date</label>
+                        <input type="text" id="datepicker1" readonly name="end_date" class="form-control" />
+                    </div>
+                </div>
+
+               
+
                 <div class="container row">
                     @if($post->status != 1)
                     <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.fangroup.set_publish', [$post->id]) }}">Publish Now</a>
@@ -185,4 +198,5 @@ Manager Admin
 @push('script')
 {{-- <script src="{{ asset('assets/manager-admin/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script> --}}
 <script src="{{ asset('assets/manager-admin/pages/dashborad.js') }}"></script>
+
 @endpush
