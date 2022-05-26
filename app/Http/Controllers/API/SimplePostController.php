@@ -7,19 +7,47 @@ use Illuminate\Http\Request;
 use App\Models\SimplePost;
 use App\Models\Post;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
+use Vonage\Client\Exception\Validation;
 
 class SimplePostController extends Controller
 {
     //
     public function add(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'description' => 'required',
+            'star_id' => 'required',
+            'type' => 'required',
+
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'star_id.required' => "Star Field Is Required",
+            'type.required' => "This  Field Is Required",
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
+
         $post = new SimplePost();
         $post->title = $request->input('title');
         $post->created_by_id = auth('sanctum')->user()->id;
+        $post->category_id = auth('sanctum')->user()->category_id;
+        $post->subcategory_id = auth('sanctum')->user()->sub_category_id;
         $post->star_id = $request->input('star_id');
         $post->description = $request->input('description');
-        $post->fee = $request->input('fee');
+        $post->fee = $request->input('fee') > 0  ? $request->input('fee') : 0;
         $post->video = $request->input('video');
         $post->type = $request->input('type');
 
@@ -35,7 +63,14 @@ class SimplePostController extends Controller
             Image::make($file)->resize(900, 400)->save($filename, 100);
             $post->image = $filename;
         }
-
+        if ($request->hasFile('video')) {
+    
+            $file        = $request->file('video');
+            $path        = 'uploads/videos/post';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $post->video = $path . '/' . $file_name;
+        }
         $post->save();
 
         return response()->json([
@@ -215,17 +250,49 @@ class SimplePostController extends Controller
         ]);
     }
 
+    public function decline_post($id){
+        $declinePost = SimplePost::findOrFail($id)->update(['star_approval'=>2]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success',
+        ]);
+    }
+
     public function star_add(Request $request)
     {
         //return $request->all();
 
 
+        
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'description' => 'required',
+            'type' => 'required',
+
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'type.required' => "This  Field Is Required",
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
         $post = new SimplePost();
         $post->title = $request->input('title');
         $post->created_by_id = auth('sanctum')->user()->id;
         $post->star_id = auth('sanctum')->user()->id;
+        $post->category_id = auth('sanctum')->user()->category_id;
+        $post->subcategory_id = auth('sanctum')->user()->sub_category_id;
         $post->description = $request->input('description');
-        $post->fee = $request->input('fee');
+        $post->fee = $request->input('fee') > 0  ? $request->input('fee') : 0;
         $post->video = $request->input('video');
         $post->type = $request->input('type');
         $post->star_approval = 1;
@@ -247,6 +314,14 @@ class SimplePostController extends Controller
             Image::make($file)->resize(900, 400)->save($filename, 100);
             $post->image = $filename;
         }
+        if ($request->hasFile('video')) {
+    
+            $file        = $request->file('video');
+            $path        = 'uploads/videos/post';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $post->video = $path . '/' . $file_name;
+        }
 
         $post->save();
 
@@ -256,7 +331,12 @@ class SimplePostController extends Controller
             $npost = new Post();
             $npost->type = 'general';
             $npost->user_id = auth('sanctum')->user()->id;
+            $npost->category_id = auth('sanctum')->user()->category_id;
+            $npost->sub_category_id = auth('sanctum')->user()->sub_category_id;
             $npost->event_id = $post->id;
+            $npost->title = $post->title;
+            $npost->details = $post->description;
+            $npost->status = 1;
             $npost->save();
         }
 

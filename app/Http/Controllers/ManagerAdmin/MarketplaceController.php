@@ -17,7 +17,7 @@ class MarketplaceController extends Controller
         // $date = (int) Carbon::now()->format('dmYHis');
         // $rand = rand(100,999).$date;
 
-        $post = Marketplace::latest()->where('post_status', 1)->get();
+        $post = Marketplace::latest()->where('post_status', 1)->where('category_id',auth()->user()->category_id)->get();
 
         return view('ManagerAdmin.marketplace.index', compact('post'));
     }
@@ -37,14 +37,14 @@ class MarketplaceController extends Controller
 
     public function pending()
     {
-        $post = Marketplace::where([['status',0],['post_status',1]])->latest()->get();
+        $post = Marketplace::where([['status',0],['post_status',1]])->where('category_id',auth()->user()->category_id)->latest()->get();
 
         return view('ManagerAdmin.marketplace.index', compact('post'));
     }
 
     public function published()
     {
-        $post = Marketplace::where('status',1)->latest()->get();
+        $post = Marketplace::where('status',1)->where('category_id',auth()->user()->category_id)->latest()->get();
 
         return view('ManagerAdmin.marketplace.index', compact('post'));
     }
