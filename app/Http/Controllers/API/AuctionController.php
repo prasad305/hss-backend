@@ -269,7 +269,7 @@ class AuctionController extends Controller
 
     public function liveBidding($auction_id)
     {
-        $bidding = Bidding::with('user')->orderBy('amount', 'DESC')->where('auction_id', $auction_id)->take(6)->get();
+        $bidding = Bidding::with('user')->orderBy('amount', 'DESC')->where('auction_id', $auction_id)->take(8)->get();
         return response()->json([
             'status' => 200,
             'bidding' => $bidding,
@@ -277,10 +277,12 @@ class AuctionController extends Controller
     }
     public function topBidder($auction_id)
     {
+        $topBidder = Bidding::with('user')->orderBy('amount', 'DESC')->where('auction_id', $auction_id)->where('notify_status',1)->get();
         $bidding = Bidding::with('user')->orderBy('amount', 'DESC')->where('auction_id', $auction_id)->take(3)->get();
         return response()->json([
             'status' => 200,
             'bidding' => $bidding,
+            'topBidder' => $topBidder,
         ]);
     }
 

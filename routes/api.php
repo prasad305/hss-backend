@@ -148,7 +148,14 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // auction product
     Route::get('/auction-product/all', [UserController::class, 'auctionProduct']);
+    Route::get('/auction-product/{id}', [UserController::class, 'auctionSingleProduct']);
     Route::get('/user/getStarAuction/{star_id}', [UserController::class, 'starAuction']);
+    // Auction
+    Route::get('/user/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
+    Route::post('user/bidding/auction/product', [UserController::class, 'bidNow']);
+    Route::get('user/liveBidding/auction/{auction_id}', [UserController::class, 'liveBidding']);
+    Route::get('user/auctionApply/auction/{auction_id}', [UserController::class, 'auctionApply']);
+    Route::get('user/liveBidding/history/{auction_id}', [UserController::class, 'bidHistory']);
 
     //Event Registaion By User (Learning Session + Live Chat + Greeting + Meetup Event)
     Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
@@ -159,11 +166,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/greetings/register', [UserController::class, 'greetingsRegistation']);
     Route::post('/user/meetup-event/register', [MeetupEventController::class, 'meetup_register']);
 
-    // Auction
-    Route::get('/user/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
-    Route::post('user/bidding/auction/product', [UserController::class, 'bidNow']);
-    Route::get('user/liveBidding/auction/{auction_id}', [UserController::class, 'liveBidding']);
-    Route::get('user/liveBidding/history/{auction_id}', [UserController::class, 'bidHistory']);
 
     // Audition
     Route::get('/user/audition/all', [UserController::class, 'audition_list']);
