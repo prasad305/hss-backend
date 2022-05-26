@@ -14,6 +14,7 @@ use App\Http\Controllers\ManagerAdmin\FanGroupController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\ManagerAdmin\AuctionController;
 use App\Http\Controllers\ManagerAdmin\PromoVideoController;
+use App\Http\Controllers\ManagerAdmin\ScheduleController;
 use App\Http\Controllers\ManagerAdmin\StarAssignedController;
 use App\Http\Controllers\ManagerAdmin\SuperStarController;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,10 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     // Dashboard Routes By Srabon
 
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
+
+    // Schedule Routes By Monir 
+    Route::resource('schedule', ScheduleController::class);
+
 
     // Meetup Events
     Route::get('meetup-events', [DashboardController::class, 'meetupEvents'])->name('dashboard.meetupEvent');
@@ -119,8 +124,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     
     // assigned route for admin to star or star to admin
     Route::resource('assigned',StarAssignedController::class);
-
-
 
 
     // Live route

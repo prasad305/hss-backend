@@ -12,10 +12,20 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a href="{{ route('managerAdmin.schedule.index') }}" class="nav-link">
+                <i class="nav-icon {{ Request::routeIs('managerAdmin.schedule.index') ? 'active' : '' }} fas fa-th"></i>
+                <p>
+                    Schedules
+                </p>
+            </a>
+        </li>
+
 
         <li class="nav-item">
             <a href="{{ route('managerAdmin.admin.index') }}" class="nav-link">
-                <i class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-th"></i>
+                <i class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-users"></i>
+                <i class="fa-solid fa-list-check"></i>
                 <p>
                     Admins
                     {{-- <span class="right badge badge-danger">New</span> --}}
@@ -25,7 +35,7 @@
 
         <li class="nav-item">
             <a href="{{ route('managerAdmin.star.index') }}" class="nav-link">
-                <i class="nav-icon {{ Request::routeIs('managerAdmin.star.index') ? 'active' : '' }} fas fa-th"></i>
+                <i class="nav-icon {{ Request::routeIs('managerAdmin.star.index') ? 'active' : '' }} fas fa-star"></i>
                 <p>
                     Super Stars
                 </p>
@@ -36,7 +46,7 @@
         <li class="nav-item">
             <a href="{{ route('managerAdmin.auditionAdmin.index') }}" class="nav-link">
                 <i
-                    class="nav-icon {{ Request::routeIs('managerAdmin.auditionAdmin.index') ? 'active' : '' }} fas fa-th"></i>
+                    class="nav-icon {{ Request::routeIs('managerAdmin.auditionAdmin.index') ? 'active' : '' }} fa fa-list-check"></i>
                 <p>
                     Audition Admins
                 </p>
@@ -60,6 +70,8 @@
                 </p>
             </a>
         </li>
+
+      
 
 
         <li class="nav-item">

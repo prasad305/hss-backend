@@ -35,6 +35,7 @@ class ScheduleController extends Controller
                     'date' => $req['date'],
                 ]);
             }else{
+               
                 Schedule::insert([
                     'admin_id' => auth('sanctum')->user()->id,
                     'event_type' => $req['event_type'],
