@@ -48,9 +48,9 @@ class PromoVideoController extends Controller
                 'title' => $request->title,
                 'star_approval' => 0,
             ]);
-    
+
             if ($request->hasFile('video_url')) {
-    
+
                 $file        = $request->file('video_url');
                 $path        = 'uploads/videos/promos';
                 $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
@@ -58,16 +58,16 @@ class PromoVideoController extends Controller
                 $promo->video_url = $path . '/' . $file_name;
             }
             if ($request->hasFile('thumbnail')) {
-    
+
                 $file        = $request->file('thumbnail');
                 $path        = 'uploads/videos/promos/';
                 $file_name   = $path . time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
                 Image::make($file)->resize(900, 400)->save($file_name);
                 $promo->thumbnail = $file_name;
             }
-    
+
             $promo->save();
-    
+
             return response()->json([
                 'status' => 200,
                 'message' => "Video Uploaded Successfully"
@@ -75,7 +75,7 @@ class PromoVideoController extends Controller
         }
 
 
-       
+
     }
     public function pendingVideos()
     {

@@ -20,53 +20,128 @@ class GreetingController extends Controller
 
     public function index()
     {
-        //
-    }
 
+    }
 
     public function create()
     {
-    }
 
+    }
 
     public function add(Request $request)
     {
-        $greeting = new Greeting();
-
-        $greeting->title = $request->input('title');
-        $greeting->created_by_id = auth('sanctum')->user()->id;
-        $greeting->star_id = $request->input('star_id');
-
-        // $superStar = SuperStar::where('star_id', $request->input('star_id'))->first();
-        // $greeting->admin_id = $superStar->admin_id;
-
-        $greeting->description = $request->input('description');
-        $greeting->cost = $request->input('cost');
-        $greeting->registration_start_date = Carbon::parse($request->input('registration_start_date'));
-        $greeting->registration_end_date = Carbon::parse($request->input('registration_end_date'));
-
-        if ($request->hasfile('banner')) {
-            $destination = $greeting->banner;
-            if (File::exists($destination)) {
-                File::delete($destination);
-            }
-            $file = $request->file('banner');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/greetings/' . time() . '.' . $extension;
-
-            Image::make($file)->resize(879, 200)
-                ->save($filename, 100);
-
-            $greeting->banner = $filename;
-        }
-
-        $greeting->save();
-
-        return response()->json([
-            'status' => 200,
-            'greeting_id' => $greeting->id,
-            'message' => 'Greetings Session Added',
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'instruction' => 'required|min:1',
+            'cost' => 'required|min:1',
+            'banner' => 'required|mimes:jpeg,jpg,png,webp',
+            'video' => 'required|mimes:mp4,mov,ogg',
         ]);
+
+        // return $request->all();
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $greeting = new Greeting();
+            $greeting->created_by_id = auth('sanctum')->user()->id;
+            $greeting->admin_id = auth('sanctum')->user()->id;
+            $greeting->category_id = auth('sanctum')->user()->category_id;
+
+            $greeting->title = $request->title;
+            $greeting->instruction = $request->instruction;
+            $greeting->star_id = auth('sanctum')->user()->star->id;
+            $greeting->cost = $request->cost;
+
+            if ($request->hasfile('banner')) {
+                $destination = $greeting->banner;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('banner');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/greeting/' . time() . '.' . $extension;
+                Image::make($file)->resize(900, 400)->save($filename, 50);
+                $greeting->banner = $filename;
+            }
+
+            if ($request->hasFile('video')) {
+                if ($greeting->video != null && file_exists($greeting->video)) {
+                    unlink($greeting->video);
+                }
+                $file        = $request->file('video');
+                $path        = 'uploads/videos/greeting';
+                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                $file->move($path, $file_name);
+                $greeting->video = $path . '/' . $file_name;
+            }
+
+            $greeting->save();
+            return response()->json([
+                'status' => 200,
+                'greeting' => $greeting,
+                'message' => 'Greetings Added Successfully !',
+            ]);
+        }
+    }
+    public function edit_greetings(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'instruction' => 'required|min:1',
+            'cost' => 'required|min:1',
+            'banner' => 'mimes:jpeg,jpg,png,webp',
+            'video' => 'mimes:mp4,mov,ogg',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $greeting = Greeting::find($request->id);
+            // $greeting->created_by_id = auth('sanctum')->user()->id;
+            $greeting->admin_id = auth('sanctum')->user()->id;
+            $greeting->category_id = auth('sanctum')->user()->category_id;
+
+            $greeting->title = $request->title;
+            $greeting->instruction = $request->instruction;
+            $greeting->cost = $request->cost;
+
+            if ($request->hasfile('banner')) {
+                $destination = $greeting->banner;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('banner');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/greeting/' . time() . '.' . $extension;
+                Image::make($file)->resize(900, 400)->save($filename, 50);
+                $greeting->banner = $filename;
+            }
+
+            if ($request->hasFile('video')) {
+                if ($greeting->video != null && file_exists($greeting->video)) {
+                    unlink($greeting->video);
+                }
+                $file        = $request->file('video');
+                $path        = 'uploads/videos/greeting';
+                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                $file->move($path, $file_name);
+                $greeting->video = $path . '/' . $file_name;
+            }
+
+            $greeting->save();
+            return response()->json([
+                'status' => 200,
+                'greeting' => $greeting,
+                'message' => 'Greetings Updated Successfully !',
+            ]);
+        }
     }
 
 
@@ -171,8 +246,7 @@ class GreetingController extends Controller
      */
     public function greetingsCreateStatusAdmin()
     {
-        $greeting = Greeting::where('created_by_id', auth('sanctum')->user()->id)->first();
-
+        $greeting = Greeting::where('star_id', auth('sanctum')->user()->star->id)->first();
         if (isset($greeting)) {
             return response()->json([
                 'status' => 200,
@@ -180,10 +254,9 @@ class GreetingController extends Controller
                 'action' => true,
             ]);
         } else {
-
             return response()->json([
                 'status' => 200,
-                'greeting' => $greeting,
+                'greeting' => [],
                 'action' => false,
             ]);
         }

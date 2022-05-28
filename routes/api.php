@@ -269,6 +269,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
 
     Route::post('admin/add_greetings', [GreetingController::class, 'add']);
+    Route::post('admin/edit_greetings', [GreetingController::class, 'edit_greetings']);
     Route::get('admin/greeting/{id}', [GreetingController::class, 'show']);
 
 
