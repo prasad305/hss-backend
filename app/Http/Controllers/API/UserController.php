@@ -262,7 +262,7 @@ class UserController extends Controller
 
     public function registeredLivechat()
     {
-        $post = LiveChatRegistration::with('liveChatRoom')->where('user_id', auth('sanctum')->user()->id)->latest()->get();
+        $post = LiveChatRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
 
         return response()->json([
             'status' => 200,
