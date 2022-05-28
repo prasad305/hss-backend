@@ -29,6 +29,8 @@ class CreateAuctionsTable extends Migration
             $table->string('product_image')->nullable();
             $table->string('banner')->nullable();
             $table->timestamp('bid_from')->nullable();
+            $table->timestamp('result_date')->nullable();
+            $table->timestamp('product_delivery_date')->nullable();
             $table->timestamp('bid_to')->nullable();
             $table->boolean('status')->nullable();
             $table->boolean('star_approval')->default(0)->comment('0=pending,1=approved');

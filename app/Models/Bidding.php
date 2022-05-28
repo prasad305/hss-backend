@@ -23,6 +23,6 @@ class Bidding extends Model
     public function auction()
     {
 
-        return $this->hasMany(Auction::class, 'auction_id');
+        return $this->belongsTo(Auction::class, 'auction_id');
     }
 }
