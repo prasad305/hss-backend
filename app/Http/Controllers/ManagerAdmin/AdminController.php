@@ -16,6 +16,7 @@ class AdminController extends Controller
     public function index()
     {
         $admins = User::where([['category_id',auth()->user()->category_id],['user_type', 'admin']])->orderBy('id', 'DESC')->get();
+        
         return view('ManagerAdmin.admins.index', compact('admins'));
     }
 
