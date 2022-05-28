@@ -91,8 +91,11 @@ class FanGroupController extends Controller
         ]);
     }
 
-    public function set_publish($id)
+    public function set_publish(Request $request)
     {
+        // dd($request->all());
+       
+        $id = $request->postId;
         $spost = FanGroup::find($id);
 
 
@@ -108,6 +111,8 @@ class FanGroupController extends Controller
             $post->category_id=$spost->category_id;
             $post->sub_category_id=$spost->sub_category_id;
             $post->title = $spost->group_name;
+            $post->post_start_date = Carbon::parse($request->post_start_date)->format('Y-m-d');
+            $post->post_end_date = Carbon::parse($request->post_end_date)->format('Y-m-d');
             $post->details = $spost->description;
             $post->status = 1;
 

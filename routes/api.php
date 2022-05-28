@@ -220,6 +220,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/fan-group/star/list/{data}', [FanGroupController::class, 'someStarList']);
     Route::get('/admin/fan/group/adminlist/status', [FanGroupController::class, 'statusAdminStar']);
     Route::get('/admin/fan/group/show/{slug}', [FanGroupController::class, 'showFanGroup']);
+    Route::get('/admin/fan/group/analytics/{slug}', [FanGroupController::class, 'showFanGroupAnalytics']);
     Route::post('/admin/fan/group/update/{slug}', [FanGroupController::class, 'updateFanGroup']);
     Route::delete('/admin/fan/group/delete/{slug}', [FanGroupController::class, 'deleteFanGroup']);
     Route::post('/admin/fan/member/approve/{id}', [FanGroupController::class, 'approveFanMember']);

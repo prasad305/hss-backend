@@ -427,34 +427,8 @@ function ErrorMessageClear() {
 
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-  <!-- <script>
-  $( function() {
-    $( "#datepicker" ).datepicker();
-  } );
-  </script>
-  <script>
-  $( function() {
-    $( "#datepicker1" ).datepicker();
-  } );
-  </script> -->
 
 
-<script>
-    $('#datepicker').datepicker(
-         { 
-            minDate: 0,
-            beforeShow: function() {
-            $(this).datepicker('option', 'maxDate', $('#datepicker1').val());
-          }
-       });
-    //     $('#datepicker1').datepicker({
-    //         defaultDate: "+1w",
-    //         beforeShow: function() {
-    //             $(this).datepicker('option', 'minDate', $('#datepicker').val());
-    //             if ($('#datepicker').val() === '') $(this).datepicker('option', 'minDate', 0);                             
-    //         }
-    //    });
-</script>
 
 </body>
 
