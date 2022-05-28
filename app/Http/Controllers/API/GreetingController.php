@@ -173,18 +173,18 @@ class GreetingController extends Controller
     }
 
 
-    public function view_star_greeting()
-    {
-        $greeting = Greeting::where('star_id', auth('sanctum')->user()->id)->latest()->first();
+    // public function view_star_greeting()
+    // {
+    //     $greeting = Greeting::where('star_id', auth('sanctum')->user()->id)->latest()->first();
 
-        //$greeting = User::where('id',auth('sanctum')->user()->id)->first();
+    //     //$greeting = User::where('id',auth('sanctum')->user()->id)->first();
 
-        return response()->json([
-            'status' => 200,
-            'greeting' => $greeting,
-            'message' => 'Success',
-        ]);
-    }
+    //     return response()->json([
+    //         'status' => 200,
+    //         'greeting' => $greeting,
+    //         'message' => 'Success',
+    //     ]);
+    // }
 
 
     public function greetingStatusCheck()
