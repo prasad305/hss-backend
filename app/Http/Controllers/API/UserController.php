@@ -751,7 +751,7 @@ class UserController extends Controller
     public function auctionApply($auction_id)
     {
         $auctionApply = Bidding::with('user','auction')->where('auction_id', $auction_id)->where('notify_status',1)->where('user_id',auth()->user()->id)->first();
-        $winner = Bidding::with('user','auction')->where('auction_id', $auction_id)->where('winner',1)->where('user_id',auth()->user()->id)->first();
+        $winner = Bidding::with('user','auction')->where('auction_id', $auction_id)->where('win_status',1)->where('user_id',auth()->user()->id)->first();
         return response()->json([
             'status' => 200,
             'auctionApply' => $auctionApply,
