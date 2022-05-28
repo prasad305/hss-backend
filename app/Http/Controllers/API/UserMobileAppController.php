@@ -13,6 +13,7 @@ use App\Models\LiveChatRegistration;
 use App\Models\LiveChat;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
+use App\Models\LiveChatRoom;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
 use App\Models\User;
@@ -71,6 +72,7 @@ class UserMobileAppController extends Controller
             $event->available_start_time = Carbon::parse($request->end_time)->addMinutes(1)->format('H:i:s');
             $eventRegistration->live_chat_id = $eventId;
             $eventRegistration->amount = $request->fee;
+            $eventRegistration->room_id = $request->room_id;
             $eventRegistration->live_chat_start_time = Carbon::parse($request->start_time)->format('H:i:s');
             $eventRegistration->live_chat_end_time = Carbon::parse($request->end_time)->format('H:i:s');
             $activity->type = 'livechat';
