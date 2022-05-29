@@ -19,6 +19,7 @@ use App\Http\Controllers\API\Audition\Admin\AuditionController;
 use App\Http\Controllers\API\Audition\Jury\JuryAuditionController;
 use App\Http\Controllers\API\Audition\Judge\JudgeAuditionController;
 use App\Http\Controllers\API\PromoVideoController;
+use App\Http\Controllers\API\StarGreetingController;
 use App\Http\Controllers\API\StarScheduleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -193,7 +194,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     //Registration Checker
     Route::get('/user/registration_checker/{type}/{slug}', [UserController::class, 'registration_checker']);
-
 });
 
 
@@ -421,7 +421,12 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::post('/star/add_live_session', [LiveChatController::class, 'add_live_session']);
     Route::post('/star/update_live_session', [LiveChatController::class, 'update_live_session']);
 
-    Route::get('/star/greetings', [GreetingController::class, 'view_star_greeting']);
+    // Route::get('/star/greetings', [GreetingController::class, 'view_star_greeting']);
+    //greetings Activety check
+    Route::get('/star/greetings_star_status', [StarGreetingController::class, 'greetings_star_status']);
+    Route::post('/star/add_greetings', [StarGreetingController::class, 'add_greetings']);
+
+
     Route::get('/admin/greeting_approve', [GreetingController::class, 'greetingsApprovedByStar']);
 
     Route::get('/star/meetup_event/pending', [MeetupEventController::class, 'star_pending_list']);

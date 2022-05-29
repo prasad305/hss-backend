@@ -30,16 +30,14 @@ class GreetingController extends Controller
 
     public function add(Request $request)
     {
+        // return $request->all();
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'instruction' => 'required|min:1',
-            'cost' => 'required|min:1',
+            'instruction' => 'required|min:10',
+            'cost' => 'required|numeric||min:1',
             'banner' => 'required|mimes:jpeg,jpg,png,webp',
             'video' => 'required|mimes:mp4,mov,ogg',
         ]);
-
-        // return $request->all();
-
         if ($validator->fails()) {
             return response()->json([
                 'status' => 422,
@@ -91,10 +89,10 @@ class GreetingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'instruction' => 'required|min:1',
-            'cost' => 'required|min:1',
-            'banner' => 'mimes:jpeg,jpg,png,webp',
-            'video' => 'mimes:mp4,mov,ogg',
+            'instruction' => 'required|min:10',
+            'cost' => 'required|numeric||min:1',
+            'banner' => 'nullable|mimes:jpeg,jpg,png,webp',
+            'video' => 'nullable|mimes:mp4,mov,ogg',
         ]);
 
         if ($validator->fails()) {
@@ -104,7 +102,7 @@ class GreetingController extends Controller
             ]);
         } else {
             $greeting = Greeting::find($request->id);
-            // $greeting->created_by_id = auth('sanctum')->user()->id;
+
             $greeting->admin_id = auth('sanctum')->user()->id;
             $greeting->category_id = auth('sanctum')->user()->category_id;
 
@@ -144,7 +142,6 @@ class GreetingController extends Controller
         }
     }
 
-
     public function show($id)
     {
         $greeting = Greeting::find($id);
@@ -176,18 +173,18 @@ class GreetingController extends Controller
     }
 
 
-    public function view_star_greeting()
-    {
-        $greeting = Greeting::where('star_id', auth('sanctum')->user()->id)->latest()->first();
+    // public function view_star_greeting()
+    // {
+    //     $greeting = Greeting::where('star_id', auth('sanctum')->user()->id)->latest()->first();
 
-        //$greeting = User::where('id',auth('sanctum')->user()->id)->first();
+    //     //$greeting = User::where('id',auth('sanctum')->user()->id)->first();
 
-        return response()->json([
-            'status' => 200,
-            'greeting' => $greeting,
-            'message' => 'Success',
-        ]);
-    }
+    //     return response()->json([
+    //         'status' => 200,
+    //         'greeting' => $greeting,
+    //         'message' => 'Success',
+    //     ]);
+    // }
 
 
     public function greetingStatusCheck()
@@ -232,7 +229,6 @@ class GreetingController extends Controller
                 'action' => true,
             ]);
         } else {
-
             return response()->json([
                 'status' => 200,
                 'greeting' => $greeting,
