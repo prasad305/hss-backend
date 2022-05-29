@@ -440,17 +440,56 @@ class AuctionController extends Controller
             'status' => 200,
         ]);
     }
+    public function decline($id)
+    {
+
+
+        Auction::where('id', $id)->update(['star_approval' => 2]);
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+
 
 
     public function star_updateProduct(Request $request, $id)
     {
+        $product = Auction::findOrfail($id);
+
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'bid_from' => 'required',
+            'bid_to' => 'required',
+            'details' => 'required',
+            'base_price' => 'required',
+            'result_date' => 'required',
+            'product_delivery_date' => 'required',
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'bid_from.required' => 'Date Field Is Required',
+            'bid_to.required' => 'Date Field Is Required',
+            'details.required' => 'Description Field Is Required',
+            'result_date.required' => 'This Field Is Required',
+            'product_delivery_date.required' => 'This Field Is Required',
+            'base_price.required' => "Price Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
 
         if ($request->hasFile('product_image')) {
             $file        = $request->file('product_image');
             $path        = 'uploads/images/auction';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
-            $data['product_image'] = $path . '/' . $file_name;
+            $product['product_image'] = $path . '/' . $file_name;
         }
 
         if ($request->hasFile('banner')) {
@@ -458,15 +497,22 @@ class AuctionController extends Controller
             $path        = 'uploads/images/auction';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
-            $data['banner'] = $path . '/' . $file_name;
+            $product['banner'] = $path . '/' . $file_name;
+        }
+        if($product){
+            $product->title = $request->title;
+            $product->base_price = $request->base_price;
+            $product->bid_from = $request->bid_from;
+            $product->bid_to = $request->bid_to;
+            $product->details = $request->details;
+            $product->result_date = $request->result_date;
+            $product->product_delivery_date = $request->product_delivery_date;
+            $product->save();
         }
 
-        $product = Auction::findOrfail($id)->update([
-            'title' => $request->title,
-            'base_price' => $request->base_price,
-            //'details' => $request->status,
-            'status' => $request->status,
-        ]);
+        // $product = Auction::findOrfail($id)->update([
+           
+        // ]);
 
 
         return response()->json([
@@ -498,6 +544,7 @@ class AuctionController extends Controller
             'maxBidding' => $maxBidding
         ]);
     }
+   
 
 
     public function star_showProduct($id)
@@ -520,7 +567,7 @@ class AuctionController extends Controller
     public function star_pendingProduct()
     {
 
-        $product = Auction::where('star_approval', 0)->count();
+        $product = Auction::orderBy('id','DESC')->where('star_approval', 0)->count();
         return response()->json([
             'status' => 200,
             'product' => $product,
@@ -529,7 +576,7 @@ class AuctionController extends Controller
     public function star_pendingProductList()
     {
 
-        $products = Auction::where('star_approval', 0)->get();
+        $products = Auction::orderBy('id','DESC')->where('star_approval', 0)->get();
         return response()->json([
             'status' => 200,
             'products' => $products,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Acquired_app;
 use App\Models\Activity;
 use App\Models\Auction;
 use App\Models\Audition\Audition;
@@ -677,7 +678,7 @@ class UserController extends Controller
 
     public function auctionProduct()
     {
-        $product = Auction::with('star')->where('status', 1)->get();
+        $product = Auction::with('star')->orderBy('id','DESC')->where('status', 1)->get();
         return response()->json([
             'status' => 200,
             'product' => $product
@@ -697,7 +698,7 @@ class UserController extends Controller
     public function starAuction($star_id)
     {
 
-        $product = Auction::with('star', 'bidding', 'bidding.user')->where('star_id', $star_id)->where('status', 1)->latest()->get();
+        $product = Auction::with('star', 'bidding', 'bidding.user')->orderBy('id','DESC')->where('star_id', $star_id)->where('status', 1)->latest()->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
@@ -758,6 +759,67 @@ class UserController extends Controller
             'winner'=>$winner
         ]);
     }
+    public function maxBid($id){
+        $maxBid = Bidding::orderBy('amount','DESC')->where('auction_id',$id)->where('user_id',auth()->user()->id)->first();
+        return response()->json([
+            'status' => 200,
+            'maxBid' => $maxBid,
+        ]);
+    }
+
+    public function aquiredProduct(Request $request){
+
+        $bidding = Bidding::where('id',$request->bidding_id)->first();
+
+        $validator = Validator::make($request->all(), [
+
+            'name' => 'required',
+            'phone' => 'required',
+            'card_number' => 'required',
+            'ccv' => 'required',
+            'expiry_date' => 'required',
+
+
+        ],[
+            'name.required' => 'This Field Is Required',
+            'phone.required' => 'This Field Is Required',
+            'card_number.required' => 'This Field Is Required',
+            'ccv.required' => 'This Field Is Required',
+            'expiry_date.required' => 'This Field Is Required',
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
+
+        $aquired = Acquired_app::create([
+            'name' => $request->name,
+            'bidding_id' => $request->bidding_id,
+            'payment_id' => 1,
+            'card_number' => $request->card_number,
+            'phone' => $request->phone,
+            'ccv' => $request->ccv,
+            'expiry_date' => $request->expiry_date,
+        ]);
+
+
+        if($bidding->applied_status == 0){
+            $bidding->applied_status = 1;
+            $bidding->update();
+        }
+
+        return response()->json([
+            'status' => 200,
+            'aquired' => $aquired,
+            'message' => "Application success"
+        ]);
+
+    }
+
     public function bidHistory($auction_id)
     {
         $bidHistory = Bidding::orderBy('id', 'DESC')->where('user_id', auth()->user()->id)->where('auction_id', $auction_id)->get();

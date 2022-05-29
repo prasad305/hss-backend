@@ -157,6 +157,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('user/liveBidding/auction/{auction_id}', [UserController::class, 'liveBidding']);
     Route::get('user/auctionApply/auction/{auction_id}', [UserController::class, 'auctionApply']);
     Route::get('user/liveBidding/history/{auction_id}', [UserController::class, 'bidHistory']);
+    Route::post('user/aquired/auction', [UserController::class, 'aquiredProduct']);
+    Route::get('user/maxbid/auction/{id}', [UserController::class, 'maxBid']);
 
     //Event Registaion By User (Learning Session + Live Chat + Greeting + Meetup Event)
     Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
@@ -453,6 +455,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/edit/auction/{id}', [AuctionController::class, 'star_editProduct']);
     Route::get('/star/approvedOrDecline/auction/{id}', [AuctionController::class, 'star_approvedOrDecline']);
     Route::put('/star/approved/auction/{id}', [AuctionController::class, 'star_approved']);
+    Route::put('/star/decline/auction/{id}', [AuctionController::class, 'decline']);
     Route::post('/star/update/auction/{id}', [AuctionController::class, 'star_updateProduct']);
     Route::get('/star/all/auction/product', [AuctionController::class, 'star_allProduct']);
     Route::get('/star/show/auction/product/{id}', [AuctionController::class, 'star_showProduct']);
@@ -464,6 +467,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/sold/auction/product', [AuctionController::class, 'star_soldProduct']);
     Route::get('/star/unSold/auction/product', [AuctionController::class, 'star_unSoldProduct']);
     Route::get('/star/live/allProduct', [AuctionController::class, 'star_allLiveProduct']);
+    Route::get('/star/all/bidders', [AuctionController::class, 'star_allBidders']);
 
 
     // Super Star Audtion Routes
