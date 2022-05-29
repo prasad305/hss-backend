@@ -425,6 +425,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     //greetings Activety check
     Route::get('/star/greetings_star_status', [StarGreetingController::class, 'greetings_star_status']);
     Route::post('/star/add_greetings', [StarGreetingController::class, 'add_greetings']);
+    Route::post('/star/edit_greetings', [StarGreetingController::class, 'edit_greetings']);
 
 
     Route::get('/admin/greeting_approve', [GreetingController::class, 'greetingsApprovedByStar']);

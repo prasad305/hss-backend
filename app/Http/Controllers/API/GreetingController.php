@@ -35,6 +35,7 @@ class GreetingController extends Controller
             'title' => 'required',
             'instruction' => 'required|min:10',
             'cost' => 'required|numeric||min:1',
+            'user_required_day' => 'required|numeric||min:1',
             'banner' => 'required|mimes:jpeg,jpg,png,webp',
             'video' => 'required|mimes:mp4,mov,ogg',
         ]);
@@ -53,6 +54,7 @@ class GreetingController extends Controller
             $greeting->instruction = $request->instruction;
             $greeting->star_id = auth('sanctum')->user()->star->id;
             $greeting->cost = $request->cost;
+            $greeting->user_required_day = $request->user_required_day;
 
             if ($request->hasfile('banner')) {
                 $destination = $greeting->banner;
@@ -91,6 +93,7 @@ class GreetingController extends Controller
             'title' => 'required',
             'instruction' => 'required|min:10',
             'cost' => 'required|numeric||min:1',
+            'user_required_day' => 'required|numeric||min:1',
             'banner' => 'nullable|mimes:jpeg,jpg,png,webp',
             'video' => 'nullable|mimes:mp4,mov,ogg',
         ]);
@@ -109,6 +112,7 @@ class GreetingController extends Controller
             $greeting->title = $request->title;
             $greeting->instruction = $request->instruction;
             $greeting->cost = $request->cost;
+            $greeting->user_required_day = $request->user_required_day;
 
             if ($request->hasfile('banner')) {
                 $destination = $greeting->banner;
