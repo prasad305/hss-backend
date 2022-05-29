@@ -17,11 +17,9 @@ class CreateAuctionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('created_by_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
-
             $table->unsignedBigInteger('category_id')->nullable();
-            $table->string('name')->comment('Product Name')->nullable();
+            $table->unsignedBigInteger('subcategory_id')->nullable();
             $table->string('title')->comment('Post Title')->nullable();
-
             $table->string('keyword')->nullable();
             $table->string('type')->nullable();
             $table->unsignedBigInteger('owner_id')->nullable();
@@ -31,6 +29,8 @@ class CreateAuctionsTable extends Migration
             $table->string('product_image')->nullable();
             $table->string('banner')->nullable();
             $table->timestamp('bid_from')->nullable();
+            $table->timestamp('result_date')->nullable();
+            $table->timestamp('product_delivery_date')->nullable();
             $table->timestamp('bid_to')->nullable();
             $table->boolean('status')->nullable();
             $table->boolean('star_approval')->default(0)->comment('0=pending,1=approved');

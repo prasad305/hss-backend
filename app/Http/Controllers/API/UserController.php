@@ -683,6 +683,17 @@ class UserController extends Controller
             'product' => $product
         ]);
     }
+    public function  auctionSingleProduct($id)
+    {
+        $userInfo = user::findOrFail(auth()->user()->id);
+        $auctionInfo = Auction::findOrFail($id);
+        return response()->json([
+            'status' => 200,
+            'auctionInfo' => $auctionInfo,
+            'userInfo' => $userInfo
+        ]);
+    }
+
     public function starAuction($star_id)
     {
 
@@ -735,6 +746,16 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'bidding' => $bidding,
+        ]);
+    }
+    public function auctionApply($auction_id)
+    {
+        $auctionApply = Bidding::with('user','auction')->where('auction_id', $auction_id)->where('notify_status',1)->where('user_id',auth()->user()->id)->first();
+        $winner = Bidding::with('user','auction')->where('auction_id', $auction_id)->where('win_status',1)->where('user_id',auth()->user()->id)->first();
+        return response()->json([
+            'status' => 200,
+            'auctionApply' => $auctionApply,
+            'winner'=>$winner
         ]);
     }
     public function bidHistory($auction_id)

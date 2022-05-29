@@ -149,7 +149,14 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // auction product
     Route::get('/auction-product/all', [UserController::class, 'auctionProduct']);
+    Route::get('/auction-product/{id}', [UserController::class, 'auctionSingleProduct']);
     Route::get('/user/getStarAuction/{star_id}', [UserController::class, 'starAuction']);
+    // Auction
+    Route::get('/user/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
+    Route::post('user/bidding/auction/product', [UserController::class, 'bidNow']);
+    Route::get('user/liveBidding/auction/{auction_id}', [UserController::class, 'liveBidding']);
+    Route::get('user/auctionApply/auction/{auction_id}', [UserController::class, 'auctionApply']);
+    Route::get('user/liveBidding/history/{auction_id}', [UserController::class, 'bidHistory']);
 
     //Event Registaion By User (Learning Session + Live Chat + Greeting + Meetup Event)
     Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
@@ -160,11 +167,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/greetings/register', [UserController::class, 'greetingsRegistation']);
     Route::post('/user/meetup-event/register', [MeetupEventController::class, 'meetup_register']);
 
-    // Auction
-    Route::get('/user/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
-    Route::post('user/bidding/auction/product', [UserController::class, 'bidNow']);
-    Route::get('user/liveBidding/auction/{auction_id}', [UserController::class, 'liveBidding']);
-    Route::get('user/liveBidding/history/{auction_id}', [UserController::class, 'bidHistory']);
 
     // Audition
     Route::get('/user/audition/all', [UserController::class, 'audition_list']);
@@ -341,6 +343,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/promoVideo/pending', [PromoVideoController::class, 'pendingVideos']);
     Route::get('/admin/promoVideo/live', [PromoVideoController::class, 'liveVideos']);
     Route::get('/admin/promoVideo/count', [PromoVideoController::class, 'promoVideoCount']);
+    //Category
+    Route::get('/admin/view-category', [CategoryController::class, 'index']);
 });
 
 
@@ -398,6 +402,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/simple_post/pending/{id}', [SimplePostController::class, 'star_pending_details']);
     Route::get('/star/simple_post/approved', [SimplePostController::class, 'star_approved_list']);
     Route::get('/star/approve_post/{id}', [SimplePostController::class, 'approve_post']);
+    Route::get('/star/decline_post/{id}', [SimplePostController::class, 'decline_post']);
 
     // Learning Session Section
     Route::post('/star/add_learning_session', [LearningSessionController::class, 'star_add']);

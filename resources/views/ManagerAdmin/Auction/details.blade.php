@@ -43,7 +43,7 @@ Manager Admin
 
             <div class="col-md-8 ">
                 <div class="row card p-5">
-                    <h3>{{ $product->name }}</h3>
+                    <h3>{{ $product->title }}</h3>
                     <p>
                         {!! $product->details !!}
                     </p>
