@@ -27,7 +27,7 @@ class FanGroupController extends Controller
     {
         $post = FanGroup::where('my_star_status', 1)
                 ->where('another_star_status', 1)
-                ->where('status', 0)
+                ->where('status', 2)
                 ->latest()->get();
 
         return view('ManagerAdmin.fangroup.index', compact('post'));
@@ -101,6 +101,11 @@ class FanGroupController extends Controller
 
         if($spost->status != 1)
         {
+            $request->validate([
+                'post_start_date' => 'required',
+                'post_end_date' => 'required',
+            ]);
+
             $spost->status = 1;
             $spost->update();
 
@@ -122,7 +127,7 @@ class FanGroupController extends Controller
         }
         else
         {
-            $spost->status = 0;
+            $spost->status = 2;
             $spost->update();
 
             // Remove post //

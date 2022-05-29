@@ -229,6 +229,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/fan-group/join/{slug}/{data}', [FanGroupController::class, 'joinFanGroup']);
     Route::post('/admin/fan-group/post/{slug}/{data}', [FanGroupController::class, 'postFanGroup']);
     Route::post('/admin/fan/group/image/update/{slug}', [FanGroupController::class, 'updateImageFanGroup']);
+    Route::post('/admin/fan-group/manager/approval/{slug}', [FanGroupController::class, 'fanGroupManagerApproval']);
     Route::get('/admin/fan/group/settings/delete/{id}', [FanGroupController::class, 'deleteSettingsFan']);
     Route::post('/admin/fan/group/settings/no-warning/{id}', [FanGroupController::class, 'noWarningSettingsFan']);
     Route::post('/admin/fan/group/approval/warning/{id}/{fanid}', [FanGroupController::class, 'warningSettingsFan']);

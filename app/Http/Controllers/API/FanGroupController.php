@@ -470,6 +470,18 @@ class FanGroupController extends Controller
         ]);
     }
 
+    public function fanGroupManagerApproval($slug){
+        $fanDetails = FanGroup::where('slug', $slug)->first();
+
+        $fanDetails->status = 2;
+        $fanDetails->save();
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'Fan Group Approval Request Done!',
+        ]);
+    }
+
     // Fan Post Like
 
     public function postFanPostLike(Request $request, $id){
@@ -519,6 +531,9 @@ class FanGroupController extends Controller
     }
 
     public function getFanGroupDetails($slug){
+        // Get User Points for checking 
+        $userPoints = User::find(Auth('sanctum')->user()->id);
+
         $fanDetails = FanGroup::where('slug', $slug)->first();
 
         $users_one = json_decode($fanDetails->my_user_join ? $fanDetails->my_user_join : '[]');
@@ -541,6 +556,7 @@ class FanGroupController extends Controller
         return response()->json([
             'status' => 200,
             'fanDetails' => $fanDetails,
+            'userPoints' => $userPoints,
             'fanId' => $fanDetails->id,
             'my_user_join' => $my_user_join,
             'another_user_join' => $another_user_join,
