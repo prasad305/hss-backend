@@ -409,9 +409,15 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/approve_learning_session/{id}', [LearningSessionController::class, 'approve_post']);
 
 
+    Route::get('/star/live-chat/pending', [LiveChatController::class, 'pendingLiveChat']);
+    Route::get('/star/live-chat/approved', [LiveChatController::class, 'approveLiveChat']);
+    Route::get('/star/live-chat/completed', [LiveChatController::class, 'completedLiveChat']);
+    Route::get('/star/live-chat/details/{slug}', [LiveChatController::class, 'details']);
+    Route::get('/star/approveLiveChat/{id}', [LiveChatController::class, 'setApproveLiveChat']);
+
+
     Route::get('/star/pendingLiveChat', [LiveChatController::class, 'pendingLiveChat']);
     Route::get('/star/approvedLiveChat', [LiveChatController::class, 'approveLiveChat']);
-    Route::get('/star/approveLiveChat/{id}', [LiveChatController::class, 'setApproveLiveChat']);
     Route::get('/star/livechat_event_details/{id}', [LiveChatController::class, 'details']);
 
     Route::get('/deleteLiveChat/{id}', [LiveChatController::class, 'deleteLiveChat']);
