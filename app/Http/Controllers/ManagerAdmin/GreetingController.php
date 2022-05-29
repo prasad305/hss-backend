@@ -25,7 +25,32 @@ class GreetingController extends Controller
 
     public function request()
     {
-        $greetings = Greeting::where([['category_id', Auth::user()->category_id],['status', 1]])->get();
+        $greetings = Greeting::where([['category_id', Auth::user()->category_id], ['status', 1]])->get();
         return view('ManagerAdmin.greeting.request', compact('greetings'));
+    }
+
+    public function show($greeting_id)
+    {
+        $greeting = Greeting::findOrFail($greeting_id);
+        return view('ManagerAdmin.greeting.show', compact('greeting'));
+    }
+
+
+    public function publish($greeting_id)
+    {
+        $greeting = Greeting::findOrFail($greeting_id);
+        $greeting->status = 2;
+        try {
+            $greeting->save();
+            return response()->json([
+                'type' => 'success',
+                'message' => 'Successfully Updated'
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => $exception->getMessage()
+            ]);
+        }
     }
 }
