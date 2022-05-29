@@ -252,9 +252,12 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/learning_session/live', [LearningSessionController::class, 'live_list']);
     Route::get('/admin/learning_session/evaluation', [LearningSessionController::class, 'evaluation_list']);
     Route::get('/admin/learning_session/completed', [LearningSessionController::class, 'completed_list']);
-
+    Route::get('/admin/learning_session/details/{slug}', [LearningSessionController::class, 'details']);
+    Route::get('/admin/learning_session/assignment/{id}', [LearningSessionController::class, 'assignment_details']);
     Route::get('/admin/learning_session/pending/{slug}', [LearningSessionController::class, 'pending_details']);
     Route::get('/admin/learning_session/approved', [LearningSessionController::class, 'approved_list']);
+    Route::post('/admin/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
+    Route::get('admin/learning_session/assignment/set_approved/{id}', [LearningSessionController::class, 'assignment_rule_add']);
 
     // Live Session Section
     Route::post('admin/add_live_session', [LiveChatController::class, 'add_live_session']);
@@ -407,6 +410,11 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/learning_session/pending/{id}', [LearningSessionController::class, 'star_pending_details']);
     Route::get('/star/learning_session/approved', [LearningSessionController::class, 'star_approved_list']);
     Route::get('/star/approve_learning_session/{id}', [LearningSessionController::class, 'approve_post']);
+    Route::get('/star/learning_session/completed', [LearningSessionController::class, 'star_completed_list']);
+    Route::get('/star/learning_session/evaluation', [LearningSessionController::class, 'star_approved_list']);
+    Route::get('/star/learning_session/details/{slug}', [LearningSessionController::class, 'details']);
+
+
 
 
     Route::get('/star/live-chat/pending', [LiveChatController::class, 'pendingLiveChat']);
@@ -437,7 +445,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     Route::get('/star/meetup_event/pending', [MeetupEventController::class, 'star_pending_list']);
     Route::get('/star/meetup_event/approved', [MeetupEventController::class, 'star_approved_list']);
-    Route::get('/star/meetup_event_details/{id}', [MeetupEventController::class, 'details']);
+    Route::get('/star/meetup_event/completed', [MeetupEventController::class, 'star_completed_list']);
+    Route::get('/star/meetup_event/details/{slug}', [MeetupEventController::class, 'details']);
 
 
     Route::get('/star/meetup_event/set_approve/{id}', [MeetupEventController::class, 'set_approve']);
