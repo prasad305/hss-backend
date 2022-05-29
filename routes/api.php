@@ -271,6 +271,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('admin/add_greetings', [GreetingController::class, 'add']);
     Route::post('admin/edit_greetings', [GreetingController::class, 'edit_greetings']);
     Route::get('admin/greeting/{id}', [GreetingController::class, 'show']);
+    Route::get('admin/greeting/forwardToManagerAdmin/{id}', [GreetingController::class, 'forwardToManagerAdmin']);
 
 
     Route::get('admin/greeting/check_status', [LiveChatController::class, 'greetingsCreateStatus']);
@@ -426,6 +427,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/greetings_star_status', [StarGreetingController::class, 'greetings_star_status']);
     Route::post('/star/add_greetings', [StarGreetingController::class, 'add_greetings']);
     Route::post('/star/edit_greetings', [StarGreetingController::class, 'edit_greetings']);
+    Route::get('/star/approve_greeting/{greeting_id}', [StarGreetingController::class, 'approve_greeting']);
+    Route::get('/star/decline_greeting/{greeting_id}', [StarGreetingController::class, 'decline_greeting']);
 
 
     Route::get('/admin/greeting_approve', [GreetingController::class, 'greetingsApprovedByStar']);

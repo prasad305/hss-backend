@@ -146,6 +146,18 @@ class GreetingController extends Controller
         }
     }
 
+
+    public function forwardToManagerAdmin($greetings_id){
+        $greeting = Greeting::find($greeting_id);
+        $greeting->star_approve_status = 1;
+        $greeting->save();
+        return response()->json([
+            'status' => 200,
+            'greeting' => $greeting,
+            'message' => 'Greetings Accepted Successfully !',
+        ]);
+    }
+
     public function show($id)
     {
         $greeting = Greeting::find($id);

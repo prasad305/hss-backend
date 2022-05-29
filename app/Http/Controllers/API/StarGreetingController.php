@@ -30,7 +30,7 @@ class StarGreetingController extends Controller
     }
     public function add_greetings(Request $request)
     {
-          $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'title' => 'required',
             'instruction' => 'required|min:10',
             'cost' => 'required|numeric||min:1',
@@ -144,5 +144,26 @@ class StarGreetingController extends Controller
                 'message' => 'Greetings Updated Successfully !',
             ]);
         }
+    }
+    public function approve_greeting($greeting_id)
+    {
+        $greeting = Greeting::find($greeting_id);
+        $greeting->star_approve_status = 1;
+        $greeting->save();
+        return response()->json([
+            'status' => 200,
+            'greeting' => $greeting,
+            'message' => 'Greetings Accepted Successfully !',
+        ]);
+    }
+    public function decline_greeting($greeting_id)
+    {
+        $greeting = Greeting::find($greeting_id);
+        $greeting->delete();
+        return response()->json([
+            'status' => 200,
+            'greeting' => $greeting,
+            'message' => 'Greetings Declined Successfully !',
+        ]);
     }
 }
