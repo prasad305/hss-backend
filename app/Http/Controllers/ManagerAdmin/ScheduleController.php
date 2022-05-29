@@ -46,13 +46,25 @@ class ScheduleController extends Controller
 
     public function edit($id)
     {
-        //
+        $schedule = Schedule::find($id);
+        return view('ManagerAdmin.schedule.reminder',compact('schedule'));
     }
 
 
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'reminder_date' => 'required',
+        ]);
+        
+        $schedule = Schedule::find($id);
+        $schedule->remainder_date = $request->reminder_date;
+        $schedule->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Reminder Date Set Successfully'
+        ]);
     }
 
 

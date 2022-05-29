@@ -64,7 +64,16 @@ Admin
                       <!-- the events -->
                         @foreach ($schedules as $schedule)
                         <div id="external-events">
-                            <div class="external-event {{$schedule->event_type == 'livechat' ?  'bg-success' : ''}} {{$schedule->event_type == 'learning' ?  'bg-danger': ''}} {{$schedule->event_type == 'meetup' ?  'bg-info': ''}} ">{{strtoupper($schedule->event_type)}} <span class="text-warning">{{date('h:i A',strtotime($schedule->form)).'-'.date('h :i A',strtotime($schedule->to))}}</span> </div>
+                            <div class="external-event {{$schedule->event_type == 'livechat' ?  'bg-success' : ''}} {{$schedule->event_type == 'learning' ?  'bg-danger': ''}} {{$schedule->event_type == 'meetup' ?  'bg-info': ''}} ">{{strtoupper($schedule->event_type)}} <span class="text-warning">{{date('h:i A',strtotime($schedule->form)).'-'.date('h :i A',strtotime($schedule->to))}}</span>&nbsp;&nbsp;&nbsp; 
+                              
+                                @if ($schedule->remainder_date == null)
+                                <a style="cursor: pointer;" onclick="Show('Set Reminder','{{ route('managerAdmin.schedule.edit',$schedule->id) }}')">
+                                    <i class="fas fa-edit"></i>reminder
+                                </a>
+                                @else
+                                remainder date : {{Carbon\Carbon::parse($schedule->remainder_date)->format('Y d,M')}}
+                                @endif
+                            </div>
                           </div>
                         @endforeach
                     

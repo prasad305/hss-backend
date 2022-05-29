@@ -42,7 +42,7 @@ class StarScheduleController extends Controller
                 } else {
                     $admin = User::where('parent_user',auth()->user()->parent_user)->first();
                     Schedule::insert([
-                        'admin_id' => auth('sanctum')->user->parent_user,
+                        'admin_id' => auth('sanctum')->user()->parent_user,
                         'event_type' => $req['event_type'],
                         'star_id' => auth('sanctum')->user()->id,
                         'from' => $req['from'],
