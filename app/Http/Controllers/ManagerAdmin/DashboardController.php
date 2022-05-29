@@ -135,25 +135,6 @@ class DashboardController extends Controller
 
         return view('ManagerAdmin.MeetupEvents.meetupEventsDetails', compact(['data', 'totalParticipant', 'totalFee']));
     }
-    public function greetings()
-    {
-        return view('ManagerAdmin.LearningSession.dashboard');
-    }
-    public function greetingsData($type)
-    {
-        if ($type == 'total') {
-            $portalData = Greeting::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
-        } elseif ($type == 'upcoming') {
-            $portalData = Greeting::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
-        } else {
-            $portalData = Greeting::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
-        }
-        return view('ManagerAdmin.LearningSession.dashboard', compact('portalData'));
-    }
-    public function greetingsDetails()
-    {
-        return view('ManagerAdmin.LearningSession.dashboard');
-    }
     public function liveChats()
     {
         // Total

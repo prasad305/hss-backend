@@ -192,7 +192,7 @@
             {{-- <p>Second Panel</p> --}}
 
             <div class="row">
-             
+
 
                 @if (isset($auditions[0]))
                     @foreach ($auditions as $key => $audition)

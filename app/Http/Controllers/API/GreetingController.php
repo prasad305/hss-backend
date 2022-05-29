@@ -147,14 +147,14 @@ class GreetingController extends Controller
     }
 
 
-    public function forwardToManagerAdmin($greetings_id){
+    public function forwardToManagerAdmin($greeting_id){
         $greeting = Greeting::find($greeting_id);
-        $greeting->star_approve_status = 1;
+        $greeting->status = 1;
         $greeting->save();
         return response()->json([
             'status' => 200,
             'greeting' => $greeting,
-            'message' => 'Greetings Accepted Successfully !',
+            'message' => 'Greetings Forwarded Successfully !',
         ]);
     }
 
