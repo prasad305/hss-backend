@@ -20,6 +20,7 @@ class CreateGreetingsRegistrationsTable extends Migration
             $table->timestamp('notification_at')->nullable();
             $table->string('name')->nullable();
             $table->string('phone')->nullable();
+            $table->string('purpose')->nullable();
             $table->timestamp('birth_date')->nullable();
             $table->timestamp('request_time')->nullable();
             $table->longText('greeting_contex')->nullable();

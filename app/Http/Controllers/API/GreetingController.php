@@ -279,9 +279,10 @@ class GreetingController extends Controller
     /**
      * user greeting register information
      */
-    public function greetingsRegisterListByGreetingsId($greetings_id)
+    public function greetingsRegisterListByGreetingsId()
     {
-        $register_list = GreetingsRegistration::where('greeting_id', $greetings_id)->get();
+        $greeting = auth('sanctum')->user()->star->asStarGreeting;
+        $register_list = GreetingsRegistration::where('greeting_id', $greeting->id)->get();
 
         return response()->json([
             'status' => 200,
@@ -293,7 +294,7 @@ class GreetingController extends Controller
      */
     public function greetingsRegisterWithPaymentList($greetings_id)
     {
-        $register_list = GreetingsRegistration::where([['greeting_id', $greetings_id], ['status', 2]])->get();
+        return $register_list = GreetingsRegistration::where([['greeting_id', $greetings_id], ['status', 2]])->get();
 
         return response()->json([
             'status' => 200,

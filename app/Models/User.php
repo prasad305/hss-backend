@@ -202,6 +202,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(AuditionEvent::class, 'star_id');
     }
+    public function asStarGreeting()
+    {
+        return $this->hasOne(Greeting::class, 'star_id');
+    }
 
     public function registeredAuditionEvents()
     {

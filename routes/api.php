@@ -307,7 +307,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     //greetings Activety check
     Route::get('/admin/greetings_star_status', [GreetingController::class, 'greetingsCreateStatusAdmin']);
     //user greetings register list
-    Route::get('/admin/greetings_register_list/{greetings_id}', [GreetingController::class, 'greetingsRegisterListByGreetingsId']);
+    Route::get('/admin/greetings_register_list', [GreetingController::class, 'greetingsRegisterListByGreetingsId']);
 
     //Sent Notification to user
     Route::post('/admin/sent_notofiaction_user', [GreetingController::class, 'sentNotificationToUser']);
