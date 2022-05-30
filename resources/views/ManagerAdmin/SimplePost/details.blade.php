@@ -12,12 +12,12 @@ Manager Admin
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Live Chat Event</h1>
+                <h1 class="m-0">Post</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Live Chat Event Details</li>
+                    <li class="breadcrumb-item active">Post Details</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -34,8 +34,8 @@ Manager Admin
                 @if($post->image)
                 <img src="{{ asset($post->image) }}" style="width: 100%" />
                 @else
-                <iframe width="420" height="315" src="{{ $post->video }}">
-                </iframe>
+                <video width="420" height="315" controls src="{{ asset($post->video) }}">
+                </video>
                 @endif
 
             </div>
@@ -56,10 +56,7 @@ Manager Admin
                         Date
                         <h4 class="text-warning">{{ \Carbon\Carbon::parse($post->date)->format('d F,Y')}}</h4>
                     </div>
-                    <div class="col-md-6 card py-3">
-                        Time
-                        <h4 class="text-warning">{{ \Carbon\Carbon::parse($post->start_time)->format('h:i A')}} - {{ \Carbon\Carbon::parse($post->end_time)->format('h:i A')}}</h4>
-                    </div>
+                  
                 </div>
             </div>
 

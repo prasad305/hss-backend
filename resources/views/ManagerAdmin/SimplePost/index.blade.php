@@ -40,9 +40,12 @@
                     <div class="col-sm-6 col-lg-4">
                         <div class="card">
                             <div class="panel panel-primary text-center">
-                                <div class="">
-                                    <img width="100%" src="{{ asset($val->image) }}" alt="">
-                                </div>
+                                @if($val->image)
+                                <img src="{{ asset($val->image) }}" style="width: 100%" />
+                                @else
+                                <video width="420" height="315" controls src="{{ asset($val->video) }}">
+                                </video>
+                                @endif
                                 <div class="panel-body py-3">
                                     <h3 class="text-ellipsis-line-1">{{ $val->title }}</h3>
 
