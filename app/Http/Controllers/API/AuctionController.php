@@ -290,6 +290,17 @@ class AuctionController extends Controller
         ]);
     }
 
+    public function  allBidderList($id){
+
+        $bidderList = Bidding::with('user')->orderBy('amount','DESC')->where('auction_id',$id)->distinct('user_id')->get();
+
+        return response()->json([
+            'status' => 200,
+            'bidderList' => $bidderList,
+        ]);
+    }
+
+
     public function notify_bidder($id)
     {
         $bidding = Bidding::find($id);
