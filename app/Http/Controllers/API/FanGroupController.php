@@ -8,6 +8,7 @@ use Auth;
 use App\Models\FanGroup;
 use App\Models\FanPost;
 use App\Models\User;
+use App\Models\Wallet;
 use App\Models\Fan_Group_Join;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
@@ -514,10 +515,14 @@ class FanGroupController extends Controller
 
         $fanUser = json_decode($useFan->fan_group ? $useFan->fan_group : '[]');
 
-        $fanCount = count($fanUser);
+        $fanCount = FanGroup::select("*")
+                            ->whereIn('id', $fanUser)
+                            ->where('status', 1)
+                            ->count();
 
         $useFanGroup = FanGroup::select("*")
                     ->whereIn('id', $fanUser)
+                    ->where('status', 1)
                     ->get();
 
         $fanList = FanGroup::where('status', 1)->whereNotIn('id', $fanUser)->latest()->get();
@@ -532,7 +537,13 @@ class FanGroupController extends Controller
 
     public function getFanGroupDetails($slug){
         // Get User Points for checking 
-        $userPoints = User::find(Auth('sanctum')->user()->id);
+        // $userPoints = User::find(Auth('sanctum')->user()->id);
+        $userPoints = Wallet::where('user_id', Auth('sanctum')->user()->id)->first();
+        if($userPoints){
+            $userPoints = $userPoints;
+        }else{
+            $userPoints = 0;
+        }
 
         $fanDetails = FanGroup::where('slug', $slug)->first();
 
@@ -550,7 +561,6 @@ class FanGroupController extends Controller
 
         $my_star = User::find($fanDetails->my_star);
         $another_star = User::find($fanDetails->another_star);
-
 
 
         return response()->json([

@@ -110,4 +110,51 @@ class WalletController extends Controller
 
     }
 
+    public function userFreeWalletStore($packageid, $userId){
+
+        $walletHistory = new WalletHistory();
+        $walletHistory->packages_id = $packageid;
+        $walletHistory->user_id = $userId;
+        $walletHistory->wallet_payment_id = 0;
+        $walletHistory->status = 0;
+        $walletHistory->save();
+
+        $userWallet = Wallet::where('user_id', $userId)->first();
+
+        $addPackages = Package::where('id', $packageid)->first();
+        
+        if($userWallet){
+            
+            $userWallet->club_points += $addPackages->club_points;
+            $userWallet->auditions += $addPackages->auditions;
+            $userWallet->learning_session += $addPackages->learning_session;
+            $userWallet->live_chats += $addPackages->live_chats;
+            $userWallet->meetup += $addPackages->meetup;
+            $userWallet->greetings += $addPackages->greetings;
+            $userWallet->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Payment Added Successfully',
+            ]);
+        }else{
+
+            $wallet = new Wallet();
+            $wallet->user_id = $userId;
+            $wallet->club_points += $addPackages->club_points;
+            $wallet->auditions += $addPackages->auditions;
+            $wallet->learning_session += $addPackages->learning_session;
+            $wallet->live_chats += $addPackages->live_chats;
+            $wallet->meetup += $addPackages->meetup;
+            $wallet->greetings += $addPackages->greetings;
+            $wallet->status = 0;
+            $wallet->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Payment Added Successfully',
+            ]);
+        }   
+    }
+
 }

@@ -111,10 +111,10 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/marketplace/activities', [MarketplaceController::class, 'viewMarketplaceActivities']);
 
     // Fan Group Section
-    Route::get('user/fan/group/list', [FanGroupController::class, 'getFanGroupList']);
-    Route::get('user/fan/group/{slug}', [FanGroupController::class, 'getFanGroupDetails']);
-    Route::post('user/fan/group/store', [FanGroupController::class, 'getFanGroupStore']);
-    Route::get('user/fan/group/join/{join_id}', [FanGroupController::class, 'getFanGroupJoinId']);
+    Route::get('/user/fan/group/list', [FanGroupController::class, 'getFanGroupList']);
+    Route::get('/user/fan/group/{slug}', [FanGroupController::class, 'getFanGroupDetails']);
+    Route::post('/user/fan/group/store', [FanGroupController::class, 'getFanGroupStore']);
+    Route::get('/user/fan/group/join/{join_id}', [FanGroupController::class, 'getFanGroupJoinId']);
     Route::post('/user/fan/group/post/store', [FanGroupController::class, 'getFanPostStore']);
     Route::get('/user/fan/group/post/show/{slug}', [FanGroupController::class, 'getFanPostShow']);
     Route::get('/user/fan/group/post/like/{id}', [FanGroupController::class, 'getFanPostLike']);
@@ -210,6 +210,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/wallet/details', [WalletController::class, 'getUserWallet']);
     Route::post('/user/wallet/store', [WalletController::class, 'userWalletStore']);
     Route::get('/user/wallet/history', [WalletController::class, 'userWalletHistory']);
+    Route::post('/user/free/wallet/store/{packageId}/{userId}', [WalletController::class, 'userFreeWalletStore']);
 });
 
 
