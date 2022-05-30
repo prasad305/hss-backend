@@ -305,7 +305,10 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/add_schedule/', [ScheduleController::class, 'add_schedule']);
 
     Route::get('/admin/schedule', [ScheduleController::class, 'selected_schedule']);
-    Route::get('/admin/schedule/{date}', [ScheduleController::class, 'dateWiseSchedule']);
+
+    Route::get('admin/schedule/notification', [ScheduleController::class, 'notification']);
+
+    Route::get('/{date}', [ScheduleController::class, 'dateWiseSchedule']);
 
     Route::get('/admin/schedule_list', [ScheduleController::class, 'schedule_list']);
     Route::get('/admin/current_year_schedule_list', [ScheduleController::class, 'current_year_schedule_list']);
@@ -371,6 +374,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/schedule/{date}', [StarScheduleController::class, 'dateWiseSchedule']);
     Route::get('/star/schedule_list', [StarScheduleController::class, 'schedule_list']);
     Route::get('/star/current_week_schedule_list', [StarScheduleController::class, 'current_week_schedule_list']);
+    Route::get('/star/schedule/notification', [StarScheduleController::class, 'notification']);
 
     // Fan Group Section
     Route::get('star/fan/group/starlist/status', [FanGroupController::class, 'statusStar']);
