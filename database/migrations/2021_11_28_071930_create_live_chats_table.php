@@ -32,6 +32,8 @@ class CreateLiveChatsTable extends Migration
             $table->integer('total_seat')->nullable();
             $table->float('total_amount')->nullable();
             $table->float('fee')->nullable();
+            $table->float('max_time')->nullable();
+            $table->float('interval')->nullable();
             $table->integer('participant_number')->nullable();
             $table->timestamp('registration_start_date')->nullable();
             $table->timestamp('registration_end_date')->nullable();

@@ -406,22 +406,26 @@
         if (key == 'star_id') {
             $('#star_error').html(value);
         }
+        if (key == 'reminder_date') {
+            $('#reminder_error').html(value);
+        }
     }
 
-function ErrorMessageClear() {
-    $('#sub_category_error').html('');  
-    $('#first_name_error').html('');
-    $('#last_name_error').html('');
-    $('#email_error').html('');
-    $('#phone_error').html('');
-    $('#image_error').html('');
-    $('#cover_error').html('');
-    $('#dob_error').html('');
-    $('#terms_error').html('');
-    $('#category_id').html('');
-    $('#star_id').html('');
-  }
-    </script>
+    function ErrorMessageClear() {
+        $('#sub_category_error').html('');  
+        $('#first_name_error').html('');
+        $('#last_name_error').html('');
+        $('#email_error').html('');
+        $('#phone_error').html('');
+        $('#image_error').html('');
+        $('#cover_error').html('');
+        $('#dob_error').html('');
+        $('#terms_error').html('');
+        $('#category_id').html('');
+        $('#star_id').html('');
+        $('#reminder_error').html('');
+    }
+</script>
 
 
 </body>

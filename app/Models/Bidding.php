@@ -18,11 +18,11 @@ class Bidding extends Model
     public function user()
     {
 
-        return $this->hasMany(User::class, 'id', 'user_id');
+        return $this->belongsTo(User::class,'user_id');
     }
     public function auction()
     {
 
-        return $this->hasMany(Auction::class, 'auction_id');
+        return $this->belongsTo(Auction::class, 'auction_id');
     }
 }

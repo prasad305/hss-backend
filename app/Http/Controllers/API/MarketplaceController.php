@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
 use App\Models\Marketplace;
 use App\Models\User;
 use App\Models\Country;
@@ -12,8 +11,10 @@ use App\Models\State;
 use App\Models\Order;
 use App\Models\City;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class MarketplaceController extends Controller
@@ -117,6 +118,34 @@ class MarketplaceController extends Controller
 
     public function marketplaceStore(Request $request){
 
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'category_id' => 'required',
+            'description' => 'required',
+            'image' => 'required|image',
+            'unit_price' => 'required',
+            'total_items' => 'required',
+            'superstar_id' => 'required',
+            'subcategory_id' => 'required',
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'category_id.required' => "Category Field Is Required",
+            'subcategory_id.required' => "Subcategory Field Is Required",
+            'description.required' => 'Description Field Is Required',
+            'image.required' => "Image Field Is Required",
+            'unit_price.required' => "Unit Price Field Is Required",
+            'total_items.required' => "Total Item Field Is Required",
+            'superstar_id.required' => "Superstar Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
         $id = Auth::user()->id;
         $parent_id = User::find($id);
 
@@ -124,6 +153,8 @@ class MarketplaceController extends Controller
         $marketplace = new Marketplace();
 
         $marketplace->title = $request->title;
+        $marketplace->category_id = $request->category_id;
+        $marketplace->subcategory_id = $request->subcategory_id;
         $marketplace->slug = Str::slug($request->input('title'));
         $marketplace->description = $request->description;
         $marketplace->unit_price = $request->unit_price;
@@ -133,7 +164,7 @@ class MarketplaceController extends Controller
         $marketplace->status = 0;
         $marketplace->total_selling = 0;
         $marketplace->created_by = $id;
-        $marketplace->superstar_id = $request->star_id;
+        $marketplace->superstar_id = $request->superstar_id;
         $marketplace->superstar_admin_id = $id;
 
         if ($request->hasfile('image')) {
@@ -155,7 +186,7 @@ class MarketplaceController extends Controller
     }
 
     public function allProductList(){
-        $approved = Marketplace::where('status', 1)
+        $approved = Marketplace::orderBy('id','DESC')->where('status', 1)
                                 ->where('superstar_admin_id', Auth::user()->id)
                                 ->get();
         $approvedCount = Marketplace::where('status', 1)
@@ -170,17 +201,20 @@ class MarketplaceController extends Controller
     }
 
     public function orderAdminProductList(){
-        $orderList = Order::where('superstar_admin_id', Auth::user()->id)
+        $totalOrder = Order::where('superstar_admin_id', Auth::user()->id)
+        ->count();
+        $orderList = Order::orderBy('id','DESC')->where('superstar_admin_id', Auth::user()->id)
                                 ->get();
 
         return response()->json([
             'status' => 200,
             'orderList' => $orderList,
+            'totalOrder' => $totalOrder,
         ]);
     }
 
     public function liveProductList(){
-        $live = Marketplace::whereColumn('total_items','>','total_selling')
+        $live = Marketplace::orderBy('id','DESC')->whereColumn('total_items','>','total_selling')
                             ->where('status',1)
                             ->where('superstar_admin_id', Auth::user()->id)
                             ->where('post_status',1)
@@ -196,7 +230,7 @@ class MarketplaceController extends Controller
     }
 
     public function pendingProductList(){
-        $pending = Marketplace::where('post_status', 0)
+        $pending = Marketplace::orderBy('id','DESC')->where('post_status', 0)
                                 ->where('superstar_admin_id', Auth::user()->id)
                                 ->get();
         $pendingCount = Marketplace::where('post_status', 0)
@@ -219,6 +253,27 @@ class MarketplaceController extends Controller
         ]);
     }
     public function storeAdminProductList(Request $request ,$id){
+
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'description' => 'required',
+            'unit_price' => 'required',
+            'total_items' => 'required',
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'unit_price.required' => "Unit Price Field Is Required",
+            'total_items.required' => "Total Item Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
         $marketplace = Marketplace::find($id);
 
         $marketplace->title = $request->title;
@@ -259,6 +314,29 @@ class MarketplaceController extends Controller
     public function starMarketplaceStore(Request $request){
 
 
+        // return $request->all();
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'description' => 'required',
+            'image' => 'required|image',
+            'unit_price' => 'required',
+            'total_items' => 'required',
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'image.required' => "Image Field Is Required",
+            'unit_price.required' => "Unit Price Field Is Required",
+            'total_items.required' => "Total Item Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
         $id = Auth::user()->id;
         $parent_id = User::find($id);
 
@@ -276,6 +354,9 @@ class MarketplaceController extends Controller
         $marketplace->superstar_admin_id = $parent_id->parent_user;
         $marketplace->superstar_id = $id;
         $marketplace->created_by = $id;
+        $marketplace->category_id = Auth::user()->category_id;
+        $marketplace->subcategory_id = Auth::user()->sub_category_id;
+
 
         if ($request->hasfile('image')) {
 
@@ -299,11 +380,11 @@ class MarketplaceController extends Controller
         $id = Auth::user()->id;
         $parent_id = User::find($id);
 
-        $approved = Marketplace::where('status', 1)
+        $approved = Marketplace::orderBy('id','DESC')->where('post_status', 1)
                                 ->where('superstar_admin_id', $parent_id->parent_user)
                                 ->get();
 
-        $approvedCount = Marketplace::where('status', 1)
+        $approvedCount = Marketplace::where('post_status', 1)
                                 ->where('superstar_admin_id', $parent_id->parent_user)
                                 ->count();
 
@@ -318,7 +399,7 @@ class MarketplaceController extends Controller
         $id = Auth::user()->id;
         $parent_id = User::find($id);
 
-        $live = Marketplace::whereColumn('total_items','>','total_selling')
+        $live = Marketplace::orderBy('id','DESC')->whereColumn('total_items','>','total_selling')
                             ->where('status',1)
                             ->where('post_status', 1)
                             ->where('superstar_admin_id', $parent_id->parent_user)
@@ -337,7 +418,7 @@ class MarketplaceController extends Controller
         $id = Auth::user()->id;
         $parent_id = User::find($id);
 
-        $pending = Marketplace::where('post_status', 0)
+        $pending = Marketplace::orderBy('id','DESC')->where('post_status', 0)
                             ->where('superstar_admin_id', $parent_id->parent_user)
                             ->get();
         $pendingCount = Marketplace::where('post_status', 0)
@@ -361,6 +442,27 @@ class MarketplaceController extends Controller
     }
 
     public function storeStarProductList(Request $request ,$id){
+
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'description' => 'required',
+            'unit_price' => 'required',
+            'total_items' => 'required',
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'unit_price.required' => "Unit Price Field Is Required",
+            'total_items.required' => "Total Item Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
         $marketplace = Marketplace::find($id);
 
         $marketplace->title = $request->title;
@@ -407,7 +509,7 @@ class MarketplaceController extends Controller
 
     public function declineStarProductList($id){
         $marketplace = Marketplace::find($id);
-        $marketplace->post_status = 0;
+        $marketplace->post_status = 2;
         $marketplace->save();
 
         return response()->json([

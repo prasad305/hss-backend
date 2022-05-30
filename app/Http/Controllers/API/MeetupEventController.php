@@ -130,23 +130,34 @@ class MeetupEventController extends Controller
 
     public function star_pending_list()
     {
-        $meetup = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 0]])->latest()->get();
+        $events = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '<', 1]]);
 
         return response()->json([
             'status' => 200,
-            'meetup' => $meetup,
-            'message' => 'Success',
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
         ]);
     }
 
     public function star_approved_list()
     {
-        $meetup = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 1]])->latest()->get();
+        $events = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0], ['status', '<', 10]]);
 
         return response()->json([
             'status' => 200,
-            'meetup' => $meetup,
-            'message' => 'Success',
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
+        ]);
+    }
+
+    public function star_completed_list()
+    {
+        $events = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', 9]]);
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
         ]);
     }
 
