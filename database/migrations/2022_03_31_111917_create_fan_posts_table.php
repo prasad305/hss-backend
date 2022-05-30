@@ -15,15 +15,16 @@ class CreateFanPostsTable extends Migration
     {
         Schema::create('fan_posts', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id')->nullable();
-            $table->string('fan_group_id')->nullable();
+            $table->integer('user_id')->nullable();
+            $table->integer('fan_group_id')->nullable();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
-            $table->string('star_id')->nullable();
+            $table->integer('star_id')->nullable();
             $table->string('star_name')->nullable();
-            $table->string('like_count')->nullable();
+            $table->integer('like_count')->nullable();
+            $table->longText('user_like_id')->nullable();
             $table->string('video')->nullable();
-            $table->string('status')->nullable();
+            $table->integer('status')->nullable()->comment('1 = active, 0 = inactive');
             $table->timestamps();
         });
     }

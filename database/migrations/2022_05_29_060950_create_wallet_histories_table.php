@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFanGroupJoinsTable extends Migration
+class CreateWalletHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateFanGroupJoinsTable extends Migration
      */
     public function up()
     {
-        Schema::create('fan__group__joins', function (Blueprint $table) {
+        Schema::create('wallet_histories', function (Blueprint $table) {
             $table->id();
+            $table->integer('packages_id')->nullable();
             $table->integer('user_id')->nullable();
-            $table->integer('fan_group_id')->nullable();
-            $table->integer('star_id')->nullable();
-            $table->string('star_name')->nullable();
-            $table->integer('warning_count')->nullable();
-            $table->integer('approveStatus')->nullable();
+            $table->integer('wallet_payment_id')->nullable();
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ class CreateFanGroupJoinsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fan__group__joins');
+        Schema::dropIfExists('wallet_histories');
     }
 }
