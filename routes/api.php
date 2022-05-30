@@ -253,6 +253,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/learning_session/evaluation', [LearningSessionController::class, 'evaluation_list']);
     Route::get('/admin/learning_session/completed', [LearningSessionController::class, 'completed_list']);
     Route::get('/admin/learning_session/details/{slug}', [LearningSessionController::class, 'details']);
+    Route::get('/admin/learning_session/registered_user/{slug}', [LearningSessionController::class, 'registured_user']);
     Route::get('/admin/learning_session/pending/{slug}', [LearningSessionController::class, 'pending_details']);
     Route::get('/admin/learning_session/approved', [LearningSessionController::class, 'approved_list']);
     Route::get('/admin/learning_session/assignment/{id}', [LearningSessionController::class, 'assignment_details']);
@@ -293,7 +294,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/live_chat/live', [LiveChatController::class, 'live_list']);
     Route::get('/admin/live_chat/completed', [LiveChatController::class, 'completed_list']);
     Route::get('/admin/livechat_event_details/{slug}', [LiveChatController::class, 'details']);
-    Route::get('/admin/live_chat_slots/{id}', [LiveChatController::class, 'slots']);
+    Route::get('/admin/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
     Route::get('/admin/live_chat/count', [LiveChatController::class, 'count']);
 
 
@@ -413,6 +414,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/learning_session/completed', [LearningSessionController::class, 'star_completed_list']);
     Route::get('/star/learning_session/evaluation', [LearningSessionController::class, 'star_approved_list']);
     Route::get('/star/learning_session/details/{slug}', [LearningSessionController::class, 'details']);
+    Route::get('/star/learning_session/assignment/{id}', [LearningSessionController::class, 'star_assignment_details']);
+    Route::post('/star/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
+    Route::post('/star/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'assignment_set_approval']);
 
 
 
