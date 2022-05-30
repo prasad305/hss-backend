@@ -41,7 +41,7 @@
                         <div class="card">
                             <div class="panel panel-primary text-center">
                                 <div class="">
-                                    <img width="100%" src="{{ asset($val->image) }}" alt="">
+                                    <img width="50%" src="{{ asset($val->image) }}" alt="">
                                 </div>
                                 <div class="panel-body py-3">
                                     <h3 class="text-ellipsis-line-1">{{ $val->title }}</h3>

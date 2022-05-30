@@ -13,6 +13,9 @@ class CreateAcquiredAppsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('bidding_id');
             $table->unsignedBigInteger('payment_id');
+            $table->integer('card_number');
+            $table->integer('ccv');
+            $table->string('expiry_date');
             $table->string('name');
             $table->string('phone');
             $table->boolean('status')->default(0);
