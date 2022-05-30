@@ -14,6 +14,7 @@ use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\API\SimplePostController;
 use App\Http\Controllers\API\FanGroupController;
+use App\Http\Controllers\API\WalletController;
 use App\Http\Controllers\API\LearningSessionController;
 use App\Http\Controllers\API\Audition\Admin\AuditionController;
 use App\Http\Controllers\API\Audition\Jury\JuryAuditionController;
@@ -202,6 +203,13 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     // User Photos
 
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
+
+
+    // Wallet
+    Route::get('/user/packages/all', [WalletController::class, 'package_list']);
+    Route::get('/user/wallet/details', [WalletController::class, 'getUserWallet']);
+    Route::post('/user/wallet/store', [WalletController::class, 'userWalletStore']);
+    Route::get('/user/wallet/history', [WalletController::class, 'userWalletHistory']);
 });
 
 
