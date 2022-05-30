@@ -22,6 +22,7 @@ class CreateSchedulesTable extends Migration
             $table->time('to')->nullable();
             $table->date('date')->nullable();
             $table->string('month')->nullable();
+            $table->date('remainder_date')->nullable();
             $table->boolean('status')->default(0)->comment('0 = active , 1 = deactive');
             $table->timestamps();
         });

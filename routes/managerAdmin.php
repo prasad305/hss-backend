@@ -28,9 +28,10 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     // Dashboard Routes By Srabon
 
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
-
+    
     // Schedule Routes By Monir 
     Route::resource('schedule', ScheduleController::class);
+    Route::post('schdeule/updateAll/{admin_id}', [ScheduleController::class, 'update_all'])->name('schedule.update_all');
 
 
     // Meetup Events

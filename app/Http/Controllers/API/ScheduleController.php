@@ -82,6 +82,22 @@ class ScheduleController extends Controller
         ]);
     }
 
+    public function notification()
+    {
+
+        $schedules = Schedule::where([['admin_id',auth('sanctum')->user()->id],['status',0]])
+                            ->whereColumn('remainder_date', '<=', 'date')
+                            ->get(); 
+        // $schedules = Schedule::where([['admin_id',auth('sanctum')->user()->id],['status',0]])->get(); 
+
+        return response()->json([
+            'status' => 200,
+            'schedules' => $schedules,
+        ]);
+    }
+
+
+
     public function dateWiseSchedule($date)
     {
         $schedule = Schedule::where([['admin_id', auth('sanctum')->user()->id], ['date', $date]])->get();

@@ -42,7 +42,7 @@ class StarScheduleController extends Controller
                 } else {
                     $admin = User::where('parent_user',auth()->user()->parent_user)->first();
                     Schedule::insert([
-                        'admin_id' => auth('sanctum')->user->parent_user,
+                        'admin_id' => auth('sanctum')->user()->parent_user,
                         'event_type' => $req['event_type'],
                         'star_id' => auth('sanctum')->user()->id,
                         'from' => $req['from'],
@@ -119,6 +119,20 @@ class StarScheduleController extends Controller
             'status'=>200,
             'schedule'=> $schedule,
             'message'=>'Added Successfully',
+        ]);
+    }
+
+    public function notification()
+    {
+
+        $schedules = Schedule::where([['star_id',auth('sanctum')->user()->id],['status',0]])
+                            ->whereColumn('remainder_date', '<=', 'date')
+                            ->get(); 
+
+
+        return response()->json([
+            'status' => 200,
+            'schedules' => $schedules,
         ]);
     }
 }
