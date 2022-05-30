@@ -29,29 +29,38 @@ class LiveChatController extends Controller
             'pendingLiveChatNumber' => $pendingLiveChatNumber,
         ]);
     }
+
+
     public function pendingLiveChat()
     {
-        $pendingLiveChats = LiveChat::where('star_id', auth('sanctum')->user()->id)->where('star_approve_status', 0)->latest()->get();
-        $pendingLiveChatNumber = LiveChat::where('star_approve_status', 0)->where('star_id', auth('sanctum')->user()->id)->count();
+        $events = LiveChat::where([['star_id', auth('sanctum')->user()->id], ['status', '<', 1]]);
 
         return response()->json([
             'status' => 200,
-            'message' => 'Ok',
-            'pendingLiveChats' => $pendingLiveChats,
-            'pendingLiveChatNumber' => $pendingLiveChatNumber,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
         ]);
     }
 
     public function approveLiveChat()
     {
-        $approveLiveChats = LiveChat::where('star_id', auth('sanctum')->user()->id)->where('star_approve_status', 1)->latest()->get();
-        $pendingLiveChatNumber = LiveChat::where('star_approve_status', 0)->where('star_id', auth('sanctum')->user()->id)->count();
+        $events = LiveChat::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0], ['status', '<', 10]]);
 
         return response()->json([
             'status' => 200,
-            'message' => 'Ok',
-            'approveLiveChats' => $approveLiveChats,
-            'pendingLiveChatNumber' => $pendingLiveChatNumber,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
+        ]);
+    }
+
+    public function completedLiveChat()
+    {
+        $events = LiveChat::where([['star_id', auth('sanctum')->user()->id], ['status', 9]]);
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
         ]);
     }
 
@@ -63,7 +72,6 @@ class LiveChatController extends Controller
             'status' => 200,
             'message' => 'Ok',
             'event' => $event,
-            'details' => '"' . $event ? $event->description : '' . '"',
         ]);
     }
 
@@ -71,7 +79,7 @@ class LiveChatController extends Controller
     public function setApproveLiveChat($id)
     {
         $approveLiveChat = LiveChat::find($id);
-        $approveLiveChat->star_approve_status = 1;
+        $approveLiveChat->status = 1;
         $approveLiveChat->update();
 
         return response()->json([
@@ -137,6 +145,8 @@ class LiveChatController extends Controller
             'registration_start_date' => 'required',
             'registration_end_date' => 'required',
             'fee' => 'required',
+            'max_time' => 'required|min:1',
+            'interval' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -161,6 +171,8 @@ class LiveChatController extends Controller
             $liveChat->registration_start_date = $request->input('registration_start_date');
             $liveChat->registration_end_date = $request->input('registration_end_date');
             $liveChat->fee = $request->input('fee');
+            $liveChat->max_time = $request->input('max_time');
+            $liveChat->interval = $request->input('interval');
 
             if ($request->hasfile('image')) {
                 $destination = $liveChat->banner;
