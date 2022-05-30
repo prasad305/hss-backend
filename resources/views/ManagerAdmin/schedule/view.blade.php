@@ -26,8 +26,8 @@ Admin
 <div class="content">
 
     <div class="container-fluid">
-       
-       
+
+
 
 
     </div> <!-- container -->
@@ -42,30 +42,47 @@ Admin
         </div>
 
 
-        
-         
 
+
+
+    </div>
+    <hr>
+    <h4 class="mb-2">Schedule List</h4>
+    <form action="{{route('managerAdmin.schedule.update_all',$admin->id)}}" method="post">
+        @csrf
+        <div class="row mb-3">
+
+            <div class="col-md-2 offset-md-4">
+                <input type="text" id="set_reminder" name="set_reminder" class="form-control float-left" placeholder="set all reminder by day">
+                @error('set_reminder')
+                <span class="text-danger">{{$message}}</span>
+                @enderror
+                   
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-md btn-success">Set</button>
+            </div>
         </div>
-        <hr>
-        <h4 class="mb-2">Schedule List</h4>
+    </form>
+    <div class="row">
+        @foreach ($schedulesOrderByDate as $key => $schedules)
+        <div class="col-md-3">
+            <div class="sticky-top mb-3">
 
-      
-        <div class="row">
-            @foreach ($schedulesOrderByDate as $key => $schedules)
-            <div class="col-md-3">
-              <div class="sticky-top mb-3">
 
-               
                 <div class="card">
                     <div class="card-header bg-primary">
-                      <h4 class="card-title">{{ $key }}</h4>
+                        <h4 class="card-title">{{ $key }}</h4>
                     </div>
                     <div class="card-body">
-                      <!-- the events -->
+                        <!-- the events -->
                         @foreach ($schedules as $schedule)
                         <div id="external-events">
-                            <div class="external-event {{$schedule->event_type == 'livechat' ?  'bg-success' : ''}} {{$schedule->event_type == 'learning' ?  'bg-danger': ''}} {{$schedule->event_type == 'meetup' ?  'bg-info': ''}} ">{{strtoupper($schedule->event_type)}} <span class="text-warning">{{date('h:i A',strtotime($schedule->form)).'-'.date('h :i A',strtotime($schedule->to))}}</span>&nbsp;&nbsp;&nbsp; 
-                              
+                            <div class="external-event {{$schedule->event_type == 'livechat' ?  'bg-success' : ''}} {{$schedule->event_type == 'learning' ?  'bg-danger': ''}} {{$schedule->event_type == 'meetup' ?  'bg-info': ''}} ">
+                                {{strtoupper($schedule->event_type)}} <span class="text-warning">{{date('h:i
+                                    A',strtotime($schedule->form)).'-'.date('h :i
+                                    A',strtotime($schedule->to))}}</span>&nbsp;&nbsp;&nbsp;
+
                                 @if ($schedule->remainder_date == null)
                                 <a style="cursor: pointer;" onclick="Show('Set Reminder','{{ route('managerAdmin.schedule.edit',$schedule->id) }}')">
                                     <i class="fas fa-edit"></i>reminder
@@ -74,30 +91,30 @@ Admin
                                 remainder date : {{Carbon\Carbon::parse($schedule->remainder_date)->format('Y d,M')}}
                                 @endif
                             </div>
-                          </div>
+                        </div>
                         @endforeach
-                    
+
                     </div>
                     <!-- /.card-body -->
-                  </div>
-                  <!-- /.card -->
-              
-              
-               
-              </div>
-            </div>
-            @endforeach
-            <!-- /.col -->
-            <!-- /.col -->
-        </div>
+                </div>
+                <!-- /.card -->
 
-       
-        
-    </div> <!-- container -->
+
+
+            </div>
+        </div>
+        @endforeach
+        <!-- /.col -->
+        <!-- /.col -->
+    </div>
+
+
+
+</div> <!-- container -->
 </div> <!-- content -->
 
 <script>
-     
+
 </script>
 
 <style>
@@ -131,5 +148,6 @@ Admin
             overflow: hidden;
         }
     }
+
 </style>
 @endsection

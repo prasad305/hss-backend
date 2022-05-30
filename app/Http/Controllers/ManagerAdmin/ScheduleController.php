@@ -7,6 +7,7 @@ use App\Models\Schedule;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 
 class ScheduleController extends Controller
 {
@@ -53,6 +54,7 @@ class ScheduleController extends Controller
 
     public function update(Request $request, $id)
     {
+        
         $request->validate([
             'reminder_date' => 'required',
         ]);
@@ -66,6 +68,28 @@ class ScheduleController extends Controller
             'message' => 'Reminder Date Set Successfully'
         ]);
     }
+    public function update_all(Request $request,$admin_id)
+    {
+        // $date = Carbon::now()->addDays(-1);
+        // return $date;
+      
+        $request->validate([
+            'set_reminder' => 'required'
+        ]);
+
+       $schedules = Schedule::whereMonth('date', '=', Carbon::now()->month)->where([['admin_id', $admin_id],['remainder_date',null]])->get();
+     
+        foreach ($schedules as $key => $schedule) {
+            $schedule_date = Carbon::parse($schedule->date)->addDays(-$request->set_reminder)->format('Y-m-d');
+            $schedule->update([
+                'remainder_date' => $schedule_date,
+            ]);
+        }
+        session()->flash('success','Reminder Date Set Successfully!');
+         return redirect()->back();
+    }
+
+
 
 
     public function destroy($id)

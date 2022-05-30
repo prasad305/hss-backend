@@ -121,4 +121,17 @@ class StarScheduleController extends Controller
             'message'=>'Added Successfully',
         ]);
     }
+
+    public function notification()
+    {
+
+        $schedules = Schedule::where([['star_id',auth('sanctum')->user()->id],['status',0]])
+                            ->whereColumn('remainder_date', '<=', 'date')
+                            ->get(); 
+
+        return response()->json([
+            'status' => 200,
+            'schedules' => $schedules,
+        ]);
+    }
 }
