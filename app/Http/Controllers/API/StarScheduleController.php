@@ -129,6 +129,7 @@ class StarScheduleController extends Controller
                             ->whereColumn('remainder_date', '<=', 'date')
                             ->get(); 
 
+
         return response()->json([
             'status' => 200,
             'schedules' => $schedules,

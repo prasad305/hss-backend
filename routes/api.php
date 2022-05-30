@@ -308,7 +308,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
     Route::get('admin/schedule/notification', [ScheduleController::class, 'notification']);
 
-    Route::get('/{date}', [ScheduleController::class, 'dateWiseSchedule']);
+    Route::get('admin/schedule/{date}', [ScheduleController::class, 'dateWiseSchedule']);
 
     Route::get('/admin/schedule_list', [ScheduleController::class, 'schedule_list']);
     Route::get('/admin/current_year_schedule_list', [ScheduleController::class, 'current_year_schedule_list']);
