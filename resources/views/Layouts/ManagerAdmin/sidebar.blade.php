@@ -373,6 +373,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('managerAdmin.learningSession.evaluation') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Evaluation</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('managerAdmin.learningSession.published') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Published</p>

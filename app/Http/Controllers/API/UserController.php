@@ -28,6 +28,7 @@ use App\Models\React;
 use App\Models\SimplePost;
 use App\Models\ChoiceList;
 use App\Models\InterestType;
+use App\Models\LearningSessionAssignment;
 use App\Models\LiveChatRoom;
 use App\Models\Message;
 use App\Models\PromoVideo;
@@ -1224,5 +1225,37 @@ class UserController extends Controller
             'status' => 200,
             'participant' => $participant,
         ]);
+    }
+
+    public function uploadLearningSessionVideo(Request $request)
+    {
+        // return $request->all();
+        $validator = Validator::make($request->all(), [
+            'file.*' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+
+            foreach ($request->file as $key => $file) {
+                $learning_video = new LearningSessionAssignment();
+                $learning_video->event_id = $request->learning_session_id;
+                $learning_video->user_id = auth()->user()->id;
+
+                $file_name   = time() . rand('0000', '9999') . $key . '.' . $file->getClientOriginalName();
+                $file_path = 'uploads/videos/learnings/';
+                $file->move($file_path, $file_name);
+                $learning_video->video = $file_path . $file_name;
+                $learning_video->save();
+            }
+            return response()->json([
+                'status' => 200,
+                'message' => 'Learning Videos Uploaded Successfully!',
+            ]);
+        }
     }
 }

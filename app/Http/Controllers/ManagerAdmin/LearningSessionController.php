@@ -161,6 +161,20 @@ class LearningSessionController extends Controller
         return view('ManagerAdmin.LearningSession.index', compact('upcommingEvent'));
     }
 
+    public function learningEvaluation()
+    {
+        $events = LearningSession::where([['status','>', 2], ['status','<', 9],['category_id',auth()->user()->category_id]])->get();
+
+        return view('ManagerAdmin.LearningSession.evaluation', compact('events'));
+    }
+
+    public function evaluationDetails($id)
+    {
+        $event = LearningSession::findOrFail($id);
+
+        return view('ManagerAdmin.LearningSession.evaluationDetails', compact('event'));
+    }
+
     public function manager_all()
     {
         $upcommingEvent = LearningSession::latest()->latest()->get();
