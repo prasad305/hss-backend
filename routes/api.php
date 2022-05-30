@@ -253,11 +253,11 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/learning_session/evaluation', [LearningSessionController::class, 'evaluation_list']);
     Route::get('/admin/learning_session/completed', [LearningSessionController::class, 'completed_list']);
     Route::get('/admin/learning_session/details/{slug}', [LearningSessionController::class, 'details']);
-    Route::get('/admin/learning_session/assignment/{id}', [LearningSessionController::class, 'assignment_details']);
     Route::get('/admin/learning_session/pending/{slug}', [LearningSessionController::class, 'pending_details']);
     Route::get('/admin/learning_session/approved', [LearningSessionController::class, 'approved_list']);
+    Route::get('/admin/learning_session/assignment/{id}', [LearningSessionController::class, 'assignment_details']);
     Route::post('/admin/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
-    Route::get('admin/learning_session/assignment/set_approved/{id}', [LearningSessionController::class, 'assignment_rule_add']);
+    Route::post('admin/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'assignment_set_approval']);
 
     // Live Session Section
     Route::post('admin/add_live_session', [LiveChatController::class, 'add_live_session']);

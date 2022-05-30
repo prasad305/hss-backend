@@ -77,6 +77,30 @@ class LearningSessionController extends Controller
         ]);
     }
 
+
+
+    public function assignment_set_approval(Request $request, $type, $id)
+    {
+
+        $post = LearningSessionAssignment::find($id);
+
+        if($type == 'approve')
+        {
+            $post->status = 1;
+        }else{
+            $post->status = 2;
+        }
+
+        $post->comment = $request->input('comment');
+
+        $post->update();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Status Updated',
+        ]);
+    }
+
     public function count()
     {
         $pending = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', 0]])->count();
@@ -160,11 +184,22 @@ class LearningSessionController extends Controller
 
     public function assignment_details($id)
     {
-        $event = LearningSessionAssignment::where('event_id',$id)->get();
+        // $event = LearningSessionAssignment::all();
+
+        $learning_session = LearningSession::find($id);
+        $instruction = $learning_session->assignment_instruction;
+
+        $event = LearningSessionAssignment::where([['event_id', $id],['status',0]])->get();
+        $approved_event = LearningSessionAssignment::where([['event_id', $id],['status',1]])->get();
+        $rejected_event = LearningSessionAssignment::where([['event_id', $id],['status',2]])->get();
 
         return response()->json([
             'status' => 200,
+            'instruction' => $instruction,
             'event' => $event,
+            'approved_event' => $approved_event,
+            'rejected_event' => $rejected_event,
+
             'message' => 'Success',
         ]);
     }
