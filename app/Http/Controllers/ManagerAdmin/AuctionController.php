@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auction;
+use App\Models\Bidding;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -34,9 +35,12 @@ class AuctionController extends Controller
     public function details($id)
     {
         $product = Auction::with('star')->find($id);
+        $allbidders = collect(Bidding::with('user')->where('auction_id',$id)->orderBy('amount','DESC')->get());
+        $bidders = $allbidders->unique('user_id');
+        $totalBidders = Bidding::with('user')->where('auction_id',$id)->orderBy('amount','DESC')->distinct('user_id')->count();
         //dd($product);
 
-        return view('ManagerAdmin.Auction.details', compact('product'));
+        return view('ManagerAdmin.Auction.details', compact(['product','bidders',"totalBidders"]));
     }
 
 

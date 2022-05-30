@@ -293,10 +293,15 @@ class AuctionController extends Controller
     public function  allBidderList($id){
 
         $bidderList = Bidding::with('user')->orderBy('amount','DESC')->where('auction_id',$id)->distinct('user_id')->get();
+        // $users = Bidding::with('user')->where('auction_id',$id)->orderBy('amount','DESC')->get();
+        // $bidderList = collect($users)->unique('user_id');
+
+        $totalBidder = Bidding::with('user')->orderBy('amount','DESC')->where('auction_id',$id)->distinct('user_id')->count();
 
         return response()->json([
             'status' => 200,
             'bidderList' => $bidderList,
+            'totalBidder' => $totalBidder,
         ]);
     }
 
