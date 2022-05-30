@@ -678,11 +678,48 @@ class UserController extends Controller
 
     public function auctionProduct()
     {
-        $product = Auction::with('star')->orderBy('id','DESC')->where('status', 1)->get();
+
+        $id = auth('sanctum')->user()->id;
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
+
+        $selectedCat = json_decode($selectedCategory->category);
+        $selectedSubCat = json_decode($selectedCategory->subcategory);
+        $selectedSubSubCat = json_decode($selectedCategory->star_id);
+
+        $cat_post = Auction::with('star')->orderBy('id','DESC')->where('status', 1)
+            ->whereIn('category_id', $selectedCat)
+            ->latest()->get();
+
+        if (isset($sub_cat_post)) {
+            $sub_cat_post = Auction::with('star')->orderBy('id','DESC')->where('status', 1)
+                ->whereIn('sub_category_id', $selectedSubCat)
+                ->latest()->get();
+        } else {
+            $sub_cat_post = [];
+        }
+
+        if (isset($sub_sub_cat_post)) {
+            $sub_sub_cat_post = Auction::with('star')->orderBy('id','DESC')->where('status', 1)
+                ->whereIn('user_id', $selectedSubSubCat)
+                ->latest()->get();
+        } else {
+            $sub_sub_cat_post = [];
+        }
+
+        $product = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
+
         return response()->json([
-            'status' => 200,
-            'product' => $product
+                'status' => 200,
+                'product' => $product
         ]);
+    
+
+        // $product = Auction::with('star')->orderBy('id','DESC')->where('status', 1)->get();
+        // return response()->json([
+        //     'status' => 200,
+        //     'product' => $product
+        // ]);
+
     }
     public function  auctionSingleProduct($id)
     {

@@ -99,7 +99,58 @@ Manager Admin
             <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Post','{{ route('managerAdmin.auctionProduct.edit', $product->id) }}')">Edit</a>
         </div>
 
-
+        <div class="row mt-5" >
+            <div class="col-12">
+            <div class="card">
+            <div class="card-header">
+            <h3 class="card-title">Bidder List - {{$totalBidders}}</h3>
+            <div class="card-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+            <div class="input-group-append">
+            <button type="submit" class="btn btn-default">
+            <i class="fas fa-search"></i>
+            </button>
+            </div>
+            </div>
+            </div>
+            </div>
+            
+            <div class="card-body table-responsive p-0">
+             <table class="table table-hover text-nowrap">
+            <thead>
+            <tr>
+            <th>#SL</th>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+                @foreach ($bidders as $key=>$bidder )
+                   <tr>
+            <td>{{$key+1}}</td>
+            <td>{{$bidder->user->first_name}} {{$bidder->user->last_name}}</td>
+            <td>{{$bidder->amount}}</td>
+            <td>{{ \Carbon\Carbon::parse($bidder->created_at)->format('d F,Y')}}</td>
+            <td>@if ($bidder->applied_status === 1)
+                <span class="tag tag-success">Applied</span>
+                @else
+                <span class="tag tag-success">Not Applied</span>
+                
+            @endif</td>
+            </tr> 
+                @endforeach
+            
+            </tbody>
+            </table>
+            </div>
+            
+            </div>
+            
+            </div>
+            </div>
     </div> <!-- container -->
 </div> <!-- content -->
 
