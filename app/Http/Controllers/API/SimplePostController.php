@@ -217,7 +217,7 @@ class SimplePostController extends Controller
 
     public function star_add(Request $request)
     {
-        //return $request->all();
+
 
 
         $post = new SimplePost();

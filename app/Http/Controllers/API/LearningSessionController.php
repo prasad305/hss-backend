@@ -14,7 +14,7 @@ class LearningSessionController extends Controller
     //
     public function add(Request $request)
     {
-        //return $request->all();
+
 
 
         $post = new LearningSession();

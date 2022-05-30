@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class StarAssignedController extends Controller
 {
-  
+
     public function index()
     {
        $data = [
@@ -20,13 +20,13 @@ class StarAssignedController extends Controller
        return view('ManagerAdmin.assigned.index',$data);
     }
 
-    
+
     public function create()
     {
         //
     }
 
-    
+
     public function store(Request $request)
     {
         //
@@ -37,23 +37,23 @@ class StarAssignedController extends Controller
         //
     }
 
-    
+
     public function edit($id)
     {
         $data = [
             'unassigned_stars' => User::where([['status',1],['active_status',1],['category_id',auth()->user()->category_id],['user_type','star'],['parent_user',null]])->get(),
 
             'admin' => User::find($id),
-            
+
         ];
- 
+
         return view('ManagerAdmin.assigned.edit',$data);
     }
 
-   
+
     public function update(Request $request, $id)
     {
-        // return $request->all();
+
         $request->validate([
             'star_id' => 'required',
         ]);
@@ -77,7 +77,7 @@ class StarAssignedController extends Controller
         }
     }
 
-  
+
     public function destroy($id)
     {
         //

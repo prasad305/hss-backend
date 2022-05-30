@@ -54,7 +54,7 @@ class FanGroupController extends Controller
         $anotherStar =  $request->another_star;
 
         $adminId = User::find($anotherStar);
-        // return $request->all();
+
 
         $fangroup = new FanGroup();
 
@@ -76,7 +76,7 @@ class FanGroupController extends Controller
             $fangroup->category_id = $adminId->category_id;
             $fangroup->sub_category_id = $adminId->sub_category_id;
         }
-        
+
         $fangroup->another_star_status = 0;
 
         if ($request->hasfile('banner')) {
@@ -112,7 +112,7 @@ class FanGroupController extends Controller
         // $anotherStar =  $request->another_star;
 
         // $adminId = User::find($anotherStar);
-        // return $request->all();
+
 
         $validator = Validator::make($request->all(), [
             'group_name' => 'required',
@@ -173,7 +173,7 @@ class FanGroupController extends Controller
         }
     }
     public function deleteFanGroup($slug){
-        
+
         $fangroup = FanGroup::where('slug', $slug)->first();
 
         $destination = $fangroup->banner;
@@ -581,7 +581,7 @@ class FanGroupController extends Controller
 
         $fanWarning = Fan_Group_Join::find($id);
 
-       
+
         $fanWarning->delete();
 
         return response()->json([
@@ -593,7 +593,7 @@ class FanGroupController extends Controller
 
         $fanWarning = Fan_Group_Join::find($id);
 
-       
+
         $fanWarning->warning_count = 0;
 
         $fanWarning->save();
@@ -607,7 +607,7 @@ class FanGroupController extends Controller
 
         $fanWarning = Fan_Group_Join::where('user_id', $id)->where('fan_group_id', $fanid)->first();
 
-       
+
         $fanWarning->warning_count++;
 
         $fanWarning->save();
@@ -820,7 +820,7 @@ class FanGroupController extends Controller
     public function updateImageFanGroup(Request $request, $slug){
 
         $fanImage = FanGroup::where('slug', $slug)->first();
-        
+
 
         if ($request->hasfile('banner')) {
 
@@ -833,7 +833,7 @@ class FanGroupController extends Controller
         }
 
         $fanImage->save();
-        
+
         return response()->json([
             'status' => 200,
             'message' => 'Fan Group Image updated Successfully',

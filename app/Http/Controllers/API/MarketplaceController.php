@@ -30,8 +30,8 @@ class MarketplaceController extends Controller
                 'data' => $data,
             ]);
     }
-    
-    
+
+
     public function viewCountry(){
         $data = Country::where('status', 1)
                             ->get();
@@ -119,10 +119,10 @@ class MarketplaceController extends Controller
 
         $id = Auth::user()->id;
         $parent_id = User::find($id);
-        // return $request->all();
+
 
         $marketplace = new Marketplace();
-        
+
         $marketplace->title = $request->title;
         $marketplace->slug = Str::slug($request->input('title'));
         $marketplace->description = $request->description;
@@ -161,7 +161,7 @@ class MarketplaceController extends Controller
         $approvedCount = Marketplace::where('status', 1)
                                 ->where('superstar_admin_id', Auth::user()->id)
                                 ->count();
-        
+
         return response()->json([
             'status' => 200,
             'approved' => $approved,
@@ -172,7 +172,7 @@ class MarketplaceController extends Controller
     public function orderAdminProductList(){
         $orderList = Order::where('superstar_admin_id', Auth::user()->id)
                                 ->get();
-        
+
         return response()->json([
             'status' => 200,
             'orderList' => $orderList,
@@ -188,7 +188,7 @@ class MarketplaceController extends Controller
 
 
         // $live = Marketplace::where('status', 1)->get();
-        
+
         return response()->json([
             'status' => 200,
             'live' => $live,
@@ -258,12 +258,12 @@ class MarketplaceController extends Controller
 
     public function starMarketplaceStore(Request $request){
 
-        // return $request->all();
+
         $id = Auth::user()->id;
         $parent_id = User::find($id);
 
         $marketplace = new Marketplace();
-        
+
         $marketplace->title = $request->title;
         $marketplace->slug = Str::slug($request->input('title'));
         $marketplace->description = $request->description;
@@ -306,7 +306,7 @@ class MarketplaceController extends Controller
         $approvedCount = Marketplace::where('status', 1)
                                 ->where('superstar_admin_id', $parent_id->parent_user)
                                 ->count();
-        
+
         return response()->json([
             'status' => 200,
             'approved' => $approved,
@@ -326,7 +326,7 @@ class MarketplaceController extends Controller
 
 
         // $live = Marketplace::where('status', 1)->get();
-        
+
         return response()->json([
             'status' => 200,
             'live' => $live,
@@ -359,7 +359,7 @@ class MarketplaceController extends Controller
             'editData' => $editData,
         ]);
     }
-    
+
     public function storeStarProductList(Request $request ,$id){
         $marketplace = Marketplace::find($id);
 

@@ -25,7 +25,7 @@ class PromoVideoController extends Controller
 
     public function videoStore(Request $request)
     {
-        // return $request->all();
+
         $validator = Validator::make($request->all(),[
             'star_id' => 'required',
             'title' => 'required',

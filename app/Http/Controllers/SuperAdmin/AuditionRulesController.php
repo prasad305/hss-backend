@@ -105,7 +105,7 @@ class AuditionRulesController extends Controller
 
     public function update(Request $request, $id)
     {
-        // return $request->all();
+
         $request->validate([
             'category_id' => 'required',
             'round_num' => 'required',

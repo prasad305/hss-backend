@@ -30,7 +30,7 @@ class GreetingController extends Controller
 
     public function add(Request $request)
     {
-        // return $request->all();
+
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'instruction' => 'required|min:10',
@@ -282,7 +282,7 @@ class GreetingController extends Controller
     public function greetingsRegisterListByGreetingsId()
     {
         $greeting = auth('sanctum')->user()->star->asStarGreeting;
-        $register_list = GreetingsRegistration::where('greeting_id', $greeting->id)->get();
+        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id],['notification_at',null],['status', 0]])->get();
 
         return response()->json([
             'status' => 200,
@@ -314,21 +314,9 @@ class GreetingController extends Controller
             'status' => 200,
         ]);
     }
-    /**
-     * sent notification to user
-     */
-    // public function sentNotificationToUser(Request $request)
-    // {
-    //     return response()->json([
-    //         'status' => 200,
-    //         'list' => $request->all()
-    //     ]);
-    // }
 
     public function sentNotificationToUser(Request $request)
     {
-
-
         $users_arry = explode(',', $request->users);
         $greetins_arry = explode(',', $request->greetings_id);
 
@@ -340,20 +328,19 @@ class GreetingController extends Controller
             $text->save();
 
             foreach ($users_arry as $key => $req) {
-
                 Notification::insert([
                     'notification_id' => $text->id,
+                    'event_id' => GreetingsRegistration::whereIn('id', $greetins_arry)->first()->greeting->id,
                     'user_id' => $req,
                     'view_status' => 0,
                     'status' => 0,
-
+                    'created_at' => Carbon::now(),
                 ]);
             }
-
             $register_greeting = GreetingsRegistration::whereIn('id', $greetins_arry)->update(['notification_at' => Carbon::now()]);
         }
 
-        $register_list = GreetingsRegistration::where('greeting_id', $request->greeting_id)->get();
+        $register_list = GreetingsRegistration::whereIn('id', $greetins_arry)->where([['notification_at',null],['status', 0]])->get();
 
 
         return response()->json([

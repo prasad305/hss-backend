@@ -14,7 +14,7 @@ class ScheduleController extends Controller
     //
     public function add_schedule(Request $request)
     {
-        // return $request->all();
+
 
         $undeleteable_ids = [];
         foreach ($request->all() as $key => $req) {
@@ -35,7 +35,7 @@ class ScheduleController extends Controller
                     'date' => $req['date'],
                 ]);
             } else {
-               
+
                 if ($req['from'] == null || $req['from'] == '' && $req['to'] == null || $req['to'] == '' && $req['event_type'] == null || $req['event_type'] == '') {
                     return response()->json([
                         'status' => 422,
@@ -52,7 +52,7 @@ class ScheduleController extends Controller
                         'month' => Carbon::parse($req['date'])->format('M'),
                         'updated_at' => date("Y-m-d h:i:s"),
                         'created_at' => date("Y-m-d h:i:s"),
-                    ]); 
+                    ]);
                 }
             }
         }
