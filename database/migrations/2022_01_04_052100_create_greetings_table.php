@@ -28,10 +28,10 @@ class CreateGreetingsTable extends Migration
             // $table->integer('participant_number')->nullable();
             // $table->timestamp('registration_start_date')->nullable();
             // $table->timestamp('registration_end_date')->nullable();
-            $table->boolean('publish_status')->default(0);
+            // $table->boolean('publish_status')->default(0);
             $table->integer('user_required_day')->default(5)->comment('How many days ago star wants to get greeting request from a user');
             $table->integer('star_approve_status')->default(0)->comment('1 = star approve, decline = delete ');
-            $table->boolean('status')->default(0)->comment('1 = forwared to manager admin');
+            $table->boolean('status')->default(0)->comment('1 = forwared to manager admin, 2 = published to website');
             $table->timestamps();
         });
     }

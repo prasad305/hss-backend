@@ -236,18 +236,21 @@ class GreetingController extends Controller
     public function greetingsCreateStatus($star_id)
 
     {
-        $greeting = Greeting::where([['star_id', $star_id], ['star_approve_status', '>', 0]])->first();
+        $star = User::find($star_id);
+        $greeting = Greeting::where([['star_id', $star_id], ['star_approve_status', '>', 0],['status', 2]])->first();
 
         if (isset($greeting)) {
             return response()->json([
                 'status' => 200,
                 'greeting' => $greeting,
+                'star' => $star,
                 'action' => true,
             ]);
         } else {
             return response()->json([
                 'status' => 200,
                 'greeting' => $greeting,
+                'star' => $star,
                 'action' => false,
             ]);
         }
