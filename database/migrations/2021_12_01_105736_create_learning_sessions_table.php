@@ -15,6 +15,7 @@ class CreateLearningSessionsTable extends Migration
     {
         Schema::create('learning_sessions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('created_by_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();

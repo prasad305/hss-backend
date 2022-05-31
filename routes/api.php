@@ -164,6 +164,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     //Event Registaion By User (Learning Session + Live Chat + Greeting + Meetup Event)
     Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
+    Route::post('/user/learning-session/video-upload', [UserController::class, 'uploadLearningSessionVideo']);
 
     //use this api on react project file path- \src\components\Pages\Profile\profile-components\starProfile\StarChat
     Route::post('/user/liveChat/register', [UserController::class, 'liveChatRigister']);

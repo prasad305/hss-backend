@@ -31,7 +31,7 @@ class LearningSession extends Model
         'room_id',
         'total_amount',
     ];
-    protected $with = ['star'];
+    protected $with = ['star','learningSessionAssignment'];
 
     public function admin()
     {
@@ -50,5 +50,10 @@ class LearningSession extends Model
     public function registeredLearningSessions()
     {
         return $this->hasMany(LearningSessionRegistration::class, 'learning_session_id');
+    }
+
+    public function learningSessionAssignment()
+    {
+        return $this->hasMany(LearningSessionAssignment::class, 'event_id');
     }
 }
