@@ -289,6 +289,16 @@ class GreetingController extends Controller
             'list' => $register_list
         ]);
     }
+    public function adminGreetingsRegisterListWithPaymentComplete()
+    {
+        $greeting = auth('sanctum')->user()->star->asStarGreeting;
+        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id],['notification_at','!=',null],['status', 1]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'list' => $register_list
+        ]);
+    }
     /**
      * user greetings reg with payment list
      */
