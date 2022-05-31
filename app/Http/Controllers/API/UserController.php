@@ -1290,7 +1290,7 @@ class UserController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-
+            
             foreach ($request->file as $key => $file) {
                 $learning_video = new LearningSessionAssignment();
                 $learning_video->event_id = $request->learning_session_id;
@@ -1302,9 +1302,12 @@ class UserController extends Controller
                 $learning_video->video = $file_path . $file_name;
                 $learning_video->save();
             }
+
+            $learning_session = LearningSession::find($request->learning_session_id);
             return response()->json([
                 'status' => 200,
                 'message' => 'Learning Videos Uploaded Successfully!',
+                'learningSession' => $learning_session,
             ]);
         }
     }
