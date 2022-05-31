@@ -16,6 +16,7 @@ use App\Models\LearningSessionRegistration;
 use App\Models\LiveChatRoom;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
+use App\Models\Notification;
 use App\Models\User;
 use App\Models\UserInfo;
 use Carbon\Carbon;
@@ -43,6 +44,7 @@ class UserMobileAppController extends Controller
     }
     public function eventRegister(Request $request)
     {
+        // return $request->all();
         $user = User::find(auth('sanctum')->user()->id);
         $eventId = (string)$request->event_id;
         $modelName = $request->model_name;
@@ -78,12 +80,16 @@ class UserMobileAppController extends Controller
             $activity->type = 'livechat';
             $event->update();
         }
-        // if( $modelName == 'GreetingsRegistration'){
-        //     $eventRegistration = new GreetingsRegistration();
-        //     $event = Greeting::find($eventId);
-        //     $eventRegistration->greeting_id = $eventId;
-        //     $activity->type = 'greeting';
-        // }
+        if( $modelName == 'greeting'){
+            $eventRegistration = GreetingsRegistration::find($request->event_registration_id);
+            $event = Greeting::find($eventId);
+            $eventRegistration->status = 1;
+            $activity->type = 'greeting';
+
+            $notification = Notification::find($request->notification_id);
+            $notification->view_status = 1;
+            $notification->save();
+        }
         if ($modelName == 'AuditionParticipant') {
             $eventRegistration = new AuditionEventRegistration();
             $event = Audition::find($eventId);
@@ -115,7 +121,7 @@ class UserMobileAppController extends Controller
             'eventRegistration' => $eventRegistration,
             'modelName' => $modelName,
             'eventId' => $eventId,
-            'message' => 'Success',
+            'message' => 'Success Registered',
         ]);
     }
 

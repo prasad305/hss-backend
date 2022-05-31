@@ -742,7 +742,7 @@ class AuditionController extends Controller
 
     public function selectedTop(Request $request)
     {
-        // return $request->all();
+
 
         if ($request->mark_wise != null && $request->mark_wise == 'mark') {
             AuditionMark::where('audition_id', $request->audition_id)->where('marks', '>=', $request->selected_top)->where('participant_status', 1)->update([
@@ -862,7 +862,7 @@ class AuditionController extends Controller
     public function saveRoundInstruction(Request $request)
     {
 
-        // return $request->all();
+
 
         $validator = Validator::make($request->all(), [
             // 'title' => 'required',

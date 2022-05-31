@@ -148,7 +148,7 @@ class MarketplaceController extends Controller
         }
         $id = Auth::user()->id;
         $parent_id = User::find($id);
-        // return $request->all();
+
 
         $marketplace = new Marketplace();
 
@@ -312,6 +312,7 @@ class MarketplaceController extends Controller
     // SuperStar For Marketplace
 
     public function starMarketplaceStore(Request $request){
+
 
         // return $request->all();
         $validator = Validator::make($request->all(), [

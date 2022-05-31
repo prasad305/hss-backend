@@ -412,7 +412,7 @@ class UserController extends Controller
 
     public function liveChatRigister(Request $request)
     {
-        // return $request->all();
+
         $liveChat = LiveChat::find($request->event_id);
         $liveChat->slot_counter = $liveChat->slot_counter + $request->minute;
         $start_time = Carbon::parse($liveChat->start_time)->addMinutes($liveChat->slot_counter);
@@ -469,6 +469,7 @@ class UserController extends Controller
         $greetings = new GreetingsRegistration();
 
         $greetings->request_time = Carbon::parse($request->input('time'));
+        $greetings->purpose = $request->purpose;
         $greetings->user_id = auth('sanctum')->user()->id;
         $greetings->greeting_id = $request->greetings_id;
         $greetings->save();
@@ -510,7 +511,7 @@ class UserController extends Controller
             $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->orderBy('id', 'DESC')->first();
             $greeting_reg->name = $request->name;
             $greeting_reg->birth_date = $request->date_b;
-            $greeting_reg->greeting_contex = $request->greetings_context;
+            $greeting_reg->greeting_context = $request->greetings_context;
             $greeting_reg->additional_message = $request->additional_message;
             $greeting_reg->phone = $request->phone;
             $greeting_reg->password = Hash::make($request->password);
@@ -528,29 +529,41 @@ class UserController extends Controller
             ]);
         }
     }
+    public function greetingInfoToRegistration($greeting_id)
+    {
+
+
+        $greeting = Greeting::find($greeting_id);
+        $greetingsRegistration =  GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id],['greeting_id',$greeting_id],['notification_at','!=', null]])->orderBy('id', 'DESC')->first();
+
+
+
+            return response()->json([
+                'status' => 200,
+                'greeting' => $greeting,
+                'greetingsRegistration' => $greetingsRegistration,
+            ]);
+
+    }
 
     /**
      * public function greetings stastus
      */
     public function greetingStatus()
     {
-        $single_greeting = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
+        $single_greeting = GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id],['notofication_at', null]])->first();
 
         if (isset($single_greeting)) {
             return response()->json([
                 'status' => 200,
                 'action' => true,
                 'greeting' => $single_greeting,
-
-
             ]);
         } else {
             return response()->json([
                 'status' => 200,
                 'action' => false,
                 'greeting' => $single_greeting,
-
-
             ]);
         }
     }
@@ -660,7 +673,7 @@ class UserController extends Controller
      */
     public function checkUserNotifiaction()
     {
-        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+        $notification = Notification::where([['user_id', auth('sanctum')->user()->id],['view_status',0]])->orderBy('id','ASC')->get();
         $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
         if ($greeting_reg)
             $greeting_info = Greeting::find($greeting_reg->greeting_id);
@@ -1000,7 +1013,7 @@ class UserController extends Controller
     public function videoUpload(Request $request)
     {
 
-        // return $request->all();
+
 
         $audition = AuditionParticipant::where('audition_id', $request->audition_id)->where('user_id', Auth::user()->id)->first();
 
@@ -1129,7 +1142,7 @@ class UserController extends Controller
     public function updateCover(Request $request, $id)
     {
 
-        // return $request->all();
+
 
         $userInfo = User::findOrfail($id);
 
@@ -1157,7 +1170,7 @@ class UserController extends Controller
     public function updateProfile(Request $request, $id)
     {
 
-        // return $request->all();
+
 
         $userInfo = User::findOrfail($id);
 

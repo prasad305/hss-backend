@@ -13,6 +13,7 @@ use App\Http\Controllers\ManagerAdmin\MarketplaceController;
 use App\Http\Controllers\ManagerAdmin\FanGroupController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\ManagerAdmin\AuctionController;
+use App\Http\Controllers\ManagerAdmin\GreetingController;
 use App\Http\Controllers\ManagerAdmin\PromoVideoController;
 use App\Http\Controllers\ManagerAdmin\ScheduleController;
 use App\Http\Controllers\ManagerAdmin\StarAssignedController;
@@ -28,8 +29,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     // Dashboard Routes By Srabon
 
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
-    
     // Schedule Routes By Monir 
+
     Route::resource('schedule', ScheduleController::class);
     Route::post('schdeule/updateAll/{admin_id}', [ScheduleController::class, 'update_all'])->name('schedule.update_all');
 
@@ -38,11 +39,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('meetup-events', [DashboardController::class, 'meetupEvents'])->name('dashboard.meetupEvent');
     Route::get('meetup-events-data/{type}', [DashboardController::class, 'meetupEventsData'])->name('dashboard.meetupEventData');
     Route::get('meetup-events-details/{id}', [DashboardController::class, 'meetupEventsDetails'])->name('dashboard.meetupEventDetails');
-
-    // Greetings
-    Route::get('greetings', [DashboardController::class, 'greetings'])->name('dashboard.greeting');
-    Route::get('greetings-data/{type}', [DashboardController::class, 'greetingsData'])->name('dashboard.greetingData');
-    Route::get('greetings-details', [DashboardController::class, 'greetingsDetails'])->name('dashboard.greetingDetails');
     // Live Chats
 
     Route::get('live-chats', [DashboardController::class, 'liveChats'])->name('dashboard.liveChat');
@@ -87,7 +83,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::resource('admin', AdminController::class);
     Route::post('admin/active/{id}', [AdminController::class, 'activeNow'])->name('admin.activeNow');
     Route::post('admin/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('admin.inactiveNow');
-    
+
     //For Super Star route
     Route::resource('star', SuperStarController::class);
     Route::post('star/active/{id}', [AdminController::class, 'activeNow'])->name('star.activeNow');
@@ -111,20 +107,20 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     // Jury Board route
     Route::resource('jury', JuryBoardController::class);
-    
+
     Route::post('jury/active/{id}', [JuryBoardController::class, 'activeNow'])->name('jury.activeNow');
     Route::post('jury/inactive/{id}', [JuryBoardController::class, 'inactiveNow'])->name('jury.inactiveNow');
 
     Route::get('jury-assinged', [JuryBoardController::class, 'assinged'])->name('juryBoard_assinged');
     Route::get('jury-free', [JuryBoardController::class, 'notAssinged'])->name('juryBoard_notAssinged');
     Route::get('jury-view/{jury_id}', [JuryBoardController::class, 'views'])->name('jury.views');
-    
-    
+
+
     Route::post('jury-video-assign', [JuryBoardController::class, 'assignVideo'])->name('jury.AssingVideos');
-    
-    
+
+
     // assigned route for admin to star or star to admin
-    Route::resource('assigned',StarAssignedController::class);
+    Route::resource('assigned', StarAssignedController::class);
 
 
     // Live route
@@ -189,6 +185,15 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
         // Jury Audition Routes
         Route::get('jury-published/{id}', [AuditionAdminController::class, 'juryPublished'])->name('jury_published');
         Route::get('jury-published/{id}', [AuditionAdminController::class, 'juryPublished'])->name('jury_published');
+    });
+
+
+    // greeting
+    Route::group(['prefix' => 'greeting/', 'as' => 'greeting.'], function () {
+        Route::get('dashboard', [GreetingController::class, 'dashboard'])->name('dashboard');
+        Route::get('request', [GreetingController::class, 'request'])->name('request');
+        Route::get('show/{id}', [GreetingController::class, 'show'])->name('show');
+        Route::post('publish/{id}', [GreetingController::class, 'publish'])->name('publish');
     });
 
 
