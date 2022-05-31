@@ -163,7 +163,7 @@ class LearningSessionController extends Controller
 
     public function learningEvaluation()
     {
-        $events = LearningSession::where([['status','>', 2], ['status','<', 9],['category_id',auth()->user()->category_id]])->get();
+        $events = LearningSession::where([['status','>', 3], ['status','<', 9],['category_id',auth()->user()->category_id]])->get();
 
         return view('ManagerAdmin.LearningSession.evaluation', compact('events'));
     }
@@ -174,6 +174,34 @@ class LearningSessionController extends Controller
 
         return view('ManagerAdmin.LearningSession.evaluationDetails', compact('event'));
     }
+
+    public function evaluationAccept($id)
+    {
+        $event = LearningSession::findOrFail($id);
+        $event->status = 5;
+        $event->save();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Approved Successfully!',
+        ]);
+
+        
+    }
+
+    public function evaluationReject($id)
+    {
+        $event = LearningSession::findOrFail($id);
+        $event->status = 55;
+        $event->save();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Rejected Successfully!',
+        ]);
+
+        
+    }
+
+
 
     public function manager_all()
     {
