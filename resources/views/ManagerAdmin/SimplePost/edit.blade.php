@@ -19,12 +19,25 @@
 
 
     <span class="row">
-           <div class="form-group col-md-12">
-              <label for="image">Banner</label>
-              <br><img id="image1" onchange="validateMultipleImage('image1')" alt="icon" src="{{ asset($event->image) }}" height="300px" width="100%" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required/>
-              <br><br>
-              <input type="file" class="mt-2" id="image" name="image" onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
-        </div>
+
+        @if ($event->image != null)
+            
+        <div class="form-group col-md-12">
+           <label for="image">Banner</label>
+           <br><img id="image1" onchange="validateMultipleImage('image1')" alt="icon" src="{{ asset($event->image) }}" height="300px" width="100%" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required/>
+           <br><br>
+           <input type="file" class="mt-2" id="image" name="image" onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
+     </div>
+        @else
+        <div class="form-group col-md-12">
+            <label for="image">Video</label>
+        </br>
+            <video width="420" height="315" controls src="{{ asset($event->video) }}">
+            </video>
+            <br><br>
+            <input type="file" class="mt-2" id="video" name="video" onchange="document.getElementById('video1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
+      </div>
+      @endif
     </span>
 
     <div class="row form-group">
@@ -39,7 +52,7 @@
      </div>
 
 
-    <button type="submit" class="btn btn-primary" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update Event</button>
+    <button type="submit" class="btn btn-primary" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update Post</button>
 
 </form>
 

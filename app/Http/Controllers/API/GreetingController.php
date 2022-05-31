@@ -30,11 +30,12 @@ class GreetingController extends Controller
 
     public function add(Request $request)
     {
-        // return $request->all();
+
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'instruction' => 'required|min:10',
             'cost' => 'required|numeric||min:1',
+            'user_required_day' => 'required|numeric||min:1',
             'banner' => 'required|mimes:jpeg,jpg,png,webp',
             'video' => 'required|mimes:mp4,mov,ogg',
         ]);
@@ -53,6 +54,7 @@ class GreetingController extends Controller
             $greeting->instruction = $request->instruction;
             $greeting->star_id = auth('sanctum')->user()->star->id;
             $greeting->cost = $request->cost;
+            $greeting->user_required_day = $request->user_required_day;
 
             if ($request->hasfile('banner')) {
                 $destination = $greeting->banner;
@@ -91,6 +93,7 @@ class GreetingController extends Controller
             'title' => 'required',
             'instruction' => 'required|min:10',
             'cost' => 'required|numeric||min:1',
+            'user_required_day' => 'required|numeric||min:1',
             'banner' => 'nullable|mimes:jpeg,jpg,png,webp',
             'video' => 'nullable|mimes:mp4,mov,ogg',
         ]);
@@ -109,6 +112,7 @@ class GreetingController extends Controller
             $greeting->title = $request->title;
             $greeting->instruction = $request->instruction;
             $greeting->cost = $request->cost;
+            $greeting->user_required_day = $request->user_required_day;
 
             if ($request->hasfile('banner')) {
                 $destination = $greeting->banner;
@@ -140,6 +144,18 @@ class GreetingController extends Controller
                 'message' => 'Greetings Updated Successfully !',
             ]);
         }
+    }
+
+
+    public function forwardToManagerAdmin($greeting_id){
+        $greeting = Greeting::find($greeting_id);
+        $greeting->status = 1;
+        $greeting->save();
+        return response()->json([
+            'status' => 200,
+            'greeting' => $greeting,
+            'message' => 'Greetings Forwarded Successfully !',
+        ]);
     }
 
     public function show($id)
@@ -220,18 +236,21 @@ class GreetingController extends Controller
     public function greetingsCreateStatus($star_id)
 
     {
-        $greeting = Greeting::where([['star_id', $star_id], ['star_approve_status', '>', 0]])->first();
+        $star = User::find($star_id);
+        $greeting = Greeting::where([['star_id', $star_id], ['star_approve_status', '>', 0],['status', 2]])->first();
 
         if (isset($greeting)) {
             return response()->json([
                 'status' => 200,
                 'greeting' => $greeting,
+                'star' => $star,
                 'action' => true,
             ]);
         } else {
             return response()->json([
                 'status' => 200,
                 'greeting' => $greeting,
+                'star' => $star,
                 'action' => false,
             ]);
         }
@@ -260,9 +279,10 @@ class GreetingController extends Controller
     /**
      * user greeting register information
      */
-    public function greetingsRegisterListByGreetingsId($greetings_id)
+    public function greetingsRegisterListByGreetingsId()
     {
-        $register_list = GreetingsRegistration::where('greeting_id', $greetings_id)->get();
+        $greeting = auth('sanctum')->user()->star->asStarGreeting;
+        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id],['notification_at',null],['status', 0]])->get();
 
         return response()->json([
             'status' => 200,
@@ -274,7 +294,7 @@ class GreetingController extends Controller
      */
     public function greetingsRegisterWithPaymentList($greetings_id)
     {
-        $register_list = GreetingsRegistration::where([['greeting_id', $greetings_id], ['status', 2]])->get();
+        return $register_list = GreetingsRegistration::where([['greeting_id', $greetings_id], ['status', 2]])->get();
 
         return response()->json([
             'status' => 200,
@@ -294,21 +314,9 @@ class GreetingController extends Controller
             'status' => 200,
         ]);
     }
-    /**
-     * sent notification to user
-     */
-    // public function sentNotificationToUser(Request $request)
-    // {
-    //     return response()->json([
-    //         'status' => 200,
-    //         'list' => $request->all()
-    //     ]);
-    // }
 
     public function sentNotificationToUser(Request $request)
     {
-
-
         $users_arry = explode(',', $request->users);
         $greetins_arry = explode(',', $request->greetings_id);
 
@@ -320,20 +328,19 @@ class GreetingController extends Controller
             $text->save();
 
             foreach ($users_arry as $key => $req) {
-
                 Notification::insert([
                     'notification_id' => $text->id,
+                    'event_id' => GreetingsRegistration::whereIn('id', $greetins_arry)->first()->greeting->id,
                     'user_id' => $req,
                     'view_status' => 0,
                     'status' => 0,
-
+                    'created_at' => Carbon::now(),
                 ]);
             }
-
             $register_greeting = GreetingsRegistration::whereIn('id', $greetins_arry)->update(['notification_at' => Carbon::now()]);
         }
 
-        $register_list = GreetingsRegistration::where('greeting_id', $request->greeting_id)->get();
+        $register_list = GreetingsRegistration::whereIn('id', $greetins_arry)->where([['notification_at',null],['status', 0]])->get();
 
 
         return response()->json([

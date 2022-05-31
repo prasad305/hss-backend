@@ -15,8 +15,14 @@ class Marketplace extends Model
         'unit_price',
         'total_items',
         'keywords',
+        'total_selling',
+        'approved_date',
         'image',
         'status',
+        'category_id',
+        'subcategory_id',
+        'sub_subcategory_id',
+        'superstar_id',
     ];
 
     //Relation For API

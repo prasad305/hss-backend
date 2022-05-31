@@ -21,7 +21,7 @@ class StarAuthController extends Controller
     public function register(Request $request)
     {
 
-        // return $request->all();
+
         $validator = Validator::make($request->all(),[
             // 'email' => 'required|unique:users,email',
             // 'phone' => 'required|unique:users,phone',
@@ -62,7 +62,7 @@ class StarAuthController extends Controller
                 }else{
                     $star = new SuperStar();
                 }
-               
+
 
                 $star->star_id = $user->id;
                 $star->admin_id = auth('sanctum')->user()->id;
@@ -70,7 +70,7 @@ class StarAuthController extends Controller
                 $star->sub_category_id =  auth('sanctum')->user()->sub_category_id;
                 $star->terms_and_condition = $request->input('terms_and_condition');
                 $star->qr_code = rand( 10000000 , 99999999 );
-    
+
                 if ($request->hasFile('profile_file_one')) {
                     if ($star->star_file_one != null && file_exists($star->star_file_one)) {
                         unlink($star->star_file_one);
@@ -92,7 +92,7 @@ class StarAuthController extends Controller
                     $file->move($path, $file_name);
                     $star->star_file_two = $path . '/' . $file_name;
                 }
-    
+
                 $star->save();
             }
 
@@ -111,7 +111,7 @@ class StarAuthController extends Controller
             'password' => 'required|min:4'
         ]);
 
-        // return $request->all();
+
 
         if($validator->fails())
         {
@@ -306,9 +306,9 @@ class StarAuthController extends Controller
         $superStar = SuperStar::all();
 
         $juryBoard = JuryBoard::all();
-        
+
         $merged = $superStar->merge($juryBoard);
-        
+
         $user = $merged->where('qr_code',$request->qr_code)->first();
 
             if ($user) {

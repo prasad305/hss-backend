@@ -18,6 +18,7 @@ class Schedule extends Model
         'to',
         'date',
         'month',
+        'remainder_date',
         'status',
     ];
 

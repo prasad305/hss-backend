@@ -14,7 +14,7 @@ class ScheduleController extends Controller
     //
     public function add_schedule(Request $request)
     {
-        // return $request->all();
+
 
         $undeleteable_ids = [];
         foreach ($request->all() as $key => $req) {
@@ -35,7 +35,7 @@ class ScheduleController extends Controller
                     'date' => $req['date'],
                 ]);
             } else {
-               
+
                 if ($req['from'] == null || $req['from'] == '' && $req['to'] == null || $req['to'] == '' && $req['event_type'] == null || $req['event_type'] == '') {
                     return response()->json([
                         'status' => 422,
@@ -52,7 +52,7 @@ class ScheduleController extends Controller
                         'month' => Carbon::parse($req['date'])->format('M'),
                         'updated_at' => date("Y-m-d h:i:s"),
                         'created_at' => date("Y-m-d h:i:s"),
-                    ]); 
+                    ]);
                 }
             }
         }
@@ -81,6 +81,22 @@ class ScheduleController extends Controller
             'message' => 'Added Successfully',
         ]);
     }
+
+    public function notification()
+    {
+
+        $schedules = Schedule::where([['admin_id',auth('sanctum')->user()->id],['status',0]])
+                            ->whereColumn('remainder_date', '<=', 'date')
+                            ->get(); 
+        // $schedules = Schedule::where([['admin_id',auth('sanctum')->user()->id],['status',0]])->get(); 
+
+        return response()->json([
+            'status' => 200,
+            'schedules' => $schedules,
+        ]);
+    }
+
+
 
     public function dateWiseSchedule($date)
     {

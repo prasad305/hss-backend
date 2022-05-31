@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\LearningSession;
 use App\Models\LearningSessionAssignment;
+use App\Models\LearningSessionRegistration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -15,7 +16,7 @@ class LearningSessionController extends Controller
     //
     public function add(Request $request)
     {
-        //return $request->all();
+
         $post = new LearningSession();
         $post->title = $request->input('title');
         $post->slug = Str::slug($request->input('title'));
@@ -74,6 +75,31 @@ class LearningSessionController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Assignment Ruled Added',
+        ]);
+    }
+
+
+
+    public function assignment_set_approval(Request $request, $type, $id)
+    {
+
+        $post = LearningSessionAssignment::find($id);
+
+        if($type == 'approve')
+        {
+            $post->status = 1;
+        }else{
+            $post->status = 2;
+        }
+
+        $post->mark = $request->input('mark');
+        $post->comment = $request->input('comment');
+
+        $post->update();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Status Updated',
         ]);
     }
 
@@ -158,13 +184,36 @@ class LearningSessionController extends Controller
         ]);
     }
 
-    public function assignment_details($id)
+    public function registered_user($slug)
     {
-        $event = LearningSessionAssignment::where('event_id',$id)->get();
+        $event = LearningSession::where('slug',$slug)->first();
+        $users = LearningSessionRegistration::where('learning_session_id',$event->id)->get();
 
         return response()->json([
             'status' => 200,
+            'users' => $users,
+            'message' => 'Success',
+        ]);
+    }
+
+    public function assignment_details($id)
+    {
+        // $event = LearningSessionAssignment::all();
+
+        $learning_session = LearningSession::find($id);
+        $instruction = $learning_session->assignment_instruction;
+
+        $event = LearningSessionAssignment::where([['event_id', $id],['status',0]])->get();
+        $approved_event = LearningSessionAssignment::where([['event_id', $id],['status',1]])->get();
+        $rejected_event = LearningSessionAssignment::where([['event_id', $id],['status',2]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'instruction' => $instruction,
             'event' => $event,
+            'approved_event' => $approved_event,
+            'rejected_event' => $rejected_event,
+
             'message' => 'Success',
         ]);
     }
@@ -308,6 +357,21 @@ class LearningSessionController extends Controller
             'count' => $events->count(),
         ]);
     }
+
+    public function star_assignment_details($id)
+    {
+        $event = LearningSessionAssignment::where([['event_id', $id],['status',1],['mark',0]])->get();
+        $approved_event = LearningSessionAssignment::where([['event_id', $id],['status',1],['mark','>',0]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+            'approved_event' => $approved_event,
+            'message' => 'Success',
+        ]);
+    }
+
+
 
     public function star_coompleted_list()
     {

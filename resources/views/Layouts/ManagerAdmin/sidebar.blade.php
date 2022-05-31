@@ -14,7 +14,8 @@
 
         <li class="nav-item">
             <a href="{{ route('managerAdmin.schedule.index') }}" class="nav-link">
-                <i class="nav-icon {{ Request::routeIs('managerAdmin.schedule.index') ? 'active' : '' }} fas fa-th"></i>
+                <i
+                    class="nav-icon {{ Request::routeIs('managerAdmin.schedule.index') ? 'active' : '' }} fas fa-th"></i>
                 <p>
                     Schedules
                 </p>
@@ -24,7 +25,8 @@
 
         <li class="nav-item">
             <a href="{{ route('managerAdmin.admin.index') }}" class="nav-link">
-                <i class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-users"></i>
+                <i
+                    class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-users"></i>
                 <i class="fa-solid fa-list-check"></i>
                 <p>
                     Admins
@@ -64,14 +66,15 @@
 
         <li class="nav-item">
             <a href="{{ route('managerAdmin.assigned.index') }}" class="nav-link">
-                <i class="nav-icon {{ Request::routeIs('managerAdmin.assigned.index') ? 'active' : '' }} fas fa-th"></i>
+                <i
+                    class="nav-icon {{ Request::routeIs('managerAdmin.assigned.index') ? 'active' : '' }} fas fa-th"></i>
                 <p>
                     Assign
                 </p>
             </a>
         </li>
 
-      
+
 
 
         <li class="nav-item">
@@ -82,6 +85,12 @@
                 </p>
             </a>
             <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('managerAdmin.simplePost.published') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
@@ -139,11 +148,11 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-            <a href="{{ route('managerAdmin.dashboard.audition') }}" class="nav-link">
-        <i class="far fa-circle nav-icon"></i>
-        <p>Dashboard</p>
-        </a>
-    </li>
+                    <a href="{{ route('managerAdmin.dashboard.audition') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('managerAdmin.audition.published') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
@@ -160,6 +169,28 @@
                     <a href="{{ route('managerAdmin.audition.all') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>All</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>Greetings
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.greeting.dashboard') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.greeting.request') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Request</p>
                     </a>
                 </li>
             </ul>
@@ -367,6 +398,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('managerAdmin.learningSession.evaluation') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Evaluation</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('managerAdmin.learningSession.published') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Published</p>
@@ -388,8 +425,10 @@
         </li>
 
 
-        <li class="nav-item {{ \Illuminate\Support\Facades\Request::is('manager-admin/audition*') ? 'menu-open ' : '' }}">
-            <a href="#" class="nav-link {{ \Illuminate\Support\Facades\Request::is('manager-admin/audition*') ? 'active ' : '' }}">
+        <li
+            class="nav-item {{ \Illuminate\Support\Facades\Request::is('manager-admin/audition*') ? 'menu-open ' : '' }}">
+            <a href="#"
+                class="nav-link {{ \Illuminate\Support\Facades\Request::is('manager-admin/audition*') ? 'active ' : '' }}">
                 <i class="nav-icon fas fa-chart-pie"></i>
                 <p>Audition
                     <i class="right fas fa-angle-left"></i>
@@ -409,7 +448,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.auditionAdmin.index') }}" class="nav-link {{ Request::routeIs('managerAdmin.audition.auditionAdmin.index') ? 'active' : '' }}">
+                    <a href="{{ route('managerAdmin.audition.auditionAdmin.index') }}"
+                        class="nav-link {{ Request::routeIs('managerAdmin.audition.auditionAdmin.index') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Admins</p>
                     </a>

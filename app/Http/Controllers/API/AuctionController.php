@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 
 class AuctionController extends Controller
@@ -29,15 +30,38 @@ class AuctionController extends Controller
         //return response()->json($request->all());
 
 
+        $validator = Validator::make($request->all(), [
 
-        $request->validate([
-
-            'name' => 'required',
             'title' => 'required',
-            'base_price' => 'required',
+            'bid_from' => 'required',
+            'bid_to' => 'required',
+            'product_image' => 'required|image',
+            'banner' => 'required|image',
+            'category_id' => 'required',
             'details' => 'required',
-            'status' => 'required',
+            'base_price' => 'required',
+            'star_id' => 'required',
+            'subcategory_id' => 'required',
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'bid_from.required' => 'Date Field Is Required',
+            'bid_to.required' => 'Date Field Is Required',
+            'category_id.required' => "Category Field Is Required",
+            'subcategory_id.required' => "Subcategory Field Is Required",
+            'details.required' => 'Description Field Is Required',
+            'product_image.required' => "Image Field Is Required",
+            'banner.required' => "Image Field Is Required",
+            'base_price.required' => "Price Field Is Required",
+            'star_id.required' => "Superstar Field Is Required",
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
 
         $data = $request->except(['_token', 'product_image', 'banner']);
         $data['created_by_id'] = Auth::user()->id;
@@ -99,12 +123,41 @@ class AuctionController extends Controller
 
     public function updateProduct(Request $request, $id)
     {
-        // $request->validate([
-        //     'name' => 'required',
-        //     'title' => 'required',
-        //     'base_price' => 'required',
-        //     'status' => 'required',
-        // ]);
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'bid_from' => 'required',
+            'bid_to' => 'required',
+            'result_date' => 'required',
+            'product_delivery_date' => 'required',
+            'category_id' => 'required',
+            'details' => 'required',
+            'base_price' => 'required',
+            'star_id' => 'required',
+            'subcategory_id' => 'required',
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'bid_from.required' => 'Date Field Is Required',
+            'bid_to.required' => 'Date Field Is Required',
+            'result_date.required' => 'Date Field Is Required',
+            'product_delivery_date.required' => 'Date Field Is Required',
+            'category_id.required' => "Category Field Is Required",
+            'subcategory_id.required' => "Subcategory Field Is Required",
+            'details.required' => 'Description Field Is Required',
+            'base_price.required' => "Price Field Is Required",
+            'star_id.required' => "Superstar Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
+        $product = Auction::findOrFail($id);
+        $data = $request->all();
+
 
 
         if ($request->hasFile('product_image')) {
@@ -123,17 +176,19 @@ class AuctionController extends Controller
             $data['banner'] = $path . '/' . $file_name;
         }
 
-        $product = Auction::findOrfail($id)->update([
-            'name' => $request->name,
-            'title' => $request->title,
-            'base_price' => $request->base_price,
-            //'details' => $request->status,
-            'status' => $request->status,
-        ]);
+        // $product = Auction::findOrfail($id)->update([
+        //     'name' => $request->name,
+        //     'title' => $request->title,
+        //     'base_price' => $request->base_price,
+        //     //'details' => $request->status,
+        //     'status' => $request->status,
+        // ]);
+
+        $product->update($data);
 
 
         return response()->json([
-            'status' => '200',
+            'status' => 200,
             'products' => $product,
             'message' => 'success',
         ]);
@@ -218,7 +273,7 @@ class AuctionController extends Controller
 
     public function liveBidding($auction_id)
     {
-        $bidding = Bidding::with('user')->orderBy('amount', 'DESC')->where('auction_id', $auction_id)->take(6)->get();
+        $bidding = Bidding::with('user')->orderBy('amount', 'DESC')->where('auction_id', $auction_id)->take(8)->get();
         return response()->json([
             'status' => 200,
             'bidding' => $bidding,
@@ -226,12 +281,30 @@ class AuctionController extends Controller
     }
     public function topBidder($auction_id)
     {
+        $topBidder = Bidding::with('user')->orderBy('amount', 'DESC')->where('auction_id', $auction_id)->where('notify_status',1)->get();
         $bidding = Bidding::with('user')->orderBy('amount', 'DESC')->where('auction_id', $auction_id)->take(3)->get();
         return response()->json([
             'status' => 200,
             'bidding' => $bidding,
+            'topBidder' => $topBidder,
         ]);
     }
+
+    public function  allBidderList($id){
+
+        $bidderList = Bidding::with('user')->orderBy('amount','DESC')->where('auction_id',$id)->distinct('user_id')->get();
+        // $users = Bidding::with('user')->where('auction_id',$id)->orderBy('amount','DESC')->get();
+        // $bidderList = collect($users)->unique('user_id');
+
+        $totalBidder = Bidding::with('user')->orderBy('amount','DESC')->where('auction_id',$id)->distinct('user_id')->count();
+
+        return response()->json([
+            'status' => 200,
+            'bidderList' => $bidderList,
+            'totalBidder' => $totalBidder,
+        ]);
+    }
+
 
     public function notify_bidder($id)
     {
@@ -272,20 +345,40 @@ class AuctionController extends Controller
 
 
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
 
-            'name' => 'required',
             'title' => 'required',
-            'base_price' => 'required',
+            'bid_from' => 'required',
+            'bid_to' => 'required',
+            'product_image' => 'required|image',
+            'banner' => 'required|image',
             'details' => 'required',
-            'status' => 'required',
+            'base_price' => 'required',
 
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'bid_from.required' => 'Date Field Is Required',
+            'bid_to.required' => 'Date Field Is Required',
+            'details.required' => 'Description Field Is Required',
+            'product_image.required' => "Image Field Is Required",
+            'banner.required' => "Image Field Is Required",
+            'base_price.required' => "Price Field Is Required",
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
 
         $data = $request->except(['_token', 'product_image', 'banner']);
         $data['star_approval'] = 1;
         $data['star_id'] = Auth::user()->id;
         $data['created_by_id'] = Auth::user()->id;
+        $data['category_id'] = Auth::user()->category_id;
+        $data['subcategory_id'] = Auth::user()->sub_category_id;
+
 
 
         if ($request->hasFile('product_image')) {
@@ -363,17 +456,56 @@ class AuctionController extends Controller
             'status' => 200,
         ]);
     }
+    public function decline($id)
+    {
+
+
+        Auction::where('id', $id)->update(['star_approval' => 2]);
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+
 
 
     public function star_updateProduct(Request $request, $id)
     {
+        $product = Auction::findOrfail($id);
+
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'bid_from' => 'required',
+            'bid_to' => 'required',
+            'details' => 'required',
+            'base_price' => 'required',
+            'result_date' => 'required',
+            'product_delivery_date' => 'required',
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'bid_from.required' => 'Date Field Is Required',
+            'bid_to.required' => 'Date Field Is Required',
+            'details.required' => 'Description Field Is Required',
+            'result_date.required' => 'This Field Is Required',
+            'product_delivery_date.required' => 'This Field Is Required',
+            'base_price.required' => "Price Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
 
         if ($request->hasFile('product_image')) {
             $file        = $request->file('product_image');
             $path        = 'uploads/images/auction';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
-            $data['product_image'] = $path . '/' . $file_name;
+            $product['product_image'] = $path . '/' . $file_name;
         }
 
         if ($request->hasFile('banner')) {
@@ -381,16 +513,22 @@ class AuctionController extends Controller
             $path        = 'uploads/images/auction';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
-            $data['banner'] = $path . '/' . $file_name;
+            $product['banner'] = $path . '/' . $file_name;
+        }
+        if($product){
+            $product->title = $request->title;
+            $product->base_price = $request->base_price;
+            $product->bid_from = $request->bid_from;
+            $product->bid_to = $request->bid_to;
+            $product->details = $request->details;
+            $product->result_date = $request->result_date;
+            $product->product_delivery_date = $request->product_delivery_date;
+            $product->save();
         }
 
-        $product = Auction::findOrfail($id)->update([
-            'name' => $request->name,
-            'title' => $request->title,
-            'base_price' => $request->base_price,
-            //'details' => $request->status,
-            'status' => $request->status,
-        ]);
+        // $product = Auction::findOrfail($id)->update([
+           
+        // ]);
 
 
         return response()->json([
@@ -422,6 +560,7 @@ class AuctionController extends Controller
             'maxBidding' => $maxBidding
         ]);
     }
+   
 
 
     public function star_showProduct($id)
@@ -444,7 +583,7 @@ class AuctionController extends Controller
     public function star_pendingProduct()
     {
 
-        $product = Auction::where('star_approval', 0)->count();
+        $product = Auction::orderBy('id','DESC')->where('star_approval', 0)->count();
         return response()->json([
             'status' => 200,
             'product' => $product,
@@ -453,7 +592,7 @@ class AuctionController extends Controller
     public function star_pendingProductList()
     {
 
-        $products = Auction::where('star_approval', 0)->get();
+        $products = Auction::orderBy('id','DESC')->where('star_approval', 0)->get();
         return response()->json([
             'status' => 200,
             'products' => $products,

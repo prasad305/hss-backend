@@ -160,7 +160,7 @@ class AuthController extends Controller
                 $countValue  = LiveChatRegistration::where('user_id', $user->id)->where('live_chat_id', $eventId)->count();
             }
             if ($modelName == 'GreetingsRegistration') {
-                $countValue  = GreetingsRegistration::where('user_id', $user->id)->where('greeting_id', $eventId)->count();
+                $countValue  = GreetingsRegistration::where([['user_id', $user->id],['greeting_id', $eventId],['status', 0]])->count();
             }
             // if( $modelName == 'AuditionParticipant'){
             //     $countValue  = AuditionParticipant::where('user_id',$user->id)->where('audition_id',$eventId)->count();

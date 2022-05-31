@@ -75,6 +75,18 @@ class LiveChatController extends Controller
         ]);
     }
 
+    public function slots($slug)
+    {
+        $event = LiveChat::where('slug', $slug)->first();
+        $users = LiveChatRegistration::where('live_chat_id', $event->id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'users' => $users,
+        ]);
+    }
+
 
     public function setApproveLiveChat($id)
     {

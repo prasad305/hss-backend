@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Acquired_app;
 use App\Models\Activity;
 use App\Models\Auction;
 use App\Models\Audition\Audition;
@@ -27,6 +28,7 @@ use App\Models\React;
 use App\Models\SimplePost;
 use App\Models\ChoiceList;
 use App\Models\InterestType;
+use App\Models\LearningSessionAssignment;
 use App\Models\LiveChatRoom;
 use App\Models\Message;
 use App\Models\PromoVideo;
@@ -411,7 +413,7 @@ class UserController extends Controller
 
     public function liveChatRigister(Request $request)
     {
-        // return $request->all();
+
         $liveChat = LiveChat::find($request->event_id);
         $liveChat->slot_counter = $liveChat->slot_counter + $request->minute;
         $start_time = Carbon::parse($liveChat->start_time)->addMinutes($liveChat->slot_counter);
@@ -468,6 +470,7 @@ class UserController extends Controller
         $greetings = new GreetingsRegistration();
 
         $greetings->request_time = Carbon::parse($request->input('time'));
+        $greetings->purpose = $request->purpose;
         $greetings->user_id = auth('sanctum')->user()->id;
         $greetings->greeting_id = $request->greetings_id;
         $greetings->save();
@@ -509,7 +512,7 @@ class UserController extends Controller
             $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->orderBy('id', 'DESC')->first();
             $greeting_reg->name = $request->name;
             $greeting_reg->birth_date = $request->date_b;
-            $greeting_reg->greeting_contex = $request->greetings_context;
+            $greeting_reg->greeting_context = $request->greetings_context;
             $greeting_reg->additional_message = $request->additional_message;
             $greeting_reg->phone = $request->phone;
             $greeting_reg->password = Hash::make($request->password);
@@ -527,29 +530,41 @@ class UserController extends Controller
             ]);
         }
     }
+    public function greetingInfoToRegistration($greeting_id)
+    {
+
+
+        $greeting = Greeting::find($greeting_id);
+        $greetingsRegistration =  GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id],['greeting_id',$greeting_id],['notification_at','!=', null]])->orderBy('id', 'DESC')->first();
+
+
+
+            return response()->json([
+                'status' => 200,
+                'greeting' => $greeting,
+                'greetingsRegistration' => $greetingsRegistration,
+            ]);
+
+    }
 
     /**
      * public function greetings stastus
      */
     public function greetingStatus()
     {
-        $single_greeting = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
+        $single_greeting = GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id],['notofication_at', null]])->first();
 
         if (isset($single_greeting)) {
             return response()->json([
                 'status' => 200,
                 'action' => true,
                 'greeting' => $single_greeting,
-
-
             ]);
         } else {
             return response()->json([
                 'status' => 200,
                 'action' => false,
                 'greeting' => $single_greeting,
-
-
             ]);
         }
     }
@@ -659,7 +674,7 @@ class UserController extends Controller
      */
     public function checkUserNotifiaction()
     {
-        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+        $notification = Notification::where([['user_id', auth('sanctum')->user()->id],['view_status',0]])->orderBy('id','ASC')->get();
         $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
         if ($greeting_reg)
             $greeting_info = Greeting::find($greeting_reg->greeting_id);
@@ -677,16 +692,64 @@ class UserController extends Controller
 
     public function auctionProduct()
     {
-        $product = Auction::with('star')->where('status', 1)->get();
+
+        $id = auth('sanctum')->user()->id;
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
+
+        $selectedCat = json_decode($selectedCategory->category);
+        $selectedSubCat = json_decode($selectedCategory->subcategory);
+        $selectedSubSubCat = json_decode($selectedCategory->star_id);
+
+        $cat_post = Auction::with('star')->orderBy('id','DESC')->where('status', 1)
+            ->whereIn('category_id', $selectedCat)
+            ->latest()->get();
+
+        if (isset($sub_cat_post)) {
+            $sub_cat_post = Auction::with('star')->orderBy('id','DESC')->where('status', 1)
+                ->whereIn('sub_category_id', $selectedSubCat)
+                ->latest()->get();
+        } else {
+            $sub_cat_post = [];
+        }
+
+        if (isset($sub_sub_cat_post)) {
+            $sub_sub_cat_post = Auction::with('star')->orderBy('id','DESC')->where('status', 1)
+                ->whereIn('user_id', $selectedSubSubCat)
+                ->latest()->get();
+        } else {
+            $sub_sub_cat_post = [];
+        }
+
+        $product = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
+
+        return response()->json([
+                'status' => 200,
+                'product' => $product
+        ]);
+    
+
+        // $product = Auction::with('star')->orderBy('id','DESC')->where('status', 1)->get();
+        // return response()->json([
+        //     'status' => 200,
+        //     'product' => $product
+        // ]);
+
+    }
+    public function  auctionSingleProduct($id)
+    {
+        $userInfo = user::findOrFail(auth()->user()->id);
+        $auctionInfo = Auction::findOrFail($id);
         return response()->json([
             'status' => 200,
-            'product' => $product
+            'auctionInfo' => $auctionInfo,
+            'userInfo' => $userInfo
         ]);
     }
+
     public function starAuction($star_id)
     {
 
-        $product = Auction::with('star', 'bidding', 'bidding.user')->where('star_id', $star_id)->where('status', 1)->latest()->get();
+        $product = Auction::with('star', 'bidding', 'bidding.user')->orderBy('id','DESC')->where('star_id', $star_id)->where('status', 1)->latest()->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
@@ -737,6 +800,77 @@ class UserController extends Controller
             'bidding' => $bidding,
         ]);
     }
+    public function auctionApply($auction_id)
+    {
+        $auctionApply = Bidding::with('user','auction')->where('auction_id', $auction_id)->where('notify_status',1)->where('user_id',auth()->user()->id)->first();
+        $winner = Bidding::with('user','auction')->where('auction_id', $auction_id)->where('win_status',1)->where('user_id',auth()->user()->id)->first();
+        return response()->json([
+            'status' => 200,
+            'auctionApply' => $auctionApply,
+            'winner'=>$winner
+        ]);
+    }
+    public function maxBid($id){
+        $maxBid = Bidding::orderBy('amount','DESC')->where('auction_id',$id)->where('user_id',auth()->user()->id)->first();
+        return response()->json([
+            'status' => 200,
+            'maxBid' => $maxBid,
+        ]);
+    }
+
+    public function aquiredProduct(Request $request){
+
+        $bidding = Bidding::where('id',$request->bidding_id)->first();
+
+        $validator = Validator::make($request->all(), [
+
+            'name' => 'required',
+            'phone' => 'required',
+            'card_number' => 'required',
+            'ccv' => 'required',
+            'expiry_date' => 'required',
+
+
+        ],[
+            'name.required' => 'This Field Is Required',
+            'phone.required' => 'This Field Is Required',
+            'card_number.required' => 'This Field Is Required',
+            'ccv.required' => 'This Field Is Required',
+            'expiry_date.required' => 'This Field Is Required',
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
+
+        $aquired = Acquired_app::create([
+            'name' => $request->name,
+            'bidding_id' => $request->bidding_id,
+            'payment_id' => 1,
+            'card_number' => $request->card_number,
+            'phone' => $request->phone,
+            'ccv' => $request->ccv,
+            'expiry_date' => $request->expiry_date,
+        ]);
+
+
+        if($bidding->applied_status == 0){
+            $bidding->applied_status = 1;
+            $bidding->update();
+        }
+
+        return response()->json([
+            'status' => 200,
+            'aquired' => $aquired,
+            'message' => "Application success"
+        ]);
+
+    }
+
     public function bidHistory($auction_id)
     {
         $bidHistory = Bidding::orderBy('id', 'DESC')->where('user_id', auth()->user()->id)->where('auction_id', $auction_id)->get();
@@ -880,7 +1014,7 @@ class UserController extends Controller
     public function videoUpload(Request $request)
     {
 
-        // return $request->all();
+
 
         $audition = AuditionParticipant::where('audition_id', $request->audition_id)->where('user_id', Auth::user()->id)->first();
 
@@ -1009,7 +1143,7 @@ class UserController extends Controller
     public function updateCover(Request $request, $id)
     {
 
-        // return $request->all();
+
 
         $userInfo = User::findOrfail($id);
 
@@ -1037,7 +1171,7 @@ class UserController extends Controller
     public function updateProfile(Request $request, $id)
     {
 
-        // return $request->all();
+
 
         $userInfo = User::findOrfail($id);
 
@@ -1141,5 +1275,37 @@ class UserController extends Controller
             'status' => 200,
             'participant' => $participant,
         ]);
+    }
+
+    public function uploadLearningSessionVideo(Request $request)
+    {
+        // return $request->all();
+        $validator = Validator::make($request->all(), [
+            'file.*' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+
+            foreach ($request->file as $key => $file) {
+                $learning_video = new LearningSessionAssignment();
+                $learning_video->event_id = $request->learning_session_id;
+                $learning_video->user_id = auth()->user()->id;
+
+                $file_name   = time() . rand('0000', '9999') . $key . '.' . $file->getClientOriginalName();
+                $file_path = 'uploads/videos/learnings/';
+                $file->move($file_path, $file_name);
+                $learning_video->video = $file_path . $file_name;
+                $learning_video->save();
+            }
+            return response()->json([
+                'status' => 200,
+                'message' => 'Learning Videos Uploaded Successfully!',
+            ]);
+        }
     }
 }

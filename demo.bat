@@ -1,0 +1,1 @@
+C:\xampp\php\php.exe C:\xampp\htdocs\HelloSuperStarsBackend-2\artisan schedule:run
