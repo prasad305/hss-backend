@@ -463,9 +463,11 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     //user greetings register list
     Route::get('/star/greetings_reg_list/{greetings_id}', [GreetingController::class, 'greetingsRegisterListByGreetingsId']);
-    Route::get('/star/greetings_reg_payment_list/{greetings_id}', [GreetingController::class, 'greetingsRegisterWithPaymentList']);
+    Route::get('/star/greetings_reg_payment_list', [GreetingController::class, 'greetingsRegisterWithPaymentList']);
     // Route::get('/star/greetings', [GreetingController::class, 'view_star_greeting']);
     Route::get('/star/greetings_star_status', [StarGreetingController::class, 'greetings_star_status']);
+    Route::get('/star/greetings_register_list_with_payment_complete', [GreetingController::class, 'starGreetingsRegisterListWithPaymentComplete']);
+    Route::get('/star/single_greeting_registration/{greeting_registration_id}', [GreetingController::class, 'starSingleGreetingRegistration']);
 
     //<======================== Auction Route ========================>
 
