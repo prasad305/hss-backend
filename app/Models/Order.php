@@ -9,7 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $with = ['marketplace', 'user'];
+    protected $with = ['marketplace', 'user', 'state', 'country', 'city'];
 
 
     public function marketplace()
