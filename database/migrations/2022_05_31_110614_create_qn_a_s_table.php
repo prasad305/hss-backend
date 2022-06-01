@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLiveChatsTable extends Migration
+class CreateQnASTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateLiveChatsTable extends Migration
      */
     public function up()
     {
-        Schema::create('live_chats', function (Blueprint $table) {
+        Schema::create('qn_a_s', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('created_by_id')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('sub_category_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->string('title')->nullable();
@@ -29,17 +30,15 @@ class CreateLiveChatsTable extends Migration
             $table->unsignedBigInteger('slot_counter')->nullable();
             $table->string('banner')->nullable();
             $table->string('video')->nullable();
-            $table->integer('total_seat')->nullable();
-            $table->float('total_amount')->nullable();
             $table->float('fee')->nullable();
+            $table->float('min_time')->nullable();
             $table->float('max_time')->nullable();
-            $table->float('interval')->nullable();
-            $table->integer('participant_number')->nullable();
+            $table->integer('question_quantity')->nullable();
+            $table->float('time_interval')->nullable();
             $table->timestamp('registration_start_date')->nullable();
             $table->timestamp('registration_end_date')->nullable();
-            $table->string('max_time_per_person')->nullable();
-            $table->boolean('publish_status')->default(1);
-            $table->boolean('star_approval')->default(0);
+            $table->boolean('publish_status')->default(0);
+            $table->boolean('star_approve_status')->default(0);
             $table->integer('status')->default(0)->comment('0 = pending, 1 = star_approval, 2 = posted by Manager Admin, 9 = completed, 10 = removed, 11 = rejeced by Star, 22 = rejected by Manager Admin');
             $table->timestamps();
         });
@@ -52,6 +51,6 @@ class CreateLiveChatsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('live_chats');
+        Schema::dropIfExists('qn_a_s');
     }
 }

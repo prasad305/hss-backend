@@ -15,20 +15,18 @@
             {!! $event->description !!}
           </textarea>
         </div>
+
+
     </div>
 
 
     <span class="row">
-
-        @if ($event->image != null)
-            
-        <div class="form-group col-md-12">
-           <label for="image">Banner</label>
-           <br><img id="image1" onchange="validateMultipleImage('image1')" alt="icon" src="{{ asset($event->image) }}" height="300px" width="100%" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required/>
-           <br><br>
-           <input type="file" class="mt-2" id="banner" name="image" onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
-     </div>
-        @else
+           <div class="form-group col-md-12">
+              <label for="image">Banner</label>
+              <br><img id="image1" onchange="validateMultipleImage('image1')" alt="icon" src="{{ asset($event->banner) }}" height="300px" width="100%" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required/>
+              <br><br>
+              <input type="file" class="mt-2" id="image" name="banner" onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
+        </div>
         <div class="form-group col-md-12">
             <label for="image">Video</label>
         </br>
@@ -37,22 +35,21 @@
             <br><br>
             <input type="file" class="mt-2" id="video" name="video" onchange="document.getElementById('video1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
       </div>
-      @endif
     </span>
 
     <div class="row form-group">
         <div class="col-md-6">
               <label for="first_name">Fee</label>
-              <select name="type" id="" class="form-control">
-                  <option value="paid">Paid</option>
-                  <option value="free">Free</option>
-              </select>
+              <input type="text" class="form-control" name="fee" placeholder="" value="{{$event->fee }}">
          </div>
-
+         {{-- <div class="col-md-6">
+            <label for="first_name">Slots</label>
+            <input type="text" class="form-control" name="slots" placeholder="" value="{{$event->total_seat }}">
+       </div> --}}
      </div>
 
 
-    <button type="submit" class="btn btn-primary" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update Post</button>
+    <button type="submit" class="btn btn-primary" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update Event</button>
 
 </form>
 
@@ -70,7 +67,7 @@
      });
 
      $.ajax({
-         url: "{{ route('managerAdmin.simplePost.update',$event->id) }}",// your request url
+         url: "{{ route('managerAdmin.qna.update',$event->id) }}",// your request url
          data: formData,
          processData: false,
          contentType: false,
