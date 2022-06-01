@@ -496,44 +496,35 @@ class UserController extends Controller
      */
     public function greetingsRegistationUpdate(Request $request)
     {
+        // return $request->all();
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            // 'date_b' => 'required',
-            'phone' => 'required',
-            'greetings_context' => 'required',
-            'password' => 'required'
+            'name' => 'required|min:3',
+            'greeting_context' => 'required|min:5',
+            'additional_message' => 'nullable|min:3',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
+                'status' => 422,
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->orderBy('id', 'DESC')->first();
+            $greeting_reg = GreetingsRegistration::find($request->greeting_registration_id);
             $greeting_reg->name = $request->name;
-            $greeting_reg->birth_date = $request->date_b;
-            $greeting_reg->greeting_context = $request->greetings_context;
+            $greeting_reg->greeting_context = $request->greeting_context;
             $greeting_reg->additional_message = $request->additional_message;
-            $greeting_reg->phone = $request->phone;
-            $greeting_reg->password = Hash::make($request->password);
-            $greeting_reg->status = 2;
+            $greeting_reg->status = 1;
             $greeting_reg->save();
-
-            $notification = Notification::find($request->notification_id);
-            $notification->view_status = 1;
-            $notification->save();
 
             return response()->json([
                 'status' => 200,
-                'data' => $request->notification_id
-
+                'greeting' => $greeting_reg->greeting,
+                'greetingsRegistration' => $greeting_reg,
             ]);
         }
     }
     public function greetingInfoToRegistration($greeting_id)
     {
-
-
         $greeting = Greeting::find($greeting_id);
         $greetingsRegistration =  GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id],['greeting_id',$greeting_id],['notification_at','!=', null]])->orderBy('id', 'DESC')->first();
 
@@ -726,7 +717,7 @@ class UserController extends Controller
                 'status' => 200,
                 'product' => $product
         ]);
-    
+
 
         // $product = Auction::with('star')->orderBy('id','DESC')->where('status', 1)->get();
         // return response()->json([

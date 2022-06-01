@@ -19,15 +19,15 @@ class CreateGreetingsRegistrationsTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamp('notification_at')->nullable();
             $table->string('name')->nullable();
-            $table->string('phone')->nullable();
             $table->string('purpose')->nullable();
-            $table->timestamp('birth_date')->nullable();
             $table->timestamp('request_time')->nullable();
             $table->longText('greeting_context')->nullable();
-            $table->string('location')->nullable();
+            // $table->string('phone')->nullable();
+            // $table->timestamp('birth_date')->nullable();
+            // $table->string('location')->nullable();
+            // $table->string('password')->nullable();
             $table->longText('additional_message')->nullable();
-            $table->string('password')->nullable();
-            $table->integer('status')->default(0)->comment('1 = registration completed / payment completed');
+            $table->integer('status')->default(0)->comment('0 = default ,1 = registration completed / payment completed');
 
             $table->string('payment_method')->nullable();
             $table->boolean('payment_status')->nullable();
