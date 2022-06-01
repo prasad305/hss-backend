@@ -102,6 +102,7 @@ class QnaController extends Controller
 
         $qnA->title = $request->input('title');
         $qnA->description = $request->input('description');
+        $qnA->instruction = $request->input('instruction');
 
         // $qnA->date = $request->input('date');
         // $qnA->start_time = Carbon::parse($request->input('start_time'));

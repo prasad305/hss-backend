@@ -11,13 +11,22 @@
     <div class="form-group row">
         <div class="col-md-12">
           <label for="phone">Description</label>
-          <textarea id="summernote" name="description">
+          <textarea class="summernote" name="description">
             {!! $event->description !!}
           </textarea>
         </div>
 
 
     </div>
+    <div class="form-group row">
+        <div class="col-md-12">
+          <label for="phone">Instruction</label>
+          <textarea class="summernote" name="instruction">
+            {!! $event->instruction !!}
+          </textarea>
+        </div>
+    </div>
+    
 
 
     <span class="row">
@@ -107,8 +116,8 @@
  </script>
 
 <script>
-    $('#summernote').summernote({
+    $('.summernote').summernote({
       placeholder: '',
-      height: 200
+      height: 150
     });
   </script>
