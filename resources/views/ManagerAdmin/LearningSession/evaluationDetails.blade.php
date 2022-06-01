@@ -95,12 +95,24 @@
                     </div>
 
                     <div class="container row">
-                        @if($event->status != 1)
-                            <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.learningSession.set_publish', [$event->id]) }}">Publish Now</a>
-                        @elseif($event->status != 0)
-                            <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.learningSession.set_publish', [$event->id]) }}">Remove From Publish</a>
-                        @endif
-                            <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Learning Session','{{ route('managerAdmin.learningSession.edit', $event->id) }}')">Edit</a>
+                      
+                            {{-- <a type="button" class="btn btn-outline-success px-5 mr-2" onclick="Show('Edit Learning Session','{{ route('managerAdmin.learningSession.accept', $event->id) }}')">Accept</a> --}}
+                            @if ($event->status < 5 )
+                            <button class="btn btn-outline-success px-5 mr-2" onclick="Accept(this)" value="{{ route('managerAdmin.learningSession.evaluationAccept', $event->id) }}">
+                                Accept
+                            </button>
+                            <button class="btn btn-outline-danger px-5 mr-2" onclick="Reject(this)" value="{{ route('managerAdmin.learningSession.evaluationReject', $event->id) }}">
+                                Reject
+                            </button>
+                            @endif
+
+                            @if ($event->status == 5)
+                                <span class="btn btn-outline-success">Accepted</span>
+                            @endif
+                            @if ($event->status == 55)
+                                <span class="btn btn-outline-danger">Rejected</span>
+                            @endif
+                          
                     </div>
 
                 </div>
@@ -133,10 +145,96 @@
         </script>
     @endif
 
+    <script>
+         function Accept(objButton) {
+        var url = objButton.value;
+        // alert(objButton.value)
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Accept !'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    },
+                    success: function(data) {
+                        if (data.status == 'success') {
+                            Swal.fire(
+                                'Accepted !',
+                                data.message,
+                                'success'
+                            )
+                            setTimeout(function() {
+                                location.reload();
+                            }, 800);
+                        } else {
+                            Swal.fire(
+                                'Wrong !',
+                                'Something going wrong. ' + data.message,
+                                'warning'
+                            )
+                        }
+                    },
+                })
+            }
+        })
+    }
+        function Reject(objButton) {
+        var url = objButton.value;
+        // alert(objButton.value)
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Reject !'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    },
+                    success: function(data) {
+                        if (data.status == 'success') {
+                            Swal.fire(
+                                'Rejected !',
+                                data.message,
+                                'success'
+                            )
+                            setTimeout(function() {
+                                location.reload();
+                            }, 800);
+                        } else {
+                            Swal.fire(
+                                'Wrong !',
+                                'Something going wrong. ' + data.message,
+                                'warning'
+                            )
+                        }
+                    },
+                })
+            }
+        })
+    }
+    </script>
+
 
 @endsection
 
 @push('script')
+
     {{-- <script src="{{ asset('assets/manager-admin/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script> --}}
     <script src="{{ asset('assets/manager-admin/pages/dashborad.js') }}"></script>
 @endpush

@@ -21,6 +21,8 @@ class CreateLearningSessionAssignmentsTable extends Migration
             $table->integer('mark')->default(0);
             $table->longText('comment')->nullable();
             $table->integer('status')->default(0);
+            $table->integer('send_to_manager')->default(0);
+            $table->integer('send_to_star')->default(0);
             $table->timestamps();
         });
     }
