@@ -12,10 +12,11 @@ class Activity extends Model
     protected $fillable = [
         'type',
         'event_id',
+        'event_registration_id',
         'user_id',
     ];
 
-    protected $with = ['user', 'meetup', 'livechat', 'learningSession'];
+    protected $with = ['user', 'meetup', 'livechat', 'learningSession','greetingRegistration'];
 
     public function user()
     {
@@ -35,5 +36,9 @@ class Activity extends Model
     public function learningSession()
     {
         return $this->belongsTo(LearningSession::class, 'event_id');
+    }
+    public function greetingRegistration()
+    {
+        return $this->belongsTo(GreetingsRegistration::class, 'event_registration_id');
     }
 }

@@ -478,12 +478,12 @@ class UserController extends Controller
         $greetings->save();
 
         // New Activity Add for Greeting Register
-        $activity = new Activity();
-        $activity->user_id = auth('sanctum')->user()->id;
-        $activity->event_id = $request->greetings_id;
-        $activity->event_registration_id = $greetings->id;
-        $activity->type = 'greeting';
-        $activity->save();
+        // $activity = new Activity();
+        // $activity->user_id = auth('sanctum')->user()->id;
+        // $activity->event_id = $request->greetings_id;
+        // $activity->event_registration_id = $greetings->id;
+        // $activity->type = 'greeting';
+        // $activity->save();
 
         $single_greeting = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
 
