@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Greeting;
+use App\Models\GreetingsRegistration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
@@ -25,6 +26,37 @@ class StarGreetingController extends Controller
                 'status' => 200,
                 'greeting' => [],
                 'action' => false,
+            ]);
+        }
+    }
+
+    public function videoUpload(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'video' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $greetingsRegistration = GreetingsRegistration::find($request->greeting_registration_id);
+            $greetingsRegistration->status = 2;
+            if ($request->hasFile('video')) {
+                if ($greetingsRegistration->video != null && file_exists($greetingsRegistration->video)) {
+                    unlink($greetingsRegistration->video);
+                }
+                $file        = $request->file('video');
+                $path        = 'uploads/videos/greeting';
+                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                $file->move($path, $file_name);
+                $greetingsRegistration->video = $path . '/' . $file_name;
+            }
+            $greetingsRegistration->save();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Greeting video uploaded successfully !',
             ]);
         }
     }
@@ -166,4 +198,73 @@ class StarGreetingController extends Controller
             'message' => 'Greetings Declined Successfully !',
         ]);
     }
+    public function greetingsRegisterListByGreetingsId()
+    {
+        $greeting = auth('sanctum')->user()->star->asStarGreeting;
+        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', null], ['status', 0]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'list' => $register_list
+        ]);
+    }
+
+    public function registerListWithPaymentComplete()
+    {
+        $greeting = auth('sanctum')->user()->asStarGreeting;
+        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 1]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'list' => $register_list,
+            'greeting' => $greeting,
+        ]);
+    }
+    public function greetingsVideoUploadedList()
+    {
+        $greeting = auth('sanctum')->user()->asStarGreeting;
+        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 2]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'list' => $register_list,
+            'greeting' => $greeting,
+        ]);
+    }
+
+    public function singleGreetingRegistration($greeting_registration_id)
+    {
+        $greetingsRegistration = GreetingsRegistration::find($greeting_registration_id);
+        $greeting = $greetingsRegistration->greeting;
+
+        return response()->json([
+            'status' => 200,
+            'greeting' => $greeting,
+            'greetingsRegistration' => $greetingsRegistration,
+        ]);
+    }
+
+
+    // public function greetingsRegisterWithPaymentList($greetings_id)
+    // {
+    //     return $register_list = GreetingsRegistration::where([['greeting_id', $greetings_id], ['status', 2]])->get();
+
+    //     return response()->json([
+    //         'status' => 200,
+    //         'list' => $register_list
+    //     ]);
+    // }
+
+    // public function view_star_greeting()
+    // {
+    //     $greeting = Greeting::where('star_id', auth('sanctum')->user()->id)->latest()->first();
+
+    //     //$greeting = User::where('id',auth('sanctum')->user()->id)->first();
+
+    //     return response()->json([
+    //         'status' => 200,
+    //         'greeting' => $greeting,
+    //         'message' => 'Success',
+    //     ]);
+    // }
 }

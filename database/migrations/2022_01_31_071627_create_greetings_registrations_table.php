@@ -20,6 +20,7 @@ class CreateGreetingsRegistrationsTable extends Migration
             $table->timestamp('notification_at')->nullable();
             $table->string('name')->nullable();
             $table->string('purpose')->nullable();
+            $table->string('video')->nullable();
             $table->timestamp('request_time')->nullable();
             $table->longText('greeting_context')->nullable();
             // $table->string('phone')->nullable();
@@ -27,15 +28,13 @@ class CreateGreetingsRegistrationsTable extends Migration
             // $table->string('location')->nullable();
             // $table->string('password')->nullable();
             $table->longText('additional_message')->nullable();
-            $table->integer('status')->default(0)->comment('0 = default ,1 = registration completed / payment completed');
-
+            $table->integer('status')->default(0)->comment('0 = default ,1 = registration completed / payment completed, 2 = star uploaded greeting video');
             $table->string('payment_method')->nullable();
             $table->boolean('payment_status')->nullable();
             $table->string('payment_date')->nullable();
             $table->float('amount')->nullable();
             $table->string('card_holder_name')->nullable();
             $table->string('account_no')->nullable();
-
             $table->timestamps();
         });
     }
