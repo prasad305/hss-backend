@@ -79,11 +79,60 @@ class LearningSessionController extends Controller
     }
 
 
-
+    //Prepare for Star
     public function assignment_set_approval(Request $request, $type, $id)
+    {
+        $post = LearningSessionAssignment::find($id);
+
+        if($type == 'approve')
+        {
+            $post->status = 1;
+        }else{
+            $post->status = 2;
+        }
+
+        $post->comment = $request->input('comment');
+
+        $post->update();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Status Updated',
+
+        ]);
+    }
+
+    //Prepare for Star
+    public function star_assignment_set_approval(Request $request, $type, $id)
+    {
+        $post = LearningSessionAssignment::find($id);
+
+        if($type == 'approve')
+        {
+            $post->status = 1;
+        }else{
+            $post->status = 2;
+        }
+
+        $post->comment = $request->input('comment');
+        $post->mark = $request->input('mark');
+
+        $post->update();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Status Updated',
+
+        ]);
+    }
+
+
+
+    public function assignment_set_approval_with_mark(Request $request, $type, $id)
     {
 
         $post = LearningSessionAssignment::find($id);
+        $pending = LearningSessionAssignment::where([['event_id', $id],['status',1],['mark','<',1]])->count();
 
         if($type == 'approve')
         {
@@ -99,7 +148,43 @@ class LearningSessionController extends Controller
 
         return response()->json([
             'status' => 200,
+            'pending' => $pending,
             'message' => 'Status Updated',
+        ]);
+    }
+
+
+    public function admin_assignment_marks($slug)
+    {
+        $event = LearningSession::where('slug', $slug)->first();
+
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+            'message' => 'Status Updated',
+        ]);
+    }
+
+    public function assignment_send_to_manager($id)
+    {
+
+        LearningSessionAssignment::where([['event_id', $id],['status',1],['mark','>',1]])->update(['send_to_manager' => 1]);
+        LearningSession::find($id)->update(['status' => 6]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Status Updated',
+        ]);
+    }
+
+    public function assignment_send_to_star($id)
+    {
+
+        LearningSessionAssignment::where([['event_id', $id],['status',1],['mark',0],])->update(['send_to_star' => 1]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Videos Sent to Star!',
         ]);
     }
 
@@ -203,9 +288,16 @@ class LearningSessionController extends Controller
         $learning_session = LearningSession::find($id);
         $instruction = $learning_session->assignment_instruction;
 
-        $event = LearningSessionAssignment::where([['event_id', $id],['status',0]])->get();
-        $approved_event = LearningSessionAssignment::where([['event_id', $id],['status',1]])->get();
+        //Prepare for Manager
+        $event = LearningSessionAssignment::where([['event_id', $id],['status',0],['mark',0],['send_to_star',0]])->get();
+        $approved_event = LearningSessionAssignment::where([['event_id', $id],['status',1],['mark','>',0]])->get();
         $rejected_event = LearningSessionAssignment::where([['event_id', $id],['status',2]])->get();
+
+        //Prepare for Star
+        $star_event =  $event;
+        $star_approved_event = LearningSessionAssignment::where([['event_id', $id],['status',1],['mark',0]])->get();
+    
+
 
         return response()->json([
             'status' => 200,
@@ -213,6 +305,9 @@ class LearningSessionController extends Controller
             'event' => $event,
             'approved_event' => $approved_event,
             'rejected_event' => $rejected_event,
+
+            'star_event' => $star_event,
+            'star_approved_event' => $star_approved_event,
 
             'message' => 'Success',
         ]);
@@ -349,7 +444,7 @@ class LearningSessionController extends Controller
 
     public function star_evaluation_list()
     {
-        $events = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 3]]);
+        $events = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 2], ['status', '<', 9]]);
 
         return response()->json([
             'status' => 200,
@@ -360,8 +455,8 @@ class LearningSessionController extends Controller
 
     public function star_assignment_details($id)
     {
-        $event = LearningSessionAssignment::where([['event_id', $id],['status',1],['mark',0]])->get();
-        $approved_event = LearningSessionAssignment::where([['event_id', $id],['status',1],['mark','>',0]])->get();
+        $event = LearningSessionAssignment::where([['event_id', $id],['send_to_star',1],['mark',0]])->get();
+        $approved_event = LearningSessionAssignment::where([['event_id', $id],['send_to_star',1],['mark','>',0]])->get();
 
         return response()->json([
             'status' => 200,

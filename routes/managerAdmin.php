@@ -246,6 +246,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('learningSession/pending', [LearningSessionController::class, 'manager_pending'])->name('learningSession.pending');
     Route::get('learningSession/evaluation', [LearningSessionController::class, 'learningEvaluation'])->name('learningSession.evaluation');
     Route::get('learningSession/evaluation/{id}', [LearningSessionController::class, 'evaluationDetails'])->name('learningSession.evaluationDetails');
+    Route::post('learningSession/evaluation/accept/{id}', [LearningSessionController::class, 'evaluationAccept'])->name('learningSession.evaluationAccept');
+    Route::post('learningSession/evaluation/reject/{id}', [LearningSessionController::class, 'evaluationReject'])->name('learningSession.evaluationReject');
     Route::get('learningSession/published', [LearningSessionController::class, 'manager_published'])->name('learningSession.published');
     Route::get('learningSession/all', [LearningSessionController::class, 'manager_all'])->name('learningSession.all');
 

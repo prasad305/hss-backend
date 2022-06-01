@@ -20,12 +20,10 @@ class GreetingController extends Controller
 
     public function index()
     {
-
     }
 
     public function create()
     {
-
     }
 
     public function add(Request $request)
@@ -147,7 +145,8 @@ class GreetingController extends Controller
     }
 
 
-    public function forwardToManagerAdmin($greeting_id){
+    public function forwardToManagerAdmin($greeting_id)
+    {
         $greeting = Greeting::find($greeting_id);
         $greeting->status = 1;
         $greeting->save();
@@ -155,6 +154,17 @@ class GreetingController extends Controller
             'status' => 200,
             'greeting' => $greeting,
             'message' => 'Greetings Forwarded Successfully !',
+        ]);
+    }
+    public function starSingleGreetingRegistration($greeting_registration_id)
+    {
+        $greetingsRegistration = GreetingsRegistration::find($greeting_registration_id);
+        $greeting = $greetingsRegistration->greeting;
+
+        return response()->json([
+            'status' => 200,
+            'greeting' => $greeting,
+            'greetingsRegistration' => $greetingsRegistration,
         ]);
     }
 
@@ -237,7 +247,7 @@ class GreetingController extends Controller
 
     {
         $star = User::find($star_id);
-        $greeting = Greeting::where([['star_id', $star_id], ['star_approve_status', '>', 0],['status', 2]])->first();
+        $greeting = Greeting::where([['star_id', $star_id], ['star_approve_status', '>', 0], ['status', 2]])->first();
 
         if (isset($greeting)) {
             return response()->json([
@@ -282,29 +292,43 @@ class GreetingController extends Controller
     public function greetingsRegisterListByGreetingsId()
     {
         $greeting = auth('sanctum')->user()->star->asStarGreeting;
-        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id],['notification_at',null],['status', 0]])->get();
+        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', null], ['status', 0]])->get();
 
         return response()->json([
             'status' => 200,
             'list' => $register_list
         ]);
     }
-    /**
-     * user greetings reg with payment list
-     */
-    public function greetingsRegisterWithPaymentList($greetings_id)
+    public function adminGreetingsRegisterListWithPaymentComplete()
     {
-        return $register_list = GreetingsRegistration::where([['greeting_id', $greetings_id], ['status', 2]])->get();
+        $greeting = auth('sanctum')->user()->star->asStarGreeting;
+        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 1]])->get();
 
         return response()->json([
             'status' => 200,
             'list' => $register_list
         ]);
     }
+    public function starGreetingsRegisterListWithPaymentComplete()
+    {
+        $greeting = auth('sanctum')->user()->asStarGreeting;
+        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 1]])->get();
 
-    /**
-     * user register greetings delete
-     */
+        return response()->json([
+            'status' => 200,
+            'list' => $register_list,
+            'greeting' => $greeting,
+        ]);
+    }
+    // public function greetingsRegisterWithPaymentList($greetings_id)
+    // {
+    //     return $register_list = GreetingsRegistration::where([['greeting_id', $greetings_id], ['status', 2]])->get();
+
+    //     return response()->json([
+    //         'status' => 200,
+    //         'list' => $register_list
+    //     ]);
+    // }
     public function greetingsRegDelete($id)
     {
         $regGreetings = GreetingsRegistration::find($id);
@@ -340,7 +364,7 @@ class GreetingController extends Controller
             $register_greeting = GreetingsRegistration::whereIn('id', $greetins_arry)->update(['notification_at' => Carbon::now()]);
         }
 
-        $register_list = GreetingsRegistration::whereIn('id', $greetins_arry)->where([['notification_at',null],['status', 0]])->get();
+        $register_list = GreetingsRegistration::whereIn('id', $greetins_arry)->where([['notification_at', null], ['status', 0]])->get();
 
 
         return response()->json([
