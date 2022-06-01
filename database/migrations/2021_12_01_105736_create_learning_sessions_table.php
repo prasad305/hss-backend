@@ -18,7 +18,6 @@ class CreateLearningSessionsTable extends Migration
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('created_by_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
-            $table->unsignedBigInteger('category_id')->nullable();
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
             $table->timestamp('registration_end_date')->nullable();
@@ -35,7 +34,6 @@ class CreateLearningSessionsTable extends Migration
             $table->float('fee')->nullable();
             $table->string('room_id')->nullable();
 
-            $table->string('assignment_reg_start_date')->nullable();
             $table->string('assignment_reg_start_date')->nullable();
             $table->string('assignment_fee')->nullable();
             $table->string('assignment_video_slot_number')->nullable();

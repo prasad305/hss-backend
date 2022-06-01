@@ -546,7 +546,7 @@ class UserController extends Controller
      */
     public function greetingStatus()
     {
-        $single_greeting = GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id],['notofication_at', null]])->first();
+        $single_greeting = GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id],['notification_at', null]])->first();
 
         if (isset($single_greeting)) {
             return response()->json([

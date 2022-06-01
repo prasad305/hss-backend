@@ -231,6 +231,17 @@ class StarGreetingController extends Controller
             'greeting' => $greeting,
         ]);
     }
+    public function greetingsForwardedToUserList()
+    {
+        $greeting = auth('sanctum')->user()->asStarGreeting;
+        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 3]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'list' => $register_list,
+            'greeting' => $greeting,
+        ]);
+    }
 
     public function singleGreetingRegistration($greeting_registration_id)
     {
