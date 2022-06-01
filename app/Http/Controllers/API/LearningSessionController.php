@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\Validator;
 
 class LearningSessionController extends Controller
 {
@@ -17,46 +18,76 @@ class LearningSessionController extends Controller
     public function add(Request $request)
     {
 
-        $post = new LearningSession();
-        $post->title = $request->input('title');
-        $post->slug = Str::slug($request->input('title'));
-        $post->created_by_id = auth('sanctum')->user()->id;
-        $post->star_id = $request->input('star_id');
-        $post->description = $request->input('description');
-
-        $post->registration_start_date = $request->input('registration_start_date');
-        $post->registration_end_date = $request->input('registration_end_date');
-        $post->date = $request->input('date');
-        $post->start_time = $request->input('start_time');
-        $post->end_time = $request->input('end_time');
-
-        $post->fee = $request->input('fee');
-        $post->participant_number = $request->input('participant_number');
-        $post->room_id = $request->input('room_id');
-
-
-        //$post->video = $request->input('video');
-        //$post->type = $request->input('type');
-
-        if ($request->hasfile('image')) {
-            $destination = $post->banner;
-            if (File::exists($destination)) {
-                File::delete($destination);
-            }
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/learning_session/' . time() . '.' . $extension;
-
-            Image::make($file)->resize(900, 400)->save($filename, 100);
-            $post->banner = $filename;
-        }
-
-        $post->save();
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Learning Session Added',
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|unique:learning_sessions',
+            'description' => 'required',
+            'star_id' => 'required',
+            'description' => 'required',
+            'registration_start_date' => 'required',
+            'registration_end_date' => 'required',
+            'date' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'assignment' => 'required',
+            'fee' => 'required',
+            'participant_number' => 'required',
+            'room_id' => 'required',
+            'image' => 'required|mimes:jpg,jpeg,png,gif,webp',
+        ],[
+           'title.unique' => 'This title already exist' ,
+           'star_id.required' => 'Please Select One Star' ,
         ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->errors(),
+            ]);
+        } else {
+
+            $post = new LearningSession();
+            $post->title = $request->input('title');
+            $post->slug = Str::slug($request->input('title'));
+            $post->created_by_id = auth('sanctum')->user()->id;
+            $post->star_id = $request->input('star_id');
+            $post->description = $request->input('description');
+
+            $post->registration_start_date = $request->input('registration_start_date');
+            $post->registration_end_date = $request->input('registration_end_date');
+            $post->date = $request->input('date');
+            $post->start_time = $request->input('start_time');
+            $post->end_time = $request->input('end_time');
+
+            $post->assignment = $request->input('assignment');
+            $post->fee = $request->input('fee');
+            $post->participant_number = $request->input('participant_number');
+            $post->room_id = $request->input('room_id');
+
+            //$post->video = $request->input('video');
+            //$post->type = $request->input('type');
+
+            if ($request->hasfile('image')) {
+                $destination = $post->banner;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/learning_session/' . time() . '.' . $extension;
+
+                Image::make($file)->resize(900, 400)->save($filename, 100);
+                $post->banner = $filename;
+            }
+
+            $post->save();
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Learning Session Added',
+            ]);
+        }
     }
 
     public function assignment_rule_add(Request $request)
@@ -69,7 +100,6 @@ class LearningSessionController extends Controller
         $post->assignment_video_slot_number = $request->input('slot_number');
         $post->assignment_instruction = $request->input('instruction');
         $post->status = 4; // Assignment Rules Send To Manager Admin
-
         $post->update();
 
         return response()->json([
@@ -84,10 +114,9 @@ class LearningSessionController extends Controller
     {
         $post = LearningSessionAssignment::find($id);
 
-        if($type == 'approve')
-        {
+        if ($type == 'approve') {
             $post->status = 1;
-        }else{
+        } else {
             $post->status = 2;
         }
 
@@ -107,10 +136,9 @@ class LearningSessionController extends Controller
     {
         $post = LearningSessionAssignment::find($id);
 
-        if($type == 'approve')
-        {
+        if ($type == 'approve') {
             $post->status = 1;
-        }else{
+        } else {
             $post->status = 2;
         }
 
@@ -132,12 +160,11 @@ class LearningSessionController extends Controller
     {
 
         $post = LearningSessionAssignment::find($id);
-        $pending = LearningSessionAssignment::where([['event_id', $id],['status',1],['mark','<',1]])->count();
+        $pending = LearningSessionAssignment::where([['event_id', $id], ['status', 1], ['mark', '<', 1]])->count();
 
-        if($type == 'approve')
-        {
+        if ($type == 'approve') {
             $post->status = 1;
-        }else{
+        } else {
             $post->status = 2;
         }
 
@@ -158,29 +185,58 @@ class LearningSessionController extends Controller
     {
         $event = LearningSession::where('slug', $slug)->first();
 
+        $approved = LearningSessionAssignment::where('status', 1)->count();
+        $with_mark = LearningSessionAssignment::where('mark', '>', 0)->count();
+
         return response()->json([
             'status' => 200,
             'event' => $event,
+            'complete' => $approved == $with_mark,
             'message' => 'Status Updated',
         ]);
     }
 
-    public function assignment_send_to_manager($id)
+    public function admin_assignment_set_complete($id)
     {
-
-        LearningSessionAssignment::where([['event_id', $id],['status',1],['mark','>',1]])->update(['send_to_manager' => 1]);
-        LearningSession::find($id)->update(['status' => 6]);
+        $event = LearningSession::find($id);
+        $event->status = 9;
+        $event->update();
 
         return response()->json([
             'status' => 200,
-            'message' => 'Status Updated',
+            'message' => 'Set Completed!',
+        ]);
+
+    }
+
+    public function admin_assignment_set_assignment($id)
+    {
+        $event = LearningSession::find($id);
+        $event->status = 3;
+        $event->update();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Assignment Session Started!',
+        ]);
+    }
+
+    public function assignment_send_to_manager($slug)
+    {
+        $event = LearningSession::where('slug', $slug)->first();
+        $event->update(['status' => 6]);
+        LearningSessionAssignment::where([['event_id', $event->id], ['status', 1], ['mark', '>', 1]])->update(['send_to_manager' => 1]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Sent to Manager Successfully!',
         ]);
     }
 
     public function assignment_send_to_star($id)
     {
 
-        LearningSessionAssignment::where([['event_id', $id],['status',1],['mark',0],])->update(['send_to_star' => 1]);
+        LearningSessionAssignment::where([['event_id', $id], ['status', 1], ['mark', 0],])->update(['send_to_star' => 1]);
 
         return response()->json([
             'status' => 200,
@@ -238,7 +294,7 @@ class LearningSessionController extends Controller
 
     public function evaluation_list()
     {
-        $events = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status','>', 2], ['status','<', 9]]);
+        $events = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', '>', 2], ['status', '<', 9]]);
 
         return response()->json([
             'status' => 200,
@@ -260,7 +316,7 @@ class LearningSessionController extends Controller
 
     public function details($slug)
     {
-        $event = LearningSession::where('slug',$slug)->first();
+        $event = LearningSession::where('slug', $slug)->first();
 
         return response()->json([
             'status' => 200,
@@ -269,10 +325,11 @@ class LearningSessionController extends Controller
         ]);
     }
 
-    public function registered_user($slug)
+
+    public function registured_user($slug)
     {
-        $event = LearningSession::where('slug',$slug)->first();
-        $users = LearningSessionRegistration::where('learning_session_id',$event->id)->get();
+        $event = LearningSession::where('slug', $slug)->first();
+        $users = LearningSessionRegistration::where('learning_session_id', $event->id)->get();
 
         return response()->json([
             'status' => 200,
@@ -289,14 +346,14 @@ class LearningSessionController extends Controller
         $instruction = $learning_session->assignment_instruction;
 
         //Prepare for Manager
-        $event = LearningSessionAssignment::where([['event_id', $id],['status',0],['mark',0],['send_to_star',0]])->get();
-        $approved_event = LearningSessionAssignment::where([['event_id', $id],['status',1],['mark','>',0]])->get();
-        $rejected_event = LearningSessionAssignment::where([['event_id', $id],['status',2]])->get();
+        $event = LearningSessionAssignment::where([['event_id', $id], ['status', 0], ['mark', 0], ['send_to_star', 0]])->get();
+        $approved_event = LearningSessionAssignment::where([['event_id', $id], ['status', 1], ['mark', '>', 0]])->get();
+        $rejected_event = LearningSessionAssignment::where([['event_id', $id], ['status', 2]])->get();
 
         //Prepare for Star
         $star_event =  $event;
-        $star_approved_event = LearningSessionAssignment::where([['event_id', $id],['status',1],['mark',0]])->get();
-    
+        $star_approved_event = LearningSessionAssignment::where([['event_id', $id], ['status', 1], ['mark', 0]])->get();
+
 
 
         return response()->json([
@@ -315,7 +372,7 @@ class LearningSessionController extends Controller
 
     public function pending_details($slug)
     {
-        $post = LearningSession::where('slug',$slug)->first();
+        $post = LearningSession::where('slug', $slug)->first();
 
         return response()->json([
             'status' => 200,
@@ -455,8 +512,8 @@ class LearningSessionController extends Controller
 
     public function star_assignment_details($id)
     {
-        $event = LearningSessionAssignment::where([['event_id', $id],['send_to_star',1],['mark',0]])->get();
-        $approved_event = LearningSessionAssignment::where([['event_id', $id],['send_to_star',1],['mark','>',0]])->get();
+        $event = LearningSessionAssignment::where([['event_id', $id], ['send_to_star', 1], ['mark', 0]])->get();
+        $approved_event = LearningSessionAssignment::where([['event_id', $id], ['send_to_star', 1], ['mark', '>', 0]])->get();
 
         return response()->json([
             'status' => 200,
@@ -483,7 +540,7 @@ class LearningSessionController extends Controller
     {
         $post = LearningSession::find($id);
 
-        $post->star_approval = 1;
+        $post->status = 1;
 
         $post->update();
 

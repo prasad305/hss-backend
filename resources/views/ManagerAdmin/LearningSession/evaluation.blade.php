@@ -9,31 +9,30 @@
 @endpush
 
 @section('content')
-
-<!-- Content Header (Page header) -->
-<div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0">Learning Session</h1>
-        </div><!-- /.col -->
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Learning Session</li>
-          </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-  </div>
-  <!-- /.content-header -->
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Learning Session</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Learning Session</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
 
 
     <div class="content">
         <div class="container-fluid">
 
             <div class="row">
-                @foreach ($events as $event) 
+                @foreach ($events as $event)
                     <!--card-->
 
                     <div class="col-sm-6 col-lg-4">
@@ -45,9 +44,12 @@
 
                                 <div class="panel-body py-3">
                                     <h3 class="text-ellipsis-line-1">{{ $event->title }}</h3>
-                                    <a href="{{ route('managerAdmin.learningSession.evaluationDetails', [$event->id]) }}" type="button"
-                                        class="btn btn-info waves-effect waves-light">Details <i
+                                    <a href="{{ route('managerAdmin.learningSession.evaluationDetails', [$event->id]) }}"
+                                        type="button" class="btn btn-info waves-effect waves-light">Details <i
                                             class="fa fa-angle-double-right"></i></a>
+                                    <a href="{{ route('managerAdmin.learningSession.evaluationResult', [$event->id]) }}"
+                                        type="button" class="btn btn-info waves-effect waves-light">Show Result <i
+                                            class="fa fa-eye"></i></a>
 
                                 </div>
                             </div>
@@ -78,13 +80,4 @@
             });
         </script>
     @endif
-
-
-
 @endsection
-
-
-
-
-
-

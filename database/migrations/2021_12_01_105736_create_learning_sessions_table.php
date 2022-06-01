@@ -35,7 +35,8 @@ class CreateLearningSessionsTable extends Migration
             $table->float('fee')->nullable();
             $table->string('room_id')->nullable();
 
-            $table->string('assignment_reg_start_date')->nullable();
+            $table->string('assignment')->default(0);
+            $table->string('assignment_reg_end_date')->nullable();
             $table->string('assignment_reg_start_date')->nullable();
             $table->string('assignment_fee')->nullable();
             $table->string('assignment_video_slot_number')->nullable();

@@ -29,7 +29,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     // Dashboard Routes By Srabon
 
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
-    // Schedule Routes By Monir 
+    // Schedule Routes By Monir
 
     Route::resource('schedule', ScheduleController::class);
     Route::post('schdeule/updateAll/{admin_id}', [ScheduleController::class, 'update_all'])->name('schedule.update_all');
@@ -59,7 +59,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('fan-group-details/{id}', [DashboardController::class, 'fanGroupsDetails'])->name('dashboard.fanGroupDetails');
 
     //  learing Session
-   
+
 
     Route::get('learning-sessions', [DashboardController::class, 'learningSessions'])->name('dashboard.learningSession');
     Route::get('learning-session/{type}', [DashboardController::class, 'learninSessionData'])->name('dashboard.learningSessionData');
@@ -164,7 +164,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
         Route::get('assinged', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'assinged'])->name('auditionAdmin.assinged');
         Route::get('free', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin.notAssinged');
 
-
         Route::get('instruction/{audition_id}', [AuditionAdminController::class, 'instruction'])->name('instruction');
         Route::get('send-instruction/{audition_id}', [AuditionAdminController::class, 'sendInstructionToParticipant'])->name('sendInstruction');
 
@@ -222,8 +221,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('fangroup/edit/{id}', [FanGroupController::class, 'edit'])->name('fangroup.edit');
     Route::put('fangroup/update/{id}', [FanGroupController::class, 'update'])->name('fangroup.update');
 
-
-
     //Meetup-events
     Route::get('meetupEvents/pending', [MeetupEventController::class, 'manager_pending'])->name('meetupEvent.pending');
     Route::get('meetupEvents/published', [MeetupEventController::class, 'manager_published'])->name('meetupEvent.published');
@@ -246,11 +243,11 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('learningSession/pending', [LearningSessionController::class, 'manager_pending'])->name('learningSession.pending');
     Route::get('learningSession/evaluation', [LearningSessionController::class, 'learningEvaluation'])->name('learningSession.evaluation');
     Route::get('learningSession/evaluation/{id}', [LearningSessionController::class, 'evaluationDetails'])->name('learningSession.evaluationDetails');
+    Route::get('learningSession/evaluationResult/{id}', [LearningSessionController::class, 'evaluationResult'])->name('learningSession.evaluationResult');
     Route::post('learningSession/evaluation/accept/{id}', [LearningSessionController::class, 'evaluationAccept'])->name('learningSession.evaluationAccept');
     Route::post('learningSession/evaluation/reject/{id}', [LearningSessionController::class, 'evaluationReject'])->name('learningSession.evaluationReject');
     Route::get('learningSession/published', [LearningSessionController::class, 'manager_published'])->name('learningSession.published');
     Route::get('learningSession/all', [LearningSessionController::class, 'manager_all'])->name('learningSession.all');
-
     Route::get('learningSession/details/{id}', [LearningSessionController::class, 'manager_event_details'])->name('learningSession.details');
     Route::get('learningSession/edit/{id}', [LearningSessionController::class, 'edit'])->name('learningSession.edit');
     Route::put('learningSession/edit/{id}', [LearningSessionController::class, 'update'])->name('learningSession.update');
@@ -260,7 +257,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::post('audition-assign/{admin_id}', [JobAssign::class, 'auditionStore'])->name('AuditionAssign');
 
     // Promo Video
-
     Route::get('promoVideo/pending', [PromoVideoController::class, 'pending'])->name('promoVideo.pending');
     Route::get('promoVideo/published', [PromoVideoController::class, 'published'])->name('promoVideo.published');
     Route::get('promoVideo/all', [PromoVideoController::class, 'all'])->name('promoVideo.all');

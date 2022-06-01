@@ -12,6 +12,7 @@ use App\Models\GreetingsRegistration;
 use App\Models\LiveChatRegistration;
 use App\Models\LiveChat;
 use App\Models\LearningSession;
+use App\Models\LearningSessionEvaluation;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChatRoom;
 use App\Models\MeetupEvent;
@@ -45,7 +46,7 @@ class UserMobileAppController extends Controller
     public function eventRegister(Request $request)
     {
         // return $request->all();
-        $user = User::find(auth('sanctum')->user()->id);
+        $user = auth('sanctum')->user();
         $eventId = (string)$request->event_id;
         $modelName = $request->model_name;
 
@@ -66,6 +67,14 @@ class UserMobileAppController extends Controller
             $eventRegistration->learning_session_id = $eventId;
             $eventRegistration->amount = $event->fee;
             $activity->type = 'learningSession';
+
+            if($event->evaluation == 1)
+            {
+                $evaluation = new LearningSessionEvaluation();
+                $evaluation->evant_id = $event->id;
+                $evaluation->user_id = $user->id;
+                $evaluation->save();
+            }
         }
 
         if( $modelName == 'livechat'){

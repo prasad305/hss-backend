@@ -98,7 +98,7 @@ class FanGroupController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 422,
-                'errors' => $validator->messages(),
+                'errors' => $validator->errors(),
             ]);
         }else{
             return response()->json([
@@ -163,7 +163,7 @@ class FanGroupController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 422,
-                'errors' => $validator->messages(),
+                'errors' => $validator->errors(),
             ]);
         }else{
             return response()->json([

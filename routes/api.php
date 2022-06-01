@@ -230,8 +230,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/fan/group/settings/no-warning/{id}', [FanGroupController::class, 'noWarningSettingsFan']);
     Route::post('/admin/fan/group/approval/warning/{id}/{fanid}', [FanGroupController::class, 'warningSettingsFan']);
 
-
-
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
     Route::get('/admin/marketplace/product-list/approved', [MarketplaceController::class, 'allProductList']);
@@ -266,9 +264,12 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
     Route::post('admin/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'assignment_set_approval']);
     Route::post('admin/learning_session/assignment/approval/withMark/{type}/{id}', [LearningSessionController::class, 'assignment_set_approval_with_mark']);
-    Route::get('admin/learning_session/assignment/send_to_manager/{id}', [LearningSessionController::class, 'assignment_send_to_manager']);
+    Route::get('admin/learning_session/assignment/send_to_manager/{slug}', [LearningSessionController::class, 'assignment_send_to_manager']);
     Route::get('admin/learning_session/assignment/send_to_star/{id}', [LearningSessionController::class, 'assignment_send_to_star']);
     Route::get('/admin/learning_session/assignment/marks/{slug}', [LearningSessionController::class, 'admin_assignment_marks']);
+    Route::get('/admin/learning_session/setComplete/{id}', [LearningSessionController::class, 'admin_assignment_set_complete']);
+    Route::get('/admin/learning_session/setAssignment/{id}', [LearningSessionController::class, 'admin_assignment_set_assignment']);
+
 
 
     // Live Session Section
@@ -429,14 +430,14 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/learning_session/pending', [LearningSessionController::class, 'star_pending_list']);
     Route::get('/star/learning_session/pending/{id}', [LearningSessionController::class, 'star_pending_details']);
     Route::get('/star/learning_session/approved', [LearningSessionController::class, 'star_approved_list']);
-    Route::get('/star/approve_learning_session/{id}', [LearningSessionController::class, 'approve_post']);
+    Route::get('/star/learning_session/approve/{id}', [LearningSessionController::class, 'approve_post']);
     Route::get('/star/learning_session/completed', [LearningSessionController::class, 'star_completed_list']);
     Route::get('/star/learning_session/evaluation', [LearningSessionController::class, 'star_evaluation_list']);
     Route::get('/star/learning_session/details/{slug}', [LearningSessionController::class, 'details']);
     Route::get('/star/learning_session/assignment/{id}', [LearningSessionController::class, 'star_assignment_details']);
     Route::post('/star/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
     Route::post('/star/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'star_assignment_set_approval']);
-    
+
 
 
 
