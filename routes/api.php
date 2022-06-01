@@ -452,7 +452,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/qna_completed', [QnaController::class, 'star_qna_completed']);
     Route::get('/star/qna_details/{slug}', [QnaController::class, 'qna_details']);
     Route::get('/star/qna/approved/{id}', [QnaController::class, 'setApprovedQna']);
-
+    Route::get('/star/qna/rejected/{id}', [QnaController::class, 'setRejectedQna']);
+    Route::post('/star/update_Qna', [QnaController::class, 'update_Qna']);
 
 
     Route::get('/star/live-chat/pending', [LiveChatController::class, 'pendingLiveChat']);
