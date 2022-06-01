@@ -17,6 +17,24 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class GreetingController extends Controller
 {
+    public function forwardToUser(Request $request){
+        $greeting_registration_id_array = explode(',', $request->greeting_registration_ids);
+        $validator = Validator::make($request->all(), [
+            'greeting_registration_ids' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $greetingsRegistration = GreetingsRegistration::whereIn('id',$greeting_registration_id_array)->update(['status' => 3]);
+            return response()->json([
+                'status' => 200,
+                'message' => 'Greeting video forwarded successfully !',
+            ]);
+        }
+    }
 
     public function index()
     {
@@ -278,6 +296,28 @@ class GreetingController extends Controller
             'list' => $register_list
         ]);
     }
+    public function greetingsVideoUploadedList()
+    {
+        $greeting = auth('sanctum')->user()->star->asStarGreeting;
+        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 2]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'list' => $register_list,
+            'greeting' => $greeting
+        ]);
+    }
+    public function greetingsForwardedToUserList()
+    {
+        $greeting = auth('sanctum')->user()->star->asStarGreeting;
+        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 3]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'list' => $register_list,
+            'greeting' => $greeting
+        ]);
+    }
 
 
     public function greetingsRegDelete($id)
@@ -287,6 +327,17 @@ class GreetingController extends Controller
 
         return response()->json([
             'status' => 200,
+        ]);
+    }
+
+    public function greetingsRegisterListByGreetingsId()
+    {
+        $greeting = auth('sanctum')->user()->star->asStarGreeting;
+        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', null], ['status', 0]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'list' => $register_list
         ]);
     }
 

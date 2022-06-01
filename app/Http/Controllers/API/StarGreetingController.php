@@ -198,16 +198,16 @@ class StarGreetingController extends Controller
             'message' => 'Greetings Declined Successfully !',
         ]);
     }
-    public function greetingsRegisterListByGreetingsId()
-    {
-        $greeting = auth('sanctum')->user()->star->asStarGreeting;
-        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', null], ['status', 0]])->get();
+    // public function greetingsRegisterListByGreetingsId()
+    // {
+    //     $greeting = auth('sanctum')->user()->asStarGreeting;
+    //     $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', null], ['status', 0]])->get();
 
-        return response()->json([
-            'status' => 200,
-            'list' => $register_list
-        ]);
-    }
+    //     return response()->json([
+    //         'status' => 200,
+    //         'list' => $register_list
+    //     ]);
+    // }
 
     public function registerListWithPaymentComplete()
     {

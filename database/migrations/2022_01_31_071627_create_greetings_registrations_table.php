@@ -28,7 +28,7 @@ class CreateGreetingsRegistrationsTable extends Migration
             // $table->string('location')->nullable();
             // $table->string('password')->nullable();
             $table->longText('additional_message')->nullable();
-            $table->integer('status')->default(0)->comment('0 = default ,1 = registration completed / payment completed, 2 = star uploaded greeting video');
+            $table->integer('status')->default(0)->comment('0 = default ,1 = registration completed / payment completed, 2 = star uploaded greeting video, 3 = admin forwarded to user');
             $table->string('payment_method')->nullable();
             $table->boolean('payment_status')->nullable();
             $table->string('payment_date')->nullable();

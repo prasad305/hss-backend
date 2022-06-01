@@ -321,10 +321,13 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/greetings_star_status', [GreetingController::class, 'greetingsCreateStatusAdmin']);
     Route::get('/admin/greetings_register_list', [GreetingController::class, 'greetingsRegisterListByGreetingsId']);
     Route::get('/admin/greetings_register_list_with_payment_complete', [GreetingController::class, 'adminGreetingsRegisterListWithPaymentComplete']);
+    Route::get('/admin/greetings_video_uploaded_list', [GreetingController::class, 'greetingsVideoUploadedList']);
+    Route::get('/admin/greetings_forwarded_to_user_list', [GreetingController::class, 'greetingsForwardedToUserList']);
     Route::get('/admin/greeting_approve', [GreetingController::class, 'greetingsApprovedByStar']);
     Route::get('admin/greeting/{id}', [GreetingController::class, 'show']);
     Route::get('admin/greeting/forwardToManagerAdmin/{id}', [GreetingController::class, 'forwardToManagerAdmin']);
-    Route::get('admin/greeting/check_status', [LiveChatController::class, 'greetingsCreateStatus']);
+    // Route::get('admin/greeting/check_status', [GreetingController::class, 'greetingsCreateStatus']);
+    Route::post('admin/greeting/forward_to_user', [GreetingController::class, 'forwardToUser']);
 
     //Sent Notification to user
     Route::post('/admin/sent_notofiaction_user', [GreetingController::class, 'sentNotificationToUser']);
@@ -475,7 +478,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/greetings_star_status', [StarGreetingController::class, 'greetings_star_status']);
 
     //user greetings register list
-    Route::get('/star/greetings_reg_list/{greetings_id}', [StarGreetingController::class, 'greetingsRegisterListByGreetingsId']);
+    // Route::get('/star/greetings_reg_list/{greetings_id}', [StarGreetingController::class, 'greetingsRegisterListByGreetingsId']);
     // Route::get('/star/greetings_reg_payment_list', [StarGreetingController::class, 'greetingsRegisterWithPaymentList']);
     // Route::get('/star/greetings', [StarGreetingController::class, 'view_star_greeting']);
     Route::get('/star/greetings_register_list_with_payment_complete', [StarGreetingController::class, 'registerListWithPaymentComplete']);
