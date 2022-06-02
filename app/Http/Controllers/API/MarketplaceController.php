@@ -38,18 +38,21 @@ class MarketplaceController extends Controller
 
         $cat_post = Marketplace::select("*")
             ->whereIn('category_id', $selectedCat)
+            ->whereColumn('total_items', '>', 'total_selling')
             ->where('post_status', 1)
             ->where('status', 1)
             ->latest()->get();
 
         $sub_cat_post = Marketplace::select("*")
             ->whereIn('subcategory_id', $selectedSubCat)
+            ->whereColumn('total_items', '>', 'total_selling')
             ->where('post_status', 1)
             ->where('status', 1)
             ->latest()->get();
 
         $sub_sub_cat_post = Marketplace::select("*")
             ->whereIn('superstar_id', $selectedSubSubCat)
+            ->whereColumn('total_items', '>', 'total_selling')
             ->where('post_status', 1)
             ->where('status', 1)
             ->latest()->get();
@@ -126,37 +129,79 @@ class MarketplaceController extends Controller
     }
 
     public function viewMarketplaceOrder(Request $request){
-        $marketplace = Marketplace::where('slug', $request->marketplace_slug)->first();
+        $validator = Validator::make($request->all(), [
 
-        $date = (int) Carbon::now()->format('dmYHis');
-        $rand = rand(100,999).$date;
+            'country_id' => 'required',
+            'state_id' => 'required',
+            'city_id' => 'required',
+            'area' => 'required',
+            'phone' => 'required',
+            'card_no' => 'required',
+            'expire_date' => 'required',
+            'cvc' => 'required',
 
-        $data = new Order();
-        $data->country_id = $request->country_id;
-        $data->state_id = $request->state_id;
-        $data->city_id = $request->city_id;
-        $data->area = $request->area;
-        $data->phone = $request->phone;
-        $data->order_no = $rand;
-        $data->items = $request->items;
-        $data->unit_price = $request->unit_price;
-        $data->delivery_charge = $request->delivery_charge;
-        $data->cvc = $request->cvc;
-        $data->card_no = $request->card_no;
-        $data->expire_date = $request->expire_date;
-        $data->user_id = Auth::user()->id;
-        $data->marketplace_id = $marketplace->id;
-        $data->superstar_id = $marketplace->superstar_id;
-        $data->superstar_admin_id = $marketplace->superstar_admin_id;
-        $data->total_price = ($request->items * $request->unit_price) + $request->delivery_charge;
-        $data->status = 1;
-
-        $data->save();
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Order submit Successfully',
+        ],[
+            'country_id.required' => 'Country Name Is Required',
+            'state_id.required' => "State Name Is Required",
+            'city_id.required' => "City Name Is Required",
+            'area.required' => 'Area Field Is Required',
+            'phone.required' => "Phone Field Is Required",
+            'card_no.required' => "Card No Is Required",
+            'expire_date.required' => "Expire Date Field Is Required",
+            'cvc.required' => "CCV Field Is Required",
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }else{
+            $marketplace = Marketplace::where('slug', $request->marketplace_slug)->first();
+
+            if($marketplace->total_items >= $marketplace->total_selling + $request->items){
+                $date = (int) Carbon::now()->format('dmYHis');
+                $rand = rand(100,999).$date;
+
+                $data = new Order();
+                $data->country_id = $request->country_id;
+                $data->state_id = $request->state_id;
+                $data->city_id = $request->city_id;
+                $data->area = $request->area;
+                $data->phone = $request->phone;
+                $data->order_no = $rand;
+                $data->items = $request->items;
+                $data->unit_price = $request->unit_price;
+                $data->delivery_charge = $request->delivery_charge;
+                $data->cvc = $request->cvc;
+                $data->card_no = $request->card_no;
+                $data->expire_date = $request->expire_date;
+                $data->user_id = Auth::user()->id;
+                $data->marketplace_id = $marketplace->id;
+                $data->superstar_id = $marketplace->superstar_id;
+                $data->superstar_admin_id = $marketplace->superstar_admin_id;
+                $data->total_price = ($request->items * $request->unit_price) + $request->delivery_charge + $request->tax;
+                $data->status = 1;
+
+                $data->save();
+
+                $marketplace->total_selling += $request->items;
+                $marketplace->save();
+
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Order submit Successfully',
+                ]);
+            }else{
+                return response()->json([
+                    'status' => 218,
+                    'message' => 'Not enough product',
+                ]);
+            }
+        }
+
+        
     }
 
     public function viewMarketplaceActivities(){
@@ -179,6 +224,7 @@ class MarketplaceController extends Controller
             'title' => 'required',
             'category_id' => 'required',
             'description' => 'required',
+            'keywords' => 'required',
             'terms_conditions' => 'required',
             'image' => 'required|image',
             'unit_price' => 'required',
@@ -194,6 +240,7 @@ class MarketplaceController extends Controller
             'subcategory_id.required' => "Subcategory Field Is Required",
             'description.required' => 'Description Field Is Required',
             'image.required' => "Image Field Is Required",
+            'keywords.required' => "Keywords Field Is Required",
             'unit_price.required' => "Unit Price Field Is Required",
             'total_items.required' => "Total Item Field Is Required",
             'superstar_id.required' => "Superstar Field Is Required",
@@ -316,10 +363,10 @@ class MarketplaceController extends Controller
     }
 
     public function pendingProductList(){
-        $pending = Marketplace::orderBy('id','DESC')->where('post_status', 0)
+        $pending = Marketplace::orderBy('id','DESC')->where('status', 0)
                                 ->where('superstar_admin_id', Auth::user()->id)
                                 ->get();
-        $pendingCount = Marketplace::where('post_status', 0)
+        $pendingCount = Marketplace::where('status', 0)
                                 ->where('superstar_admin_id', Auth::user()->id)
                                 ->count();
 
@@ -344,6 +391,7 @@ class MarketplaceController extends Controller
 
             'title' => 'required',
             'description' => 'required',
+            'keywords' => 'required',
             'unit_price' => 'required',
             'terms_conditions' => 'required',
             'total_items' => 'required',
@@ -352,6 +400,7 @@ class MarketplaceController extends Controller
 
         ],[
             'title.required' => 'Title Field Is Required',
+            'keywords.required' => 'Keywords Field Is Required',
             'description.required' => 'Description Field Is Required',
             'unit_price.required' => "Unit Price Field Is Required",
             'total_items.required' => "Total Item Field Is Required",
@@ -412,6 +461,7 @@ class MarketplaceController extends Controller
 
             'title' => 'required',
             'description' => 'required',
+            'keywords' => 'required',
             'terms_conditions' => 'required',
             'image' => 'required|image',
             'unit_price' => 'required',
@@ -422,6 +472,7 @@ class MarketplaceController extends Controller
         ],[
             'title.required' => 'Title Field Is Required',
             'description.required' => 'Description Field Is Required',
+            'keywords.required' => 'Keywords Field Is Required',
             'image.required' => "Image Field Is Required",
             'unit_price.required' => "Unit Price Field Is Required",
             'total_items.required' => "Total Item Field Is Required",
@@ -548,6 +599,7 @@ class MarketplaceController extends Controller
 
             'title' => 'required',
             'description' => 'required',
+            'keywords' => 'required',
             'terms_conditions' => 'required',
             'unit_price' => 'required',
             'total_items' => 'required',
@@ -557,6 +609,7 @@ class MarketplaceController extends Controller
         ],[
             'title.required' => 'Title Field Is Required',
             'description.required' => 'Description Field Is Required',
+            'keywords.required' => 'Keywords Field Is Required',
             'unit_price.required' => "Unit Price Field Is Required",
             'total_items.required' => "Total Item Field Is Required",
             'delivery_charge.required' => "Delivery Charge Field Is Required",

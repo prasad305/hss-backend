@@ -110,6 +110,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/marketplace/details/{slug}', [MarketplaceController::class, 'getSlugDetails']);
     Route::post('/user/marketplace/order/store', [MarketplaceController::class, 'viewMarketplaceOrder']);
     Route::get('/user/marketplace/activities', [MarketplaceController::class, 'viewMarketplaceActivities']);
+    Route::get('/user/marketplace/order/product-list/view/{id}', [MarketplaceController::class, 'orderAdminProductListView']);
 
     // Fan Group Section
     Route::get('/user/fan/group/list', [FanGroupController::class, 'getFanGroupList']);
