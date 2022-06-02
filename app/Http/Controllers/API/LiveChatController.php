@@ -75,6 +75,19 @@ class LiveChatController extends Controller
         ]);
     }
 
+    public function star_set_reject($id)
+    {
+        $event = LiveChat::find($id);
+        $event->status = 11;
+        $event->update();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Event has been rejected!',
+        ]);
+
+    }
+
     public function slots($slug)
     {
         $event = LiveChat::where('slug', $slug)->first();
@@ -151,6 +164,8 @@ class LiveChatController extends Controller
             'star_id' => 'required',
             'title' => 'required|unique:live_chats,title',
             'image' => 'required',
+            'description' => 'required|min:6',
+            'instruction' => 'required|min:6',
             'date' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',

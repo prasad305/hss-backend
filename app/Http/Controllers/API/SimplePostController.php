@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\LearningSession;
 use Illuminate\Http\Request;
 use App\Models\SimplePost;
 use App\Models\Post;
@@ -10,9 +11,90 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
 use Vonage\Client\Exception\Validation;
+use Illuminate\Support\Str;
 
 class SimplePostController extends Controller
 {
+
+    //
+    public function add_learning(Request $request)
+    {
+
+        // return $request->all();
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|unique:learning_sessions',
+            'description' => 'required',
+            'star_id' => 'required',
+            'description' => 'required',
+            'registration_start_date' => 'required',
+            'registration_end_date' => 'required',
+            'date' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'assignment' => 'required',
+            'fee' => 'required',
+            'participant_number' => 'required',
+            'room_id' => 'required',
+            'image' => 'required|mimes:jpg,jpeg,png,gif,webp',
+        ],[
+           'title.unique' => 'This title already exist' ,
+           'star_id.required' => 'Please Select One Star' ,
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->errors(),
+            ]);
+        } else {
+
+            $post = new LearningSession();
+            $post->title = $request->input('title');
+            $post->slug = Str::slug($request->input('title'));
+            $post->created_by_id = auth('sanctum')->user()->id;
+            $post->star_id = $request->input('star_id');
+            $post->description = $request->input('description');
+
+            $post->registration_start_date = $request->input('registration_start_date');
+            $post->registration_end_date = $request->input('registration_end_date');
+            $post->date = $request->input('date');
+            $post->start_time = $request->input('start_time');
+            $post->end_time = $request->input('end_time');
+
+            $post->assignment = $request->input('assignment');
+            $post->fee = $request->input('fee');
+            $post->participant_number = $request->input('participant_number');
+            $post->room_id = $request->input('room_id');
+
+            //$post->video = $request->input('video');
+            //$post->type = $request->input('type');
+
+            if ($request->hasfile('image')) {
+                $destination = $post->banner;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/learning_session/' . time() . '.' . $extension;
+
+                Image::make($file)->resize(900, 400)->save($filename, 100);
+                $post->banner = $filename;
+            }
+
+            $post->save();
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Learning Session Added',
+            ]);
+        }
+    }
+
+
     //
     public function add(Request $request)
     {
@@ -64,7 +146,7 @@ class SimplePostController extends Controller
             $post->image = $filename;
         }
         if ($request->hasFile('video')) {
-    
+
             $file        = $request->file('video');
             $path        = 'uploads/videos/post';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
@@ -264,7 +346,7 @@ class SimplePostController extends Controller
 
 
 
-        
+
         $validator = Validator::make($request->all(), [
 
             'title' => 'required',
@@ -315,7 +397,7 @@ class SimplePostController extends Controller
             $post->image = $filename;
         }
         if ($request->hasFile('video')) {
-    
+
             $file        = $request->file('video');
             $path        = 'uploads/videos/post';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
