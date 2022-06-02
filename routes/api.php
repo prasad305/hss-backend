@@ -92,6 +92,14 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //live chat
     Route::get('/user/live-chat/{slug}', [UserController::class, 'liveChatDetails']);
 
+    //Questions And Answers
+    Route::get('/user/qna/{slug}', [UserController::class, 'qnaDetails']);
+    Route::get('/user/sinlgeQna/{id}', [UserController::class, 'sinlgeQna']);
+    Route::get('/user/getSingleQnaEvent/{id}', [UserController::class, 'getSingleQnaEvent']);
+    Route::get('/user/getSingleQnaEvent/{minute}/{id}', [UserController::class, 'getLiveQnaTiemSlot']);
+    Route::get('/user/qna/activities', [UserController::class, 'qna_activities']);
+
+
     //Meetup Event
     Route::get('/user/meetup/{slug}', [UserController::class, 'meetupDetails']);
 

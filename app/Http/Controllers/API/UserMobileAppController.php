@@ -17,6 +17,8 @@ use App\Models\LiveChatRoom;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
 use App\Models\Notification;
+use App\Models\QnA;
+use App\Models\QnaRegistration;
 use App\Models\User;
 use App\Models\UserInfo;
 use Carbon\Carbon;
@@ -78,6 +80,19 @@ class UserMobileAppController extends Controller
             $eventRegistration->live_chat_start_time = Carbon::parse($request->start_time)->format('H:i:s');
             $eventRegistration->live_chat_end_time = Carbon::parse($request->end_time)->format('H:i:s');
             $activity->type = 'livechat';
+            $event->update();
+        }
+        if( $modelName == 'qna'){
+            $eventRegistration = new QnaRegistration();
+            $event = QnA::find($eventId);
+            $event->available_start_time = Carbon::parse($request->end_time)->addMinutes(1)->format('H:i:s');
+            $eventRegistration->qna_id = $eventId;
+            $eventRegistration->amount = $request->fee;
+            $eventRegistration->room_id = $request->room_id;
+            $eventRegistration->qna_date = $request->date;
+            $eventRegistration->qna_start_time = Carbon::parse($request->start_time)->format('H:i:s');
+            $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
+            $activity->type = 'qna';
             $event->update();
         }
         if( $modelName == 'greeting'){

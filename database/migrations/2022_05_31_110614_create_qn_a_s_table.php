@@ -25,6 +25,7 @@ class CreateQnASTable extends Migration
             $table->longText('description')->nullable();
             $table->longText('instruction')->nullable();
             $table->timestamp('date')->nullable();
+            $table->time('available_start_time')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
             $table->unsignedBigInteger('slot_counter')->nullable();
