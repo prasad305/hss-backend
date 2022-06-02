@@ -46,15 +46,17 @@
                                 <div class="panel-body py-3">
                                     <h3 class="text-ellipsis-line-1">{{ $val->title }}</h3>
 
-                                    @if ($val->status == 0)
+                                    @if ($val->status == 2)
 
-                                        <a type="button" class="btn btn-warning waves-effect waves-light"><i
-                                                class="icon-record"></i>
-                                            Pending</a>
+                                    <button type="button" class="btn btn-success waves-effect waves-light"><i
+                                        class="icon-checkmark-round"></i> Published</button>
                                     @else
 
-                                        <button type="button" class="btn btn-success waves-effect waves-light"><i
-                                                class="icon-checkmark-round"></i> Published</button>
+                                    <a type="button" class="btn btn-warning waves-effect waves-light"><i
+                                        class="icon-record"></i>
+                                    Pending</a>
+
+
                                     @endif
 
                                     <a href="{{ route('managerAdmin.liveChat.details', [$val->id]) }}" type="button"

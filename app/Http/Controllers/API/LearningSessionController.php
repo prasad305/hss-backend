@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Validator;
 class LearningSessionController extends Controller
 {
     //
-    public function add(Request $request)
+    public function add_learning(Request $request)
     {
+
+        return $request->all();
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:learning_sessions',

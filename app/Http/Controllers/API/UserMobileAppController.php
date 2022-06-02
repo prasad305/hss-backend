@@ -80,7 +80,7 @@ class UserMobileAppController extends Controller
         if( $modelName == 'livechat'){
             $eventRegistration = new LiveChatRegistration();
             $event = LiveChat::find($eventId);
-            $event->available_start_time = Carbon::parse($request->end_time)->addMinutes(1)->format('H:i:s');
+            $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->interval)->format('H:i:s');
             $eventRegistration->live_chat_id = $eventId;
             $eventRegistration->amount = $request->fee;
             $eventRegistration->room_id = $request->room_id;

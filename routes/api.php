@@ -248,7 +248,11 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/simple_post/approved', [SimplePostController::class, 'approved_list']);
 
     // Learning Session Section
-    Route::post('admin/add_learning_session', [LearningSessionController::class, 'add']);
+    // Route::post('admin/add_learning_session', [LearningSessionController::class, 'add']);
+
+    Route::post('admin/learning_session/create', [SimplePostController::class, 'add_learning']);
+
+    // Route::post('admin/learning_session/create', [LearningSessionController::class, 'add_learning']);
     Route::get('/admin/learning_session/all', [LearningSessionController::class, 'all']);
     Route::get('/admin/learning_session/count', [LearningSessionController::class, 'count']);
 
@@ -450,11 +454,11 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/live-chat/completed', [LiveChatController::class, 'completedLiveChat']);
     Route::get('/star/live-chat/details/{slug}', [LiveChatController::class, 'details']);
     Route::get('/star/approveLiveChat/{id}', [LiveChatController::class, 'setApproveLiveChat']);
-
-
     Route::get('/star/pendingLiveChat', [LiveChatController::class, 'pendingLiveChat']);
     Route::get('/star/approvedLiveChat', [LiveChatController::class, 'approveLiveChat']);
     Route::get('/star/livechat_event_details/{id}', [LiveChatController::class, 'details']);
+    Route::get('/star/live-chat/setReject/{id}', [LiveChatController::class, 'star_set_reject']);
+
 
     Route::get('/deleteLiveChat/{id}', [LiveChatController::class, 'deleteLiveChat']);
     Route::get('/livechatListByDate/{date}', [LiveChatController::class, 'livechatListByDate']);
