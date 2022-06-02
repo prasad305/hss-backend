@@ -279,6 +279,7 @@ class UserController extends Controller
     {
         $post = QnaRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
 
+
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
@@ -312,6 +313,16 @@ class UserController extends Controller
     public function getAllLiveChatEvent()
     {
         $livechats = LiveChat::orderBy('id', 'DESC')->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'livechats' => $livechats,
+        ]);
+    }
+    public function getQnaAll()
+    {
+        $livechats = QnA::orderBy('id', 'DESC')->get();
 
         return response()->json([
             'status' => 200,

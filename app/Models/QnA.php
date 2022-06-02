@@ -21,10 +21,10 @@ class QnA extends Model
             return $this->belongsTo(User::class, 'created_by_id');
         }
     
-        // public function registeredLiveChats()
-        // {
-        //     return $this->hasMany(LiveChatRegistration::class, 'live_chat_id');
-        // }
+        public function registeredQna()
+        {
+            return $this->hasMany(QnaRegistration::class, 'qna_id');
+        }
     
         public function Category()
         {
