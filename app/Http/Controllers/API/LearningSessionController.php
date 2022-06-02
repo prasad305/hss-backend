@@ -78,16 +78,27 @@ class LearningSessionController extends Controller
         ]);
     }
 
+    public function registured_user($slug)
+    {
+        $event = LearningSession::where('slug', $slug)->first();
+        $users = LearningSessionRegistration::where('learning_session_id', $event->id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'users' => $users,
+            'message' => 'Success',
+        ]);
+    }
+
 
     //Prepare for Star
     public function assignment_set_approval(Request $request, $type, $id)
     {
         $post = LearningSessionAssignment::find($id);
 
-        if($type == 'approve')
-        {
+        if ($type == 'approve') {
             $post->status = 1;
-        }else{
+        } else {
             $post->status = 2;
         }
 
@@ -107,10 +118,9 @@ class LearningSessionController extends Controller
     {
         $post = LearningSessionAssignment::find($id);
 
-        if($type == 'approve')
-        {
+        if ($type == 'approve') {
             $post->status = 1;
-        }else{
+        } else {
             $post->status = 2;
         }
 
@@ -132,12 +142,11 @@ class LearningSessionController extends Controller
     {
 
         $post = LearningSessionAssignment::find($id);
-        $pending = LearningSessionAssignment::where([['event_id', $id],['status',1],['mark','<',1]])->count();
+        $pending = LearningSessionAssignment::where([['event_id', $id], ['status', 1], ['mark', '<', 1]])->count();
 
-        if($type == 'approve')
-        {
+        if ($type == 'approve') {
             $post->status = 1;
-        }else{
+        } else {
             $post->status = 2;
         }
 
@@ -168,7 +177,7 @@ class LearningSessionController extends Controller
     public function assignment_send_to_manager($id)
     {
 
-        LearningSessionAssignment::where([['event_id', $id],['status',1],['mark','>',1]])->update(['send_to_manager' => 1]);
+        LearningSessionAssignment::where([['event_id', $id], ['status', 1], ['mark', '>', 1]])->update(['send_to_manager' => 1]);
         LearningSession::find($id)->update(['status' => 6]);
 
         return response()->json([
@@ -180,7 +189,7 @@ class LearningSessionController extends Controller
     public function assignment_send_to_star($id)
     {
 
-        LearningSessionAssignment::where([['event_id', $id],['status',1],['mark',0],])->update(['send_to_star' => 1]);
+        LearningSessionAssignment::where([['event_id', $id], ['status', 1], ['mark', 0],])->update(['send_to_star' => 1]);
 
         return response()->json([
             'status' => 200,
@@ -238,7 +247,7 @@ class LearningSessionController extends Controller
 
     public function evaluation_list()
     {
-        $events = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status','>', 2], ['status','<', 9]]);
+        $events = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', '>', 2], ['status', '<', 9]]);
 
         return response()->json([
             'status' => 200,
@@ -260,7 +269,7 @@ class LearningSessionController extends Controller
 
     public function details($slug)
     {
-        $event = LearningSession::where('slug',$slug)->first();
+        $event = LearningSession::where('slug', $slug)->first();
 
         return response()->json([
             'status' => 200,
@@ -271,8 +280,8 @@ class LearningSessionController extends Controller
 
     public function registered_user($slug)
     {
-        $event = LearningSession::where('slug',$slug)->first();
-        $users = LearningSessionRegistration::where('learning_session_id',$event->id)->get();
+        $event = LearningSession::where('slug', $slug)->first();
+        $users = LearningSessionRegistration::where('learning_session_id', $event->id)->get();
 
         return response()->json([
             'status' => 200,
@@ -289,14 +298,14 @@ class LearningSessionController extends Controller
         $instruction = $learning_session->assignment_instruction;
 
         //Prepare for Manager
-        $event = LearningSessionAssignment::where([['event_id', $id],['status',0],['mark',0],['send_to_star',0]])->get();
-        $approved_event = LearningSessionAssignment::where([['event_id', $id],['status',1],['mark','>',0]])->get();
-        $rejected_event = LearningSessionAssignment::where([['event_id', $id],['status',2]])->get();
+        $event = LearningSessionAssignment::where([['event_id', $id], ['status', 0], ['mark', 0], ['send_to_star', 0]])->get();
+        $approved_event = LearningSessionAssignment::where([['event_id', $id], ['status', 1], ['mark', '>', 0]])->get();
+        $rejected_event = LearningSessionAssignment::where([['event_id', $id], ['status', 2]])->get();
 
         //Prepare for Star
         $star_event =  $event;
-        $star_approved_event = LearningSessionAssignment::where([['event_id', $id],['status',1],['mark',0]])->get();
-    
+        $star_approved_event = LearningSessionAssignment::where([['event_id', $id], ['status', 1], ['mark', 0]])->get();
+
 
 
         return response()->json([
@@ -315,7 +324,7 @@ class LearningSessionController extends Controller
 
     public function pending_details($slug)
     {
-        $post = LearningSession::where('slug',$slug)->first();
+        $post = LearningSession::where('slug', $slug)->first();
 
         return response()->json([
             'status' => 200,
@@ -455,8 +464,8 @@ class LearningSessionController extends Controller
 
     public function star_assignment_details($id)
     {
-        $event = LearningSessionAssignment::where([['event_id', $id],['send_to_star',1],['mark',0]])->get();
-        $approved_event = LearningSessionAssignment::where([['event_id', $id],['send_to_star',1],['mark','>',0]])->get();
+        $event = LearningSessionAssignment::where([['event_id', $id], ['send_to_star', 1], ['mark', 0]])->get();
+        $approved_event = LearningSessionAssignment::where([['event_id', $id], ['send_to_star', 1], ['mark', '>', 0]])->get();
 
         return response()->json([
             'status' => 200,
