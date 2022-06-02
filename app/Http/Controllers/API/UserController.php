@@ -207,6 +207,7 @@ class UserController extends Controller
         $activity = new Activity();
         $activity->user_id = auth('sanctum')->user()->id;
         $activity->event_id = $request->input('post_id');
+        $activity->event_registration_id =  $learnigSession->id;
         $activity->type = 'learningSession';
         $activity->save();
 
@@ -442,6 +443,7 @@ class UserController extends Controller
         $activity = new Activity();
         $activity->user_id = auth('sanctum')->user()->id;
         $activity->event_id = $request->event_id;
+        $activity->event_registration_id = $liveChatReg->id;
         $activity->type = 'liveChat';
         $activity->save();
 
@@ -476,11 +478,12 @@ class UserController extends Controller
         $greetings->save();
 
         // New Activity Add for Greeting Register
-        $activity = new Activity();
-        $activity->user_id = auth('sanctum')->user()->id;
-        $activity->event_id = $greetings->id;
-        $activity->type = 'greeting';
-        $activity->save();
+        // $activity = new Activity();
+        // $activity->user_id = auth('sanctum')->user()->id;
+        // $activity->event_id = $request->greetings_id;
+        // $activity->event_registration_id = $greetings->id;
+        // $activity->type = 'greeting';
+        // $activity->save();
 
         $single_greeting = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
 
@@ -543,7 +546,7 @@ class UserController extends Controller
      */
     public function greetingStatus()
     {
-        $single_greeting = GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id],['notofication_at', null]])->first();
+        $single_greeting = GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id],['notification_at', null]])->first();
 
         if (isset($single_greeting)) {
             return response()->json([
@@ -1281,7 +1284,7 @@ class UserController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            
+
             foreach ($request->file as $key => $file) {
                 $learning_video = new LearningSessionAssignment();
                 $learning_video->event_id = $request->learning_session_id;

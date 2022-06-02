@@ -123,6 +123,7 @@ class UserMobileAppController extends Controller
 
         $activity->user_id = $user->id;
         $activity->event_id = $event->id;
+        $activity->event_registration_id = $eventRegistration->id;
         $activity->save();
 
         return response()->json([
