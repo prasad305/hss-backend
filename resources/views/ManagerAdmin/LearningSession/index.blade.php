@@ -45,16 +45,13 @@
 
                                 <div class="panel-body py-3">
                                     <h3 class="text-ellipsis-line-1">{{ $val->title }}</h3>
-
-                                    @if ($val->status == 0)
-
+                                    @if ($val->status < 2)
                                         <a type="button" class="btn btn-warning waves-effect waves-light"><i
-                                                class="ion-record"></i>
+                                            class="ion-record"></i>
                                             Pending</a>
                                     @else
-
                                         <button type="button" class="btn btn-success waves-effect waves-light"><i
-                                                class="ion-checkmark-round"></i> Published</button>
+                                            class="ion-checkmark-round"></i> Published</button>
                                     @endif
 
                                     <a href="{{ route('managerAdmin.learningSession.details', [$val->id]) }}" type="button"
