@@ -108,6 +108,18 @@ class LearningSessionController extends Controller
         ]);
     }
 
+    public function registured_user($slug)
+    {
+        $event = LearningSession::where('slug', $slug)->first();
+        $users = LearningSessionRegistration::where('learning_session_id', $event->id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'users' => $users,
+            'message' => 'Success',
+        ]);
+    }
+
 
     //Prepare for Star
     public function assignment_set_approval(Request $request, $type, $id)
@@ -201,7 +213,6 @@ class LearningSessionController extends Controller
         $event = LearningSession::find($id);
         $event->status = 9;
         $event->update();
-
         return response()->json([
             'status' => 200,
             'message' => 'Set Completed!',
@@ -214,6 +225,7 @@ class LearningSessionController extends Controller
         $event = LearningSession::find($id);
         $event->status = 3;
         $event->update();
+
 
         return response()->json([
             'status' => 200,
