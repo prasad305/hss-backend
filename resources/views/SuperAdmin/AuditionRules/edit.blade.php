@@ -70,6 +70,29 @@
             background: white;
         }
 
+        .juryBord{
+            background: #2D2D2D;
+            border-radius: 6px;
+            padding: 15px 0px;
+        }
+
+        .juryBord input{
+            margin: 0px 15px;
+            margin: 0px 15px;
+            background: #0A0909;
+            color: #fff;
+            font-weight: 600;
+            font-size: 30px;
+            padding: 0;
+            border: none;
+            text-align: center;
+            border-radius: 7px;
+        }
+
+        .juryBord p{
+            padding-left: 20px;
+        }
+
     </style>
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -193,16 +216,37 @@
                                 </center>
                             </div>
 
-                            <div class=" border-warning mx-5 mt-2 mb-3">
-                                <div class="centeredSX">
-                                    <span data-decrease class="btn btn-sm minus NumAdd">-</span>
-                                    <input data-value id="jury" class="Number text-center fw-bold  p-3 mx-2 " type="text"
-                                        value="0" />
-                                    <span class="btn btn-sm minus NumAdd" data-increase>+</span>
+                            <div class="border-warning m-3">
+                                <div class="d-flex flex-column juryBord mb-3">
+                                    <p>Group A</p>
+                                    <div class="d-flex flex-row justify-content-center">
+                                        <span data-decrease class="btn btn-sm minus NumAdd">-</span>
+                                        <input data-value id="jury" class="w-25" type="text" value="0" />
+                                        <span class="btn btn-sm minus NumAdd" data-increase>+</span>
+                                    </div>
                                 </div>
+
+                                <div class="d-flex flex-column juryBord mb-3">
+                                    <p>Group B</p>
+                                    <div class="d-flex flex-row justify-content-center">
+                                        <span data-decrease class="btn btn-sm minus NumAdd">-</span>
+                                        <input data-value id="jury" class="w-25" type="text" value="0" />
+                                        <span class="btn btn-sm minus NumAdd" data-increase>+</span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-column juryBord">
+                                    <p>Group C</p>
+                                    <div class="d-flex flex-row justify-content-center">
+                                        <span data-decrease class="btn btn-sm minus NumAdd">-</span>
+                                        <input data-value id="jury" class="w-25" type="text" value="0" />
+                                        <span class="btn btn-sm minus NumAdd" data-increase>+</span>
+                                    </div>
+                                </div>
+
                                 <div class="centeredSXS text-center">
                                     <b class="text-danger">#Note:</b><br>
-                                    <small>You can’t create more than 8 jurys</small>
+                                    <small>You can’t create more than 12 jurys</small>
                                 </div>
                             </div>
                         </div>
@@ -212,7 +256,7 @@
                                 <center>
                                     <img src="{{ asset('assets/super-admin/images/table.png') }}" class="mb-1"
                                         width="35" height="35" alt="">
-                                    <p><b class="fw-bold pt-4" style="color:#F8EE00;font-size: 20px;">Select Time</b></p>
+                                    <p><b class="fw-bold pt-4" style="color:#F8EE00;font-size: 20px;">Event Time</b></p>
                                 </center>
                             </div>
                             <center><small>Select Time : </small></center>
