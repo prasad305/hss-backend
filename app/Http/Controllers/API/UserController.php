@@ -29,6 +29,7 @@ use App\Models\SimplePost;
 use App\Models\ChoiceList;
 use App\Models\InterestType;
 use App\Models\LearningSessionAssignment;
+use App\Models\LearningSessionEvaluation;
 use App\Models\LiveChatRoom;
 use App\Models\Message;
 use App\Models\PromoVideo;
@@ -1284,17 +1285,20 @@ class UserController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-
+            $evaluation = LearningSessionEvaluation::where([['event_id',$request->learning_session_id],['user_id',auth()->user()->id]])->first();
             foreach ($request->file as $key => $file) {
                 $learning_video = new LearningSessionAssignment();
                 $learning_video->event_id = $request->learning_session_id;
                 $learning_video->user_id = auth()->user()->id;
+                $learning_video->evaluation_id = $evaluation->id;
 
                 $file_name   = time() . rand('0000', '9999') . $key . '.' . $file->getClientOriginalName();
                 $file_path = 'uploads/videos/learnings/';
                 $file->move($file_path, $file_name);
                 $learning_video->video = $file_path . $file_name;
                 $learning_video->save();
+
+
             }
 
             $learning_session = LearningSession::find($request->learning_session_id);
