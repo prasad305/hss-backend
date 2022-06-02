@@ -6,26 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hello Super Star | Dashboard </title>
 
-    <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/fontawesome-free/css/all.min.css') }}">
-    <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
-    <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('assets/manager-admin/dist/css/adminlte.min.css') }}">
-    <!-- SweetAlert2 -->
     <link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
-    <!-- Custom style -->
     <link rel="stylesheet" href="{{ asset('assets/custom-style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/super-admin/Events.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/summernote/summernote-bs4.min.css') }}">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- summernote -->
-    <link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/summernote/summernote-bs4.min.css') }}">
 
     @stack('css')
     <style>
@@ -36,6 +29,13 @@
             color: #ffc107;
         }
     </style>
+
+
+
+<!-- DataTables -->
+<link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
 
 </head>
 
@@ -209,15 +209,12 @@
 
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <!-- Brand Logo -->
             <a href="{{ route('managerAdmin.dashboard') }}" class="brand-link">
                 <img src="{{ asset('assets/manager-admin/dist/img/helloSuperStar.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">Hello Super Star</span>
             </a>
 
-            <!-- Sidebar -->
             <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
                         <img src="{{ asset('assets/manager-admin/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
@@ -227,7 +224,6 @@
                     </div>
                 </div>
 
-                <!-- SidebarSearch Form -->
                 <div class="form-inline">
                     <div class="input-group" data-widget="sidebar-search">
                         <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
@@ -238,34 +234,20 @@
                         </div>
                     </div>
                 </div>
-
                 @include('Layouts.ManagerAdmin.sidebar')
 
             </div>
-            <!-- /.sidebar -->
         </aside>
 
-        <!-- Content Wrapper. Contains page content -->
 
 
         <div class="content-wrapper">
-
-
-
             @yield('content')
-
             @include('Others.modal')
-
-
-
         </div>
-        <!-- /.content-wrapper -->
 
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
+
+        <aside class="control-sidebar control-sidebar-dark"></aside>
 
         <!-- Main Footer -->
         <footer class="main-footer">
@@ -276,9 +258,8 @@
             </div>
         </footer>
     </div>
-    <!-- ./wrapper -->
 
-    <!-- REQUIRED SCRIPTS -->
+
     <!-- jQuery -->
     <script src="{{ asset('assets/manager-admin/plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap -->
@@ -328,7 +309,7 @@
         });
     </script>
     @endif
-    
+
     @if (session()->has('error'))
     <script type="text/javascript">
         $(document).ready(function() {
@@ -412,7 +393,7 @@
     }
 
     function ErrorMessageClear() {
-        $('#sub_category_error').html('');  
+        $('#sub_category_error').html('');
         $('#first_name_error').html('');
         $('#last_name_error').html('');
         $('#email_error').html('');
@@ -426,6 +407,38 @@
         $('#reminder_error').html('');
     }
 </script>
+
+<!-- DataTables  & Plugins -->
+<script src="{{ asset('assets/manager-admin/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{ asset('assets/manager-admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{ asset('assets/manager-admin/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{ asset('assets/manager-admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+<script src="{{ asset('assets/manager-admin/plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{ asset('assets/manager-admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{ asset('assets/manager-admin/plugins/jszip/jszip.min.js')}}"></script>
+<script src="{{ asset('assets/manager-admin/plugins/pdfmake/pdfmake.min.js')}}"></script>
+<script src="{{ asset('assets/manager-admin/plugins/pdfmake/vfs_fonts.js')}}"></script>
+<script src="{{ asset('assets/manager-admin/plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+<script src="{{ asset('assets/manager-admin/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+<script src="{{ asset('assets/manager-admin/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
+
+<script>
+    $(function () {
+      $("#example1").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+  </script>
 
 
 </body>
