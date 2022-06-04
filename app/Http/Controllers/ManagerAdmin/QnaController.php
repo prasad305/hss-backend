@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ManagerAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\QnA;
+use App\Models\QnaRegistration;
 use App\Models\SuperStar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -48,7 +49,12 @@ class QnaController extends Controller
     {
         $event = QnA::find($id);
 
-        return view('ManagerAdmin.QnA.details', compact('event'));
+        $allRegistered = collect(QnaRegistration::with('user')->where('qna_id',$id)->orderBy('id','DESC')->get());
+        $registered = $allRegistered->unique('user_id');
+        
+        $totalRegistered = QnaRegistration::where('qna_id',$id)->orderBy('id','DESC')->distinct('user_id')->count();
+
+        return view('ManagerAdmin.QnA.details', compact(['event','totalRegistered','registered']));
     }
 
 

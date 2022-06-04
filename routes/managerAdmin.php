@@ -252,7 +252,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     Route::get('qna', [QnaController::class, 'index'])->name('qna.index');
     Route::put('qna/approve/{id}', [QnaController::class, 'approve'])->name('qna.approve');
-    Route::get('qna/details/{id}', [QnaController::class, 'show'])->name('qna.details');
+    // Route::get('qna/details/{id}', [QnaController::class, 'show'])->name('qna.details');
 
     Route::get('qna/edit/{id}', [QnaController::class, 'edit'])->name('qna.edit');
     Route::put('qna/edit/{id}', [QnaController::class, 'update'])->name('qna.update');

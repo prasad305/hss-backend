@@ -130,7 +130,57 @@
             </div>
         </div>
 
+        <div class="row mt-5" >
+            <div class="col-12">
+            <div class="card">
+            <div class="card-header">
+            <h3 class="card-title">User List - {{$totalRegistered}}</h3>
+            <div class="card-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+            <div class="input-group-append">
+            <button type="submit" class="btn btn-default">
+            <i class="fas fa-search"></i>
+            </button>
+            </div>
+            </div>
+            </div>
+            </div>
 
+            <div class="card-body table-responsive p-0">
+             <table class="table table-hover text-nowrap">
+            <thead>
+            <tr>
+            <th>#SL</th>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Created Date</th>
+            <th>Q&A Start Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            </tr>
+            </thead>
+            <tbody>
+                @foreach ($registered as $key=>$register )
+                   <tr>
+            <td>{{$key+1}}</td>
+            <td>{{$register->user->first_name}} {{$register->user->last_name}}</td>
+            <td>{{$register->amount}}</td>
+            <td>{{ \Carbon\Carbon::parse($register->created_at)->format('d F,Y')}}</td>
+            <td>{{ \Carbon\Carbon::parse($register->qna_date)->format('d F,Y')}}</td>
+            <td>{{ \Carbon\Carbon::parse($register->start_time)->format('h:m a')}}</td>
+            <td>{{ \Carbon\Carbon::parse($register->end_time)->format('h:m a')}}</td>
+            </tr>
+                @endforeach
+
+            </tbody>
+            </table>
+            </div>
+
+            </div>
+
+            </div>
+            </div>
     @if (session()->has('success'))
         <script type="text/javascript">
             $(document).ready(function() {
