@@ -486,13 +486,10 @@ class UserController extends Controller
         // $activity->type = 'greeting';
         // $activity->save();
 
-        $single_greeting = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
-
         return response()->json([
             'status' => 200,
             'message' => "Your request time is pending,Wating for approval",
-            'greeting' => $single_greeting,
-            'greeting_registration' => $greetings,
+            'greeting' => $greetings,
         ]);
     }
     /**
@@ -547,7 +544,7 @@ class UserController extends Controller
     public function greetingStatus($star_id)
     {
         $single_greeting = GreetingsRegistration::whereHas('greeting', function ($q) use ($star_id) {
-            $q->where(['star_id', $star_id]);
+            $q->where([['star_id', $star_id]]);
         })->where([['user_id', auth('sanctum')->user()->id], ['notification_at', null]])->orderBy('id', 'DESC')->first();
 
         if (isset($single_greeting)) {
