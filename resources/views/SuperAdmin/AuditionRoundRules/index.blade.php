@@ -5,7 +5,103 @@ Super Admin
 @endpush
 
 @section('content')
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<style>
+    .audition__mark{
+        background: #242424;
+        border: 1px solid #B7AEAE;
+        border-radius: 4px;
+        width: 160px;
+        height: 37px;
+        text-align: left;
+        padding: 5px 15px;
+    }
+
+    .audition__mark input{
+        border: 2px solid #fdd700;
+        appearance: none;
+        border-radius: 50%;
+        width: 14px;
+        height: 14px;
+        transition: all ease-in 0.2s;
+    }
+
+    .audition__mark span{
+        padding-left: 10px;
+    }
+    .audition__mark input[type='radio']:checked{
+        border: 1px solid #FFD910;
+        background: #FFD910;
+    }
+
+    .wildcard__title{
+        padding-top: 10px;
+    }
+    .wildcard__title p{
+        font-weight: 500;
+        font-size: 20px;
+        letter-spacing: 0.5px;
+    }
+    .wildcard__title hr{
+        height: 0.3px;
+        background: #a7a7a7;
+    }
+    .wild_card__one{
+        background: #242424;
+        border: 1px solid #B7AEAE;
+        border-radius: 4px;
+        width: 50%;
+        height: 37px;
+        text-align: left;
+        padding: 5px 15px;
+    }
+    .wild_card__one input{
+        border: 2px solid #fdd700;
+        appearance: none;
+        border-radius: 50%;
+        width: 14px;
+        height: 14px;
+        transition: all ease-in 0.2s;
+    }
+
+    .wild_card__one input[type='radio']:checked{
+        border: 1px solid #FFD910;
+        background: #FFD910;
+    }
+
+    .wild_card__one span{
+        padding-left: 10px;
+    }
+
+    .wild_card__two{
+        background: #242424;
+        border: 1px solid #B7AEAE;
+        border-radius: 4px;
+        width: 125px;
+        height: 36px;
+        text-align: left;
+        padding: 5px 10px;
+    }
+    .wild_card__two input{
+        border: 2px solid #fdd700;
+        appearance: none;
+        border-radius: 50%;
+        width: 14px;
+        height: 14px;
+        transition: all ease-in 0.2s;
+    }
+    .wild_card__two input[type='radio']:checked{
+        border: 1px solid #FFD910;
+        background: #FFD910;
+    }
+    .wild_card__two span{
+        padding-left: 10px;
+    }
+
+
+
+</style>
 
 <!-- Content Header (Page header) -->
 <div class="content-header BorderRpo">
@@ -55,7 +151,7 @@ Super Admin
 <div class="m-4" id="show-rules" style="display:none">
     <div class="tab-pane " id="tabs-90" role="tabpanel">
         <div class="container">
-
+            <p>Mark Distribution</p>
             <form id="create-form">
                 @csrf
 
@@ -97,7 +193,98 @@ Super Admin
                         </div>
                     </div>
 
+                    <div class="d-flex flex-row my-3 w-100">
+                        <div class="audition__mark">
+                            <input type="radio" name="mark" value="Live Mark"> <span>Live Mark</span>
+                        </div>
+                        <div class="audition__mark ml-3">
+                            <input type="radio" name="mark" value="Offline Mark"> <span>Offline Mark</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column w-100 mt-2">
+                       <div class="wildcard__title">
+                           <p>WildCard</p>
+                           <hr>
+                       </div>
+                       <div class="d-flex flex-row">
+                           <div class="wild_card__one">
+                               <input type="radio" name="wildcard" value="Yes"> <span>Yes</span>
+                           </div>
+                           <div class="wild_card__one ml-3">
+                               <input type="radio" name="wildcard" value="No"> <span>No</span>
+                           </div>
+                       </div>
+
+                        <div class="d-flex flex-row justify-content-between my-2">
+                            <div class="wild_card__two">
+                                <input type="radio" name="wildcardTwo" value="Round 01"><span>Round 01</span>
+                            </div>
+                            <div class="wild_card__two">
+                                <input type="radio" name="wildcardTwo" value="Round 02"><span>Round 02</span>
+                            </div>
+                            <div class="wild_card__two">
+                                <input type="radio" name="wildcardTwo" value="Round 03"><span>Round 03</span>
+                            </div>
+                            <div class="wild_card__two">
+                                <input type="radio" name="wildcardTwo" value="Round 04"><span>Round 04</span>
+                            </div>
+                            <div class="wild_card__two">
+                                <input type="radio" name="wildcardTwo" value="Round 05"><span>Round 05</span>
+                            </div>
+                            <div class="wild_card__two">
+                                <input type="radio" name="wildcardTwo" value="Round 06"><span>Round 06</span>
+                            </div>
+                            <div class="wild_card__two">
+                                <input type="radio" name="wildcardTwo" value="Round 07"><span>Round 07</span>
+                            </div>
+                            <div class="wild_card__two">
+                                <input type="radio" name="wildcardTwo" value="Round 08"><span>Round 08</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column w-100 mt-2">
+                        <div class="wildcard__title">
+                            <p>Applie</p>
+                            <hr>
+                        </div>
+                        <div class="d-flex flex-row">
+                            <div class="wild_card__one">
+                                <input type="radio" name="applie" value="Yes"> <span>Yes</span>
+                            </div>
+                            <div class="wild_card__one ml-3">
+                                <input type="radio" name="applie" value="No"> <span>No</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column w-100 mt-2">
+                        <div class="wildcard__title">
+                            <p>Video Feed</p>
+                            <hr>
+                        </div>
+                        <div class="d-flex flex-row">
+                            <div class="wild_card__one">
+                                <input type="radio" name="videoFeed" value="Yes"> <span>Yes</span>
+                            </div>
+                            <div class="wild_card__one ml-3">
+                                <input type="radio" name="videoFeed" value="No"> <span>No</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-row my-2">
+                            <div class="wild_card__two w-25">
+                                <input type="radio" name="videoFeedType" value="Live video"><span>Live video</span>
+                            </div>
+                            <div class="wild_card__two w-25 ml-3">
+                                <input type="radio" name="videoFeedType" value="Uploaded Video"><span>Uploaded Video</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="d-flex col-md-12 justify-content-center mt-4 mb-4">
+                        <button class="btn bg-info px-3 BTNback mr-3" id="SubmitRules">Back</button>
                         <button class="btn bg-warning px-3 BTNdone" id="SubmitRules">Done</button>
                     </div>
 
@@ -124,7 +311,7 @@ Super Admin
             , success: function(data) {
                 console.log('get data', data);
                 $('#tab-content').html("");
-                
+
                 if (data.round_rules.length === 0) {
                     $('#show-rules').attr("style", "display:none");
                 }
@@ -215,7 +402,7 @@ Super Admin
                     $('#textbox3').val(0);
                 }
 
-                
+
             },
             error: function(data) {
                 var errorMessage = '<div class="card bg-danger">\n' +
@@ -241,7 +428,7 @@ Super Admin
 
         $('#show-rules').attr("style", "display:block");
 
-       
+
 
 
     }
