@@ -162,7 +162,7 @@ class LearningSessionController extends Controller
 
     public function learningEvaluation()
     {
-        $events = LearningSession::where([['status', '>', 3], ['status', '<', 9], ['category_id', auth()->user()->category_id]])->get();
+        $events = LearningSession::where([['status', '>', 3], ['status', '<', 9]])->get();
 
         return view('ManagerAdmin.LearningSession.evaluation', compact('events'));
     }

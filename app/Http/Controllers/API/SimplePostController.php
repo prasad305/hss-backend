@@ -19,7 +19,7 @@ class SimplePostController extends Controller
     //
     public function add_learning(Request $request)
     {
-
+        
         // return $request->all();
 
         $validator = Validator::make($request->all(), [

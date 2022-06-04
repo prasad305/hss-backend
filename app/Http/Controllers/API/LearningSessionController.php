@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\LearningSession;
 use App\Models\LearningSessionAssignment;
+use App\Models\LearningSessionEvaluation;
 use App\Models\LearningSessionRegistration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -18,7 +19,7 @@ class LearningSessionController extends Controller
     public function add_learning(Request $request)
     {
 
-        return $request->all();
+        
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:learning_sessions',
@@ -106,7 +107,7 @@ class LearningSessionController extends Controller
 
         return response()->json([
             'status' => 200,
-            'message' => 'Assignment Ruled Added',
+            'message' => 'Assignment Rule Added',
         ]);
     }
 
@@ -182,10 +183,14 @@ class LearningSessionController extends Controller
             $post->status = 2;
         }
 
-        $post->mark = $request->input('mark');
+        $post->mark = $request->input('mark'); 
         $post->comment = $request->input('comment');
 
         $post->update();
+
+        $eva = LearningSessionEvaluation::where('id',$post->evaluation_id)->first();
+        $eva->total_mark += $request->input('mark'); 
+        $eva->save();
 
         return response()->json([
             'status' => 200,
@@ -340,17 +345,7 @@ class LearningSessionController extends Controller
     }
 
 
-    public function registured_user($slug)
-    {
-        $event = LearningSession::where('slug', $slug)->first();
-        $users = LearningSessionRegistration::where('learning_session_id', $event->id)->get();
 
-        return response()->json([
-            'status' => 200,
-            'users' => $users,
-            'message' => 'Success',
-        ]);
-    }
 
     public function assignment_details($id)
     {

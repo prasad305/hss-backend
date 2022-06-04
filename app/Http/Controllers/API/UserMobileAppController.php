@@ -68,10 +68,10 @@ class UserMobileAppController extends Controller
             $eventRegistration->amount = $event->fee;
             $activity->type = 'learningSession';
 
-            if($event->evaluation == 1)
+            if($event->assignment == 1)
             {
                 $evaluation = new LearningSessionEvaluation();
-                $evaluation->evant_id = $event->id;
+                $evaluation->event_id = $event->id;
                 $evaluation->user_id = $user->id;
                 $evaluation->save();
             }
