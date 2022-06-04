@@ -529,24 +529,25 @@ class UserController extends Controller
     public function greetingInfoToRegistration($greeting_id)
     {
         $greeting = Greeting::find($greeting_id);
-        $greetingsRegistration =  GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id],['greeting_id',$greeting_id],['notification_at','!=', null]])->orderBy('id', 'DESC')->first();
+        $greetingsRegistration =  GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id], ['greeting_id', $greeting_id], ['notification_at', '!=', null]])->orderBy('id', 'DESC')->first();
 
 
 
-            return response()->json([
-                'status' => 200,
-                'greeting' => $greeting,
-                'greetingsRegistration' => $greetingsRegistration,
-            ]);
-
+        return response()->json([
+            'status' => 200,
+            'greeting' => $greeting,
+            'greetingsRegistration' => $greetingsRegistration,
+        ]);
     }
 
     /**
      * public function greetings stastus
      */
-    public function greetingStatus()
+    public function greetingStatus($star_id)
     {
-        $single_greeting = GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id],['notification_at', null]])->first();
+        $single_greeting = GreetingsRegistration::whereHas('greeting', function ($q) use ($star_id) {
+            $q->where(['star_id', $star_id]);
+        })->where([['user_id', auth('sanctum')->user()->id], ['notification_at', null]])->orderBy('id', 'DESC')->first();
 
         if (isset($single_greeting)) {
             return response()->json([
@@ -668,7 +669,7 @@ class UserController extends Controller
      */
     public function checkUserNotifiaction()
     {
-        $notification = Notification::where([['user_id', auth('sanctum')->user()->id],['view_status',0]])->orderBy('id','ASC')->get();
+        $notification = Notification::where([['user_id', auth('sanctum')->user()->id], ['view_status', 0]])->orderBy('id', 'ASC')->get();
         $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
         if ($greeting_reg)
             $greeting_info = Greeting::find($greeting_reg->greeting_id);
@@ -694,12 +695,12 @@ class UserController extends Controller
         $selectedSubCat = json_decode($selectedCategory->subcategory);
         $selectedSubSubCat = json_decode($selectedCategory->star_id);
 
-        $cat_post = Auction::with('star')->orderBy('id','DESC')->where('status', 1)
+        $cat_post = Auction::with('star')->orderBy('id', 'DESC')->where('status', 1)
             ->whereIn('category_id', $selectedCat)
             ->latest()->get();
 
         if (isset($sub_cat_post)) {
-            $sub_cat_post = Auction::with('star')->orderBy('id','DESC')->where('status', 1)
+            $sub_cat_post = Auction::with('star')->orderBy('id', 'DESC')->where('status', 1)
                 ->whereIn('sub_category_id', $selectedSubCat)
                 ->latest()->get();
         } else {
@@ -707,7 +708,7 @@ class UserController extends Controller
         }
 
         if (isset($sub_sub_cat_post)) {
-            $sub_sub_cat_post = Auction::with('star')->orderBy('id','DESC')->where('status', 1)
+            $sub_sub_cat_post = Auction::with('star')->orderBy('id', 'DESC')->where('status', 1)
                 ->whereIn('user_id', $selectedSubSubCat)
                 ->latest()->get();
         } else {
@@ -717,8 +718,8 @@ class UserController extends Controller
         $product = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
 
         return response()->json([
-                'status' => 200,
-                'product' => $product
+            'status' => 200,
+            'product' => $product
         ]);
 
 
@@ -743,7 +744,7 @@ class UserController extends Controller
     public function starAuction($star_id)
     {
 
-        $product = Auction::with('star', 'bidding', 'bidding.user')->orderBy('id','DESC')->where('star_id', $star_id)->where('status', 1)->latest()->get();
+        $product = Auction::with('star', 'bidding', 'bidding.user')->orderBy('id', 'DESC')->where('star_id', $star_id)->where('status', 1)->latest()->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
@@ -796,25 +797,27 @@ class UserController extends Controller
     }
     public function auctionApply($auction_id)
     {
-        $auctionApply = Bidding::with('user','auction')->where('auction_id', $auction_id)->where('notify_status',1)->where('user_id',auth()->user()->id)->first();
-        $winner = Bidding::with('user','auction')->where('auction_id', $auction_id)->where('win_status',1)->where('user_id',auth()->user()->id)->first();
+        $auctionApply = Bidding::with('user', 'auction')->where('auction_id', $auction_id)->where('notify_status', 1)->where('user_id', auth()->user()->id)->first();
+        $winner = Bidding::with('user', 'auction')->where('auction_id', $auction_id)->where('win_status', 1)->where('user_id', auth()->user()->id)->first();
         return response()->json([
             'status' => 200,
             'auctionApply' => $auctionApply,
-            'winner'=>$winner
+            'winner' => $winner
         ]);
     }
-    public function maxBid($id){
-        $maxBid = Bidding::orderBy('amount','DESC')->where('auction_id',$id)->where('user_id',auth()->user()->id)->first();
+    public function maxBid($id)
+    {
+        $maxBid = Bidding::orderBy('amount', 'DESC')->where('auction_id', $id)->where('user_id', auth()->user()->id)->first();
         return response()->json([
             'status' => 200,
             'maxBid' => $maxBid,
         ]);
     }
 
-    public function aquiredProduct(Request $request){
+    public function aquiredProduct(Request $request)
+    {
 
-        $bidding = Bidding::where('id',$request->bidding_id)->first();
+        $bidding = Bidding::where('id', $request->bidding_id)->first();
 
         $validator = Validator::make($request->all(), [
 
@@ -825,7 +828,7 @@ class UserController extends Controller
             'expiry_date' => 'required',
 
 
-        ],[
+        ], [
             'name.required' => 'This Field Is Required',
             'phone.required' => 'This Field Is Required',
             'card_number.required' => 'This Field Is Required',
@@ -852,7 +855,7 @@ class UserController extends Controller
         ]);
 
 
-        if($bidding->applied_status == 0){
+        if ($bidding->applied_status == 0) {
             $bidding->applied_status = 1;
             $bidding->update();
         }
@@ -862,7 +865,6 @@ class UserController extends Controller
             'aquired' => $aquired,
             'message' => "Application success"
         ]);
-
     }
 
     public function bidHistory($auction_id)
@@ -1205,18 +1207,15 @@ class UserController extends Controller
 
     public function registration_checker($type, $slug)
     {
-        if($type == 'livechat')
-        {
+        if ($type == 'livechat') {
             $event = LiveChat::where('slug', $slug)->first();
             $participant = LiveChatRegistration::where([['user_id', auth('sanctum')->user()->id], ['live_chat_id', $event->id]])->first();
         }
-        if($type == 'learningSession')
-        {
+        if ($type == 'learningSession') {
             $event = LearningSession::where('slug', $slug)->first();
             $participant = LearningSessionRegistration::where([['user_id', auth('sanctum')->user()->id], ['learning_session_id', $event->id]])->first();
         }
-        if($type == 'meetup')
-        {
+        if ($type == 'meetup') {
             $event = MeetupEvent::where('slug', $slug)->first();
             $participant = MeetupEventRegistration::where([['user_id', auth('sanctum')->user()->id], ['meetup_event_id', $event->id]])->first();
         }

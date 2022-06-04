@@ -133,7 +133,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/greetings_registaion_update', [UserController::class, 'greetingsRegistationUpdate']);
 
     //user greeting registatin status
-    Route::get('/user/greetings_registaion_status', [UserController::class, 'greetingStatus']);
+    Route::get('/user/greetings_registaion_status/{star_id}', [UserController::class, 'greetingStatus']);
 
     //greetings Activety check
     Route::get('/user/greetings_star_status/{star_id}', [GreetingController::class, 'greetingsCreateStatus']);

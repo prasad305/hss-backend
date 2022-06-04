@@ -53,7 +53,7 @@ class GreetingController extends Controller
             'cost' => 'required|numeric||min:1',
             'user_required_day' => 'required|numeric||min:1',
             'banner' => 'required|mimes:jpeg,jpg,png,webp',
-            'video' => 'required|mimes:mp4,mov,ogg',
+            'video' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
