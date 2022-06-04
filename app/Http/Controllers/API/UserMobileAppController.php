@@ -12,6 +12,7 @@ use App\Models\GreetingsRegistration;
 use App\Models\LiveChatRegistration;
 use App\Models\LiveChat;
 use App\Models\LearningSession;
+use App\Models\LearningSessionEvaluation;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChatRoom;
 use App\Models\MeetupEvent;
@@ -35,17 +36,17 @@ class UserMobileAppController extends Controller
         return response()->json([
             'status' => 200,
             'activity_length' => $activities->count(),
-            'greeting_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type','greeting')->orderBy('id','DESC')->get(),
-            'learning_session_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type','learningSession')->orderBy('id','DESC')->get(),
-            'live_chat_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type','liveChat')->orderBy('id','DESC')->get(),
-            'meetup_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type','meetup')->orderBy('id','DESC')->get(),
+            'greeting_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'greeting')->orderBy('id', 'DESC')->get(),
+            'learning_session_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'learningSession')->orderBy('id', 'DESC')->get(),
+            'live_chat_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'liveChat')->orderBy('id', 'DESC')->get(),
+            'meetup_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'meetup')->orderBy('id', 'DESC')->get(),
 
         ]);
     }
     public function eventRegister(Request $request)
     {
         // return $request->all();
-        $user = User::find(auth('sanctum')->user()->id);
+        $user = auth('sanctum')->user();
         $eventId = (string)$request->event_id;
         $modelName = $request->model_name;
 
@@ -66,12 +67,20 @@ class UserMobileAppController extends Controller
             $eventRegistration->learning_session_id = $eventId;
             $eventRegistration->amount = $event->fee;
             $activity->type = 'learningSession';
+
+            if($event->evaluation == 1)
+            {
+                $evaluation = new LearningSessionEvaluation();
+                $evaluation->evant_id = $event->id;
+                $evaluation->user_id = $user->id;
+                $evaluation->save();
+            }
         }
 
         if( $modelName == 'livechat'){
             $eventRegistration = new LiveChatRegistration();
             $event = LiveChat::find($eventId);
-            $event->available_start_time = Carbon::parse($request->end_time)->addMinutes(1)->format('H:i:s');
+            $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->interval)->format('H:i:s');
             $eventRegistration->live_chat_id = $eventId;
             $eventRegistration->amount = $request->fee;
             $eventRegistration->room_id = $request->room_id;
@@ -114,6 +123,7 @@ class UserMobileAppController extends Controller
 
         $activity->user_id = $user->id;
         $activity->event_id = $event->id;
+        $activity->event_registration_id = $eventRegistration->id;
         $activity->save();
 
         return response()->json([

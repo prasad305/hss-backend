@@ -24,9 +24,7 @@ class LiveChatController extends Controller
 
     public function pending()
     {
-        $upcommingEvent = LiveChat::where([
-            ['star_approve_status', 1], ['status', null]
-        ])->latest()->get();
+        $upcommingEvent = LiveChat::where('status', 1)->latest()->get();
 
         return view('ManagerAdmin.LiveChat.index', compact('upcommingEvent'));
     }
@@ -59,10 +57,9 @@ class LiveChatController extends Controller
     {
         $event = LiveChat::find($id);
 
-        if ($event->status != 1) {
-            $event->status = 1;
+        if ($event->status != 2) {
+            $event->status = 2;
             $event->update();
-
             $starCat = SuperStar::where('star_id', $event->star_id)->first();
 
             // Create New post //
@@ -70,14 +67,12 @@ class LiveChatController extends Controller
             $post->type = 'livechat';
             $post->user_id = $event->star_id;
             $post->event_id = $event->id;
-            // $post->category_id=$starCat->category_id;
-            // $post->sub_category_id=$starCat->sub_category_id;
-
+            $post->category_id=$starCat->category_id;
+            $post->sub_category_id=$starCat->sub_category_id;
             $post->save();
         } else {
-            $event->status = NULL;
+            $event->status = 8;
             $event->update();
-
             // Remove post //
             $post = Post::where('event_id', $id)->first();
             $post->delete();

@@ -17,6 +17,7 @@ class LearningSession extends Model
         'registration_end_date',
         'registration_start_date',
         'description',
+        'instruction',
         'venue',
         'total_seat',
         'banner',
@@ -30,6 +31,7 @@ class LearningSession extends Model
         'status',
         'room_id',
         'total_amount',
+        'assignment',
     ];
     protected $with = ['star','learningSessionAssignment'];
 

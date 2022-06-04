@@ -230,8 +230,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/fan/group/settings/no-warning/{id}', [FanGroupController::class, 'noWarningSettingsFan']);
     Route::post('/admin/fan/group/approval/warning/{id}/{fanid}', [FanGroupController::class, 'warningSettingsFan']);
 
-
-
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
     Route::get('/admin/marketplace/product-list/approved', [MarketplaceController::class, 'allProductList']);
@@ -250,7 +248,11 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/simple_post/approved', [SimplePostController::class, 'approved_list']);
 
     // Learning Session Section
-    Route::post('admin/add_learning_session', [LearningSessionController::class, 'add']);
+    // Route::post('admin/add_learning_session', [LearningSessionController::class, 'add']);
+
+    Route::post('admin/learning_session/create', [SimplePostController::class, 'add_learning']);
+
+    // Route::post('admin/learning_session/create', [LearningSessionController::class, 'add_learning']);
     Route::get('/admin/learning_session/all', [LearningSessionController::class, 'all']);
     Route::get('/admin/learning_session/count', [LearningSessionController::class, 'count']);
 
@@ -266,9 +268,12 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
     Route::post('admin/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'assignment_set_approval']);
     Route::post('admin/learning_session/assignment/approval/withMark/{type}/{id}', [LearningSessionController::class, 'assignment_set_approval_with_mark']);
-    Route::get('admin/learning_session/assignment/send_to_manager/{id}', [LearningSessionController::class, 'assignment_send_to_manager']);
+    Route::get('admin/learning_session/assignment/send_to_manager/{slug}', [LearningSessionController::class, 'assignment_send_to_manager']);
     Route::get('admin/learning_session/assignment/send_to_star/{id}', [LearningSessionController::class, 'assignment_send_to_star']);
     Route::get('/admin/learning_session/assignment/marks/{slug}', [LearningSessionController::class, 'admin_assignment_marks']);
+    Route::get('/admin/learning_session/setComplete/{id}', [LearningSessionController::class, 'admin_assignment_set_complete']);
+    Route::get('/admin/learning_session/setAssignment/{id}', [LearningSessionController::class, 'admin_assignment_set_assignment']);
+
 
 
     // Live Session Section
@@ -283,8 +288,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('admin/agreement_paper/{star_id}', [CategoryController::class, 'agreement_paper']);
 
 
-    Route::post('admin/add_greetings', [GreetingController::class, 'add']);
-    Route::post('admin/edit_greetings', [GreetingController::class, 'edit_greetings']);
 
 
     Route::post('/admin/add_meetup', [MeetupEventController::class, 'add']);
@@ -318,13 +321,18 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/current_year_schedule_list', [ScheduleController::class, 'current_year_schedule_list']);
 
     //greetings Activety check
+    Route::post('admin/add_greetings', [GreetingController::class, 'add']);
+    Route::post('admin/edit_greetings', [GreetingController::class, 'edit_greetings']);
     Route::get('/admin/greetings_star_status', [GreetingController::class, 'greetingsCreateStatusAdmin']);
     Route::get('/admin/greetings_register_list', [GreetingController::class, 'greetingsRegisterListByGreetingsId']);
     Route::get('/admin/greetings_register_list_with_payment_complete', [GreetingController::class, 'adminGreetingsRegisterListWithPaymentComplete']);
+    Route::get('/admin/greetings_video_uploaded_list', [GreetingController::class, 'greetingsVideoUploadedList']);
+    Route::get('/admin/greetings_forwarded_to_user_list', [GreetingController::class, 'greetingsForwardedToUserList']);
     Route::get('/admin/greeting_approve', [GreetingController::class, 'greetingsApprovedByStar']);
     Route::get('admin/greeting/{id}', [GreetingController::class, 'show']);
     Route::get('admin/greeting/forwardToManagerAdmin/{id}', [GreetingController::class, 'forwardToManagerAdmin']);
-    Route::get('admin/greeting/check_status', [LiveChatController::class, 'greetingsCreateStatus']);
+    // Route::get('admin/greeting/check_status', [GreetingController::class, 'greetingsCreateStatus']);
+    Route::post('admin/greeting/forward_to_user', [GreetingController::class, 'forwardToUser']);
 
     //Sent Notification to user
     Route::post('/admin/sent_notofiaction_user', [GreetingController::class, 'sentNotificationToUser']);
@@ -429,14 +437,14 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/learning_session/pending', [LearningSessionController::class, 'star_pending_list']);
     Route::get('/star/learning_session/pending/{id}', [LearningSessionController::class, 'star_pending_details']);
     Route::get('/star/learning_session/approved', [LearningSessionController::class, 'star_approved_list']);
-    Route::get('/star/approve_learning_session/{id}', [LearningSessionController::class, 'approve_post']);
+    Route::get('/star/learning_session/approve/{id}', [LearningSessionController::class, 'approve_post']);
     Route::get('/star/learning_session/completed', [LearningSessionController::class, 'star_completed_list']);
     Route::get('/star/learning_session/evaluation', [LearningSessionController::class, 'star_evaluation_list']);
     Route::get('/star/learning_session/details/{slug}', [LearningSessionController::class, 'details']);
     Route::get('/star/learning_session/assignment/{id}', [LearningSessionController::class, 'star_assignment_details']);
     Route::post('/star/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
     Route::post('/star/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'star_assignment_set_approval']);
-    
+
 
 
 
@@ -446,11 +454,11 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/live-chat/completed', [LiveChatController::class, 'completedLiveChat']);
     Route::get('/star/live-chat/details/{slug}', [LiveChatController::class, 'details']);
     Route::get('/star/approveLiveChat/{id}', [LiveChatController::class, 'setApproveLiveChat']);
-
-
     Route::get('/star/pendingLiveChat', [LiveChatController::class, 'pendingLiveChat']);
     Route::get('/star/approvedLiveChat', [LiveChatController::class, 'approveLiveChat']);
     Route::get('/star/livechat_event_details/{id}', [LiveChatController::class, 'details']);
+    Route::get('/star/live-chat/setReject/{id}', [LiveChatController::class, 'star_set_reject']);
+
 
     Route::get('/deleteLiveChat/{id}', [LiveChatController::class, 'deleteLiveChat']);
     Route::get('/livechatListByDate/{date}', [LiveChatController::class, 'livechatListByDate']);
@@ -458,11 +466,6 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     Route::post('/star/add_live_session', [LiveChatController::class, 'add_live_session']);
     Route::post('/star/update_live_session', [LiveChatController::class, 'update_live_session']);
-
-    Route::post('/star/add_greetings', [StarGreetingController::class, 'add_greetings']);
-    Route::post('/star/edit_greetings', [StarGreetingController::class, 'edit_greetings']);
-    Route::get('/star/approve_greeting/{greeting_id}', [StarGreetingController::class, 'approve_greeting']);
-    Route::get('/star/decline_greeting/{greeting_id}', [StarGreetingController::class, 'decline_greeting']);
 
     Route::get('/star/meetup_event/pending', [MeetupEventController::class, 'star_pending_list']);
     Route::get('/star/meetup_event/approved', [MeetupEventController::class, 'star_approved_list']);
@@ -472,13 +475,22 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     Route::get('/star/live_chat/count', [LiveChatController::class, 'count2']);
 
-    //user greetings register list
-    Route::get('/star/greetings_reg_list/{greetings_id}', [GreetingController::class, 'greetingsRegisterListByGreetingsId']);
-    Route::get('/star/greetings_reg_payment_list', [GreetingController::class, 'greetingsRegisterWithPaymentList']);
-    // Route::get('/star/greetings', [GreetingController::class, 'view_star_greeting']);
+    // star greeting related list
+    Route::post('/star/add_greetings', [StarGreetingController::class, 'add_greetings']);
+    Route::post('/star/edit_greetings', [StarGreetingController::class, 'edit_greetings']);
+    Route::get('/star/approve_greeting/{greeting_id}', [StarGreetingController::class, 'approve_greeting']);
+    Route::get('/star/decline_greeting/{greeting_id}', [StarGreetingController::class, 'decline_greeting']);
     Route::get('/star/greetings_star_status', [StarGreetingController::class, 'greetings_star_status']);
-    Route::get('/star/greetings_register_list_with_payment_complete', [GreetingController::class, 'starGreetingsRegisterListWithPaymentComplete']);
-    Route::get('/star/single_greeting_registration/{greeting_registration_id}', [GreetingController::class, 'starSingleGreetingRegistration']);
+
+    //user greetings register list
+    // Route::get('/star/greetings_reg_list/{greetings_id}', [StarGreetingController::class, 'greetingsRegisterListByGreetingsId']);
+    // Route::get('/star/greetings_reg_payment_list', [StarGreetingController::class, 'greetingsRegisterWithPaymentList']);
+    // Route::get('/star/greetings', [StarGreetingController::class, 'view_star_greeting']);
+    Route::get('/star/greetings_register_list_with_payment_complete', [StarGreetingController::class, 'registerListWithPaymentComplete']);
+    Route::get('/star/greetings_video_uploaded_list', [StarGreetingController::class, 'greetingsVideoUploadedList']);
+    Route::get('/star/greetings_forwarded_to_user_list', [StarGreetingController::class, 'greetingsForwardedToUserList']);
+    Route::get('/star/single_greeting_registration/{greeting_registration_id}', [StarGreetingController::class, 'singleGreetingRegistration']);
+    Route::post('/star/greeting_video_upload', [StarGreetingController::class, 'videoUpload']);
 
     //<======================== Auction Route ========================>
 
