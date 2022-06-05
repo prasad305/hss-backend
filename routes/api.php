@@ -384,7 +384,6 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     // schdedule
     Route::post('/star/add_schedule/', [StarScheduleController::class, 'add_schedule']);
-
     Route::get('/star/schedule', [StarScheduleController::class, 'selected_schedule']);
     Route::get('/star/schedule/{date}', [StarScheduleController::class, 'dateWiseSchedule']);
     Route::get('/star/schedule_list', [StarScheduleController::class, 'schedule_list']);
@@ -400,7 +399,6 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/fan/group/show/{slug}', [FanGroupController::class, 'showStarFanGroup']);
     Route::post('/star/fan/member/approve/{id}', [FanGroupController::class, 'approveFanMember']);
     Route::post('/star/fan/member/post/{id}', [FanGroupController::class, 'approveFanPost']);
-
     Route::post('/star/fan-group/join/{slug}/{data}', [FanGroupController::class, 'joinFanGroup']);
     Route::post('/star/fan-group/post/{slug}/{data}', [FanGroupController::class, 'postFanGroup']);
     Route::post('/star/fan/group/image/update/{slug}', [FanGroupController::class, 'updateImageFanGroup']);
@@ -446,9 +444,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::post('/star/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'star_assignment_set_approval']);
 
 
-
-
-
+    // Live Session Section
     Route::get('/star/live-chat/pending', [LiveChatController::class, 'pendingLiveChat']);
     Route::get('/star/live-chat/approved', [LiveChatController::class, 'approveLiveChat']);
     Route::get('/star/live-chat/completed', [LiveChatController::class, 'completedLiveChat']);
@@ -458,20 +454,19 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/approvedLiveChat', [LiveChatController::class, 'approveLiveChat']);
     Route::get('/star/livechat_event_details/{id}', [LiveChatController::class, 'details']);
     Route::get('/star/live-chat/setReject/{id}', [LiveChatController::class, 'star_set_reject']);
-
-
     Route::get('/deleteLiveChat/{id}', [LiveChatController::class, 'deleteLiveChat']);
     Route::get('/livechatListByDate/{date}', [LiveChatController::class, 'livechatListByDate']);
     Route::get('/registeredUserList/{live_chat_id}', [LiveChatController::class, 'registeredUserList']);
-
     Route::post('/star/add_live_session', [LiveChatController::class, 'add_live_session']);
     Route::post('/star/update_live_session', [LiveChatController::class, 'update_live_session']);
 
+    // Meetup Event Section
     Route::get('/star/meetup_event/pending', [MeetupEventController::class, 'star_pending_list']);
     Route::get('/star/meetup_event/approved', [MeetupEventController::class, 'star_approved_list']);
     Route::get('/star/meetup_event/completed', [MeetupEventController::class, 'star_completed_list']);
     Route::get('/star/meetup_event/details/{slug}', [MeetupEventController::class, 'details']);
     Route::get('/star/meetup_event/set_approve/{id}', [MeetupEventController::class, 'set_approve']);
+    Route::post('/star/meetup_event/edit/{id}', [MeetupEventController::class, 'star_edit']);
 
     Route::get('/star/live_chat/count', [LiveChatController::class, 'count2']);
 
@@ -521,11 +516,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/pending-audition/{id}', [JudgeAuditionController::class, 'starSingleAudition']);
     Route::put('/star/approved/audition/{id}', [JudgeAuditionController::class, 'starApprovedAudition']);
     Route::put('/star/decline/audition/{id}', [JudgeAuditionController::class, 'starDeclineAudition']);
-
     Route::get('/star/selectVideo/{id}', [AuditionController::class, 'getStarVideos']);
     Route::post('/star/starMarking', [AuditionController::class, 'starMarking']);
     Route::get('/star/starMarkingDone/videos/{id}', [AuditionController::class, 'starMarkingDone']);
-
     Route::get('superstar/audition/liveEditInstructions/{audition_id}', [JudgeAuditionController::class, 'liveEditInstructions']);
     Route::post('superstar/audition/updateAuditionInstruction/{audition_instruction_id}', [JudgeAuditionController::class, 'updateAuditionInstruction']);
 
@@ -560,19 +553,15 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'pending']);
     Route::get('/audition-admin/audition/request', [AuditionController::class, 'request']);
     Route::get('/audition-admin/audition/lives', [AuditionController::class, 'live']);
-
     Route::get('/audition-admin/audition/{slug}', [AuditionController::class, 'getAudition']);
     Route::get('/audition-admin/audition/assigned-judge/{slug}', [AuditionController::class, 'getAssignedJudge']);
     Route::get('/audition-admin/audition/total-judge-approval/{slug}', [AuditionController::class, 'totalJudgeApproval']);
     Route::get('/audition-admin/audition/approval-request-for-manager-admin/{slug}', [AuditionController::class, 'approvalRequestForManagerAdmin']);
-
     Route::get('/audition-admin/audition/stars/{category_id}', [AuditionController::class, 'stars']);
     Route::post('/audition-admin/audition/add', [AuditionController::class, 'store']);
-
     Route::get('/audition-admin/auditionStatus/{audition_id}', [AuditionController::class, 'auditionStatus']);
     Route::get('/audition-admin/sendManager/{audition_id}', [AuditionController::class, 'sendManager']);
     Route::put('/audition-admin/confirmed/audition/{audition_id}', [AuditionController::class, 'confirmedAudition']);
-
     Route::get('audition-admin/audtion-videos/{audition_id}', [AuditionController::class, 'getAuditionVideos']);
     Route::post('audition-admin/filter-video/submit', [AuditionController::class, 'submitFilterVideo']);
     Route::get('audition-admin/accepted-videos/{audition_id}', [AuditionController::class, 'acceptedVideo']);
@@ -583,16 +572,11 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('audition-admin/jury-selected-videos/{audition_id}', [AuditionController::class, 'juryMarkingVideos']);
     Route::get('audition-admin/jury-marking-videos/{jury_id}', [AuditionController::class, 'getJuryMarkingVideos']);
     Route::get('audition-admin/get-mark-wise-videos/{audition_id}/{mark}', [AuditionController::class, 'getMarkWiseVideos']);
-
     Route::post('audition-admin/selected-top-videos', [AuditionController::class, 'selectedTop']);
     Route::post('audition-admin/rejected-videos-message', [AuditionController::class, 'rejectedMessage']);
     Route::get('/audition-admin/participant/list/{id}', [AuditionController::class, 'participantList']);
-
     Route::get('audition-admin/participant/list', [AuditionController::class, 'participantList']);
-
-
     Route::post('audition-admin/audition-round-instruction', [AuditionController::class, 'saveRoundInstruction']);
-
     Route::get('audition-admin/jury-num-assinged-videos/{audition_id}/{round_rule_id}', [AuditionController::class, 'juryNumberOfVideosApply']);
     Route::post('audition-admin/submit-jury-assign-video', [AuditionController::class, 'updateJuryAssignVideo']);
     Route::post('audition-admin/submit-jury-auto-assign-video', [AuditionController::class, 'updateJuryAutoAssignVideo']);

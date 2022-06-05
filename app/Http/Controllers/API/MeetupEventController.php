@@ -192,13 +192,11 @@ class MeetupEventController extends Controller
     public function set_approve($id)
     {
         $meetup = MeetupEvent::find($id);
-        $meetup->star_approval = 1;
+        $meetup->status = 1;
         $meetup->update();
-
 
         return response()->json([
             'status' => 200,
-            'meetup' => $meetup,
             'message' => 'Approved',
         ]);
     }
@@ -209,7 +207,7 @@ class MeetupEventController extends Controller
     public function manager_pending()
     {
         $upcommingEvent = MeetupEvent::where([
-            ['star_approval', 1], ['status', 0]
+            ['status','<',2],
         ])->latest()->get();
 
         return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
@@ -236,8 +234,6 @@ class MeetupEventController extends Controller
         $meetup = MeetupEvent::find($id);
         $meetup->star_approval = 1;
         $meetup->update();
-
-
 
         return response()->json([
             'status' => 200,
@@ -278,14 +274,11 @@ class MeetupEventController extends Controller
     {
         $meetup = MeetupEvent::find($id);
 
-        if ($meetup->status != 1) {
-            $meetup->manager_approval = 1;
-            $meetup->status = 1;
-
+        if ($meetup->status != 2) {
+            $meetup->status = 2;
             $meetup->update();
 
             $starCat = SuperStar::where('star_id', $meetup->star_id)->first();
-
             // Create New post //
             $post = new Post();
             $post->type = 'meetup';
@@ -294,17 +287,19 @@ class MeetupEventController extends Controller
             $post->category_id = $starCat->category_id;
             $post->sub_category_id = $starCat->sub_category_id;
             $post->save();
-        } else {
-            $meetup->manager_approval = 0;
-            $meetup->status = 0;
-            $meetup->update();
 
+            return redirect()->back()->with('success', 'Published');
+        } else {
+            $meetup->status = 10;
+            $meetup->update();
             //Remove post //
             $post = Post::where('event_id', $id)->first();
             $post->delete();
+
+            return redirect()->back()->with('warning', 'Removed');
         }
 
-        return redirect()->back()->with('success', 'Published');
+
     }
 
 
@@ -416,6 +411,84 @@ class MeetupEventController extends Controller
             return response()->json([
                 'type' => 'error',
                 'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+            ]);
+        }
+    }
+
+    public function star_edit(Request $request, $id)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'star_id' => 'required',
+            'title' => 'required',
+            'description' => 'required|min:6',
+            'instruction' => 'required|min:6',
+            'date' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'reg_start_date' => 'required',
+            'reg_end_date' => 'required',
+            'fee' => 'required',
+            'total_seat' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $meetup = MeetupEvent::find($id);
+
+            $meetup->star_id = $request->input('star_id');
+            $meetup->title = $request->input('title');
+            $meetup->slug = Str::slug($request->input('title'));
+            $meetup->event_link = $request->input('event_link');
+            $meetup->venue = $request->input('venue');
+            $meetup->meetup_type = $request->input('meetup_type');
+            $meetup->date = $request->input('date');
+            $meetup->start_time = $request->input('start_time');
+            $meetup->end_time = $request->input('end_time');
+            $meetup->description = $request->input('description');
+            $meetup->instruction = $request->input('instruction');
+            $meetup->total_seat = $request->input('total_seat');
+            $meetup->reg_start_date = $request->input('reg_start_date');
+            $meetup->reg_end_date = $request->input('reg_end_date');
+            $meetup->fee = $request->input('fee');
+
+            if ($request->hasfile('banner')) {
+                $destination = $meetup->banner;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('banner');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/meetup/' . time() . '.' . $extension;
+
+                Image::make($file)->resize(900, 400)
+                    ->save($filename, 50);
+
+                $meetup->banner = $filename;
+            }
+
+            if ($request->hasfile('video')) {
+                $destination = $meetup->video;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('video');
+                $path = 'uploads/videos/meetup';
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+                $file->move($path, $filename);
+                $meetup->video = $path . '/' . $filename;
+            }
+
+            $meetup->update();
+
+            return response()->json([
+                'status' => 200,
+                'meetup_id' => $meetup->id,
+                'message' => 'Meetup Event Updated',
             ]);
         }
     }
