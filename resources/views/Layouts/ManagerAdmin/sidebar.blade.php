@@ -474,6 +474,41 @@
                 </li>
             </ul>
         </li>
+        {{-- Question And Answers --}}
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>Q&A
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.qna.published') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Published</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.qna.pending') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Pending</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.qna.all') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>All</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
 
 

@@ -16,7 +16,8 @@ class Activity extends Model
         'user_id',
     ];
 
-    protected $with = ['user', 'meetup', 'livechat', 'learningSession','greetingRegistration','greeting'];
+    protected $with = ['user', 'meetup', 'livechat', 'learningSession','greetingRegistration','greeting','qna'];
+
 
     public function user()
     {
@@ -31,6 +32,10 @@ class Activity extends Model
     public function livechat()
     {
         return $this->belongsTo(LiveChat::class, 'event_id');
+    }
+    public function qna()
+    {
+        return $this->belongsTo(QnA::class, 'event_id');
     }
 
     public function learningSession()
