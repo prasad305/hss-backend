@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\QnA;
+use App\Models\QnaRegistration;
 use App\Models\SuperStar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -28,7 +29,7 @@ class QnaController extends Controller
             'registration_start_date' => 'required',
             'registration_end_date' => 'required',
             'fee' => 'required',
-            'question_quantity' => 'required',
+            // 'question_quantity' => 'required',
             'min_time' => 'required|min:1',
             'max_time' => 'required|min:1',
             'time_interval' => 'required',
@@ -57,7 +58,7 @@ class QnaController extends Controller
             $qna->registration_start_date = $request->input('registration_start_date');
             $qna->registration_end_date = $request->input('registration_end_date');
             $qna->fee = $request->input('fee');
-            $qna->question_quantity = $request->input('question_quantity');
+            // $qna->question_quantity = $request->input('question_quantity');
             $qna->min_time = $request->input('min_time');
             $qna->max_time = $request->input('max_time');
             $qna->time_interval = $request->input('time_interval');
@@ -146,11 +147,20 @@ class QnaController extends Controller
             'count' => $events->count(),
         ]);
     }
+    public function registeredList($slug)
+    {
+        $event = QnA::where('slug', $slug)->first();
+        $users = QnaRegistration::where('qna_id', $event->id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'users' => $users,
+        ]);
+    }
 
 
     // Star Section
-
-
 
     public function star_add_qna(Request $request)
     {
@@ -165,7 +175,7 @@ class QnaController extends Controller
             'registration_start_date' => 'required',
             'registration_end_date' => 'required',
             'fee' => 'required',
-            'question_quantity' => 'required',
+            // 'question_quantity' => 'required',
             'min_time' => 'required|min:1',
             'max_time' => 'required|min:1',
             'time_interval' => 'required',
@@ -194,7 +204,8 @@ class QnaController extends Controller
             $qna->registration_start_date = $request->input('registration_start_date');
             $qna->registration_end_date = $request->input('registration_end_date');
             $qna->fee = $request->input('fee');
-            $qna->question_quantity = $request->input('question_quantity');
+            $qna->star_approval = 1;
+            // $qna->question_quantity = $request->input('question_quantity');
             $qna->min_time = $request->input('min_time');
             $qna->max_time = $request->input('max_time');
             $qna->time_interval = $request->input('time_interval');
@@ -246,7 +257,7 @@ class QnaController extends Controller
             'registration_start_date' => 'required',
             'registration_end_date' => 'required',
             'fee' => 'required',
-            'question_quantity' => 'required',
+            // 'question_quantity' => 'required',
             'min_time' => 'required|min:1',
             'max_time' => 'required|min:1',
             'time_interval' => 'required',
@@ -274,7 +285,7 @@ class QnaController extends Controller
             $qna->registration_start_date = $request->input('registration_start_date');
             $qna->registration_end_date = $request->input('registration_end_date');
             $qna->fee = $request->input('fee');
-            $qna->question_quantity = $request->input('question_quantity');
+            // $qna->question_quantity = $request->input('question_quantity');
             $qna->min_time = $request->input('min_time');
             $qna->max_time = $request->input('max_time');
             $qna->time_interval = $request->input('time_interval');
@@ -384,6 +395,17 @@ class QnaController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Event Rejected',
+        ]);
+    }
+    public function QnaRegisteredList($slug)
+    {
+        $event = QnA::where('slug', $slug)->first();
+        $users = QnaRegistration::where('qna_id', $event->id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'users' => $users,
         ]);
     }
 }

@@ -99,6 +99,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/getSingleQnaEvent/{minute}/{id}', [UserController::class, 'getLiveQnaTiemSlot']);
     Route::get('/user/qna_activites', [UserController::class, 'qna_activities']);
     Route::get('/user/qnaAll', [UserController::class, 'getQnaAll']);
+    Route::get('/user/qnaStarAll/{id}', [UserController::class, 'getStarQna']);
     
 
     //Meetup Event
@@ -301,6 +302,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/qna/{slug}', [QnaController::class, 'details']);
     Route::get('/admin/qna_live', [QnaController::class, 'liveQnalist']);
     Route::get('/admin/qna_completed', [QnaController::class, 'qna_completed']);
+    Route::get('/admin/registeredList/{slug}', [QnaController::class, 'registeredList']);
 
     Route::get('admin/star_list', [CategoryController::class, 'star_list']);
     Route::get('admin/agreement_paper/{star_id}', [CategoryController::class, 'agreement_paper']);
@@ -476,6 +478,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/qna/approved/{id}', [QnaController::class, 'setApprovedQna']);
     Route::get('/star/qna/rejected/{id}', [QnaController::class, 'setRejectedQna']);
     Route::post('/star/update_Qna', [QnaController::class, 'update_Qna']);
+    Route::get('/star/registeredList/{slug}', [QnaController::class, 'QnaRegisteredList']);
 
 
     Route::get('/star/live-chat/pending', [LiveChatController::class, 'pendingLiveChat']);

@@ -40,7 +40,7 @@ class QnaController extends Controller
 
     public function all()
     {
-        $upcommingEvent = QnA::latest()->latest()->get();
+        $upcommingEvent = QnA::where('category_id',auth()->user()->category_id)->where('status',1)->orWhere('star_approval',1)->latest()->get();
 
         return view('ManagerAdmin.QnA.index', compact('upcommingEvent'));
     }

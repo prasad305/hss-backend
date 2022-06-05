@@ -8,6 +8,8 @@ use App\Models\LiveChat;
 use App\Models\EventProfile;
 use App\Models\Greeting;
 use App\Models\LiveChatRegistration;
+use App\Models\QnA;
+use App\Models\QnaRegistration;
 use App\Models\SuperStar;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -99,7 +101,6 @@ class LiveChatController extends Controller
             'users' => $users,
         ]);
     }
-
 
     public function setApproveLiveChat($id)
     {

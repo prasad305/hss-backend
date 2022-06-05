@@ -331,6 +331,16 @@ class UserController extends Controller
             'livechats' => $livechats,
         ]);
     }
+    public function getStarQna($id)
+    {
+        $livechats = QnA::orderBy('id', 'DESC')->where('star_id',$id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'livechats' => $livechats,
+        ]);
+    }
 
 
     public function getAllLiveChatEventByStar($id)

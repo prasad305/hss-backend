@@ -34,7 +34,7 @@ class CreateQnASTable extends Migration
             $table->float('fee')->nullable();
             $table->float('min_time')->nullable();
             $table->float('max_time')->nullable();
-            $table->integer('question_quantity')->nullable();
+            // $table->integer('question_quantity')->nullable();
             $table->float('time_interval')->nullable();
             $table->timestamp('registration_start_date')->nullable();
             $table->timestamp('registration_end_date')->nullable();
