@@ -71,7 +71,7 @@ class LiveChatController extends Controller
             $post->sub_category_id=$starCat->sub_category_id;
             $post->save();
         } else {
-            $event->status = 8;
+            $event->status = 10;
             $event->update();
             // Remove post //
             $post = Post::where('event_id', $id)->first();

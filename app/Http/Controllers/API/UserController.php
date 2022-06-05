@@ -384,8 +384,8 @@ class UserController extends Controller
         $user_start_time = $livechat->available_start_time ? $livechat->available_start_time : $livechat->start_time;
         $user_end_time = Carbon::parse($user_start_time)->addMinutes($minute)->format('H:i:s');
 
-        $start_date = new DateTime($user_start_time, new DateTimeZone('Asia/Dhaka'));
-        $end_date = new DateTime($livechat->end_time, new DateTimeZone('Asia/Dhaka'));
+        $start_date = new DateTime($user_start_time);
+        $end_date = new DateTime($livechat->end_time);
 
         $interval = $start_date->diff($end_date);
         $hours   = $interval->format('%h');

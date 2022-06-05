@@ -259,34 +259,34 @@ class LearningSessionController extends Controller
 
     public function manager_event_details($id)
     {
-        $meetup = LearningSession::find($id);
+        $event = LearningSession::find($id);
 
-        return view('ManagerAdmin.LearningSession.details', compact('meetup'));
+        return view('ManagerAdmin.LearningSession.details', compact('event'));
     }
 
 
     public function manager_event_set_publish($id)
     {
-        $meetup = LearningSession::find($id);
+        $learningSession = LearningSession::find($id);
 
-        if ($meetup->status != 2) {
-            $meetup->status = 2;
-            $meetup->update();
+        if ($learningSession->status != 2) {
+            $learningSession->status = 2;
+            $learningSession->update();
 
-            $starCat = SuperStar::where('star_id', $meetup->star_id)->first();
+            $starCat = SuperStar::where('star_id', $learningSession->star_id)->first();
 
             // Create New post //
             $post = new Post();
             $post->type = 'learningSession';
-            $post->user_id = $meetup->star_id;
-            $post->event_id = $meetup->id;
+            $post->user_id = $learningSession->star_id;
+            $post->event_id = $learningSession->id;
             $post->category_id=$starCat->category_id;
             $post->sub_category_id=$starCat->sub_category_id;
             $post->save();
         } else {
-            //$meetup->manager_approval = 0;
-            $meetup->status = 8;
-            $meetup->update();
+            //$learningSession->manager_approval = 0;
+            $learningSession->status = 10;
+            $learningSession->update();
 
             //Remove post //
             $post = Post::where('event_id', $id)->first();
