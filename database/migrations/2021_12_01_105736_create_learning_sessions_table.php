@@ -23,6 +23,7 @@ class CreateLearningSessionsTable extends Migration
             $table->timestamp('registration_end_date')->nullable();
             $table->timestamp('registration_start_date')->nullable();
             $table->text('description')->nullable();
+            $table->text('instruction')->nullable();
             $table->string('venue')->nullable();
             $table->integer('total_seat')->nullable();
             $table->string('banner')->nullable();
