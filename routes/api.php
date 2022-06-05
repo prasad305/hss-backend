@@ -212,6 +212,11 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
         return response()->json(['message' => 'You are in as Admin', 'status' => 200], 200);
     });
 
+    Route::get('admin/star_list', [CategoryController::class, 'star_list']);
+    Route::get('admin/agreement_paper/{star_id}', [CategoryController::class, 'agreement_paper']);
+
+
+
     // Fan Group Section
     Route::post('admin/fan-group/store', [FanGroupController::class, 'fanGroupStore']);
     Route::get('/admin/fan-group/star/list', [FanGroupController::class, 'allStarList']);
@@ -255,7 +260,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     // Route::post('admin/learning_session/create', [LearningSessionController::class, 'add_learning']);
     Route::get('/admin/learning_session/all', [LearningSessionController::class, 'all']);
     Route::get('/admin/learning_session/count', [LearningSessionController::class, 'count']);
-
     Route::get('/admin/learning_session/pending', [LearningSessionController::class, 'pending_list']);
     Route::get('/admin/learning_session/live', [LearningSessionController::class, 'live_list']);
     Route::get('/admin/learning_session/evaluation', [LearningSessionController::class, 'evaluation_list']);
@@ -275,7 +279,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/learning_session/setAssignment/{id}', [LearningSessionController::class, 'admin_assignment_set_assignment']);
 
 
-
     // Live Session Section
     Route::post('admin/add_live_session', [LiveChatController::class, 'add_live_session']);
     Route::get('/admin/livechat', [LiveChatController::class, 'admin_livechat']);
@@ -284,18 +287,14 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/registeredUserList/{live_chat_id}', [LiveChatController::class, 'admin_registeredUserList']);
 
 
-    Route::get('admin/star_list', [CategoryController::class, 'star_list']);
-    Route::get('admin/agreement_paper/{star_id}', [CategoryController::class, 'agreement_paper']);
-
-
-
-
+    //Meetup Session Section
     Route::post('/admin/add_meetup', [MeetupEventController::class, 'add']);
     Route::get('/admin/meetup_event/pending', [MeetupEventController::class, 'pending_list']);
     Route::get('/admin/meetup_event/live', [MeetupEventController::class, 'live_list']);
     Route::get('/admin/meetup_event/completed', [MeetupEventController::class, 'completed']);
     Route::get('/admin/meetup_event/details/{slug}', [MeetupEventController::class, 'details']);
     Route::get('/admin/meetup_event_slots/{slug}', [MeetupEventController::class, 'slots']);
+
 
     Route::post('/admin/add_livechat_profile', [LiveChatController::class, 'profile_create']);
     Route::get('/admin/livechat_event_profile', [LiveChatController::class, 'profile']);

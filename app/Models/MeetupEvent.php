@@ -19,6 +19,7 @@ class MeetupEvent extends Model
         'start_time',
         'end_time',
         'description',
+        'instruction',
         'venue',
         'total_seat',
         'banner',
@@ -30,6 +31,8 @@ class MeetupEvent extends Model
         'star_approval',
         'manager_approval',
         'status',
+        'reg_start_date',
+        'reg_end_date',
         'total_amount',
         'category_id'
     ];
