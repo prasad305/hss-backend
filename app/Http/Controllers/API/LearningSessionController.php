@@ -315,7 +315,7 @@ class LearningSessionController extends Controller
 
         return response()->json([
             'status' => 200,
-            'events' => $events->latest()->get(),
+            'events' => $events->orderBy('updated_at','desc')->get(),
             'count' => $events->count(),
         ]);
     }
