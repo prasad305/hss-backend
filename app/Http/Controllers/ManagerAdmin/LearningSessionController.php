@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\SuperStar;
 use App\Models\LearningSession;
 use App\Models\LearningSessionAssignment;
+use App\Models\LearningSessionEvaluation;
 use App\Models\LearningSessionRegistration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -177,25 +178,10 @@ class LearningSessionController extends Controller
     public function evaluationResult($id)
     {
         $event = LearningSession::findOrFail($id);
+       $results = LearningSessionEvaluation::where('event_id',$id)->orderBy('total_mark','desc')->get();
 
-        $assignment = LearningSessionAssignment::where([['event_id', $id], ['send_to_manager', 1]])->get();
-        $assignmentUser = $assignment->groupBy(function ($val) {
-            return $val->user_id;
-        });
 
-        foreach ($assignmentUser as $assignments)
-        {
-
-            $marks = [];
-            foreach ($assignments as $data)
-            {
-
-            }
-        }
-
-        // return $assignmentUser;
-
-        return view('ManagerAdmin.LearningSession.evaluationResult', compact('event','assignment','assignmentUser'));
+        return view('ManagerAdmin.LearningSession.evaluationResult', compact('event','results'));
     }
 
     public function evaluationAccept($id)

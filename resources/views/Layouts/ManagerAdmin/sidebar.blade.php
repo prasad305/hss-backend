@@ -26,8 +26,9 @@
         <li class="nav-item">
             <a href="{{ route('managerAdmin.admin.index') }}" class="nav-link">
                 <i
-                    class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-users"></i>
-                <i class="fa-solid fa-list-check"></i>
+                    class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-users">
+                </i>
+                {{-- <i class="fa-solid fa-list-check"></i> --}}
                 <p>
                     Admins
                     {{-- <span class="right badge badge-danger">New</span> --}}

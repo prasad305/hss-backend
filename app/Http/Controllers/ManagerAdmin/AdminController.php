@@ -76,6 +76,7 @@ class AdminController extends Controller
         $user->category_id = auth()->user()->category_id;
         $user->sub_category_id = $request->sub_category_id;
         $user->created_by = createdBy();
+        $user->status = 0;
 
         if ($request->hasFile('image')) {
 
@@ -100,7 +101,7 @@ class AdminController extends Controller
             $user->save();
             if ($user) {
                 return response()->json([
-                    'success' => true,
+                    'type' => 'success',
                     'message' => 'Admin Added Successfully'
                 ]);
             }

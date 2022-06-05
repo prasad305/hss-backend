@@ -11,10 +11,18 @@ class LearningSessionEvaluation extends Model
 
     protected $guarded = [];
 
-    protected $with = ['assignment'];
+    protected $with = ['assignments','learningSession','user'];
 
-    public function assignment()
+    public function assignments()
     {
         return $this->hasMany(LearningSessionAssignment::class, 'evaluation_id');
+    }
+    public function learningSession()
+    {
+        return $this->belongsTo(LearningSession::class, 'event_id','id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id','id');
     }
 }
