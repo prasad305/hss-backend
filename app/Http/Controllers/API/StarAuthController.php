@@ -20,7 +20,7 @@ class StarAuthController extends Controller
 {
     public function register(Request $request)
     {
-
+        // return $request->star_id;
 
         $validator = Validator::make($request->all(),[
             // 'email' => 'required|unique:users,email',

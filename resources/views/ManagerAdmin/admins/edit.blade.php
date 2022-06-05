@@ -85,7 +85,7 @@
         success: function (data) {
             Swal.fire(
                     'Success!',
-                    'Audition Admin has been Added. ' + data.message,
+                     data.message,
                     'success'
                 )
                 setTimeout(function() {
