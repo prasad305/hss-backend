@@ -25,7 +25,7 @@ class LearningSessionController extends Controller
             'title' => 'required|unique:learning_sessions',
             'description' => 'required',
             'star_id' => 'required',
-            'description' => 'required',
+            'instruction' => 'required',
             'registration_start_date' => 'required',
             'registration_end_date' => 'required',
             'date' => 'required',
@@ -55,6 +55,7 @@ class LearningSessionController extends Controller
             $post->created_by_id = auth('sanctum')->user()->id;
             $post->star_id = $request->input('star_id');
             $post->description = $request->input('description');
+            $post->instruction = $request->input('instruction');
 
             $post->registration_start_date = $request->input('registration_start_date');
             $post->registration_end_date = $request->input('registration_end_date');
@@ -150,17 +151,14 @@ class LearningSessionController extends Controller
     public function star_assignment_set_approval(Request $request, $type, $id)
     {
         $post = LearningSessionAssignment::find($id);
-
-        if ($type == 'approve') {
-            $post->status = 1;
-        } else {
-            $post->status = 2;
-        }
-
+        
         $post->comment = $request->input('comment');
         $post->mark = $request->input('mark');
-
         $post->update();
+        
+        $evalutation = LearningSessionEvaluation::find($post->evaluation_id);
+        $evalutation->total_mark = $evalutation->total_mark+$request->input('mark');
+        $evalutation->update();
 
         return response()->json([
             'status' => 200,
@@ -443,6 +441,72 @@ class LearningSessionController extends Controller
             'status' => 200,
             'message' => 'Learning Session Added',
         ]);
+    }
+
+    public function update(Request $request,$id)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|unique:learning_sessions,title,'.$id,
+            'description' => 'required|min:5',
+            'star_id' => 'required',
+            'instruction' => 'required|min:5',
+            'date' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'fee' => 'required',
+            'participant_number' => 'required',
+            'image' => 'nullable|mimes:jpg,jpeg,png,gif,webp',
+        ],[
+           'title.unique' => 'This title already exist' ,
+           'star_id.required' => 'Please Select One Star' ,
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->errors(),
+            ]);
+        } else {
+
+           $learning_session = LearningSession::find($id);
+           $learning_session->title = $request->input('title');
+           $learning_session->slug = Str::slug($request->input('title'));
+           $learning_session->description = $request->input('description');
+           $learning_session->instruction = $request->input('instruction');
+
+           $learning_session->date = $request->input('date');
+           $learning_session->start_time = $request->input('start_time');
+           $learning_session->end_time = $request->input('end_time');
+
+           $learning_session->fee = $request->input('fee');
+           $learning_session->participant_number = $request->input('participant_number');
+
+            //$post->video = $request->input('video');
+            //$post->type = $request->input('type');
+
+            if ($request->hasfile('image')) {
+                $destination =$learning_session->banner;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/learning_session/' . time() . '.' . $extension;
+
+                Image::make($file)->resize(900, 400)->save($filename, 100);
+               $learning_session->banner = $filename;
+            }
+
+           $learning_session->save();
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Learning Session Updated',
+            ]);
+        }
     }
 
 
