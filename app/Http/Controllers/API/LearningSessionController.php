@@ -19,7 +19,7 @@ class LearningSessionController extends Controller
     public function add_learning(Request $request)
     {
 
-        
+
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:learning_sessions',
@@ -151,11 +151,11 @@ class LearningSessionController extends Controller
     public function star_assignment_set_approval(Request $request, $type, $id)
     {
         $post = LearningSessionAssignment::find($id);
-        
+
         $post->comment = $request->input('comment');
         $post->mark = $request->input('mark');
         $post->update();
-        
+
         $evalutation = LearningSessionEvaluation::find($post->evaluation_id);
         $evalutation->total_mark = $evalutation->total_mark+$request->input('mark');
         $evalutation->update();
@@ -181,13 +181,13 @@ class LearningSessionController extends Controller
             $post->status = 2;
         }
 
-        $post->mark = $request->input('mark'); 
+        $post->mark = $request->input('mark');
         $post->comment = $request->input('comment');
 
         $post->update();
 
         $eva = LearningSessionEvaluation::where('id',$post->evaluation_id)->first();
-        $eva->total_mark += $request->input('mark'); 
+        $eva->total_mark += $request->input('mark');
         $eva->save();
 
         return response()->json([
