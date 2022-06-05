@@ -22,14 +22,14 @@ class AuditionAdminController extends Controller
 {
     public function index()
     {
-    
+
         $auditionAdmins = User::where([['category_id',auth()->user()->category_id],['user_type','audition-admin']])->orderBy('id', 'DESC')->get();
         return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins'));
     }
 
 
 
-    
+
     public function juryPublished($audition_id)
     {
         $assignJuries = AuditionParticipant::select('jury_id')->get();
@@ -126,11 +126,11 @@ class AuditionAdminController extends Controller
 
     }
 
-   
+
     public function create()
     {
         $data = [
-            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBy('name','asc')->get(),            
+            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBy('name','asc')->get(),
         ];
         return view('ManagerAdmin.auditionAdmin.create',$data);
     }
@@ -150,7 +150,7 @@ class AuditionAdminController extends Controller
             'sub_category_id.required' => 'The Category Field is Required',
         ]);
 
-       
+
 
         $user = new User();
         $user->fill($request->except(['_token','image','cover']));
@@ -195,7 +195,7 @@ class AuditionAdminController extends Controller
         }
     }
 
- 
+
     public function show($search)
     {
         $search_text = $search;
@@ -206,12 +206,12 @@ class AuditionAdminController extends Controller
         return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins','search_text'));
     }
 
- 
+
     public function edit(User $auditionAdmin)
     {
         $data = [
             'auditionAdmin' => $auditionAdmin,
-            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBy('name','asc')->get(),            
+            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBy('name','asc')->get(),
         ];
         return view('ManagerAdmin.auditionAdmin.edit', $data);
     }
@@ -281,15 +281,15 @@ class AuditionAdminController extends Controller
         return $text;
     }
 
-   
+
     public function destroy(User $auditionAdmin)
     {
         try {
             if ($auditionAdmin->cover_photo != null)
-                File::delete(public_path($auditionAdmin->cover_photo)); 
+                File::delete(public_path($auditionAdmin->cover_photo));
 
             if ($auditionAdmin->image != null)
-                File::delete(public_path($auditionAdmin->image)); 
+                File::delete(public_path($auditionAdmin->image));
 
             $auditionAdmin->delete();
             return response()->json([
@@ -489,6 +489,20 @@ class AuditionAdminController extends Controller
             'auditions' => $auditions,
         ];
         return view('ManagerAdmin.Audition.events',$data);
+    }
+
+    public function registrationRules()
+    {
+        return view('ManagerAdmin.registrationRule.index');
+    }
+
+    public function createRegistrationRules()
+    {
+        return view('ManagerAdmin.registrationRule.create');
+    }
+    public function editRegistrationRules()
+    {
+        return view('ManagerAdmin.registrationRule.edit');
     }
 }
 
