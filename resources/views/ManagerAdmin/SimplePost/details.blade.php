@@ -56,7 +56,7 @@ Manager Admin
                         Date
                         <h4 class="text-warning">{{ \Carbon\Carbon::parse($post->date)->format('d F,Y')}}</h4>
                     </div>
-                  
+
                 </div>
             </div>
 

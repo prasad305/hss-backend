@@ -14,7 +14,6 @@ class GreetingsRegistration extends Model
     protected $with = ['user'];
     // protected $with = ['user', 'greeting'];
 
-    //
     public function greeting()
     {
         return $this->belongsTo(Greeting::class, 'greeting_id');

@@ -9,6 +9,7 @@ use App\Models\MeetupEventRegistration;
 use App\Models\SuperStar;
 use App\Models\Activity;
 use App\Models\Post;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 
@@ -21,6 +22,7 @@ class MeetupEventController extends Controller
         $meetup->created_by_id = auth('sanctum')->user()->id;
         $meetup->star_id = $request->input('star_id');
         $meetup->title = $request->input('title');
+        $meetup->slug = Str::slug($request->input('title'));
         $meetup->event_link = $request->input('event_link');
         $meetup->meetup_type = $request->input('meetup_type');
         $meetup->date = $request->input('date');
@@ -45,6 +47,7 @@ class MeetupEventController extends Controller
 
             $meetup->banner = $filename;
         }
+
         if ($request->hasfile('video')) {
             $destination = $meetup->video;
             if (File::exists($destination)) {
@@ -326,6 +329,7 @@ class MeetupEventController extends Controller
         $activity = new Activity();
         $activity->user_id = auth('sanctum')->user()->id;
         $activity->event_id = $request->input('meetup_event_id');
+        $activity->event_registration_id = $meetup->id;
         $activity->type = 'meetup';
         $activity->save();
 

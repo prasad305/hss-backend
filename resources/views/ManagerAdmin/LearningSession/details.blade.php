@@ -38,15 +38,11 @@
         <div class="container-fluid">
 
                 <div class="row">
-                    <div class="col-md-12">
-                        <img src="{{ asset($meetup->banner) }}" style="width: 100%" class="banner-image"/>
-                    </div>
-
+                    <img src="{{ asset($meetup->banner) }}" style="width: 100%" class="banner-image"/>
                 </div>
 
 
                 <div class="row py-5">
-
                     <div class="col-md-8 ">
                         <div class="row card p-5">
                             <h3>{{ $meetup->title }}</h3>
@@ -94,26 +90,19 @@
                     </div>
 
                     <div class="container row">
-                        @if($meetup->status != 1)
+                        @if($meetup->status < 2)
                             <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.learningSession.set_publish', [$meetup->id]) }}">Publish Now</a>
-                        @elseif($meetup->status != 0)
+                        @elseif($meetup->status == 2)
                             <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.learningSession.set_publish', [$meetup->id]) }}">Remove From Publish</a>
                         @endif
                             <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Learning Session','{{ route('managerAdmin.learningSession.edit', $meetup->id) }}')">Edit</a>
                     </div>
-
                 </div>
 
 
 
-
-
-
-
-
-
-        </div> <!-- container -->
-    </div> <!-- content -->
+        </div>
+    </div>
 
 
 
@@ -131,11 +120,6 @@
             });
         </script>
     @endif
-
-
 @endsection
 
-@push('script')
-    {{-- <script src="{{ asset('assets/manager-admin/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script> --}}
-    <script src="{{ asset('assets/manager-admin/pages/dashborad.js') }}"></script>
-@endpush
+

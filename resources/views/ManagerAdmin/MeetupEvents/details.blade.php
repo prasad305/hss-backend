@@ -90,9 +90,9 @@
                     </div>
 
                     <div class="container row">
-                        @if($meetup->status != 1)
+                        @if($meetup->status < 2)
                             <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.meetupEvent.set_publish', [$meetup->id]) }}">Publish Now</a>
-                        @elseif($meetup->status != 0)
+                        @elseif($meetup->status == 2)
                             <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.meetupEvent.set_publish', [$meetup->id]) }}">Remove From Publish</a>
                         @endif
                             <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Meetup Event','{{ route('managerAdmin.meetupEvent.edit', $meetup->id) }}')">Edit</a>

@@ -91,13 +91,14 @@ Manager Admin
 
 
         <div class="container row">
-            @if($product->status != 1)
+            @if($product->status < 2)
             <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.auctionProduct.set_publish', [$product->id]) }}">Publish Now</a>
-            @elseif($product->status != 0)
+            @elseif($product->status == 2)
             <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.auctionProduct.set_publish', [$product->id]) }}">Remove From Publish</a>
             @endif
             <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Post','{{ route('managerAdmin.auctionProduct.edit', $product->id) }}')">Edit</a>
         </div>
+
 
         <div class="row mt-5" >
             <div class="col-12">
@@ -115,7 +116,7 @@ Manager Admin
             </div>
             </div>
             </div>
-            
+
             <div class="card-body table-responsive p-0">
              <table class="table table-hover text-nowrap">
             <thead>
@@ -138,17 +139,17 @@ Manager Admin
                 <span class="tag tag-success">Applied</span>
                 @else
                 <span class="tag tag-success">Not Applied</span>
-                
+
             @endif</td>
-            </tr> 
+            </tr>
                 @endforeach
-            
+
             </tbody>
             </table>
             </div>
-            
+
             </div>
-            
+
             </div>
             </div>
     </div> <!-- container -->

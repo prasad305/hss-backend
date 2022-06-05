@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\SuperStar;
 use App\Models\LearningSession;
+use App\Models\LearningSessionAssignment;
 use App\Models\LearningSessionRegistration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\DB;
 
 class LearningSessionController extends Controller
 {
@@ -142,12 +144,9 @@ class LearningSessionController extends Controller
 
 
     /// Manager Part ////
-
     public function manager_pending()
     {
-        $upcommingEvent = LearningSession::where([
-            ['star_approval', 1], ['status', 0]
-        ])->latest()->get();
+        $upcommingEvent = LearningSession::where('status', 1)->latest()->get();
 
         return view('ManagerAdmin.LearningSession.index', compact('upcommingEvent'));
     }
@@ -155,15 +154,15 @@ class LearningSessionController extends Controller
     public function manager_published()
     {
         $upcommingEvent = LearningSession::where([
-            ['status', 1]
-        ])->latest()->latest()->get();
+            ['status', 2]
+        ])->latest()->get();
 
         return view('ManagerAdmin.LearningSession.index', compact('upcommingEvent'));
     }
 
     public function learningEvaluation()
     {
-        $events = LearningSession::where([['status','>', 3], ['status','<', 9],['category_id',auth()->user()->category_id]])->get();
+        $events = LearningSession::where([['status', '>', 3], ['status', '<', 9], ['category_id', auth()->user()->category_id]])->get();
 
         return view('ManagerAdmin.LearningSession.evaluation', compact('events'));
     }
@@ -175,6 +174,30 @@ class LearningSessionController extends Controller
         return view('ManagerAdmin.LearningSession.evaluationDetails', compact('event'));
     }
 
+    public function evaluationResult($id)
+    {
+        $event = LearningSession::findOrFail($id);
+
+        $assignment = LearningSessionAssignment::where([['event_id', $id], ['send_to_manager', 1]])->get();
+        $assignmentUser = $assignment->groupBy(function ($val) {
+            return $val->user_id;
+        });
+
+        foreach ($assignmentUser as $assignments)
+        {
+
+            $marks = [];
+            foreach ($assignments as $data)
+            {
+
+            }
+        }
+
+        // return $assignmentUser;
+
+        return view('ManagerAdmin.LearningSession.evaluationResult', compact('event','assignment','assignmentUser'));
+    }
+
     public function evaluationAccept($id)
     {
         $event = LearningSession::findOrFail($id);
@@ -184,8 +207,6 @@ class LearningSessionController extends Controller
             'status' => 'success',
             'message' => 'Approved Successfully!',
         ]);
-
-        
     }
 
     public function evaluationReject($id)
@@ -197,15 +218,13 @@ class LearningSessionController extends Controller
             'status' => 'success',
             'message' => 'Rejected Successfully!',
         ]);
-
-        
     }
 
 
 
     public function manager_all()
     {
-        $upcommingEvent = LearningSession::latest()->latest()->get();
+        $upcommingEvent = LearningSession::where([['status','<',0]])->latest()->latest()->get();
 
         return view('ManagerAdmin.LearningSession.index', compact('upcommingEvent'));
     }
@@ -238,15 +257,8 @@ class LearningSessionController extends Controller
     }
 
 
-
     public function manager_event_details($id)
     {
-        // $upcommingEvent = LearningSession::where([
-        //     ['star_approval',1],['manager_approval',0]
-        // ])->latest()->get();
-
-        // return view('ManagerAdmin.LearningSession.index', compact('upcommingEvent'));
-
         $meetup = LearningSession::find($id);
 
         return view('ManagerAdmin.LearningSession.details', compact('meetup'));
@@ -257,10 +269,8 @@ class LearningSessionController extends Controller
     {
         $meetup = LearningSession::find($id);
 
-        if ($meetup->status != 1) {
-            //$meetup->manager_approval = 1;
-            $meetup->status = 1;
-
+        if ($meetup->status != 2) {
+            $meetup->status = 2;
             $meetup->update();
 
             $starCat = SuperStar::where('star_id', $meetup->star_id)->first();
@@ -270,12 +280,12 @@ class LearningSessionController extends Controller
             $post->type = 'learningSession';
             $post->user_id = $meetup->star_id;
             $post->event_id = $meetup->id;
-            // $post->category_id=$starCat->category_id;
-            // $post->sub_category_id=$starCat->sub_category_id;
+            $post->category_id=$starCat->category_id;
+            $post->sub_category_id=$starCat->sub_category_id;
             $post->save();
         } else {
             //$meetup->manager_approval = 0;
-            $meetup->status = 0;
+            $meetup->status = 8;
             $meetup->update();
 
             //Remove post //
