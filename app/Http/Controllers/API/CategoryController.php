@@ -295,7 +295,8 @@ class CategoryController extends Controller
 
     public function star_list()
     {
-        $star =auth('sanctum')->user()->star;
+        $star = User::where('parent_user', auth('sanctum')->user()->id)->get();
+
         return response()->json([
             'status' => 200,
             'star' => $star,
