@@ -499,9 +499,9 @@ class UserController extends Controller
     {
         // return $request->all();
         $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3',
-            'greeting_context' => 'required|min:5',
-            'additional_message' => 'nullable|min:3',
+            'name' => 'required|min:2',
+            'greeting_context' => 'required|min:2',
+            'additional_message' => 'nullable|min:2',
         ]);
 
         if ($validator->fails()) {
@@ -679,7 +679,6 @@ class UserController extends Controller
             'user_id' => auth('sanctum')->user()->id,
             'notifiction' => $notification,
             'greeting_info' => $greeting_info,
-
         ]);
     }
 
