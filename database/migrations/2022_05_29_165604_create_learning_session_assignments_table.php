@@ -16,6 +16,7 @@ class CreateLearningSessionAssignmentsTable extends Migration
         Schema::create('learning_session_assignments', function (Blueprint $table) {
             $table->id();
             $table->integer('event_id')->nullable();
+            $table->integer('evaluation_id')->nullable();
             $table->integer('user_id')->nullable();
             $table->string('video')->nullable();
             $table->integer('mark')->default(0);
