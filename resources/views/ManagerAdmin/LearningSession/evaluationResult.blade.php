@@ -49,26 +49,24 @@ Manager Admin
                             <td>{{ $loop->iteration }}</td>
                             <th>{{ $result->user ? $result->user->first_name.' '.$result->user->last_name : '' }}</th>
                             <td>
-                                @php $avg = 0; @endphp
                                 @if (isset($result->assignments[0]))
                                     @foreach ($result->assignments as  $data)
                                         <video width="120" height="90" class="">
                                             <source src="{{ asset($data->video) }}" type="video/mp4">
                                         </video>
-                                        @php $avg += $data->mark/$event->assignment_video_slot_number @endphp
                                     @endforeach
                                 @endif
                             </td>
 
                             <td>
                                 {{ number_format($result->total_mark, 2) }} 
-                                @if ($key == 0)
+                                @if ($key == 0 && $result->total_mark > 0)
                                  <span class="text-success">1st</span>                                
                                 @endif 
-                                @if ($key == 1)
+                                @if ($key == 1 && $result->total_mark > 0)
                                  <span class="text-info">2nd</span>                                
                                 @endif 
-                                @if ($key == 3)
+                                @if ($key == 3 && $result->total_mark > 0)
                                  <span class="text-primary">3rd</span>                                
                                 @endif 
                             </td>

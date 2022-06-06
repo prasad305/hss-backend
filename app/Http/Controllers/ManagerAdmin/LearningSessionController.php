@@ -163,7 +163,7 @@ class LearningSessionController extends Controller
 
     public function learningEvaluation()
     {
-        $events = LearningSession::where([['status', '>', 3], ['status', '<', 9]])->get();
+        $events = LearningSession::where([['status', '>', 3], ['status', '<', 9]])->orderBy('updated_at', 'desc')->get();
 
         return view('ManagerAdmin.LearningSession.evaluation', compact('events'));
     }
@@ -178,10 +178,10 @@ class LearningSessionController extends Controller
     public function evaluationResult($id)
     {
         $event = LearningSession::findOrFail($id);
-       $results = LearningSessionEvaluation::where('event_id',$id)->orderBy('total_mark','desc')->get();
+        $results = LearningSessionEvaluation::where('event_id', $id)->orderBy('total_mark', 'desc')->get();
 
 
-        return view('ManagerAdmin.LearningSession.evaluationResult', compact('event','results'));
+        return view('ManagerAdmin.LearningSession.evaluationResult', compact('event', 'results'));
     }
 
     public function evaluationAccept($id)
@@ -210,7 +210,7 @@ class LearningSessionController extends Controller
 
     public function manager_all()
     {
-        $upcommingEvent = LearningSession::where([['status','<',0]])->latest()->latest()->get();
+        $upcommingEvent = LearningSession::where([['status', '<', 0]])->latest()->latest()->get();
 
         return view('ManagerAdmin.LearningSession.index', compact('upcommingEvent'));
     }
@@ -266,8 +266,8 @@ class LearningSessionController extends Controller
             $post->type = 'learningSession';
             $post->user_id = $learningSession->star_id;
             $post->event_id = $learningSession->id;
-            $post->category_id=$starCat->category_id;
-            $post->sub_category_id=$starCat->sub_category_id;
+            $post->category_id = $starCat->category_id;
+            $post->sub_category_id = $starCat->sub_category_id;
             $post->save();
         } else {
             //$learningSession->manager_approval = 0;

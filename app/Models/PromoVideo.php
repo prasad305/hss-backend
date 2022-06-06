@@ -11,6 +11,9 @@ class PromoVideo extends Model
         'admin_id',
         'video_url',
         'star_id',
+        'category_id',
+        'sub_category_id',
+        'star_id',
         'star_approval',
         'title'
     ];

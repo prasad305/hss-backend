@@ -1124,7 +1124,7 @@ class UserController extends Controller
     public function getPromoVideo()
     {
 
-        $promoVideos = PromoVideo::select('video_url')->where('status', 1)->latest()->get();
+        $promoVideos = PromoVideo::select('video_url')->where('status', 1)->orderBy('updated_at','desc')->get();
         return response()->json([
             'status' => 200,
             'promoVideos' => $promoVideos,
