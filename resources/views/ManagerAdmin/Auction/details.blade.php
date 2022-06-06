@@ -55,7 +55,7 @@ Manager Admin
                     </div>
                     <div class="col-md-3 card py-3 mr-1">
                         Time
-                        <h4 class="text-warning">Reselase {{ \Carbon\Carbon::parse($product->bid_from)->format('h:i A')}} - End {{ \Carbon\Carbon::parse($product->bid_to)->format('h:i A')}}</h4>
+                        <h4 class="text-warning">BID {{ \Carbon\Carbon::parse($product->bid_from)->format('h:i A')}} - End {{ \Carbon\Carbon::parse($product->bid_to)->format('h:i A')}}</h4>
                     </div>
                     <div class="col-md-3 card py-3">
                         Base Price
@@ -91,9 +91,9 @@ Manager Admin
 
 
         <div class="container row">
-            @if($product->status < 2)
+            @if($product->status == 0 )
             <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.auctionProduct.set_publish', [$product->id]) }}">Publish Now</a>
-            @elseif($product->status == 2)
+            @elseif($product->status == 1)
             <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.auctionProduct.set_publish', [$product->id]) }}">Remove From Publish</a>
             @endif
             <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Post','{{ route('managerAdmin.auctionProduct.edit', $product->id) }}')">Edit</a>
