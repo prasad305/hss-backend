@@ -105,7 +105,7 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
-            'livechats' => $post,
+            'posts' => $post,
         ]);
     }
 

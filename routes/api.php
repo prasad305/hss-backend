@@ -14,6 +14,8 @@ use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\API\SimplePostController;
 use App\Http\Controllers\API\FanGroupController;
+use App\Http\Controllers\API\SouvinerController;
+use App\Http\Controllers\API\WalletController;
 use App\Http\Controllers\API\LearningSessionController;
 use App\Http\Controllers\API\Audition\Admin\AuditionController;
 use App\Http\Controllers\API\Audition\Jury\JuryAuditionController;
@@ -109,14 +111,17 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/marketplace/details/{slug}', [MarketplaceController::class, 'getSlugDetails']);
     Route::post('/user/marketplace/order/store', [MarketplaceController::class, 'viewMarketplaceOrder']);
     Route::get('/user/marketplace/activities', [MarketplaceController::class, 'viewMarketplaceActivities']);
+    Route::get('/user/marketplace/order/product-list/view/{id}', [MarketplaceController::class, 'orderAdminProductListView']);
 
     // Fan Group Section
-    Route::get('user/fan/group/list', [FanGroupController::class, 'getFanGroupList']);
-    Route::get('user/fan/group/{slug}', [FanGroupController::class, 'getFanGroupDetails']);
-    Route::post('user/fan/group/store', [FanGroupController::class, 'getFanGroupStore']);
-    Route::get('user/fan/group/join/{join_id}', [FanGroupController::class, 'getFanGroupJoinId']);
+    Route::get('/user/fan/group/list', [FanGroupController::class, 'getFanGroupList']);
+    Route::get('/user/fan/group/{slug}', [FanGroupController::class, 'getFanGroupDetails']);
+    Route::post('/user/fan/group/store', [FanGroupController::class, 'getFanGroupStore']);
+    Route::get('/user/fan/group/join/{join_id}', [FanGroupController::class, 'getFanGroupJoinId']);
     Route::post('/user/fan/group/post/store', [FanGroupController::class, 'getFanPostStore']);
     Route::get('/user/fan/group/post/show/{slug}', [FanGroupController::class, 'getFanPostShow']);
+    Route::get('/user/fan/group/post/like/{id}', [FanGroupController::class, 'getFanPostLike']);
+    Route::post('/user/fan/group/post/like/{id}', [FanGroupController::class, 'postFanPostLike']);
 
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
@@ -200,6 +205,13 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     //Registration Checker
     Route::get('/user/registration_checker/{type}/{slug}', [UserController::class, 'registration_checker']);
+
+    // Wallet
+    Route::get('/user/packages/all', [WalletController::class, 'package_list']);
+    Route::get('/user/wallet/details', [WalletController::class, 'getUserWallet']);
+    Route::post('/user/wallet/store', [WalletController::class, 'userWalletStore']);
+    Route::get('/user/wallet/history', [WalletController::class, 'userWalletHistory']);
+    Route::post('/user/free/wallet/store/{packageId}/{userId}', [WalletController::class, 'userFreeWalletStore']);
 });
 
 
@@ -223,6 +235,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/fan-group/star/list/{data}', [FanGroupController::class, 'someStarList']);
     Route::get('/admin/fan/group/adminlist/status', [FanGroupController::class, 'statusAdminStar']);
     Route::get('/admin/fan/group/show/{slug}', [FanGroupController::class, 'showFanGroup']);
+    Route::get('/admin/fan/group/analytics/{slug}', [FanGroupController::class, 'showFanGroupAnalytics']);
     Route::post('/admin/fan/group/update/{slug}', [FanGroupController::class, 'updateFanGroup']);
     Route::delete('/admin/fan/group/delete/{slug}', [FanGroupController::class, 'deleteFanGroup']);
     Route::post('/admin/fan/member/approve/{id}', [FanGroupController::class, 'approveFanMember']);
@@ -231,6 +244,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/fan-group/join/{slug}/{data}', [FanGroupController::class, 'joinFanGroup']);
     Route::post('/admin/fan-group/post/{slug}/{data}', [FanGroupController::class, 'postFanGroup']);
     Route::post('/admin/fan/group/image/update/{slug}', [FanGroupController::class, 'updateImageFanGroup']);
+    Route::post('/admin/fan-group/manager/approval/{slug}', [FanGroupController::class, 'fanGroupManagerApproval']);
     Route::get('/admin/fan/group/settings/delete/{id}', [FanGroupController::class, 'deleteSettingsFan']);
     Route::post('/admin/fan/group/settings/no-warning/{id}', [FanGroupController::class, 'noWarningSettingsFan']);
     Route::post('/admin/fan/group/approval/warning/{id}/{fanid}', [FanGroupController::class, 'warningSettingsFan']);
@@ -243,6 +257,14 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/marketplace/product-edit/{id}', [MarketplaceController::class, 'editAdminProductList']);
     Route::post('/admin/marketplace/product-store/{id}', [MarketplaceController::class, 'storeAdminProductList']);
     Route::get('/admin/marketplace/order/product-list', [MarketplaceController::class, 'orderAdminProductList']);
+    Route::get('/admin/marketplace/order/product-list/view/{id}', [MarketplaceController::class, 'orderAdminProductListView']);
+    Route::post('/admin/marketplace/order/product/status/{status}/{id}', [MarketplaceController::class, 'orderAdminProductListStatus']);
+
+
+    // Souviner Section
+    Route::post('/admin/souviner/store', [SouvinerController::class, 'souvinerStore']);
+    // Route::get('/admin/souviner/product-list/approved', [SouvinerController::class, 'allProductList']);
+    // Route::get('/admin/souviner/product-list/pending', [SouvinerController::class, 'pendingProductList']);
 
     // Simple Post Section
     Route::post('admin/add_simple_post', [SimplePostController::class, 'add']);
@@ -426,6 +448,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/simple_post/approved', [SimplePostController::class, 'star_approved_list']);
     Route::get('/star/approve_post/{id}', [SimplePostController::class, 'approve_post']);
     Route::get('/star/decline_post/{id}', [SimplePostController::class, 'decline_post']);
+
+    // Souviner Section
+    Route::post('/star/souviner/store', [SouvinerController::class, 'souvinerStarStore']);
 
     // Learning Session Section
     Route::post('/star/add_learning_session', [LearningSessionController::class, 'star_add']);

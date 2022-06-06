@@ -17,6 +17,7 @@ class CategoryController extends Controller
     public function index()
     {
         $category = Category::all();
+        $allStar = User::where('parent_user', auth('sanctum')->user()->id)->get();
 
         $id = auth('sanctum')->user()->id;
         $selectedCategory = ChoiceList::where('user_id' ,$id)->first();
@@ -41,6 +42,7 @@ class CategoryController extends Controller
             'category' => $category,
             'selectedCategory' => $selectedCategory,
             'sugg_category' => $sugg_category,
+            'allStar' => $allStar,
         ]);
     }
 

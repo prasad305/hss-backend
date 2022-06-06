@@ -9,6 +9,7 @@ use App\Models\Order;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class MarketplaceController extends Controller
 {
@@ -66,32 +67,56 @@ class MarketplaceController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+
+            'title' => 'required',
+            'description' => 'required',
+            'keywords' => 'required',
+            'terms_conditions' => 'required',
+            'unit_price' => 'required',
+            'total_items' => 'required',
+
+        ]);
+
         $marketplace = Marketplace::findOrFail($id);
         $marketplace->fill($request->except('_token'));
 
         $marketplace->title = $request->input('title');
         $marketplace->description = $request->input('description');
         $marketplace->keywords = $request->input('keywords');
+        $marketplace->terms_conditions = $request->input('terms_conditions');
         $marketplace->total_items = $request->input('total_items');
         $marketplace->unit_price = $request->input('unit_price');
 
 
-        if ($request->hasfile('image')) {
+        // if ($request->hasfile('image')) {
 
-            // $destination = $marketplace->image;
-            // if (File::exists($destination)) {
-            //     File::delete($destination);
-            // }
+        //     // $destination = $marketplace->image;
+        //     // if (File::exists($destination)) {
+        //     //     File::delete($destination);
+        //     // }
+        //     $destination = $marketplace->image;
+        //     // @unlink($destination);
 
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/marketplace/' . time() . '.' . $extension;
+        //     if (File::exists($destination)) {
+        //         //File::delete($image_path);
+        //         unlink($destination);
+        //     }
 
-            Image::make($file)->resize(400, 400)->save($filename, 50);
-            $marketplace->image = $filename;
+        //     //     if(File::exists($destination))
+        //     //     {
+        //     //         File::delete($destination);
+        //     //     }
+
+        //     $file = $request->file('image');
+        //     $extension = $file->getClientOriginalExtension();
+        //     $filename = 'uploads/images/marketplace/' . time() . '.' . $extension;
+
+        //     Image::make($file)->resize(400, 400)->save($filename, 50);
+        //     $marketplace->image = $filename;
 
 
-        }
+        // }
 
 
             try {

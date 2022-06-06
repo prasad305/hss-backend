@@ -8,6 +8,7 @@ use Auth;
 use App\Models\FanGroup;
 use App\Models\FanPost;
 use App\Models\User;
+use App\Models\Wallet;
 use App\Models\Fan_Group_Join;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
@@ -40,67 +41,73 @@ class FanGroupController extends Controller
     }
 
     public function fanGroupStore(Request $request){
-        $validator = Validator::make($request->all(), [
+        // $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(),[
             'group_name' => 'required',
             'description' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
+            'club_points' => 'required',
             'my_star' => 'required',
             'another_star' => 'required',
-            'banner' => 'required | mimes:jpeg,jpg,png,webp | max:1000',
+            'banner' => 'required',
         ]);
 
-        $id = auth('sanctum')->user()->id;
-        $anotherStar =  $request->another_star;
-
-        $adminId = User::find($anotherStar);
-
-
-        $fangroup = new FanGroup();
-
-        $fangroup->group_name = $request->group_name;
-        $fangroup->slug = Str::slug($request->input('group_name'));
-        $fangroup->description = $request->description;
-        $fangroup->start_date = $request->start_date;
-        $fangroup->end_date = $request->end_date;
-        $fangroup->min_member = $request->min_member;
-        $fangroup->max_member = $request->max_member;
-        $fangroup->created_by = $id;
-
-        $fangroup->my_star = $request->my_star;
-        $fangroup->my_star_status = 0;
-
-        $fangroup->another_star = $anotherStar;
-        if($adminId){
-            $fangroup->another_star_admin_id = $adminId->parent_user;
-            $fangroup->category_id = $adminId->category_id;
-            $fangroup->sub_category_id = $adminId->sub_category_id;
-        }
-
-        $fangroup->another_star_status = 0;
-
-        if ($request->hasfile('banner')) {
-
-            $file = $request->file('banner');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/fangroup/' . time() . '.' . $extension;
-
-            Image::make($file)->resize(800, 300)->save($filename, 100);
-            $fangroup->banner = $filename;
-        }
-
-        $fangroup->join_approval_status = 0;
-        $fangroup->post_approval_status = 0;
-        $fangroup->status = 0;
-
-        $fangroup->save();
-
-        if ($validator->fails()) {
+        if($validator->fails())
+        {
             return response()->json([
-                'status' => 422,
-                'errors' => $validator->errors(),
+                'validation_errors'=>$validator->errors(),
             ]);
-        }else{
+        }
+
+        else{
+
+            $id = auth('sanctum')->user()->id;
+            $anotherStar =  $request->another_star;
+
+            $adminId = User::find($anotherStar);
+            // return $request->all();
+
+            $fangroup = new FanGroup();
+
+            $fangroup->group_name = $request->group_name;
+            $fangroup->slug = Str::slug($request->input('group_name'));
+            $fangroup->description = $request->description;
+            $fangroup->club_points = $request->club_points;
+            $fangroup->start_date = $request->start_date;
+            $fangroup->end_date = $request->end_date;
+            $fangroup->min_member = $request->min_member;
+            $fangroup->max_member = $request->max_member;
+            $fangroup->created_by = $id;
+
+            $fangroup->my_star = $request->my_star;
+            $fangroup->my_star_status = 0;
+
+            $fangroup->another_star = $anotherStar;
+            if($adminId){
+                $fangroup->another_star_admin_id = $adminId->parent_user;
+                $fangroup->category_id = $adminId->category_id;
+                $fangroup->sub_category_id = $adminId->sub_category_id;
+            }
+            
+            $fangroup->another_star_status = 0;
+
+            if ($request->hasfile('banner')) {
+
+                $file = $request->file('banner');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/fangroup/' . time() . '.' . $extension;
+
+                Image::make($file)->resize(800, 300)->save($filename, 100);
+                $fangroup->banner = $filename;
+            }
+
+            $fangroup->join_approval_status = 0;
+            $fangroup->post_approval_status = 0;
+            $fangroup->status = 0;
+
+            $fangroup->save();
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Fan Group Added Successfully',
@@ -114,7 +121,7 @@ class FanGroupController extends Controller
         // $adminId = User::find($anotherStar);
 
 
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'group_name' => 'required',
             'description' => 'required',
             'start_date' => 'required',
@@ -124,6 +131,7 @@ class FanGroupController extends Controller
         $fangroup = FanGroup::where('slug', $slug)->first();
 
         $fangroup->group_name = $request->group_name;
+        $fangroup->club_points = $request->club_points;
         $fangroup->slug = Str::slug($request->input('group_name'));
         $fangroup->description = $request->description;
         $fangroup->start_date = $request->start_date;
@@ -276,6 +284,7 @@ class FanGroupController extends Controller
                                     })
                                     ->whereDate('start_date','<=', $today)
                                     ->whereDate('end_date','>=', $today)
+                                    ->where('status', 1)
                                     ->orderBy('id', 'DESC')
                                     ->get();
 
@@ -454,9 +463,9 @@ class FanGroupController extends Controller
 
     public function getFanPostShow($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
-        // $id = auth('sanctum')->user()->id;
+        $userId = auth('sanctum')->user()->id;
 
-        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->latest()->orderBy('id', 'DESC')->get();
+        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->latest()->where('status', 1)->orderBy('id', 'DESC')->get();
         $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->get();
         $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->get();
 
@@ -465,30 +474,85 @@ class FanGroupController extends Controller
             'fanPost' => $fanPost,
             'fanMedia' => $fanMedia,
             'fanVideo' => $fanVideo,
+            'userId' => $userId,
             // 'useFanGroup' => $useFanGroup,
         ]);
     }
 
+    public function fanGroupManagerApproval($slug){
+        $fanDetails = FanGroup::where('slug', $slug)->first();
+
+        $fanDetails->status = 2;
+        $fanDetails->save();
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'Fan Group Approval Request Done!',
+        ]);
+    }
+
+    // Fan Post Like
+
+    public function postFanPostLike(Request $request, $id){
+        $fanPostId = FanPost::find($id);
+        $fanPostId->user_like_id = $request->showlike;
+        $fanPostId->like_count = count(json_decode($request->showlike));
+        $fanPostId->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Admin Fan Post Done',
+        ]);
+    }
+
+    public function getFanPostLike($id){
+        $fanPostId = FanPost::find($id);
+
+        return response()->json([
+            'status' => 200,
+            'userLikedList' => $fanPostId->user_like_id,
+            'likeCount' => $fanPostId->like_count,
+        ]);
+    }
+
     public function getFanGroupList(){
-        $fanList = FanGroup::where('status', 1)->latest()->get();
+        
         $id = auth('sanctum')->user()->id;
 
         $useFan = User::where('id', $id)->first();
 
         $fanUser = json_decode($useFan->fan_group ? $useFan->fan_group : '[]');
 
+        $fanCount = FanGroup::select("*")
+                            ->whereIn('id', $fanUser)
+                            ->where('status', 1)
+                            ->count();
+
         $useFanGroup = FanGroup::select("*")
                     ->whereIn('id', $fanUser)
+                    ->where('status', 1)
                     ->get();
+
+        $fanList = FanGroup::where('status', 1)->whereNotIn('id', $fanUser)->latest()->get();
 
         return response()->json([
             'status' => 200,
             'fanList' => $fanList,
+            'fanCount' => $fanCount,
             'useFanGroup' => $useFanGroup,
         ]);
     }
 
     public function getFanGroupDetails($slug){
+        // Get User Points for checking 
+        // $userPoints = User::find(Auth('sanctum')->user()->id);
+        $userPoints = Wallet::where('user_id', Auth('sanctum')->user()->id)->first();
+        if($userPoints){
+            $userPoints = $userPoints;
+        }else{
+            $userPoints = 0;
+        }
+
         $fanDetails = FanGroup::where('slug', $slug)->first();
 
         $users_one = json_decode($fanDetails->my_user_join ? $fanDetails->my_user_join : '[]');
@@ -507,10 +571,10 @@ class FanGroupController extends Controller
         $another_star = User::find($fanDetails->another_star);
 
 
-
         return response()->json([
             'status' => 200,
             'fanDetails' => $fanDetails,
+            'userPoints' => $userPoints,
             'fanId' => $fanDetails->id,
             'my_user_join' => $my_user_join,
             'another_user_join' => $another_user_join,
@@ -575,6 +639,97 @@ class FanGroupController extends Controller
             'fanId' => $fanId,
             'userJoin' => $userJoin,
             'myStar' => $myStar,
+        ]);
+    }
+
+    public function showFanGroupAnalytics($slug){
+        $fanDetails = FanGroup::where('slug', $slug)->first();
+
+        // Total Fan Post under first star 
+        $myStarPost = FanPost::where('fan_group_id', $fanDetails->id)
+                                ->where('star_id', $fanDetails->my_star)
+                                ->count();
+
+        // Total Fan Post under second star 
+        $anotherStarPost = FanPost::where('fan_group_id', $fanDetails->id)
+                                ->where('star_id', $fanDetails->another_star)
+                                ->count();
+
+        // Analytics Fan Post under first star 
+        $users = FanPost::select('id', 'created_at')
+        ->where('fan_group_id', $fanDetails->id)
+                        ->where('star_id', $fanDetails->my_star)
+                ->get()
+                ->groupBy(function($date) {
+                    //return Carbon::parse($date->created_at)->format('Y'); // grouping by years
+                    return Carbon::parse($date->created_at)->format('m'); // grouping by months
+                });
+
+                $usermcount = [];
+                $userArr = [];
+
+                foreach ($users as $key => $value) {
+                    $usermcount[(int)$key] = count($value);
+                }
+
+                for($i = 1; $i <= 12; $i++){
+                    if(!empty($usermcount[$i])){
+                        $userArr[$i] = $usermcount[$i];    
+                    }else{
+                        $userArr[$i] = 0;    
+                    }
+                }
+
+        $myStarAna=array();
+        
+        foreach ($userArr as $key => $value){
+            array_push($myStarAna, $value);
+        }
+
+        $myStarAnalytics = $myStarAna;
+
+
+        // Analytics Fan Post under first star 
+        $users2 = FanPost::select('id', 'created_at')
+        ->where('fan_group_id', $fanDetails->id)
+                        ->where('star_id', $fanDetails->another_star)
+                ->get()
+                ->groupBy(function($date) {
+                    //return Carbon::parse($date->created_at)->format('Y'); // grouping by years
+                    return Carbon::parse($date->created_at)->format('m'); // grouping by months
+                });
+
+                $usermcount2 = [];
+                $userArr2 = [];
+
+                foreach ($users2 as $key => $value) {
+                    $usermcount2[(int)$key] = count($value);
+                }
+
+                for($i = 1; $i <= 12; $i++){
+                    if(!empty($usermcount2[$i])){
+                        $userArr2[$i] = $usermcount2[$i];    
+                    }else{
+                        $userArr2[$i] = 0;    
+                    }
+                }
+
+        $anotherStarAna=array();
+        
+        foreach ($userArr2 as $key => $value){
+            array_push($anotherStarAna, $value);
+        }
+
+        $anotherStarAnalytics = $anotherStarAna;
+
+
+        return response()->json([
+            'status' => 200,
+            'fanDetails' => $fanDetails,
+            'myStarPost' => $myStarPost,
+            'anotherStarPost' => $anotherStarPost,
+            'myStarAnalytics' => $myStarAnalytics,
+            'anotherStarAnalytics' => $anotherStarAnalytics,
         ]);
     }
     public function deleteSettingsFan($id){
@@ -685,6 +840,9 @@ class FanGroupController extends Controller
 
         $fan_group_id = $request->fan_group_id;
 
+        // $latestFanID = FanGroup::latest()->get();
+        // dd($latestFanID);
+
         $showFanGroup = FanGroup::find($fan_group_id);
 
         $fanStore = new Fan_Group_Join();
@@ -701,6 +859,9 @@ class FanGroupController extends Controller
         }
 
         $fanStore->save();
+
+        
+        Fan_Group_Join::where('fan_group_id', $fan_group_id)->where('user_id', $id)->where('id', '!=', $fanStore->id)->delete();
 
         // Add ID(json) in User table
         $user = User::find($id);
@@ -757,6 +918,7 @@ class FanGroupController extends Controller
 
         $fanPost->star_id = $star->star_id;
         $fanPost->star_name = $star->star_name;
+        $fanPost->user_like_id = '[]';
 
         $fanPost->like_count = 0;
 
@@ -843,6 +1005,7 @@ class FanGroupController extends Controller
     public function getFanGroupJoinId($id){
 
         $userId = auth('sanctum')->user()->id;
+        // $fanJoinDetails = Fan_Group_Join::where('fan_group_id', $id)->where('user_id', $userId)->latest()->first();
         $fanJoinDetails = Fan_Group_Join::where('fan_group_id', $id)->where('user_id', $userId)->first();
 
         return response()->json([

@@ -25,8 +25,11 @@ class CreatePostsTable extends Migration
             $table->integer('share_number')->default(0);
             $table->string('title')->nullable();
             $table->longText('details')->nullable();
+            $table->longText('user_like_id')->nullable();
             $table->string('share_link')->nullable();
             $table->longText('react_provider')->nullable();
+            $table->timestamp('post_start_date')->nullable();
+            $table->timestamp('post_end_date')->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();
         });

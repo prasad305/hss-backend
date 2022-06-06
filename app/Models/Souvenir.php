@@ -10,14 +10,12 @@ class Souvenir extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id',
-        'star_id',
         'title',
-        'brand',
-        'details',
+        'slug',
+        'description',
+        'instruction',
         'price',
-        'quantity',
-        'status',
+        'banner',
     ];
 
     public function images()

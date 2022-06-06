@@ -15,13 +15,16 @@ class CreateSouvenirsTable extends Migration
     {
         Schema::create('souvenirs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('star_id')->nullable();
             $table->string('title')->nullable();
-            $table->string('brand')->nullable();
-            $table->text('details')->nullable();
+            $table->string('slug')->nullable();
+            $table->text('description')->nullable();
+            $table->text('instruction')->nullable();
             $table->float('price')->nullable();
-            $table->integer('quantity')->nullable();
-            $table->boolean('status')->default(0)->comment('0 = running , 1 = closed');
+            $table->integer('admin_id')->nullable();
+            $table->integer('star_id')->nullable();
+            $table->string('banner')->nullable();
+            $table->integer('approval_status')->default(0)->comment('0 = admin approval , 1 = star approval');
+            $table->integer('status')->default(0)->comment('0 = inactive , 1 = active');
             $table->timestamps();
         });
     }

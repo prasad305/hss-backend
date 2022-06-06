@@ -20,6 +20,7 @@ class FanGroup extends Model
         'max_member',
         'banner',
         'category_id',
+        'club_points',
     ];
     //Relation For API
     protected $with = ['another_admin', 'another_superstar', 'my_superstar', 'my_admin'];
