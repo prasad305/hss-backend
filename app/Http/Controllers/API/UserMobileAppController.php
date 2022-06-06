@@ -98,7 +98,7 @@ class UserMobileAppController extends Controller
             $eventRegistration->qna_id = $eventId;
             $eventRegistration->amount = $request->fee;
             $eventRegistration->room_id = $request->room_id;
-            $eventRegistration->qna_date = $request->date;
+            $eventRegistration->qna_date = $event->date;
             $eventRegistration->qna_start_time = Carbon::parse($request->start_time)->format('H:i:s');
             $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
             $activity->type = 'qna';

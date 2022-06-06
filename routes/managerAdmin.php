@@ -152,7 +152,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('post/set_publish/{id}', [SimplePostController::class, 'set_publish'])->name('simplePost.set_publish');
 
 
-    // Souvenir Auction
+    // StarShowcase Auction
     Route::get('auction/pending', [AuctionController::class, 'pending'])->name('auctionProduct.pending');
     Route::get('auction/published', [AuctionController::class, 'published'])->name('auctionProduct.published');
     Route::get('auction/all', [AuctionController::class, 'all'])->name('auctionProduct.all');

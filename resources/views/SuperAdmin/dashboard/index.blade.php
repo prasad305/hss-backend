@@ -231,7 +231,7 @@
             <span class="info-box-icon bg-warning elevation-1"><i class="fa-brands fa-product-hunt"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Total Souvenir Products</span>
+              <span class="info-box-text">Total Auction Products</span>
               <span class="info-box-number">{{ $auctionCount }}</span>
               <a href="{{ route('superAdmin.allAuction') }}">
                 <span class="info-box-number" style="color: #3aa733;"><i class="fa fa-eye"></i> View all</span>
