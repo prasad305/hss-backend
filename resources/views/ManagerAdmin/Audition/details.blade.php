@@ -55,7 +55,7 @@ Manager Admin
                     </div>
                     <div class="col-md-3 card py-3 mr-1">
                         Time
-                        <h4 class="text-warning">Reselase {{ \Carbon\Carbon::parse($audition->start_time)->format('d F,Y')}} <span class="text-success">-</span><span class="text-danger"> End {{ \Carbon\Carbon::parse($audition->end_time)->format('d F,Y')}}</span></h4>
+                        <h4 class="text-warning"> {{ \Carbon\Carbon::parse($audition->start_time)->format('d F,Y')}} <span class="text-success">-</span><span class="text-danger"> End {{ \Carbon\Carbon::parse($audition->end_time)->format('d F,Y')}}</span></h4>
                     </div>
                 </div>
             </div>
