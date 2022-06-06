@@ -15,6 +15,7 @@ use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\ManagerAdmin\AuctionController;
 use App\Http\Controllers\ManagerAdmin\GreetingController;
 use App\Http\Controllers\ManagerAdmin\PromoVideoController;
+use App\Http\Controllers\ManagerAdmin\QnaController;
 use App\Http\Controllers\ManagerAdmin\ScheduleController;
 use App\Http\Controllers\ManagerAdmin\StarAssignedController;
 use App\Http\Controllers\ManagerAdmin\SuperStarController;
@@ -44,6 +45,9 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('live-chats', [DashboardController::class, 'liveChats'])->name('dashboard.liveChat');
     Route::get('live-chats-data/{type}', [DashboardController::class, 'liveChatsData'])->name('dashboard.liveChatData');
     Route::get('live-chats-details/{id}', [DashboardController::class, 'liveChatsDetails'])->name('dashboard.liveChatDetails');
+    
+    //Question And Answers
+
 
     // Auditions
     Route::get('auditions', [DashboardController::class, 'auditions'])->name('dashboard.audition');
@@ -239,9 +243,23 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('liveChat/pending', [LiveChatController::class, 'pending'])->name('liveChat.pending');
     Route::get('liveChat/published', [LiveChatController::class, 'published'])->name('liveChat.published');
     Route::get('liveChat/all', [LiveChatController::class, 'all'])->name('liveChat.all');
+
     Route::get('LiveChatEvents/details/{id}', [LiveChatController::class, 'manager_event_details'])->name('LiveChatEvents.details');
     Route::get('LiveChatEvents/set_publish/{id}', [LiveChatController::class, 'manager_event_set_publish'])->name('liveChat.set_publish');
 
+    // Questions and Answers
+    Route::get('qna/pending', [QnaController::class, 'pending'])->name('qna.pending');
+    Route::get('qna/published', [QnaController::class, 'published'])->name('qna.published');
+    Route::get('qna/all', [QnaController::class, 'all'])->name('qna.all');
+    Route::get('qna/details/{id}', [QnaController::class, 'manager_event_details'])->name('qna.details');
+    Route::get('qna/set_publish/{id}', [QnaController::class, 'manager_event_set_publish'])->name('qna.set_publish');
+
+    Route::get('qna', [QnaController::class, 'index'])->name('qna.index');
+    Route::put('qna/approve/{id}', [QnaController::class, 'approve'])->name('qna.approve');
+    // Route::get('qna/details/{id}', [QnaController::class, 'show'])->name('qna.details');
+
+    Route::get('qna/edit/{id}', [QnaController::class, 'edit'])->name('qna.edit');
+    Route::put('qna/edit/{id}', [QnaController::class, 'update'])->name('qna.update');
 
     //Learning Session
     Route::get('learningSession/pending', [LearningSessionController::class, 'manager_pending'])->name('learningSession.pending');

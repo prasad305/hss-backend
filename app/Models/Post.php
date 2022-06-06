@@ -26,7 +26,7 @@ class Post extends Model
         'status',
     ];
 
-    protected $with = ['star', 'meetup', 'livechat', 'general', 'react', 'learningSession','audition', 'category', 'subCategory'];
+    protected $with = ['star', 'meetup', 'livechat', 'general', 'react', 'learningSession','audition', 'category', 'subCategory','qna'];
 
     public function star()
     {
@@ -41,6 +41,10 @@ class Post extends Model
     public function livechat()
     {
         return $this->belongsTo(LiveChat::class, 'event_id');
+    }
+    public function qna()
+    {
+        return $this->belongsTo(QnA::class, 'event_id');
     }
 
     public function learningSession()

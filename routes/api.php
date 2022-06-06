@@ -19,6 +19,7 @@ use App\Http\Controllers\API\Audition\Admin\AuditionController;
 use App\Http\Controllers\API\Audition\Jury\JuryAuditionController;
 use App\Http\Controllers\API\Audition\Judge\JudgeAuditionController;
 use App\Http\Controllers\API\PromoVideoController;
+use App\Http\Controllers\API\QnaController;
 use App\Http\Controllers\API\StarGreetingController;
 use App\Http\Controllers\API\StarScheduleController;
 use Illuminate\Http\Request;
@@ -82,14 +83,24 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/registerMeestup', [UserController::class, 'registeredMeetup']);
     Route::get('/user/registerLivechat', [UserController::class, 'registeredLivechat']);
     Route::get('/user/registerLearningSession', [UserController::class, 'registeredLearningSession']);
-
-
+    
+    
     Route::get('/user/sinlgeLiveChat/{id}', [UserController::class, 'sinlgeLiveChat']);
     Route::get('/user/getSingleLiveChatEvent/{id}', [UserController::class, 'getSingleLiveChatEvent']);
     Route::get('/user/getSingleLiveChatEvent/{minute}/{id}', [UserController::class, 'getLiveChatTiemSlot']);
-
+    
     //live chat
     Route::get('/user/live-chat/{slug}', [UserController::class, 'liveChatDetails']);
+    
+    //Questions And Answers
+    Route::get('/user/qna/{slug}', [UserController::class, 'qnaDetails']);
+    Route::get('/user/sinlgeQna/{id}', [UserController::class, 'sinlgeQna']);
+    Route::get('/user/getSingleQnaEvent/{id}', [UserController::class, 'getSingleQnaEvent']);
+    Route::get('/user/getSingleQnaEvent/{minute}/{id}', [UserController::class, 'getLiveQnaTiemSlot']);
+    Route::get('/user/qna_activites', [UserController::class, 'qna_activities']);
+    Route::get('/user/qnaAll', [UserController::class, 'getQnaAll']);
+    Route::get('/user/qnaStarAll/{id}', [UserController::class, 'getStarQna']);
+    
 
     //Meetup Event
     Route::get('/user/meetup/{slug}', [UserController::class, 'meetupDetails']);
@@ -286,6 +297,15 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/livechatListByDate/{date}', [LiveChatController::class, 'admin_livechatListByDate']);
     Route::get('/admin/registeredUserList/{live_chat_id}', [LiveChatController::class, 'admin_registeredUserList']);
 
+    // Question and Answers
+
+    Route::post('/admin/add_qna', [QnaController::class, 'add_qna']);
+    Route::get('/admin/pending/qna', [QnaController::class, 'pendingQna']);
+    Route::get('/admin/qna/count', [QnaController::class, 'count']);
+    Route::get('/admin/qna/{slug}', [QnaController::class, 'details']);
+    Route::get('/admin/qna_live', [QnaController::class, 'liveQnalist']);
+    Route::get('/admin/qna_completed', [QnaController::class, 'qna_completed']);
+    Route::get('/admin/registeredList/{slug}', [QnaController::class, 'registeredList']);
 
     //Meetup Session Section
     Route::post('/admin/add_meetup', [MeetupEventController::class, 'add']);
@@ -444,7 +464,21 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::post('/star/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'star_assignment_set_approval']);
 
 
-    // Live Session Section
+    // Question and Answers
+
+    Route::post('/star/add_qna', [QnaController::class, 'star_add_qna']);
+    Route::get('/star/pending/qna', [QnaController::class, 'star_pendingQna']);
+    Route::get('/star/qna/count', [QnaController::class, 'star_count']);
+    Route::get('/star/qna/{slug}', [QnaController::class, 'star_details']);
+    Route::get('/star/qna_live', [QnaController::class, 'star_liveQnalist']);
+    Route::get('/star/qna_completed', [QnaController::class, 'star_qna_completed']);
+    Route::get('/star/qna_details/{slug}', [QnaController::class, 'qna_details']);
+    Route::get('/star/qna/approved/{id}', [QnaController::class, 'setApprovedQna']);
+    Route::get('/star/qna/rejected/{id}', [QnaController::class, 'setRejectedQna']);
+    Route::post('/star/update_Qna', [QnaController::class, 'update_Qna']);
+    Route::get('/star/registeredList/{slug}', [QnaController::class, 'QnaRegisteredList']);
+
+
     Route::get('/star/live-chat/pending', [LiveChatController::class, 'pendingLiveChat']);
     Route::get('/star/live-chat/approved', [LiveChatController::class, 'approveLiveChat']);
     Route::get('/star/live-chat/completed', [LiveChatController::class, 'completedLiveChat']);
