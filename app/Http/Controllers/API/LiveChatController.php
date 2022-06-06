@@ -311,6 +311,7 @@ class LiveChatController extends Controller
     public function admin_registeredUserList($live_chat_id)
     {
         $registeredLiveChats = LiveChatRegistration::where('live_chat_id', $live_chat_id)->get();
+
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
