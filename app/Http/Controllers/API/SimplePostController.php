@@ -24,9 +24,9 @@ class SimplePostController extends Controller
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:learning_sessions',
-            'description' => 'required',
+            'description' => 'required|min:2',
             'star_id' => 'required',
-            'description' => 'required',
+            'instruction' => 'required|min:2',
             'registration_start_date' => 'required',
             'registration_end_date' => 'required',
             'date' => 'required',
@@ -56,6 +56,7 @@ class SimplePostController extends Controller
             $post->created_by_id = auth('sanctum')->user()->id;
             $post->star_id = $request->input('star_id');
             $post->description = $request->input('description');
+            $post->instruction = $request->input('instruction');
 
             $post->registration_start_date = $request->input('registration_start_date');
             $post->registration_end_date = $request->input('registration_end_date');
