@@ -366,6 +366,16 @@ class UserController extends Controller
         ]);
     }
 
+    public function liveChatRegDetails($id)
+    {
+        $event = LiveChatRegistration::where([['live_chat_id', $id],['user_id', auth('sanctum')->user()->id]])->first();
+
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+        ]);
+    }
+
     public function meetupDetails($slug)
     {
         $event = MeetupEvent::where('slug', $slug)->first();

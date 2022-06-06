@@ -90,6 +90,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     //live chat
     Route::get('/user/live-chat/{slug}', [UserController::class, 'liveChatDetails']);
+    Route::get('/user/live-chat/reg_info/{id}', [UserController::class, 'liveChatRegDetails']);
 
     //Meetup Event
     Route::get('/user/meetup/{slug}', [UserController::class, 'meetupDetails']);
@@ -456,7 +457,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/live-chat/setReject/{id}', [LiveChatController::class, 'star_set_reject']);
     Route::get('/deleteLiveChat/{id}', [LiveChatController::class, 'deleteLiveChat']);
     Route::get('/livechatListByDate/{date}', [LiveChatController::class, 'livechatListByDate']);
-    Route::get('/registeredUserList/{live_chat_id}', [LiveChatController::class, 'registeredUserList']);
+    Route::get('/star/registeredUserList/{live_chat_id}', [LiveChatController::class, 'registeredUserList']);
     Route::post('/star/add_live_session', [LiveChatController::class, 'add_live_session']);
     Route::post('/star/update_live_session', [LiveChatController::class, 'update_live_session']);
 
