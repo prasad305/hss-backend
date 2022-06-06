@@ -22,6 +22,9 @@ class PackageController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required|unique:packages',
+        ]);
        
 
         // $package = new Package();
@@ -63,9 +66,7 @@ class PackageController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'title' => 'required|unique:packages',
-        ]);
+       
 
         $package = Package::findOrFail($id);
         $package->title = $request->title;

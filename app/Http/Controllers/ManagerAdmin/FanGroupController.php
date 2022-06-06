@@ -19,18 +19,20 @@ class FanGroupController extends Controller
         $post = FanGroup::where('my_star_status', 1)
                 ->where('another_star_status', 1)
                 ->latest()->get();
-
-        return view('ManagerAdmin.fangroup.index', compact('post'));
+        $fanstatus = 'Pending/Published';
+        return view('ManagerAdmin.fangroup.index', compact('post', 'fanstatus'));
     }
 
     public function pending()
     {
         $post = FanGroup::where('my_star_status', 1)
                 ->where('another_star_status', 1)
-                ->where('status', 2)
+                ->where('status', 0)
                 ->latest()->get();
 
-        return view('ManagerAdmin.fangroup.index', compact('post'));
+        $fanstatus = 'Pending';
+
+        return view('ManagerAdmin.fangroup.index', compact('post', 'fanstatus'));
     }
 
     public function published()
@@ -39,8 +41,8 @@ class FanGroupController extends Controller
                 ->where('another_star_status', 1)
                 ->where('status', 1)
                 ->latest()->get();
-
-        return view('ManagerAdmin.fangroup.index', compact('post'));
+        $fanstatus = 'Published';
+        return view('ManagerAdmin.fangroup.index', compact('post', 'fanstatus'));
     }
 
     public function details($id)
@@ -63,6 +65,13 @@ class FanGroupController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'group_name' => 'required',
+            'description' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+        ]);
+
         $fangroup = FanGroup::findOrFail($id);
         
         $fangroup->group_name = $request->group_name;
@@ -83,12 +92,27 @@ class FanGroupController extends Controller
             $fangroup->banner = $filename;
         }
 
-        $fangroup->save();
+        // $fangroup->save();
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Fan Group Updated Successfully',
-        ]);
+        
+        try {
+            $fangroup->save();
+            if($fangroup){
+                // return response()->json([
+                //     'success' => true,
+                //     'message' => 'Marketplace Updated Successfully'
+                // ]);
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Fan Group Updated Successfully',
+                ]);
+            }
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+            ]);
+        }
     }
 
     public function set_publish(Request $request)

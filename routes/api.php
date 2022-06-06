@@ -14,6 +14,7 @@ use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\API\SimplePostController;
 use App\Http\Controllers\API\FanGroupController;
+use App\Http\Controllers\API\SouvinerController;
 use App\Http\Controllers\API\WalletController;
 use App\Http\Controllers\API\LearningSessionController;
 use App\Http\Controllers\API\Audition\Admin\AuditionController;
@@ -254,6 +255,12 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/marketplace/order/product-list/view/{id}', [MarketplaceController::class, 'orderAdminProductListView']);
     Route::post('/admin/marketplace/order/product/status/{status}/{id}', [MarketplaceController::class, 'orderAdminProductListStatus']);
 
+
+    // Souviner Section
+    Route::post('/admin/souviner/store', [SouvinerController::class, 'souvinerStore']);
+    // Route::get('/admin/souviner/product-list/approved', [SouvinerController::class, 'allProductList']);
+    // Route::get('/admin/souviner/product-list/pending', [SouvinerController::class, 'pendingProductList']);
+
     // Simple Post Section
     Route::post('admin/add_simple_post', [SimplePostController::class, 'add']);
     Route::get('/admin/simple_post/all', [SimplePostController::class, 'all']);
@@ -424,6 +431,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/simple_post/approved', [SimplePostController::class, 'star_approved_list']);
     Route::get('/star/approve_post/{id}', [SimplePostController::class, 'approve_post']);
     Route::get('/star/decline_post/{id}', [SimplePostController::class, 'decline_post']);
+
+    // Souviner Section
+    Route::post('/star/souviner/store', [SouvinerController::class, 'souvinerStarStore']);
 
     // Learning Session Section
     Route::post('/star/add_learning_session', [LearningSessionController::class, 'star_add']);

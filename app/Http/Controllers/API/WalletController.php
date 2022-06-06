@@ -101,11 +101,13 @@ class WalletController extends Controller
         $id = auth('sanctum')->user()->id;
 
         $userWalletHistory = WalletHistory::where('user_id', $id)->latest()->get();
+        $userLastWalletHistory = WalletHistory::where('user_id', $id)->latest()->first();
 
   
             return response()->json([
                 'status' => 200,
                 'userWalletHistory' => $userWalletHistory,
+                'userLastWalletHistory' => $userLastWalletHistory,
             ]);
 
     }

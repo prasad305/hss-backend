@@ -277,6 +277,7 @@ class FanGroupController extends Controller
                                     })
                                     ->whereDate('start_date','<=', $today)
                                     ->whereDate('end_date','>=', $today)
+                                    ->where('status', 1)
                                     ->orderBy('id', 'DESC')
                                     ->get();
 
@@ -457,7 +458,7 @@ class FanGroupController extends Controller
         $fanDetails = FanGroup::where('slug', $slug)->first();
         $userId = auth('sanctum')->user()->id;
 
-        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->latest()->orderBy('id', 'DESC')->get();
+        $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->latest()->where('status', 1)->orderBy('id', 'DESC')->get();
         $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->get();
         $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->get();
 
