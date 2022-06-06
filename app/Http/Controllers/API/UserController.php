@@ -33,6 +33,8 @@ use App\Models\LearningSessionEvaluation;
 use App\Models\LiveChatRoom;
 use App\Models\Message;
 use App\Models\PromoVideo;
+use App\Models\QnA;
+use App\Models\QnaRegistration;
 use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
@@ -274,6 +276,17 @@ class UserController extends Controller
             'events' => $post,
         ]);
     }
+    public function qna_activities()
+    {
+        $post = QnaRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'events' => $post,
+        ]);
+    }
 
     public function registeredLearningSession()
     {
@@ -301,6 +314,26 @@ class UserController extends Controller
     public function getAllLiveChatEvent()
     {
         $livechats = LiveChat::orderBy('id', 'DESC')->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'livechats' => $livechats,
+        ]);
+    }
+    public function getQnaAll()
+    {
+        $livechats = QnA::orderBy('id', 'DESC')->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'livechats' => $livechats,
+        ]);
+    }
+    public function getStarQna($id)
+    {
+        $livechats = QnA::orderBy('id', 'DESC')->where('star_id',$id)->get();
 
         return response()->json([
             'status' => 200,
@@ -366,15 +399,52 @@ class UserController extends Controller
         ]);
     }
 
+
     public function liveChatRegDetails($id)
     {
         $event = LiveChatRegistration::where([['live_chat_id', $id],['user_id', auth('sanctum')->user()->id]])->first();
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+        ]);
+    }
+
+    // Question and Answers
+
+    public function qnaDetails($slug)
+    {
+        $event = QnA::where('slug', $slug)->first();
 
         return response()->json([
             'status' => 200,
             'event' => $event,
         ]);
     }
+
+    public function getSingleQnaEvent($id)
+    {
+        $livechat = QnA::find($id);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'livechat' => $livechat,
+        ]);
+    }
+
+    public function sinlgeQna($id)
+    {
+        $liveChat = QnA::find($id);
+        $starInfo = User::find($liveChat->star_id);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'liveChat' => $liveChat,
+            'starInfo' =>  $starInfo
+        ]);
+    }
+
 
     public function meetupDetails($slug)
     {
@@ -421,6 +491,44 @@ class UserController extends Controller
             'message' =>  $msg,
         ]);
     }
+
+    // Q&A
+
+    public function getLiveQnaTiemSlot($minute, $id)
+    {
+        $qna = QnA::find($id);
+
+        $user_start_time = $qna->available_start_time ? $qna->available_start_time : $qna->start_time;
+        $user_end_time = Carbon::parse($user_start_time)->addMinutes($minute)->format('H:i:s');
+
+        $start_date = new DateTime($user_start_time, new DateTimeZone('Asia/Dhaka'));
+        $end_date = new DateTime($qna->end_time, new DateTimeZone('Asia/Dhaka'));
+
+        $interval = $start_date->diff($end_date);
+        $hours   = $interval->format('%h');
+        $minutes = $interval->format('%i');
+
+        $available_minutes = ($hours * 60 + $minutes);
+        // $available_time = $available_minutes - $taken_minute;
+
+        if ($available_minutes >= $minute) {
+            $msg = "Congratulation! Slot is available for You";
+            $available_status = true;
+        } else {
+            $msg = "Sorry! Slot is not available";
+            $available_status = false;
+        }
+
+
+        return response()->json([
+            'status' => 200,
+            'start_time' => $user_start_time,
+            'end_time' => $user_end_time,
+            'available' => $available_status,
+            'message' =>  $msg,
+        ]);
+    }
+
 
 
     public function liveChatRigister(Request $request)
@@ -1226,7 +1334,11 @@ class UserController extends Controller
             $event = MeetupEvent::where('slug', $slug)->first();
             $participant = MeetupEventRegistration::where([['user_id', auth('sanctum')->user()->id], ['meetup_event_id', $event->id]])->first();
         }
-
+        if($type == 'qna')
+        {
+            $event = QnA::where('slug', $slug)->first();
+            $participant = QnaRegistration::where([['user_id', auth('sanctum')->user()->id], ['qna_id', $event->id]])->first();
+        }
         return response()->json([
             'status' => 200,
             'participant' => $participant,
@@ -1314,4 +1426,6 @@ class UserController extends Controller
             ]);
         }
     }
+
+    
 }
