@@ -377,7 +377,6 @@
         if (key == 'cover') {
             $('#cover_error').html(value);
         }
-
         if (key == 'dob') {
             $('#dob_error').html(value);
         }
@@ -390,6 +389,47 @@
         if (key == 'reminder_date') {
             $('#reminder_error').html(value);
         }
+
+        if (key == 'title') {
+            $('#title_error').html(value);
+        }
+        if (key == 'description') {
+            $('#description_error').html(value);
+        }
+        if (key == 'instruction') {
+            $('#instruction_error').html(value);
+        }
+        if (key == 'date') {
+            $('#date_error').html(value);
+        }
+        if (key == 'registration_start_date') {
+            $('#registration_start_date_error').html(value);
+        }
+        if (key == 'registration_end_date') {
+            $('#registration_end_date_error').html(value);
+        }
+        if (key == 'start_time') {
+            $('#start_time_error').html(value);
+        }
+        if (key == 'end_time') {
+            $('#end_time_error').html(value);
+        }
+        if (key == 'fee') {
+            $('#fee_error').html(value);
+        }
+        if (key == 'total_seat') {
+            $('#total_seat_error').html(value);
+        }
+        if (key == 'max_time') {
+            $('#max_time_error').html(value);
+        }
+        if (key == 'min_time') {
+            $('#min_time_error').html(value);
+        }
+        if (key == 'interval') {
+            $('#interval_error').html(value);
+        }
+
     }
 
     function ErrorMessageClear() {
@@ -405,6 +445,19 @@
         $('#category_id').html('');
         $('#star_id').html('');
         $('#reminder_error').html('');
+        $('#title_error').html('');
+        $('#description_error').html('');
+        $('#instruction_error').html('');
+        $('#date_error_error').html('');
+        $('#registration_start_date_error').html('');
+        $('#registration_end_date_error').html('');
+        $('#start_time_error').html('');
+        $('#end_time_error').html('');
+        $('#fee_error').html('');
+        $('#total_seat_error').html('');
+        $('#max_time_error').html('');
+        $('#min_time_error').html('');
+        $('#interval_error').html('');
     }
 </script>
 
