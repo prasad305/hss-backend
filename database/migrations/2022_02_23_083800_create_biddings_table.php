@@ -20,8 +20,8 @@ class CreateBiddingsTable extends Migration
             $table->string('name');
             $table->float('amount');
             $table->integer('notify_status')->default(0);
-            $table->integer('win_status')->defaule(0);
-            $table->integer('applied_status')->defaule(0);
+            $table->integer('win_status')->default(0);
+            $table->integer('applied_status')->default(0);
             $table->timestamp('checkout_time')->nullable();
             $table->boolean('status')->nullable();
             $table->timestamps();

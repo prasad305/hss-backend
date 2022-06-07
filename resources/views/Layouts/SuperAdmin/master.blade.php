@@ -22,9 +22,11 @@
     <!-- Custom style -->
   <link rel="stylesheet" href="{{ asset('assets/custom-style.css')}}">
   <link rel="stylesheet" href="{{ asset('assets/super-admin/Events.css')}}">
+  <link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/summernote/summernote-bs4.min.css') }}">
 
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -331,6 +333,8 @@
 
 <script src="{{ asset('assets/super-admin/Events.js')}}"></script>
 
+<!-- Summernote -->
+<script src="{{ asset('assets/manager-admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
 
 <script>
     $(function () {

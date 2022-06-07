@@ -889,6 +889,16 @@ class UserController extends Controller
                 'name' => $user->first_name,
                 'amount' => $request->amount,
             ]);
+
+
+            if(!Activity::where([['user_id',auth()->user()->id],['event_id',$bidding->auction_id]])->exists()){
+                Activity::Create([
+                  'type'    => 'auction',
+                  'user_id'    => $bidding->user_id,
+                  'event_id'    => $bidding->auction_id,
+                  ]);
+            }
+
             return response()->json([
 
                 'status' => 200,
@@ -996,6 +1006,17 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'topBidder' => $topBidder,
+        ]);
+    }
+    public function auction_activites()
+    {
+        $post = Activity::where([['user_id', auth('sanctum')->user()->id],['type','auction']])->latest()->get();
+
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'events' => $post,
         ]);
     }
     //=============== Audition Logic By Srabon ===================

@@ -6,6 +6,7 @@ use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\DashboardController;
 use App\Http\Controllers\SuperAdmin\ManagerAdminController;
 use App\Http\Controllers\SuperAdmin\AdminController;
+use App\Http\Controllers\SuperAdmin\AuctionController;
 use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
 use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
 use App\Http\Controllers\SuperAdmin\AuditionRulesController;
@@ -108,7 +109,10 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // Audition Round Rules
     Route::resource('audition-jury', JurysAuditionController::class);
 
-
+    // Auction Routes
+    Route::get('auction-index', [AuctionController::class, 'index'])->name('auction.index');
+    Route::get('terms-create', [AuctionController::class, 'termsCreate'])->name('auctionTerms.create');
+    Route::post('terms-store', [AuctionController::class, 'termsStore'])->name('auctionTerms.store');
 
 
 
