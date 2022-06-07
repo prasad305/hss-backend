@@ -240,7 +240,19 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="text-center">
+                        <div class="px-5 py-3 my-auto">
+                            <span>
+                                <img src={{ asset('assets/manager-admin/tagPrice.PNG') }} alt="" class="PriceTage" />
+                            </span>
+                            <div class=" mx-2 ">
+                                <span class="text-light buTon-ab ">Minimum apply before</span>
+                                <br>
+                                <span class="text-light buTon-abc">
+                                    {{ $greeting->user_required_day }} Day
+                                </span>
+                            </div>
+                        </div>
+                        {{-- <div class="text-center">
                             @if ($greeting->status === 1)
                                 <button  value="{{ route('managerAdmin.greeting.publish', $greeting->id) }}" onclick="publish(this)" class="btn"
                                     style="background: #FFCE00; border-radius: 8px; font-weight: bold;">Publish Now <i
@@ -250,7 +262,7 @@
                                     style="background: #FFCE00; border-radius: 8px; font-weight: bold;">Published  <i
                                         class="fas fa-eye"></i></button>
                             @endif
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="col-md-6">
                         <div class="card px-5 py-3">
@@ -294,6 +306,26 @@
             <div class="col-md-4">
 
             </div>
+        </div>
+
+        <div class="container row mt-5">
+            <div class="text-center">
+                @if ($greeting->status === 1)
+                    <button value="{{ route('managerAdmin.greeting.publish', $greeting->id) }}"
+                        onclick="publish(this)" class="btn"
+                        style="background: #FFCE00; border-radius: 8px; font-weight: bold;">Publish Now <i
+                            class="fas fa-eye"></i></button>
+                    <a type="button" class="btn btn-outline-warning px-5"
+                        onclick="Show('Edit Post','{{ route('managerAdmin.greeting.edit', $greeting->id) }}')">Edit</a>
+                @else
+                    <button disabled class="btn"
+                        style="background: #FFCE00; border-radius: 8px; font-weight: bold;">Published <i
+                            class="fas fa-eye"></i></button>
+                            <button type="button" disabled class="btn btn-outline-warning px-5">Edit</button>
+                @endif
+
+            </div>
+
         </div>
     </div>
 

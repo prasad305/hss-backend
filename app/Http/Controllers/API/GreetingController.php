@@ -110,8 +110,8 @@ class GreetingController extends Controller
             'instruction' => 'required|min:10',
             'cost' => 'required|numeric||min:1',
             'user_required_day' => 'required|numeric||min:1',
-            'banner' => 'nullable|mimes:jpeg,jpg,png,webp',
-            'video' => 'nullable|mimes:mp4,mov,ogg',
+            'banner' => 'nullable|mimes:jpeg,jpg,png',
+            'video' => 'nullable',
         ]);
 
         if ($validator->fails()) {

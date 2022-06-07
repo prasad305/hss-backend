@@ -35,7 +35,7 @@
                 </div>
                 <div class='mx-2'>
                     <a class='btn filterBtn'
-                        onclick="Show('New Audition Admin','{{ route('managerAdmin.audition.auditionAdmin.create') }}')"><i
+                    onclick="Show('New Audition Admin','{{ route('managerAdmin.audition.auditionAdmin.create') }}')"><i
                             class="fa-solid fa-circle-plus"></i> New</a>
                 </div>
             </div>
