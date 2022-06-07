@@ -204,6 +204,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
         Route::get('published', [GreetingController::class, 'published'])->name('published');
         Route::get('show/{id}', [GreetingController::class, 'show'])->name('show');
         Route::get('edit/{id}', [GreetingController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [GreetingController::class, 'update'])->name('update');
         Route::post('publish/{id}', [GreetingController::class, 'publish'])->name('publish');
     });
 

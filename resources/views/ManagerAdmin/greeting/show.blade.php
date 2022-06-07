@@ -321,6 +321,7 @@
                     <button disabled class="btn"
                         style="background: #FFCE00; border-radius: 8px; font-weight: bold;">Published <i
                             class="fas fa-eye"></i></button>
+                            <button type="button" disabled class="btn btn-outline-warning px-5">Edit</button>
                 @endif
 
             </div>

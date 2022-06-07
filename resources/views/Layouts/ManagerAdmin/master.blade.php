@@ -374,6 +374,18 @@
         if (key == 'image') {
             $('#image_error').html(value);
         }
+        if (key == 'banner') {
+            $('#banner_error').html(value);
+        }
+        if (key == 'video') {
+            $('#video_error').html(value);
+        }
+        if (key == 'cost') {
+            $('#cost_error').html(value);
+        }
+        if (key == 'minimum_required_day') {
+            $('#minimum_required_day_error').html(value);
+        }
         if (key == 'cover') {
             $('#cover_error').html(value);
         }
@@ -458,6 +470,10 @@
         $('#max_time_error').html('');
         $('#min_time_error').html('');
         $('#interval_error').html('');
+        $('#banner_error').html('');
+        $('#video_error').html('');
+        $('#cost_error').html('');
+        $('#minimum_required_day_error').html('');
     }
 </script>
 
