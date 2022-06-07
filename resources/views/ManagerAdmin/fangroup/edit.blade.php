@@ -6,7 +6,7 @@
     <div class="row form-group">
         <div class="col-md-12">
               <label for="first_name">Group Name</label>
-              <input type="text" class="form-control" id="group_name" name="group_name" placeholder="Group Name" value="{{$event->group_name }}">
+              <input type="text" class="form-control" id="group_name" name="group_name" placeholder="Group Name" readonly="readonly" value="{{$event->group_name }}">
          </div>
     </div>
 
@@ -47,7 +47,7 @@
               <label for="image">Image</label>
               <br><img id="image1" src="{{ asset($event->banner) }}" height="300px" width="100%" />
               <br><br>
-              <input type="file" class="mt-2" id="banner" name="banner" />
+              <!-- <input type="file" class="mt-2" id="banner" name="banner" /> -->
         </div>
     </span>
 

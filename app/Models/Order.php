@@ -9,7 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $with = ['marketplace', 'user'];
+    protected $with = ['marketplace', 'user', 'state', 'country', 'city', 'star'];
 
 
     public function marketplace()
@@ -33,5 +33,10 @@ class Order extends Model
     public function city()
     {
         return $this->belongsTo(City::class, 'city_id');
+    }
+    
+    public function star()
+    {
+        return $this->belongsTo(User::class, 'superstar_id');
     }
 }

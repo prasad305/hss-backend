@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\FanGroup;
 use App\Models\User;
+use App\Models\Post;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Carbon\Carbon;
@@ -18,8 +19,8 @@ class FanGroupController extends Controller
         $post = FanGroup::where('my_star_status', 1)
                 ->where('another_star_status', 1)
                 ->latest()->get();
-
-        return view('ManagerAdmin.fangroup.index', compact('post'));
+        $fanstatus = 'Pending/Published';
+        return view('ManagerAdmin.fangroup.index', compact('post', 'fanstatus'));
     }
 
     public function pending()
@@ -29,7 +30,9 @@ class FanGroupController extends Controller
                 ->where('status', 0)
                 ->latest()->get();
 
-        return view('ManagerAdmin.fangroup.index', compact('post'));
+        $fanstatus = 'Pending';
+
+        return view('ManagerAdmin.fangroup.index', compact('post', 'fanstatus'));
     }
 
     public function published()
@@ -38,8 +41,8 @@ class FanGroupController extends Controller
                 ->where('another_star_status', 1)
                 ->where('status', 1)
                 ->latest()->get();
-
-        return view('ManagerAdmin.fangroup.index', compact('post'));
+        $fanstatus = 'Published';
+        return view('ManagerAdmin.fangroup.index', compact('post', 'fanstatus'));
     }
 
     public function details($id)
@@ -62,6 +65,13 @@ class FanGroupController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'group_name' => 'required',
+            'description' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+        ]);
+
         $fangroup = FanGroup::findOrFail($id);
         
         $fangroup->group_name = $request->group_name;
@@ -82,28 +92,72 @@ class FanGroupController extends Controller
             $fangroup->banner = $filename;
         }
 
-        $fangroup->save();
+        // $fangroup->save();
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Fan Group Updated Successfully',
-        ]);
+        
+        try {
+            $fangroup->save();
+            if($fangroup){
+                // return response()->json([
+                //     'success' => true,
+                //     'message' => 'Marketplace Updated Successfully'
+                // ]);
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Fan Group Updated Successfully',
+                ]);
+            }
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+            ]);
+        }
     }
 
-    public function set_publish($id)
+    public function set_publish(Request $request)
     {
+        // dd($request->all());
+       
+        $id = $request->postId;
         $spost = FanGroup::find($id);
+
 
         if($spost->status != 1)
         {
+            $request->validate([
+                'post_start_date' => 'required',
+                'post_end_date' => 'required',
+            ]);
+
             $spost->status = 1;
             $spost->update();
+
+            $post = new Post();
+            $post->type = 'fangroup';
+            // $post->user_id = $event->star_id;
+            $post->event_id = $spost->id;
+            $post->category_id=$spost->category_id;
+            $post->sub_category_id=$spost->sub_category_id;
+            $post->title = $spost->group_name;
+            $post->post_start_date = Carbon::parse($request->post_start_date)->format('Y-m-d');
+            $post->post_end_date = Carbon::parse($request->post_end_date)->format('Y-m-d');
+            $post->details = $spost->description;
+            $post->status = 1;
+
+            $post->save();
+
             return redirect()->back()->with('success', 'Published');
         }
         else
         {
-            $spost->status = 0;
+            $spost->status = 2;
             $spost->update();
+
+            // Remove post //
+            $post = Post::where('event_id', $id)->first();
+            $post->delete();
+
             return redirect()->back()->with('success', 'Not Published');
         }
 

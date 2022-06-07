@@ -225,7 +225,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('fangroup/list', [FanGroupController::class, 'allFangroupList'])->name('fangroup.allFangroupList');
     Route::get('fangroup/list/{id}', [FanGroupController::class, 'allFangroupDetails'])->name('fangroup.allFangroupDetails');
     Route::get('fangroup/details/{id}', [FanGroupController::class, 'details'])->name('fangroup.details');
-    Route::get('fangroup/set_publish/{id}', [FanGroupController::class, 'set_publish'])->name('fangroup.set_publish');
+    Route::post('fangroup/set_publish', [FanGroupController::class, 'set_publish'])->name('fangroup.set_publish');
     Route::get('fangroup/edit/{id}', [FanGroupController::class, 'edit'])->name('fangroup.edit');
     Route::put('fangroup/update/{id}', [FanGroupController::class, 'update'])->name('fangroup.update');
 

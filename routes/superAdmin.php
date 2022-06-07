@@ -28,6 +28,7 @@ use App\Models\Slider;
 use Illuminate\Support\Facades\Route;
 
 // Super Admin route
+
 Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin']], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
@@ -40,9 +41,9 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/user-posts', [DashboardController::class, 'userPosts'])->name('userPosts');
     Route::get('/wallet', [DashboardController::class, 'wallets'])->name('wallets');
 
-    Route::get('/package', [DashboardController::class, 'package'])->name('package');
-    Route::get('/add-package', [DashboardController::class, 'addPackage'])->name('addPackage');
-    Route::post('/store-package', [DashboardController::class, 'packageStore'])->name('packageStore');
+    // Route::get('/package', [DashboardController::class, 'package'])->name('package');
+    // Route::get('/add-package', [DashboardController::class, 'addPackage'])->name('addPackage');
+    // Route::post('/store-package', [DashboardController::class, 'packageStore'])->name('packageStore');
 
     //Dashboard Information
     Route::get('/all/user', [DashboardInfoController::class, 'allUser'])->name('allUser');

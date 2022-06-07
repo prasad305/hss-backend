@@ -20,9 +20,12 @@ class CreateMarketplacesTable extends Migration
             $table->unsignedBigInteger('subcategory_id')->nullable();
             $table->string('slug')->nullable();
             $table->longText('description')->nullable();
+            $table->longText('terms_conditions')->nullable();
             $table->integer('unit_price')->nullable();
             $table->integer('total_items')->nullable();
             $table->integer('total_selling')->nullable();
+            $table->integer('delivery_charge')->nullable();
+            $table->integer('tax')->nullable();
             $table->unsignedBigInteger('superstar_id')->nullable();
             $table->integer('created_by')->nullable();
             $table->unsignedBigInteger('superstar_admin_id')->nullable();
