@@ -18,30 +18,49 @@ class LearningSessionController extends Controller
     //
     public function add_learning(Request $request)
     {
-        // return $request->all();
-    //   return gettype($request->banner_or_video);
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|unique:learning_sessions',
-            'description' => 'required|min:5',
-            'star_id' => 'required',
-            'instruction' => 'required|min:5',
-            'registration_start_date' => 'required',
-            'registration_end_date' => 'required',
-            'date' => 'required',
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'assignment' => 'required',
-            'fee' => 'required',
-            'participant_number' => 'required',
-            'room_id' => 'required',
-            'banner_or_video' => 'required|numeric',
-            'video' => "required_if:banner_or_video,1|mimes:mp4,mkv",
-            'image' => 'required_if:banner_or_video,0|mimes:jpg,jpeg,png,gif,webp',
-        ], [
-            'title.unique' => 'This title already exist',
-            'star_id.required' => 'Please Select One Star',
-        ]);
+        
+        if ($request->banner_or_video == 0) {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|unique:learning_sessions',
+                'description' => 'required|min:5',
+                'star_id' => 'required',
+                'instruction' => 'required|min:5',
+                'registration_start_date' => 'required',
+                'registration_end_date' => 'required',
+                'event_date' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+                'assignment' => 'required',
+                'fee' => 'required',
+                'participant_number' => 'required',
+                'room_id' => 'required',
+                'image' => 'required|mimes:jpg,jpeg,png,gif,webp',
+            ], [
+                'title.unique' => 'This title already exist',
+                'star_id.required' => 'Please Select One Star',
+            ]);
+        }else{
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|unique:learning_sessions',
+                'description' => 'required|min:5',
+                'star_id' => 'required',
+                'instruction' => 'required|min:5',
+                'registration_start_date' => 'required',
+                'registration_end_date' => 'required',
+                'event_date' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+                'assignment' => 'required',
+                'fee' => 'required',
+                'participant_number' => 'required',
+                'room_id' => 'required',
+                'video' => "required|mimes:mp4,mkv",
+            ], [
+                'title.unique' => 'This title already exist',
+                'star_id.required' => 'Please Select One Star',
+            ]);
+        }
+        
 
 
         if ($validator->fails()) {
@@ -61,7 +80,7 @@ class LearningSessionController extends Controller
 
             $learningSession->registration_start_date = $request->input('registration_start_date');
             $learningSession->registration_end_date = $request->input('registration_end_date');
-            $learningSession->date = $request->input('date');
+            $learningSession->event_date = $request->input('event_date');
             $learningSession->start_time = $request->input('start_time');
             $learningSession->end_time = $request->input('end_time');
 
@@ -472,22 +491,40 @@ class LearningSessionController extends Controller
 
     public function update(Request $request, $id)
     {
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|unique:learning_sessions,title,' . $id,
-            'description' => 'required|min:5',
-            'star_id' => 'required',
-            'instruction' => 'required|min:5',
-            'date' => 'required',
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'fee' => 'required',
-            'participant_number' => 'required',
-            'image' => 'nullable|mimes:jpg,jpeg,png,gif,webp',
-        ], [
-            'title.unique' => 'This title already exist',
-            'star_id.required' => 'Please Select One Star',
-        ]);
+        if ($request->banner_or_video == 0) {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|unique:learning_sessions,title,' . $id,
+                'description' => 'required|min:5',
+                'star_id' => 'required',
+                'instruction' => 'required|min:5',
+                'event_date' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+                'fee' => 'required',
+                'participant_number' => 'required',
+                'image' => 'nullable|mimes:jpg,jpeg,png,gif,webp',
+            ], [
+                'title.unique' => 'This title already exist',
+                'star_id.required' => 'Please Select One Star',
+            ]);
+        }else{
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|unique:learning_sessions,title,' . $id,
+                'description' => 'required|min:5',
+                'star_id' => 'required',
+                'instruction' => 'required|min:5',
+                'event_date' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+                'fee' => 'required',
+                'participant_number' => 'required',
+                'video' => 'nullable|mimes:mp4,mkv',
+            ], [
+                'title.unique' => 'This title already exist',
+                'star_id.required' => 'Please Select One Star',
+            ]);
+        }
+        
 
 
         if ($validator->fails()) {
@@ -503,7 +540,7 @@ class LearningSessionController extends Controller
             $learning_session->description = $request->input('description');
             $learning_session->instruction = $request->input('instruction');
 
-            $learning_session->date = $request->input('date');
+            $learning_session->event_date = $request->input('event_date');
             $learning_session->start_time = $request->input('start_time');
             $learning_session->end_time = $request->input('end_time');
 

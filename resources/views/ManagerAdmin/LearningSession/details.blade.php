@@ -38,7 +38,13 @@
         <div class="container-fluid">
 
                 <div class="row">
+                    @if ($event->banner != null)
                     <img src="{{ asset($event->banner) }}" style="width: 100%" class="banner-image"/>
+                    @else
+                    <video controls>
+                        <source src="{{asset($event->video)}}" />
+                    </video> 
+                    @endif
                 </div>
 
 
@@ -46,19 +52,52 @@
                     <div class="col-md-8 ">
                         <div class="row card p-5">
                             <h3>{{ $event->title }}</h3>
+                            <u>Description</u>
                             <p>
                                 {!! $event->description !!}
                             </p>
+                            <hr>
+                            <u>Instruction</u>
+                            <p>
+                                {!! $event->instruction !!}
+                            </p>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 card py-3">
+                            <div class="col-md-4 card py-3">
                                 Date
-                                <h4 class="text-primary">{{ \Carbon\Carbon::parse($event->date)->format('d F,Y')}}</h4>
+                                <h4 class="text-danger">{{ \Carbon\Carbon::parse($event->event_date)->format('d F,Y')}}</h4>
                             </div>
-                            <div class="col-md-6 card py-3">
+                            <div class="col-md-3 card py-3 ml-3">
                                 Time
-                                <h4 class="text-primary">{{ \Carbon\Carbon::parse($event->start_time)->format('h:i A')}} - {{ \Carbon\Carbon::parse($event->end_time)->format('h:i A')}}</h4>
+                                <h4 class="text-danger">{{ \Carbon\Carbon::parse($event->start_time)->format('h:i A')}} - {{ \Carbon\Carbon::parse($event->end_time)->format('h:i A')}}</h4>
                             </div>
+                            <div class="col-md-4 card py-3 ml-3">
+                                Registration Date
+                                <h4 class="text-danger">{{ \Carbon\Carbon::parse($event->registration_start_date)->format('d M,Y')}} - {{ \Carbon\Carbon::parse($event->registration_end_date)->format('d M,Y')}}</h4>
+                            </div>
+                          
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 card py-3">
+                                Participant
+                                <h4 class="text-danger">{{ $event->participant_number}}</h4>
+                            </div>
+                            <div class="col-md-3 card py-3 ml-3">
+                                Fee
+                                <h4 class="text-danger">{{ $event->fee}}</h4>
+                            </div>
+                            <div class="col-md-4 card py-3 ml-3">
+                                Assignment
+                                <h4 class="text-danger">
+                                    @if ($event->assignment == 0)
+                                        Without Assignment
+                                        @else
+                                        With Assignment
+                                    @endif
+                                </h4>
+                            </div>
+                          
                         </div>
                     </div>
 
@@ -66,7 +105,7 @@
                         <div class="card px-5">
                             <div class="row py-3">
                                 <div class="col-xs-6 content-center">
-                                    <img src="{{ asset($event->star->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                                    <img src="{{ asset($event->star->image ?? get_static_option('no_image')) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
                                 </div>
                                 <div class="col-xs-6">
                                     Star
@@ -76,7 +115,7 @@
                             @if($event->admin)
                             <div class="row py-3">
                                 <div class="col-xs-6 content-center">
-                                    <img src="{{ asset($event->admin->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                                    <img src="{{ asset($event->admin->image ?? get_static_option('no_image')) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
                                 </div>
 
                                 <div class="col-xs-6">

@@ -22,14 +22,14 @@ class CreateLearningSessionsTable extends Migration
             $table->string('slug')->nullable();
             $table->timestamp('registration_end_date')->nullable();
             $table->timestamp('registration_start_date')->nullable();
-            $table->text('description')->nullable();
-            $table->text('instruction')->nullable();
+            $table->longText('description')->nullable();
+            $table->longText('instruction')->nullable();
             $table->string('venue')->nullable();
             $table->integer('total_seat')->nullable();
             $table->string('video')->nullable();
             $table->string('banner')->nullable();
             $table->integer('participant_number')->nullable();
-            $table->timestamp('date')->nullable();
+            $table->timestamp('event_date')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
             $table->float('fee')->nullable();
@@ -39,7 +39,7 @@ class CreateLearningSessionsTable extends Migration
             $table->timestamp('assignment_reg_start_date')->nullable();
             $table->string('assignment_fee')->nullable();
             $table->string('assignment_video_slot_number')->nullable();
-            $table->text('assignment_instruction')->nullable();
+            $table->longText('assignment_instruction')->nullable();
             $table->float('star_approval')->default(0)->comment('0 = deactive, 1 = active');
             $table->integer('status')->default(0)->comment('0 = pending, 1 = star_approval, 2 = posted by Manager Admin, 3 = evaluation, 9 = completed, 10 = removed, 11 = rejeced by Star, 22 = rejected by Manager Admin');
             $table->float('total_amount')->nullable();

@@ -265,10 +265,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/simple_post/approved', [SimplePostController::class, 'approved_list']);
 
     // Learning Session Section
-    // Route::post('admin/add_learning_session', [LearningSessionController::class, 'add']);
-
-    // Route::post('admin/learning_session/create', [SimplePostController::class, 'add_learning']);
-
     Route::post('admin/learning_session/create', [LearningSessionController::class, 'add_learning']);
     Route::get('/admin/learning_session/all', [LearningSessionController::class, 'all']);
     Route::get('/admin/learning_session/count', [LearningSessionController::class, 'count']);

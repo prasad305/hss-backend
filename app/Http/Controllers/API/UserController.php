@@ -1241,8 +1241,38 @@ class UserController extends Controller
 
     public function getPromoVideo()
     {
+        $id = auth('sanctum')->user()->id;
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
 
-        $promoVideos = PromoVideo::select('video_url')->where('status', 1)->orderBy('updated_at','desc')->get();
+        $selectedCat = json_decode($selectedCategory->category);
+        $selectedSubCat = json_decode($selectedCategory->subcategory);
+        $selectedSubSubCat = json_decode($selectedCategory->star_id);
+
+        $cat_promo = PromoVideo::select("*")
+            ->whereIn('category_id', $selectedCat)
+            ->where('status',1)
+            ->latest()->get();
+
+        if (isset($sub_cat_promo)) {
+            $sub_cat_promo = PromoVideo::select("*")
+                ->whereIn('sub_category_id', $selectedSubCat)
+                ->where('status',1)
+                ->latest()->get();
+        } else {
+            $sub_cat_promo = [];
+        }
+
+        if (isset($sub_sub_cat_promo)) {
+            $sub_sub_cat_promo = PromoVideo::select("*")
+                ->where('status',1)
+                ->whereIn('user_id', $selectedSubSubCat)
+                ->latest()->get();
+        } else {
+            $sub_sub_cat_promo = [];
+        }
+
+        $promoVideos = $cat_promo->concat($sub_cat_promo)->concat($sub_sub_cat_promo);
+
         return response()->json([
             'status' => 200,
             'promoVideos' => $promoVideos,

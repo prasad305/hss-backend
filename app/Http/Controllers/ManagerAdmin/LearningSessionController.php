@@ -147,7 +147,7 @@ class LearningSessionController extends Controller
     /// Manager Part ////
     public function manager_pending()
     {
-        $upcommingEvent = LearningSession::where('status', 1)->latest()->get();
+        $upcommingEvent = LearningSession::where('status', 1)->orderBy('updated_at','desc')->get();
 
         return view('ManagerAdmin.LearningSession.index', compact('upcommingEvent'));
     }
@@ -178,10 +178,21 @@ class LearningSessionController extends Controller
     public function evaluationResult($id)
     {
         $event = LearningSession::findOrFail($id);
-        $results = LearningSessionEvaluation::where('event_id', $id)->orderBy('total_mark', 'desc')->get();
+        $results = LearningSessionEvaluation::where('event_id', $id)
+                                            ->with(['assignments' => function($q){
+                                                return $q->where('mark','>',0);
+                                            }])
+                                            ->orderBy('total_mark', 'desc')->get();
 
+        $rejected_videos = LearningSessionEvaluation::where('event_id', $id)
+                                            ->with(['assignments' => function($q){
+                                                return $q->where('status',2);
+                                            }])
+                                            ->get();
 
-        return view('ManagerAdmin.LearningSession.evaluationResult', compact('event', 'results'));
+       
+
+        return view('ManagerAdmin.LearningSession.evaluationResult', compact('event', 'results','rejected_videos'));
     }
 
     public function evaluationAccept($id)
@@ -206,11 +217,25 @@ class LearningSessionController extends Controller
         ]);
     }
 
+    public function evaluationResultPublished($id)
+    {
+        $event = LearningSession::findOrFail($id);
+        $assignment = LearningSessionAssignment::where([['event_id',$id],['mark','>',0],['send_to_manager',1]])->update([
+            'send_to_user' => 1,
+        ]);
+    
+       session()->flash('success','Result Published Successfully');
+       return redirect()->back();
+    }
+
+
+
+
 
 
     public function manager_all()
     {
-        $upcommingEvent = LearningSession::where([['status', '<', 0]])->latest()->latest()->get();
+        $upcommingEvent = LearningSession::where([['status', '>', 0]])->orderBy('updated_at','desc')->get();
 
         return view('ManagerAdmin.LearningSession.index', compact('upcommingEvent'));
     }
@@ -341,41 +366,92 @@ class LearningSessionController extends Controller
 
     public function update(Request $request, $id)
     {
-        $meetup = LearningSession::findOrFail($id);
-        $meetup->fill($request->except('_token'));
+        if ($request->banner_or_video == 0) {
+            $request->validate([
+                'title' => 'required',
+                'description' => 'required',
+                'instruction' => 'required',
+                'event_date' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+                'registration_start_date' => 'required',
+                'registration_end_date' => 'required',
+                'assignment' => 'required',
+                'fee' => 'required',
+                'participant_number' => 'required',
+                'image' => 'nullable|mimes:jpg,jpeg,png',
+            ]);
+        }else{
+            $request->validate([
+                'title' => 'required',
+                'description' => 'required',
+                'instruction' => 'required',
+                'event_date' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+                'registration_start_date' => 'required',
+                'registration_end_date' => 'required',
+                'assignment' => 'required',
+                'fee' => 'required',
+                'participant_number' => 'required',
+                'video' => 'nullable|mimes:mp4,mkv',
+            ]);
+        }
+        
+        $learningSession = LearningSession::findOrFail($id);
+         $learningSession->title = $request->input('title');
+        $learningSession->slug = Str::slug($request->input('title'));
+        $learningSession->description = $request->input('description');
+        $learningSession->instruction = $request->input('instruction');
 
-        $meetup->title = $request->input('title');
-        $meetup->slug = Str::slug($request->input('title'));
-        $meetup->description = $request->input('description');
+        $learningSession->registration_start_date = $request->input('registration_start_date');
+        $learningSession->registration_end_date = $request->input('registration_end_date');
+        $learningSession->event_date = $request->input('event_date');
+        $learningSession->start_time = $request->input('start_time');
+        $learningSession->end_time = $request->input('end_time');
 
-        // $meetup->event_link= $request->input('event_link');
-        // $meetup->meetup_type = $request->input('meetup_type');
-        // $meetup->date = $request->input('date');
-        // $meetup->start_time = $request->input('start_time');
-        // $meetup->end_time = $request->input('end_time');
-        // $meetup->venue = $request->input('venue');
-
-        $meetup->participant_number = $request->input('slots');
-        $meetup->fee = $request->input('fee');
+        $learningSession->assignment = $request->input('assignment');
+        $learningSession->fee = $request->input('fee');
+        $learningSession->participant_number = $request->input('participant_number');
 
         if ($request->hasfile('image')) {
-            $destination = $meetup->banner;
+            $destination = $learningSession->banner;
             if (File::exists($destination)) {
                 File::delete($destination);
+            }
+            if ($learningSession->video != null && file_exists($learningSession->video)) {
+                unlink($learningSession->video);
             }
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = 'uploads/images/learning_session/' . time() . '.' . $extension;
 
-            Image::make($file)->resize(900, 400)
-                ->save($filename, 50);
-
-            $meetup->banner = $filename;
+            Image::make($file)->resize(900, 400)->save($filename, 100);
+            $learningSession->banner = $filename;
+            $learningSession->video = null;
         }
 
+        if ($request->hasFile('video')) {
+            $destination = $learningSession->banner;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+            if ($learningSession->video != null && file_exists($learningSession->video)) {
+                unlink($learningSession->video);
+            }
+            $file        = $request->file('video');
+            $path        = 'uploads/videos/learning_session';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $learningSession->video = $path . '/' . $file_name;
+            $learningSession->banner = null;
+        }
+
+        
+
         try {
-            $meetup->update();
-            if ($meetup) {
+            $learningSession->update();
+            if ($learningSession) {
                 return response()->json([
                     'success' => true,
                     'message' => 'Learning Session Updated Successfully'

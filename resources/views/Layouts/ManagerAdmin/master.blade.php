@@ -395,9 +395,11 @@
         if (key == 'terms_and_condition') {
             $('#terms_error').html(value);
         }
+        
         if (key == 'star_id') {
             $('#star_error').html(value);
         }
+
         if (key == 'reminder_date') {
             $('#reminder_error').html(value);
         }
@@ -441,6 +443,9 @@
         if (key == 'interval') {
             $('#interval_error').html(value);
         }
+        if (key == 'participant_number') {
+            $('#participant_number_error').html(value);
+        }
 
     }
 
@@ -474,6 +479,7 @@
         $('#video_error').html('');
         $('#cost_error').html('');
         $('#minimum_required_day_error').html('');
+        $('#participant_number_error').html('');
     }
 </script>
 

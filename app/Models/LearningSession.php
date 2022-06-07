@@ -23,7 +23,7 @@ class LearningSession extends Model
         'banner',
         'participant_number',
         'video',
-        'date',
+        'event_date',
         'start_time',
         'end_time',
         'time',
