@@ -83,16 +83,16 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/registerMeestup', [UserController::class, 'registeredMeetup']);
     Route::get('/user/registerLivechat', [UserController::class, 'registeredLivechat']);
     Route::get('/user/registerLearningSession', [UserController::class, 'registeredLearningSession']);
-    
-    
+
+
     Route::get('/user/sinlgeLiveChat/{id}', [UserController::class, 'sinlgeLiveChat']);
     Route::get('/user/getSingleLiveChatEvent/{id}', [UserController::class, 'getSingleLiveChatEvent']);
     Route::get('/user/getSingleLiveChatEvent/{minute}/{id}', [UserController::class, 'getLiveChatTiemSlot']);
-    
+
     //live chat
     Route::get('/user/live-chat/{slug}', [UserController::class, 'liveChatDetails']);
     Route::get('/user/live-chat/reg_info/{id}', [UserController::class, 'liveChatRegDetails']);
-    
+
     //Questions And Answers
     Route::get('/user/qna/{slug}', [UserController::class, 'qnaDetails']);
     Route::get('/user/sinlgeQna/{id}', [UserController::class, 'sinlgeQna']);
@@ -101,7 +101,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/qna_activites', [UserController::class, 'qna_activities']);
     Route::get('/user/qnaAll', [UserController::class, 'getQnaAll']);
     Route::get('/user/qnaStarAll/{id}', [UserController::class, 'getStarQna']);
-    
+
 
     //Meetup Event
     Route::get('/user/meetup/{slug}', [UserController::class, 'meetupDetails']);
@@ -146,6 +146,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     //user greeting registatin status
     Route::get('/user/greetings_registaion_status/{star_id}', [UserController::class, 'greetingStatus']);
+    Route::get('/user/greetings/get_purpose_list', [UserController::class, 'getPurposeList']);
 
     //greetings Activety check
     Route::get('/user/greetings_star_status/{star_id}', [GreetingController::class, 'greetingsCreateStatus']);

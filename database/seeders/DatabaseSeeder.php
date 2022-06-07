@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LiveChatRegistrationSeeder::class);
         $this->call(SuperStartSeeder::class);
         $this->call(PaymentSeeder::class);
+        $this->call(GreetingTypeSeeder::class);
 
         // audition related seeder
         $this->call(Audition\AuditionSeeder::class);
