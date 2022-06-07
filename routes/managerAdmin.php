@@ -45,7 +45,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('live-chats', [DashboardController::class, 'liveChats'])->name('dashboard.liveChat');
     Route::get('live-chats-data/{type}', [DashboardController::class, 'liveChatsData'])->name('dashboard.liveChatData');
     Route::get('live-chats-details/{id}', [DashboardController::class, 'liveChatsDetails'])->name('dashboard.liveChatDetails');
-    
+
     //Question And Answers
 
 
@@ -201,7 +201,9 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::group(['prefix' => 'greeting/', 'as' => 'greeting.'], function () {
         Route::get('dashboard', [GreetingController::class, 'dashboard'])->name('dashboard');
         Route::get('request', [GreetingController::class, 'request'])->name('request');
+        Route::get('published', [GreetingController::class, 'published'])->name('published');
         Route::get('show/{id}', [GreetingController::class, 'show'])->name('show');
+        Route::get('edit/{id}', [GreetingController::class, 'edit'])->name('edit');
         Route::post('publish/{id}', [GreetingController::class, 'publish'])->name('publish');
     });
 
@@ -278,7 +280,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     //audition create
     Route::post('audition-assign/{admin_id}', [JobAssign::class, 'auditionStore'])->name('AuditionAssign');
 
-    // Promo Video
+    // Promo Video0
     Route::get('promoVideo/pending', [PromoVideoController::class, 'pending'])->name('promoVideo.pending');
     Route::get('promoVideo/published', [PromoVideoController::class, 'published'])->name('promoVideo.published');
     Route::get('promoVideo/all', [PromoVideoController::class, 'all'])->name('promoVideo.all');
