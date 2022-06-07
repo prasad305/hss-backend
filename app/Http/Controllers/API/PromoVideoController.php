@@ -25,7 +25,7 @@ class PromoVideoController extends Controller
 
     public function videoStore(Request $request)
     {
-
+        // return auth('sanctum')->user()->category_id;
         $validator = Validator::make($request->all(),[
             'star_id' => 'required',
             'title' => 'required',
@@ -40,9 +40,8 @@ class PromoVideoController extends Controller
             ]);
         }else{
             $promo = PromoVideo::create([
-                'category_id' => auth()->user()->category_id,
-                'sub_category_id' => auth()->user()->sub_category_id,
-                'admin_id' => auth()->user()->id,
+                'category_id' => auth('sanctum')->user()->category_id,
+                'sub_category_id' => auth('sanctum')->user()->sub_category_id,
                 'admin_id' => auth()->user()->id,
                 'star_id' => $request->star_id,
                 'title' => $request->title,
@@ -77,6 +76,65 @@ class PromoVideoController extends Controller
 
 
     }
+
+
+    public function adminEdit($id)
+    {
+        $promo_video = PromoVideo::findOrFail($id);
+        return response()->json([
+            'status' => 200,
+            'promo_video' => $promo_video,
+        ]);
+    }
+
+    public function adminUpdate(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'star_id' => 'required',
+            'title' => 'required',
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'validation_errors'=>$validator->errors(),
+            ]);
+        }else{
+            $promo = PromoVideo::findOrFail($request->id);
+            
+            $promo->star_id = $request->star_id;
+            $promo->title = $request->title;
+
+            if ($request->hasFile('video_url')) {
+                if ($promo->video_url != null && file_exists($promo->video_url)) {
+                    unlink($promo->video_url);
+                }
+                $file        = $request->file('video_url');
+                $path        = 'uploads/videos/promos';
+                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                $file->move($path, $file_name);
+                $promo->video_url = $path . '/' . $file_name;
+            }
+            if ($request->hasFile('thumbnail')) {
+                if ($promo->thumbnail != null && file_exists($promo->thumbnail)) {
+                    unlink($promo->thumbnail);
+                }
+                $file        = $request->file('thumbnail');
+                $path        = 'uploads/videos/promos/';
+                $file_name   = $path . time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                Image::make($file)->resize(900, 400)->save($file_name);
+                $promo->thumbnail = $file_name;
+            }
+
+            $promo->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => "Video Updated Successfully"
+            ]);
+        }
+    }
+
     public function pendingVideos()
     {
 
@@ -88,6 +146,8 @@ class PromoVideoController extends Controller
             'promoVideos' => $promoVideos,
         ]);
     }
+
+
     public function liveVideos()
     {
 
@@ -126,6 +186,58 @@ class PromoVideoController extends Controller
         ]);
     }
 
+    public function starPromovideoStore(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'title' => 'required',
+            'video_url' => 'required|mimes:mp4,mov,ogg',
+            'thumbnail' => 'required|mimes:jpeg,jpg,png,webp | max:1000'
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'validation_errors'=>$validator->errors(),
+            ]);
+        }else{
+            $promo = PromoVideo::create([
+                'category_id' => auth('sanctum')->user()->category_id,
+                'sub_category_id' => auth('sanctum')->user()->sub_category_id,
+                'admin_id' => auth()->user()->parent_user,
+                'star_id' => auth('sanctum')->user()->id,
+                'title' => $request->title,
+                'star_approval' => 1,
+            ]);
+
+            if ($request->hasFile('video_url')) {
+
+                $file        = $request->file('video_url');
+                $path        = 'uploads/videos/promos';
+                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                $file->move($path, $file_name);
+                $promo->video_url = $path . '/' . $file_name;
+            }
+            if ($request->hasFile('thumbnail')) {
+
+                $file        = $request->file('thumbnail');
+                $path        = 'uploads/videos/promos/';
+                $file_name   = $path . time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                Image::make($file)->resize(900, 400)->save($file_name);
+                $promo->thumbnail = $file_name;
+            }
+
+            $promo->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => "Video Uploaded Successfully"
+            ]);
+        }
+
+    }
+
+
+
     public function starPromopendingVideos()
     {
 
@@ -159,6 +271,65 @@ class PromoVideoController extends Controller
             'pendingTotal' => $pendingTotal,
             'liveTotal' => $liveTotal,
         ]);
+    }
+
+    public function edit($id)
+    {
+
+        $promo_video = PromoVideo::findOrFail($id);
+
+        return response()->json([
+            'status' => 200,
+            'promo_video' => $promo_video,
+
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'title' => 'required',
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'validation_errors'=>$validator->errors(),
+            ]);
+        }else{
+            $promo = PromoVideo::findOrFail($request->id);
+            
+            $promo->title = $request->title;
+
+            if ($request->hasFile('video_url')) {
+                if ($promo->video_url != null && file_exists($promo->video_url)) {
+                    unlink($promo->video_url);
+                }
+                $file        = $request->file('video_url');
+                $path        = 'uploads/videos/promos';
+                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                $file->move($path, $file_name);
+                $promo->video_url = $path . '/' . $file_name;
+            }
+            if ($request->hasFile('thumbnail')) {
+                if ($promo->thumbnail != null && file_exists($promo->thumbnail)) {
+                    unlink($promo->thumbnail);
+                }
+                $file        = $request->file('thumbnail');
+                $path        = 'uploads/videos/promos/';
+                $file_name   = $path . time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                Image::make($file)->resize(900, 400)->save($file_name);
+                $promo->thumbnail = $file_name;
+            }
+
+            $promo->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => "Video Updated Successfully"
+            ]);
+        }
+
     }
 
     public function starVideosDetails($id)

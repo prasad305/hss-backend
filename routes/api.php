@@ -267,9 +267,9 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     // Learning Session Section
     // Route::post('admin/add_learning_session', [LearningSessionController::class, 'add']);
 
-    Route::post('admin/learning_session/create', [SimplePostController::class, 'add_learning']);
+    // Route::post('admin/learning_session/create', [SimplePostController::class, 'add_learning']);
 
-    // Route::post('admin/learning_session/create', [LearningSessionController::class, 'add_learning']);
+    Route::post('admin/learning_session/create', [LearningSessionController::class, 'add_learning']);
     Route::get('/admin/learning_session/all', [LearningSessionController::class, 'all']);
     Route::get('/admin/learning_session/count', [LearningSessionController::class, 'count']);
     Route::get('/admin/learning_session/pending', [LearningSessionController::class, 'pending_list']);
@@ -385,6 +385,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     // Promo Videos
     Route::get('/admin/promoVideo/all', [PromoVideoController::class, 'adminAllPromoVideos']);
     Route::post('/admin/promoVideo/store', [PromoVideoController::class, 'videoStore']);
+    Route::get('/admin/promoVideo/edit/{id}', [PromoVideoController::class, 'adminEdit']);
+    Route::post('/admin/promoVideo/update', [PromoVideoController::class, 'adminUpdate']);
     Route::get('/admin/promoVideo/pending', [PromoVideoController::class, 'pendingVideos']);
     Route::get('/admin/promoVideo/live', [PromoVideoController::class, 'liveVideos']);
     Route::get('/admin/promoVideo/count', [PromoVideoController::class, 'promoVideoCount']);
@@ -561,6 +563,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/promoVideo/all', [PromoVideoController::class, 'starPromovideoAll']);
     Route::post('/star/promoVideo/store', [PromoVideoController::class, 'starPromovideoStore']);
     Route::get('/star/promoVideo/pending', [PromoVideoController::class, 'starPromopendingVideos']);
+    Route::get('/star/promoVideo/edit/{id}', [PromoVideoController::class, 'edit']);
+    Route::post('/star/promoVideo/update', [PromoVideoController::class, 'update']);
     Route::get('/star/promoVideo/pending/{id}', [PromoVideoController::class, 'starVideosDetails']);
     Route::get('/star/promoVideo/live', [PromoVideoController::class, 'starPromoliveVideos']);
     Route::get('/star/promoVideo/count', [PromoVideoController::class, 'starPromoVideoCount']);
