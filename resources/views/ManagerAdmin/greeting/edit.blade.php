@@ -26,11 +26,11 @@
             <label for="banner">Banner</label>
             <br><img id="image1" onchange="validateMultipleImage('image1')" alt="icon"
                 src="{{ asset($greeting->banner) }}" height="300px" width="100%"
-                onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required />
+                onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" />
             <br><br>
             <input type="file" class="mt-2" id="banner" name="banner"
-                onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)"
-                accept=".jfif,.jpg,.jpeg,.png,.gif" required>
+                onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]);"
+                accept=".jfif,.jpg,.jpeg,.png,.gif">
         </div>
         <span class="text-danger" id="banner_error"></span>
     </span>
@@ -39,14 +39,13 @@
         <div class="form-group col-md-12">
             <label for="video">Video</label>
             <br>
-            @if ($greeting->video !== null)
-                <video width="312" controls>
-                    <source src="{{ asset('http://localhost:8000/' . $greeting->video) }}" />
-                </video>
-            @endif
+            {{-- @if ($greeting->video !== null) --}}
+            <video width="312" controls>
+                <source id="videoPreview" src="{{ asset('http://localhost:8000/' . $greeting->video) }}" />
+            </video>
+            {{-- @endif --}}
             <br>
-            <input type="file" class="mt-2" id="video" name="video" accept="video/mp4,video/x-m4v,video/*"
-                required>
+            <input type="file" class="mt-2" id="video" name="video" accept="video/mp4,video/x-m4v,video/*">
         </div>
         <span class="text-danger" id="video_error"></span>
     </span>
@@ -65,7 +64,8 @@
             <span class="text-danger" id="minimum_required_day_error"></span>
         </div>
     </div>
-    <button type="submit" class="btn btn-primary" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update Greeting</button>
+    <button type="submit" class="btn btn-primary" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update
+        Greeting</button>
 
 </form>
 
@@ -108,6 +108,11 @@
             }
         });
 
+    });
+    $(document).on("change", "#video", function(evt) {
+        var $source = $('#videoPreview');
+        $source[0].src = URL.createObjectURL(this.files[0]);
+        $source.parent()[0].load();
     });
 </script>
 

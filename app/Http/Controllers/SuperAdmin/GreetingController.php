@@ -35,7 +35,7 @@ class GreetingController extends Controller
         $greetingtype->greeting_type = $request->input('greeting_type');
         $greetingtype->status = 1;
 
-     
+
         try {
             $greetingtype->save();
             return response()->json([
@@ -59,7 +59,7 @@ class GreetingController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'greeting_type' => 'required|unique:greeting_types',
+            'greeting_type' => 'required|unique:greeting_types,greeting_type,'.$id,
         ]);
 
         $greetingtype = GreetingType::findOrFail($id);

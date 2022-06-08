@@ -63,7 +63,7 @@
                                   <span class="badge badge-danger" style="width: 70px;">InActive</span>
                                   @endif
                                 </td>
-                                
+
                                 <td style="width: 150px">
                                     <a class="btn btn-sm btn-info"
                                         onclick="Show('Edit Greeting Type','{{ route('superAdmin.greeting-type.edit', $data->id) }}')"><i
@@ -108,7 +108,7 @@
               , confirmButtonText: 'Yes, Active !'
           }).then((result) => {
               if (result.isConfirmed) {
-  
+
                   $.ajax({
                       method: 'POST',
                       url: url,
@@ -137,7 +137,7 @@
               }
           })
       }
-  
+
       function inactiveNow(objButton) {
           var url = objButton.value;
           Swal.fire({
@@ -150,7 +150,7 @@
               confirmButtonText: 'Yes, Inactive !'
           }).then((result) => {
               if (result.isConfirmed) {
-  
+
                   $.ajax({
                       method: 'POST',
                       url: url,
