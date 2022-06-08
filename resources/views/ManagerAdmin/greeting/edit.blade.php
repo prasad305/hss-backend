@@ -53,13 +53,13 @@
     <div class="row form-group">
         <div class="col-md-6">
             <label for="cost">Cost</label>
-            <input id="cost" type="number" class="form-control" name="cost" placeholder=""
+            <input readonly id="cost" type="number" class="form-control" name="cost" placeholder=""
                 value="{{ $greeting->cost }}">
             <span class="text-danger" id="cost_error"></span>
         </div>
         <div class="col-md-6">
             <label for="minimum_required_day">Minimum day before apply</label>
-            <input id="minimum_required_day" type="number" class="form-control" name="minimum_required_day"
+            <input readonly id="minimum_required_day" type="number" class="form-control" name="minimum_required_day"
                 placeholder="" value="{{ $greeting->user_required_day }}">
             <span class="text-danger" id="minimum_required_day_error"></span>
         </div>
