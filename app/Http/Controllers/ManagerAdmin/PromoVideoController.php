@@ -11,7 +11,7 @@ class PromoVideoController extends Controller
     //
     public function all()
     {
-        $promoVideo = PromoVideo::latest()->get();
+        $promoVideo = PromoVideo::where([['category_id',auth()->user()->category_id],['star_approval',1]])->latest()->get();
 
         return view('ManagerAdmin.PromoVideo.index', compact('promoVideo'));
     }
@@ -32,7 +32,7 @@ class PromoVideoController extends Controller
 
     public function details($id)
     {
-        $promoVideo = PromoVideo::with(['star', 'admin'])->find($id);
+        $promoVideo = PromoVideo::with(['star', 'admin'])->where('category_id',auth()->user()->category_id)->find($id);
         return view('ManagerAdmin.PromoVideo.details', compact('promoVideo'));
     }
 

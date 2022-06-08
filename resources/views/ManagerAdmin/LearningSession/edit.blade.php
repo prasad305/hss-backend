@@ -60,11 +60,9 @@
         <div class="form-group col-md-12" id="hide_show_video" style="display: none">
             <label for="video">Video</label>
             <br>
-            @if ($event->video !== null)
-            <video width="312" height="200" controls>
-                <source src="{{ asset('http://localhost:8000/' . $event->video) }}" />
+            <video width="312" controls>
+                <source id="videoPreview" src="{{ asset('http://localhost:8000/' . $event->video) }}" />
             </video>
-            @endif
             <br>
             <input type="file" class="mt-2" id="video" name="video" accept="video/mp4,video/x-m4v,video/*" required>
         </div>
@@ -184,6 +182,12 @@
     });
 
 });
+
+$(document).on("change", "#video", function(evt) {
+        var $source = $('#videoPreview');
+        $source[0].src = URL.createObjectURL(this.files[0]);
+        $source.parent()[0].load();
+    });
 
 </script>
 

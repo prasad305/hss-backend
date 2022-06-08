@@ -61,6 +61,9 @@
                                             class="ion-checkmark-round"></i> Published</button>
                                     @endif
 
+                                    <a href="{{ route('managerAdmin.learningSession.details', [$event->id]) }}" type="button"
+                                        class="btn btn-info waves-effect waves-light">Details <i
+                                            class="fa fa-angle-double-right"></i></a>
                                 </div>
                             </div>
 

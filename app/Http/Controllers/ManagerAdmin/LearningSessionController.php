@@ -147,7 +147,7 @@ class LearningSessionController extends Controller
     /// Manager Part ////
     public function manager_pending()
     {
-        $upcommingEvent = LearningSession::where('status', 1)->orderBy('updated_at','desc')->get();
+        $upcommingEvent = LearningSession::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('updated_at','desc')->get();
 
         return view('ManagerAdmin.LearningSession.index', compact('upcommingEvent'));
     }
@@ -163,7 +163,7 @@ class LearningSessionController extends Controller
 
     public function learningEvaluation()
     {
-        $events = LearningSession::where([['status', '>', 3], ['status', '<', 9]])->orderBy('updated_at', 'desc')->get();
+        $events = LearningSession::where([['status', '>', 3], ['status', '<', 9],['category_id',auth()->user()->category_id]])->orderBy('updated_at', 'desc')->get();
 
         return view('ManagerAdmin.LearningSession.evaluation', compact('events'));
     }
@@ -235,7 +235,7 @@ class LearningSessionController extends Controller
 
     public function manager_all()
     {
-        $upcommingEvent = LearningSession::where([['status', '>', 0]])->orderBy('updated_at','desc')->get();
+        $upcommingEvent = LearningSession::where([['status', '>', 0],['category_id',auth()->user()->category_id]])->orderBy('updated_at','desc')->get();
 
         return view('ManagerAdmin.LearningSession.index', compact('upcommingEvent'));
     }
@@ -368,7 +368,7 @@ class LearningSessionController extends Controller
     {
         if ($request->banner_or_video == 0) {
             $request->validate([
-                'title' => 'required',
+                'title' => 'required|unique:learning_sessions,title,'.$id,
                 'description' => 'required',
                 'instruction' => 'required',
                 'event_date' => 'required',
@@ -383,7 +383,7 @@ class LearningSessionController extends Controller
             ]);
         }else{
             $request->validate([
-                'title' => 'required',
+                'title' => 'required|unique:learning_sessions,title,'.$id,
                 'description' => 'required',
                 'instruction' => 'required',
                 'event_date' => 'required',
@@ -446,8 +446,6 @@ class LearningSessionController extends Controller
             $learningSession->video = $path . '/' . $file_name;
             $learningSession->banner = null;
         }
-
-        
 
         try {
             $learningSession->update();

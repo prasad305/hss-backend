@@ -134,7 +134,10 @@
                         @else
                             <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.learningSession.set_publish', [$event->id]) }}">Remove From Publish</a>
                         @endif
-                            <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Learning Session','{{ route('managerAdmin.learningSession.edit', $event->id) }}')">Edit</a>
+                        @if ($event->status < 2)
+                            
+                        <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Learning Session','{{ route('managerAdmin.learningSession.edit', $event->id) }}')">Edit</a>
+                        @endif
                     </div>
                 </div>
 

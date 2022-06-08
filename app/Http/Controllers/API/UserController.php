@@ -189,12 +189,42 @@ class UserController extends Controller
 
     public function singleLearnigSession($slug)
     {
-        $learnigSession = LearningSession::where('slug', $slug)->first();
+        $learnigSession = LearningSession::where([['slug', $slug]])->first();
 
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
             'learnigSession' => $learnigSession,
+        ]);
+    }
+
+    public function userSingleLearnigSession($slug)
+    {
+        $learnigSession = LearningSession::where([['slug', $slug]])->with(['learningSessionAssignment' => function($query){
+            return $query->where('user_id',auth()->user()->id)->get();
+        }])->first();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'learnigSession' => $learnigSession,
+        ]);
+    }
+
+    public function learningSeesionResult($slug)
+    {
+        // return $slug;
+        $learnigSession = LearningSession::where('slug', $slug)->first();
+
+        $marked_videos = LearningSessionAssignment::where([['event_id',$learnigSession->id],['user_id',auth()->user()->id],['send_to_user',1]])->get();
+
+        $rejected_videos = LearningSessionAssignment::where([['event_id',$learnigSession->id],['user_id',auth()->user()->id],['status',2]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'markedVideos' => $marked_videos,
+            'rejectedVideos' => $rejected_videos,
         ]);
     }
 

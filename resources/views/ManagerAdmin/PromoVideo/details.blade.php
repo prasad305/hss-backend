@@ -78,7 +78,7 @@ Manager Admin
             @elseif($promoVideo->status != 0)
             <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.promoVideo.set_publish', [$promoVideo->id]) }}">Remove From Publish</a>
             @endif
-            <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Post','{{ route('managerAdmin.promoVideo.edit', $promoVideo->id) }}')">Edit</a>
+            {{-- <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Post','{{ route('managerAdmin.promoVideo.edit', $promoVideo->id) }}')">Edit</a> --}}
         </div>
 
 

@@ -158,6 +158,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //check user notification
     Route::get('/user/check_notification', [UserController::class, 'checkUserNotifiaction']);
     Route::get('/learnig-session/{slug}', [UserController::class, 'singleLearnigSession']);
+    Route::get('/user/learning-session/{slug}', [UserController::class, 'userSingleLearnigSession']);
+    Route::get('/learning-session/result/{slug}', [UserController::class, 'learningSeesionResult']);
 
     //lerning session registaion
     Route::post('/learnig-session', [UserController::class, 'LearningSessionReg']);
@@ -267,6 +269,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
     // Learning Session Section
     Route::post('admin/learning_session/create', [LearningSessionController::class, 'add_learning']);
+    Route::post('/admin/update_learning_session/{id}', [LearningSessionController::class, 'adminUpdateLearning']);
     Route::get('/admin/learning_session/all', [LearningSessionController::class, 'all']);
     Route::get('/admin/learning_session/count', [LearningSessionController::class, 'count']);
     Route::get('/admin/learning_session/pending', [LearningSessionController::class, 'pending_list']);
@@ -448,7 +451,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/decline_post/{id}', [SimplePostController::class, 'decline_post']);
 
     // Learning Session Section
-    Route::post('/star/add_learning_session', [LearningSessionController::class, 'star_add']);
+    Route::post('/star/learning_session/create', [LearningSessionController::class, 'star_add']);
     Route::post('/star/update_learning_session/{id}', [LearningSessionController::class, 'update']);
     Route::get('/star/learning_session/all', [LearningSessionController::class, 'star_all']);
     Route::get('/star/learning_session/count', [LearningSessionController::class, 'star_count']);

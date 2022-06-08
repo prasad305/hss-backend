@@ -73,6 +73,8 @@ class LearningSessionController extends Controller
             $learningSession = new LearningSession();
             $learningSession->title = $request->input('title');
             $learningSession->slug = Str::slug($request->input('title'));
+            $learningSession->category_id = auth('sanctum')->user()->category_id;
+            $learningSession->admin_id = auth('sanctum')->user()->id;
             $learningSession->created_by_id = auth('sanctum')->user()->id;
             $learningSession->star_id = $request->input('star_id');
             $learningSession->description = $request->input('description');
@@ -123,6 +125,126 @@ class LearningSessionController extends Controller
                 'status' => 200,
                 'message' => 'Learning Session Added',
             ]);
+        }
+    }
+
+    public function adminUpdateLearning(Request $request,$event_id)
+    {
+        
+        if ($request->banner_or_video == 0) {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|unique:learning_sessions,title,'.$event_id,
+                'description' => 'required|min:5',
+                'star_id' => 'required',
+                'instruction' => 'required|min:5',
+                'registration_start_date' => 'required',
+                'registration_end_date' => 'required',
+                'event_date' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+                'assignment' => 'required',
+                'fee' => 'required',
+                'participant_number' => 'required',
+                'image' => 'nullable|mimes:jpg,jpeg,png,gif,webp',
+            ], [
+                'title.unique' => 'This title already exist',
+                'star_id.required' => 'Please Select One Star',
+            ]);
+        }else{
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|unique:learning_sessions,title,'.$event_id,
+                'description' => 'required|min:5',
+                'star_id' => 'required',
+                'instruction' => 'required|min:5',
+                'registration_start_date' => 'required',
+                'registration_end_date' => 'required',
+                'event_date' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+                'assignment' => 'required',
+                'fee' => 'required',
+                'participant_number' => 'required',
+                'video' => "nullable|mimes:mp4,mkv",
+            ], [
+                'title.unique' => 'This title already exist',
+                'star_id.required' => 'Please Select One Star',
+            ]);
+        }
+        
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->errors(),
+            ]);
+        } else {
+
+            $learningSession = LearningSession::find($event_id);
+            $learningSession->title = $request->input('title');
+            $learningSession->slug = Str::slug($request->input('title'));
+            $learningSession->created_by_id = auth('sanctum')->user()->id;
+            $learningSession->star_id = $request->input('star_id');
+            $learningSession->description = $request->input('description');
+            $learningSession->instruction = $request->input('instruction');
+
+            $learningSession->registration_start_date = $request->input('registration_start_date');
+            $learningSession->registration_end_date = $request->input('registration_end_date');
+            $learningSession->event_date = $request->input('event_date');
+            $learningSession->start_time = $request->input('start_time');
+            $learningSession->end_time = $request->input('end_time');
+
+            $learningSession->assignment = $request->input('assignment');
+            $learningSession->fee = $request->input('fee');
+            $learningSession->participant_number = $request->input('participant_number');
+
+            if ($request->hasfile('image')) {
+                $destination = $learningSession->banner;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                if ($learningSession->video != null && file_exists($learningSession->video)) {
+                    unlink($learningSession->video);
+                }
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/learning_session/' . time() . '.' . $extension;
+
+                Image::make($file)->resize(900, 400)->save($filename, 100);
+                $learningSession->banner = $filename;
+                $learningSession->video = null;
+            }
+
+            if ($request->hasFile('video')) {
+                if ($learningSession->video != null && file_exists($learningSession->video)) {
+                    unlink($learningSession->video);
+                }
+                $destination = $learningSession->banner;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file        = $request->file('video');
+                $path        = 'uploads/videos/learning_session';
+                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                $file->move($path, $file_name);
+                $learningSession->video = $path . '/' . $file_name;
+                $learningSession->banner = null;
+            }
+
+            try {
+                $learningSession->update();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Learning Session Updated Successfully!',
+                ]);
+            } catch (\Exception $exception) {
+                return response()->json([
+                    'type' => 'error',
+                    'message' => $exception->getMessage(),
+                ]);
+            }
+
+         
         }
     }
 
@@ -309,8 +431,8 @@ class LearningSessionController extends Controller
 
     public function count()
     {
-        $pending = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', 0]])->count();
-        $approved = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', 1]])->count();
+        $pending = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', 0]])->count();
+        $approved = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', 1]])->count();
 
         return response()->json([
             'status' => 200,
@@ -322,8 +444,8 @@ class LearningSessionController extends Controller
 
     public function all()
     {
-        $post = LearningSession::where('created_by_id', auth('sanctum')->user()->id)->latest()->get();
-        $count = LearningSession::where('created_by_id', auth('sanctum')->user()->id)->count();
+        $post = LearningSession::where('admin_id', auth('sanctum')->user()->id)->latest()->get();
+        $count = LearningSession::where('admin_id', auth('sanctum')->user()->id)->count();
 
         return response()->json([
             'status' => 200,
@@ -335,7 +457,7 @@ class LearningSessionController extends Controller
 
     public function pending_list()
     {
-        $events = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', '<', 2]]);
+        $events = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', '<', 2]]);
 
         return response()->json([
             'status' => 200,
@@ -346,7 +468,7 @@ class LearningSessionController extends Controller
 
     public function live_list()
     {
-        $events = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', 2]]);
+        $events = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', 2]]);
 
         return response()->json([
             'status' => 200,
@@ -357,7 +479,7 @@ class LearningSessionController extends Controller
 
     public function evaluation_list()
     {
-        $events = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', '>', 2], ['status', '<', 9]]);
+        $events = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', '>', 2], ['status', '<', 9]]);
 
         return response()->json([
             'status' => 200,
@@ -368,7 +490,7 @@ class LearningSessionController extends Controller
 
     public function completed_list()
     {
-        $events = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', 9]]);
+        $events = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', 9]]);
 
         return response()->json([
             'status' => 200,
@@ -436,8 +558,8 @@ class LearningSessionController extends Controller
 
     public function approved_list()
     {
-        $post = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', 1]])->latest()->get();
-        $count = LearningSession::where([['created_by_id', auth('sanctum')->user()->id], ['status', 1]])->count();
+        $post = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', 1]])->latest()->get();
+        $count = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', 1]])->count();
 
         return response()->json([
             'status' => 200,
@@ -452,41 +574,112 @@ class LearningSessionController extends Controller
 
     public function star_add(Request $request)
     {
-        $post = new LearningSession();
-        $post->title = $request->input('title');
-        $post->slug = Str::slug($request->input('title'));
-        $post->created_by_id = auth('sanctum')->user()->id;
-        $post->star_id = auth('sanctum')->user()->id;
-        $post->description = $request->input('description');
-        $post->registration_start_date = $request->input('registration_start_date');
-        $post->registration_end_date = $request->input('registration_end_date');
-        $post->date = $request->input('date');
-        $post->start_time = $request->input('start_time');
-        $post->end_time = $request->input('end_time');
-        $post->fee = $request->input('fee');
-        $post->participant_number = $request->input('participant_number');
-        $post->room_id = $request->input('room_id');
-        $post->star_approval = 1;
-
-        if ($request->hasfile('image')) {
-            $destination = $post->banner;
-            if (File::exists($destination)) {
-                File::delete($destination);
-            }
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/learning_session/' . time() . '.' . $extension;
-
-            Image::make($file)->resize(900, 400)->save($filename, 100);
-            $post->banner = $filename;
+        
+        if ($request->banner_or_video == 0) {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|unique:learning_sessions',
+                'description' => 'required|min:5',
+                'instruction' => 'required|min:5',
+                'registration_start_date' => 'required',
+                'registration_end_date' => 'required',
+                'event_date' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+                'assignment' => 'required',
+                'fee' => 'required',
+                'participant_number' => 'required',
+                'room_id' => 'required',
+                'image' => 'required|mimes:jpg,jpeg,png,gif,webp',
+            ], [
+                'title.unique' => 'This title already exist',
+                'star_id.required' => 'Please Select One Star',
+            ]);
+        }else{
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|unique:learning_sessions',
+                'description' => 'required|min:5',
+                'instruction' => 'required|min:5',
+                'registration_start_date' => 'required',
+                'registration_end_date' => 'required',
+                'event_date' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+                'assignment' => 'required',
+                'fee' => 'required',
+                'participant_number' => 'required',
+                'room_id' => 'required',
+                'video' => "required|mimes:mp4,mkv",
+            ], [
+                'title.unique' => 'This title already exist',
+                'star_id.required' => 'Please Select One Star',
+            ]);
         }
+        
 
-        $post->save();
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Learning Session Added',
-        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->errors(),
+            ]);
+        } else {
+
+            $learningSession = new LearningSession();
+            $learningSession->title = $request->input('title');
+            $learningSession->slug = Str::slug($request->input('title'));
+            $learningSession->category_id = auth('sanctum')->user()->category_id;
+            $learningSession->created_by_id = auth('sanctum')->user()->id;
+            $learningSession->admin_id = auth('sanctum')->user()->parent_user;
+            $learningSession->star_id = auth('sanctum')->user()->id;
+            $learningSession->description = $request->input('description');
+            $learningSession->instruction = $request->input('instruction');
+
+            $learningSession->registration_start_date = $request->input('registration_start_date');
+            $learningSession->registration_end_date = $request->input('registration_end_date');
+            $learningSession->event_date = $request->input('event_date');
+            $learningSession->start_time = $request->input('start_time');
+            $learningSession->end_time = $request->input('end_time');
+
+            $learningSession->assignment = $request->input('assignment');
+            $learningSession->fee = $request->input('fee');
+            $learningSession->participant_number = $request->input('participant_number');
+            $learningSession->room_id = $request->input('room_id');
+            $learningSession->status = 1;
+
+           
+
+            if ($request->hasfile('image')) {
+                $destination = $learningSession->banner;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/learning_session/' . time() . '.' . $extension;
+
+                Image::make($file)->resize(900, 400)->save($filename, 100);
+                $learningSession->banner = $filename;
+            }
+
+            if ($request->hasFile('video')) {
+                if ($learningSession->video != null && file_exists($learningSession->video)) {
+                    unlink($learningSession->video);
+                }
+                $file        = $request->file('video');
+                $path        = 'uploads/videos/learning_session';
+                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                $file->move($path, $file_name);
+                $learningSession->video = $path . '/' . $file_name;
+            }
+
+            $learningSession->save();
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Learning Session Added',
+            ]);
+        }
     }
 
     public function update(Request $request, $id)
@@ -547,8 +740,6 @@ class LearningSessionController extends Controller
             $learning_session->fee = $request->input('fee');
             $learning_session->participant_number = $request->input('participant_number');
 
-            //$post->video = $request->input('video');
-            //$post->type = $request->input('type');
 
             if ($request->hasfile('image')) {
                 $destination = $learning_session->banner;
