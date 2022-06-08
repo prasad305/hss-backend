@@ -56,22 +56,21 @@ class UserMobileAppController extends Controller
         $activity = new Activity();
 
 
-        if( $modelName == 'meetup'){
+        if ($modelName == 'meetup') {
             $eventRegistration = new MeetupEventRegistration();
             $event = MeetupEvent::find($eventId);
             $eventRegistration->meetup_event_id = $eventId;
             $eventRegistration->amount = $event->fee;
             $activity->type = 'meetup';
         }
-        if( $modelName == 'learningSession'){
+        if ($modelName == 'learningSession') {
             $eventRegistration = new LearningSessionRegistration();
             $event = LearningSession::find($eventId);
             $eventRegistration->learning_session_id = $eventId;
             $eventRegistration->amount = $event->fee;
             $activity->type = 'learningSession';
 
-            if($event->assignment == 1)
-            {
+            if ($event->assignment == 1) {
                 $evaluation = new LearningSessionEvaluation();
                 $evaluation->event_id = $event->id;
                 $evaluation->user_id = $user->id;
@@ -79,7 +78,7 @@ class UserMobileAppController extends Controller
             }
         }
 
-        if( $modelName == 'livechat'){
+        if ($modelName == 'livechat') {
             $eventRegistration = new LiveChatRegistration();
             $event = LiveChat::find($eventId);
             $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->interval)->format('H:i:s');
@@ -91,7 +90,7 @@ class UserMobileAppController extends Controller
             $activity->type = 'livechat';
             $event->update();
         }
-        if( $modelName == 'qna'){
+        if ($modelName == 'qna') {
             $eventRegistration = new QnaRegistration();
             $event = QnA::find($eventId);
             $event->available_start_time = Carbon::parse($request->end_time)->addMinutes(1)->format('H:i:s');
@@ -104,7 +103,7 @@ class UserMobileAppController extends Controller
             $activity->type = 'qna';
             $event->update();
         }
-        if( $modelName == 'greeting'){
+        if ($modelName == 'greeting') {
             $eventRegistration = GreetingsRegistration::find($request->event_registration_id);
             $event = Greeting::find($eventId);
             $eventRegistration->status = 1;
@@ -239,6 +238,16 @@ class UserMobileAppController extends Controller
             "liveChats" => $liveChats,
             "auditions" =>  $auditions,
             "meetups" => $meetups
+        ]);
+    }
+    /**
+     * all star list
+     */
+    public function allStarList()
+    {
+        $allStars = User::where('user_type', 'star')->where('status', 1)->orderBy('id', 'DESC')->get();
+        return response()->json([
+            "stars" =>  $allStars
         ]);
     }
 }
