@@ -1,82 +1,56 @@
 <form id="edit-form" enctype="multipart/form-data">
     @csrf
-    {{-- @method('PUT') --}}
-    <div class="form-group">
-      <label for="name">Name</label>
-      <input type="text" class="form-control" id="name" name="name" placeholder="Enter Category Name" value="{{ $category->name }}">
+
+    <div class="col-md-12">
+        <label for="acquired_instruction">Acquired Instruction</label>
+        <textarea name="acquired_instruction" class="summernote" id="acquired_instruction">
+            {{$instruction->acquired_instruction}}
+        </textarea>
+        <span class="text-danger" id="acquired_instruction_error"></span>
     </div>
+    <br>
+    <button type="submit" class="btn btn-success" id="btnSave"><i class="fa fa-save"></i>&nbsp; Update </button>
 
-    <span class="col-md-12 row">
-
-        <div class="form-group col-md-6">
-            <label for="image">Image</label>
-            <br><img id="image1" src="{{ asset($category->image) }}" onchange="validateMultipleImage('image1')" alt="image" src="" height="200px" width="200px" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';"/>
-            <br><br><input type="file" class="mt-2" id="image" name="image" onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif">
-        </div>
-
-        <div class="form-group col-md-6">
-            <label for="icon">Icon</label>
-            <br><img id="icon1" src="{{ asset($category->icon) }}" onchange="validateMultipleImage('icon1')" alt="image" src="" height="200px" width="200px" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';"/>
-            <br><br><input type="file" class="mt-2" id="icon" name="icon" onchange="document.getElementById('icon1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif">
-        </div>
-
-
-    </span>
-
-    <button type="submit" id="updateCategoryBtn" class="btn btn-primary"><i class="fa fa-save"></i>&nbsp; Update Category</button>
 </form>
 
-<script>
-    $(document).on('click','#updateCategoryBtn',function (event) {
-    event.preventDefault();
-    var form = $('#edit-form')[0];
-    var formData = new FormData(form);
-    formData.append('_method','PUT');
-    // Set header if need any otherwise remove setup part
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
-        }
-    });
 
-    $.ajax({
-        url: "{{ route('superAdmin.category.update',$category->id) }}",// your request url
-        data: formData,
-        processData: false,
-        contentType: false,
-        type: 'POST',
-        success: function (data) {
-            Swal.fire({
-                position: 'top-end',
-                icon: data.type,
-                title: data.message,
-                showConfirmButton: false,
-                // timer: 1500
-            })
+<script>
+    $('.textarea').summernote()
+
+    $(document).on('click', '#btnSave', function(e) {
+        e.preventDefault();
+        let acquired_instruction = $('#acquired_instruction').val();
+        $.ajax({
+            url: "{{ route('superAdmin.auctionTerms.update',$instruction->id) }}",
+            type: "PUT",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                acquired_instruction: acquired_instruction,
+            },
+            success: function(response) {
+                Swal.fire(
+                    'Success!',
+                    response.message,
+                    'success'
+                )
                 setTimeout(function() {
                     location.reload();
                 }, 1000);
-            console.log(data);
-        },
-        error: function (data) {
-            console.log(data);
-            var errorMessage = '<div class="card bg-danger">\n' +
-                        '<div class="card-body text-center p-5">\n' +
-                        '<span class="text-white">';
-                    $.each(data.responseJSON.errors, function(key, value) {
-                        errorMessage += ('' + value + '<br>');
-                    });
-                    errorMessage += '</span>\n' +
-                        '</div>\n' +
-                        '</div>';
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        footer: errorMessage
-                    })
-        }
+            },
+            error: function(response) {
+                // console.log(response);
+                $.each(response.responseJSON.errors, function(key, value) {
+                    ErrorMessage(key, value);
+                });
+            }
+        });
     });
 
- });
-</script>
 
+</script>
+<script>
+    $('.summernote').summernote({
+      placeholder: '',
+      height: 200
+    });
+  </script>

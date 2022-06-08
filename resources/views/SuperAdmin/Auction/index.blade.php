@@ -44,42 +44,31 @@
                   <table id="example1" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Icon</th>
-                            <th>Photo</th>
+                            <th>Instructions</th>
                             <th style="width: 150px">Action</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        {{-- @foreach ($category as $data)
+                        @foreach ($instruction as $data)
                             <tr>
-                                <td>{{ $data->name }}</td>
-                                <td>
-                                    <img src="{{ asset($data->icon) }}" alt="" height="50" width="50">
-                                </td>
-                                <td>
-                                    <img src="{{ asset($data->image) }}" alt="" height="50" width="50">
-                                </td>
+                                <td>{!! $data->acquired_instruction !!}</td>
                                 <td style="width: 150px">
                                     <a class="btn btn-sm btn-info"
-                                        onclick="Show('Edit Category','{{ route('superAdmin.category.edit', $data->id) }}')"><i
+                                        onclick="Show('Edit Instruction','{{ route('superAdmin.auctionTerms.edit', $data->id) }}')"><i
                                             class="fa fa-edit text-white"></i></a>
                                     <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
-                                        value="{{ route('superAdmin.category.destroy', $data) }}"><i
+                                        value="{{ route('superAdmin.auctionTerms.destroy', $data->id) }}"><i
                                             class="fa fa-trash"></i> </button>
                                 </td>
                             </tr>
-                        @endforeach --}}
+                        @endforeach
 
                     </tbody>
                   </table>
                 </div>
                 <!-- /.card-body -->
             </div>
-
-
-
 
         </div> <!-- container -->
     </div> <!-- content -->

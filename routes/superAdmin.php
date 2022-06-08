@@ -113,6 +113,9 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('auction-index', [AuctionController::class, 'index'])->name('auction.index');
     Route::get('terms-create', [AuctionController::class, 'termsCreate'])->name('auctionTerms.create');
     Route::post('terms-store', [AuctionController::class, 'termsStore'])->name('auctionTerms.store');
+    Route::get('terms-edit/{id}', [AuctionController::class, 'termsEdit'])->name('auctionTerms.edit');
+    Route::put('terms-update/{id}', [AuctionController::class, 'termsUpdate'])->name('auctionTerms.update');
+    Route::delete('terms-destroy/{id}', [AuctionController::class, 'termsDestroy'])->name('auctionTerms.destroy');
 
 
 

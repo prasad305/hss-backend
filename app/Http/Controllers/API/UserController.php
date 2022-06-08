@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Acquired_app;
 use App\Models\Activity;
 use App\Models\Auction;
+use App\Models\AuctionTerms;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPayment;
@@ -936,6 +937,15 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'maxBid' => $maxBid,
+        ]);
+    }
+    public function auction_instruction(){
+        
+        $instruction = AuctionTerms::first();
+
+        return response()->json([
+            'status' => 200,
+            'instruction' => $instruction,
         ]);
     }
 
