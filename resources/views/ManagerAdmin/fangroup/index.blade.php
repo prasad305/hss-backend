@@ -14,7 +14,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">FanGroup</h1>
+          <h1 class="m-0">FanGroup {{ $fanstatus }}</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -47,14 +47,12 @@
                                     <h3 class="text-ellipsis-line-1">{{ $val->title }}</h3>
 
                                     @if ($val->status == 0)
-
-                                        <a type="button" class="btn btn-warning waves-effect waves-light"><i
-                                                class="icon-record"></i>
-                                            Pending</a>
-                                    @else
-
                                         <button type="button" class="btn btn-success waves-effect waves-light"><i
                                                 class="icon-checkmark-round"></i> Published</button>
+                                    @else
+                                    <a type="button" class="btn btn-warning waves-effect waves-light"><i
+                                                class="icon-record"></i>
+                                            Pending</a>
                                     @endif
 
                                     <a href="{{ route('managerAdmin.fangroup.details', [$val->id]) }}" type="button"

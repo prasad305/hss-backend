@@ -36,6 +36,7 @@ class CreateUsersTable extends Migration
             $table->string('email_send_status')->nullable();
             $table->string('user_type')->nullable();
             $table->string('password')->nullable();
+            $table->integer('user_points')->nullable();
             $table->boolean('is_online')->default(0);
             $table->integer('active_status')->default(1)->comment('1 = active, 0 = inactive');
             $table->integer('status')->nullable(0)->comment('0= unapproved, 1 = approved');

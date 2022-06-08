@@ -15,10 +15,15 @@ class CreateWalletsTable extends Migration
     {
         Schema::create('wallets', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('club_point')->nullable();
-            $table->float('audition_cost')->nullable();
-            $table->float('amount')->nullable();
+            $table->integer('user_id')->nullable();
+            $table->string('title')->nullable();
+            $table->integer('club_points')->default(0);
+            $table->integer('auditions')->default(0);
+            $table->integer('learning_session')->default(0);
+            $table->integer('live_chats')->default(0);
+            $table->integer('meetup')->default(0);
+            $table->integer('greetings')->default(0);
+            $table->float('price')->default(0);
             $table->integer('status')->nullable();
             $table->timestamps();
         });

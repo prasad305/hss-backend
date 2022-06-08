@@ -26,6 +26,7 @@
         <div class="col-md-12">
               <label for="first_name">Unit Price</label>
               <input type="text" class="form-control" id="title" name="unit_price" placeholder="Enter Admin First Name" value="{{$event->unit_price }}">
+          <span class="text-danger" id="unit_price"></span>
          </div>
     </div>
 
@@ -35,6 +36,17 @@
           <textarea id="summernote" name="description">
             {!! $event->description !!}
           </textarea>
+          <span class="text-danger" id="description"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-12">
+          <label for="phone">Terms & Conditions</label>
+          <textarea id="summernote2" name="terms_conditions">
+            {!! $event->terms_conditions !!}
+          </textarea>
+          <span class="text-danger" id="terms_conditions"></span>
         </div>
     </div>
 
@@ -44,7 +56,7 @@
               <label for="image">Image</label>
               <br><img id="image1" onchange="validateMultipleImage('image1')" alt="icon" src="{{ asset($event->image) }}" height="300px" width="100%" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required/>
               <br><br>
-              <input type="file" class="mt-2" id="image" name="image" onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
+              <!-- <input type="file" class="mt-2" id="image" name="image" onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required> -->
         </div>
     </span>
 
@@ -60,7 +72,7 @@
      </div> --}}
 
 
-    <button type="submit" class="btn btn-primary" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update Event</button>
+    <button type="submit" class="btn btn-primary" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update</button>
 
 </form>
 
@@ -119,6 +131,10 @@
 
 <script>
     $('#summernote').summernote({
+      placeholder: '',
+      height: 200
+    });
+    $('#summernote2').summernote({
       placeholder: '',
       height: 200
     });
