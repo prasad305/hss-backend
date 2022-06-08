@@ -36,7 +36,7 @@
                 @foreach ($events as $event)
                     <!--card-->
 
-                    <div class="col-sm-6 col-lg-4">
+                    <div class="col-sm-6 col-lg-4 col-xl-3">
                         <div class="card">
                             <div class="panel panel-primary text-center">
                                 <div class="">

@@ -33,9 +33,18 @@ class LiveChatController extends Controller
     }
 
 
-    public function pendingLiveChat()
+    public function liveChatList($type)
     {
-        $events = LiveChat::where([['star_id', auth('sanctum')->user()->id], ['status', '<', 1]]);
+        $id = auth('sanctum')->user()->id;
+
+        if($type == 'pending')
+            $events = LiveChat::where([['star_id', $id], ['status', '<', 1]]);
+        if($type == 'approved')
+            $events = LiveChat::where([['star_id', $id], ['status', '>', 0], ['status', '<', 10]]);
+        if($type == 'completed')
+            $events = LiveChat::where([['star_id', $id], ['status', 9]]);
+        if($type == 'rejected')
+            $events = LiveChat::where([['star_id', $id], ['status', 11]]);
 
         return response()->json([
             'status' => 200,
@@ -44,27 +53,6 @@ class LiveChatController extends Controller
         ]);
     }
 
-    public function approveLiveChat()
-    {
-        $events = LiveChat::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0], ['status', '<', 10]]);
-
-        return response()->json([
-            'status' => 200,
-            'events' => $events->latest()->get(),
-            'count' => $events->count(),
-        ]);
-    }
-
-    public function completedLiveChat()
-    {
-        $events = LiveChat::where([['star_id', auth('sanctum')->user()->id], ['status', 9]]);
-
-        return response()->json([
-            'status' => 200,
-            'events' => $events->latest()->get(),
-            'count' => $events->count(),
-        ]);
-    }
 
     public function details($slug)
     {
@@ -87,7 +75,6 @@ class LiveChatController extends Controller
             'status' => 200,
             'message' => 'Event has been rejected!',
         ]);
-
     }
 
     public function slots($slug)
@@ -189,13 +176,13 @@ class LiveChatController extends Controller
             $liveChat->slug = Str::slug($request->input('title'));
             $liveChat->star_id = $request->input('star_id');
             $liveChat->category_id = $superStar->category_id;
-            // $liveChat->admin_id = $superStar->admin_id;
+            $liveChat->admin_id = $superStar->admin_id;
             $liveChat->created_by_id = auth('sanctum')->user()->id;
             $liveChat->instruction = $request->input('instruction');
             $liveChat->description = $request->input('description');
             $liveChat->date = $request->input('date');
-            $liveChat->start_time = Carbon::parse($request->input('start_time'));
-            $liveChat->end_time = Carbon::parse($request->input('end_time'));
+            $liveChat->start_time = $request->input('start_time');
+            $liveChat->end_time = $request->input('end_time');
             $liveChat->registration_start_date = $request->input('registration_start_date');
             $liveChat->registration_end_date = $request->input('registration_end_date');
             $liveChat->fee = $request->input('fee');
@@ -224,10 +211,14 @@ class LiveChatController extends Controller
             ]);
         }
     }
+
+
     public function update_live_session(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|unique:live_chats,title',
+            'description' => 'required|min:5',
+            'instruction' => 'required|min:5',
         ]);
 
         if ($validator->fails()) {
@@ -238,11 +229,9 @@ class LiveChatController extends Controller
 
             $liveChat = LiveChat::find($request->id);
             $liveChat->title = $request->input('title');
+            $liveChat->slug = Str::slug($request->input('title'));
             $liveChat->description = $request->input('description');
-            $liveChat->date = $request->input('date');
-            $liveChat->start_time = Carbon::parse($request->input('start_time'));
-            $liveChat->end_time = Carbon::parse($request->input('end_time'));
-            $liveChat->fee = $request->input('fee');
+            $liveChat->instruction = $request->input('instruction');
 
             if ($request->hasfile('image')) {
                 $destination = $liveChat->banner;
@@ -256,12 +245,11 @@ class LiveChatController extends Controller
                 Image::make($file)->resize(900, 400)->save($filename, 100);
                 $liveChat->banner = $filename;
             }
-
             $liveChat->update();
 
-            // return $request->input('description');
             return response()->json([
                 'status' => 200,
+                'event' => $liveChat,
                 'message' => 'Live Session update',
             ]);
         }
@@ -270,7 +258,6 @@ class LiveChatController extends Controller
 
 
     /// Admin Method ....
-
     public function admin_livechat()
     {
         $livechats = LiveChat::where('star_id', auth('sanctum')->user()->id)->get();
@@ -460,5 +447,73 @@ class LiveChatController extends Controller
             'message' => 'Ok',
             'event' => $event,
         ]);
+    }
+
+    public function star_add_live_session(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|unique:live_chats,title',
+            'image' => 'required',
+            'description' => 'required|min:6',
+            'instruction' => 'required|min:6',
+            'date' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'registration_start_date' => 'required',
+            'registration_end_date' => 'required',
+            'fee' => 'required',
+            'max_time' => 'required|min:1',
+            'interval' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+
+
+            $superStar = SuperStar::where('star_id', auth('sanctum')->user()->id)->first();
+
+            $liveChat = new LiveChat();
+            $liveChat->title = $request->input('title');
+            $liveChat->slug = Str::slug($request->input('title'));
+            $liveChat->star_id = auth('sanctum')->user()->id;
+            $liveChat->category_id = $superStar->category_id;
+            $liveChat->admin_id = $superStar->admin_id;
+            $liveChat->created_by_id = auth('sanctum')->user()->id;
+            $liveChat->instruction = $request->input('instruction');
+            $liveChat->description = $request->input('description');
+            $liveChat->date = $request->input('date');
+            $liveChat->start_time = $request->input('start_time');
+            $liveChat->end_time = $request->input('end_time');
+            $liveChat->registration_start_date = $request->input('registration_start_date');
+            $liveChat->registration_end_date = $request->input('registration_end_date');
+            $liveChat->fee = $request->input('fee');
+            $liveChat->max_time = $request->input('max_time');
+            $liveChat->interval = $request->input('interval');
+            $liveChat->status = 1;
+
+            if ($request->hasfile('image')) {
+                $destination = $liveChat->banner;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/live_chat/' . time() . '.' . $extension;
+
+                Image::make($file)->resize(900, 400)->save($filename, 100);
+                $liveChat->banner = $filename;
+            }
+
+            $liveChat->save();
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Live Session Added',
+            ]);
+        }
     }
 }
