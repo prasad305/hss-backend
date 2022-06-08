@@ -5,7 +5,7 @@ namespace App\Http\Controllers\ManagerAdmin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Marketplace;
-use App\Models\Order;
+use App\Models\MarketplaceOrder;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Carbon\Carbon;
@@ -24,13 +24,13 @@ class MarketplaceController extends Controller
     }
 
     public function allOrderList(){
-        $orders = Order::latest()
+        $orders = MarketplaceOrder::latest()
                        ->get();
 
         return view('ManagerAdmin.marketplace.order', compact('orders'));
     }
     public function allOrderDetails($id){
-        $order = Order::find($id);
+        $order = MarketplaceOrder::find($id);
         // dd($order);
 
         return view('ManagerAdmin.marketplace.order-view', compact('order'));

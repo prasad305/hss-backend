@@ -115,65 +115,64 @@ class FanGroupController extends Controller
         }
     }
     public function updateFanGroup(Request $request, $slug){
-        // $id = auth('sanctum')->user()->id;
-        // $anotherStar =  $request->another_star;
-
-        // $adminId = User::find($anotherStar);
-
-
-        $request->validate([
+ 
+        $validator = Validator::make($request->all(),[
             'group_name' => 'required',
             'description' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
+            'club_points' => 'required',
         ]);
 
-        $fangroup = FanGroup::where('slug', $slug)->first();
+        
 
-        $fangroup->group_name = $request->group_name;
-        $fangroup->club_points = $request->club_points;
-        $fangroup->slug = Str::slug($request->input('group_name'));
-        $fangroup->description = $request->description;
-        $fangroup->start_date = $request->start_date;
-        $fangroup->end_date = $request->end_date;
-        $fangroup->min_member = $request->min_member;
-        $fangroup->max_member = $request->max_member;
-        // $fangroup->created_by = $id;
+        if($validator->fails())
+        {
+            return response()->json([
+                'validation_errors'=>$validator->errors(),
+            ]);
+        }
+        else{
+            $fangroup = FanGroup::where('slug', $slug)->first();
 
-        // $fangroup->my_star = $request->my_star;
-        // $fangroup->my_star_status = 0;
+            $fangroup->group_name = $request->group_name;
+            $fangroup->club_points = $request->club_points;
+            $fangroup->slug = Str::slug($request->input('group_name'));
+            $fangroup->description = $request->description;
+            $fangroup->start_date = $request->start_date;
+            $fangroup->end_date = $request->end_date;
+            $fangroup->min_member = $request->min_member;
+            $fangroup->max_member = $request->max_member;
+            // $fangroup->created_by = $id;
 
-        // $fangroup->another_star = $anotherStar;
-        // $fangroup->another_star_admin_id = $adminId->parent_user;
-        // $fangroup->another_star_status = 0;
+            // $fangroup->my_star = $request->my_star;
+            // $fangroup->my_star_status = 0;
 
-        if ($request->hasfile('banner')) {
+            // $fangroup->another_star = $anotherStar;
+            // $fangroup->another_star_admin_id = $adminId->parent_user;
+            // $fangroup->another_star_status = 0;
 
-            $destination = $fangroup->banner;
-            if (File::exists($destination)) {
-                File::delete($destination);
+            if ($request->hasfile('banner')) {
+
+                $destination = $fangroup->banner;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+
+                $file = $request->file('banner');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/fangroup/' . time() . '.' . $extension;
+
+                Image::make($file)->resize(800, 300)->save($filename, 100);
+                $fangroup->banner = $filename;
             }
 
-            $file = $request->file('banner');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/fangroup/' . time() . '.' . $extension;
+            $fangroup->join_approval_status = 0;
+            $fangroup->post_approval_status = 0;
+            $fangroup->status = 0;
 
-            Image::make($file)->resize(800, 300)->save($filename, 100);
-            $fangroup->banner = $filename;
-        }
-
-        $fangroup->join_approval_status = 0;
-        $fangroup->post_approval_status = 0;
-        $fangroup->status = 0;
-
-        $fangroup->save();
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 422,
-                'errors' => $validator->errors(),
-            ]);
-        }else{
+            $fangroup->save();
+            
             return response()->json([
                 'status' => 200,
                 'message' => 'Fan Group Updated Successfully',
@@ -199,32 +198,55 @@ class FanGroupController extends Controller
 
     public function starUpdate(Request $request, $slug){
 
-        $fangroup = FanGroup::where('slug', $slug)->first();
+        $validator = Validator::make($request->all(),[
+            'group_name' => 'required',
+            'description' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'club_points' => 'required',
+        ]);
 
-        $fangroup->group_name = $request->group_name;
-        $fangroup->slug = Str::slug($request->input('group_name'));
-        $fangroup->description = $request->description;
-        $fangroup->start_date = $request->start_date;
-        $fangroup->end_date = $request->end_date;
-        $fangroup->min_member = $request->min_member;
-        $fangroup->max_member = $request->max_member;
+        
+        if($validator->fails())
+        {
+            return response()->json([
+                'validation_errors'=>$validator->errors(),
+            ]);
+        }
+        else{
+            $fangroup = FanGroup::where('slug', $slug)->first();
 
-        if ($request->hasfile('banner')) {
-
-            $file = $request->file('banner');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/fangroup/' . time() . '.' . $extension;
-
-            Image::make($file)->resize(800, 300)->save($filename, 100);
-            $fangroup->banner = $filename;
+            $fangroup->group_name = $request->group_name;
+            $fangroup->club_points = $request->club_points;
+            $fangroup->slug = Str::slug($request->input('group_name'));
+            $fangroup->description = $request->description;
+            $fangroup->start_date = $request->start_date;
+            $fangroup->end_date = $request->end_date;
+            $fangroup->min_member = $request->min_member;
+            $fangroup->max_member = $request->max_member;
+    
+            if ($request->hasfile('banner')) {
+                $destination = $fangroup->banner;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+    
+                $file = $request->file('banner');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/fangroup/' . time() . '.' . $extension;
+    
+                Image::make($file)->resize(800, 300)->save($filename, 100);
+                $fangroup->banner = $filename;
+            }
+    
+            $fangroup->save();
+    
+            return response()->json([
+                'status' => 200,
+                'message' => 'Fan Group Updated Successfully',
+            ]);
         }
 
-        $fangroup->save();
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Fan Group Updated Successfully',
-        ]);
     }
 
     public function statusStar(){
@@ -736,6 +758,20 @@ class FanGroupController extends Controller
 
         $fanWarning = Fan_Group_Join::find($id);
 
+        // if ($fanWarning->image) {
+        //     $destination = $fanWarning->image;
+        //     if(File::exists($destination))
+        //     {
+        //         File::delete($destination);
+        //     }
+        // }
+        // if ($fanWarning->video) {
+        //     $destination = $fanWarning->video;
+        //     if(File::exists($destination))
+        //     {
+        //         File::delete($destination);
+        //     }
+        // }
 
         $fanWarning->delete();
 
@@ -985,6 +1021,12 @@ class FanGroupController extends Controller
 
 
         if ($request->hasfile('banner')) {
+            $destination = $fanImage->banner;
+
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+
 
             $file = $request->file('banner');
             $extension = $file->getClientOriginalExtension();

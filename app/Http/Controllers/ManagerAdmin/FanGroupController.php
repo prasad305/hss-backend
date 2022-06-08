@@ -18,6 +18,7 @@ class FanGroupController extends Controller
     {
         $post = FanGroup::where('my_star_status', 1)
                 ->where('another_star_status', 1)
+                ->where('status', '!=', 0)
                 ->latest()->get();
         $fanstatus = 'Pending/Published';
         return view('ManagerAdmin.fangroup.index', compact('post', 'fanstatus'));
@@ -27,7 +28,7 @@ class FanGroupController extends Controller
     {
         $post = FanGroup::where('my_star_status', 1)
                 ->where('another_star_status', 1)
-                ->where('status', 0)
+                ->where('status', 2)
                 ->latest()->get();
 
         $fanstatus = 'Pending';

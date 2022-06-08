@@ -21,13 +21,13 @@ class CreateMarketplacesTable extends Migration
             $table->string('slug')->nullable();
             $table->longText('description')->nullable();
             $table->longText('terms_conditions')->nullable();
-            $table->integer('unit_price')->nullable();
+            $table->float('unit_price')->nullable();
             $table->integer('total_items')->nullable();
             $table->integer('total_selling')->nullable();
-            $table->integer('delivery_charge')->nullable();
-            $table->integer('tax')->nullable();
+            $table->float('delivery_charge')->nullable();
+            $table->float('tax')->nullable();
             $table->unsignedBigInteger('superstar_id')->nullable();
-            $table->integer('created_by')->nullable();
+            $table->integer('created_by_id')->nullable();
             $table->unsignedBigInteger('superstar_admin_id')->nullable();
             $table->string('keywords')->nullable();
             $table->integer('post_status')->nullable();

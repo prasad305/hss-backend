@@ -8,7 +8,7 @@ use App\Models\Marketplace;
 use App\Models\User;
 use App\Models\Country;
 use App\Models\State;
-use App\Models\Order;
+use App\Models\MarketplaceOrder;
 use App\Models\City;
 use App\Models\ChoiceList;
 use Carbon\Carbon;
@@ -163,7 +163,7 @@ class MarketplaceController extends Controller
                 $date = (int) Carbon::now()->format('dmYHis');
                 $rand = rand(100,999).$date;
 
-                $data = new Order();
+                $data = new MarketplaceOrder();
                 $data->country_id = $request->country_id;
                 $data->state_id = $request->state_id;
                 $data->city_id = $request->city_id;
@@ -205,7 +205,7 @@ class MarketplaceController extends Controller
     }
 
     public function viewMarketplaceActivities(){
-        $data = Order::where('user_id', Auth::user()->id)
+        $data = MarketplaceOrder::where('user_id', Auth::user()->id)
                     ->latest()
                     ->get();
 
@@ -274,7 +274,7 @@ class MarketplaceController extends Controller
         $marketplace->post_status = 0;
         $marketplace->status = 0;
         $marketplace->total_selling = 0;
-        $marketplace->created_by = $id;
+        $marketplace->created_by_id = $id;
         $marketplace->superstar_id = $request->superstar_id;
         $marketplace->superstar_admin_id = $id;
 
@@ -312,9 +312,9 @@ class MarketplaceController extends Controller
     }
 
     public function orderAdminProductList(){
-        $totalOrder = Order::where('superstar_admin_id', Auth::user()->id)
+        $totalOrder = MarketplaceOrder::where('superstar_admin_id', Auth::user()->id)
         ->count();
-        $orderList = Order::orderBy('id','DESC')->where('superstar_admin_id', Auth::user()->id)
+        $orderList = MarketplaceOrder::orderBy('id','DESC')->where('superstar_admin_id', Auth::user()->id)
                                 ->get();
 
         return response()->json([
@@ -326,7 +326,7 @@ class MarketplaceController extends Controller
 
     public function orderAdminProductListView($id){
         
-        $orderListView = Order::find($id);
+        $orderListView = MarketplaceOrder::find($id);
 
         return response()->json([
             'status' => 200,
@@ -336,7 +336,7 @@ class MarketplaceController extends Controller
 
     public function orderAdminProductListStatus($status, $id){
         
-        $orderListStatus = Order::find($id);
+        $orderListStatus = MarketplaceOrder::find($id);
         $orderListStatus->status = $status;
         $orderListStatus->save();
 
@@ -506,7 +506,7 @@ class MarketplaceController extends Controller
         $marketplace->total_selling = 0;
         $marketplace->superstar_admin_id = $parent_id->parent_user;
         $marketplace->superstar_id = $id;
-        $marketplace->created_by = $id;
+        $marketplace->created_by_id = $id;
         $marketplace->category_id = Auth::user()->category_id;
         $marketplace->subcategory_id = Auth::user()->sub_category_id;
 
