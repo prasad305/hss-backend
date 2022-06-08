@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Acquired_app;
 use App\Models\Activity;
 use App\Models\Auction;
+use App\Models\AuctionTerms;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPayment;
@@ -898,6 +899,16 @@ class UserController extends Controller
                 'name' => $user->first_name,
                 'amount' => $request->amount,
             ]);
+
+
+            if(!Activity::where([['user_id',auth()->user()->id],['event_id',$bidding->auction_id]])->exists()){
+                Activity::Create([
+                  'type'    => 'auction',
+                  'user_id'    => $bidding->user_id,
+                  'event_id'    => $bidding->auction_id,
+                  ]);
+            }
+
             return response()->json([
 
                 'status' => 200,
@@ -935,6 +946,15 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'maxBid' => $maxBid,
+        ]);
+    }
+    public function auction_instruction(){
+        
+        $instruction = AuctionTerms::first();
+
+        return response()->json([
+            'status' => 200,
+            'instruction' => $instruction,
         ]);
     }
 
@@ -1005,6 +1025,17 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'topBidder' => $topBidder,
+        ]);
+    }
+    public function auction_activites()
+    {
+        $post = Activity::where([['user_id', auth('sanctum')->user()->id],['type','auction']])->latest()->get();
+
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'events' => $post,
         ]);
     }
     //=============== Audition Logic By Srabon ===================
