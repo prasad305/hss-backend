@@ -21,4 +21,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
      * all upcomming events get
      */
     Route::get('/mobile/all-upcomming-event', [UserMobileAppController::class, 'allUpcommingEvent']);
+    /**
+     * all star list
+     */
+    Route::get('/mobile/all-star-list', [UserMobileAppController::class, 'allStarList']);
 });
