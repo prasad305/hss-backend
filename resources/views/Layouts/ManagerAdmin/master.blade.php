@@ -407,6 +407,9 @@
         if (key == 'title') {
             $('#title_error').html(value);
         }
+        if (key == 'details') {
+            $('#details_error').html(value);
+        }
         if (key == 'description') {
             $('#description_error').html(value);
         }
@@ -460,6 +463,7 @@
         $('#star_id').html('');
         $('#reminder_error').html('');
         $('#title_error').html('');
+        $('#details_error').html('');
         $('#description_error').html('');
         $('#instruction_error').html('');
         $('#date_error_error').html('');

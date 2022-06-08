@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Auction;
 use App\Models\Bidding;
 use App\Models\Notification;
+use App\Models\SuperStar;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
@@ -21,34 +23,24 @@ class AuctionController extends Controller
 
     {
 
-        // $data = $request->only('name','email','mobile_number');
-        // $test['token'] = time();
-        // $test['name'] = json_encode($data);
-        // Auction::insert($test);
-        // return response()->json('Great! Successfully store data in json format in datbase');
-
-        //return response()->json($request->all());
-
 
         $validator = Validator::make($request->all(), [
 
             'title' => 'required',
+            'keyword' => 'required',
             'bid_from' => 'required',
             'bid_to' => 'required',
             'product_image' => 'required|image',
             'banner' => 'required|image',
-            'category_id' => 'required',
-            'details' => 'required',
+            'details' => 'required|min:10',
             'base_price' => 'required',
             'star_id' => 'required',
-            'subcategory_id' => 'required',
 
         ],[
             'title.required' => 'Title Field Is Required',
+            'keyword.required' => 'Keyword Field Is Required',
             'bid_from.required' => 'Date Field Is Required',
             'bid_to.required' => 'Date Field Is Required',
-            'category_id.required' => "Category Field Is Required",
-            'subcategory_id.required' => "Subcategory Field Is Required",
             'details.required' => 'Description Field Is Required',
             'product_image.required' => "Image Field Is Required",
             'banner.required' => "Image Field Is Required",
@@ -66,23 +58,14 @@ class AuctionController extends Controller
         $data = $request->except(['_token', 'product_image', 'banner']);
         $data['created_by_id'] = Auth::user()->id;
 
+        if($request->star_id){
+            $star = SuperStar::where('star_id',$request->star_id)->first();
+        }
+        $data['category_id'] = $star->category_id;
+        $data['subcategory_id'] = $star->sub_category_id;
+
         if ($request->hasFile('product_image')) {
 
-            // $name = time().'.' . explode('/', explode(':', substr($request->product_image, 0, strpos($request->product_image, ';')))[1])[1];
-            // Image::make($request->product_image)->save(public_path('uploads/images/auction').$name);
-            // return response()->json("OK");
-
-            /*         $images = [];
-        foreach($request->file('product_image') as $image)
-        {
-            $destinationPath = 'uploads/images/auction';
-            $filename = $image->getClientOriginalName();
-            $image->move($destinationPath, $filename);
-            array_push($images, $filename);
-
-        }
-        $data['product_image'] = json_encode($images);
- */
             $file        = $request->file('product_image');
             $path        = 'uploads/images/auction';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
@@ -126,24 +109,20 @@ class AuctionController extends Controller
         $validator = Validator::make($request->all(), [
 
             'title' => 'required',
+            'keyword' => 'required',
             'bid_from' => 'required',
             'bid_to' => 'required',
             'result_date' => 'required',
             'product_delivery_date' => 'required',
-            'category_id' => 'required',
-            'details' => 'required',
+            'details' => 'required|min:10',
             'base_price' => 'required',
             'star_id' => 'required',
-            'subcategory_id' => 'required',
-
         ],[
             'title.required' => 'Title Field Is Required',
             'bid_from.required' => 'Date Field Is Required',
             'bid_to.required' => 'Date Field Is Required',
             'result_date.required' => 'Date Field Is Required',
             'product_delivery_date.required' => 'Date Field Is Required',
-            'category_id.required' => "Category Field Is Required",
-            'subcategory_id.required' => "Subcategory Field Is Required",
             'details.required' => 'Description Field Is Required',
             'base_price.required' => "Price Field Is Required",
             'star_id.required' => "Superstar Field Is Required",
@@ -155,12 +134,27 @@ class AuctionController extends Controller
                 'errors' => $validator->errors(),
             ]);
         }
+        
+
         $product = Auction::findOrFail($id);
+
         $data = $request->all();
+
+        if($request->star_id){
+            $star = SuperStar::where('star_id',$request->star_id)->first();
+        }
+        $data['category_id'] = $star->category_id;
+        $data['subcategory_id'] = $star->sub_category_id;
 
 
 
         if ($request->hasFile('product_image')) {
+
+            $destination = $product->product_image;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+
             $file        = $request->file('product_image');
             $path        = 'uploads/images/auction';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
@@ -169,6 +163,12 @@ class AuctionController extends Controller
         }
 
         if ($request->hasFile('banner')) {
+
+            $destination = $product->banner;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+
             $file        = $request->file('banner');
             $path        = 'uploads/images/auction';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
@@ -348,15 +348,17 @@ class AuctionController extends Controller
         $validator = Validator::make($request->all(), [
 
             'title' => 'required',
+            'keyword' => 'required',
             'bid_from' => 'required',
             'bid_to' => 'required',
             'product_image' => 'required|image',
             'banner' => 'required|image',
-            'details' => 'required',
+            'details' => 'required|min:10',
             'base_price' => 'required',
 
         ],[
             'title.required' => 'Title Field Is Required',
+            'keyword.required' => 'Keyword Field Is Required',
             'bid_from.required' => 'Date Field Is Required',
             'bid_to.required' => 'Date Field Is Required',
             'details.required' => 'Description Field Is Required',
@@ -383,21 +385,6 @@ class AuctionController extends Controller
 
         if ($request->hasFile('product_image')) {
 
-            // $name = time().'.' . explode('/', explode(':', substr($request->product_image, 0, strpos($request->product_image, ';')))[1])[1];
-            // Image::make($request->product_image)->save(public_path('uploads/images/auction').$name);
-            // return response()->json("OK");
-
-            /*         $images = [];
-        foreach($request->file('product_image') as $image)
-        {
-            $destinationPath = 'uploads/images/auction';
-            $filename = $image->getClientOriginalName();
-            $image->move($destinationPath, $filename);
-            array_push($images, $filename);
-
-        }
-        $data['product_image'] = json_encode($images);
- */
             $file        = $request->file('product_image');
             $path        = 'uploads/images/auction';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
@@ -476,15 +463,17 @@ class AuctionController extends Controller
         $validator = Validator::make($request->all(), [
 
             'title' => 'required',
+            'keyword' => 'required',
             'bid_from' => 'required',
             'bid_to' => 'required',
-            'details' => 'required',
+            'details' => 'required|min:10',
             'base_price' => 'required',
             'result_date' => 'required',
             'product_delivery_date' => 'required',
 
         ],[
             'title.required' => 'Title Field Is Required',
+            'keyword.required' => 'Keyword Field Is Required',
             'bid_from.required' => 'Date Field Is Required',
             'bid_to.required' => 'Date Field Is Required',
             'details.required' => 'Description Field Is Required',
@@ -501,6 +490,12 @@ class AuctionController extends Controller
         }
 
         if ($request->hasFile('product_image')) {
+
+            $destination = $product->product_image;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+
             $file        = $request->file('product_image');
             $path        = 'uploads/images/auction';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
@@ -509,6 +504,12 @@ class AuctionController extends Controller
         }
 
         if ($request->hasFile('banner')) {
+
+            $destination = $product->banner;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+
             $file        = $request->file('banner');
             $path        = 'uploads/images/auction';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
