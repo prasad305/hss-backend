@@ -88,7 +88,7 @@ class LiveChatController extends Controller
             'title' => 'required',
             'description' => 'required',
             'instruction' => 'required',
-            'image' => 'required|mimes:png,jpg,jpeg,webP',
+            'image' => 'mimes:png,jpg,jpeg,webP',
             'date' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',

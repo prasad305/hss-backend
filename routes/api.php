@@ -446,25 +446,19 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
 
     // Live Session Section
-    Route::get('/star/live-chat/pending', [LiveChatController::class, 'pendingLiveChat']);
-    Route::get('/star/live-chat/approved', [LiveChatController::class, 'approveLiveChat']);
-    Route::get('/star/live-chat/completed', [LiveChatController::class, 'completedLiveChat']);
+    Route::get('/star/live-chat/{type}', [LiveChatController::class, 'liveChatList']);
     Route::get('/star/live-chat/details/{slug}', [LiveChatController::class, 'details']);
     Route::get('/star/approveLiveChat/{id}', [LiveChatController::class, 'setApproveLiveChat']);
-    Route::get('/star/pendingLiveChat', [LiveChatController::class, 'pendingLiveChat']);
-    Route::get('/star/approvedLiveChat', [LiveChatController::class, 'approveLiveChat']);
-    Route::get('/star/livechat_event_details/{id}', [LiveChatController::class, 'details']);
     Route::get('/star/live-chat/setReject/{id}', [LiveChatController::class, 'star_set_reject']);
-    Route::get('/deleteLiveChat/{id}', [LiveChatController::class, 'deleteLiveChat']);
     Route::get('/livechatListByDate/{date}', [LiveChatController::class, 'livechatListByDate']);
     Route::get('/star/registeredUserList/{live_chat_id}', [LiveChatController::class, 'registeredUserList']);
-    Route::post('/star/add_live_session', [LiveChatController::class, 'add_live_session']);
+    Route::post('/star/add_live_session', [LiveChatController::class, 'star_add_live_session']);
     Route::post('/star/update_live_session', [LiveChatController::class, 'update_live_session']);
 
+
     // Meetup Event Section
-    Route::get('/star/meetup_event/pending', [MeetupEventController::class, 'star_pending_list']);
-    Route::get('/star/meetup_event/approved', [MeetupEventController::class, 'star_approved_list']);
-    Route::get('/star/meetup_event/completed', [MeetupEventController::class, 'star_completed_list']);
+    Route::get('/star/meetup_event/{type}', [MeetupEventController::class, 'star_meetup_list']);
+    Route::get('/star/add_meetup', [MeetupEventController::class, 'star_add_meetup']);
     Route::get('/star/meetup_event/details/{slug}', [MeetupEventController::class, 'details']);
     Route::get('/star/meetup_event/set_approve/{id}', [MeetupEventController::class, 'set_approve']);
     Route::post('/star/meetup_event/edit/{id}', [MeetupEventController::class, 'star_edit']);
