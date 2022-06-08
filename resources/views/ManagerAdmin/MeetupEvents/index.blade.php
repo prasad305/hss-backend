@@ -36,7 +36,7 @@
                 @foreach ($upcommingEvent as $val)
                     <!--card-->
 
-                    <div class="col-sm-6 col-lg-4">
+                    <div class="col-sm-6 col-lg-3">
                         <div class="card">
                             <div class="panel panel-primary text-center">
                                 <div class="">
@@ -51,7 +51,7 @@
                                         <a type="button" class="btn btn-warning waves-effect waves-light"><i
                                                 class="ion-record"></i>
                                             Pending</a>
-                                    @else
+                                    @elseif ($val->status == 2)
 
                                         <button type="button" class="btn btn-success waves-effect waves-light"><i
                                                 class="ion-checkmark-round"></i> Published</button>
