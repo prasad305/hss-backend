@@ -23,10 +23,9 @@ class CreateLiveChatsTable extends Migration
             $table->string('slug')->nullable();
             $table->longText('description')->nullable();
             $table->longText('instruction')->nullable();
-            $table->timestamp('date')->nullable();
+            $table->date('event_date')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
-            $table->unsignedBigInteger('slot_counter')->nullable();
             $table->string('banner')->nullable();
             $table->string('video')->nullable();
             $table->integer('total_seat')->nullable();
@@ -35,13 +34,10 @@ class CreateLiveChatsTable extends Migration
             $table->float('max_time')->nullable();
             $table->float('min_time')->nullable();
             $table->float('interval')->nullable();
-            $table->integer('participant_number')->nullable();
             $table->date('registration_start_date')->nullable();
             $table->date('registration_end_date')->nullable();
-            $table->string('max_time_per_person')->nullable();
-            $table->boolean('publish_status')->default(1);
             $table->boolean('star_approval')->default(0);
-            $table->integer('status')->default(0)->comment('0 = pending, 1 = star_approval, 2 = posted by Manager Admin, 9 = completed, 10 = removed, 11 = rejeced by Star, 22 = rejected by Manager Admin');
+            $table->integer('status')->default(0)->comment('0 = pending, 1 = star_approval, 2 = posted by Manager Admin, 9 = completed, 10 = remove/delete, 11 = rejeced by Star, 22 = rejected by Manager Admin');
             $table->timestamps();
         });
     }

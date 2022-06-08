@@ -64,7 +64,7 @@
                                     <img src="{{ asset($data->banner)}}" alt="" style=" height: 50px; width: 50px; ">
                                 </td>
                                 <td>
-                                    <p>{{ date('d M Y', strtotime($data->date)) }}</p>
+                                    <p>{{ date('d M Y', strtotime($data->event_date)) }}</p>
                                     {{ $data->start_time }} - {{ $data->end_time }}
                                 </td>
                                 <td>{{ $data->fee }}</td>
@@ -75,7 +75,7 @@
                                   <span class="badge badge-danger" style="width: 70px;">InActive</span>
                                   @endif
                                 </td>
-                                
+
                                 {{-- <td style="width: 150px">
                                     <a class="btn btn-sm btn-info"
                                         onclick="Show('Edit Interest Type','{{ route('superAdmin.interest-type.edit', $data->id) }}')"><i
@@ -120,7 +120,7 @@
               , confirmButtonText: 'Yes, Active !'
           }).then((result) => {
               if (result.isConfirmed) {
-  
+
                   $.ajax({
                       method: 'POST',
                       url: url,
@@ -149,7 +149,7 @@
               }
           })
       }
-  
+
       function inactiveNow(objButton) {
           var url = objButton.value;
           Swal.fire({
@@ -162,7 +162,7 @@
               confirmButtonText: 'Yes, Inactive !'
           }).then((result) => {
               if (result.isConfirmed) {
-  
+
                   $.ajax({
                       method: 'POST',
                       url: url,

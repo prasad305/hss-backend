@@ -551,7 +551,7 @@ class UserController extends Controller
         $liveChatReg->account_no =  null;
         $liveChatReg->live_chat_start_time = $start_time;
         $liveChatReg->live_chat_end_time =   $end_time;
-        $liveChatReg->live_chat_date =  $liveChat->date;
+        $liveChatReg->live_chat_date =  $liveChat->event_date;
         $liveChatReg->video =  null;
         $liveChatReg->comment_count =  null;
         $liveChatReg->publish_status =  1;

@@ -293,7 +293,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
 
     // Live Session Section
-    Route::post('admin/add_live_session', [LiveChatController::class, 'add_live_session']);
+    Route::post('admin/add_live_session', [LiveChatController::class, 'add_by_admin']);
     Route::get('/admin/livechat', [LiveChatController::class, 'admin_livechat']);
     Route::get('/admin/sinlgeLiveChat/{id}', [LiveChatController::class, 'admin_sinlgeLiveChat']);
     Route::get('/admin/livechatListByDate/{date}', [LiveChatController::class, 'admin_livechatListByDate']);
@@ -486,12 +486,12 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     // Live Session Section
     Route::get('/star/live-chat/{type}', [LiveChatController::class, 'liveChatList']);
     Route::get('/star/live-chat/details/{slug}', [LiveChatController::class, 'details']);
-    Route::get('/star/approveLiveChat/{id}', [LiveChatController::class, 'setApproveLiveChat']);
-    Route::get('/star/live-chat/setReject/{id}', [LiveChatController::class, 'star_set_reject']);
-    Route::get('/livechatListByDate/{date}', [LiveChatController::class, 'livechatListByDate']);
+    Route::get('/star/live-chat/setApprove/{id}', [LiveChatController::class, 'setApproveLiveChat']);
+    Route::get('/star/live-chat/setReject/{id}', [LiveChatController::class, 'set_reject_by_star']);
     Route::get('/star/registeredUserList/{live_chat_id}', [LiveChatController::class, 'registeredUserList']);
-    Route::post('/star/add_live_session', [LiveChatController::class, 'star_add_live_session']);
-    Route::post('/star/update_live_session', [LiveChatController::class, 'update_live_session']);
+    Route::post('/star/add_live_session', [LiveChatController::class, 'add_by_star']);
+    Route::post('/star/update_live_session', [LiveChatController::class, 'update_by_star']);
+    Route::get('/livechatListByDate/{date}', [LiveChatController::class, 'livechatListByDate']);
 
 
     // Meetup Event Section
