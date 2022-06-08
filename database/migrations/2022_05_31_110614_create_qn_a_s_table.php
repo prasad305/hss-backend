@@ -39,7 +39,7 @@ class CreateQnASTable extends Migration
             $table->timestamp('registration_start_date')->nullable();
             $table->timestamp('registration_end_date')->nullable();
             $table->boolean('publish_status')->default(0);
-            $table->boolean('star_approve_status')->default(0);
+            $table->boolean('star_approval')->default(0);
             $table->integer('status')->default(0)->comment('0 = pending, 1 = star_approval, 2 = posted by Manager Admin, 9 = completed, 10 = removed, 11 = rejeced by Star, 22 = rejected by Manager Admin');
             $table->timestamps();
         });

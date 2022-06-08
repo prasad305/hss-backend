@@ -27,6 +27,7 @@ use App\Models\Post;
 use App\Models\React;
 use App\Models\SimplePost;
 use App\Models\ChoiceList;
+use App\Models\GreetingType;
 use App\Models\InterestType;
 use App\Models\LearningSessionAssignment;
 use App\Models\LearningSessionEvaluation;
@@ -333,7 +334,7 @@ class UserController extends Controller
     }
     public function getStarQna($id)
     {
-        $livechats = QnA::orderBy('id', 'DESC')->where('star_id',$id)->get();
+        $livechats = QnA::orderBy('id', 'DESC')->where('star_id', $id)->get();
 
         return response()->json([
             'status' => 200,
@@ -402,7 +403,7 @@ class UserController extends Controller
 
     public function liveChatRegDetails($id)
     {
-        $event = LiveChatRegistration::where([['live_chat_id', $id],['user_id', auth('sanctum')->user()->id]])->first();
+        $event = LiveChatRegistration::where([['live_chat_id', $id], ['user_id', auth('sanctum')->user()->id]])->first();
         return response()->json([
             'status' => 200,
             'event' => $event,
@@ -678,6 +679,14 @@ class UserController extends Controller
                 'greeting' => $single_greeting,
             ]);
         }
+    }
+    public function getPurposeList()
+    {
+        $greetingTypes = GreetingType::where('status', 1)->orderBy('greeting_type', 'ASC')->get();
+        return response()->json([
+            'status' => 200,
+            'greetingTypes' => $greetingTypes,
+        ]);
     }
 
     /**
@@ -1272,7 +1281,6 @@ class UserController extends Controller
         }
 
         $promoVideos = $cat_promo->concat($sub_cat_promo)->concat($sub_sub_cat_promo);
-
         return response()->json([
             'status' => 200,
             'promoVideos' => $promoVideos,
@@ -1364,8 +1372,7 @@ class UserController extends Controller
             $event = MeetupEvent::where('slug', $slug)->first();
             $participant = MeetupEventRegistration::where([['user_id', auth('sanctum')->user()->id], ['meetup_event_id', $event->id]])->first();
         }
-        if($type == 'qna')
-        {
+        if ($type == 'qna') {
             $event = QnA::where('slug', $slug)->first();
             $participant = QnaRegistration::where([['user_id', auth('sanctum')->user()->id], ['qna_id', $event->id]])->first();
         }
@@ -1432,7 +1439,7 @@ class UserController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $evaluation = LearningSessionEvaluation::where([['event_id',$request->learning_session_id],['user_id',auth()->user()->id]])->first();
+            $evaluation = LearningSessionEvaluation::where([['event_id', $request->learning_session_id], ['user_id', auth()->user()->id]])->first();
             foreach ($request->file as $key => $file) {
                 $learning_video = new LearningSessionAssignment();
                 $learning_video->event_id = $request->learning_session_id;
@@ -1444,8 +1451,6 @@ class UserController extends Controller
                 $file->move($file_path, $file_name);
                 $learning_video->video = $file_path . $file_name;
                 $learning_video->save();
-
-
             }
 
             $learning_session = LearningSession::find($request->learning_session_id);
@@ -1456,6 +1461,4 @@ class UserController extends Controller
             ]);
         }
     }
-
-    
 }
