@@ -22,9 +22,11 @@
     <!-- Custom style -->
   <link rel="stylesheet" href="{{ asset('assets/custom-style.css')}}">
   <link rel="stylesheet" href="{{ asset('assets/super-admin/Events.css')}}">
+  <link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/summernote/summernote-bs4.min.css') }}">
 
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -331,6 +333,8 @@
 
 <script src="{{ asset('assets/super-admin/Events.js')}}"></script>
 
+<!-- Summernote -->
+<script src="{{ asset('assets/manager-admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
 
 <script>
     $(function () {
@@ -380,6 +384,67 @@
                      footer: ''
                 });
     }
+
+    function ErrorMessage(key,value) {
+        if (key == 'category_id') {
+            $('#category_error').html(value);
+        }
+        if (key == 'sub_category_id') {
+            $('#sub_category_error').html(value);
+        }
+        if (key == 'first_name') {
+            $('#first_name_error').html(value);
+        }
+        if (key == 'last_name') {
+            $('#last_name_error').html(value);
+        }
+        if (key == 'email') {
+            $('#email_error').html(value);
+        }
+        if (key == 'phone') {
+            $('#phone_error').html(value);
+        }
+        if (key == 'image') {
+            $('#image_error').html(value);
+        }
+        if (key == 'cover') {
+            $('#cover_error').html(value);
+        }
+
+        if (key == 'dob') {
+            $('#dob_error').html(value);
+        }
+        if (key == 'terms_and_condition') {
+            $('#terms_error').html(value);
+        }
+        if (key == 'star_id') {
+            $('#star_error').html(value);
+        }
+        if (key == 'reminder_date') {
+            $('#reminder_error').html(value);
+        }
+        if (key == 'acquired_instruction') {
+            $('#acquired_instruction_error').html(value);
+        }
+    }
+
+
+    function ErrorMessageClear() {
+        $('#sub_category_error').html('');
+        $('#first_name_error').html('');
+        $('#last_name_error').html('');
+        $('#email_error').html('');
+        $('#phone_error').html('');
+        $('#image_error').html('');
+        $('#cover_error').html('');
+        $('#dob_error').html('');
+        $('#terms_error').html('');
+        $('#category_id').html('');
+        $('#star_id').html('');
+        $('#reminder_error').html('');
+        $('#acquired_instruction_error').html('');
+    }
+
 
 </script>
 

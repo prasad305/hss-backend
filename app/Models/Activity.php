@@ -16,7 +16,7 @@ class Activity extends Model
         'user_id',
     ];
 
-    protected $with = ['user', 'meetup', 'livechat', 'learningSession','greetingRegistration','greeting','qna'];
+    protected $with = ['user', 'meetup', 'livechat', 'learningSession','greetingRegistration','greeting','qna','auction'];
 
 
     public function user()
@@ -50,4 +50,9 @@ class Activity extends Model
     {
         return $this->belongsTo(Greeting::class, 'event_id');
     }
+    public function auction()
+    {
+        return $this->belongsTo(Auction::class, 'event_id');
+    }
+
 }

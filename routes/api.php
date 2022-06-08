@@ -179,6 +179,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('user/liveBidding/history/{auction_id}', [UserController::class, 'bidHistory']);
     Route::post('user/aquired/auction', [UserController::class, 'aquiredProduct']);
     Route::get('user/maxbid/auction/{id}', [UserController::class, 'maxBid']);
+    Route::get('/user/auction_activites', [UserController::class, 'auction_activites']);
+    Route::get('/user/auction_instruction', [UserController::class, 'auction_instruction']);
 
     //Event Registaion By User (Learning Session + Live Chat + Greeting + Meetup Event)
     Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
