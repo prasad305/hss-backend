@@ -31,6 +31,7 @@ class CreateFanGroupsTable extends Migration
             $table->integer('another_star_admin_id')->nullable();
             $table->integer('another_star_status')->nullable()->comment('1 = Accept, 0 = Not Accept, 2 = Ignore');
             $table->string('banner')->nullable();
+            $table->integer('club_points')->nullable();
             $table->longText('my_user_join')->nullable()->comment('my_user_join_by_id');
             $table->longText('another_user_join')->nullable()->comment('another_user_join_by_id');
             $table->integer('join_approval_status')->nullable()->comment('1 = Anyone can Join, 0 = Join by Admin/Star');
