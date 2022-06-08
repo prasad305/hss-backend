@@ -137,7 +137,7 @@ class LiveChatController extends Controller
             $liveChat->banner = $filename;
         }
 
-        $liveChat->date = $request->input('date');
+        $liveChat->event_date = $request->input('date');
         $liveChat->start_time = $request->input('start_time');
         $liveChat->end_time = $request->input('end_time');
 

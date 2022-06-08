@@ -26,7 +26,7 @@ class LiveChatSeeder extends Seeder
             $liveChat->admin_id = 3;
             $liveChat->title = 'Demo live chat title -' . $i;
             $liveChat->description = "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution";
-            $liveChat->date = Carbon::now()->addDays(5);
+            $liveChat->event_date = Carbon::now()->addDays(5);
             $liveChat->start_time = Carbon::now()->addDays(5)->addMinutes(10);
             $liveChat->end_time =  Carbon::now()->addDays(5)->addMinutes(40);
             $liveChat->banner = 'demo_image/banner.jpg';
