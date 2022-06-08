@@ -28,13 +28,13 @@ class CreateMarketplaceOrdersTable extends Migration
             $table->string('phone')->nullable();
             $table->integer('items')->nullable();
             $table->float('unit_price')->nullable();
-            $table->integer('delivery_charge')->nullable();
+            $table->float('delivery_charge')->nullable();
             $table->float('total_price')->nullable();
             $table->string('holder_name')->nullable();
             $table->string('card_no')->nullable();
             $table->string('expire_date')->nullable();
             $table->integer('cvc')->nullable();
-            $table->integer('status')->nullable();
+            $table->integer('status')->nullable()->comment('1 = Ordered, 2 = Received, 3 = Out for Delivery, 4 = Delivered');
             $table->timestamp('delivery_at')->nullable();
             $table->timestamps();
         });
