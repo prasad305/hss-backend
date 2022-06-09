@@ -5,10 +5,12 @@ namespace App\Http\Controllers\ManagerAdmin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Marketplace;
+use App\Models\User;
 use App\Models\MarketplaceOrder;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
 class MarketplaceController extends Controller
@@ -24,8 +26,12 @@ class MarketplaceController extends Controller
     }
 
     public function allOrderList(){
-        $orders = MarketplaceOrder::latest()
-                       ->get();
+        // $orders = MarketplaceOrder::latest()
+                    //    ->get();
+
+        $orders = MarketplaceOrder::whereHas('Marketplace', function($q){
+                            $q->where('category_id',  auth('sanctum')->user()->category_id);
+                        })->latest()->get();
 
         return view('ManagerAdmin.marketplace.order', compact('orders'));
     }
@@ -79,60 +85,63 @@ class MarketplaceController extends Controller
         ]);
 
         $marketplace = Marketplace::findOrFail($id);
-        $marketplace->fill($request->except('_token'));
+        $marketplace->fill($request->except('_token','image'));
 
         $marketplace->title = $request->input('title');
+        $marketplace->slug = Str::slug($request->input('title').'-'.rand(9999,99999));
         $marketplace->description = $request->input('description');
         $marketplace->keywords = $request->input('keywords');
         $marketplace->terms_conditions = $request->input('terms_conditions');
-        $marketplace->total_items = $request->input('total_items');
-        $marketplace->unit_price = $request->input('unit_price');
+        // $marketplace->total_items = $request->input('total_items');
+        // $marketplace->unit_price = $request->input('unit_price');
 
 
-        // if ($request->hasfile('image')) {
-
-        //     // $destination = $marketplace->image;
-        //     // if (File::exists($destination)) {
-        //     //     File::delete($destination);
-        //     // }
-        //     $destination = $marketplace->image;
-        //     // @unlink($destination);
-
-        //     if (File::exists($destination)) {
-        //         //File::delete($image_path);
-        //         unlink($destination);
-        //     }
-
-        //     //     if(File::exists($destination))
-        //     //     {
-        //     //         File::delete($destination);
-        //     //     }
-
-        //     $file = $request->file('image');
-        //     $extension = $file->getClientOriginalExtension();
-        //     $filename = 'uploads/images/marketplace/' . time() . '.' . $extension;
-
-        //     Image::make($file)->resize(400, 400)->save($filename, 50);
-        //     $marketplace->image = $filename;
-
-
-        // }
-
-
-            try {
-                $marketplace->update();
-                if($marketplace){
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Marketplace Updated Successfully'
-                    ]);
-                }
-            } catch (\Exception $exception) {
-                return response()->json([
-                    'type' => 'error',
-                    'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
-                ]);
+        if ($request->hasfile('image')) {
+            $destination = $marketplace->image;
+            if ($destination != null && file_exists($destination)) {
+                unlink($destination);
             }
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/marketplace/' . time() . '.' . $extension;
+
+            Image::make($file)->resize(400, 400)->save($filename, 50);
+            $marketplace->image = $filename;
+
+        }
+        
+
+        try {
+
+            $marketplace->update();
+         
+             return response()->json([
+                 'success' => true,
+                 'message' => 'Description Updated Successfully'
+             ]);
+            
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+            ]);
+        }
+
+
+            // try {
+            //     $marketplace->update();
+            //     if($marketplace){
+            //         return response()->json([
+            //             'success' => true,
+            //             'message' => 'Marketplace Updated Successfully'
+            //         ]);
+            //     }
+            // } catch (\Exception $exception) {
+            //     return response()->json([
+            //         'type' => 'error',
+            //         'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+            //     ]);
+            // }
     }
 
     public function set_publish($id)

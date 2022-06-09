@@ -71,7 +71,7 @@ class FanGroupController extends Controller
             $fangroup = new FanGroup();
 
             $fangroup->group_name = $request->group_name;
-            $fangroup->slug = Str::slug($request->input('group_name'));
+            $fangroup->slug = Str::slug($request->input('group_name').'-'.rand(9999,99999));
             $fangroup->description = $request->description;
             $fangroup->club_points = $request->club_points;
             $fangroup->start_date = $request->start_date;
@@ -137,7 +137,7 @@ class FanGroupController extends Controller
 
             $fangroup->group_name = $request->group_name;
             $fangroup->club_points = $request->club_points;
-            $fangroup->slug = Str::slug($request->input('group_name'));
+            $fangroup->slug = Str::slug($request->input('group_name').'-'.rand(9999,99999));
             $fangroup->description = $request->description;
             $fangroup->start_date = $request->start_date;
             $fangroup->end_date = $request->end_date;
@@ -218,7 +218,7 @@ class FanGroupController extends Controller
 
             $fangroup->group_name = $request->group_name;
             $fangroup->club_points = $request->club_points;
-            $fangroup->slug = Str::slug($request->input('group_name'));
+            $fangroup->slug = Str::slug($request->input('group_name').'-'.rand(9999,99999));
             $fangroup->description = $request->description;
             $fangroup->start_date = $request->start_date;
             $fangroup->end_date = $request->end_date;

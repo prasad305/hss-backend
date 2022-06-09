@@ -5,30 +5,34 @@
         <div class="col-md-12">
               <label for="first_name">Title</label>
               <input type="text" class="form-control" id="title" name="title" placeholder="Enter Admin First Name" value="{{$event->title }}">
+              <span id="title_error" class="text-danger"></span>
          </div>
+         
     </div>
 
     <div class="row form-group">
         <div class="col-md-12">
               <label for="first_name">Keywords</label>
-              <input type="text" class="form-control" id="title" name="keywords" placeholder="Enter Admin First Name" value="{{$event->keywords }}">
+              <input type="text" class="form-control" id="keywords" name="keywords" placeholder="Enter Admin First Name" value="{{$event->keywords }}">
+              <span id="keywords_error" class="text-danger"></span>
          </div>
+         
     </div>
 
-    <div class="row form-group">
+    <!-- <div class="row form-group">
         <div class="col-md-12">
               <label for="first_name">Total Items</label>
-              <input type="text" class="form-control" id="title" name="total_items" placeholder="Enter Admin First Name" value="{{$event->total_items }}">
+              <input type="text" class="form-control" id="title" name="total_items" readonly placeholder="Enter Admin First Name" value="{{$event->total_items }}">
          </div>
     </div>
 
     <div class="row form-group">
         <div class="col-md-12">
               <label for="first_name">Unit Price</label>
-              <input type="text" class="form-control" id="title" name="unit_price" placeholder="Enter Admin First Name" value="{{$event->unit_price }}">
+              <input type="text" class="form-control" id="title" name="unit_price" readonly placeholder="Enter Admin First Name" value="{{$event->unit_price }}">
           <span class="text-danger" id="unit_price"></span>
          </div>
-    </div>
+    </div> -->
 
     <div class="form-group row">
         <div class="col-md-12">
@@ -36,7 +40,7 @@
           <textarea id="summernote" name="description">
             {!! $event->description !!}
           </textarea>
-          <span class="text-danger" id="description"></span>
+         <span id="descriptions_error" class="text-danger"></span>
         </div>
     </div>
 
@@ -46,7 +50,7 @@
           <textarea id="summernote2" name="terms_conditions">
             {!! $event->terms_conditions !!}
           </textarea>
-          <span class="text-danger" id="terms_conditions"></span>
+          <span class="text-danger" id="terms_conditions_error"></span>
         </div>
     </div>
 
@@ -56,7 +60,7 @@
               <label for="image">Image</label>
               <br><img id="image1" onchange="validateMultipleImage('image1')" alt="icon" src="{{ asset($event->image) }}" height="300px" width="100%" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required/>
               <br><br>
-              <!-- <input type="file" class="mt-2" id="image" name="image" onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required> -->
+              <input type="file" class="mt-2" id="image" name="image" onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
         </div>
     </span>
 
@@ -79,6 +83,7 @@
 <script>
     $(document).on('click','#btnUpdateData',function (event) {
      event.preventDefault();
+     ErrorMessageClear();
      var form = $('#edit-form')[0];
      var formData = new FormData(form);
      formData.append('_method','PUT');
@@ -107,21 +112,11 @@
              console.log(data);
          },
          error: function (data) {
-             console.log(data);
-             var errorMessage = '<div class="card bg-danger">\n' +
-                         '<div class="card-body text-center p-5">\n' +
-                         '<span class="text-white">';
+           
                      $.each(data.responseJSON.errors, function(key, value) {
-                         errorMessage += ('' + value + '<br>');
+                        ErrorMessage(key,value)
                      });
-                     errorMessage += '</span>\n' +
-                         '</div>\n' +
-                         '</div>';
-                     Swal.fire({
-                         icon: 'error',
-                         title: 'Oops...',
-                         footer: errorMessage
-                     })
+                 
          }
      });
 
