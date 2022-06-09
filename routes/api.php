@@ -163,6 +163,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //check user notification
     Route::get('/user/check_notification', [UserController::class, 'checkUserNotifiaction']);
     Route::get('/learnig-session/{slug}', [UserController::class, 'singleLearnigSession']);
+    Route::get('/user/learning-session/{slug}', [UserController::class, 'userSingleLearnigSession']);
+    Route::get('/learning-session/result/{slug}', [UserController::class, 'learningSeesionResult']);
 
     //lerning session registaion
     Route::post('/learnig-session', [UserController::class, 'LearningSessionReg']);
@@ -293,11 +295,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/simple_post/approved', [SimplePostController::class, 'approved_list']);
 
     // Learning Session Section
-    // Route::post('admin/add_learning_session', [LearningSessionController::class, 'add']);
-
-    // Route::post('admin/learning_session/create', [SimplePostController::class, 'add_learning']);
-
     Route::post('admin/learning_session/create', [LearningSessionController::class, 'add_learning']);
+    Route::post('/admin/update_learning_session/{id}', [LearningSessionController::class, 'adminUpdateLearning']);
     Route::get('/admin/learning_session/all', [LearningSessionController::class, 'all']);
     Route::get('/admin/learning_session/count', [LearningSessionController::class, 'count']);
     Route::get('/admin/learning_session/pending', [LearningSessionController::class, 'pending_list']);
@@ -485,7 +484,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::post('/star/souviner/decline/{id}', [SouvinerController::class, 'souvinerStarDecline']);
 
     // Learning Session Section
-    Route::post('/star/add_learning_session', [LearningSessionController::class, 'star_add']);
+    Route::post('/star/learning_session/create', [LearningSessionController::class, 'star_add']);
     Route::post('/star/update_learning_session/{id}', [LearningSessionController::class, 'update']);
     Route::get('/star/learning_session/all', [LearningSessionController::class, 'star_all']);
     Route::get('/star/learning_session/count', [LearningSessionController::class, 'star_count']);

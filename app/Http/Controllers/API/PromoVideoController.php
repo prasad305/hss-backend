@@ -42,6 +42,7 @@ class PromoVideoController extends Controller
             $promo = PromoVideo::create([
                 'category_id' => auth('sanctum')->user()->category_id,
                 'sub_category_id' => auth('sanctum')->user()->sub_category_id,
+                'created_by' => auth('sanctum')->user()->id,
                 'admin_id' => auth()->user()->id,
                 'star_id' => $request->star_id,
                 'title' => $request->title,
@@ -203,6 +204,7 @@ class PromoVideoController extends Controller
             $promo = PromoVideo::create([
                 'category_id' => auth('sanctum')->user()->category_id,
                 'sub_category_id' => auth('sanctum')->user()->sub_category_id,
+                'created_by' => auth('sanctum')->user()->id,
                 'admin_id' => auth()->user()->parent_user,
                 'star_id' => auth('sanctum')->user()->id,
                 'title' => $request->title,

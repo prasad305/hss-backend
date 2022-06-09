@@ -73,7 +73,7 @@
 <script>
     $(document).on('click','#btnSendData',function (event) {
     event.preventDefault();
-    ErrorMessageClear();
+    ErrorMessageClear(); // clear previous error message
     var form = $('#create-form')[0];
     var formData = new FormData(form);
 
@@ -114,7 +114,7 @@
         },
         error: function (data) {
             $.each(data.responseJSON.errors, function(key, value) {
-                ErrorMessage(key,value);
+                ErrorMessage(key,value); // validation message show
             });
         }
     });

@@ -29,7 +29,7 @@ Manager Admin
 
     <div class="container-fluid">
 
-
+        <h1>Final Result</h1>
         <div class="card">
             <!-- /.card-header -->
             <div class="card-body">
@@ -79,6 +79,56 @@ Manager Admin
                             <th>User Name</th>
                             <th>Videos</th>
                             <th>Total Mark</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+
+        </div>
+        <a href="{{route('managerAdmin.learningSession.evaluationResultPublished',$event->id)}}" class="btn btn-outline-success btn-success text-light"> Send To User</a>
+        <hr>
+        <h1>Reject Video List</h1>
+        <div class="card">
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>User Name</th>
+                            <th>Videos</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach ($rejected_videos as $key => $rejected)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <th>{{ $rejected->user ? $rejected->user->first_name.' '.$rejected->user->last_name : '' }}</th>
+                            <td>
+                                @if (isset($rejected->assignments[0]))
+                                    @foreach ($rejected->assignments as  $data)
+                                        <video width="120" height="90" class="">
+                                            <source src="{{ asset($data->video) }}" type="video/mp4">
+                                        </video>
+                                    @endforeach
+                                @endif
+                            </td>
+
+                            <td>
+                               Rejected 
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>SL</th>
+                            <th>User Name</th>
+                            <th>Videos</th>
+                            <th>Status</th>
                         </tr>
                     </tfoot>
                 </table>

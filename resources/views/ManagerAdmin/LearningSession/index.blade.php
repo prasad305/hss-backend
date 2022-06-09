@@ -15,12 +15,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Meetup Events</h1>
+          <h1 class="m-0">Learning Session</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Meetup Events</li>
+            <li class="breadcrumb-item active">Learning Session</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -33,19 +33,26 @@
         <div class="container-fluid">
 
             <div class="row">
-                @foreach ($upcommingEvent as $val)
+                @foreach ($upcommingEvent as $event)
                     <!--card-->
 
                     <div class="col-sm-6 col-lg-4">
                         <div class="card">
                             <div class="panel panel-primary text-center">
                                 <div class="">
-                                    <img width="100%" src="{{ asset($val->banner) }}" alt="">
+                                    @if ($event->banner != null)
+                                        <img width="100%" src="{{ asset($event->banner) }}" alt=""> 
+                                        @else
+                                        <video width="312" height="200px" controls>
+                                            <source src="{{asset($event->video)}}" />
+                                        </video> 
+                                    @endif
+                                   
                                 </div>
 
                                 <div class="panel-body py-3">
-                                    <h3 class="text-ellipsis-line-1">{{ $val->title }}</h3>
-                                    @if ($val->status < 2)
+                                    <h3 class="text-ellipsis-line-1">{{ $event->title }}</h3>
+                                    @if ($event->status < 2)
                                         <a type="button" class="btn btn-warning waves-effect waves-light"><i
                                             class="ion-record"></i>
                                             Pending</a>
@@ -54,10 +61,9 @@
                                             class="ion-checkmark-round"></i> Published</button>
                                     @endif
 
-                                    <a href="{{ route('managerAdmin.learningSession.details', [$val->id]) }}" type="button"
+                                    <a href="{{ route('managerAdmin.learningSession.details', [$event->id]) }}" type="button"
                                         class="btn btn-info waves-effect waves-light">Details <i
                                             class="fa fa-angle-double-right"></i></a>
-
                                 </div>
                             </div>
 

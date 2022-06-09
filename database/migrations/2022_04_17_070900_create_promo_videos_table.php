@@ -17,6 +17,7 @@ class CreatePromoVideosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('sub_category_id')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
             $table->string('title')->nullable();
