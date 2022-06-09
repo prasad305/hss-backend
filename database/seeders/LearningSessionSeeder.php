@@ -29,7 +29,7 @@ class LearningSessionSeeder extends Seeder
             $LearningSession->banner =  $faker->imageUrl($width = 300, $height = 200);;
             $LearningSession->participant_number =  $faker->numberBetween(100, 200);
             $LearningSession->video =  "https://youtu.be/lyXjeJN9lyg";
-            $LearningSession->date =  Carbon::now();
+            $LearningSession->event_date =  Carbon::now();
             $LearningSession->start_time =  Carbon::now()->setTime(22, 32, 5);
             $LearningSession->end_time =  Carbon::now()->setTime(24, 32, 5);
             $LearningSession->fee =  $faker->numberBetween(400, 500);

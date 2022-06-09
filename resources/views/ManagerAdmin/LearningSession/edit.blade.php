@@ -70,7 +70,7 @@
     </span>
 
 
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-md-12">
             <label for="event_date">Event Date</label>
             <input type="date" class="form-control" name="event_date" value="{{ date('Y-m-d',strtotime($event->event_date)) }}">
@@ -90,9 +90,9 @@
             <input type="time" class="form-control" name="end_time" value="{{ $event->end_time }}">
             <span class="text-danger" id="end_time_error"></span>
         </div>
-    </div>
+    </div> --}}
 
-    <hr>
+    {{-- <hr>
 
     <div class="row form-group">
         <div class="col-md-6">
@@ -132,7 +132,7 @@
             <input type="text" class="form-control" name="participant_number" value="{{$event->participant_number }}">
             <span class="text-danger" id="participant_number_error"></span>
         </div>
-    </div>
+    </div> --}}
 
 
     <button type="submit" class="btn btn-primary" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update

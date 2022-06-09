@@ -70,6 +70,7 @@ Manager Admin
                                  <span class="text-primary">3rd</span>                                
                                 @endif 
                             </td>
+                            
                         </tr>
                         @endforeach
                     </tbody>
@@ -102,11 +103,16 @@ Manager Admin
                         </tr>
                     </thead>
                     <tbody>
-
+                        {{-- @if ($rejected_videos->assignments[0]) --}}
                         @foreach ($rejected_videos as $key => $rejected)
+                        {{-- <tr>
+                            <td colspan="5" class="text-center">No Rjected Video Found!!</td>
+                        </tr> --}}
+                        @if (count($rejected->assignments) > 0)
+                           
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <th>{{ $rejected->user ? $rejected->user->first_name.' '.$rejected->user->last_name : '' }}</th>
+                            <td>{{ $rejected->user ? $rejected->user->first_name.' '.$rejected->user->last_name : '' }}</td>
                             <td>
                                 @if (isset($rejected->assignments[0]))
                                     @foreach ($rejected->assignments as  $data)
@@ -121,7 +127,12 @@ Manager Admin
                                Rejected 
                             </td>
                         </tr>
+                      
+                        @endif
+                      
                         @endforeach
+                          {{-- @endif --}}
+                        {{-- @endif --}}
                     </tbody>
                     <tfoot>
                         <tr>
