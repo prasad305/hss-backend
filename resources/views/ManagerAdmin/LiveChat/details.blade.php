@@ -94,10 +94,6 @@
                                 <div class="col-8 text-warning">{{ \Carbon\Carbon::parse($event->registration_end_date)->format('d F,Y')}}</div>
                             </div>
                             <div class="row">
-                                <div class="col-4">Total Slot:</div>
-                                <div class="col-8 text-warning">{{ $event->total_seat }}</div>
-                            </div>
-                            <div class="row">
                                 <div class="col-4">Maximum Time:</div>
                                 <div class="col-8 text-warning">{{ $event->max_time }} Minute(s)</div>
                             </div>
@@ -119,10 +115,11 @@
             <div class="container row">
                 @if($event->status != 2)
                     <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.liveChat.set_publish', [$event->id]) }}">Publish Now</a>
+                    <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Live Chat Event','{{ route('managerAdmin.liveChat.edit', $event->id) }}')">Edit</a>
                 @else
                     <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.liveChat.set_publish', [$event->id]) }}">Remove From Publish</a>
                 @endif
-                    <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Live Chat Event','{{ route('managerAdmin.liveChat.edit', $event->id) }}')">Edit</a>
+
             </div>
 
 

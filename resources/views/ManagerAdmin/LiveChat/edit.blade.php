@@ -47,7 +47,7 @@
 
     <hr>
 
-    <div class="row form-group">
+    {{-- <div class="row form-group">
         <div class="col-md-6">
             <label for="first_name">Event Date</label>
             <input type="date" class="form-control" name="date" value="{{ $event->date }}">
@@ -66,10 +66,9 @@
             <input type="time" class="form-control" name="end_time" value="{{ $event->end_time }}">
             <span class="text-danger" id="end_time_error"></span>
         </div>
-    </div>
+    </div> --}}
 
-    <hr>
-
+{{--
     <div class="row form-group">
         <div class="col-md-6">
             <label for="first_name">Registration Start Date</label>
@@ -115,7 +114,7 @@
             <input type="text" class="form-control" name="interval" placeholder="" value="{{ $event->interval }}">
             <span class="text-danger" id="interval_error"></span>
         </div>
-    </div>
+    </div> --}}
 
 
 
