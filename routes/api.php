@@ -287,6 +287,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     // Simple Post Section
     Route::post('admin/add_simple_post', [SimplePostController::class, 'add']);
     Route::get('/admin/simple_post/all', [SimplePostController::class, 'all']);
+    Route::post('/admin/simple_post/update/{id}', [SimplePostController::class, 'simplePostUpdate']);
     Route::get('/admin/simple_post/count', [SimplePostController::class, 'count']);
     Route::get('/admin/simple_post/pending', [SimplePostController::class, 'pending_list']);
     Route::get('/admin/simple_post/pending/{id}', [SimplePostController::class, 'pending_details']);
@@ -335,6 +336,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/qna_live', [QnaController::class, 'liveQnalist']);
     Route::get('/admin/qna_completed', [QnaController::class, 'qna_completed']);
     Route::get('/admin/registeredList/{slug}', [QnaController::class, 'registeredList']);
+    Route::post('/admin/admin_update_Qna', [QnaController::class, 'admin_update_Qna']);
 
     //Meetup Session Section
     Route::post('/admin/add_meetup', [MeetupEventController::class, 'add']);

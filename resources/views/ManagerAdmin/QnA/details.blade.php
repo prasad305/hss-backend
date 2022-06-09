@@ -103,8 +103,10 @@
                     <a type="button" class="btn btn-outline-danger mr-2"
                         href="{{ route('managerAdmin.qna.set_publish', [$event->id]) }}">Remove From Publish</a>
                 @endif
+                @if ($event->status < 1)   
                 <a type="button" class="btn btn-outline-warning px-5"
                     onclick="Show('Edit QnA Event','{{ route('managerAdmin.qna.edit', $event->id) }}')">Edit</a>
+                @endif
             </div>
             <div class="col-md-6">
                 <div class="card px-5 py-3 mx-2">
