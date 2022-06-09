@@ -453,11 +453,15 @@
         if (key == 'terms_conditions') {
             $('#terms_conditions_error').html(value);
         }
+        if (key == 'group_name') {
+            $('#group_name_error').html(value);
+        }
 
     }
 
     function ErrorMessageClear() {
         $('#sub_category_error').html('');
+        $('#group_name_error').html('');
         $('#first_name_error').html('');
         $('#last_name_error').html('');
         $('#descriptions_error').html('');

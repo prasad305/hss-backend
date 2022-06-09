@@ -92,8 +92,8 @@ class MarketplaceController extends Controller
         $marketplace->description = $request->input('description');
         $marketplace->keywords = $request->input('keywords');
         $marketplace->terms_conditions = $request->input('terms_conditions');
-        $marketplace->total_items = $request->input('total_items');
-        $marketplace->unit_price = $request->input('unit_price');
+        // $marketplace->total_items = $request->input('total_items');
+        // $marketplace->unit_price = $request->input('unit_price');
 
 
         if ($request->hasfile('image')) {

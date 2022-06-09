@@ -19,7 +19,7 @@
          
     </div>
 
-    <div class="row form-group">
+    <!-- <div class="row form-group">
         <div class="col-md-12">
               <label for="first_name">Total Items</label>
               <input type="text" class="form-control" id="title" name="total_items" readonly placeholder="Enter Admin First Name" value="{{$event->total_items }}">
@@ -32,7 +32,7 @@
               <input type="text" class="form-control" id="title" name="unit_price" readonly placeholder="Enter Admin First Name" value="{{$event->unit_price }}">
           <span class="text-danger" id="unit_price"></span>
          </div>
-    </div>
+    </div> -->
 
     <div class="form-group row">
         <div class="col-md-12">
