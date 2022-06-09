@@ -263,7 +263,7 @@ class MarketplaceController extends Controller
         $marketplace->title = $request->title;
         $marketplace->category_id = $request->category_id;
         $marketplace->subcategory_id = $request->subcategory_id;
-        $marketplace->slug = Str::slug($request->input('title'));
+        $marketplace->slug = Str::slug($request->input('title').'-'.rand(9999,99999));
         $marketplace->description = $request->description;
         $marketplace->tax = $request->tax;
         $marketplace->terms_conditions = $request->terms_conditions;
@@ -417,7 +417,7 @@ class MarketplaceController extends Controller
         $marketplace = Marketplace::find($id);
 
         $marketplace->title = $request->title;
-        $marketplace->slug = Str::slug($request->input('title'));
+        $marketplace->slug = Str::slug($request->input('title').'-'.rand(9999,99999));
         $marketplace->description = $request->description;
         $marketplace->unit_price = $request->unit_price;
         $marketplace->tax = $request->tax;
@@ -493,7 +493,7 @@ class MarketplaceController extends Controller
         $marketplace = new Marketplace();
 
         $marketplace->title = $request->title;
-        $marketplace->slug = Str::slug($request->input('title'));
+        $marketplace->slug = Str::slug($request->input('title').'-'.rand(9999,99999));
         $marketplace->description = $request->description;
         $marketplace->terms_conditions = $request->terms_conditions;
         $marketplace->delivery_charge = $request->delivery_charge;
@@ -626,7 +626,7 @@ class MarketplaceController extends Controller
         $marketplace = Marketplace::find($id);
 
         $marketplace->title = $request->title;
-        $marketplace->slug = Str::slug($request->input('title'));
+        $marketplace->slug = Str::slug($request->input('title').'-'.rand(9999,99999));
         $marketplace->description = $request->description;
         $marketplace->unit_price = $request->unit_price;
         $marketplace->delivery_charge = $request->delivery_charge;

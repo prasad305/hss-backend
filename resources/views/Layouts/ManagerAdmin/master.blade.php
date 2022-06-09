@@ -449,12 +449,28 @@
             $('#participant_number_error').html(value);
         }
 
+        if (key == 'keywords') {
+            $('#keywords_error').html(value);
+        }
+        if (key == 'description') {
+            $('#descriptions_error').html(value);
+        }
+        if (key == 'terms_conditions') {
+            $('#terms_conditions_error').html(value);
+        }
+        if (key == 'group_name') {
+            $('#group_name_error').html(value);
+        }
+
     }
 
     function ErrorMessageClear() {
         $('#sub_category_error').html('');
+        $('#group_name_error').html('');
         $('#first_name_error').html('');
         $('#last_name_error').html('');
+        $('#descriptions_error').html('');
+        $('#terms_conditions_error').html('');
         $('#email_error').html('');
         $('#phone_error').html('');
         $('#image_error').html('');
@@ -482,6 +498,7 @@
         $('#cost_error').html('');
         $('#minimum_required_day_error').html('');
         $('#participant_number_error').html('');
+        $('#keywords_error').html('');
     }
 </script>
 

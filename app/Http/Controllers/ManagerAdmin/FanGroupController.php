@@ -19,6 +19,7 @@ class FanGroupController extends Controller
         $post = FanGroup::where('my_star_status', 1)
                 ->where('another_star_status', 1)
                 ->where('status', '!=', 0)
+                ->where('category_id',auth()->user()->category_id)
                 ->latest()->get();
         $fanstatus = 'Pending/Published';
         return view('ManagerAdmin.fangroup.index', compact('post', 'fanstatus'));
@@ -29,6 +30,7 @@ class FanGroupController extends Controller
         $post = FanGroup::where('my_star_status', 1)
                 ->where('another_star_status', 1)
                 ->where('status', 2)
+                ->where('category_id',auth()->user()->category_id)
                 ->latest()->get();
 
         $fanstatus = 'Pending';
@@ -41,6 +43,7 @@ class FanGroupController extends Controller
         $post = FanGroup::where('my_star_status', 1)
                 ->where('another_star_status', 1)
                 ->where('status', 1)
+                ->where('category_id',auth()->user()->category_id)
                 ->latest()->get();
         $fanstatus = 'Published';
         return view('ManagerAdmin.fangroup.index', compact('post', 'fanstatus'));
@@ -76,14 +79,19 @@ class FanGroupController extends Controller
         $fangroup = FanGroup::findOrFail($id);
         
         $fangroup->group_name = $request->group_name;
-        $fangroup->slug = Str::slug($request->input('group_name'));
+        $fangroup->slug = Str::slug($request->input('group_name').'-'.rand(9999,99999));
         $fangroup->description = $request->description;
         $fangroup->start_date = $request->start_date;
         $fangroup->end_date = $request->end_date;
-        $fangroup->min_member = $request->min_member;
-        $fangroup->max_member = $request->max_member;
+        // $fangroup->min_member = $request->min_member;
+        // $fangroup->max_member = $request->max_member;
 
         if ($request->hasfile('banner')) {
+
+            $destination = $fangroup->banner;
+            if ($destination != null && file_exists($destination)) {
+                unlink($destination);
+            }
 
             $file = $request->file('banner');
             $extension = $file->getClientOriginalExtension();
