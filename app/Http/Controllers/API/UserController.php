@@ -276,16 +276,24 @@ class UserController extends Controller
     }
 
 
-    public function getStarPost($id)
+    public function getStarPost($id, $type)
     {
-        $post = Post::where('user_id', $id)->latest()->get();
+        if($type == 'livechat')
+        {
+            $post = Post::where([['user_id', $id],['type','livechat']])->latest()->get();
+        }
+        if($type == 'all')
+        {
+            $post = Post::where('user_id', $id)->latest()->get();
+        }
 
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
-            'livechats' => $post,
+            'posts' => $post,
         ]);
     }
+
 
     public function interestType()
     {

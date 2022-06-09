@@ -24,19 +24,19 @@ class LiveChatController extends Controller
 
     public function all()
     {
-        $events = LiveChat::where('status', '>', 0)->latest()->get();
+        $events = LiveChat::where([['status', '>', 0],['category_id',auth()->user()->category_id]])->latest()->get();
         return view('ManagerAdmin.LiveChat.index', compact('events'));
     }
 
     public function pending()
     {
-        $events = LiveChat::where('status', 1)->latest()->get();
+        $events = LiveChat::where([['status', 1],['category_id',auth()->user()->category_id]])->latest()->get();
         return view('ManagerAdmin.LiveChat.index', compact('events'));
     }
 
     public function published()
     {
-        $events = LiveChat::where('status', 2)->latest()->latest()->get();
+        $events = LiveChat::where([['status', 2],['category_id',auth()->user()->category_id]])->latest()->get();
         return view('ManagerAdmin.LiveChat.index', compact('events'));
     }
 
@@ -83,36 +83,35 @@ class LiveChatController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $request->validate([
             'title' => 'required',
-            'description' => 'required',
-            'instruction' => 'required',
+            'description' => 'required|min:5',
+            'instruction' => 'required|min:5',
             'image' => 'mimes:png,jpg,jpeg,webP',
-            'date' => 'required',
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'registration_start_date' => 'required',
-            'registration_end_date' => 'required',
-            'fee' => 'required',
-            'total_seat' => 'required',
-            'max_time' => 'required',
-            'min_time' => 'required',
-            'interval' => 'required',
+            // 'date' => 'required',
+            // 'start_time' => 'required',
+            // 'end_time' => 'required',
+            // 'registration_start_date' => 'required',
+            // 'registration_end_date' => 'required',
+            // 'fee' => 'required',
+            // 'total_seat' => 'required',
+            // 'max_time' => 'required',
+            // 'min_time' => 'required',
+            // 'interval' => 'required',
         ], [
             'title.required' => 'This Field Is Required',
             'description.required' => 'This Field Is Required',
             'instruction.required' => 'This Field Is Required',
-            'date.required' => 'This Field Is Required',
-            'start_time.required' => 'This Field Is Required',
-            'end_time.required' => 'This Field Is Required',
-            'registration_start_date.required' => 'This Field Is Required',
-            'registration_end_date.required' => 'This Field Is Required',
-            'fee.required' => 'This Field Is Required',
-            'total_seat.required' => 'This Field Is Required',
-            'max_time.required' => 'This Field Is Required',
-            'min_time.required' => 'This Field Is Required',
-            'interval.required' => 'This Field Is Required',
+            // 'date.required' => 'This Field Is Required',
+            // 'start_time.required' => 'This Field Is Required',
+            // 'end_time.required' => 'This Field Is Required',
+            // 'registration_start_date.required' => 'This Field Is Required',
+            // 'registration_end_date.required' => 'This Field Is Required',
+            // 'fee.required' => 'This Field Is Required',
+            // 'total_seat.required' => 'This Field Is Required',
+            // 'max_time.required' => 'This Field Is Required',
+            // 'min_time.required' => 'This Field Is Required',
+            // 'interval.required' => 'This Field Is Required',
         ]);
 
 
@@ -137,17 +136,17 @@ class LiveChatController extends Controller
             $liveChat->banner = $filename;
         }
 
-        $liveChat->event_date = $request->input('date');
-        $liveChat->start_time = $request->input('start_time');
-        $liveChat->end_time = $request->input('end_time');
+        // $liveChat->event_date = $request->input('date');
+        // $liveChat->start_time = $request->input('start_time');
+        // $liveChat->end_time = $request->input('end_time');
 
-        $liveChat->registration_start_date = $request->input('registration_start_date');
-        $liveChat->registration_end_date = $request->input('registration_end_date');
-        $liveChat->fee = $request->input('fee');
-        $liveChat->total_seat = $request->input('total_seat');
-        $liveChat->max_time = $request->input('max_time');
-        $liveChat->min_time = $request->input('min_time');
-        $liveChat->interval = $request->input('interval');
+        // $liveChat->registration_start_date = $request->input('registration_start_date');
+        // $liveChat->registration_end_date = $request->input('registration_end_date');
+        // $liveChat->fee = $request->input('fee');
+        // $liveChat->total_seat = $request->input('total_seat');
+        // $liveChat->max_time = $request->input('max_time');
+        // $liveChat->min_time = $request->input('min_time');
+        // $liveChat->interval = $request->input('interval');
 
 
         try {
