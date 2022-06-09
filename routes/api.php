@@ -49,7 +49,9 @@ Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearnin
 //Star Photo and videos
 Route::get('/star_photos/{id}', [UserController::class, 'star_photo']);
 Route::get('/star_videos/{id}', [UserController::class, 'star_video']);
-Route::get('/user/getStarPost/{id}', [UserController::class, 'getStarPost']);
+Route::get('/user/getStarPost/{id}/{type}', [UserController::class, 'getStarPost']);
+
+
 
 // Data Fetching For Landing Page Right Side Bar
 Route::get('/user/learning_session/all', [LearningSessionController::class, 'user_all']);
@@ -107,12 +109,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     //Meetup Event
     Route::get('/user/meetup/{slug}', [UserController::class, 'meetupDetails']);
-
-
     Route::get('view-country', [CategoryController::class, 'index']);
     Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
     Route::get('/user/registeredLivechat', [UserController::class, 'registeredLivechat']);
-
     Route::get('/user/interest/type', [UserController::class, 'interestType']);
 
     // Marketplace Section
@@ -318,7 +317,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
 
     // Live Session Section
-    Route::post('admin/add_live_session', [LiveChatController::class, 'add_by_admin']);
     Route::get('/admin/livechat', [LiveChatController::class, 'admin_livechat']);
     Route::get('/admin/sinlgeLiveChat/{id}', [LiveChatController::class, 'admin_sinlgeLiveChat']);
     Route::get('/admin/livechatListByDate/{date}', [LiveChatController::class, 'admin_livechatListByDate']);
@@ -345,11 +343,12 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
     Route::post('/admin/add_livechat_profile', [LiveChatController::class, 'profile_create']);
     Route::get('/admin/livechat_event_profile', [LiveChatController::class, 'profile']);
-    Route::post('/admin/add_live_chat', [LiveChatController::class, 'add']);
+    Route::post('/admin/live-chat/add', [LiveChatController::class, 'add_by_admin']);
+    Route::post('/admin/live-chat/update', [LiveChatController::class, 'update_by_admin']);
     Route::get('/admin/live_chat/pending', [LiveChatController::class, 'pending_list']);
     Route::get('/admin/live_chat/live', [LiveChatController::class, 'live_list']);
     Route::get('/admin/live_chat/completed', [LiveChatController::class, 'completed_list']);
-    Route::get('/admin/livechat_event_details/{slug}', [LiveChatController::class, 'details']);
+    Route::get('/admin/live-chat/details/{slug}', [LiveChatController::class, 'details']);
     Route::get('/admin/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
     Route::get('/admin/live_chat/count', [LiveChatController::class, 'count']);
 
