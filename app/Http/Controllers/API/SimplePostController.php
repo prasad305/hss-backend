@@ -200,14 +200,15 @@ class SimplePostController extends Controller
         $post->star_id = $request->input('star_id');
         $post->description = $request->input('description');
         $post->fee = $request->input('fee') > 0  ? $request->input('fee') : 0;
-        $post->video = $request->input('video');
         $post->type = $request->input('type');
         $post->post_type = $request->input('post_type');
 
         if ($request->hasfile('image')) {
-            $destination = $post->image;
-            if (File::exists($destination)) {
-                File::delete($destination);
+            if (File::exists($post->image)) {
+                File::delete($post->image);
+            }
+            if (File::exists($post->video)) {
+                File::delete($post->video);
             }
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
@@ -215,14 +216,21 @@ class SimplePostController extends Controller
 
             Image::make($file)->resize(900, 400)->save($filename, 100);
             $post->image = $filename;
+            $post->video = null;
         }
         if ($request->hasFile('video')) {
-
+            if (File::exists($post->image)) {
+                File::delete($post->image);
+            }
+            if (File::exists($post->video)) {
+                File::delete($post->video);
+            }
             $file        = $request->file('video');
             $path        = 'uploads/videos/post';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
             $post->video = $path . '/' . $file_name;
+            $post->image = null;
         }
         $post->save();
 
@@ -415,9 +423,6 @@ class SimplePostController extends Controller
     public function star_add(Request $request)
     {
 
-
-
-
         $validator = Validator::make($request->all(), [
 
             'title' => 'required',
@@ -446,7 +451,6 @@ class SimplePostController extends Controller
         $post->subcategory_id = auth('sanctum')->user()->sub_category_id;
         $post->description = $request->input('description');
         $post->fee = $request->input('fee') > 0  ? $request->input('fee') : 0;
-        $post->video = $request->input('video');
         $post->type = $request->input('type');
         $post->star_approval = 1;
 
@@ -496,6 +500,79 @@ class SimplePostController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Post Added',
+        ]);
+    }
+    public function star_post_update(Request $request,$id)
+    {
+
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'description' => 'required',
+            'type' => 'required',
+            'post_type' => 'required',
+
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'type.required' => "This  Field Is Required",
+            'post_type.required' => "This  Field Is Required",
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
+
+        $post =  SimplePost::find($id);
+        $post->title = $request->input('title');
+        $post->created_by_id = auth('sanctum')->user()->id;
+        $post->category_id = auth('sanctum')->user()->category_id;
+        $post->subcategory_id = auth('sanctum')->user()->sub_category_id;
+        $post->star_id = auth('sanctum')->user()->id;
+        $post->description = $request->input('description');
+        $post->fee = $request->input('fee') > 0  ? $request->input('fee') : 0;
+        $post->type = $request->input('type');
+        $post->post_type = $request->input('post_type');
+
+        if ($request->hasfile('image')) {
+            if (File::exists($post->image)) {
+                File::delete($post->image);
+            }
+            if (File::exists($post->video)) {
+                File::delete($post->video);
+            }
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/post/' . time() . '.' . $extension;
+
+            Image::make($file)->resize(900, 400)->save($filename, 100);
+            $post->image = $filename;
+            $post->video = null;
+        }
+        if ($request->hasFile('video')) {
+            if (File::exists($post->image)) {
+                File::delete($post->image);
+            }
+            if (File::exists($post->video)) {
+                File::delete($post->video);
+            }
+            $file        = $request->file('video');
+            $path        = 'uploads/videos/post';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $post->video = $path . '/' . $file_name;
+            $post->image = null;
+        }
+        $post->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Post Updated',
         ]);
     }
 }

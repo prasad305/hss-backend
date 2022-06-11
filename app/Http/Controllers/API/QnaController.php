@@ -23,7 +23,7 @@ class QnaController extends Controller
             'image' => 'required',
             'instruction' => 'required|min:5',
             'description' => 'required|min:5',
-            'date' => 'required',
+            'event_date' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
             'registration_start_date' => 'required',
@@ -52,7 +52,7 @@ class QnaController extends Controller
             $qna->created_by_id = auth('sanctum')->user()->id;
             $qna->description = $request->input('description');
             $qna->instruction = $request->input('instruction');
-            $qna->date = $request->input('date');
+            $qna->event_date = $request->input('event_date');
             $qna->start_time = Carbon::parse($request->input('start_time'));
             $qna->end_time = Carbon::parse($request->input('end_time'));
             $qna->registration_start_date = $request->input('registration_start_date');
@@ -102,7 +102,7 @@ class QnaController extends Controller
         // return $request->all();
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:live_chats,title',
-            'date' => 'required',
+            'event_date' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
             'instruction' => 'required|min:5',
@@ -132,7 +132,7 @@ class QnaController extends Controller
             $qna->created_by_id = auth('sanctum')->user()->id;
             $qna->description = $request->input('description');
             $qna->instruction = $request->input('instruction');
-            $qna->date = $request->input('date');
+            $qna->event_date = $request->input('event_date');
             $qna->start_time = Carbon::parse($request->input('start_time'));
             $qna->end_time = Carbon::parse($request->input('end_time'));
             $qna->registration_start_date = $request->input('registration_start_date');
@@ -247,7 +247,7 @@ class QnaController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:live_chats,title',
             'image' => 'required',
-            'date' => 'required',
+            'event_date' => 'required',
             'instruction' => 'required|min:5',
             'description' => 'required|min:5',
             'start_time' => 'required',
@@ -278,7 +278,7 @@ class QnaController extends Controller
             $qna->created_by_id = auth('sanctum')->user()->id;
             $qna->description = $request->input('description');
             $qna->instruction = $request->input('instruction');
-            $qna->date = $request->input('date');
+            $qna->event_date = $request->input('event_date');
             $qna->start_time = Carbon::parse($request->input('start_time'));
             $qna->end_time = Carbon::parse($request->input('end_time'));
             $qna->registration_start_date = $request->input('registration_start_date');
@@ -329,7 +329,7 @@ class QnaController extends Controller
         // return $request->all();
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:live_chats,title',
-            'date' => 'required',
+            'event_date' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
             'instruction' => 'required|min:5',
@@ -359,7 +359,7 @@ class QnaController extends Controller
             $qna->created_by_id = auth('sanctum')->user()->id;
             $qna->description = $request->input('description');
             $qna->instruction = $request->input('instruction');
-            $qna->date = $request->input('date');
+            $qna->event_date = $request->input('event_date');
             $qna->start_time = Carbon::parse($request->input('start_time'));
             $qna->end_time = Carbon::parse($request->input('end_time'));
             $qna->registration_start_date = $request->input('registration_start_date');

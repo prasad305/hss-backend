@@ -637,4 +637,20 @@ class AuctionController extends Controller
             'product' => $product,
         ]);
     }
+    public function makeWinner($id){
+
+        $winenir = Bidding::where('id', $id)->update(['win_status'=>'1']);
+
+        // if($winenir){
+        //     $auctionSold = Auction::where('id',$winenir->auction_id)->get();
+        //     $auctionSold->product_status = 1;
+        // }
+        // $auctionSold->update();
+
+
+        return response()->json([
+            'status' => 200,
+            'winenr' => $winenir,
+        ]);
+    }
 }
