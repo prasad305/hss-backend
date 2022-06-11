@@ -9,6 +9,7 @@ use App\Models\LearningSession;
 use App\Models\LearningSessionAssignment;
 use App\Models\LearningSessionEvaluation;
 use App\Models\LearningSessionRegistration;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -147,18 +148,24 @@ class LearningSessionController extends Controller
     /// Manager Part ////
     public function manager_pending()
     {
-        $upcommingEvent = LearningSession::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('updated_at','desc')->get();
+        $learningSessions = LearningSession::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('updated_at','desc')->get();
 
-        return view('ManagerAdmin.LearningSession.index', compact('upcommingEvent'));
+        return view('ManagerAdmin.LearningSession.index', compact('learningSessions'));
+    }
+    public function manager_rejected()
+    {
+        $learningSessions = LearningSession::where([['status', 11],['category_id',auth()->user()->category_id]])->orderBy('updated_at','desc')->get();
+
+        return view('ManagerAdmin.LearningSession.index', compact('learningSessions'));
     }
 
     public function manager_published()
     {
-        $upcommingEvent = LearningSession::where([
+        $learningSessions = LearningSession::where([
             ['status', 2]
         ])->latest()->get();
 
-        return view('ManagerAdmin.LearningSession.index', compact('upcommingEvent'));
+        return view('ManagerAdmin.LearningSession.index', compact('learningSessions'));
     }
 
     public function learningEvaluation()
@@ -178,15 +185,17 @@ class LearningSessionController extends Controller
     public function evaluationResult($id)
     {
         $event = LearningSession::findOrFail($id);
-        $results = LearningSessionEvaluation::where('event_id', $id)
+
+        
+         $results = LearningSessionEvaluation::where('event_id', $id)
                                             ->with(['assignments' => function($q){
-                                                return $q->where('mark','>',0);
+                                                return $q->where([['mark','>',0],['send_to_manager',1]]);
                                             }])
                                             ->orderBy('total_mark', 'desc')->get();
 
         $rejected_videos = LearningSessionEvaluation::where('event_id', $id)
                                             ->with(['assignments' => function($q){
-                                                return $q->where('status',2);
+                                                return $q->where([['status',2],['send_to_manager',1]]);
                                             }])
                                             ->get();
 
@@ -220,7 +229,7 @@ class LearningSessionController extends Controller
     public function evaluationResultPublished($id)
     {
         $event = LearningSession::findOrFail($id);
-        $assignment = LearningSessionAssignment::where([['event_id',$id],['mark','>',0],['send_to_manager',1]])->update([
+        $assignment = LearningSessionAssignment::where([['event_id',$id],['send_to_manager',1]])->update([
             'send_to_user' => 1,
         ]);
     
@@ -235,9 +244,9 @@ class LearningSessionController extends Controller
 
     public function manager_all()
     {
-        $upcommingEvent = LearningSession::where([['status', '>', 0],['category_id',auth()->user()->category_id]])->orderBy('updated_at','desc')->get();
+        $learningSessions = LearningSession::where([['status', '>', 0],['category_id',auth()->user()->category_id]])->orderBy('updated_at','desc')->get();
 
-        return view('ManagerAdmin.LearningSession.index', compact('upcommingEvent'));
+        return view('ManagerAdmin.LearningSession.index', compact('learningSessions'));
     }
 
     public function set_approve_by_manager($id)
@@ -276,11 +285,15 @@ class LearningSessionController extends Controller
     }
 
 
-    public function manager_event_set_publish($id)
+    public function manager_event_set_publish(Request $request,$id)
     {
         $learningSession = LearningSession::find($id);
 
         if ($learningSession->status != 2) {
+            $request->validate([
+                'post_start_date' => 'required',
+                'post_end_date' => 'required',
+            ]);
             $learningSession->status = 2;
             $learningSession->update();
 
@@ -293,6 +306,8 @@ class LearningSessionController extends Controller
             $post->event_id = $learningSession->id;
             $post->category_id = $learningSession->star->category_id;
             $post->sub_category_id = $learningSession->star->sub_category_id;
+            $post->post_start_date = Carbon::parse($request->post_start_date);
+            $post->post_end_date = Carbon::parse($request->post_end_date);
             $post->save();
         } else {
             //$learningSession->manager_approval = 0;

@@ -410,7 +410,8 @@ class LearningSessionController extends Controller
     {
         $event = LearningSession::where('slug', $slug)->first();
         $event->update(['status' => 6]);
-        LearningSessionAssignment::where([['event_id', $event->id], ['status', 1], ['mark', '>', 1]])->update(['send_to_manager' => 1]);
+        // LearningSessionAssignment::where([['event_id', $event->id], ['status', 1], ['mark', '>', 1]])->update(['send_to_manager' => 1]);
+        LearningSessionAssignment::where([['event_id', $event->id]])->update(['send_to_manager' => 1]);
 
         return response()->json([
             'status' => 200,
@@ -462,6 +463,17 @@ class LearningSessionController extends Controller
         return response()->json([
             'status' => 200,
             'events' => $events->latest()->get(),
+            'count' => $events->count(),
+        ]);
+    }
+    
+    public function rejected_list()
+    {
+        $events = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status',11]]);
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events->orderBy('updated_at','desc')->get(),
             'count' => $events->count(),
         ]);
     }
@@ -827,6 +839,17 @@ class LearningSessionController extends Controller
         ]);
     }
 
+    public function star_reject_list()
+    {
+        $events = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status',11]]);
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events->orderBY('updated_at','desc')->get(),
+            'count' => $events->count(),
+        ]);
+    }
+
     public function star_evaluation_list()
     {
         $events = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 2], ['status', '<', 9]]);
@@ -866,11 +889,25 @@ class LearningSessionController extends Controller
 
     public function approve_post($id)
     {
-        $post = LearningSession::find($id);
+        $learningSession = LearningSession::find($id);
 
-        $post->status = 1;
+        $learningSession->status = 1;
 
-        $post->update();
+        $learningSession->update();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success',
+        ]);
+    }
+
+    public function reject($id)
+    {
+        $learningSession = LearningSession::find($id);
+
+        $learningSession->status = 11;
+
+        $learningSession->update();
 
         return response()->json([
             'status' => 200,

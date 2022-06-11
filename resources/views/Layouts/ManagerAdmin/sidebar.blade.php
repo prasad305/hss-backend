@@ -542,6 +542,12 @@
                         <p>All</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.learningSession.rejected') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Rejected By Star</p>
+                    </a>
+                </li>
             </ul>
         </li>
 

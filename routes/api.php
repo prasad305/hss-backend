@@ -298,6 +298,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/update_learning_session/{id}', [LearningSessionController::class, 'adminUpdateLearning']);
     Route::get('/admin/learning_session/all', [LearningSessionController::class, 'all']);
     Route::get('/admin/learning_session/count', [LearningSessionController::class, 'count']);
+    Route::get('/admin/learning_session/rejected', [LearningSessionController::class, 'rejected_list']);
     Route::get('/admin/learning_session/pending', [LearningSessionController::class, 'pending_list']);
     Route::get('/admin/learning_session/live', [LearningSessionController::class, 'live_list']);
     Route::get('/admin/learning_session/evaluation', [LearningSessionController::class, 'evaluation_list']);
@@ -490,7 +491,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/learning_session/pending', [LearningSessionController::class, 'star_pending_list']);
     Route::get('/star/learning_session/pending/{id}', [LearningSessionController::class, 'star_pending_details']);
     Route::get('/star/learning_session/approved', [LearningSessionController::class, 'star_approved_list']);
+    Route::get('/star/learning_session/reject', [LearningSessionController::class, 'star_reject_list']);
     Route::get('/star/learning_session/approve/{id}', [LearningSessionController::class, 'approve_post']);
+    Route::get('/star/learning_session/reject/{id}', [LearningSessionController::class, 'reject']);
     Route::get('/star/learning_session/completed', [LearningSessionController::class, 'star_completed_list']);
     Route::get('/star/learning_session/evaluation', [LearningSessionController::class, 'star_evaluation_list']);
     Route::get('/star/learning_session/details/{slug}', [LearningSessionController::class, 'details']);
