@@ -248,7 +248,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('liveChat/all', [LiveChatController::class, 'all'])->name('liveChat.all');
 
     Route::get('LiveChatEvents/details/{id}', [LiveChatController::class, 'manager_event_details'])->name('LiveChatEvents.details');
-    Route::get('LiveChatEvents/set_publish/{id}', [LiveChatController::class, 'manager_event_set_publish'])->name('liveChat.set_publish');
+    Route::post('LiveChatEvents/set_publish/{id}', [LiveChatController::class, 'manager_event_set_publish'])->name('liveChat.set_publish');
 
     // Questions and Answers
     Route::get('qna/pending', [QnaController::class, 'pending'])->name('qna.pending');

@@ -24,19 +24,19 @@ class LiveChatController extends Controller
 
     public function all()
     {
-        $events = LiveChat::where([['status', '>', 0],['category_id',auth()->user()->category_id]])->latest()->get();
+        $events = LiveChat::where([['status', '>', 0], ['category_id', auth()->user()->category_id]])->latest()->get();
         return view('ManagerAdmin.LiveChat.index', compact('events'));
     }
 
     public function pending()
     {
-        $events = LiveChat::where([['status', 1],['category_id',auth()->user()->category_id]])->latest()->get();
+        $events = LiveChat::where([['status', 1], ['category_id', auth()->user()->category_id]])->latest()->get();
         return view('ManagerAdmin.LiveChat.index', compact('events'));
     }
 
     public function published()
     {
-        $events = LiveChat::where([['status', 2],['category_id',auth()->user()->category_id]])->latest()->get();
+        $events = LiveChat::where([['status', 2], ['category_id', auth()->user()->category_id]])->latest()->get();
         return view('ManagerAdmin.LiveChat.index', compact('events'));
     }
 
@@ -47,11 +47,16 @@ class LiveChatController extends Controller
     }
 
 
-    public function manager_event_set_publish($id)
+    public function manager_event_set_publish(Request $request, $id)
     {
         $event = LiveChat::find($id);
 
         if ($event->status != 2) {
+            $request->validate([
+                'post_start_date' => 'required',
+                'post_end_date' => 'required',
+            ]);
+
             $event->status = 2;
             $event->update();
             $starCat = SuperStar::where('star_id', $event->star_id)->first();
@@ -63,7 +68,10 @@ class LiveChatController extends Controller
             $post->event_id = $event->id;
             $post->category_id = $starCat->category_id;
             $post->sub_category_id = $starCat->sub_category_id;
+            $post->post_start_date = Carbon::parse($request->post_start_date);
+            $post->post_end_date = Carbon::parse($request->post_end_date);
             $post->save();
+
         } else {
             $event->status = 10;
             $event->update();
