@@ -284,15 +284,15 @@ class LearningSessionController extends Controller
             $learningSession->status = 2;
             $learningSession->update();
 
-            $starCat = SuperStar::where('star_id', $learningSession->star_id)->first();
+        //    return $learningSession->star;
 
             // Create New post //
             $post = new Post();
             $post->type = 'learningSession';
             $post->user_id = $learningSession->star_id;
             $post->event_id = $learningSession->id;
-            $post->category_id = $starCat->category_id;
-            $post->sub_category_id = $starCat->sub_category_id;
+            $post->category_id = $learningSession->star->category_id;
+            $post->sub_category_id = $learningSession->star->sub_category_id;
             $post->save();
         } else {
             //$learningSession->manager_approval = 0;
@@ -300,7 +300,7 @@ class LearningSessionController extends Controller
             $learningSession->update();
 
             //Remove post //
-            $post = Post::where('event_id', $id)->first();
+           return $post = Post::where('event_id', $learningSession->id)->first();
             $post->delete();
         }
 
@@ -371,14 +371,14 @@ class LearningSessionController extends Controller
                 'title' => 'required|unique:learning_sessions,title,'.$id,
                 'description' => 'required',
                 'instruction' => 'required',
-                'event_date' => 'required',
-                'start_time' => 'required',
-                'end_time' => 'required',
-                'registration_start_date' => 'required',
-                'registration_end_date' => 'required',
-                'assignment' => 'required',
-                'fee' => 'required',
-                'participant_number' => 'required',
+                // 'event_date' => 'required',
+                // 'start_time' => 'required',
+                // 'end_time' => 'required',
+                // 'registration_start_date' => 'required',
+                // 'registration_end_date' => 'required',
+                // 'assignment' => 'required',
+                // 'fee' => 'required',
+                // 'participant_number' => 'required',
                 'image' => 'nullable|mimes:jpg,jpeg,png',
             ]);
         }else{
@@ -386,14 +386,14 @@ class LearningSessionController extends Controller
                 'title' => 'required|unique:learning_sessions,title,'.$id,
                 'description' => 'required',
                 'instruction' => 'required',
-                'event_date' => 'required',
-                'start_time' => 'required',
-                'end_time' => 'required',
-                'registration_start_date' => 'required',
-                'registration_end_date' => 'required',
-                'assignment' => 'required',
-                'fee' => 'required',
-                'participant_number' => 'required',
+                // 'event_date' => 'required',
+                // 'start_time' => 'required',
+                // 'end_time' => 'required',
+                // 'registration_start_date' => 'required',
+                // 'registration_end_date' => 'required',
+                // 'assignment' => 'required',
+                // 'fee' => 'required',
+                // 'participant_number' => 'required',
                 'video' => 'nullable|mimes:mp4,mkv',
             ]);
         }
@@ -404,15 +404,15 @@ class LearningSessionController extends Controller
         $learningSession->description = $request->input('description');
         $learningSession->instruction = $request->input('instruction');
 
-        $learningSession->registration_start_date = $request->input('registration_start_date');
-        $learningSession->registration_end_date = $request->input('registration_end_date');
-        $learningSession->event_date = $request->input('event_date');
-        $learningSession->start_time = $request->input('start_time');
-        $learningSession->end_time = $request->input('end_time');
+        // $learningSession->registration_start_date = $request->input('registration_start_date');
+        // $learningSession->registration_end_date = $request->input('registration_end_date');
+        // $learningSession->event_date = $request->input('event_date');
+        // $learningSession->start_time = $request->input('start_time');
+        // $learningSession->end_time = $request->input('end_time');
 
-        $learningSession->assignment = $request->input('assignment');
-        $learningSession->fee = $request->input('fee');
-        $learningSession->participant_number = $request->input('participant_number');
+        // $learningSession->assignment = $request->input('assignment');
+        // $learningSession->fee = $request->input('fee');
+        // $learningSession->participant_number = $request->input('participant_number');
 
         if ($request->hasfile('image')) {
             $destination = $learningSession->banner;
