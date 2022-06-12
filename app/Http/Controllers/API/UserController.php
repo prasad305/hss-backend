@@ -559,7 +559,6 @@ class UserController extends Controller
             $available_status = false;
         }
 
-
         return response()->json([
             'status' => 200,
             'start_time' => $user_start_time,
