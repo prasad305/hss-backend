@@ -71,6 +71,19 @@ class StarAuthController extends Controller
                 $star->terms_and_condition = $request->input('terms_and_condition');
                 $star->qr_code = rand( 10000000 , 99999999 );
 
+                if ($request->hasfile('signature')) {
+                    $destination = $star->signature;
+                    if (File::exists($destination)) {
+                        File::delete($destination);
+                    }
+                    $file = $request->file('signature');
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = 'uploads/images/users/stars' . time() . '.' . $extension;
+                    Image::make($file)->resize(900, 400)->save($filename, 50);
+    
+                    $star->signature = $filename;
+                }
+
                 if ($request->hasFile('profile_file_one')) {
                     if ($star->star_file_one != null && file_exists($star->star_file_one)) {
                         unlink($star->star_file_one);
@@ -101,6 +114,16 @@ class StarAuthController extends Controller
                 'message'=> 'Star Added Successfully',
             ]);
         }
+    }
+
+    public function star_details($id){
+        $star = User::find($id);
+        $star_details = SuperStar::where('star_id',$id)->first();
+        return response()->json([
+            'status'=>200,
+            'star_details'=> $star_details,
+        ]);
+
     }
 
     public function superStar_register(Request $request)

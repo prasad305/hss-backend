@@ -24,13 +24,13 @@ class CreateQnASTable extends Migration
             $table->string('slug')->nullable();
             $table->longText('description')->nullable();
             $table->longText('instruction')->nullable();
-            $table->timestamp('date')->nullable();
+            $table->timestamp('event_date')->nullable();
             $table->time('available_start_time')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
             $table->unsignedBigInteger('slot_counter')->nullable();
-            $table->string('banner')->nullable();
-            $table->string('video')->nullable();
+            $table->text('banner')->nullable();
+            $table->text('video')->nullable();
             $table->float('fee')->nullable();
             $table->float('min_time')->nullable();
             $table->float('max_time')->nullable();

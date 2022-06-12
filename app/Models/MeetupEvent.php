@@ -13,6 +13,8 @@ class MeetupEvent extends Model
         'id',
         'created_by_id',
         'star_id',
+        'admin_id',
+        'category_id',
         'meetup_type',
         'title',
         'event_link',
@@ -56,7 +58,7 @@ class MeetupEvent extends Model
 
     public function admin()
     {
-        return $this->belongsTo(User::class, 'created_by_id');
+        return $this->belongsTo(User::class, 'admin_id');
     }
 
     public function registeredMeetupEvents()

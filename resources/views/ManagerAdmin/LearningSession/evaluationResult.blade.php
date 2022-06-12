@@ -45,6 +45,7 @@ Manager Admin
                     <tbody>
 
                         @foreach ($results as $key => $result)
+                        @if (isset($result->assignments[0]))
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <th>{{ $result->user ? $result->user->first_name.' '.$result->user->last_name : '' }}</th>
@@ -72,6 +73,8 @@ Manager Admin
                             </td>
                             
                         </tr>
+                        @endif
+                        
                         @endforeach
                     </tbody>
                     <tfoot>
@@ -87,7 +90,7 @@ Manager Admin
 
 
         </div>
-        <a href="{{route('managerAdmin.learningSession.evaluationResultPublished',$event->id)}}" class="btn btn-outline-success btn-success text-light"> Send To User</a>
+        
         <hr>
         <h1>Reject Video List</h1>
         <div class="card">
@@ -99,17 +102,13 @@ Manager Admin
                             <th>SL</th>
                             <th>User Name</th>
                             <th>Videos</th>
+                            <th>Send To User</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @if ($rejected_videos->assignments[0]) --}}
                         @foreach ($rejected_videos as $key => $rejected)
-                        {{-- <tr>
-                            <td colspan="5" class="text-center">No Rjected Video Found!!</td>
-                        </tr> --}}
                         @if (count($rejected->assignments) > 0)
-                           
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $rejected->user ? $rejected->user->first_name.' '.$rejected->user->last_name : '' }}</td>
@@ -122,17 +121,12 @@ Manager Admin
                                     @endforeach
                                 @endif
                             </td>
-
                             <td>
                                Rejected 
                             </td>
                         </tr>
-                      
                         @endif
-                      
                         @endforeach
-                          {{-- @endif --}}
-                        {{-- @endif --}}
                     </tbody>
                     <tfoot>
                         <tr>
@@ -144,7 +138,7 @@ Manager Admin
                     </tfoot>
                 </table>
             </div>
-
+            <a href="{{route('managerAdmin.learningSession.evaluationResultPublished',$event->id)}}" class="btn btn-outline-success btn-success text-light"> Send To User</a>
 
         </div>
 

@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 // Authentication API
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('user_authentication', [AuthController::class, 'user_authentication']);
 Route::post('logout', [AuthController::class, 'logout']);
 
 // OTP Verification API
@@ -97,6 +98,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/live-chat/{slug}', [UserController::class, 'liveChatDetails']);
     Route::get('/user/live-chat/reg_info/{id}', [UserController::class, 'liveChatRegDetails']);
 
+
+
     //Questions And Answers
     Route::get('/user/qna/{slug}', [UserController::class, 'qnaDetails']);
     Route::get('/user/sinlgeQna/{id}', [UserController::class, 'sinlgeQna']);
@@ -105,6 +108,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/qna_activites', [UserController::class, 'qna_activities']);
     Route::get('/user/qnaAll', [UserController::class, 'getQnaAll']);
     Route::get('/user/qnaStarAll/{id}', [UserController::class, 'getStarQna']);
+    Route::get('/user/qna/reg_info/{id}', [UserController::class, 'qnaRegDetails']);
 
 
     //Meetup Event
@@ -186,6 +190,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //Event Registaion By User (Learning Session + Live Chat + Greeting + Meetup Event)
     Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
     Route::post('/user/learning-session/video-upload', [UserController::class, 'uploadLearningSessionVideo']);
+    Route::post('/user/learning-session/saveCertificateInfo', [UserController::class, 'saveCertificateInfo']);
+    Route::get('/user/greeting-leraning-certificate/{event_id}', [UserController::class, 'getCertificateData']);
 
     //use this api on react project file path- \src\components\Pages\Profile\profile-components\starProfile\StarChat
     Route::post('/user/liveChat/register', [UserController::class, 'liveChatRigister']);
@@ -215,6 +221,11 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     // User Profile
     Route::post('/user/coverUpdate/{id}', [UserController::class, 'updateCover']);
     Route::post('/user/profileUpdate/{id}', [UserController::class, 'updateProfile']);
+
+    // Souviner Section
+    Route::get('/user/souviner/view/{starId}', [SouvinerController::class, 'getUserSouvenir']);
+    Route::post('/user/souvenir/apply/store/{starId}', [SouvinerController::class, 'applyUserSouvenir']);
+    Route::get('/user/souvenir/activities/list', [SouvinerController::class, 'activitiesUserSouvenir']);
 
     // User Photos
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
@@ -282,12 +293,17 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/souviner/update/{id}', [SouvinerController::class, 'souvinerUpdate']);
     Route::get('/admin/souviner/view/{id}', [SouvinerController::class, 'souvinerView']);
     Route::get('/admin/souviner/check', [SouvinerController::class, 'souvinerCheck']);
+    Route::get('/admin/souvenir/register/list', [SouvinerController::class, 'registerUserSouvenirList']);
+    Route::get('/admin/souvenir/register/approve/{id}', [SouvinerController::class, 'registerSouvenirApprove']);
+    Route::get('/admin/souvenir/register/decline/{id}', [SouvinerController::class, 'registerSouvenirDecline']);
+    Route::get('/admin/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
     // Route::get('/admin/souviner/product-list/approved', [SouvinerController::class, 'allProductList']);
     // Route::get('/admin/souviner/product-list/pending', [SouvinerController::class, 'pendingProductList']);
 
     // Simple Post Section
     Route::post('admin/add_simple_post', [SimplePostController::class, 'add']);
     Route::get('/admin/simple_post/all', [SimplePostController::class, 'all']);
+    Route::post('/admin/simple_post/update/{id}', [SimplePostController::class, 'simplePostUpdate']);
     Route::get('/admin/simple_post/count', [SimplePostController::class, 'count']);
     Route::get('/admin/simple_post/pending', [SimplePostController::class, 'pending_list']);
     Route::get('/admin/simple_post/pending/{id}', [SimplePostController::class, 'pending_details']);
@@ -298,6 +314,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/update_learning_session/{id}', [LearningSessionController::class, 'adminUpdateLearning']);
     Route::get('/admin/learning_session/all', [LearningSessionController::class, 'all']);
     Route::get('/admin/learning_session/count', [LearningSessionController::class, 'count']);
+    Route::get('/admin/learning_session/rejected', [LearningSessionController::class, 'rejected_list']);
     Route::get('/admin/learning_session/pending', [LearningSessionController::class, 'pending_list']);
     Route::get('/admin/learning_session/live', [LearningSessionController::class, 'live_list']);
     Route::get('/admin/learning_session/evaluation', [LearningSessionController::class, 'evaluation_list']);
@@ -332,9 +349,11 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/qna_live', [QnaController::class, 'liveQnalist']);
     Route::get('/admin/qna_completed', [QnaController::class, 'qna_completed']);
     Route::get('/admin/registeredList/{slug}', [QnaController::class, 'registeredList']);
+    Route::post('/admin/admin_update_Qna', [QnaController::class, 'admin_update_Qna']);
 
     //Meetup Session Section
-    Route::post('/admin/add_meetup', [MeetupEventController::class, 'add']);
+    Route::post('/admin/add_meetup', [MeetupEventController::class, 'add_by_admin']);
+    Route::post('/admin/edit_meetup/{id}', [MeetupEventController::class, 'update_by_admin']);
     Route::get('/admin/meetup_event/pending', [MeetupEventController::class, 'pending_list']);
     Route::get('/admin/meetup_event/live', [MeetupEventController::class, 'live_list']);
     Route::get('/admin/meetup_event/completed', [MeetupEventController::class, 'completed']);
@@ -400,6 +419,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/topBidder/auction/{auction_id}', [AuctionController::class, 'topBidder']);
     Route::get('/admin/topBidder/auction/notify/{id}', [AuctionController::class, 'notify_bidder']);
     Route::get('/admin/allBidderList/auction/{id}', [AuctionController::class, 'allBidderList']);
+    Route::post('/admin/winner/auction/{id}', [AuctionController::class, 'makeWinner']);
 
     // audition routes
     //Route::get('/admin/audition/status', [AuditionController::class, 'starAdminPendingAudtion']);
@@ -415,6 +435,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/promoVideo/update', [PromoVideoController::class, 'adminUpdate']);
     Route::get('/admin/promoVideo/pending', [PromoVideoController::class, 'pendingVideos']);
     Route::get('/admin/promoVideo/live', [PromoVideoController::class, 'liveVideos']);
+    Route::get('/admin/promoVideo/reject', [PromoVideoController::class, 'rejectVideos']);
     Route::get('/admin/promoVideo/count', [PromoVideoController::class, 'promoVideoCount']);
     //Category
     Route::get('/admin/view-category', [CategoryController::class, 'index']);
@@ -472,6 +493,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/simple_post/count', [SimplePostController::class, 'star_count']);
     Route::get('/star/simple_post/pending', [SimplePostController::class, 'star_pending_list']);
     Route::get('/star/simple_post/pending/{id}', [SimplePostController::class, 'star_pending_details']);
+    Route::post('/star/simple_post/update/{id}', [SimplePostController::class, 'star_post_update']);
     Route::get('/star/simple_post/approved', [SimplePostController::class, 'star_approved_list']);
     Route::get('/star/approve_post/{id}', [SimplePostController::class, 'approve_post']);
     Route::get('/star/decline_post/{id}', [SimplePostController::class, 'decline_post']);
@@ -479,8 +501,14 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     // Souviner Section
     Route::post('/star/souviner/store', [SouvinerController::class, 'souvinerStarStore']);
     Route::get('/star/souviner/check', [SouvinerController::class, 'souvinerStarCheck']);
+    Route::get('/star/souviner/edit/{id}', [SouvinerController::class, 'souvinerStarEdit']);
+    Route::post('/star/souviner/update/{id}', [SouvinerController::class, 'souvinerStarUpdate']);
     Route::post('/star/souviner/approve/{id}', [SouvinerController::class, 'souvinerStarApprove']);
     Route::post('/star/souviner/decline/{id}', [SouvinerController::class, 'souvinerStarDecline']);
+    Route::get('/star/souvenir/register/list', [SouvinerController::class, 'starRegisterUserSouvenirList']);
+    Route::get('/star/souvenir/register/approve/{id}', [SouvinerController::class, 'registerSouvenirApprove']);
+    Route::get('/star/souvenir/register/decline/{id}', [SouvinerController::class, 'registerSouvenirDecline']);
+    Route::get('/star/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
 
     // Learning Session Section
     Route::post('/star/learning_session/create', [LearningSessionController::class, 'star_add']);
@@ -490,7 +518,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/learning_session/pending', [LearningSessionController::class, 'star_pending_list']);
     Route::get('/star/learning_session/pending/{id}', [LearningSessionController::class, 'star_pending_details']);
     Route::get('/star/learning_session/approved', [LearningSessionController::class, 'star_approved_list']);
+    Route::get('/star/learning_session/reject', [LearningSessionController::class, 'star_reject_list']);
     Route::get('/star/learning_session/approve/{id}', [LearningSessionController::class, 'approve_post']);
+    Route::get('/star/learning_session/reject/{id}', [LearningSessionController::class, 'reject']);
     Route::get('/star/learning_session/completed', [LearningSessionController::class, 'star_completed_list']);
     Route::get('/star/learning_session/evaluation', [LearningSessionController::class, 'star_evaluation_list']);
     Route::get('/star/learning_session/details/{slug}', [LearningSessionController::class, 'details']);
@@ -527,9 +557,10 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     // Meetup Event Section
     Route::get('/star/meetup_event/{type}', [MeetupEventController::class, 'star_meetup_list']);
-    Route::get('/star/add_meetup', [MeetupEventController::class, 'star_add_meetup']);
+    Route::post('/star/add_meetup', [MeetupEventController::class, 'star_add_meetup']);
     Route::get('/star/meetup_event/details/{slug}', [MeetupEventController::class, 'details']);
     Route::get('/star/meetup_event/set_approve/{id}', [MeetupEventController::class, 'set_approve']);
+    Route::get('/star/rejectMeetup/{id}', [MeetupEventController::class, 'set_reject']);
     Route::post('/star/meetup_event/edit/{id}', [MeetupEventController::class, 'star_edit']);
 
     Route::get('/star/live_chat/count', [LiveChatController::class, 'count2']);
@@ -590,6 +621,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/promoVideo/all', [PromoVideoController::class, 'starPromovideoAll']);
     Route::post('/star/promoVideo/store', [PromoVideoController::class, 'starPromovideoStore']);
     Route::get('/star/promoVideo/pending', [PromoVideoController::class, 'starPromopendingVideos']);
+    Route::get('/star/promoVideo/reject', [PromoVideoController::class, 'starPromoRejectedVideos']);
     Route::get('/star/promoVideo/edit/{id}', [PromoVideoController::class, 'edit']);
     Route::post('/star/promoVideo/update', [PromoVideoController::class, 'update']);
     Route::get('/star/promoVideo/pending/{id}', [PromoVideoController::class, 'starVideosDetails']);
@@ -711,6 +743,8 @@ Route::post('/user/selected/category/store', [CategoryController::class, 'select
 Route::post('/user/selected/subcategory/store', [CategoryController::class, 'selectedSubCategoryStore']);
 Route::post('/user/selected/starcategory/store', [CategoryController::class, 'selectedStarCategoryStore']);
 Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
+
+Route::get('/user/star-details/{id}', [StarAuthController::class, 'star_details']);
 
 
 Route::post('select_category', [CategoryController::class, 'select_category']);

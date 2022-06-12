@@ -17,7 +17,7 @@ class CreateLearningSessionEvaluationsTable extends Migration
             $table->id();
             $table->integer('event_id')->nullable();
             $table->integer('user_id')->nullable();
-            $table->integer('total_mark')->default(0);
+            $table->double('total_mark',8,2)->default(0);
             $table->integer('status')->default(0);
             $table->timestamps();
         });

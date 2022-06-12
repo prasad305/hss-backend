@@ -7,6 +7,7 @@ use App\Models\Auction;
 use App\Models\Bidding;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class AuctionController extends Controller
@@ -53,49 +54,92 @@ class AuctionController extends Controller
 
     public function update(Request $request, $id)
     {
-        $product = Auction::findOrFail($id);
-        $product->fill($request->except('_token'));
-
-        $product->title = $request->input('title');
-        $product->details = $request->input('details');
-
-        // $meetup->event_link= $request->input('event_link');
-        // $meetup->meetup_type = $request->input('meetup_type');
-        // $meetup->date = $request->input('date');
-        // $meetup->start_time = $request->input('start_time');
-        // $meetup->end_time = $request->input('end_time');
-        // $meetup->venue = $request->input('venue');
-
-        if ($request->hasfile('product_image')) {
-
-            // $destination = $meetup->image;
-            // if (File::exists($destination)) {
-            //     File::delete($destination);
-            // }
-
-            $file = $request->file('product_image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/auction/' . time() . '.' . $extension;
-
-            Image::make($file)->resize(900, 400)->save($filename, 50);
-            $product->product_image = $filename;
-        }
 
 
-        try {
-            $product->update();
-            if ($product) {
+            $request->validate([
+    
+                    'title' => 'required',
+                    'details' => 'required',
+        
+        
+                ],[
+                    'title.required' => 'Title Field Is Required',
+                    'details.required' => 'Description Field Is Required',
+        
+                ]);
+                $product = Auction::findOrFail($id);
+
+                if ($request->hasfile('product_image')) {
+
+                    $destination = $product->product_image;
+                    if (File::exists($destination)) {
+                        File::delete($destination);
+                    }
+        
+                    $file = $request->file('product_image');
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = 'uploads/images/auction/' . time() . '.' . $extension;
+        
+                    Image::make($file)->resize(900, 400)->save($filename, 50);
+                    $product->product_image = $filename;
+                }
+
+                $product->title = $request->input('title');
+                 $product->details = $request->input('details');
+
+           try {
+
+               $product->update();
+            
                 return response()->json([
                     'success' => true,
-                    'message' => 'Updated Successfully'
+                    'message' => 'Description Updated Successfully'
                 ]);
-            }
+            
         } catch (\Exception $exception) {
             return response()->json([
                 'type' => 'error',
                 'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
             ]);
         }
+        
+
+        // $product = Auction::findOrFail($id);
+        // $product->fill($request->except('_token'));
+
+        // $product->title = $request->input('title');
+        // $product->details = $request->input('details');
+
+        // if ($request->hasfile('product_image')) {
+
+        //     // $destination = $meetup->image;
+        //     // if (File::exists($destination)) {
+        //     //     File::delete($destination);
+        //     // }
+
+        //     $file = $request->file('product_image');
+        //     $extension = $file->getClientOriginalExtension();
+        //     $filename = 'uploads/images/auction/' . time() . '.' . $extension;
+
+        //     Image::make($file)->resize(900, 400)->save($filename, 50);
+        //     $product->product_image = $filename;
+        // }
+
+
+        // try {
+        //     $product->update();
+        //     if ($product) {
+        //         return response()->json([
+        //             'success' => true,
+        //             'message' => 'Updated Successfully'
+        //         ]);
+        //     }
+        // } catch (\Exception $exception) {
+        //     return response()->json([
+        //         'type' => 'error',
+        //         'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+        //     ]);
+        // }
     }
 
     public function set_publish($id)

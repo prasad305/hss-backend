@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\QnA;
 use App\Models\QnaRegistration;
 use App\Models\SuperStar;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -32,7 +33,7 @@ class QnaController extends Controller
     public function published()
     {
         $upcommingEvent = QnA::where([
-            ['status', 1]
+            ['status', 2]
         ])->latest()->latest()->get();
 
         return view('ManagerAdmin.QnA.index', compact('upcommingEvent'));
@@ -40,7 +41,7 @@ class QnaController extends Controller
 
     public function all()
     {
-        $upcommingEvent = QnA::where('category_id',auth()->user()->category_id)->where('status',1)->orWhere('star_approval',1)->latest()->get();
+        $upcommingEvent = QnA::where('category_id',auth()->user()->category_id)->where([['star_approval',1],['status','<',10]])->latest()->get();
 
         return view('ManagerAdmin.QnA.index', compact('upcommingEvent'));
     }
@@ -51,21 +52,25 @@ class QnaController extends Controller
 
         $allRegistered = collect(QnaRegistration::with('user')->where('qna_id',$id)->orderBy('id','DESC')->get());
         $registered = $allRegistered->unique('user_id');
-        
+
         $totalRegistered = QnaRegistration::where('qna_id',$id)->orderBy('id','DESC')->distinct('user_id')->count();
 
         return view('ManagerAdmin.QnA.details', compact(['event','totalRegistered','registered']));
     }
 
 
-    public function manager_event_set_publish($id)
+    public function manager_event_set_publish(Request $request, $id)
     {
-        $event = QnA::with('star','admin')->find($id);
+        $event = QnA::find($id);
 
-        if ($event->status != 1) {
-            $event->status = 1;
+        if ($event->status != 2) {
+            $request->validate([
+                'post_start_date' => 'required',
+                'post_end_date' => 'required',
+            ]);
+
+            $event->status = 2;
             $event->update();
-
             $starCat = SuperStar::where('star_id', $event->star_id)->first();
 
             // Create New post //
@@ -73,23 +78,19 @@ class QnaController extends Controller
             $post->type = 'qna';
             $post->user_id = $event->star_id;
             $post->event_id = $event->id;
-            $post->title = $event->title;
-            $post->details = $event->description;
-            $post->status = 1;
-            $post->category_id=$starCat->category_id;
-            $post->sub_category_id=$starCat->sub_category_id;
-
+            $post->category_id = $starCat->category_id;
+            $post->sub_category_id = $starCat->sub_category_id;
+            $post->post_start_date = Carbon::parse($request->post_start_date);
+            $post->post_end_date = Carbon::parse($request->post_end_date);
             $post->save();
-        } else {
-            $event->status = 0;
-            $event->update();
 
+        } else {
+            $event->status = 10;
+            $event->update();
             // Remove post //
             $post = Post::where('event_id', $id)->first();
             $post->delete();
         }
-
-
 
         return redirect()->back()->with('success', 'Published');
     }
@@ -103,6 +104,22 @@ class QnaController extends Controller
 
     public function update(Request $request, $id)
     {
+
+
+        $request->validate([
+
+            'title' => 'required',
+            'description' => 'required',
+            'instruction' => 'required',
+
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'instruction.required' => 'Instruction Field Is Required',
+
+        ]);
+
         $qnA = QnA::findOrFail($id);
         $qnA->fill($request->except('_token'));
 
@@ -118,10 +135,10 @@ class QnaController extends Controller
         // $qnA->total_seat = $request->input('slots');
 
         if ($request->hasfile('banner')) {
-            // $destination = $qnA->banner;
-            // if (File::exists($destination)) {
-            //     File::delete($destination);
-            // }
+            $destination = $qnA->banner;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
             $file = $request->file('banner');
             $extension = $file->getClientOriginalExtension();
             $filename = 'uploads/images/qna/' . time() . '.' . $extension;
@@ -131,12 +148,12 @@ class QnaController extends Controller
         }
         if ($request->hasfile('video')) {
 
-            // $destination = $qnA->video;
-            // if (File::exists($destination)) {
-            //     File::delete($destination);
-            // }
+            $destination = $qnA->video;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
             if ($request->hasFile('video')) {
-    
+
                 $file        = $request->file('video');
                 $path        = 'uploads/videos/qna';
                 $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
