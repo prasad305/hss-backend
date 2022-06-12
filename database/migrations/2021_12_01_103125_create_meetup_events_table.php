@@ -18,10 +18,11 @@ class CreateMeetupEventsTable extends Migration
             $table->unsignedBigInteger('created_by_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('admin_id')->nullable();
             $table->string('meetup_type')->nullable();
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
-            $table->date('date')->nullable();
+            $table->date('event_date')->nullable();
             $table->text('event_link')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
@@ -30,15 +31,11 @@ class CreateMeetupEventsTable extends Migration
             $table->string('venue')->nullable();
             $table->integer('total_seat')->nullable();
             $table->string('banner')->nullable();
-            $table->integer('participant_number')->nullable();
             $table->string('video')->nullable();
             $table->time('reg_start_date')->nullable();
             $table->time('reg_end_date')->nullable();
             $table->float('fee')->nullable();
-            $table->boolean('star_approval')->default(0)->comment('0 = pending, 1 = approved');
-            $table->boolean('manager_approval')->default(0)->comment('0 = pending, 1 = approved');
-            $table->boolean('status')->default(0)->comment('0 = deactive, 1 = active');
-            $table->unsignedBigInteger('total_amount')->nullable();
+            $table->integer('status')->default(0)->comment('0 = pending, 1 = star_approval, 2 = posted by Manager Admin, 9 = completed, 10 = remove/delete, 11 = rejeced by Star, 22 = rejected by Manager Admin');
             $table->timestamps();
         });
     }
