@@ -10,6 +10,7 @@ use App\Models\LearningSessionRegistration;
 use App\Models\MeetupEventRegistration;
 use App\Models\LiveChatRegistration;
 use App\Models\LiveChat;
+use App\Models\SuperStar;
 //use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -330,6 +331,7 @@ class AuthController extends Controller
     {
         $user = User::find($id);
         $user_info = UserInfo::where('user_id', $user->id)->first();
+        $star_details = SuperStar::where('star_id', $user->id)->first();
 
         if (empty($user_info)) {
             $user_info = new UserInfo;
@@ -338,7 +340,8 @@ class AuthController extends Controller
         return response()->json([
             'status' => 200,
             'users' => $user,
-            'info' => $user_info
+            'info' => $user_info,
+            'star_details' => $star_details
         ]);
     }
 

@@ -139,7 +139,7 @@ class PromoVideoController extends Controller
     public function pendingVideos()
     {
 
-        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('admin_id', auth()->user()->id)->where('status', 0)->get();
+        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('admin_id', auth()->user()->id)->where([['status', 0]])->get();
 
 
         return response()->json([
@@ -160,10 +160,22 @@ class PromoVideoController extends Controller
 
         ]);
     }
+
+    public function rejectVideos()
+    {
+
+        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('admin_id', auth()->user()->id)->where([['star_approval', 2]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'promoVideos' => $promoVideos,
+
+        ]);
+    }
     public function promoVideoCount()
     {
 
-        $pendingTotal = PromoVideo::where('admin_id', auth()->user()->id)->where('status', 0)->count();
+        $pendingTotal = PromoVideo::where('admin_id', auth()->user()->id)->where([['status', 0],['star_approval',0]]) ->count();
         $liveTotal = PromoVideo::where('admin_id', auth()->user()->id)->where('status', 1)->count();
 
         return response()->json([
@@ -251,6 +263,18 @@ class PromoVideoController extends Controller
             'promoVideos' => $promoVideos,
         ]);
     }
+    public function starPromoRejectedVideos()
+    {
+
+        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('star_id', auth()->user()->id)->where('star_approval', 2)->get();
+
+
+        return response()->json([
+            'status' => 200,
+            'promoVideos' => $promoVideos,
+        ]);
+    }
+
     public function starPromoliveVideos()
     {
 

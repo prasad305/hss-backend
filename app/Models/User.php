@@ -68,7 +68,7 @@ class User extends Authenticatable
 
 
     //Relation For API
-    protected $with = ['userInfo', 'admin','star','category','subCategory'];
+    protected $with = ['userInfo', 'admin','star.starDetails','category','subCategory'];
 
 
     public function admin()
@@ -76,15 +76,19 @@ class User extends Authenticatable
         return $this->hasOne(User::class, 'parent_user');
     }
 
-    // public function starDetails()
-    // {
-    //     return $this->hasOne(SuperStar::class, 'star_id');
-    // }
+    public function starDetails()
+    {
+        return $this->hasOne(SuperStar::class, 'star_id');
+    }
 
     public function star()
     {
         return $this->hasOne(User::class, 'parent_user');
     }
+    // public function starInfo()
+    // {
+    //     return $this->hasOne(SuperStar::class, 'star_id');
+    // }
 
 
     public function userInfo()

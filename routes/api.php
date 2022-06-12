@@ -187,6 +187,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //Event Registaion By User (Learning Session + Live Chat + Greeting + Meetup Event)
     Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
     Route::post('/user/learning-session/video-upload', [UserController::class, 'uploadLearningSessionVideo']);
+    Route::post('/user/learning-session/saveCertificateInfo', [UserController::class, 'saveCertificateInfo']);
+    Route::get('/user/greeting-leraning-certificate/{event_id}', [UserController::class, 'getCertificateData']);
 
     //use this api on react project file path- \src\components\Pages\Profile\profile-components\starProfile\StarChat
     Route::post('/user/liveChat/register', [UserController::class, 'liveChatRigister']);
@@ -421,6 +423,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/promoVideo/update', [PromoVideoController::class, 'adminUpdate']);
     Route::get('/admin/promoVideo/pending', [PromoVideoController::class, 'pendingVideos']);
     Route::get('/admin/promoVideo/live', [PromoVideoController::class, 'liveVideos']);
+    Route::get('/admin/promoVideo/reject', [PromoVideoController::class, 'rejectVideos']);
     Route::get('/admin/promoVideo/count', [PromoVideoController::class, 'promoVideoCount']);
     //Category
     Route::get('/admin/view-category', [CategoryController::class, 'index']);
@@ -600,6 +603,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/promoVideo/all', [PromoVideoController::class, 'starPromovideoAll']);
     Route::post('/star/promoVideo/store', [PromoVideoController::class, 'starPromovideoStore']);
     Route::get('/star/promoVideo/pending', [PromoVideoController::class, 'starPromopendingVideos']);
+    Route::get('/star/promoVideo/reject', [PromoVideoController::class, 'starPromoRejectedVideos']);
     Route::get('/star/promoVideo/edit/{id}', [PromoVideoController::class, 'edit']);
     Route::post('/star/promoVideo/update', [PromoVideoController::class, 'update']);
     Route::get('/star/promoVideo/pending/{id}', [PromoVideoController::class, 'starVideosDetails']);
@@ -721,6 +725,8 @@ Route::post('/user/selected/category/store', [CategoryController::class, 'select
 Route::post('/user/selected/subcategory/store', [CategoryController::class, 'selectedSubCategoryStore']);
 Route::post('/user/selected/starcategory/store', [CategoryController::class, 'selectedStarCategoryStore']);
 Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
+
+Route::get('/user/star-details/{id}', [StarAuthController::class, 'star_details']);
 
 
 Route::post('select_category', [CategoryController::class, 'select_category']);

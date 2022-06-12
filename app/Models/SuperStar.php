@@ -18,6 +18,7 @@ class SuperStar extends Model
         'description',
         'qr_code',
         'agreement',
+        'signature',
         'status',
     ];
 
