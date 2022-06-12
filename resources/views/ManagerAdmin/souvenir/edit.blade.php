@@ -9,13 +9,13 @@
          </div>
     </div>
 
-    <div class="row form-group">
+    <!-- <div class="row form-group">
         <div class="col-md-12">
               <label for="first_name">Price</label>
               <input type="text" class="form-control" id="price" name="price" placeholder="Enter Price" value="{{$event->price }}">
               <span id="price_error" class="text-danger"></span>
          </div>
-    </div>
+    </div> -->
 
 
     <div class="form-group row">
@@ -34,7 +34,7 @@
           <textarea id="summernote2" name="instruction">
             {!! $event->instruction !!}
           </textarea>
-          <span class="text-danger" id="terms_conditions_error"></span>
+          <span class="text-danger" id="instruction_error"></span>
         </div>
     </div>
 

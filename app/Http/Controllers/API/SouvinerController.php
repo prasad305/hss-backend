@@ -164,7 +164,7 @@ class SouvinerController extends Controller
 
     public function getUserSouvenir($starId){
 
-        $getSouviner = SouvenirCreate::where('star_id', $starId)->first();
+        $getSouviner = SouvenirCreate::where('star_id', $starId)->where('status', 1)->first();
 
         if($getSouviner){
             return response()->json([
@@ -270,6 +270,7 @@ class SouvinerController extends Controller
             'getSouviner' => $getSouviner,
         ]);
     }
+
     public function souvinerStarApprove($id){
 
         $souviner = SouvenirCreate::find($id);
@@ -281,6 +282,7 @@ class SouvinerController extends Controller
             'message' => 'Souvenir Approved Successfully',
         ]);
     }
+
     public function souvinerStarDecline($id){
 
         $souviner = SouvenirCreate::find($id);
@@ -366,18 +368,6 @@ class SouvinerController extends Controller
 
     // User Apply Souvenir
     public function applyUserSouvenir(Request $request, $starId){
-        // // $table->string('name')->nullable();
-        // // $table->integer('country_id')->nullable();
-        // // $table->integer('state_id')->nullable();
-        // // $table->integer('city_id')->nullable();
-        // $table->integer('souvenir_id')->nullable();
-        // $table->text('description')->nullable();
-        // $table->integer('user_id')->nullable();
-        // $table->integer('star_id')->nullable();
-        // $table->integer('admin_id')->nullable();
-        // $table->string('image')->nullable();
-        // // $table->string('area')->nullable();
-        // $table->string('mobile_no')->nullable();
 
         $validator = Validator::make($request->all(),[
             'name' => 'required',
@@ -454,6 +444,59 @@ class SouvinerController extends Controller
         return response()->json([
             'status' => 200,
             'registerSouvenir' => $registerSouvenir,
+        ]);
+    }
+    public function starRegisterUserSouvenirList(){
+        $star = auth('sanctum')->user()->id;
+
+        $registerSouvenir = SouvenirApply::where('star_id', $star)->where('status', 0)->latest()->get();
+
+        return response()->json([
+            'status' => 200,
+            'registerSouvenir' => $registerSouvenir,
+        ]);
+    }
+
+    public function activitiesUserSouvenir(){
+        $user = auth('sanctum')->user()->id;
+
+        $userSouvenir = SouvenirApply::where('user_id', $user)->latest()->get();
+
+        return response()->json([
+            'status' => 200,
+            'userSouvenir' => $userSouvenir,
+        ]);
+    }
+
+    public function registerSouvenirApprove($id){
+
+        $registerSouvenir = SouvenirApply::find($id);
+        $registerSouvenir->status = 1;
+        $registerSouvenir->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Souvenir Approve Successfully'
+        ]);
+    }
+    public function registerSouvenirDecline($id){
+
+        $registerSouvenir = SouvenirApply::find($id);
+        $registerSouvenir->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Souvenir Declined Successfully'
+        ]);
+    }
+
+    public function registerSouvenirView($id){
+
+        $souvinerView = SouvenirApply::find($id);
+
+        return response()->json([
+            'status' => 200,
+            'souvinerView' => $souvinerView,
         ]);
     }
 

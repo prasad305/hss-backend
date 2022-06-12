@@ -228,6 +228,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('souvenir/all', [SouvenirController::class, 'all'])->name('souvenir.all');
     Route::get('souvenir/details/{id}', [SouvenirController::class, 'details'])->name('souvenir.details');
     Route::get('souvenir/edit/{id}', [SouvenirController::class, 'edit'])->name('souvenir.edit');
+    Route::get('souvenir/apply/show', [SouvenirController::class, 'showApplySouvenir'])->name('souvenir.showApply');
     Route::put('souvenir/update/{id}', [SouvenirController::class, 'update'])->name('souvenir.update');
     Route::get('souvenir/set_publish/{id}', [SouvenirController::class, 'set_publish'])->name('souvenir.set_publish');
 

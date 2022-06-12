@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\SouvenirCreate;
+use App\Models\SouvenirApply;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Carbon\Carbon;
@@ -58,7 +59,6 @@ class SouvenirController extends Controller
             'title' => 'required',
             'description' => 'required',
             'instruction' => 'required',
-            'price' => 'required',
 
         ]);
 
@@ -69,7 +69,6 @@ class SouvenirController extends Controller
         $souvenir->slug = Str::slug($request->input('title').'-'.rand(9999,99999));
         $souvenir->description = $request->input('description');
         $souvenir->instruction = $request->input('instruction');
-        $souvenir->price = $request->input('price');
 
 
         // if ($request->hasfile('image')) {
@@ -146,7 +145,14 @@ class SouvenirController extends Controller
         }
 
         return redirect()->back()->with('success', 'Published');
+    }
 
+    public function showApplySouvenir()
+    {
+        $applySouvenir = SouvenirApply::where('category_id', auth('sanctum')->user()->category_id)
+                                        ->latest()
+                                        ->get();
 
+        return view('ManagerAdmin.souvenir.show-apply', compact('applySouvenir'));
     }
 }

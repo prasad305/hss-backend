@@ -19,11 +19,11 @@ class CreateSouvenirCreatesTable extends Migration
             $table->string('slug')->nullable();
             $table->integer('category_id')->nullable();
             $table->integer('sub_category_id')->nullable();
-            $table->text('description')->nullable();
-            $table->text('instruction')->nullable();
+            $table->longText('description')->nullable();
+            $table->longText('instruction')->nullable();
             $table->float('price')->nullable();
-            $table->integer('admin_id')->nullable();
-            $table->integer('star_id')->nullable();
+            $table->unsignedBigInteger('admin_id')->nullable();
+            $table->unsignedBigInteger('star_id')->nullable();
             $table->string('banner')->nullable();
             $table->string('video')->nullable();
             $table->integer('approval_status')->default(0)->comment('0 = admin approval , 1 = star approval');

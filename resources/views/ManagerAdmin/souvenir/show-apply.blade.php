@@ -45,39 +45,45 @@
                     <thead>
                         <tr>
                             <th>SL</th>
-                            <th>Title</th>
+                            <th>User Name</th>
                             <th>Image</th>
-                            <th>Items</th>
-                            <th>Unit Price</th>
-                            <th>Total Price</th>
-                            <th>Phone</th>
-                            <th>Status</th>
-                            <th style="width: 150px">Action</th>
+                            <th>Mobile No</th>
+                            <th>Area</th>
+                            <th>Star Name</th>
+                            <th>Apply Date</th>
+                            <!-- <th>Status</th> -->
+                            <!-- <th style="width: 150px">Action</th> -->
                         </tr>
                     </thead>
                     <tbody>
 
-                        @foreach ($orders as $key => $data)
+                        @foreach ($applySouvenir as $key => $data)
                             <tr>
                                 <td>{{ ++$key }}</td>
-                                <td>{{ $data->marketplace->title }}</td>
+                                <td>{{ $data->name }}</td>
                                 <td>
-                                    <img src="{{ asset($data->marketplace->image) }}" style="height: 60px; border-radius: 67%; border: 2px solid #90fd00;" alt="">
+                                    <img src="{{ asset($data->image) }}" style="height: 60px; border-radius: 67%; border: 2px solid #90fd00;" alt="">
                                 </td>
-                                <td>{{ $data->items }}</td>
-                                <td>{{ $data->unit_price }}</td>
-                                <td>{{ $data->total_price }}</td>
-                                <td>{{ $data->phone }}</td>
-                                <td>
+                                <td>{{ $data->mobile_no }}</td>
+                                <td>{{ $data->area }}, {{ $data->city->name }}
+                                    <br>
+                                    {{ $data->state->name }}, {{ $data->country->name }}
+                                </td>
+                                <td>{{ $data->star->first_name }} {{ $data->star->last_name }}
+                                    <br>
+                                    {{ $data->star->phone }}
+                                </td>
+                                <td>{{ $data->created_at->diffForHumans() }}</td>
+                                <!-- <td>
                                   @if($data->status == 0)
                                   <span class="badge badge-danger" style="width: 70px;">Pending</span>
                                   @elseif($data->status == 1)
-                                  <span class="badge badge-primary" style="width: 70px;">Received</span>
+                                  <span class="badge badge-primary" style="width: 70px;">Approved for Payment</span>
                                   @else
-                                  <span class="badge badge-success" style="width: 70px;">Delivery</span>
+                                  <span class="badge badge-success" style="width: 70px;">Payment Send</span>
                                   @endif
-                                </td>
-                                
+                                </td> -->
+<!--                                 
                                 <td style="width: 150px">
                                     <a href="{{ route('managerAdmin.marketplace.allOrderDetails', $data->id) }}" class="btn btn-sm btn-info"><i class="fa fa-eye text-white"></i></a>
                                         {{-- @if ($data->status == 0)
@@ -89,7 +95,7 @@
                                                 <i class="fa fa-close"></i>
                                             </button>
                                         @endif --}}
-                                </td>
+                                </td> -->
                             </tr>
 
 

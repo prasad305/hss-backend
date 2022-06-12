@@ -312,6 +312,12 @@
                         <p>All</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.souvenir.showApply') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Register List</p>
+                    </a>
+                </li>
             </ul>
         </li>
 

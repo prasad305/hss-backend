@@ -16,15 +16,15 @@ class CreateSouvenirAppliesTable extends Migration
         Schema::create('souvenir_applies', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->integer('category_id')->nullable();
-            $table->integer('country_id')->nullable();
-            $table->integer('state_id')->nullable();
-            $table->integer('city_id')->nullable();
-            $table->integer('souvenir_id')->nullable();
-            $table->text('description')->nullable();
-            $table->integer('user_id')->nullable();
-            $table->integer('star_id')->nullable();
-            $table->integer('admin_id')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('country_id')->nullable();
+            $table->unsignedBigInteger('state_id')->nullable();
+            $table->unsignedBigInteger('city_id')->nullable();
+            $table->unsignedBigInteger('souvenir_id')->nullable();
+            $table->longText('description')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('star_id')->nullable();
+            $table->unsignedBigInteger('admin_id')->nullable();
             $table->string('image')->nullable();
             $table->string('area')->nullable();
             $table->string('mobile_no')->nullable();
