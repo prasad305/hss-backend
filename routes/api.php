@@ -422,6 +422,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/promoVideo/edit/{id}', [PromoVideoController::class, 'adminEdit']);
     Route::post('/admin/promoVideo/update', [PromoVideoController::class, 'adminUpdate']);
     Route::get('/admin/promoVideo/pending', [PromoVideoController::class, 'pendingVideos']);
+    Route::get('/admin/promoVideo/{promo_id}', [PromoVideoController::class, 'videoDetails']);
     Route::get('/admin/promoVideo/live', [PromoVideoController::class, 'liveVideos']);
     Route::get('/admin/promoVideo/reject', [PromoVideoController::class, 'rejectVideos']);
     Route::get('/admin/promoVideo/count', [PromoVideoController::class, 'promoVideoCount']);

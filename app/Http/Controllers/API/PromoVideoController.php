@@ -46,7 +46,7 @@ class PromoVideoController extends Controller
                 'admin_id' => auth()->user()->id,
                 'star_id' => $request->star_id,
                 'title' => $request->title,
-                'star_approval' => 0,
+                'status' => 0,
             ]);
 
             if ($request->hasFile('video_url')) {
@@ -138,13 +138,19 @@ class PromoVideoController extends Controller
 
     public function pendingVideos()
     {
-
-        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('admin_id', auth()->user()->id)->where([['status', 0]])->get();
-
-
+        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('admin_id', auth()->user()->id)->where('status',0)->get();
         return response()->json([
             'status' => 200,
             'promoVideos' => $promoVideos,
+        ]);
+    }
+
+    public function videoDetails($promo_id)
+    {
+        $promoVideo = PromoVideo::find($promo_id);
+        return response()->json([
+            'status' => 200,
+            'promoVideo' => $promoVideo,
         ]);
     }
 
@@ -175,7 +181,7 @@ class PromoVideoController extends Controller
     public function promoVideoCount()
     {
 
-        $pendingTotal = PromoVideo::where('admin_id', auth()->user()->id)->where([['status', 0],['star_approval',0]]) ->count();
+        $pendingTotal = PromoVideo::where('admin_id', auth()->user()->id)->where('status',0) ->count();
         $liveTotal = PromoVideo::where('admin_id', auth()->user()->id)->where('status', 1)->count();
 
         return response()->json([
