@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 // Authentication API
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('user_authentication', [AuthController::class, 'user_authentication']);
 Route::post('logout', [AuthController::class, 'logout']);
 
 // OTP Verification API

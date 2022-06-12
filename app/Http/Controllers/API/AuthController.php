@@ -120,6 +120,61 @@ class AuthController extends Controller
         }
     }
 
+
+    public function user_authentication(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'username' => 'required',
+            'password' => 'required|min:4'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $user = User::where('username', $request->username)->first();
+
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'Invalid Credantials',
+                ]);
+            } else {
+                if ($user->user_type == 'user') {
+                    $token = $user->createToken($user->email . '_UserToken', ['server:user'])->plainTextToken;
+                    $role = 1;
+                } else if ($user->user_type == 'admin' && $user->status == 1) {
+                    $token = $user->createToken($user->email . '_AdminToken', ['server:admin'])->plainTextToken;
+                    $role = 8;
+                } else if ($user->user_type == 'star' && $user->status == 1) {
+                    $token = $user->createToken($user->email . '_StarToken', ['server:star'])->plainTextToken;
+                    $role = 7;
+                } else if ($user->user_type == null) {
+                    $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
+                    $role = 0;
+                } else {
+                    $token = $user->createToken($user->email . '_Token', [''])->plainTextToken;
+                    $role = 0;
+                }
+
+                return response()->json([
+                    'status' => 200,
+                    'email' => $user->email,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                    'id' => $user->id,
+                    'user_type' => $user->user_type,
+                    'token' => $token,
+                    'role' => $role,
+                    'user' => $user,
+                    'message' => 'Logged In Successfully',
+                ]);
+            }
+        }
+    }
+
+
+
     public function verify_user(Request $request)
     {
         $user = User::find(auth('sanctum')->user()->id);
