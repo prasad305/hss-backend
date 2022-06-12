@@ -17,6 +17,8 @@ class CreateSouvenirCreatesTable extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
+            $table->integer('category_id')->nullable();
+            $table->integer('sub_category_id')->nullable();
             $table->text('description')->nullable();
             $table->text('instruction')->nullable();
             $table->float('price')->nullable();

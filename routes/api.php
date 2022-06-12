@@ -216,6 +216,10 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/coverUpdate/{id}', [UserController::class, 'updateCover']);
     Route::post('/user/profileUpdate/{id}', [UserController::class, 'updateProfile']);
 
+    // Souviner Section
+    Route::get('/user/souviner/view/{starId}', [SouvinerController::class, 'getUserSouvenir']);
+    Route::post('/user/souvenir/apply/store/{starId}', [SouvinerController::class, 'applyUserSouvenir']);
+
     // User Photos
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
 
@@ -282,6 +286,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/souviner/update/{id}', [SouvinerController::class, 'souvinerUpdate']);
     Route::get('/admin/souviner/view/{id}', [SouvinerController::class, 'souvinerView']);
     Route::get('/admin/souviner/check', [SouvinerController::class, 'souvinerCheck']);
+    Route::get('/admin/souvenir/register/list', [SouvinerController::class, 'registerUserSouvenirList']);
     // Route::get('/admin/souviner/product-list/approved', [SouvinerController::class, 'allProductList']);
     // Route::get('/admin/souviner/product-list/pending', [SouvinerController::class, 'pendingProductList']);
 
@@ -480,6 +485,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     // Souviner Section
     Route::post('/star/souviner/store', [SouvinerController::class, 'souvinerStarStore']);
     Route::get('/star/souviner/check', [SouvinerController::class, 'souvinerStarCheck']);
+    Route::get('/star/souviner/edit/{id}', [SouvinerController::class, 'souvinerStarEdit']);
+    Route::post('/star/souviner/update/{id}', [SouvinerController::class, 'souvinerStarUpdate']);
     Route::post('/star/souviner/approve/{id}', [SouvinerController::class, 'souvinerStarApprove']);
     Route::post('/star/souviner/decline/{id}', [SouvinerController::class, 'souvinerStarDecline']);
 
