@@ -31,6 +31,7 @@ use App\Models\ChoiceList;
 use App\Models\GreetingType;
 use App\Models\InterestType;
 use App\Models\LearningSessionAssignment;
+use App\Models\LearningSessionCertificate;
 use App\Models\LearningSessionEvaluation;
 use App\Models\LiveChatRoom;
 use App\Models\Message;
@@ -205,10 +206,13 @@ class UserController extends Controller
             return $query->where('user_id',auth()->user()->id)->get();
         }])->first();
 
+        $userLearningSession = LearningSessionRegistration::where([['learning_session_id',$learnigSession->id],['user_id',auth()->user()->id]])->first();
+
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
             'learnigSession' => $learnigSession,
+            'userLearningSession' => $userLearningSession,
         ]);
     }
 
@@ -1529,5 +1533,60 @@ class UserController extends Controller
                 'learningSession' => $learning_session,
             ]);
         }
+    }
+
+    public function saveCertificateInfo(Request $request)
+    {
+        // return $request->all();
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'father_name' => 'required',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $user = User::find(auth('sanctum')->user()->id);
+
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'Invalid Credantials',
+                ]);
+            } else {
+                $learning_session = LearningSession::find($request->event_id);
+           
+                if ($learning_session) {
+                    $certificate =  LearningSessionCertificate::where([['event_id',$request->event_id],['user_id',auth()->user()->id]])->first();
+                    if (empty($certificate)) {
+                        $certificate = new LearningSessionCertificate();
+                    }
+                    $certificate->event_id = $request->event_id;
+                    $certificate->user_id = auth()->user()->id;
+                    $certificate->name = $request->name;
+                    $certificate->father_name = $request->father_name;
+                    $certificate->save();
+                }
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Certificate Data Upload Successfully!',
+                    'learningSession' => $learning_session,
+                ]);
+            }
+            
+            
+        }
+    }
+
+    public function getCertificateData($event_id){
+        $certificate = LearningSessionCertificate::where([['event_id',$event_id],['user_id',auth()->user()->id]])->first();
+        return response()->json([
+            'status' => 200,
+            'certificateData' => $certificate,
+        ]);
     }
 }

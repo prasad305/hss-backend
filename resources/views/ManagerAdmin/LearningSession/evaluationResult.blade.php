@@ -102,17 +102,13 @@ Manager Admin
                             <th>SL</th>
                             <th>User Name</th>
                             <th>Videos</th>
+                            <th>Send To User</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @if ($rejected_videos->assignments[0]) --}}
                         @foreach ($rejected_videos as $key => $rejected)
-                        {{-- <tr>
-                            <td colspan="5" class="text-center">No Rjected Video Found!!</td>
-                        </tr> --}}
                         @if (count($rejected->assignments) > 0)
-                           
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $rejected->user ? $rejected->user->first_name.' '.$rejected->user->last_name : '' }}</td>
@@ -125,17 +121,12 @@ Manager Admin
                                     @endforeach
                                 @endif
                             </td>
-
                             <td>
                                Rejected 
                             </td>
                         </tr>
-                      
                         @endif
-                      
                         @endforeach
-                          {{-- @endif --}}
-                        {{-- @endif --}}
                     </tbody>
                     <tfoot>
                         <tr>
