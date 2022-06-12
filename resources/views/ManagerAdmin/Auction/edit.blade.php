@@ -5,6 +5,7 @@
         <div class="col-md-12">
             <label for="first_name">Title</label>
             <input type="text" class="form-control" id="title" name="title" placeholder="Enter Admin First Name" value="{{$product->title }}">
+            <span class="text-danger" id="title_error"></span>
         </div>
     </div>
 
@@ -14,6 +15,7 @@
             <textarea id="summernote" name="details">
             {!! $product->details!!}
           </textarea>
+          <span class="text-danger" id="details_error"></span>
         </div>
     </div>
 
@@ -50,33 +52,21 @@
             processData: false,
             contentType: false,
             type: 'POST',
-            success: function(data) {
+            success: function(response) {
                 Swal.fire(
                     'Success!',
-                    data.message,
+                    response.message,
                     'success'
                 )
                 setTimeout(function() {
                     location.reload();
                 }, 1000);
-                console.log(data);
             },
-            error: function(data) {
-                console.log(data);
-                var errorMessage = '<div class="card bg-danger">\n' +
-                    '<div class="card-body text-center p-5">\n' +
-                    '<span class="text-white">';
-                $.each(data.responseJSON.errors, function(key, value) {
-                    errorMessage += ('' + value + '<br>');
+            error: function(response) {
+                // console.log(response);
+                $.each(response.responseJSON.errors, function(key, value) {
+                    ErrorMessage(key, value);
                 });
-                errorMessage += '</span>\n' +
-                    '</div>\n' +
-                    '</div>';
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    footer: errorMessage
-                })
             }
         });
 

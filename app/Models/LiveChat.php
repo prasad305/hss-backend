@@ -35,7 +35,7 @@ class LiveChat extends Model
 
     public function admin()
     {
-        return $this->belongsTo(User::class, 'created_by_id');
+        return $this->belongsTo(User::class, 'admin_id');
     }
 
     public function star()

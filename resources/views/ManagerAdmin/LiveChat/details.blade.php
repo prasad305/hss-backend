@@ -224,7 +224,7 @@
     <script>
         $(function() {
             $("#datepicker").datepicker({
-                minDate: "-100000D",
+                minDate: "<?php echo \Carbon\Carbon::now()->format('m/d/Y'); ?>",
                 maxDate: "<?php echo \Carbon\Carbon::parse($event->registration_start_date)->format('m/d/Y'); ?>"
             });
         });

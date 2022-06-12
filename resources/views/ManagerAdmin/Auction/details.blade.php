@@ -96,7 +96,10 @@ Manager Admin
             @elseif($product->status == 1)
             <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.auctionProduct.set_publish', [$product->id]) }}">Remove From Publish</a>
             @endif
+            @if ($product->status == 0)
+                
             <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Post','{{ route('managerAdmin.auctionProduct.edit', $product->id) }}')">Edit</a>
+            @endif
         </div>
 
 

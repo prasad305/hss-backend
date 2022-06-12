@@ -103,6 +103,22 @@ class QnaController extends Controller
 
     public function update(Request $request, $id)
     {
+
+
+        $request->validate([
+    
+            'title' => 'required',
+            'description' => 'required',
+            'instruction' => 'required',
+
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'instruction.required' => 'Instruction Field Is Required',
+
+        ]);
+
         $qnA = QnA::findOrFail($id);
         $qnA->fill($request->except('_token'));
 
@@ -118,10 +134,10 @@ class QnaController extends Controller
         // $qnA->total_seat = $request->input('slots');
 
         if ($request->hasfile('banner')) {
-            // $destination = $qnA->banner;
-            // if (File::exists($destination)) {
-            //     File::delete($destination);
-            // }
+            $destination = $qnA->banner;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
             $file = $request->file('banner');
             $extension = $file->getClientOriginalExtension();
             $filename = 'uploads/images/qna/' . time() . '.' . $extension;
@@ -131,10 +147,10 @@ class QnaController extends Controller
         }
         if ($request->hasfile('video')) {
 
-            // $destination = $qnA->video;
-            // if (File::exists($destination)) {
-            //     File::delete($destination);
-            // }
+            $destination = $qnA->video;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
             if ($request->hasFile('video')) {
     
                 $file        = $request->file('video');

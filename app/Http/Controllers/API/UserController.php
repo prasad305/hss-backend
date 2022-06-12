@@ -377,8 +377,7 @@ class UserController extends Controller
     }
     public function getStarQna($id)
     {
-        $livechats = QnA::orderBy('id', 'DESC')->where('star_id', $id)->get();
-
+        $livechats = Post::orderBy('id', 'DESC')->where('user_id', $id)->where('type', 'qna')->get();
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
@@ -404,7 +403,7 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
-            'livechats' => $post,
+            'posts' => $post,
         ]);
     }
 
@@ -991,7 +990,7 @@ class UserController extends Controller
         ]);
     }
     public function auction_instruction(){
-        
+
         $instruction = AuctionTerms::first();
 
         return response()->json([
