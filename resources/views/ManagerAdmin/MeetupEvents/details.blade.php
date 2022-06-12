@@ -65,7 +65,7 @@
                     <div class="row">
                         <div class="col-md-6 card py-3">
                             Date
-                            <h4 class="text-warning">{{ \Carbon\Carbon::parse($meetup->date)->format('d F,Y') }}</h4>
+                            <h4 class="text-warning">{{ \Carbon\Carbon::parse($meetup->event_date)->format('d F,Y') }}</h4>
                         </div>
                         <div class="col-md-6 card py-3">
                             Time
@@ -87,6 +87,7 @@
                                 <h3>{{ $meetup->star->first_name }} {{ $meetup->star->last_name }}</h3>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-xs-6 content-center mr-2">
                                 <img src="{{ asset($meetup->admin->image) }}" class="user_image"
@@ -99,6 +100,7 @@
                                 <h3>{{ $meetup->admin->first_name }} {{ $meetup->admin->last_name }}</h3>
                             </div>
                         </div>
+
                     </div>
 
                     <div class="card px-5 py-3">
@@ -233,7 +235,7 @@
 
         $(function() {
             $("#datepicker1").datepicker({
-                minDate: "<?php echo \Carbon\Carbon::parse($meetup->date)
+                minDate: "<?php echo \Carbon\Carbon::parse($meetup->event_date)
                     ->addDays(1)
                     ->format('m/d/Y'); ?>",
                 maxDate: "+100000D"
