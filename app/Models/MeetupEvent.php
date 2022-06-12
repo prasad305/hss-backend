@@ -13,6 +13,8 @@ class MeetupEvent extends Model
         'id',
         'created_by_id',
         'star_id',
+        'admin_id',
+        'category_id',
         'meetup_type',
         'title',
         'event_link',
