@@ -59,13 +59,13 @@
 
             <div class="row pt-3">
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="card py-3 p-2">
                         Fees
                         <h4 class="text-warning">$ {{ $event->fee }}</h4>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="card py-3 p-2">
                         Registration Date
                         <h4 class="text-warning"><h4 class="text-warning">{{ \Carbon\Carbon::parse($event->registration_start_date)->format('d F,Y') }} - {{ \Carbon\Carbon::parse($event->registration_start_date)->format('d F,Y') }}</h4></h4>
@@ -73,13 +73,13 @@
 
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="card py-3 p-2">
                         Event Date
-                        <h4 class="text-warning">{{ \Carbon\Carbon::parse($event->date)->format('d F,Y') }}</h4>
+                        <h4 class="text-warning">{{ \Carbon\Carbon::parse($event->event_date)->format('d F,Y') }}</h4>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="card py-3 p-2">
                         Event Time
                         <h4 class="text-warning">{{ \Carbon\Carbon::parse($event->start_time)->format('h:i A') }} -
@@ -87,7 +87,21 @@
                     </div>
 
                 </div>
+                <div class="col-md-2">
+                    <div class="card py-3 p-2">
+                        Minimum Time
+                        <h4 class="text-warning">{{$event->min_time}}</h4>
+                    </div>
 
+                </div>
+                <div class="col-md-2">
+                    <div class="card py-3 p-2">
+                        Maximum Time
+                        <h4 class="text-warning">{{$event->max_time}}</h4>
+                    </div>
+
+                </div>
+                
             </div>
         </div>
 
@@ -103,8 +117,10 @@
                     <a type="button" class="btn btn-outline-danger mr-2"
                         href="{{ route('managerAdmin.qna.set_publish', [$event->id]) }}">Remove From Publish</a>
                 @endif
+                @if ($event->status < 1)   
                 <a type="button" class="btn btn-outline-warning px-5"
                     onclick="Show('Edit QnA Event','{{ route('managerAdmin.qna.edit', $event->id) }}')">Edit</a>
+                @endif
             </div>
             <div class="col-md-6">
                 <div class="card px-5 py-3 mx-2">
@@ -130,6 +146,7 @@
             </div>
         </div>
 
+        @if ($event->status >= 1)
         <div class="row mt-5" >
             <div class="col-12">
             <div class="card">
@@ -181,6 +198,7 @@
 
             </div>
             </div>
+        @endif
     @if (session()->has('success'))
         <script type="text/javascript">
             $(document).ready(function() {

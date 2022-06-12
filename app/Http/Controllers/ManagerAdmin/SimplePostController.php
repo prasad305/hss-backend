@@ -51,25 +51,32 @@ class SimplePostController extends Controller
 
     public function update(Request $request, $id)
     {
+
+        $request->validate([
+    
+            'title' => 'required',
+            'description' => 'required',
+
+
+
+        ],[
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+
+        ]);
+
         $meetup = SimplePost::findOrFail($id);
         $meetup->fill($request->except('_token'));
 
         $meetup->title = $request->input('title');
         $meetup->description = $request->input('description');
 
-        // $meetup->event_link= $request->input('event_link');
-        // $meetup->meetup_type = $request->input('meetup_type');
-        // $meetup->date = $request->input('date');
-        // $meetup->start_time = $request->input('start_time');
-        // $meetup->end_time = $request->input('end_time');
-        // $meetup->venue = $request->input('venue');
-
         if ($request->hasfile('image')) {
 
-            // $destination = $meetup->image;
-            // if (File::exists($destination)) {
-            //     File::delete($destination);
-            // }
+            $destination = $meetup->image;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
 
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
@@ -83,10 +90,10 @@ class SimplePostController extends Controller
         
         if ($request->hasfile('video')) {
 
-            // $destination = $meetup->image;
-            // if (File::exists($destination)) {
-            //     File::delete($destination);
-            // }
+            $destination = $meetup->image;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
             if ($request->hasFile('video')) {
     
                 $file        = $request->file('video');
@@ -105,7 +112,7 @@ class SimplePostController extends Controller
                 if($meetup){
                     return response()->json([
                         'success' => true,
-                        'message' => 'Meetup Event Updated Successfully'
+                        'message' => 'Post Updated Successfully'
                     ]);
                 }
             } catch (\Exception $exception) {

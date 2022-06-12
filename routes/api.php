@@ -289,6 +289,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     // Simple Post Section
     Route::post('admin/add_simple_post', [SimplePostController::class, 'add']);
     Route::get('/admin/simple_post/all', [SimplePostController::class, 'all']);
+    Route::post('/admin/simple_post/update/{id}', [SimplePostController::class, 'simplePostUpdate']);
     Route::get('/admin/simple_post/count', [SimplePostController::class, 'count']);
     Route::get('/admin/simple_post/pending', [SimplePostController::class, 'pending_list']);
     Route::get('/admin/simple_post/pending/{id}', [SimplePostController::class, 'pending_details']);
@@ -334,6 +335,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/qna_live', [QnaController::class, 'liveQnalist']);
     Route::get('/admin/qna_completed', [QnaController::class, 'qna_completed']);
     Route::get('/admin/registeredList/{slug}', [QnaController::class, 'registeredList']);
+    Route::post('/admin/admin_update_Qna', [QnaController::class, 'admin_update_Qna']);
 
     //Meetup Session Section
     Route::post('/admin/add_meetup', [MeetupEventController::class, 'add_by_admin']);
@@ -403,6 +405,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/topBidder/auction/{auction_id}', [AuctionController::class, 'topBidder']);
     Route::get('/admin/topBidder/auction/notify/{id}', [AuctionController::class, 'notify_bidder']);
     Route::get('/admin/allBidderList/auction/{id}', [AuctionController::class, 'allBidderList']);
+    Route::post('/admin/winner/auction/{id}', [AuctionController::class, 'makeWinner']);
 
     // audition routes
     //Route::get('/admin/audition/status', [AuditionController::class, 'starAdminPendingAudtion']);
@@ -475,6 +478,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/simple_post/count', [SimplePostController::class, 'star_count']);
     Route::get('/star/simple_post/pending', [SimplePostController::class, 'star_pending_list']);
     Route::get('/star/simple_post/pending/{id}', [SimplePostController::class, 'star_pending_details']);
+    Route::post('/star/simple_post/update/{id}', [SimplePostController::class, 'star_post_update']);
     Route::get('/star/simple_post/approved', [SimplePostController::class, 'star_approved_list']);
     Route::get('/star/approve_post/{id}', [SimplePostController::class, 'approve_post']);
     Route::get('/star/decline_post/{id}', [SimplePostController::class, 'decline_post']);
