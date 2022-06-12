@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 // Authentication API
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('user_authentication', [AuthController::class, 'user_authentication']);
 Route::post('logout', [AuthController::class, 'logout']);
 
 // OTP Verification API
@@ -335,7 +336,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/registeredList/{slug}', [QnaController::class, 'registeredList']);
 
     //Meetup Session Section
-    Route::post('/admin/add_meetup', [MeetupEventController::class, 'add']);
+    Route::post('/admin/add_meetup', [MeetupEventController::class, 'add_by_admin']);
+    Route::post('/admin/edit_meetup/{id}', [MeetupEventController::class, 'update_by_admin']);
     Route::get('/admin/meetup_event/pending', [MeetupEventController::class, 'pending_list']);
     Route::get('/admin/meetup_event/live', [MeetupEventController::class, 'live_list']);
     Route::get('/admin/meetup_event/completed', [MeetupEventController::class, 'completed']);
@@ -530,9 +532,10 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     // Meetup Event Section
     Route::get('/star/meetup_event/{type}', [MeetupEventController::class, 'star_meetup_list']);
-    Route::get('/star/add_meetup', [MeetupEventController::class, 'star_add_meetup']);
+    Route::post('/star/add_meetup', [MeetupEventController::class, 'star_add_meetup']);
     Route::get('/star/meetup_event/details/{slug}', [MeetupEventController::class, 'details']);
     Route::get('/star/meetup_event/set_approve/{id}', [MeetupEventController::class, 'set_approve']);
+    Route::get('/star/rejectMeetup/{id}', [MeetupEventController::class, 'set_reject']);
     Route::post('/star/meetup_event/edit/{id}', [MeetupEventController::class, 'star_edit']);
 
     Route::get('/star/live_chat/count', [LiveChatController::class, 'count2']);
