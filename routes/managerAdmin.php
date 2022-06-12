@@ -266,7 +266,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('qna/published', [QnaController::class, 'published'])->name('qna.published');
     Route::get('qna/all', [QnaController::class, 'all'])->name('qna.all');
     Route::get('qna/details/{id}', [QnaController::class, 'manager_event_details'])->name('qna.details');
-    Route::get('qna/set_publish/{id}', [QnaController::class, 'manager_event_set_publish'])->name('qna.set_publish');
+    Route::post('qna/set_publish/{id}', [QnaController::class, 'manager_event_set_publish'])->name('qna.set_publish');
 
     Route::get('qna', [QnaController::class, 'index'])->name('qna.index');
     Route::put('qna/approve/{id}', [QnaController::class, 'approve'])->name('qna.approve');
