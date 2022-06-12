@@ -106,6 +106,7 @@ class SimplePostController extends Controller
             'description' => 'required',
             'star_id' => 'required',
             'type' => 'required',
+            'fee' => 'required',
             'post_type' => 'required',
 
 
@@ -114,6 +115,7 @@ class SimplePostController extends Controller
             'description.required' => 'Description Field Is Required',
             'star_id.required' => "Star Field Is Required",
             'type.required' => "This  Field Is Required",
+            'fee.required' => "This  Field Is Required",
             'post_type.required' => "This  Field Is Required",
 
         ]);
@@ -170,9 +172,10 @@ class SimplePostController extends Controller
         $validator = Validator::make($request->all(), [
 
             'title' => 'required',
-            'description' => 'required',
+            'description' => 'required|min:5',
             'star_id' => 'required',
             'type' => 'required',
+            'fee' => 'required',
             'post_type' => 'required',
 
 
@@ -182,6 +185,7 @@ class SimplePostController extends Controller
             'star_id.required' => "Star Field Is Required",
             'type.required' => "This  Field Is Required",
             'post_type.required' => "This  Field Is Required",
+            'fee.required' => "This  Field Is Required",
 
         ]);
 
@@ -393,6 +397,10 @@ class SimplePostController extends Controller
                 $post->type = 'general';
                 $post->user_id = $spost->star_id;
                 $post->event_id = $spost->id;
+                $post->category_id = auth('sanctum')->user()->category_id;
+                $post->sub_category_id = auth('sanctum')->user()->sub_category_id;
+                $post->title = $spost->title;
+                $post->details = $spost->details;
                 $post->save();
             } else {
                 $spost->status = 0;
@@ -492,7 +500,7 @@ class SimplePostController extends Controller
             $npost->sub_category_id = auth('sanctum')->user()->sub_category_id;
             $npost->event_id = $post->id;
             $npost->title = $post->title;
-            $npost->details = $post->description;
+            $npost->details = $post->details;
             $npost->status = 1;
             $npost->save();
         }
@@ -508,8 +516,9 @@ class SimplePostController extends Controller
         $validator = Validator::make($request->all(), [
 
             'title' => 'required',
-            'description' => 'required',
+            'description' => 'required|min:5',
             'type' => 'required',
+            'fee' => 'required',
             'post_type' => 'required',
 
 
@@ -517,6 +526,7 @@ class SimplePostController extends Controller
             'title.required' => 'Title Field Is Required',
             'description.required' => 'Description Field Is Required',
             'type.required' => "This  Field Is Required",
+            'fee.required' => "This  Field Is Required",
             'post_type.required' => "This  Field Is Required",
 
         ]);
@@ -530,7 +540,6 @@ class SimplePostController extends Controller
 
         $post =  SimplePost::find($id);
         $post->title = $request->input('title');
-        $post->created_by_id = auth('sanctum')->user()->id;
         $post->category_id = auth('sanctum')->user()->category_id;
         $post->subcategory_id = auth('sanctum')->user()->sub_category_id;
         $post->star_id = auth('sanctum')->user()->id;
