@@ -90,9 +90,11 @@ Manager Admin
             @if($post->status != 1)
             <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.simplePost.set_publish', [$post->id]) }}">Publish Now</a>
             @elseif($post->status != 0)
-            <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.simplePost.set_publish', [$post->id]) }}">Remove From Publish</a>
+            <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.simplePost.set_publish', [$post->id]) }}">Remove From Published</a>
             @endif
+            @if ($post->status <1 )              
             <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Post','{{ route('managerAdmin.simplePost.edit', $post->id) }}')">Edit</a>
+            @endif
         </div>
 
 

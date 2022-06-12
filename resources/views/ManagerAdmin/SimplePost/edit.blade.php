@@ -5,6 +5,7 @@
         <div class="col-md-12">
               <label for="first_name">Title</label>
               <input type="text" class="form-control" id="title" name="title" placeholder="Enter Admin First Name" value="{{$event->title }}">
+              <span class="text-danger" id="title_error"></span>
          </div>
      </div>
 
@@ -14,6 +15,7 @@
           <textarea id="summernote" name="description">
             {!! $event->description !!}
           </textarea>
+          <span class="text-danger" id="description_error"></span>
         </div>
     </div>
 
@@ -40,18 +42,6 @@
       @endif
     </span>
 
-    <div class="row form-group">
-        <div class="col-md-6">
-              <label for="first_name">Fee</label>
-              <select name="type" id="" class="form-control">
-                  <option value="paid">Paid</option>
-                  <option value="free">Free</option>
-              </select>
-         </div>
-
-     </div>
-
-
     <button type="submit" class="btn btn-primary" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update Post</button>
 
 </form>
@@ -75,34 +65,22 @@
          processData: false,
          contentType: false,
          type: 'POST',
-         success: function (data) {
-             Swal.fire(
-                     'Success!',
-                     data.message,
-                     'success'
-                 )
-                 setTimeout(function() {
-                     location.reload();
-                 }, 1000);
-             console.log(data);
-         },
-         error: function (data) {
-             console.log(data);
-             var errorMessage = '<div class="card bg-danger">\n' +
-                         '<div class="card-body text-center p-5">\n' +
-                         '<span class="text-white">';
-                     $.each(data.responseJSON.errors, function(key, value) {
-                         errorMessage += ('' + value + '<br>');
-                     });
-                     errorMessage += '</span>\n' +
-                         '</div>\n' +
-                         '</div>';
-                     Swal.fire({
-                         icon: 'error',
-                         title: 'Oops...',
-                         footer: errorMessage
-                     })
-         }
+         success: function(response) {
+                Swal.fire(
+                    'Success!',
+                    response.message,
+                    'success'
+                )
+                setTimeout(function() {
+                    location.reload();
+                }, 1000);
+            },
+            error: function(response) {
+                // console.log(response);
+                $.each(response.responseJSON.errors, function(key, value) {
+                    ErrorMessage(key, value);
+                });
+            }
      });
 
  });
