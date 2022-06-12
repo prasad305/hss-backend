@@ -400,7 +400,7 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
-            'livechats' => $post,
+            'posts' => $post,
         ]);
     }
 
@@ -987,7 +987,7 @@ class UserController extends Controller
         ]);
     }
     public function auction_instruction(){
-        
+
         $instruction = AuctionTerms::first();
 
         return response()->json([
