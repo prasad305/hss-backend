@@ -285,6 +285,43 @@
           </li> --}}
             </ul>
         </li>
+
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>Souvenir
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.souvenir.published') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Published</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.souvenir.pending') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Pending</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.souvenir.all') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>All</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.souvenir.showApply') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Register List</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-chart-pie"></i>
