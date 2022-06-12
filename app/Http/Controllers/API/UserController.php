@@ -217,9 +217,9 @@ class UserController extends Controller
         // return $slug;
         $learnigSession = LearningSession::where('slug', $slug)->first();
 
-        $marked_videos = LearningSessionAssignment::where([['event_id',$learnigSession->id],['user_id',auth()->user()->id],['send_to_user',1]])->get();
+        $marked_videos = LearningSessionAssignment::where([['event_id',$learnigSession->id],['user_id',auth()->user()->id],['send_to_user',1],['mark','>',0]])->get();
 
-        $rejected_videos = LearningSessionAssignment::where([['event_id',$learnigSession->id],['user_id',auth()->user()->id],['status',2]])->get();
+        $rejected_videos = LearningSessionAssignment::where([['event_id',$learnigSession->id],['user_id',auth()->user()->id],['status',2],['send_to_user',1]])->get();
 
         return response()->json([
             'status' => 200,

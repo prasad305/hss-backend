@@ -33,7 +33,7 @@
         <div class="container-fluid">
 
             <div class="row">
-                @foreach ($upcommingEvent as $event)
+                @foreach ($learningSessions as $event)
                     <!--card-->
 
                     <div class="col-sm-6 col-lg-4">
@@ -49,21 +49,27 @@
                                     @endif
                                    
                                 </div>
-
+                            
                                 <div class="panel-body py-3">
                                     <h3 class="text-ellipsis-line-1">{{ $event->title }}</h3>
-                                    @if ($event->status < 2)
-                                        <a type="button" class="btn btn-warning waves-effect waves-light"><i
-                                            class="ion-record"></i>
-                                            Pending</a>
-                                    @else
-                                        <button type="button" class="btn btn-success waves-effect waves-light"><i
-                                            class="ion-checkmark-round"></i> Published</button>
-                                    @endif
+                                   @if ($event->status == 11)
+                                   <a type="button" class="btn btn-danger waves-effect waves-light"><i
+                                    class="ion-record"></i>
+                                    Rejected</a>
+                                       @else
+                                       @if ($event->status < 2)
+                                       <a type="button" class="btn btn-warning waves-effect waves-light"><i
+                                           class="ion-record"></i>
+                                           Pending</a>
+                                   @else
+                                       <button type="button" class="btn btn-success waves-effect waves-light"><i
+                                           class="ion-checkmark-round"></i> Published</button>
+                                   @endif
 
-                                    <a href="{{ route('managerAdmin.learningSession.details', [$event->id]) }}" type="button"
-                                        class="btn btn-info waves-effect waves-light">Details <i
-                                            class="fa fa-angle-double-right"></i></a>
+                                   <a href="{{ route('managerAdmin.learningSession.details', [$event->id]) }}" type="button"
+                                       class="btn btn-info waves-effect waves-light">Details <i
+                                           class="fa fa-angle-double-right"></i></a>
+                                   @endif
                                 </div>
                             </div>
 

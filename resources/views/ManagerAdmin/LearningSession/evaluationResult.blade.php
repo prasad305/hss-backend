@@ -45,6 +45,7 @@ Manager Admin
                     <tbody>
 
                         @foreach ($results as $key => $result)
+                        @if (isset($result->assignments[0]))
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <th>{{ $result->user ? $result->user->first_name.' '.$result->user->last_name : '' }}</th>
@@ -72,6 +73,8 @@ Manager Admin
                             </td>
                             
                         </tr>
+                        @endif
+                        
                         @endforeach
                     </tbody>
                     <tfoot>
@@ -87,7 +90,7 @@ Manager Admin
 
 
         </div>
-        <a href="{{route('managerAdmin.learningSession.evaluationResultPublished',$event->id)}}" class="btn btn-outline-success btn-success text-light"> Send To User</a>
+        
         <hr>
         <h1>Reject Video List</h1>
         <div class="card">
@@ -144,7 +147,7 @@ Manager Admin
                     </tfoot>
                 </table>
             </div>
-
+            <a href="{{route('managerAdmin.learningSession.evaluationResultPublished',$event->id)}}" class="btn btn-outline-success btn-success text-light"> Send To User</a>
 
         </div>
 
