@@ -10,6 +10,7 @@ use App\Models\LearningSessionRegistration;
 use App\Models\MeetupEventRegistration;
 use App\Models\LiveChatRegistration;
 use App\Models\LiveChat;
+use App\Models\QnaRegistration;
 use App\Models\SuperStar;
 //use Dotenv\Validator;
 use Illuminate\Http\Request;
@@ -214,6 +215,9 @@ class AuthController extends Controller
             }
             if ($modelName == 'LiveChatRegistration') {
                 $countValue  = LiveChatRegistration::where('user_id', $user->id)->where('live_chat_id', $eventId)->count();
+            }
+            if ($modelName == 'QnaRegistration') {
+                $countValue  = QnaRegistration::where('user_id', $user->id)->where('qna_id', $eventId)->count();
             }
             if ($modelName == 'GreetingsRegistration') {
                 $countValue  = GreetingsRegistration::where([['user_id', $user->id],['greeting_id', $eventId],['status', 0]])->count();
