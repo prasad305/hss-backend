@@ -19,7 +19,7 @@ class SimplePostController extends Controller
     //
     public function add_learning(Request $request)
     {
-        
+
         // return $request->all();
 
         $validator = Validator::make($request->all(), [
@@ -33,7 +33,6 @@ class SimplePostController extends Controller
             'start_time' => 'required',
             'end_time' => 'required',
             'assignment' => 'required',
-            'fee' => 'required',
             'participant_number' => 'required',
             'room_id' => 'required',
             'image' => 'required|mimes:jpg,jpeg,png,gif,webp',
@@ -106,7 +105,6 @@ class SimplePostController extends Controller
             'description' => 'required',
             'star_id' => 'required',
             'type' => 'required',
-            'fee' => 'required',
             'post_type' => 'required',
 
 
@@ -115,7 +113,6 @@ class SimplePostController extends Controller
             'description.required' => 'Description Field Is Required',
             'star_id.required' => "Star Field Is Required",
             'type.required' => "This  Field Is Required",
-            'fee.required' => "This  Field Is Required",
             'post_type.required' => "This  Field Is Required",
 
         ]);
@@ -175,7 +172,6 @@ class SimplePostController extends Controller
             'description' => 'required|min:5',
             'star_id' => 'required',
             'type' => 'required',
-            'fee' => 'required',
             'post_type' => 'required',
 
 
@@ -185,7 +181,6 @@ class SimplePostController extends Controller
             'star_id.required' => "Star Field Is Required",
             'type.required' => "This  Field Is Required",
             'post_type.required' => "This  Field Is Required",
-            'fee.required' => "This  Field Is Required",
 
         ]);
 
@@ -518,7 +513,6 @@ class SimplePostController extends Controller
             'title' => 'required',
             'description' => 'required|min:5',
             'type' => 'required',
-            'fee' => 'required',
             'post_type' => 'required',
 
 
@@ -526,7 +520,6 @@ class SimplePostController extends Controller
             'title.required' => 'Title Field Is Required',
             'description.required' => 'Description Field Is Required',
             'type.required' => "This  Field Is Required",
-            'fee.required' => "This  Field Is Required",
             'post_type.required' => "This  Field Is Required",
 
         ]);
