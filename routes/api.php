@@ -434,10 +434,11 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/promoVideo/edit/{id}', [PromoVideoController::class, 'adminEdit']);
     Route::post('/admin/promoVideo/update', [PromoVideoController::class, 'adminUpdate']);
     Route::get('/admin/promoVideo/pending', [PromoVideoController::class, 'pendingVideos']);
+    Route::get('/admin/promoVideoApproved', [PromoVideoController::class, 'approvedVideos']);
     Route::get('/admin/promoVideo/{promo_id}', [PromoVideoController::class, 'videoDetails']);
-    Route::get('/admin/promoVideo/live', [PromoVideoController::class, 'liveVideos']);
-    Route::get('/admin/promoVideo/reject', [PromoVideoController::class, 'rejectVideos']);
-    Route::get('/admin/promoVideo/count', [PromoVideoController::class, 'promoVideoCount']);
+    Route::get('/admin/promoVideoLive', [PromoVideoController::class, 'liveVideos']);
+    Route::get('/admin/promoVideoReject', [PromoVideoController::class, 'rejectVideos']);
+    Route::get('/admin/promoVideoCount', [PromoVideoController::class, 'promoVideoCount']);
     //Category
     Route::get('/admin/view-category', [CategoryController::class, 'index']);
 });
@@ -622,11 +623,12 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/promoVideo/all', [PromoVideoController::class, 'starPromovideoAll']);
     Route::post('/star/promoVideo/store', [PromoVideoController::class, 'starPromovideoStore']);
     Route::get('/star/promoVideo/pending', [PromoVideoController::class, 'starPromopendingVideos']);
-    Route::get('/star/promoVideo/reject', [PromoVideoController::class, 'starPromoRejectedVideos']);
+    Route::get('/star/promoVideoApproved', [PromoVideoController::class, 'starPromoApprovedVideos']);
+    Route::get('/star/promoVideoReject', [PromoVideoController::class, 'starPromoRejectedVideos']);
     Route::get('/star/promoVideo/edit/{id}', [PromoVideoController::class, 'edit']);
     Route::post('/star/promoVideo/update', [PromoVideoController::class, 'update']);
     Route::get('/star/promoVideo/pending/{id}', [PromoVideoController::class, 'starVideosDetails']);
-    Route::get('/star/promoVideo/live', [PromoVideoController::class, 'starPromoliveVideos']);
+    Route::get('/star/promoVideoLive', [PromoVideoController::class, 'starPromoliveVideos']);
     Route::get('/star/promoVideo/count', [PromoVideoController::class, 'starPromoVideoCount']);
     Route::get('/star/promoVideo/approved/{id}', [PromoVideoController::class, 'starPromoVideoApproved']);
     Route::get('/star/promoVideo/decline/{id}', [PromoVideoController::class, 'starPromoVideoDecline']);

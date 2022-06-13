@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PromoVideo;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PromoVideoController extends Controller
@@ -11,21 +12,21 @@ class PromoVideoController extends Controller
     //
     public function all()
     {
-        $promoVideo = PromoVideo::where([['category_id',auth()->user()->category_id],['star_approval',1]])->latest()->get();
+        $promoVideo = PromoVideo::where([['category_id',auth()->user()->category_id],['status','>',0]])->orderBy('updated_at','desc')->get();
 
         return view('ManagerAdmin.PromoVideo.index', compact('promoVideo'));
     }
 
     public function pending()
     {
-        $promoVideo = PromoVideo::where([['status', 0], ['star_approval', 1]])->latest()->get();
+        $promoVideo = PromoVideo::where([['status',1],['category_id',auth()->user()->category_id]])->orderBy('updated_at','desc')->get();
 
         return view('ManagerAdmin.PromoVideo.index', compact('promoVideo'));
     }
 
     public function published()
     {
-        $promoVideo = PromoVideo::where('status', 1)->latest()->get();
+        $promoVideo = PromoVideo::where([['status',2],['category_id',auth()->user()->category_id]])->orderBy('updated_at','desc')->get();
 
         return view('ManagerAdmin.PromoVideo.index', compact('promoVideo'));
     }
@@ -81,29 +82,29 @@ class PromoVideoController extends Controller
         }
     }
 
-    public function set_publish($id)
+    public function set_publish(Request $request,$id)
     {
         $promoVideo = PromoVideo::find($id);
-        if ($promoVideo->status != 0) {
+        if ($promoVideo->status != 2) {
 
-            $promoVideo->status = 0;
+            $request->validate([
+                'publish_start_date' => 'required',
+                'publish_end_date' => 'required',
+            ]);
+
+            $promoVideo->status = 2;
+            $promoVideo->publish_start_date = Carbon::parse($request->publish_start_date);
+            $promoVideo->publish_end_date = Carbon::parse($request->publish_end_date);
             $promoVideo->update();
+            return redirect()->back()->with('success', 'Published');
         } else {
             $promoVideo->status = 1;
+            $promoVideo->publish_start_date = null;
+            $promoVideo->publish_end_date = null;
             $promoVideo->update();
-            // $post =  Post::where('type','promoVideo')->where('event_id',$promoVideo->id)->first();
-            // if (!isset($post)) {
-            //     Post::create([
-            //         'type' => 'promoVideo',
-            //         'user_id' => '1',
-            //         'event_id' => $promoVideo->id,
-            //         'title' => $promoVideo->title,
-            //         'details' => $promoVideo->description,
-            //         'status' => 1,
-            //         ]);
-            // }
+            return redirect()->back()->with('success', 'Unpublished');
         }
 
-        return redirect()->back()->with('success', 'Published');
+        
     }
 }

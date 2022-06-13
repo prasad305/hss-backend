@@ -72,16 +72,61 @@ Manager Admin
         </div>
 
 
-        <div class="container row">
-            @if($promoVideo->status != 1)
-            <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.promoVideo.set_publish', [$promoVideo->id]) }}">Publish Now</a>
-            @elseif($promoVideo->status != 0)
-            <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.promoVideo.set_publish', [$promoVideo->id]) }}">Remove From Publish</a>
-            @endif
-            {{-- <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Post','{{ route('managerAdmin.promoVideo.edit', $promoVideo->id) }}')">Edit</a> --}}
+        @if ($promoVideo->status != 2)
+        <div class="card row">
+            <div class="card-header"
+                style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
+                Publish in News Feed
+            </div>
+            <div class="card-body">
+                <form action="{{ route('managerAdmin.promoVideo.set_publish', [$promoVideo->id]) }}" method="post">
+                    @csrf
+                    <div class="row">
+                        <div class="mb-3 col-md-6 col-6">
+                            <label for="start_date" class="form-label">Post Start Date</label>
+                            <input type="calender" class="form-control" id="datepicker"
+                                style="background: coral; position: relative; padding-left: 33px;"
+                                name="publish_start_date" readonly="readonly" value="{{ old('publish_start_date') }}" />
+                            <i class="fa fa-calendar"
+                                style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
+                                aria-hidden="true"></i>
+                            @if ($errors->has('publish_start_date'))
+                            <span class="text-danger">{{ $errors->first('publish_start_date') }}</span>
+                            @endif
+                        </div>
+                        <div class="mb-3 col-md-6 col-6">
+                            <label for="end_date" class="form-label">Post End Date</label>
+                            <input type="text" class="form-control" id="datepicker1"
+                                style="background: coral; position: relative; padding-left: 33px;"
+                                name="publish_end_date" readonly="readonly" value="{{ old('publish_end_date') }}">
+                            <i class="fa fa-calendar"
+                                style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
+                                aria-hidden="true"></i>
+                            @if ($errors->has('publish_end_date'))
+                            <span class="text-danger">{{ $errors->first('publish_end_date') }}</span>
+                            @endif
+                        </div>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-outline-success mr-2" href="">Publish Now</button>
+                    {{-- <a type="button" class="btn btn-outline-warning px-5"
+                        onclick="Show('Edit Live Chat Event','{{ route('managerAdmin.promoVideo.edit', $promoVideo->id) }}')">Edit</a> --}}
+
+
+
+                </form>
+
+            </div>
+
         </div>
-
-
+        @endif
+        @if ($promoVideo->status == 2)
+        <form action="{{ route('managerAdmin.promoVideo.set_publish', [$promoVideo->id]) }}" method="post">
+            @csrf
+            <button type="submit" class="btn btn-outline-danger mr-2">Remove From Publish</button>
+        </form>
+        @endif
     </div> <!-- container -->
 </div> <!-- content -->
 
@@ -106,7 +151,35 @@ Manager Admin
 
 @endsection
 
+
+@push('js')
+{{-- <script src="{{ asset('assets/manager-admin/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script> --}}
+<script src="{{ asset('assets/manager-admin/pages/dashborad.js') }}"></script>
+
+
+<script>
+    $(function() {
+            $("#datepicker").datepicker({
+                minDate: "{{\Carbon\Carbon::now()->format('m/d/Y')}}",
+                maxDate: ""
+            });
+        });
+
+        $(function() {
+            $("#datepicker1").datepicker({
+                minDate: "{{\Carbon\Carbon::now()->format('m/d/Y')}}",
+                maxDate: "+100000D"
+            });
+        });
+</script>
+@endpush
+
 @push('script')
 {{-- <script src="{{ asset('assets/manager-admin/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script> --}}
 <script src="{{ asset('assets/manager-admin/pages/dashborad.js') }}"></script>
+@endpush
+
+@push('jsstyle')
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 @endpush

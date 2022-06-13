@@ -45,8 +45,7 @@ Manager Admin
                         <div class="panel-body py-3">
                             <h3 class="text-ellipsis-line-1">{{ $val->title }}</h3>
 
-                            @if ($val->status == 0)
-
+                            @if ($val->status == 1)
                             <a type="button" class="btn btn-warning waves-effect waves-light"><i class="icon-record"></i>
                                 Pending</a>
                             @else
