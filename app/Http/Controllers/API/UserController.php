@@ -452,6 +452,17 @@ class UserController extends Controller
         ]);
     }
 
+    public function qnaRegDetails($id)
+    {
+        $event = QnaRegistration::where([['qna_id', $id], ['user_id', auth('sanctum')->user()->id]])->first();
+
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+
+        ]);
+    }
+
     // Question and Answers
 
     public function qnaDetails($slug)

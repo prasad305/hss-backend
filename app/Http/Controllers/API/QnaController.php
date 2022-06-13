@@ -48,7 +48,7 @@ class QnaController extends Controller
             $qna->star_id = $request->input('star_id');
             $qna->category_id = $superStar->category_id;
             $qna->sub_category_id = $superStar->sub_category_id;
-            $qna->admin_id = auth()->user()->id;
+            $qna->admin_id = auth('sanctum')->user()->id;
             $qna->created_by_id = auth('sanctum')->user()->id;
             $qna->description = $request->input('description');
             $qna->instruction = $request->input('instruction');
@@ -75,6 +75,7 @@ class QnaController extends Controller
                 Image::make($file)->resize(900, 400)->save($filename, 100);
                 $qna->banner = $filename;
             }
+
             if ($request->hasFile('video')) {
                 $destination = $qna->video;
                 if (File::exists($destination)) {
@@ -122,13 +123,15 @@ class QnaController extends Controller
             ]);
         } else {
 
+            $superStar = SuperStar::where('star_id', $request->input('star_id'))->first();
+
             $qna = QnA::where('slug',$request->slug)->first();
             $qna->title = $request->input('title');
             $qna->slug = Str::slug($request->input('title'));
             $qna->star_id = $request->star_id;
-            $qna->category_id =  auth()->user()->category_id;
-            $qna->sub_category_id =  auth()->user()->sub_category_id;
-            $qna->admin_id = auth()->user()->id;
+            $qna->category_id =  $superStar->category_id;
+            $qna->sub_category_id =  $superStar->sub_category_id;
+            $qna->admin_id = auth('sanctum')->user()->id;
             $qna->created_by_id = auth('sanctum')->user()->id;
             $qna->description = $request->input('description');
             $qna->instruction = $request->input('instruction');
@@ -352,11 +355,7 @@ class QnaController extends Controller
             $qna = QnA::find($request->id);
             $qna->title = $request->input('title');
             $qna->slug = Str::slug($request->input('title'));
-            $qna->star_id = auth('sanctum')->user()->id;
-            $qna->category_id =  auth()->user()->category_id;
-            $qna->sub_category_id =  auth()->user()->sub_category_id;
             $qna->admin_id = auth()->user()->parent_user;
-            $qna->created_by_id = auth('sanctum')->user()->id;
             $qna->description = $request->input('description');
             $qna->instruction = $request->input('instruction');
             $qna->event_date = $request->input('event_date');

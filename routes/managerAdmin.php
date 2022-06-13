@@ -10,6 +10,7 @@ use App\Http\Controllers\ManagerAdmin\LiveEventController;
 use App\Http\Controllers\ManagerAdmin\LearningSessionController;
 use App\Http\Controllers\ManagerAdmin\SimplePostController;
 use App\Http\Controllers\ManagerAdmin\MarketplaceController;
+use App\Http\Controllers\ManagerAdmin\SouvenirController;
 use App\Http\Controllers\ManagerAdmin\FanGroupController;
 use App\Http\Controllers\API\MeetupEventController;
 use App\Http\Controllers\ManagerAdmin\AuctionController;
@@ -221,6 +222,16 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::put('marketplace/update/{id}', [MarketplaceController::class, 'update'])->name('marketplace.update');
     Route::get('marketplace/set_publish/{id}', [MarketplaceController::class, 'set_publish'])->name('marketplace.set_publish');
 
+    //Souviner Post
+    Route::get('souvenir/pending', [SouvenirController::class, 'pending'])->name('souvenir.pending');
+    Route::get('souvenir/published', [SouvenirController::class, 'published'])->name('souvenir.published');
+    Route::get('souvenir/all', [SouvenirController::class, 'all'])->name('souvenir.all');
+    Route::get('souvenir/details/{id}', [SouvenirController::class, 'details'])->name('souvenir.details');
+    Route::get('souvenir/edit/{id}', [SouvenirController::class, 'edit'])->name('souvenir.edit');
+    Route::get('souvenir/apply/show', [SouvenirController::class, 'showApplySouvenir'])->name('souvenir.showApply');
+    Route::put('souvenir/update/{id}', [SouvenirController::class, 'update'])->name('souvenir.update');
+    Route::get('souvenir/set_publish/{id}', [SouvenirController::class, 'set_publish'])->name('souvenir.set_publish');
+
     //Fan Group
     Route::get('fangroup/pending', [FanGroupController::class, 'pending'])->name('fangroup.pending');
     Route::get('fangroup/published', [FanGroupController::class, 'published'])->name('fangroup.published');
@@ -255,7 +266,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('qna/published', [QnaController::class, 'published'])->name('qna.published');
     Route::get('qna/all', [QnaController::class, 'all'])->name('qna.all');
     Route::get('qna/details/{id}', [QnaController::class, 'manager_event_details'])->name('qna.details');
-    Route::get('qna/set_publish/{id}', [QnaController::class, 'manager_event_set_publish'])->name('qna.set_publish');
+    Route::post('qna/set_publish/{id}', [QnaController::class, 'manager_event_set_publish'])->name('qna.set_publish');
 
     Route::get('qna', [QnaController::class, 'index'])->name('qna.index');
     Route::put('qna/approve/{id}', [QnaController::class, 'approve'])->name('qna.approve');
