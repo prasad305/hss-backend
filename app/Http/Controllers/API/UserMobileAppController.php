@@ -41,6 +41,7 @@ class UserMobileAppController extends Controller
             'greeting_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'greeting')->orderBy('id', 'DESC')->get(),
             'learning_session_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'learningSession')->orderBy('id', 'DESC')->get(),
             'live_chat_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'liveChat')->orderBy('id', 'DESC')->get(),
+            'qna_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'qna')->orderBy('id', 'DESC')->get(),
             'meetup_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'meetup')->orderBy('id', 'DESC')->get(),
 
         ]);

@@ -52,12 +52,9 @@ Route::get('/star_photos/{id}', [UserController::class, 'star_photo']);
 Route::get('/star_videos/{id}', [UserController::class, 'star_video']);
 Route::get('/user/getStarPost/{id}/{type}', [UserController::class, 'getStarPost']);
 
-
-
 // Data Fetching For Landing Page Right Side Bar
 Route::get('/user/learning_session/all', [LearningSessionController::class, 'user_all']);
 Route::get('/user/live_chat/all', [LiveChatController::class, 'userAll']);
-
 
 Route::get('/user_info/{id}', [AuthController::class, 'user_data']);
 Route::post('/chatting/message', [UserController::class, 'message']);
@@ -65,10 +62,8 @@ Route::get('/chatting/message/{id}', [UserController::class, 'get_message']);
 Route::post('/group/message', [UserController::class, 'group_message']);
 Route::get('/group/message/{id}', [UserController::class, 'get_group_message']);
 
-
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
-
     Route::get('/checkingAuthenticated', function () {
         return response()->json(['message' => 'You are in', 'status' => 200], 200);
     });
@@ -89,7 +84,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/registerLivechat', [UserController::class, 'registeredLivechat']);
     Route::get('/user/registerLearningSession', [UserController::class, 'registeredLearningSession']);
 
-
     Route::get('/user/sinlgeLiveChat/{id}', [UserController::class, 'sinlgeLiveChat']);
     Route::get('/user/getSingleLiveChatEvent/{id}', [UserController::class, 'getSingleLiveChatEvent']);
     Route::get('/user/getSingleLiveChatEvent/{minute}/{id}', [UserController::class, 'getLiveChatTiemSlot']);
@@ -97,7 +91,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //live chat
     Route::get('/user/live-chat/{slug}', [UserController::class, 'liveChatDetails']);
     Route::get('/user/live-chat/reg_info/{id}', [UserController::class, 'liveChatRegDetails']);
-
 
 
     //Questions And Answers
