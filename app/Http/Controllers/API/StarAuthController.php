@@ -20,7 +20,7 @@ class StarAuthController extends Controller
 {
     public function register(Request $request)
     {
-        // return $request->star_id;
+        
 
         $validator = Validator::make($request->all(),[
             // 'email' => 'required|unique:users,email',
@@ -41,6 +41,7 @@ class StarAuthController extends Controller
             $user = User::find($request->star_id);
 
             if ($request->hasfile('image')) {
+                // return $request->image;
                 $destination = $user->image;
                 if (File::exists($destination)) {
                     File::delete($destination);
@@ -72,6 +73,7 @@ class StarAuthController extends Controller
                 $star->qr_code = rand( 10000000 , 99999999 );
 
                 if ($request->hasfile('signature')) {
+           
                     $destination = $star->signature;
                     if (File::exists($destination)) {
                         File::delete($destination);
