@@ -286,6 +286,14 @@ class UserController extends Controller
         {
             $post = Post::where([['user_id', $id],['type','livechat']])->latest()->get();
         }
+        if($type == 'meetup')
+        {
+            $post = Post::where([['user_id', $id],['type','meetup']])->latest()->get();
+        }
+        if($type == 'learning')
+        {
+            $post = Post::where([['user_id', $id],['type','learningSession']])->latest()->get();
+        }
         if($type == 'all')
         {
             $post = Post::where('user_id', $id)->latest()->get();
