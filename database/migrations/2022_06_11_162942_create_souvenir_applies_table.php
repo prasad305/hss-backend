@@ -28,6 +28,7 @@ class CreateSouvenirAppliesTable extends Migration
             $table->string('image')->nullable();
             $table->string('area')->nullable();
             $table->string('mobile_no')->nullable();
+            $table->float('total_amount')->nullable();
             $table->integer('status')->default(0)->comment('0 = pending , 1 = approved, 2 = Payment Complete');
             $table->timestamps();
         });

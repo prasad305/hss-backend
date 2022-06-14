@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use App\Models\SouvenirCreate;
 use App\Models\SouvenirApply;
+use App\Models\SouvenirPayment;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -389,6 +390,7 @@ class SouvinerController extends Controller
         }else{
             $user = User::find(auth('sanctum')->user()->id);
             $star = User::find($starId);
+            $souvenirAmount = SouvenirCreate::find($request->souvinerId);
 
             if (Hash::check($request->password, $user->password)){
 
@@ -398,6 +400,7 @@ class SouvinerController extends Controller
                 $apply->state_id = $request->state_id;
                 $apply->city_id = $request->city_id;
                 $apply->souvenir_id = $request->souvinerId;
+                $apply->total_amount = $souvenirAmount->price;
                 $apply->description = $request->description;
                 $apply->area = $request->area;
                 $apply->mobile_no = $request->mobile_no;
@@ -498,6 +501,55 @@ class SouvinerController extends Controller
             'status' => 200,
             'souvinerView' => $souvinerView,
         ]);
+    }
+
+    public function activitiesDetailsUserSouvenir($id){
+
+        $detailsSouvenir = SouvenirApply::find($id);
+
+        return response()->json([
+            'status' => 200,
+            'detailsSouvenir' => $detailsSouvenir,
+        ]);
+    }
+
+    public function userSouvenirPaymentStore(Request $request){
+
+        $validator = Validator::make($request->all(),[
+            'card_holder_name' => 'required',
+            'card_no' => 'required',
+            'card_expire_date' => 'required',
+            'card_cvv' => 'required',
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json([
+                'validation_errors'=>$validator->errors(),
+            ]);
+        }else{
+            $souvenir = new SouvenirPayment();
+
+            $souvenir->souvenir_create_id = $request->souvenir_create_id;
+            $souvenir->souvenir_apply_id = $request->souvenir_apply_id;
+            $souvenir->user_id = auth('sanctum')->user()->id;
+            $souvenir->payment_method = 'ssl';
+            $souvenir->payment_status = 1;
+            $souvenir->card_holder_name = $request->card_holder_name;
+            $souvenir->card_no = $request->card_no;
+            $souvenir->card_expire_date = $request->card_expire_date;
+            $souvenir->card_cvv = $request->card_cvv;
+            $souvenir->total_amount = $request->total_amount;
+            $souvenir->status = 1;
+            $souvenir->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Souvenir Payment Successfully'
+            ]);
+        }
+        
+
     }
 
 }
