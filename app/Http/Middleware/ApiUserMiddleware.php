@@ -23,14 +23,14 @@ class ApiUserMiddleware
             {
                 return $next($request);
             }
-            if(auth()->user()->user_type == 'admin' && auth()->user()->status == '1')
-            {
-                return $next($request);
-            }
-            if(auth()->user()->user_type == 'star' && auth()->user()->status == '1')
-            {
-                return $next($request);
-            }
+            // if(auth()->user()->user_type == 'admin' && auth()->user()->status == '1')
+            // {
+            //     return $next($request);
+            // }
+            // if(auth()->user()->user_type == 'star' && auth()->user()->status == '1')
+            // {
+            //     return $next($request);
+            // }
             if(auth()->user()->user_type == null){
                 $user = auth('sanctum')->user();
         
