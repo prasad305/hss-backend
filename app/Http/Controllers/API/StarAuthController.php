@@ -25,7 +25,7 @@ class StarAuthController extends Controller
         $validator = Validator::make($request->all(),[
             // 'email' => 'required|unique:users,email',
             // 'phone' => 'required|unique:users,phone',
-            // 'password' => 'required|min:4'
+            'terms_and_condition' => 'required|min:4',
         ]);
 
         if($validator->fails())

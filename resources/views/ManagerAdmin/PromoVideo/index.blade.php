@@ -39,7 +39,7 @@ Manager Admin
                     <div class="panel panel-primary text-center">
                         <div class="">
                             <video width="312" controls>
-                                <source src="{{asset('http://localhost:8000/'.$val->video_url)}}" />
+                                <source src="{{asset($val->video_url)}}" />
                             </video>
                         </div>
                         <div class="panel-body py-3">
