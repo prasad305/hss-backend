@@ -26,8 +26,8 @@ class CreateSimplePostsTable extends Migration
             $table->longText('description')->nullable();
             $table->string('image')->nullable();
             $table->string('video')->nullable();
-            $table->integer('star_approval')->default(0);
-            $table->integer('status')->default(0);
+            $table->integer('star_approval')->default(0)->comment('0 = pending, 1 = approved,2 = reject');
+            $table->integer('status')->default(0)->comment('1 = published');
             $table->timestamps();
         });
     }
