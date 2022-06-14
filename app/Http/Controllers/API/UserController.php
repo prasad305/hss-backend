@@ -1338,26 +1338,35 @@ class UserController extends Controller
         $selectedCat = json_decode($selectedCategory->category);
         $selectedSubCat = json_decode($selectedCategory->subcategory);
         $selectedSubSubCat = json_decode($selectedCategory->star_id);
-
+        $today = Carbon::now();
         $cat_promo = PromoVideo::select("*")
             ->whereIn('category_id', $selectedCat)
-            ->where('status',1)
-            ->latest()->get();
+            ->where('status',2)
+            ->whereDate('publish_start_date', '<=',$today)
+            ->whereDate('publish_end_date', '>=', $today)
+            ->orderBy('updated_at','desc')
+            ->get();
 
         if (isset($sub_cat_promo)) {
             $sub_cat_promo = PromoVideo::select("*")
                 ->whereIn('sub_category_id', $selectedSubCat)
-                ->where('status',1)
-                ->latest()->get();
+                ->where('status',2)
+                ->whereDate('publish_start_date', '<=',$today)
+                ->whereDate('publish_end_date', '>=', $today)
+                ->orderBy('updated_at','desc')
+                ->get();
         } else {
             $sub_cat_promo = [];
         }
 
         if (isset($sub_sub_cat_promo)) {
             $sub_sub_cat_promo = PromoVideo::select("*")
-                ->where('status',1)
-                ->whereIn('user_id', $selectedSubSubCat)
-                ->latest()->get();
+                ->where('status',2)
+                ->whereIn('star_id', $selectedSubSubCat)
+                ->whereDate('publish_start_date', '<=',$today)
+                ->whereDate('publish_end_date', '>=', $today)
+                ->orderBy('updated_at','desc')
+                ->get();
         } else {
             $sub_sub_cat_promo = [];
         }

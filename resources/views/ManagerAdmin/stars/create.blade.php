@@ -76,12 +76,12 @@
         success: function (data) {
             Swal.fire(
                 'Success!',
-                'Admin has been Added. ' + data.message,
+                data.message,
                 'success'
             )
-            setTimeout(function() {
-                location.reload();
-            }, 1000);
+            // setTimeout(function() {
+            //     location.reload();
+            // }, 1000);
         },
         error: function (data) {
             $.each(data.responseJSON.errors, function(key, value) {

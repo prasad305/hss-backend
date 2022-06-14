@@ -13,9 +13,12 @@ class PromoVideo extends Model
         'star_id',
         'category_id',
         'sub_category_id',
-        'star_id',
+        'created_by',
         'star_approval',
-        'title'
+        'publish_start_date',
+        'publish_end_date',
+        'title',
+        'status'
     ];
     use HasFactory;
 
