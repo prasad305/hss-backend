@@ -372,7 +372,10 @@ class FanGroupController extends Controller
             orWhere(function ($query) use($id) {
                     $query->where('another_star_status', 0)
                         ->where('another_star_admin_id',$id);
-                })->orWhere('status', 0)->orderBy('id', 'DESC')->get();
+                })->orWhere(function ($query) use($id) {
+                    $query->where('status', 0)
+                        ->orWhere('status', 2);
+                })->orderBy('id', 'DESC')->get();
 
         $fanPendingCount = FanGroup::where(function ($query) use($id) {
             $query->where('my_star_status', 0)
@@ -381,7 +384,10 @@ class FanGroupController extends Controller
             orWhere(function ($query) use($id) {
                     $query->where('another_star_status', 0)
                         ->where('another_star_admin_id',$id);
-                })->orWhere('status', 0)->count();
+                })->orWhere(function ($query) use($id) {
+                    $query->where('status', 0)
+                        ->orWhere('status', 2);
+                })->count();
 
 
         $today = Carbon::now();

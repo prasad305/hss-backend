@@ -17,10 +17,10 @@ class CreateWalletPaymentsTable extends Migration
             $table->id();
             $table->integer('packages_id')->nullable();
             $table->integer('user_id')->nullable();
-            $table->string('holder_name')->nullable();
+            $table->string('card_holder_name')->nullable();
             $table->string('card_no')->nullable();
-            $table->string('expire_date')->nullable();
-            $table->integer('cvv')->nullable();
+            $table->string('card_expire_date')->nullable();
+            $table->integer('card_cvv')->nullable();
             $table->integer('status')->default(0);
             $table->timestamps();
         });
