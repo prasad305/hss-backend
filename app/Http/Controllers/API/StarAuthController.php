@@ -20,7 +20,7 @@ class StarAuthController extends Controller
 {
     public function register(Request $request)
     {
-        
+
 
         $validator = Validator::make($request->all(),[
             // 'email' => 'required|unique:users,email',
@@ -73,7 +73,7 @@ class StarAuthController extends Controller
                 $star->qr_code = rand( 10000000 , 99999999 );
 
                 if ($request->hasfile('signature')) {
-           
+
                     $destination = $star->signature;
                     if (File::exists($destination)) {
                         File::delete($destination);
@@ -82,7 +82,7 @@ class StarAuthController extends Controller
                     $extension = $file->getClientOriginalExtension();
                     $filename = 'uploads/images/users/stars' . time() . '.' . $extension;
                     Image::make($file)->resize(900, 400)->save($filename, 50);
-    
+
                     $star->signature = $filename;
                 }
 
@@ -336,12 +336,14 @@ class StarAuthController extends Controller
 
         $user = $merged->where('qr_code',$request->qr_code)->first();
 
+        // return $user;
+
             if ($user) {
 
                 return response()->json([
                     'status'=>200,
                     'star_id' => $user->star_id,
-                    'auth_type' => $user->user_type,
+                    'auth_type' => User::find($user->star_id)->user_type,
                     'message'=>'QR Code Matched!',
                 ]);
             }
