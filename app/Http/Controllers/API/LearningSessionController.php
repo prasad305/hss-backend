@@ -18,7 +18,7 @@ class LearningSessionController extends Controller
     //
     public function add_learning(Request $request)
     {
-        
+
         if ($request->banner_or_video == 0) {
             $validator = Validator::make($request->all(), [
                 'title' => 'required|unique:learning_sessions',
@@ -60,7 +60,7 @@ class LearningSessionController extends Controller
                 'star_id.required' => 'Please Select One Star',
             ]);
         }
-        
+
 
 
         if ($validator->fails()) {
@@ -130,7 +130,7 @@ class LearningSessionController extends Controller
 
     public function adminUpdateLearning(Request $request,$event_id)
     {
-        
+
         if ($request->banner_or_video == 0) {
             $validator = Validator::make($request->all(), [
                 'title' => 'required|unique:learning_sessions,title,'.$event_id,
@@ -170,7 +170,7 @@ class LearningSessionController extends Controller
                 'star_id.required' => 'Please Select One Star',
             ]);
         }
-        
+
 
 
         if ($validator->fails()) {
@@ -244,7 +244,7 @@ class LearningSessionController extends Controller
                 ]);
             }
 
-         
+
         }
     }
 
@@ -466,7 +466,7 @@ class LearningSessionController extends Controller
             'count' => $events->count(),
         ]);
     }
-    
+
     public function rejected_list()
     {
         $events = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status',11]]);
@@ -586,7 +586,7 @@ class LearningSessionController extends Controller
 
     public function star_add(Request $request)
     {
-        
+
         if ($request->banner_or_video == 0) {
             $validator = Validator::make($request->all(), [
                 'title' => 'required|unique:learning_sessions',
@@ -626,7 +626,7 @@ class LearningSessionController extends Controller
                 'star_id.required' => 'Please Select One Star',
             ]);
         }
-        
+
 
 
         if ($validator->fails()) {
@@ -658,7 +658,7 @@ class LearningSessionController extends Controller
             $learningSession->room_id = $request->input('room_id');
             $learningSession->status = 1;
 
-           
+
 
             if ($request->hasfile('image')) {
                 $destination = $learningSession->banner;
@@ -729,7 +729,7 @@ class LearningSessionController extends Controller
                 'star_id.required' => 'Please Select One Star',
             ]);
         }
-        
+
 
 
         if ($validator->fails()) {
@@ -920,7 +920,7 @@ class LearningSessionController extends Controller
     /// User Section
     public function user_all()
     {
-        $post = LearningSession::where('status', 1)->latest()->get();
+        $post = LearningSession::where('status', 2)->latest()->get();
 
         return response()->json([
             'status' => 200,

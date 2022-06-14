@@ -412,7 +412,7 @@ class MeetupEventController extends Controller
     // User Part
     public function meetup_event_list()
     {
-        $meetup = MeetupEvent::where('status', 1)->latest()->get();
+        $meetup = MeetupEvent::where('status', 2)->latest()->get();
 
         return response()->json([
             'status' => 200,
