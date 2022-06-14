@@ -1093,7 +1093,7 @@ class UserController extends Controller
 
     public function audition_list()
     {
-        $upcomingAuditions = Audition::where('status', 3)->latest()->get();
+        $upcomingAuditions = Audition::where('status', 2)->latest()->get();
 
         return response()->json([
             'status' => 200,
@@ -1577,7 +1577,7 @@ class UserController extends Controller
                 ]);
             } else {
                 $learning_session = LearningSession::find($request->event_id);
-           
+
                 if ($learning_session) {
                     $certificate =  LearningSessionCertificate::where([['event_id',$request->event_id],['user_id',auth()->user()->id]])->first();
                     if (empty($certificate)) {
@@ -1595,8 +1595,8 @@ class UserController extends Controller
                     'learningSession' => $learning_session,
                 ]);
             }
-            
-            
+
+
         }
     }
 

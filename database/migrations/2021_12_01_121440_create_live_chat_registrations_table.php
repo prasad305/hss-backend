@@ -23,9 +23,9 @@ class CreateLiveChatRegistrationsTable extends Migration
             $table->float('amount')->nullable();
             $table->string('card_holder_name')->nullable();
             $table->string('account_no')->nullable();
-            $table->timestamp('live_chat_start_time')->nullable();
-            $table->timestamp('live_chat_end_time')->nullable();
-            $table->timestamp('live_chat_date')->nullable();
+            $table->time('live_chat_start_time')->nullable();
+            $table->time('live_chat_end_time')->nullable();
+            $table->date('live_chat_date')->nullable();
             $table->string('video')->nullable();
             $table->string('room_id')->nullable();
             $table->integer('comment_count')->nullable();
