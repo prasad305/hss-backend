@@ -230,6 +230,16 @@ class QnaController extends Controller
             'count' => $events->count(),
         ]);
     }
+    public function qna_rejected()
+    {
+        $events = QnA::where([['admin_id', auth('sanctum')->user()->id], ['star_approval', 2]]);
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
+        ]);
+    }
     public function registeredList($slug)
     {
         $event = QnA::where('slug', $slug)->first();

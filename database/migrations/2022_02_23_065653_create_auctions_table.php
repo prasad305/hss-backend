@@ -32,7 +32,7 @@ class CreateAuctionsTable extends Migration
             $table->timestamp('bid_to')->nullable();
             $table->timestamp('result_date')->nullable();
             $table->timestamp('product_delivery_date')->nullable();
-            $table->boolean('status')->nullable();
+            $table->boolean('status')->nullable()->comment('0 = pending, 1 = published');
             $table->boolean('star_approval')->default(0)->comment('0=pending,1=approved');
             $table->boolean('product_status')->default(0)->comment('0=unsold,1=sold');
             $table->timestamps();
