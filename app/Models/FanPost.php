@@ -22,7 +22,7 @@ class FanPost extends Model
         'category_id',
     ];
 
-    protected $with = ['user', 'star'];
+    protected $with = ['user', 'star', 'fangroup'];
 
     public function user()
     {
@@ -36,5 +36,10 @@ class FanPost extends Model
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
+    }
+    
+    public function fangroup()
+    {
+        return $this->belongsTo(FanGroup::class, 'fan_group_id');
     }
 }
