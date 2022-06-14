@@ -301,6 +301,18 @@ class SimplePostController extends Controller
             'message' => 'Success',
         ]);
     }
+    public function rejected_list()
+    {
+        $post = SimplePost::where([['created_by_id', auth('sanctum')->user()->id], ['star_approval', 2]])->latest()->get();
+        $count = SimplePost::where([['created_by_id', auth('sanctum')->user()->id], ['star_approval', 2]])->count();
+
+        return response()->json([
+            'status' => 200,
+            'post' => $post,
+            'count' => $count,
+            'message' => 'Success',
+        ]);
+    }
 
 
     /// For Super Star ///

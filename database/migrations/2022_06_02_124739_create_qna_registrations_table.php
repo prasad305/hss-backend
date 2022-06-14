@@ -20,7 +20,7 @@ class CreateQnaRegistrationsTable extends Migration
             $table->string('payment_method')->nullable();
             $table->boolean('payment_status')->nullable();
             $table->timestamp('payment_date')->nullable();
-            $table->float('amount')->nullable();
+            $table->double('amount')->nullable();
             $table->string('card_holder_name')->nullable();
             $table->string('account_no')->nullable();
             $table->time('qna_start_time')->nullable();

@@ -301,6 +301,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/simple_post/pending', [SimplePostController::class, 'pending_list']);
     Route::get('/admin/simple_post/pending/{id}', [SimplePostController::class, 'pending_details']);
     Route::get('/admin/simple_post/approved', [SimplePostController::class, 'approved_list']);
+    Route::get('/admin/simple_post/rejected', [SimplePostController::class, 'rejected_list']);
 
     // Learning Session Section
     Route::post('admin/learning_session/create', [LearningSessionController::class, 'add_learning']);
@@ -341,6 +342,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/qna/{slug}', [QnaController::class, 'details']);
     Route::get('/admin/qna_live', [QnaController::class, 'liveQnalist']);
     Route::get('/admin/qna_completed', [QnaController::class, 'qna_completed']);
+    Route::get('/admin/qna_rejected', [QnaController::class, 'qna_rejected']);
     Route::get('/admin/registeredList/{slug}', [QnaController::class, 'registeredList']);
     Route::post('/admin/admin_update_Qna', [QnaController::class, 'admin_update_Qna']);
 
