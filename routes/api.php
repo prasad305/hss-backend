@@ -113,6 +113,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // Marketplace Section
     Route::get('/user/marketplace/all', [MarketplaceController::class, 'marketplaceAll']);
+    Route::get('/user/marketplace/all/{star_id}', [MarketplaceController::class, 'marketplaceStarAll']);
     Route::get('/user/marketplace/view-country', [MarketplaceController::class, 'viewCountry']);
     Route::get('/user/marketplace/state/{id}', [MarketplaceController::class, 'viewState']);
     Route::get('/user/marketplace/city/{id}', [MarketplaceController::class, 'viewCity']);
@@ -123,6 +124,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // Fan Group Section
     Route::get('/user/fan/group/list', [FanGroupController::class, 'getFanGroupList']);
+    Route::get('/user/fan/post/list/{starId}', [FanGroupController::class, 'fanPostStarAll']);
     Route::get('/user/fan/group/{slug}', [FanGroupController::class, 'getFanGroupDetails']);
     Route::post('/user/fan/group/store', [FanGroupController::class, 'getFanGroupStore']);
     Route::get('/user/fan/group/join/{join_id}', [FanGroupController::class, 'getFanGroupJoinId']);

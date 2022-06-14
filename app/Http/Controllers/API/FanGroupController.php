@@ -40,6 +40,17 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Star Related Fan Post
+    public function fanPostStarAll($starId){
+        $starFanPost = FanPost::where('star_id', $starId)
+                            ->get();
+
+        return response()->json([
+                'status' => 200,
+                'starFanPost' => $starFanPost,
+            ]);
+    }
+
     public function fanGroupStore(Request $request){
         // $validator = Validator::make($request->all(), [
         $validator = Validator::make($request->all(),[

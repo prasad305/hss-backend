@@ -92,6 +92,16 @@ class MarketplaceController extends Controller
     }
 
 
+    public function marketplaceStarAll($starId){
+        $starMarketplace = Marketplace::where('superstar_id', $starId)
+                            ->get();
+
+        return response()->json([
+                'status' => 200,
+                'starMarketplace' => $starMarketplace,
+            ]);
+    }
+
     public function viewCountry(){
         $data = Country::where('status', 1)
                             ->get();
