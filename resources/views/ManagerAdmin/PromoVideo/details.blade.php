@@ -32,7 +32,7 @@ Manager Admin
         <div class="row">
             <div class="col-md-6">
                 <video width="800" controls>
-                    <source src="{{asset('http://localhost:8000/'.$promoVideo->video_url)}}" />
+                    <source src="{{asset($promoVideo->video_url)}}" />
                 </video>
             </div>
         </div>
