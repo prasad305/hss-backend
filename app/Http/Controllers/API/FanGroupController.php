@@ -40,6 +40,17 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Star Related Fan Post
+    public function fanPostStarAll($starId){
+        $starFanPost = FanPost::where('star_id', $starId)
+                            ->get();
+
+        return response()->json([
+                'status' => 200,
+                'starFanPost' => $starFanPost,
+            ]);
+    }
+
     public function fanGroupStore(Request $request){
         // $validator = Validator::make($request->all(), [
         $validator = Validator::make($request->all(),[
@@ -372,7 +383,10 @@ class FanGroupController extends Controller
             orWhere(function ($query) use($id) {
                     $query->where('another_star_status', 0)
                         ->where('another_star_admin_id',$id);
-                })->orWhere('status', 0)->orderBy('id', 'DESC')->get();
+                })->orWhere(function ($query) use($id) {
+                    $query->where('status', 0)
+                        ->orWhere('status', 2);
+                })->orderBy('id', 'DESC')->get();
 
         $fanPendingCount = FanGroup::where(function ($query) use($id) {
             $query->where('my_star_status', 0)
@@ -381,7 +395,10 @@ class FanGroupController extends Controller
             orWhere(function ($query) use($id) {
                     $query->where('another_star_status', 0)
                         ->where('another_star_admin_id',$id);
-                })->orWhere('status', 0)->count();
+                })->orWhere(function ($query) use($id) {
+                    $query->where('status', 0)
+                        ->orWhere('status', 2);
+                })->count();
 
 
         $today = Carbon::now();

@@ -15,18 +15,17 @@ class CreateSouvenirPaymentsTable extends Migration
     {
         Schema::create('souvenir_payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('souvenir_order_id')->nullable();
-            $table->timestamp('payment_date')->nullable();
+            $table->unsignedBigInteger('souvenir_create_id')->nullable();
+            $table->unsignedBigInteger('souvenir_apply_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('payment_method')->nullable();
             $table->boolean('payment_status')->nullable();
             $table->string('card_holder_name')->nullable();
-            $table->float('amount')->nullable();
-            $table->string('transaction_id')->nullable();
+            $table->string('card_no')->nullable();
+            $table->string('card_expire_date')->nullable();
+            $table->integer('card_cvv')->nullable();
+            $table->float('total_amount')->nullable();
             $table->integer('status')->nullable();
-            $table->string('ccv')->nullable();
-
-
-
             $table->timestamps();
         });
     }
