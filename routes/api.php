@@ -217,8 +217,10 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // Souviner Section
     Route::get('/user/souviner/view/{starId}', [SouvinerController::class, 'getUserSouvenir']);
+    Route::post('/user/souviner/payment/store', [SouvinerController::class, 'userSouvenirPaymentStore']);
     Route::post('/user/souvenir/apply/store/{starId}', [SouvinerController::class, 'applyUserSouvenir']);
     Route::get('/user/souvenir/activities/list', [SouvinerController::class, 'activitiesUserSouvenir']);
+    Route::get('/user/souvenir/activities/view/{id}', [SouvinerController::class, 'activitiesDetailsUserSouvenir']);
 
     // User Photos
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
