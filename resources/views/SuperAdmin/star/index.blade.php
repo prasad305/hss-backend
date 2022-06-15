@@ -105,7 +105,7 @@ Super Admin
                                     <i class="fa fa-close"></i>
                                 </button>
                             @endif
-                            <a class="btn btn btn-info" onclick="Show('Edit Star','{{ route('superAdmin.star.edit', $admin->id) }}')"><i class="fa fa-edit text-white"></i></a>
+                            {{-- <a class="btn btn btn-info" onclick="Show('Edit Star','{{ route('superAdmin.star.edit', $admin->id) }}')"><i class="fa fa-edit text-white"></i></a> --}}
                             <button class="btn btn-danger" onclick="delete_function(this)" value="{{ route('superAdmin.star.destroy', $admin->id) }}">
                                 <i class="fa fa-trash"></i>
                             </button>

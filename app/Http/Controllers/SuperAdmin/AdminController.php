@@ -120,6 +120,7 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'category_id' => 'required',
             'sub_category_id' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
@@ -131,6 +132,7 @@ class AdminController extends Controller
 
         $user = User::findOrFail($id);
         $user->fill($request->except('_token'));
+        $user->category_id = $request->category_id;
         $user->sub_category_id = $request->sub_category_id;
         $user->updated_by = updatedBy();
 
