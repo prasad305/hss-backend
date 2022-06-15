@@ -442,6 +442,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/view-category', [CategoryController::class, 'index']);
 });
 
+Route::get('/star/registeredUserList/{live_chat_id}', [LiveChatController::class, 'registeredUserList']);
+
 
 
 // Approved Superstar Middleware
@@ -550,7 +552,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/live-chat/details/{slug}', [LiveChatController::class, 'details']);
     Route::get('/star/live-chat/setApprove/{id}', [LiveChatController::class, 'setApproveLiveChat']);
     Route::get('/star/live-chat/setReject/{id}', [LiveChatController::class, 'set_reject_by_star']);
-    Route::get('/star/registeredUserList/{live_chat_id}', [LiveChatController::class, 'registeredUserList']);
+
     Route::post('/star/add_live_session', [LiveChatController::class, 'add_by_star']);
     Route::post('/star/update_live_session', [LiveChatController::class, 'update_by_star']);
     Route::get('/livechatListByDate/{date}', [LiveChatController::class, 'livechatListByDate']);
@@ -756,7 +758,7 @@ Route::get('fetch-subcategory/{id}', [CategoryController::class, 'fetch_subcateg
 Route::post('select_sub_category', [SubCategoryController::class, 'select_sub_category']);
 Route::get('fetch-star/{id}', [SubCategoryController::class, 'fetch_subcategory']);
 Route::post('select_star', [SubCategoryController::class, 'select_star']);
-Route::get('submit_react/{id}', [UserController::class, 'submit_react']);
+Route::post('submit_react/{id}', [UserController::class, 'submit_react']);
 Route::get('check_react/{id}', [UserController::class, 'check_react']);
 Route::get('checkchoice', [CategoryController::class, 'check']);
 
