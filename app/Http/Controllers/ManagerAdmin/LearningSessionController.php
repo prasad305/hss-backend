@@ -315,7 +315,7 @@ class LearningSessionController extends Controller
             $learningSession->update();
 
             //Remove post //
-           return $post = Post::where('event_id', $learningSession->id)->first();
+            $post = Post::where('event_id', $learningSession->id)->first();
             $post->delete();
         }
 

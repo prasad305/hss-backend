@@ -439,8 +439,8 @@
         $('#cover_error').html('');
         $('#dob_error').html('');
         $('#terms_error').html('');
-        $('#category_id').html('');
-        $('#star_id').html('');
+        $('#category_error').html('');
+        $('#star_error').html('');
         $('#reminder_error').html('');
         $('#acquired_instruction_error').html('');
     }

@@ -30,12 +30,17 @@ class SuperStarController extends Controller
     public function store(Request $request)
     {
         
-        $request->validate([
-            'sub_category_id' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'dob' => 'required',
-        ]);
+        $request->validate(
+            [
+                'sub_category_id' => 'required',
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'dob' => 'required',
+            ],[
+                'dob.required' => 'Date Of Birth Field Required',
+                'sub_category_id.required' => 'Please Select Sub Category'
+            ]
+        );
 
         $user = new User();
         $user->fill($request->except('_token'));
