@@ -443,10 +443,14 @@ class SouvinerController extends Controller
         $admin = auth('sanctum')->user()->id;
 
         $registerSouvenir = SouvenirApply::where('admin_id', $admin)->where('status', 0)->latest()->get();
+        $userPaymentDueSouvenir = SouvenirApply::where('admin_id', $admin)->where('status', 1)->get();
+        $userPaymentSouvenir = SouvenirApply::where('admin_id', $admin)->where('status', '>=', 2)->latest()->get();
 
         return response()->json([
             'status' => 200,
             'registerSouvenir' => $registerSouvenir,
+            'userPaymentDueSouvenir' => $userPaymentDueSouvenir,
+            'userPaymentSouvenir' => $userPaymentSouvenir,
         ]);
     }
     public function starRegisterUserSouvenirList(){
@@ -454,9 +458,14 @@ class SouvinerController extends Controller
 
         $registerSouvenir = SouvenirApply::where('star_id', $star)->where('status', 0)->latest()->get();
 
+        $userPaymentDueSouvenir = SouvenirApply::where('star_id', $star)->where('status', 1)->get();
+        $userPaymentSouvenir = SouvenirApply::where('star_id', $star)->where('status', '>=', 2)->latest()->get();
+
         return response()->json([
             'status' => 200,
             'registerSouvenir' => $registerSouvenir,
+            'userPaymentDueSouvenir' => $userPaymentDueSouvenir,
+            'userPaymentSouvenir' => $userPaymentSouvenir,
         ]);
     }
 
@@ -528,6 +537,10 @@ class SouvinerController extends Controller
                 'validation_errors'=>$validator->errors(),
             ]);
         }else{
+            $statusChangeSouvenir = SouvenirApply::find($request->souvenir_apply_id);
+            $statusChangeSouvenir->status = 2;
+            $statusChangeSouvenir->save();
+
             $souvenir = new SouvenirPayment();
 
             $souvenir->souvenir_create_id = $request->souvenir_create_id;
