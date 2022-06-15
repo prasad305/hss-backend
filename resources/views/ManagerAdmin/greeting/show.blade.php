@@ -39,9 +39,9 @@
         }
 
         /* .active{
-                    background-color: goldenrod !important;
-                    color: white !important;
-                } */
+                        background-color: goldenrod !important;
+                        color: white !important;
+                    } */
 
         .clockNOte {
             background-color: rgb(29, 29, 29);
@@ -71,8 +71,8 @@
         }
 
         /* .Notifytdx:hover, .lNTS:hover, .rNTS:hover{
-                 background-color: rgb(255, 153, 0);
-                } */
+                     background-color: rgb(255, 153, 0);
+                    } */
 
 
 
@@ -205,7 +205,6 @@
                 width: 90% !important;
             }
         }
-
     </style>
     <div class="row">
         <div class="col-md-12 mx-2 mt-3">
@@ -310,18 +309,17 @@
 
         <div class="container row mt-5">
             <div class="text-center">
-                @if ($greeting->status === 1)
-                    <button value="{{ route('managerAdmin.greeting.publish', $greeting->id) }}"
-                        onclick="publish(this)" class="btn"
-                        style="background: #FFCE00; border-radius: 8px; font-weight: bold;">Publish Now <i
-                            class="fas fa-eye"></i></button>
+                @if ($greeting->status == 1)
+                    <button value="{{ route('managerAdmin.greeting.publish', $greeting->id) }}" onclick="publish(this)"
+                        class="btn" style="background: #FFCE00; border-radius: 8px; font-weight: bold;">Publish
+                        Now <i class="fas fa-eye"></i></button>
                     <a type="button" class="btn btn-outline-warning px-5"
                         onclick="Show('Edit Post','{{ route('managerAdmin.greeting.edit', $greeting->id) }}')">Edit</a>
                 @else
                     <button disabled class="btn"
                         style="background: #FFCE00; border-radius: 8px; font-weight: bold;">Published <i
                             class="fas fa-eye"></i></button>
-                            <button type="button" disabled class="btn btn-outline-warning px-5">Edit</button>
+                    <button type="button" disabled class="btn btn-outline-warning px-5">Edit</button>
                 @endif
 
             </div>
@@ -331,46 +329,46 @@
 
     <script>
         function publish(objButton) {
-           var url = objButton.value;
-           // alert(objButton.value)
-           Swal.fire({
-               title: 'Are you sure?'
-               , text: "You won't be able to revert this!"
-               , icon: 'warning'
-               , showCancelButton: true
-               , confirmButtonColor: '#3085d6'
-               , cancelButtonColor: '#d33'
-               , confirmButtonText: 'Yes, Publish !'
-           }).then((result) => {
-               if (result.isConfirmed) {
+            var url = objButton.value;
+            // alert(objButton.value)
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Publish !'
+            }).then((result) => {
+                if (result.isConfirmed) {
 
-                   $.ajax({
-                       method: 'POST',
-                       url: url,
-                       headers: {
-                           'X-CSRF-TOKEN': "{{ csrf_token() }}",
-                       },
-                       success: function(data) {
-                           if (data.type == 'success') {
-                               Swal.fire(
-                                   'Published !',
-                                   'This greeting has been published. ' + data.message,
-                                   'success'
-                               )
-                               setTimeout(function() {
-                                   location.reload();
-                               }, 800);
-                           } else {
-                               Swal.fire(
-                                   'Wrong !',
-                                   'Something going wrong. ' + data.message,
-                                   'warning'
-                               )
-                           }
-                       }
-                   , })
-               }
-           })
-       }
-   </script>
+                    $.ajax({
+                        method: 'POST',
+                        url: url,
+                        headers: {
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        },
+                        success: function(data) {
+                            if (data.type == 'success') {
+                                Swal.fire(
+                                    'Published !',
+                                    'This greeting has been published. ' + data.message,
+                                    'success'
+                                )
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 800);
+                            } else {
+                                Swal.fire(
+                                    'Wrong !',
+                                    'Something going wrong. ' + data.message,
+                                    'warning'
+                                )
+                            }
+                        },
+                    })
+                }
+            })
+        }
+    </script>
 @endsection
