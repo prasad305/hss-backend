@@ -467,8 +467,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('star/fan/group/starlist/status', [FanGroupController::class, 'statusStar']);
     Route::post('star/fan/group/update/{slug}', [FanGroupController::class, 'starUpdate']);
     Route::get('star/fan/group/details/{slug}', [FanGroupController::class, 'fanGroupDetails']);
-    Route::get('star/fan/group/active/{slug}/{id}', [FanGroupController::class, 'fanGroupActive']);
-    Route::get('star/fan/group/ignore/{slug}/{id}', [FanGroupController::class, 'fanGroupIgnore']);
+    Route::get('star/fan/group/active/{slug}', [FanGroupController::class, 'fanGroupActive']);
+    Route::get('star/fan/group/ignore/{slug}', [FanGroupController::class, 'fanGroupIgnore']);
     Route::get('/star/fan/group/show/{slug}', [FanGroupController::class, 'showStarFanGroup']);
     Route::post('/star/fan/member/approve/{id}', [FanGroupController::class, 'approveFanMember']);
     Route::post('/star/fan/member/post/{id}', [FanGroupController::class, 'approveFanPost']);
