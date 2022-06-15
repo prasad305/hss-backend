@@ -153,7 +153,7 @@
 
                             <button type="submit" class="btn btn-outline-success mr-2" href="">Publish Now</button>
                             <a type="button" class="btn btn-outline-warning px-5"
-                                onclick="Show('Edit Live Chat Event','{{ route('managerAdmin.liveChat.edit', $event->id) }}')">Edit</a>
+                                onclick="Show('Edit Live Chat Event','{{ route('managerAdmin.qna.edit', $event->id) }}')">Edit</a>
 
 
 
