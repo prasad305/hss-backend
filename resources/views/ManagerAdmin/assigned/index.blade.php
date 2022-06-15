@@ -28,12 +28,6 @@ Assigned Asdmin
     <div class="container-fluid">
 
         <div class="row float-right">
-            {{-- <input type="search" name="search_text" id="search_text" class="form-control" style="width:200px!important; margin-right: 5px!important" value="{{isset($search_text) ? $search_text : ''}}">
-            <a class="btn btn-success btn-md mr-4" style="float: right; margin-bottom: 10px;" onclick="openLink('{{ url('manager-admin/auditionAdmin') }}/'+$('#search_text').val())" ><i
-                    class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
-            <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;"
-                onclick="Show('New Audition Admin','{{ route('managerAdmin.auditionAdmin.create') }}')"><i
-                    class=" fa fa-plus"></i>&nbsp;Add New</a> --}}
         </div>
 
         <!-- =========================================================== -->
@@ -54,7 +48,7 @@ Assigned Asdmin
                             <span class="info-box-text AdminName">
                                 <h5>{{ $admin->first_name }} {{ $admin->last_name }}</h5>
                             </span>
-                            <b class="AdminMusic">{{$admin->subCategory ? $admin->subCategory->name : ''}}</b> <br />
+                            <b class="AdminMusic text-warning">{{$admin->subCategory ? $admin->subCategory->name : ''}}</b> <br />
                         {{-- </a> --}}
                     
 
@@ -64,10 +58,6 @@ Assigned Asdmin
                         @else
                         {{-- <span class="right badge border border-success my-2">Free Now</span> 🏳️<br> --}}
                         @endif
-
-                        {{-- <p class="AtifAdmin">Atif Aslam</p> --}}
-                        <p class="{{ $admin->status == 0 ? 'text-danger' : 'text-success' }}">
-                            {{ $admin->status == 0 ? 'Pending For Approval' : 'Approved' }}</p>
 
                         <p class="{{ $admin->active_status == 0 ? 'text-danger' : 'text-success' }}">
                             {{ $admin->active_status == 0 ? 'Inactive' : 'Active' }}</p>
@@ -103,7 +93,7 @@ Assigned Asdmin
                             <span class="info-box-text AdminName">
                                 <h5>{{ $admin->first_name }} {{ $admin->last_name }}</h5>
                             </span>
-                            <b class="AdminMusic">{{$admin->subCategory ? $admin->subCategory->name : ''}}</b> <br />
+                            <b class="AdminMusic text-warning">{{$admin->subCategory ? $admin->subCategory->name : ''}}</b> <br />
                         {{-- </a> --}}
                     
 

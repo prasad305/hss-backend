@@ -12,9 +12,9 @@ class StarAssignedController extends Controller
     public function index()
     {
        $data = [
-           'assigned_admins' => User::where([['status',1],['active_status',1],['category_id',auth()->user()->category_id],['user_type','admin']])->whereHas('star')->get(),
+           'assigned_admins' => User::where([['status',1],['active_status',1],['category_id',auth()->user()->category_id],['user_type','admin']])->whereHas('star')->orderBy('updated_at','desc')->get(),
 
-           'unassigned_admins' => User::where([['status',1],['active_status',1],['category_id',auth()->user()->category_id],['user_type','admin']])->whereDoesntHave('star')->get(),
+           'unassigned_admins' => User::where([['status',1],['active_status',1],['category_id',auth()->user()->category_id],['user_type','admin']])->whereDoesntHave('star')->orderBy('updated_at','desc')->get(),
        ];
 
        return view('ManagerAdmin.assigned.index',$data);
@@ -40,10 +40,11 @@ class StarAssignedController extends Controller
 
     public function edit($id)
     {
+        $admin =  User::find($id);
         $data = [
-            'unassigned_stars' => User::where([['status',1],['active_status',1],['category_id',auth()->user()->category_id],['user_type','star'],['parent_user',null]])->get(),
+            'unassigned_stars' => User::where([['status',1],['active_status',1],['sub_category_id',$admin->sub_category_id],['user_type','star'],['parent_user',null]])->get(),
 
-            'admin' => User::find($id),
+            'admin' =>$admin,
 
         ];
 

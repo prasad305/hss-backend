@@ -72,6 +72,7 @@
   <script>
     $(document).on('click','#btnSaveAdmin',function (event) {
         event.preventDefault();
+        ErrorMessageClear();
         var form = $('#create-form')[0];
         var formData = new FormData(form);
 
@@ -88,13 +89,6 @@
             contentType: false,
             type: 'POST',
             success: function (data) {
-                // Swal.fire({
-                //     position: 'top-end',
-                //     icon: data.type,
-                //     title: data.message,
-                //     showConfirmButton: false,
-                //     // timer: 1500
-                // })
                 Swal.fire(
                     'Success!',
                     'Admin has been Added. ' + data.message,
@@ -105,22 +99,11 @@
                 }, 1000);
             },
             error: function (data) {
-                var errorMessage = '<div class="card bg-danger">\n' +
-                            '<div class="card-body text-center p-5">\n' +
-                            '<span class="text-white">';
+               
                 $.each(data.responseJSON.errors, function(key, value) {
-                    errorMessage += ('' + value + '<br>');
+                    ErrorMessage(key,value);
                 });
-                errorMessage += '</span>\n' +
-                    '</div>\n' +
-                    '</div>';
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    footer: errorMessage
-                });
-
-                console.log(data);
+                
             }
         });
 

@@ -16,7 +16,7 @@
 
     <div class="form-group row">
         <div class="col-md-6">
-          <label for="dob">DOB</label>
+          <label for="dob">Date of Birth</label>
           <input type="date" class="form-control" id="dob" name="dob" placeholder="Enter Date Of Birth">
           <span class="text-danger" id="dob_error"></span>
         </div>
