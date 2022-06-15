@@ -104,6 +104,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/qna/reg_info/{id}', [UserController::class, 'qnaRegDetails']);
 
 
+    
+
     //Meetup Event
     Route::get('/user/meetup/{slug}', [UserController::class, 'meetupDetails']);
     Route::get('view-country', [CategoryController::class, 'index']);
