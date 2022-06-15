@@ -462,9 +462,9 @@ class FanGroupController extends Controller
         ]);
     }
 
-    public function fanGroupActive($slug, $id){
+    public function fanGroupActive($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
-        // $id = auth('sanctum')->user()->id;
+        $id = auth('sanctum')->user()->id;
 
         if($fanDetails->my_star == $id){
             $fanDetails->my_star_status = 1;
@@ -481,9 +481,9 @@ class FanGroupController extends Controller
         ]);
     }
 
-    public function fanGroupIgnore($slug, $id){
+    public function fanGroupIgnore($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
-        // $id = auth('sanctum')->user()->id;
+        $id = auth('sanctum')->user()->id;
 
         if($fanDetails->my_star == $id){
             $fanDetails->my_star_status = 2;
