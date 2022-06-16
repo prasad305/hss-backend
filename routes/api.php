@@ -481,6 +481,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/fan/group/settings/delete/{id}', [FanGroupController::class, 'deleteSettingsFan']);
     Route::post('/star/fan/group/settings/no-warning/{id}', [FanGroupController::class, 'noWarningSettingsFan']);
     Route::post('/star/fan/group/approval/warning/{id}/{fanid}', [FanGroupController::class, 'warningSettingsFan']);
+    Route::get('/star/fan/group/analytics/{slug}', [FanGroupController::class, 'showFanGroupAnalytics']);
 
     // Marketplace Section
     Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);

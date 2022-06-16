@@ -833,6 +833,10 @@ class FanGroupController extends Controller
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->orderBy('id', 'DESC')->get();
         $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->orderBy('id', 'DESC')->get();
 
+        
+        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->get();
+        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->get();
+
         $id = auth('sanctum')->user()->id;
         $my_star = User::find($id);
         $fanId = $my_star->	parent_user;
@@ -866,6 +870,7 @@ class FanGroupController extends Controller
         }else{
             $myStar = User::find($fanDetails->another_star);
         }
+        $fanWarning = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('warning_count', '!=', 0)->orderBy('id', 'DESC')->get();
 
         // $my_star = User::find($fanDetails->my_star);
         // $another_star = User::find($fanDetails->another_star);
