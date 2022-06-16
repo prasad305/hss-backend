@@ -57,6 +57,7 @@ class AuctionController extends Controller
 
         $data = $request->except(['_token', 'product_image', 'banner']);
         $data['created_by_id'] = Auth::user()->id;
+        $data['admin_id'] = Auth::user()->id;
 
         if($request->star_id){
             $star = SuperStar::where('star_id',$request->star_id)->first();
@@ -197,7 +198,7 @@ class AuctionController extends Controller
     public function allProduct()
     {
 
-        $products = Auction::all();
+        $products = Auction::orderBy('id','DESC')->where('admin_id',auth()->user()->id)->all();
         return response()->json([
             'status' => '200',
             'product' => $products
@@ -207,7 +208,7 @@ class AuctionController extends Controller
     {
         $totolBidding = Bidding::count();
         $maxBidding = Bidding::max('amount');
-        $products = Auction::with('bidding')->orderBy('id', 'DESC')->where('status', 1)->get();
+        $products = Auction::with('bidding')->orderBy('id', 'DESC')->where('admin_id',auth()->user()->id)->where('status', 1)->get();
 
         return response()->json([
             'status' => '200',
@@ -232,14 +233,14 @@ class AuctionController extends Controller
     public function totalProduct()
     {
 
-        $product = Auction::count();
+        $product = Auction::where('admin_id',auth()->user()->admin_id)->count();
         return response()->json($product);
     }
     public function pendingProduct()
     {
 
-        $product = Auction::where('status', 0)->count();
-        $pending_product = Auction::orderBy('id', 'DESC')->where('status', 0)->get();
+        $product = Auction::where('status', 0)->where('admin_id',auth()->user()->id)->count();
+        $pending_product = Auction::orderBy('id', 'DESC')->where('status', 0)->where('admin_id',auth()->user()->id)->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
@@ -250,8 +251,8 @@ class AuctionController extends Controller
     public function soldProduct()
     {
 
-        $product = Auction::where('product_status', 1)->count();
-        $sold_product = Auction::where('product_status', 1)->get();
+        $product = Auction::where('product_status', 1)->where('admin_id',auth()->user()->id)->count();
+        $sold_product = Auction::where('product_status', 1)->where('admin_id',auth()->user()->id)->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
@@ -262,12 +263,23 @@ class AuctionController extends Controller
     public function unSoldProduct()
     {
 
-        $product = Auction::where('star_approval', 1)->where('product_status', 0)->count();
-        $unsold_product = Auction::orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->get();
+        $product = Auction::where('star_approval', 1)->where('product_status', 0)->where('admin_id',auth()->user()->id)->count();
+        $unsold_product = Auction::orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->where('admin_id',auth()->user()->id)->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
             'unsold_product' => $unsold_product,
+        ]);
+    }
+    public function rejectedProduct()
+    {
+
+        $product = Auction::where('star_approval', 2)->where('product_status', 0)->where('admin_id',auth()->user()->id)->count();
+        $rejectedProduct = Auction::orderBy('id', 'DESC')->where('star_approval', 2)->where('product_status', 0)->where('admin_id',auth()->user()->id)->get();
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+            'rejectedProduct' => $rejectedProduct,
         ]);
     }
 
@@ -378,6 +390,7 @@ class AuctionController extends Controller
         $data['star_approval'] = 1;
         $data['star_id'] = Auth::user()->id;
         $data['created_by_id'] = Auth::user()->id;
+        $data['admin_id'] = Auth::user()->parent_user;
         $data['category_id'] = Auth::user()->category_id;
         $data['subcategory_id'] = Auth::user()->sub_category_id;
 
@@ -542,7 +555,7 @@ class AuctionController extends Controller
     public function star_allProduct()
     {
 
-        $products = Auction::all();
+        $products = Auction::orderBy('id','DESC')->where('star_id',auth()->user()->id)->all();
         return response()->json([
             'status' => '200',
             'product' => $products
@@ -552,7 +565,7 @@ class AuctionController extends Controller
     {
         $totolBidding = Bidding::count();
         $maxBidding = Bidding::max('amount');
-        $products = Auction::with('bidding')->orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->get();
+        $products = Auction::with('bidding')->orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->where('star_id',auth()->user()->id)->get();
 
         return response()->json([
             'status' => '200',
@@ -578,13 +591,13 @@ class AuctionController extends Controller
     public function star_totalProduct()
     {
 
-        $product = Auction::count();
+        $product = Auction::where('star_id',auth()->user()->id)->count();
         return response()->json($product);
     }
     public function star_pendingProduct()
     {
 
-        $product = Auction::orderBy('id','DESC')->where('star_approval', 0)->count();
+        $product = Auction::orderBy('id','DESC')->where('star_approval', 0)->where('star_id',auth()->user()->id)->count();
         return response()->json([
             'status' => 200,
             'product' => $product,
@@ -593,7 +606,7 @@ class AuctionController extends Controller
     public function star_pendingProductList()
     {
 
-        $products = Auction::orderBy('id','DESC')->where('star_approval', 0)->get();
+        $products = Auction::orderBy('id','DESC')->where('star_approval', 0)->where('star_id',auth()->user()->id)->get();
         return response()->json([
             'status' => 200,
             'products' => $products,
@@ -602,7 +615,7 @@ class AuctionController extends Controller
     public function star_unSoldProductList()
     {
 
-        $products = Auction::orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->get();
+        $products = Auction::orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->where('star_id',auth()->user()->id)->get();
         return response()->json([
             'status' => 200,
             'products' => $products,
@@ -611,7 +624,7 @@ class AuctionController extends Controller
     public function star_soldProductList()
     {
 
-        $products = Auction::where('product_status', 1)->get();
+        $products = Auction::where('product_status', 1)->where('star_id',auth()->user()->id)->get();
         return response()->json([
             'status' => 200,
             'products' => $products,
@@ -621,7 +634,7 @@ class AuctionController extends Controller
     public function star_soldProduct()
     {
 
-        $product = Auction::where('product_status', 1)->count();
+        $product = Auction::where('product_status', 1)->where('star_id',auth()->user()->id)->count();
         return response()->json([
             'status' => 200,
             'product' => $product,
@@ -631,7 +644,7 @@ class AuctionController extends Controller
     public function star_unSoldProduct()
     {
 
-        $product = Auction::where('star_approval', 1)->where('product_status', 0)->count();
+        $product = Auction::where('star_approval', 1)->where('product_status', 0)->where('star_id',auth()->user()->id)->count();
         return response()->json([
             'status' => 200,
             'product' => $product,
