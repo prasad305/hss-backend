@@ -736,6 +736,13 @@ Route::post('jury-register', [JuryAuthController::class, 'register']);
 
 
 Route::get('view-category', [CategoryController::class, 'index']);
+
+/**
+ * all category show for moble user registation
+ */
+Route::get('view-category-mobile', [CategoryController::class, 'ViewAllCategory']);
+
+
 Route::get('/user/subcategory/{id}', [CategoryController::class, 'allSubcategoryList']);
 Route::get('/user/left/subcategory/{slug}', [CategoryController::class, 'allLeftSubcategoryList']);
 Route::get('/user/starcategory/{id}', [CategoryController::class, 'allStarCategoryList']);
