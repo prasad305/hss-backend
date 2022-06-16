@@ -127,6 +127,7 @@ class SimplePostController extends Controller
         $post = new SimplePost();
         $post->title = $request->input('title');
         $post->created_by_id = auth('sanctum')->user()->id;
+        $post->admin_id = auth('sanctum')->user()->id;
         $post->category_id = auth('sanctum')->user()->category_id;
         $post->subcategory_id = auth('sanctum')->user()->sub_category_id;
         $post->star_id = $request->input('star_id');
@@ -241,8 +242,8 @@ class SimplePostController extends Controller
 
     public function count()
     {
-        $pending = SimplePost::where([['created_by_id', auth('sanctum')->user()->id], ['status', 0]])->count();
-        $approved = SimplePost::where([['created_by_id', auth('sanctum')->user()->id], ['status', 1]])->count();
+        $pending = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 0]])->count();
+        $approved = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 1]])->count();
 
         return response()->json([
             'status' => 200,
@@ -254,8 +255,8 @@ class SimplePostController extends Controller
 
     public function all()
     {
-        $post = SimplePost::where('created_by_id', auth('sanctum')->user()->id)->latest()->get();
-        $count = SimplePost::where('created_by_id', auth('sanctum')->user()->id)->count();
+        $post = SimplePost::where('admin_id', auth('sanctum')->user()->id)->latest()->get();
+        $count = SimplePost::where('admin_id', auth('sanctum')->user()->id)->count();
 
         return response()->json([
             'status' => 200,
@@ -267,8 +268,8 @@ class SimplePostController extends Controller
 
     public function pending_list()
     {
-        $post = SimplePost::where([['created_by_id', auth('sanctum')->user()->id], ['status', 0]])->latest()->get();
-        $count = SimplePost::where([['created_by_id', auth('sanctum')->user()->id], ['status', 0]])->count();
+        $post = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 0]])->latest()->get();
+        $count = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 0]])->count();
 
         return response()->json([
             'status' => 200,
@@ -291,8 +292,8 @@ class SimplePostController extends Controller
 
     public function approved_list()
     {
-        $post = SimplePost::where([['created_by_id', auth('sanctum')->user()->id], ['status', 1]])->latest()->get();
-        $count = SimplePost::where([['created_by_id', auth('sanctum')->user()->id], ['status', 1]])->count();
+        $post = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 1]])->latest()->get();
+        $count = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 1]])->count();
 
         return response()->json([
             'status' => 200,
@@ -303,8 +304,8 @@ class SimplePostController extends Controller
     }
     public function rejected_list()
     {
-        $post = SimplePost::where([['created_by_id', auth('sanctum')->user()->id], ['star_approval', 2]])->latest()->get();
-        $count = SimplePost::where([['created_by_id', auth('sanctum')->user()->id], ['star_approval', 2]])->count();
+        $post = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['star_approval', 2]])->latest()->get();
+        $count = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['star_approval', 2]])->count();
 
         return response()->json([
             'status' => 200,
@@ -461,6 +462,7 @@ class SimplePostController extends Controller
         $post = new SimplePost();
         $post->title = $request->input('title');
         $post->created_by_id = auth('sanctum')->user()->id;
+        $post->admin_id = auth('sanctum')->user()->parent_user;
         $post->star_id = auth('sanctum')->user()->id;
         $post->category_id = auth('sanctum')->user()->category_id;
         $post->subcategory_id = auth('sanctum')->user()->sub_category_id;

@@ -415,6 +415,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/pending/auction/product', [AuctionController::class, 'pendingProduct']);
     Route::get('/admin/sold/auction/product', [AuctionController::class, 'soldProduct']);
     Route::get('/admin/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
+    Route::get('/admin/rejected/auction/product', [AuctionController::class, 'rejectedProduct']);
     Route::get('/admin/live/allProduct', [AuctionController::class, 'allLiveProduct']);
     Route::get('/admin/liveBidding/auction/{auction_id}', [AuctionController::class, 'liveBidding']);
     Route::get('/admin/topBidder/auction/{auction_id}', [AuctionController::class, 'topBidder']);
@@ -443,6 +444,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     //Category
     Route::get('/admin/view-category', [CategoryController::class, 'index']);
 });
+
+Route::get('/star/registeredUserList/{live_chat_id}', [LiveChatController::class, 'registeredUserList']);
 
 
 
@@ -553,7 +556,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/live-chat/details/{slug}', [LiveChatController::class, 'details']);
     Route::get('/star/live-chat/setApprove/{id}', [LiveChatController::class, 'setApproveLiveChat']);
     Route::get('/star/live-chat/setReject/{id}', [LiveChatController::class, 'set_reject_by_star']);
-    Route::get('/star/registeredUserList/{live_chat_id}', [LiveChatController::class, 'registeredUserList']);
+
     Route::post('/star/add_live_session', [LiveChatController::class, 'add_by_star']);
     Route::post('/star/update_live_session', [LiveChatController::class, 'update_by_star']);
     Route::get('/livechatListByDate/{date}', [LiveChatController::class, 'livechatListByDate']);
@@ -739,6 +742,13 @@ Route::post('jury-register', [JuryAuthController::class, 'register']);
 
 
 Route::get('view-category', [CategoryController::class, 'index']);
+
+/**
+ * all category show for moble user registation
+ */
+Route::get('view-category-mobile', [CategoryController::class, 'ViewAllCategory']);
+
+
 Route::get('/user/subcategory/{id}', [CategoryController::class, 'allSubcategoryList']);
 Route::get('/user/left/subcategory/{slug}', [CategoryController::class, 'allLeftSubcategoryList']);
 Route::get('/user/starcategory/{id}', [CategoryController::class, 'allStarCategoryList']);
@@ -759,7 +769,7 @@ Route::get('fetch-subcategory/{id}', [CategoryController::class, 'fetch_subcateg
 Route::post('select_sub_category', [SubCategoryController::class, 'select_sub_category']);
 Route::get('fetch-star/{id}', [SubCategoryController::class, 'fetch_subcategory']);
 Route::post('select_star', [SubCategoryController::class, 'select_star']);
-Route::get('submit_react/{id}', [UserController::class, 'submit_react']);
+Route::post('submit_react/{id}', [UserController::class, 'submit_react']);
 Route::get('check_react/{id}', [UserController::class, 'check_react']);
 Route::get('checkchoice', [CategoryController::class, 'check']);
 
