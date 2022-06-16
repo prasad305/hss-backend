@@ -20,17 +20,16 @@ class CategoryController extends Controller
         $allStar = User::where('parent_user', auth('sanctum')->user()->id)->get();
 
         $id = auth('sanctum')->user()->id;
-        $selectedCategory = ChoiceList::where('user_id' ,$id)->first();
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
 
-        if($selectedCategory)
-        {
+        if ($selectedCategory) {
             $selectedCategory = json_decode($selectedCategory->category);
 
             // $sugg_category = Category::whereNotIn('id', $selectedCategory)->get();
             $sugg_category = Category::select("*")
-                        ->whereNotIn('id', $selectedCategory)
-                        ->get();
-        }else{
+                ->whereNotIn('id', $selectedCategory)
+                ->get();
+        } else {
             $selectedCategory = [];
             $sugg_category = [];
         }
@@ -46,14 +45,27 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function allSubcategoryList($catId){
+    /**
+     * for mobile use registaion
+     */
+    public function ViewAllCategory()
+    {
+        $category = Category::all();
+        return response()->json([
+            'status' => 200,
+            'category' => $category,
+        ]);
+    }
+
+    public function allSubcategoryList($catId)
+    {
 
         $allSubCat = SubCategory::where('category_id', $catId)
-                            ->latest()
-                            ->get();
+            ->latest()
+            ->get();
 
         $id = auth('sanctum')->user()->id;
-        $selectedCategory = ChoiceList::where('user_id' ,$id)->first();
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
 
         $selectedSubCategory = json_decode($selectedCategory->subcategory);
 
@@ -72,12 +84,13 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function allLeftSubcategoryList($slug){
-        $category = Category::where('slug',$slug)->first();
-        $allSubCat = SubCategory::where('category_id',$category->id)->get();
+    public function allLeftSubcategoryList($slug)
+    {
+        $category = Category::where('slug', $slug)->first();
+        $allSubCat = SubCategory::where('category_id', $category->id)->get();
 
         $id = auth('sanctum')->user()->id;
-        $selectedCategory = ChoiceList::where('user_id' ,$id)->first();
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
 
         $selectedSubCategory = json_decode($selectedCategory->subcategory);
 
@@ -96,14 +109,15 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function allStarCategoryList($subCatId){
+    public function allStarCategoryList($subCatId)
+    {
 
         $allStarCat = SuperStar::where('sub_category_id', $subCatId)
-                            ->latest()
-                            ->get();
+            ->latest()
+            ->get();
 
         $id = auth('sanctum')->user()->id;
-        $selectedCategory = ChoiceList::where('user_id' ,$id)->first();
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
 
         $selectedStarCategory = json_decode($selectedCategory->star_id);
 
@@ -122,22 +136,23 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function starFollowingList(){
+    public function starFollowingList()
+    {
 
         $id = auth('sanctum')->user()->id;
-        $selectedCategory = ChoiceList::where('user_id' ,$id)->first();
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
 
         $followStarCategory = json_decode($selectedCategory->star_id);
 
         $followingStarCategory = Superstar::select("*")
-                    ->whereIn('id', $followStarCategory)
-                    ->get();
+            ->whereIn('id', $followStarCategory)
+            ->get();
 
-        if($followingStarCategory != null){
+        if ($followingStarCategory != null) {
             $suggFollowingStarCategory = Superstar::select("*")
-                    ->whereNotIn('id', $followStarCategory)
-                    ->get();
-        }else{
+                ->whereNotIn('id', $followStarCategory)
+                ->get();
+        } else {
             $suggFollowingStarCategory = Superstar::latest()->get();
         }
 
@@ -157,10 +172,9 @@ class CategoryController extends Controller
         $id = auth('sanctum')->user()->id;
         $category = json_decode($request->category);
 
-        $cat = ChoiceList::where('user_id' ,$id)->first();
+        $cat = ChoiceList::where('user_id', $id)->first();
 
-        if(!isset($cat))
-        {
+        if (!isset($cat)) {
             $cat = new ChoiceList();
             $cat->user_id = $id;
             $cat->save();
@@ -169,36 +183,36 @@ class CategoryController extends Controller
         $subcategory = json_decode($cat->subcategory);
         $starcategory = json_decode($cat->star_id);
 
-        $subCat=array();
-        $starCat=array();
+        $subCat = array();
+        $starCat = array();
 
-        $catLen=count($category);
-        $subCatLen=count($subcategory ? $subcategory : []);
-        $starCatLen=count($starcategory ? $starcategory : []);
+        $catLen = count($category);
+        $subCatLen = count($subcategory ? $subcategory : []);
+        $starCatLen = count($starcategory ? $starcategory : []);
 
-        for($x=0; $x<$subCatLen; $x++){
-            $ok= false;
-            for($y=0; $y<$catLen; $y++){
+        for ($x = 0; $x < $subCatLen; $x++) {
+            $ok = false;
+            for ($y = 0; $y < $catLen; $y++) {
                 $scat = SubCategory::find($subcategory[$x]);
-                if($category[$y] == $scat->category_id){
-                    $ok= true;
+                if ($category[$y] == $scat->category_id) {
+                    $ok = true;
                 }
             }
-            if($ok === false){
+            if ($ok === false) {
                 array_push($subCat, $subcategory[$x]);
                 // $ok = false;
             }
         }
 
-        for($x=0; $x<$starCatLen; $x++){
-            $ok= false;
-            for($y=0; $y<$catLen; $y++){
+        for ($x = 0; $x < $starCatLen; $x++) {
+            $ok = false;
+            for ($y = 0; $y < $catLen; $y++) {
                 $scat = SuperStar::find($starcategory[$x]);
-                if($category[$y] == $scat->category_id){
-                    $ok= true;
+                if ($category[$y] == $scat->category_id) {
+                    $ok = true;
                 }
             }
-            if($ok === false){
+            if ($ok === false) {
                 array_push($starCat, $starcategory[$x]);
                 // $ok = false;
             }
@@ -219,25 +233,25 @@ class CategoryController extends Controller
     {
 
         $id = auth('sanctum')->user()->id;
-        $cat = ChoiceList::where('user_id' ,$id)->first();
+        $cat = ChoiceList::where('user_id', $id)->first();
 
         $subcategory = json_decode($request->subcategory);
         $starcategory = json_decode($cat->star_id);
 
-        $starCat=array();
+        $starCat = array();
 
-        $subCatLen=count($subcategory);
-        $starLen=count($starcategory);
+        $subCatLen = count($subcategory);
+        $starLen = count($starcategory);
 
-        for($x=0; $x<$starLen; $x++){
-            $ok= false;
-            for($y=0; $y<$subCatLen; $y++){
+        for ($x = 0; $x < $starLen; $x++) {
+            $ok = false;
+            for ($y = 0; $y < $subCatLen; $y++) {
                 $scat = SuperStar::find($starcategory[$x]);
-                if($subcategory[$y] == $scat->sub_category_id){
-                    $ok= true;
+                if ($subcategory[$y] == $scat->sub_category_id) {
+                    $ok = true;
                 }
             }
-            if($ok === false){
+            if ($ok === false) {
                 array_push($starCat, $starcategory[$x]);
                 // $ok = false;
             }
@@ -257,7 +271,7 @@ class CategoryController extends Controller
     {
 
         $id = auth('sanctum')->user()->id;
-        $cat = ChoiceList::where('user_id' ,$id)->first();
+        $cat = ChoiceList::where('user_id', $id)->first();
 
         $cat->star_id = $request->star_id;
         $cat->save();
@@ -271,13 +285,13 @@ class CategoryController extends Controller
     public function selectedCategory()
     {
         $id = auth('sanctum')->user()->id;
-        $selectedCategory = ChoiceList::where('user_id' ,$id)->first();
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
 
         $selectedCategory = json_decode($selectedCategory->category);
 
         $userCategory = Category::select("*")
-                    ->whereIn('id', $selectedCategory)
-                    ->get();
+            ->whereIn('id', $selectedCategory)
+            ->get();
 
         return response()->json([
             'status' => 200,
@@ -318,20 +332,18 @@ class CategoryController extends Controller
     public function select_category(Request $req)
     {
 
-        $subCategories = SubCategory::whereIn('category_id',$req->cat)->get();
+        $subCategories = SubCategory::whereIn('category_id', $req->cat)->get();
 
-        $user = ChoiceList::where('user_id',auth('sanctum')->user()->id)->first();
+        $user = ChoiceList::where('user_id', auth('sanctum')->user()->id)->first();
 
 
-        if($user)
-        {
+        if ($user) {
             $user->category = json_encode($req->cat);
             $user->update();
-        }
-        else{
+        } else {
             ChoiceList::create([
-                'user_id'=> auth('sanctum')->user()->id,
-                'category'=> json_encode($req->cat)
+                'user_id' => auth('sanctum')->user()->id,
+                'category' => json_encode($req->cat)
             ]);
         }
 
@@ -346,7 +358,7 @@ class CategoryController extends Controller
 
     public function check()
     {
-        $data = ChoiceList::where('user_id',auth('sanctum')->user()->id)->first();
+        $data = ChoiceList::where('user_id', auth('sanctum')->user()->id)->first();
 
 
         return response()->json([
@@ -354,6 +366,5 @@ class CategoryController extends Controller
             'message' => 'Working',
             'category' => json_decode($data->category),
         ]);
-
     }
 }
