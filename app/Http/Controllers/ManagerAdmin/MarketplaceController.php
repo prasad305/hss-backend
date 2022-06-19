@@ -79,8 +79,8 @@ class MarketplaceController extends Controller
             'description' => 'required',
             'keywords' => 'required',
             'terms_conditions' => 'required',
-            'unit_price' => 'required',
-            'total_items' => 'required',
+            // 'unit_price' => 'required',
+            // 'total_items' => 'required',
 
         ]);
 
