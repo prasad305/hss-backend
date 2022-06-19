@@ -181,7 +181,7 @@ class MeetupEventController extends Controller
 
     public function pending_list()
     {
-        $events = MeetupEvent::where([['created_by_id', auth('sanctum')->user()->id], ['status', '<', 2]]);
+        $events = MeetupEvent::where([['admin_id', auth('sanctum')->user()->id], ['status', '<', 2]]);
 
         return response()->json([
             'status' => 200,
@@ -192,7 +192,7 @@ class MeetupEventController extends Controller
 
     public function live_list()
     {
-        $events = MeetupEvent::where([['created_by_id', auth('sanctum')->user()->id], ['status', 2]]);
+        $events = MeetupEvent::where([['admin_id', auth('sanctum')->user()->id], ['status', 2]]);
 
         return response()->json([
             'status' => 200,
@@ -203,7 +203,7 @@ class MeetupEventController extends Controller
 
     public function completed()
     {
-        $events = MeetupEvent::where([['created_by_id', auth('sanctum')->user()->id], ['status', 9]]);
+        $events = MeetupEvent::where([['admin_id', auth('sanctum')->user()->id], ['status', 9]]);
 
         return response()->json([
             'status' => 200,
