@@ -27,10 +27,74 @@ class MarketplaceController extends Controller
         //                     ->where('post_status', 1)
         //                     ->get();
 
+        // $id = auth('sanctum')->user()->id;
+        // $selectedCategory = ChoiceList::where('user_id', $id)->first();
+
+        // // return $selectedCategory;
+
+        // $selectedCat = json_decode($selectedCategory->category);
+        // $selectedSubCat = json_decode($selectedCategory->subcategory);
+        // $selectedSubSubCat = json_decode($selectedCategory->star_id);
+
+        // $cat_post = Marketplace::select("*")
+        //     ->whereIn('category_id', $selectedCat)
+        //     ->whereColumn('total_items', '>', 'total_selling')
+        //     ->where('post_status', 1)
+        //     ->where('status', 1)
+        //     ->latest()->get();
+
+        // $sub_cat_post = Marketplace::select("*")
+        //     ->whereIn('subcategory_id', $selectedSubCat)
+        //     ->whereColumn('total_items', '>', 'total_selling')
+        //     ->where('post_status', 1)
+        //     ->where('status', 1)
+        //     ->latest()->get();
+
+        // $sub_sub_cat_post = Marketplace::select("*")
+        //     ->whereIn('superstar_id', $selectedSubSubCat)
+        //     ->whereColumn('total_items', '>', 'total_selling')
+        //     ->where('post_status', 1)
+        //     ->where('status', 1)
+        //     ->latest()->get();
+
+        // if($cat_post) {
+        //     $cat_post = $cat_post;
+        // } else {
+        //     $cat_post = [];
+        // }
+
+        // if($sub_cat_post) {
+        //     $sub_cat_post = $sub_cat_post;
+        // } else {
+        //     $sub_cat_post = [];
+        // }
+
+        // if($sub_sub_cat_post) {
+        //     $sub_sub_cat_post = $sub_sub_cat_post;
+        // } else {
+        //     $sub_sub_cat_post = [];
+        // }
+
+        
+
+        // $data = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
+
+        // if($data){
+        //     $data = $data;
+        // }else{
+        //     $data = [];
+        // }
+
+        // return response()->json([
+        //         'status' => 200,
+        //         'data' => $data,
+        //     ]);
+
+
+
+
         $id = auth('sanctum')->user()->id;
         $selectedCategory = ChoiceList::where('user_id', $id)->first();
-
-        // return $selectedCategory;
 
         $selectedCat = json_decode($selectedCategory->category);
         $selectedSubCat = json_decode($selectedCategory->subcategory);
@@ -43,52 +107,34 @@ class MarketplaceController extends Controller
             ->where('status', 1)
             ->latest()->get();
 
-        $sub_cat_post = Marketplace::select("*")
-            ->whereIn('subcategory_id', $selectedSubCat)
-            ->whereColumn('total_items', '>', 'total_selling')
-            ->where('post_status', 1)
-            ->where('status', 1)
-            ->latest()->get();
-
-        $sub_sub_cat_post = Marketplace::select("*")
-            ->whereIn('superstar_id', $selectedSubSubCat)
-            ->whereColumn('total_items', '>', 'total_selling')
-            ->where('post_status', 1)
-            ->where('status', 1)
-            ->latest()->get();
-
-        if($cat_post) {
-            $cat_post = $cat_post;
-        } else {
-            $cat_post = [];
-        }
-
-        if($sub_cat_post) {
-            $sub_cat_post = $sub_cat_post;
+        if (isset($sub_cat_post)) {
+            $sub_cat_post =Marketplace::select("*")
+                ->whereIn('subcategory_id', $selectedSubCat)
+                ->whereColumn('total_items', '>', 'total_selling')
+                ->where('post_status', 1)
+                ->where('status', 1)
+                ->latest()->get();
         } else {
             $sub_cat_post = [];
         }
 
-        if($sub_sub_cat_post) {
-            $sub_sub_cat_post = $sub_sub_cat_post;
+        if (isset($sub_sub_cat_post)) {
+            $sub_sub_cat_post = Marketplace::select("*")
+                ->whereIn('superstar_id', $selectedSubSubCat)
+                ->whereColumn('total_items', '>', 'total_selling')
+                ->where('post_status', 1)
+                ->where('status', 1)
+                ->latest()->get();
         } else {
             $sub_sub_cat_post = [];
         }
 
-        
-
         $data = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
 
-        if($data){
-            $data = $data;
-        }else{
-            $data = [];
-        }
-
         return response()->json([
-                'status' => 200,
-                'data' => $data,
-            ]);
+            'status' => 200,
+            'data' => $data
+        ]);
     }
 
 
