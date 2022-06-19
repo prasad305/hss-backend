@@ -43,6 +43,8 @@ Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 // Home Page All Post
 Route::get('/user/all_post', [UserController::class, 'all_post']);
 Route::get('/user/post/{type}', [UserController::class, 'single_type_post']);
+Route::post('/user/general-post/payment', [UserController::class, 'generalPostPayment']);
+Route::get('/user/generalPost/payment/check', [UserController::class, 'generalPostPaymentCheck']);
 
 
 Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
@@ -104,7 +106,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/qna/reg_info/{id}', [UserController::class, 'qnaRegDetails']);
 
 
-    
+
 
     //Meetup Event
     Route::get('/user/meetup/{slug}', [UserController::class, 'meetupDetails']);
@@ -182,7 +184,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('user/aquired/auction', [UserController::class, 'aquiredProduct']);
     Route::get('user/maxbid/auction/{id}', [UserController::class, 'maxBid']);
     Route::get('/user/auction_activites', [UserController::class, 'auction_activites']);
-    Route::get('/user/auction_instruction', [UserController::class, 'auction_instruction']);
+
 
     //Event Registaion By User (Learning Session + Live Chat + Greeting + Meetup Event)
     Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
