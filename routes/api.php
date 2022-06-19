@@ -42,6 +42,7 @@ Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 
 // Home Page All Post
 Route::get('/user/all_post', [UserController::class, 'all_post']);
+Route::get('/user/all_post/with-paginate/{limit}', [UserController::class, 'paginate_all_post']);
 Route::get('/user/post/{type}', [UserController::class, 'single_type_post']);
 
 
@@ -104,7 +105,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/qna/reg_info/{id}', [UserController::class, 'qnaRegDetails']);
 
 
-    
+
 
     //Meetup Event
     Route::get('/user/meetup/{slug}', [UserController::class, 'meetupDetails']);

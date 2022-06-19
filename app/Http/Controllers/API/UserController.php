@@ -114,6 +114,48 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * post with pagination
+     */
+    public function paginate_all_post($limit)
+    {
+        $id = auth('sanctum')->user()->id;
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
+
+        $selectedCat = json_decode($selectedCategory->category);
+        $selectedSubCat = json_decode($selectedCategory->subcategory);
+        $selectedSubSubCat = json_decode($selectedCategory->star_id);
+
+        $cat_post = Post::select("*")
+            ->whereIn('category_id', $selectedCat)->paginate($limit);
+
+        if (isset($sub_cat_post)) {
+            $sub_cat_post = Post::select("*")
+                ->whereIn('sub_category_id', $selectedSubCat)
+                ->latest()->get();
+        } else {
+            $sub_cat_post = [];
+        }
+
+        if (isset($sub_sub_cat_post)) {
+            $sub_sub_cat_post = Post::select("*")
+                ->whereIn('user_id', $selectedSubSubCat)
+                ->latest()->get();
+        } else {
+            $sub_sub_cat_post = [];
+        }
+
+        $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'posts' => $post,
+        ]);
+    }
+
+
+
     public function single_type_post($type)
     {
         $id = auth('sanctum')->user()->id;
@@ -202,11 +244,11 @@ class UserController extends Controller
 
     public function userSingleLearnigSession($slug)
     {
-        $learnigSession = LearningSession::where([['slug', $slug]])->with(['learningSessionAssignment' => function($query){
-            return $query->where('user_id',auth()->user()->id)->get();
+        $learnigSession = LearningSession::where([['slug', $slug]])->with(['learningSessionAssignment' => function ($query) {
+            return $query->where('user_id', auth()->user()->id)->get();
         }])->first();
 
-        $userLearningSession = LearningSessionRegistration::where([['learning_session_id',$learnigSession->id],['user_id',auth()->user()->id]])->first();
+        $userLearningSession = LearningSessionRegistration::where([['learning_session_id', $learnigSession->id], ['user_id', auth()->user()->id]])->first();
 
         return response()->json([
             'status' => 200,
@@ -221,9 +263,9 @@ class UserController extends Controller
         // return $slug;
         $learnigSession = LearningSession::where('slug', $slug)->first();
 
-        $marked_videos = LearningSessionAssignment::where([['event_id',$learnigSession->id],['user_id',auth()->user()->id],['send_to_user',1],['mark','>',0]])->get();
+        $marked_videos = LearningSessionAssignment::where([['event_id', $learnigSession->id], ['user_id', auth()->user()->id], ['send_to_user', 1], ['mark', '>', 0]])->get();
 
-        $rejected_videos = LearningSessionAssignment::where([['event_id',$learnigSession->id],['user_id',auth()->user()->id],['status',2],['send_to_user',1]])->get();
+        $rejected_videos = LearningSessionAssignment::where([['event_id', $learnigSession->id], ['user_id', auth()->user()->id], ['status', 2], ['send_to_user', 1]])->get();
 
         return response()->json([
             'status' => 200,
@@ -282,20 +324,16 @@ class UserController extends Controller
 
     public function getStarPost($id, $type)
     {
-        if($type == 'livechat')
-        {
-            $post = Post::where([['user_id', $id],['type','livechat']])->latest()->get();
+        if ($type == 'livechat') {
+            $post = Post::where([['user_id', $id], ['type', 'livechat']])->latest()->get();
         }
-        if($type == 'meetup')
-        {
-            $post = Post::where([['user_id', $id],['type','meetup']])->latest()->get();
+        if ($type == 'meetup') {
+            $post = Post::where([['user_id', $id], ['type', 'meetup']])->latest()->get();
         }
-        if($type == 'learning')
-        {
-            $post = Post::where([['user_id', $id],['type','learningSession']])->latest()->get();
+        if ($type == 'learning') {
+            $post = Post::where([['user_id', $id], ['type', 'learningSession']])->latest()->get();
         }
-        if($type == 'all')
-        {
+        if ($type == 'all') {
             $post = Post::where('user_id', $id)->latest()->get();
         }
 
@@ -776,12 +814,12 @@ class UserController extends Controller
 
         $array = $post->react_provider ? json_decode($post->react_provider) : [];
 
-        if(!in_array( auth('sanctum')->user()->id,$array)){
+        if (!in_array(auth('sanctum')->user()->id, $array)) {
             array_push($array,  auth('sanctum')->user()->id);
             $post->react_number = $post->react_number + 1;
             // $array[] = auth('sanctum')->user()->id;
-        }else{
-            if (($key = array_search( auth('sanctum')->user()->id, $array))) {
+        } else {
+            if (($key = array_search(auth('sanctum')->user()->id, $array))) {
                 unset($array[$key]);
             }
             $post->react_number = $post->react_number - 1;
@@ -920,12 +958,12 @@ class UserController extends Controller
             ]);
 
 
-            if(!Activity::where([['user_id',auth()->user()->id],['event_id',$bidding->auction_id]])->exists()){
+            if (!Activity::where([['user_id', auth()->user()->id], ['event_id', $bidding->auction_id]])->exists()) {
                 Activity::Create([
-                  'type'    => 'auction',
-                  'user_id'    => $bidding->user_id,
-                  'event_id'    => $bidding->auction_id,
-                  ]);
+                    'type'    => 'auction',
+                    'user_id'    => $bidding->user_id,
+                    'event_id'    => $bidding->auction_id,
+                ]);
             }
 
             return response()->json([
@@ -967,7 +1005,8 @@ class UserController extends Controller
             'maxBid' => $maxBid,
         ]);
     }
-    public function auction_instruction(){
+    public function auction_instruction()
+    {
 
         $instruction = AuctionTerms::first();
 
@@ -1048,7 +1087,7 @@ class UserController extends Controller
     }
     public function auction_activites()
     {
-        $post = Activity::where([['user_id', auth('sanctum')->user()->id],['type','auction']])->latest()->get();
+        $post = Activity::where([['user_id', auth('sanctum')->user()->id], ['type', 'auction']])->latest()->get();
 
 
         return response()->json([
@@ -1309,19 +1348,19 @@ class UserController extends Controller
         $today = Carbon::now();
         $cat_promo = PromoVideo::select("*")
             ->whereIn('category_id', $selectedCat)
-            ->where('status',2)
-            ->whereDate('publish_start_date', '<=',$today)
+            ->where('status', 2)
+            ->whereDate('publish_start_date', '<=', $today)
             ->whereDate('publish_end_date', '>=', $today)
-            ->orderBy('updated_at','desc')
+            ->orderBy('updated_at', 'desc')
             ->get();
 
         if (isset($sub_cat_promo)) {
             $sub_cat_promo = PromoVideo::select("*")
                 ->whereIn('sub_category_id', $selectedSubCat)
-                ->where('status',2)
-                ->whereDate('publish_start_date', '<=',$today)
+                ->where('status', 2)
+                ->whereDate('publish_start_date', '<=', $today)
                 ->whereDate('publish_end_date', '>=', $today)
-                ->orderBy('updated_at','desc')
+                ->orderBy('updated_at', 'desc')
                 ->get();
         } else {
             $sub_cat_promo = [];
@@ -1329,11 +1368,11 @@ class UserController extends Controller
 
         if (isset($sub_sub_cat_promo)) {
             $sub_sub_cat_promo = PromoVideo::select("*")
-                ->where('status',2)
+                ->where('status', 2)
                 ->whereIn('star_id', $selectedSubSubCat)
-                ->whereDate('publish_start_date', '<=',$today)
+                ->whereDate('publish_start_date', '<=', $today)
                 ->whereDate('publish_end_date', '>=', $today)
-                ->orderBy('updated_at','desc')
+                ->orderBy('updated_at', 'desc')
                 ->get();
         } else {
             $sub_sub_cat_promo = [];
@@ -1547,7 +1586,7 @@ class UserController extends Controller
                 $learning_session = LearningSession::find($request->event_id);
 
                 if ($learning_session) {
-                    $certificate =  LearningSessionCertificate::where([['event_id',$request->event_id],['user_id',auth()->user()->id]])->first();
+                    $certificate =  LearningSessionCertificate::where([['event_id', $request->event_id], ['user_id', auth()->user()->id]])->first();
                     if (empty($certificate)) {
                         $certificate = new LearningSessionCertificate();
                     }
@@ -1563,13 +1602,12 @@ class UserController extends Controller
                     'learningSession' => $learning_session,
                 ]);
             }
-
-
         }
     }
 
-    public function getCertificateData($event_id){
-        $certificate = LearningSessionCertificate::where([['event_id',$event_id],['user_id',auth()->user()->id]])->first();
+    public function getCertificateData($event_id)
+    {
+        $certificate = LearningSessionCertificate::where([['event_id', $event_id], ['user_id', auth()->user()->id]])->first();
         return response()->json([
             'status' => 200,
             'certificateData' => $certificate,
