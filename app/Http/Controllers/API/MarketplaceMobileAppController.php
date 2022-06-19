@@ -33,11 +33,11 @@ class MarketplaceMobileAppController extends Controller
             // $marketplaceOrder->expire_date = $request->expire_date;
 
             // $marketplaceOrder->status = 1;
+            // $marketplace->total_selling += $request->items;
+            // $marketplace->save();
 
             $marketplaceOrder->save();
 
-            $marketplace->total_selling += $request->items;
-            $marketplace->save();
 
 
             return response()->json([
