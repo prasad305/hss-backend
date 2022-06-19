@@ -876,12 +876,14 @@ class UserController extends Controller
     }
     public function  auctionSingleProduct($id)
     {
-        $userInfo = user::findOrFail(auth()->user()->id);
         $auctionInfo = Auction::findOrFail($id);
+        $instruction = AuctionTerms::first();
+
         return response()->json([
             'status' => 200,
             'auctionInfo' => $auctionInfo,
-            'userInfo' => $userInfo
+            'userInfo' => auth('sanctum')->user(),
+            'instruction' => $instruction,
         ]);
     }
 

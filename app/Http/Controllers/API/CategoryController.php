@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\ChoiceList;
 use App\Models\SubCategory;
 use App\Models\SuperStar;
+use App\Models\Wallet;
 
 class CategoryController extends Controller
 {
@@ -335,6 +336,20 @@ class CategoryController extends Controller
         $subCategories = SubCategory::whereIn('category_id', $req->cat)->get();
 
         $user = ChoiceList::where('user_id', auth('sanctum')->user()->id)->first();
+        
+        $wallet = Wallet::where('user_id', auth('sanctum')->user()->id)->first();
+        if (!$wallet) {
+            Wallet::create([
+                'user_id' => auth('sanctum')->user()->id,
+                'club_points' => 0,
+                'auditions' => 0,
+                'learning_session' => 0,
+                'live_chats' => 0,
+                'meetup' => 0,
+                'greetings' => 0,
+                'price' => 0,
+            ]);
+        }
 
 
         if ($user) {
@@ -343,7 +358,9 @@ class CategoryController extends Controller
         } else {
             ChoiceList::create([
                 'user_id' => auth('sanctum')->user()->id,
-                'category' => json_encode($req->cat)
+                'category' => json_encode($req->cat),
+                'subcategory' => '[]',
+                'star_id' => '[]'
             ]);
         }
 

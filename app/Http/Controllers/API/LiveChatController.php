@@ -322,7 +322,7 @@ class LiveChatController extends Controller
 
     public function pending_list()
     {
-        $events = LiveChat::where([['created_by_id', auth('sanctum')->user()->id], ['status', '<', 2]]);
+        $events = LiveChat::where([['admin_id', auth('sanctum')->user()->id], ['status', '<', 2]]);
 
         return response()->json([
             'status' => 200,
@@ -333,7 +333,7 @@ class LiveChatController extends Controller
 
     public function live_list()
     {
-        $events = LiveChat::where([['created_by_id', auth('sanctum')->user()->id], ['status', 2]]);
+        $events = LiveChat::where([['admin_id', auth('sanctum')->user()->id], ['status', 2]]);
 
         return response()->json([
             'status' => 200,
@@ -344,7 +344,7 @@ class LiveChatController extends Controller
 
     public function completed_list()
     {
-        $events = LiveChat::where([['created_by_id', auth('sanctum')->user()->id], ['status', 9]]);
+        $events = LiveChat::where([['admin_id', auth('sanctum')->user()->id], ['status', 9]]);
 
         return response()->json([
             'status' => 200,

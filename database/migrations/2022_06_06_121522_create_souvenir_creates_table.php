@@ -22,6 +22,8 @@ class CreateSouvenirCreatesTable extends Migration
             $table->longText('description')->nullable();
             $table->longText('instruction')->nullable();
             $table->float('price')->nullable();
+            $table->float('delivery_charge')->nullable();
+            $table->float('tax')->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
             $table->string('banner')->nullable();
