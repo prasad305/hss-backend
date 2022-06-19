@@ -16,7 +16,7 @@ class Activity extends Model
         'user_id',
     ];
 
-    protected $with = ['user', 'meetup', 'livechat', 'learningSession','greetingRegistration','greeting','qna','auction'];
+    protected $with = ['user', 'meetup','meetupRegistration', 'livechat','livechatRegistration', 'learningSession','learningSessionRegistration','greetingRegistration','greeting','qna','qnaRegistration','auction'];
 
 
     public function user()
@@ -28,19 +28,35 @@ class Activity extends Model
     {
         return $this->belongsTo(MeetupEvent::class, 'event_id');
     }
+    public function meetupRegistration()
+    {
+        return $this->belongsTo(MeetupEventRegistration::class, 'event_registration_id');
+    }
 
     public function livechat()
     {
         return $this->belongsTo(LiveChat::class, 'event_id');
     }
+    public function livechatRegistration()
+    {
+        return $this->belongsTo(LiveChatRegistration::class, 'event_registration_id');
+    }
     public function qna()
     {
         return $this->belongsTo(QnA::class, 'event_id');
+    }
+    public function qnaRegistration()
+    {
+        return $this->belongsTo(QnaRegistration::class, 'event_registration_id');
     }
 
     public function learningSession()
     {
         return $this->belongsTo(LearningSession::class, 'event_id');
+    }
+    public function learningSessionRegistration()
+    {
+        return $this->belongsTo(LearningSessionRegistration::class, 'event_registration_id');
     }
     public function greetingRegistration()
     {

@@ -415,6 +415,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/pending/auction/product', [AuctionController::class, 'pendingProduct']);
     Route::get('/admin/sold/auction/product', [AuctionController::class, 'soldProduct']);
     Route::get('/admin/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
+    Route::get('/admin/rejected/auction/product', [AuctionController::class, 'rejectedProduct']);
     Route::get('/admin/live/allProduct', [AuctionController::class, 'allLiveProduct']);
     Route::get('/admin/liveBidding/auction/{auction_id}', [AuctionController::class, 'liveBidding']);
     Route::get('/admin/topBidder/auction/{auction_id}', [AuctionController::class, 'topBidder']);
@@ -480,6 +481,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/fan/group/settings/delete/{id}', [FanGroupController::class, 'deleteSettingsFan']);
     Route::post('/star/fan/group/settings/no-warning/{id}', [FanGroupController::class, 'noWarningSettingsFan']);
     Route::post('/star/fan/group/approval/warning/{id}/{fanid}', [FanGroupController::class, 'warningSettingsFan']);
+    Route::get('/star/fan/group/analytics/{slug}', [FanGroupController::class, 'showFanGroupAnalytics']);
 
     // Marketplace Section
     Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);
