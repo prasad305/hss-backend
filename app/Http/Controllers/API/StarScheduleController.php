@@ -109,11 +109,11 @@ class StarScheduleController extends Controller
         ]);
     }
 
-    public function current_week_schedule_list()
+    public function current_month_schedule_list()
     {
 
         $schedule = Schedule::select(['event_type as title','date as startDate','from','to'])->whereBetween('date',
-        [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where('star_id',auth('sanctum')->user()->id)->get();
+        [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->where('star_id',auth('sanctum')->user()->id)->get();
 
         return response()->json([
             'status'=>200,

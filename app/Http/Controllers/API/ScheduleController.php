@@ -129,7 +129,7 @@ class ScheduleController extends Controller
 
         $schedule = Schedule::select(['event_type as title', 'date as startDate', 'from', 'to'])->whereBetween(
             'date',
-            [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]
+            [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()]
         )->where('admin_id', auth('sanctum')->user()->id)->get();
 
         return response()->json([
