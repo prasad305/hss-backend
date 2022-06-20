@@ -1025,7 +1025,7 @@ class FanGroupController extends Controller
             $folder_path = 'uploads/videos/fanvideo/';
             $video_file_name = now()->timestamp . '.' . $file->getClientOriginalExtension();
             // save to server
-            $request->video->move(public_path($folder_path), $video_file_name);
+            $request->video->move($folder_path, $video_file_name);
             $fanPost->video = $folder_path . $video_file_name;
         }
 

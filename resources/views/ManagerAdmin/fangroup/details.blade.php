@@ -166,9 +166,10 @@ Manager Admin
                     @elseif($post->status != 0)
                     <button type="submit" class="btn btn-outline-danger mr-2">Remove From Publish</button>
                     @endif
+                    @if($post->status != 1)
                     <a type="button" class="btn btn-outline-warning px-5"
                         onclick="Show('Edit FanGroup','{{ route('managerAdmin.fangroup.edit', $post->id) }}')">Edit</a>
-
+                    @endif
                 </form>
                 <br>
                 <br>
