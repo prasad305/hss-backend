@@ -327,7 +327,6 @@ class StarAuthController extends Controller
     public function qr_verify(Request $request)
     {
 
-
         $superStar = SuperStar::all();
 
         $juryBoard = JuryBoard::all();
@@ -336,16 +335,23 @@ class StarAuthController extends Controller
 
         $user = $merged->where('qr_code',$request->qr_code)->first();
 
-        // return $user;
+        
 
             if ($user) {
-
-                return response()->json([
-                    'status'=>200,
-                    'star_id' => $user->star_id,
-                    'auth_type' => User::find($user->star_id)->user_type,
-                    'message'=>'QR Code Matched!',
-                ]);
+                if (User::find($user->star_id)->email && User::find($user->star_id)->phone) {
+                    return response()->json([
+                        'status'=>409,
+                        'message'=>'This Star Already Registered!',
+                    ]);
+                }else{
+                    return response()->json([
+                        'status'=>200,
+                        'star_id' => $user->star_id,
+                        'auth_type' => User::find($user->star_id)->user_type,
+                        'message'=>'QR Code Matched!',
+                    ]);
+                }
+               
             }
             else
             {
