@@ -225,6 +225,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/souvenir/apply/store/{starId}', [SouvinerController::class, 'applyUserSouvenir']);
     Route::get('/user/souvenir/activities/list', [SouvinerController::class, 'activitiesUserSouvenir']);
     Route::get('/user/souvenir/activities/view/{id}', [SouvinerController::class, 'activitiesDetailsUserSouvenir']);
+    Route::get('/user/souvenir/order/view/{id}', [SouvinerController::class, 'orderDetailsSouvenir']);
 
     // User Photos
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
@@ -293,9 +294,11 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/souviner/view/{id}', [SouvinerController::class, 'souvinerView']);
     Route::get('/admin/souviner/check', [SouvinerController::class, 'souvinerCheck']);
     Route::get('/admin/souvenir/register/list', [SouvinerController::class, 'registerUserSouvenirList']);
+    Route::get('/admin/souvenir/status/change/{status}/{souvenirId}', [SouvinerController::class, 'statusSouvenirChange']);
     Route::get('/admin/souvenir/register/approve/{id}', [SouvinerController::class, 'registerSouvenirApprove']);
     Route::get('/admin/souvenir/register/decline/{id}', [SouvinerController::class, 'registerSouvenirDecline']);
     Route::get('/admin/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
+    Route::get('/admin/souvenir/order/view/{id}', [SouvinerController::class, 'orderDetailsSouvenir']);
     // Route::get('/admin/souviner/product-list/approved', [SouvinerController::class, 'allProductList']);
     // Route::get('/admin/souviner/product-list/pending', [SouvinerController::class, 'pendingProductList']);
 
