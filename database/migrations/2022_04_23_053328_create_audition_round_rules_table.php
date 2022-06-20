@@ -18,9 +18,10 @@ class CreateAuditionRoundRulesTable extends Migration
             $table->unsignedBigInteger('audition_rules_id');
             $table->double('judge_mark')->nullable();
             $table->double('jury_mark')->nullable();
+            $table->integer('round_num')->nullable();
             $table->double('user_vote_mark')->nullable();
             $table->text('title')->nullable();
-            $table->text('description')->nullable();
+            $table->longText('description')->nullable();
             $table->text('video_instruction')->nullable();
             $table->text('video_start_time')->nullable();
             $table->text('video_end_time')->nullable();

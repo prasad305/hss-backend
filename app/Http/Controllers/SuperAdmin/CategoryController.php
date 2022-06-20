@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Audition\AuditionRules;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\File;
@@ -75,6 +76,10 @@ class CategoryController extends Controller
         }
         try {
             $category->save();
+
+            AuditionRules::create([
+                'category_id' => $category->id,
+            ]);
             return response()->json([
                 'type' => 'success',
                 'message' => 'Category created successfully',

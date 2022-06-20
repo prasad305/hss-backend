@@ -386,6 +386,9 @@
     }
 
     function ErrorMessage(key,value) {
+        if (key == 'name') {
+            $('#name_error').html(value);
+        }
         if (key == 'category_id') {
             $('#category_error').html(value);
         }
@@ -430,6 +433,7 @@
 
 
     function ErrorMessageClear() {
+        $('#name_error').html('');
         $('#sub_category_error').html('');
         $('#first_name_error').html('');
         $('#last_name_error').html('');

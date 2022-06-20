@@ -26,8 +26,8 @@ class AuditionRulesController extends Controller
     public function create()
     {
         $data = [
-            'categories' => Category::where('status', 1)->orderBy('id', 'DESC')->get(),
-            'rules' => AuditionRules::where('status', 1)->latest()->get(),
+            'categories' => Category::orderBy('id', 'DESC')->get(),
+            'rules' => AuditionRules::latest()->get(),
         ];
         return view('SuperAdmin.AuditionRules.create', $data);
     }
@@ -97,7 +97,7 @@ class AuditionRulesController extends Controller
     {
         $data = [
             'rules' => AuditionRules::find($id),
-            'categories' => Category::where('status', 1)->orderBy('id', 'DESC')->get(),
+            'categories' => Category::orderBy('id', 'DESC')->get(),
         ];
         return view('SuperAdmin.AuditionRules.edit', $data);
     }

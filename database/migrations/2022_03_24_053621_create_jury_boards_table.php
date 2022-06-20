@@ -13,6 +13,7 @@ class CreateJuryBoardsTable extends Migration
         Schema::create('jury_boards', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('star_id');
+            $table->unsignedBigInteger('group_id');
             $table->text('terms_and_condition')->nullable();
             $table->text('description')->nullable();
             $table->string('qr_code')->nullable();
