@@ -75,7 +75,7 @@ class MarketplaceController extends Controller
         //     $sub_sub_cat_post = [];
         // }
 
-        
+
 
         // $data = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
 
@@ -225,6 +225,8 @@ class MarketplaceController extends Controller
                 $data->city_id = $request->city_id;
                 $data->area = $request->area;
                 $data->phone = $request->phone;
+
+
                 $data->order_no = $rand;
                 $data->items = $request->items;
                 $data->unit_price = $request->unit_price;
@@ -257,7 +259,7 @@ class MarketplaceController extends Controller
             }
         }
 
-        
+
     }
 
     public function viewMarketplaceActivities(){
@@ -381,7 +383,7 @@ class MarketplaceController extends Controller
     }
 
     public function orderAdminProductListView($id){
-        
+
         $orderListView = MarketplaceOrder::find($id);
 
         return response()->json([
@@ -391,7 +393,7 @@ class MarketplaceController extends Controller
     }
 
     public function orderAdminProductListStatus($status, $id){
-        
+
         $orderListStatus = MarketplaceOrder::find($id);
         $orderListStatus->status = $status;
         $orderListStatus->save();

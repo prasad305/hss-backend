@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\UserMobileAppController;
+use App\Http\Controllers\API\MarketplaceMobileAppController;
 use App\Http\Controllers\API\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +14,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
         Route::group(['prefix' => 'mobile-app/', 'as' => 'mobileApp.'], function () {
             Route::get('greeting-status/{star_id}', [UserMobileAppController::class, 'greetingStatus']);
             Route::get('menu', [UserMobileAppController::class, 'menu']);
+            Route::post('marketplace-store', [MarketplaceMobileAppController::class, 'marketplaceStore']);
         });
     });
 
