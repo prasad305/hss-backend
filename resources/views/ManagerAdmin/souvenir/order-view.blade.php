@@ -46,20 +46,20 @@
                    <div class="col-sm-4 invoice-col">
                       <b>From</b> <br>
                       <address>
-                          <img src="{{ asset($order->marketplace->superstar->image)}}" style="width: 80px; height: 75px; border-radius: 50%; border: 3px solid #6ff30a;" alt=""> <br>
-                         <strong>{{$order->marketplace->superstar->first_name}} {{$order->marketplace->superstar->last_name}}</strong><br>
-                         Phone: {{$order->marketplace->superstar->phone}}<br>
-                         Email: {{$order->marketplace->superstar->email}}
+                          <img src="{{ asset($order->star->image)}}" style="width: 80px; height: 75px; border-radius: 50%; border: 3px solid #6ff30a;" alt=""> <br>
+                         <strong>{{$order->star->first_name}} {{$order->star->last_name}}</strong><br>
+                         Phone: {{$order->star->phone}}<br>
+                         Email: {{$order->star->email}}
                       </address>
                    </div>
                    <div class="col-sm-4 invoice-col">
                     <b>To</b> <br>
                       <address>
-                        <img src="{{ asset($order->marketplace->superstar->image)}}" style="width: 80px; height: 75px; border-radius: 50%; border: 3px solid #6ff30a;" alt=""> <br>
+                        <img src="{{ asset($order->user->image)}}" style="width: 80px; height: 75px; border-radius: 50%; border: 3px solid #6ff30a;" alt=""> <br>
                          <strong>{{$order->user->first_name}} {{$order->user->last_name}}</strong><br>
                          {{ $order->area }}<br>
                          {{ $order->city->name }}, {{ $order->state->name }}, {{ $order->country->name }}<br>
-                         Phone: {{ $order->phone }}<br>
+                         Phone: {{ $order->mobile_no }}<br>
                          Email: {{ $order->user->email }}
                       </address>
                    </div>
@@ -82,24 +82,22 @@
                       <table class="table table-striped">
                          <thead>
                             <tr>
-                               <th>Qty</th>
+                               <th>Sl</th>
                                <th>Product</th>
                                <th>Image</th>
-                               <th>Items</th>
-                               <th>Unit Price</th>
+                               <th>Price</th>
                                <th>Subtotal</th>
                             </tr>
                          </thead>
                          <tbody>
                             <tr>
                                <td>1</td>
-                               <td>{{ $order->marketplace->title }}</td>
+                               <td>{{ $order->souvenir->title }}</td>
                                <td>
-                                <img src="{{ asset($order->marketplace->image)}}" style="width: 50px; height: 50px; border-radius: 20%; border: 3px solid #6ff30a;" alt=""> 
+                                <img src="{{ asset($order->image)}}" style="width: 50px; height: 50px; border-radius: 20%; border: 3px solid #6ff30a;" alt=""> 
                                </td>
-                               <td>{{ $order->items }}</td>
-                               <td>{{ $order->unit_price }}</td>
-                               <td>{{ $order->items * $order->unit_price }}</td>
+                               <td>{{ $order->souvenir->price }}</td>
+                               <td>{{ $order->souvenir->price }}</td>
                             </tr>
                          </tbody>
                       </table>
@@ -112,20 +110,24 @@
                       </p>
                    </div>
                    <div class="col-6">
-                      <p class="lead">Amount Due 2/22/2014</p>
+                      <!-- <p class="lead">Amount Due 2/22/2014</p> -->
                       <div class="table-responsive">
                          <table class="table">
                             <tr>
                                <th style="width:50%">Subtotal:</th>
-                               <td>{{ $order->items * $order->unit_price }} Tk</td>
+                               <td>{{ $order->souvenir->price }} Tk</td>
                             </tr>
                             <tr>
                                <th>Delivery Charge:</th>
-                               <td>{{ $order->delivery_charge }} Tk</td>
+                               <td>{{ $order->souvenir->delivery_charge }} Tk</td>
+                            </tr>
+                            <tr>
+                               <th>Tax:</th>
+                               <td>{{ $order->souvenir->tax }} Tk</td>
                             </tr>
                             <tr>
                                <th>Total:</th>
-                               <td>{{ $order->items * $order->unit_price + $order->delivery_charge }} Tk</td>
+                               <td>{{ $order->total_amount }} Tk</td>
                             </tr>
                          </table>
                       </div>
