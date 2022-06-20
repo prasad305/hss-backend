@@ -17,10 +17,11 @@ class CreateGeneralPostPaymentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('post_id');
             $table->unsignedBigInteger('user_id');
+            $table->string('name');
+            $table->double('amount');
             $table->integer('card_number');
             $table->integer('ccv');
             $table->string('expiry_date');
-            $table->string('name');
             $table->boolean('status')->default(0);
             $table->timestamps();
         });

@@ -44,7 +44,7 @@ Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 Route::get('/user/all_post', [UserController::class, 'all_post']);
 Route::get('/user/post/{type}', [UserController::class, 'single_type_post']);
 Route::post('/user/general-post/payment', [UserController::class, 'generalPostPayment']);
-Route::get('/user/generalPost/payment/check', [UserController::class, 'generalPostPaymentCheck']);
+Route::get('/user/generalPost/payment/check/{post_id}', [UserController::class, 'generalPostPaymentCheck']);
 
 
 Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);

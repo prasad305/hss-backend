@@ -26,6 +26,6 @@ class SimplePost extends Model
     }
     public function generalPostPayment()
     {
-        return $this->belongsTo(GeneralPostPayment::class, 'post_id');
+        return $this->hasMany(GeneralPostPayment::class, 'post_id');
     }
 }

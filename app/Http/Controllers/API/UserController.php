@@ -159,6 +159,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
 
             'name' => 'required',
+            'amount' => 'required',
             'card_number' => 'required',
             'expiry_date' => 'required',
             'ccv' => 'required',
@@ -184,9 +185,11 @@ class UserController extends Controller
             'post_id' => $request->post_id,
             'user_id' => $request->user_id,
             'name' => $request->name,
+            'amount' => $request->amount,
             'card_number' => $request->card_number,
             'ccv' => $request->ccv,
             'expiry_date' => $request->expiry_date,
+            'status' => 1,
         ]);
 
 
@@ -196,10 +199,11 @@ class UserController extends Controller
             'message' => "Payment success"
         ]);
     }
-    public function generalPostPaymentCheck()
+    public function generalPostPaymentCheck($post_id)
     {
 
-        $payment_status = GeneralPostPayment::where('user_id', auth('sanctum')->user()->id)->get();
+        $payment_status = GeneralPostPayment::where('user_id', auth('sanctum')->user()->id)->where('post_id', $post_id)->where('status', 1)->first();
+
         return response()->json([
             'status' => 200,
             'payment_status' => $payment_status,
