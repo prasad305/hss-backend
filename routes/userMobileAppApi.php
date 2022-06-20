@@ -15,6 +15,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
             Route::get('greeting-status/{star_id}', [UserMobileAppController::class, 'greetingStatus']);
             Route::get('menu', [UserMobileAppController::class, 'menu']);
             Route::post('marketplace-store', [MarketplaceMobileAppController::class, 'marketplaceStore']);
+            Route::post('marketplace-update/{marketplace_id}', [MarketplaceMobileAppController::class, 'marketplaceUpdate']);
+            Route::get('check-payment-uncompleted-order/{marketplace_id}', [MarketplaceMobileAppController::class, 'checkPaymentUncompletedOrder']);
         });
     });
 
