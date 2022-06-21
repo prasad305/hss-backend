@@ -50,15 +50,6 @@ class MarketplaceMobileAppController extends Controller
             $marketplaceOrder->city_id = $request->city;
             $marketplaceOrder->area = $request->area;
             $marketplaceOrder->phone = $request->phone;
-
-            // $marketplaceOrder->cvc = $request->cvc;
-            // $marketplaceOrder->card_no = $request->card_no;
-            // $marketplaceOrder->expire_date = $request->expire_date;
-            // $marketplaceOrder->status = 1;
-
-            // $marketplace->total_selling += $marketplaceOrder->items;
-            // $marketplace->save();
-
             $marketplaceOrder->save();
 
             return response()->json([
