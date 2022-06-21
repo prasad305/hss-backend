@@ -209,6 +209,16 @@ class UserController extends Controller
             'payment_status' => $payment_status,
         ]);
     }
+    public function simplePostPaymentCheck()
+    {
+
+        $lockStatus = GeneralPostPayment::where('user_id', auth('sanctum')->user()->id)->where('status', 1)->pluck('post_id');
+
+        return response()->json([
+            'status' => 200,
+            'lockStatus' => $lockStatus,
+        ]);
+    }
 
 
     public function allSubcategoryList($catId)
