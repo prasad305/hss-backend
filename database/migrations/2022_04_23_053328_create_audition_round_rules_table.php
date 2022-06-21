@@ -15,18 +15,23 @@ class CreateAuditionRoundRulesTable extends Migration
     {
         Schema::create('audition_round_rules', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('audition_rules_id');
-            $table->double('judge_mark')->nullable();
-            $table->double('jury_mark')->nullable();
             $table->integer('round_num')->nullable();
+            $table->unsignedBigInteger('audition_rules_id');
+            $table->integer('jury_or_judge')->nullable()->comment('0 = jury,1= judge');
+            $table->double('jury_or_judge_mark')->nullable();
             $table->double('user_vote_mark')->nullable();
+            $table->integer('mark_live_or_offline')->nullable()->comment('0 = offline,1= live');
+            $table->integer('wildcard')->nullable()->comment('0 = no , 1= yes');
+            $table->integer('wildcard_round')->nullable();
+            $table->integer('appeal')->nullable()->comment('0 = no, 1= yes');
+            $table->integer('video_feed')->nullable()->comment('0 = no, 1= yes');
             $table->text('title')->nullable();
             $table->longText('description')->nullable();
-            $table->text('video_instruction')->nullable();
-            $table->text('video_start_time')->nullable();
-            $table->text('video_end_time')->nullable();
+            $table->longText('video_instruction')->nullable();
+            $table->timestamp('video_start_time')->nullable();
+            $table->timestamp('video_end_time')->nullable();
             $table->text('instruction')->nullable();
-            $table->string('num_of_videos')->nullable();
+            $table->integer('num_of_videos')->nullable();
             $table->timestamp('uploade_date')->nullable();
             $table->text('banner')->nullable();
             $table->text('video')->nullable();

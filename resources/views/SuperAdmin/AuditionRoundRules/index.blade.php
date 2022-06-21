@@ -5,10 +5,10 @@ Super Admin
 @endpush
 
 @section('content')
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <style>
-    .audition__mark{
+    .audition__mark {
         background: #242424;
         border: 1px solid #B7AEAE;
         border-radius: 4px;
@@ -18,7 +18,7 @@ Super Admin
         padding: 5px 15px;
     }
 
-    .audition__mark input{
+    .audition__mark input {
         border: 2px solid #fdd700;
         appearance: none;
         border-radius: 50%;
@@ -27,27 +27,31 @@ Super Admin
         transition: all ease-in 0.2s;
     }
 
-    .audition__mark span{
+    .audition__mark span {
         padding-left: 10px;
     }
-    .audition__mark input[type='radio']:checked{
+
+    .audition__mark input[type='radio']:checked {
         border: 1px solid #FFD910;
         background: #FFD910;
     }
 
-    .wildcard__title{
+    .wildcard__title {
         padding-top: 10px;
     }
-    .wildcard__title p{
+
+    .wildcard__title p {
         font-weight: 500;
         font-size: 20px;
         letter-spacing: 0.5px;
     }
-    .wildcard__title hr{
+
+    .wildcard__title hr {
         height: 0.3px;
         background: #a7a7a7;
     }
-    .wild_card__one{
+
+    .wild_card__one {
         background: #242424;
         border: 1px solid #B7AEAE;
         border-radius: 4px;
@@ -56,7 +60,8 @@ Super Admin
         text-align: left;
         padding: 5px 15px;
     }
-    .wild_card__one input{
+
+    .wild_card__one input {
         border: 2px solid #fdd700;
         appearance: none;
         border-radius: 50%;
@@ -65,16 +70,16 @@ Super Admin
         transition: all ease-in 0.2s;
     }
 
-    .wild_card__one input[type='radio']:checked{
+    .wild_card__one input[type='radio']:checked {
         border: 1px solid #FFD910;
         background: #FFD910;
     }
 
-    .wild_card__one span{
+    .wild_card__one span {
         padding-left: 10px;
     }
 
-    .wild_card__two{
+    .wild_card__two {
         background: #242424;
         border: 1px solid #B7AEAE;
         border-radius: 4px;
@@ -83,7 +88,8 @@ Super Admin
         text-align: left;
         padding: 5px 10px;
     }
-    .wild_card__two input{
+
+    .wild_card__two input {
         border: 2px solid #fdd700;
         appearance: none;
         border-radius: 50%;
@@ -91,16 +97,15 @@ Super Admin
         height: 14px;
         transition: all ease-in 0.2s;
     }
-    .wild_card__two input[type='radio']:checked{
+
+    .wild_card__two input[type='radio']:checked {
         border: 1px solid #FFD910;
         background: #FFD910;
     }
-    .wild_card__two span{
+
+    .wild_card__two span {
         padding-left: 10px;
     }
-
-
-
 </style>
 
 <!-- Content Header (Page header) -->
@@ -109,17 +114,16 @@ Super Admin
         <div class="row ">
             <div class="col-sm-6">
                 <h1 class="m-0">Audition List</h1>
-            </div><!-- /.col -->
+            </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    {{-- <a href="{{ route('superAdmin.events.edit',1) }}"> <li class="breadcrumb-item active">Events
-                        List</li></a> --}}
+                   
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
                     <li class="breadcrumb-item active"> Audition List</li>
                 </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- /.content-header -->
@@ -127,12 +131,17 @@ Super Admin
 
     @foreach ($rules_categories as $key => $rules)
     @if($rules->category)
-    <li class="nav-item custom-nav-item m-2 TextBH {{ $key == 0 ? 'active' : '' }}" onclick="selectedCategory('{{ $rules->id }}')">
-        <a class="nav-link border-warning " data-toggle="tab" href="#tabs-{{ $rules->category ? $rules->category->id : '' }}" role="tab">
+    <li class="nav-item custom-nav-item m-2 TextBH {{ $key == 0 ? 'active' : '' }}"
+        onclick="selectedCategory('{{ $rules->id }}')">
+        <a class="nav-link border-warning " data-toggle="tab"
+            href="#tabs-{{ $rules->category ? $rules->category->id : '' }}" role="tab">
             <center>
-                <img src="{{ asset($rules->category ? $rules->category->icon : '') }}" class="ARRimg pt-2" alt={{ $rules->category ? $rules->category->name : '' }} icon>
+                <img src="{{ asset($rules->category ? $rules->category->icon : '') }}" class="ARRimg pt-2" alt={{
+                    $rules->category ? $rules->category->name : '' }} icon>
             </center>
-            <a class="btn border-warning nav-link  {{ $key == 0 ? 'active' : '' }}" data-toggle="tab" href="#tabs-{{ $rules->category->id ?? '' }}" role="tab">{{ $rules->category ? $rules->category->name : '' }}</a>
+            <a class="btn border-warning nav-link  {{ $key == 0 ? 'active' : '' }}" data-toggle="tab"
+                href="#tabs-{{ $rules->category->id ?? '' }}" role="tab">{{ $rules->category ? $rules->category->name :
+                '' }}</a>
         </a>
     </li>
     @endif
@@ -165,97 +174,73 @@ Super Admin
                             </div>
                         </div>
                         <div class="text-light">
-                            <input type="number" min="0" max="100" id="textbox1" class="Chexka form-control" placeholder="0" />
-                        </div>
-                    </div>
-
-                    <div class="d-flex  justify-content-between BorderInSA p-2 m-1 col-md-12">
-                        <div class="text-light mt-1">
-                            <div class="custom-control">
-                                <input type="checkbox" id="checkbox2" class=" mt-3" />
-                                <label class="" for="jury"><span class="px-3">Jury Mark</span></label>
-                            </div>
-                        </div>
-                        <div class="text-light">
-                            <input type="number" min="0" max="100" id="textbox2" class="Chexka form-control" placeholder="0" />
-                        </div>
-                    </div>
-
-                    <div class="d-flex  justify-content-between BorderInSA p-2 m-1 col-md-12">
-                        <div class="text-light mt-1">
-                            <div class="custom-control">
-                                <input type="checkbox" id="checkbox3" class=" mt-3" />
-                                <label class="" for="jury"><span class="px-3">Judge Mark</span></label>
-                            </div>
-                        </div>
-                        <div class="text-light">
-                            <input type="number" min="0" max="100" id="textbox3" class="Chexka form-control" placeholder="0" />
+                            <input type="number" min="0" max="100" id="textbox1" class="Chexka form-control"
+                                placeholder="0" />
                         </div>
                     </div>
 
                     <div class="d-flex flex-row my-3 w-100">
                         <div class="audition__mark">
-                            <input type="radio" name="mark" value="Live Mark"> <span>Live Mark</span>
+                            <input type="radio" name="jury_or_judge" value="0"> <span>Jury Mark</span>
                         </div>
                         <div class="audition__mark ml-3">
-                            <input type="radio" name="mark" value="Offline Mark"> <span>Offline Mark</span>
+                            <input type="radio" name="jury_or_judge" value="1"> <span>Judge Mark</span>
                         </div>
+
+                        <span class="text-danger" id="jury_or_judge_error"></span>
+
+                        <div class="col-md-4">
+                            <input type="text" name="jury_or_judge_mark" id="jury_or_judge_mark" class="form-control" placeholder="Mark">
+                            <span class="text-danger" id="jury_or_judge_mark_error"></span>
+                        </div>
+
                     </div>
 
-                    <div class="d-flex flex-column w-100 mt-2">
-                       <div class="wildcard__title">
-                           <p>WildCard</p>
-                           <hr>
-                       </div>
-                       <div class="d-flex flex-row">
-                           <div class="wild_card__one">
-                               <input type="radio" name="wildcard" value="Yes"> <span>Yes</span>
-                           </div>
-                           <div class="wild_card__one ml-3">
-                               <input type="radio" name="wildcard" value="No"> <span>No</span>
-                           </div>
-                       </div>
 
-                        <div class="d-flex flex-row justify-content-between my-2">
-                            <div class="wild_card__two">
-                                <input type="radio" name="wildcardTwo" value="Round 01"><span>Round 01</span>
-                            </div>
-                            <div class="wild_card__two">
-                                <input type="radio" name="wildcardTwo" value="Round 02"><span>Round 02</span>
-                            </div>
-                            <div class="wild_card__two">
-                                <input type="radio" name="wildcardTwo" value="Round 03"><span>Round 03</span>
-                            </div>
-                            <div class="wild_card__two">
-                                <input type="radio" name="wildcardTwo" value="Round 04"><span>Round 04</span>
-                            </div>
-                            <div class="wild_card__two">
-                                <input type="radio" name="wildcardTwo" value="Round 05"><span>Round 05</span>
-                            </div>
-                            <div class="wild_card__two">
-                                <input type="radio" name="wildcardTwo" value="Round 06"><span>Round 06</span>
-                            </div>
-                            <div class="wild_card__two">
-                                <input type="radio" name="wildcardTwo" value="Round 07"><span>Round 07</span>
-                            </div>
-                            <div class="wild_card__two">
-                                <input type="radio" name="wildcardTwo" value="Round 08"><span>Round 08</span>
-                            </div>
+                    <div class="d-flex flex-row my-3 w-100">
+                        <div class="audition__mark">
+                            <input type="radio" name="mark_live_or_offline" value="1"> <span>Live Mark</span>
                         </div>
+                        <div class="audition__mark ml-3">
+                            <input type="radio" name="mark_live_or_offline" value="0"> <span>Offline Mark</span>
+                        </div>
+                        <span class="text-danger" id="mark_live_or_offline_error"></span>
                     </div>
 
                     <div class="d-flex flex-column w-100 mt-2">
                         <div class="wildcard__title">
-                            <p>Applie</p>
+                            <p>WildCard</p>
                             <hr>
                         </div>
                         <div class="d-flex flex-row">
                             <div class="wild_card__one">
-                                <input type="radio" name="applie" value="Yes"> <span>Yes</span>
+                                <input type="radio" name="wildcard" value="1" onchange="wilCardNo(this.value)"> <span>Yes</span>
                             </div>
                             <div class="wild_card__one ml-3">
-                                <input type="radio" name="applie" value="No"> <span>No</span>
+                                <input type="radio" name="wildcard" value="0" onchange="wilCardNo(this.value)"> <span>No</span>
                             </div>
+                            <span class="text-danger" id="wildcard_error"></span>
+                        </div>
+
+                        <div class="d-flex flex-row justify-content-between my-2"  id="wildcard_rounds">
+                           
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex flex-column w-100 mt-2">
+                        <div class="wildcard__title">
+                            <p>Appeal</p>
+                            <hr>
+                        </div>
+                        <div class="d-flex flex-row">
+                            <div class="wild_card__one">
+                                <input type="radio"  checked="checked" name="appeal" value="1"> <span>Yes</span>
+                            </div>
+                            <div class="wild_card__one ml-3">
+                                <input type="radio" name="appeal" value="0"> <span>No</span>
+                            </div>
+                            <span class="text-danger" id="appeal_error"></span>
                         </div>
                     </div>
 
@@ -266,21 +251,14 @@ Super Admin
                         </div>
                         <div class="d-flex flex-row">
                             <div class="wild_card__one">
-                                <input type="radio" name="videoFeed" value="Yes"> <span>Yes</span>
+                                <input type="radio" name="video_feed" value="1"> <span>Yes</span>
                             </div>
                             <div class="wild_card__one ml-3">
-                                <input type="radio" name="videoFeed" value="No"> <span>No</span>
+                                <input type="radio" name="video_feed" value="0"> <span>No</span>
                             </div>
+                            <span class="text-danger" id="video_feed_error"></span>
                         </div>
 
-                        <div class="d-flex flex-row my-2">
-                            <div class="wild_card__two w-25">
-                                <input type="radio" name="videoFeedType" value="Live video"><span>Live video</span>
-                            </div>
-                            <div class="wild_card__two w-25 ml-3">
-                                <input type="radio" name="videoFeedType" value="Uploaded Video"><span>Uploaded Video</span>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="d-flex col-md-12 justify-content-center mt-4 mb-4">
@@ -298,12 +276,8 @@ Super Admin
 
 <script>
     function selectedCategory(rules_id) {
-
-
-        // var rules_id = $('.selectedCategory').text();
         console.log('category', rules_id);
         var url = "{{ url('super-admin/audition-round-rules/') }}";
-
 
         $.ajax({
             url: url + "/" + rules_id, // your request url
@@ -360,11 +334,9 @@ Super Admin
     };
 
     function showRules(round_id) {
-
-        // alert(round_id)
+        $('#wildcard_rounds').html('');
 
         var url = "{{ url('super-admin/audition-round-rules/mark/') }}";
-
 
         $.ajax({
             url: url + "/" + round_id, // your request url
@@ -402,6 +374,59 @@ Super Admin
                     $('#textbox3').val(0);
                 }
 
+                if (data.mark.jury_or_judge == 0) {
+                    $('input:radio[name=jury_or_judge][value=0]').attr('checked', true);
+                }else{
+                    $('input:radio[name=jury_or_judge][value=1]').attr('checked', true);
+                }
+
+                if (data.mark.jury_or_judge_mark > 0) {
+                    $('#jury_or_judge_mark').val(data.mark.jury_or_judge_mark);
+                }
+
+                if (data.mark.wildcard == 0) {
+                    $('input:radio[name=wildcard][value=0]').attr('checked', true);
+                }else{
+                    $('input:radio[name=wildcard][value=1]').attr('checked', true);
+                }
+
+                if (data.mark.wildcard_round != null) {
+                    $('input:radio[name=wildcard][value='+data.mark.wildcard_round+']').attr('checked', true);
+                }
+
+                if (data.mark.video_feed == 0) {
+                    $('input:radio[name=video_feed][value=0]').attr('checked', true);
+                }else{
+                    $('input:radio[name=video_feed][value=1]').attr('checked', true);
+                }
+
+                if (data.mark.mark_live_or_offline == 0) {
+                    $('input:radio[name=mark_live_or_offline][value=0]').attr('checked', true);
+                }else{
+                    $('input:radio[name=mark_live_or_offline][value=1]').attr('checked', true);
+                }
+
+                if (data.mark.appeal == 0) {
+                    $('input:radio[name=appeal][value=0]').attr('checked', true);
+                }else{
+                    $('input:radio[name=appeal][value=1]').attr('checked', true);
+                }
+
+                console.log('data.mark.appea...',data.mark.appeal);
+
+
+                var single_round = "";
+
+                data.rules.forEach((round, index) => {
+                    if (round.id > round_id) {
+                        single_round += '<div class="wild_card__two"  style="display: none;">'+
+                                        '<input type="radio" name="wildcard_round" value="'+round.id+'"><span>Round '+`${index+1}`+'</span>'+
+                                    '</div>';
+                    }
+                });
+
+                $('#wildcard_rounds').append(single_round);
+
 
             },
             error: function(data) {
@@ -436,12 +461,16 @@ Super Admin
 
     $(document).on('click', '#SubmitRules', function(event) {
             event.preventDefault();
+            ErrorMessageClear();
+            $('.wild_card__two').css("display", "block");
             var round_id = $('#round_id').val();
             // alert(round_id);
             var v1 = parseInt($('#textbox1').val()) > 0 ? parseInt($('#textbox1').val()) : 0;
-            var v2 = parseInt($('#textbox2').val()) > 0 ? parseInt($('#textbox2').val()) : 0;
-            var v3 = parseInt($('#textbox3').val()) > 0 ? parseInt($('#textbox3').val()) : 0;
-            var total = v1 + v2 + v3;
+            // var v2 = parseInt($('#textbox2').val()) > 0 ? parseInt($('#textbox2').val()) : 0;
+            // var v3 = parseInt($('#textbox3').val()) > 0 ? parseInt($('#textbox3').val()) : 0;
+            var v4 = parseInt($('#jury_or_judge_mark').val()) > 0 ? parseInt($('#jury_or_judge_mark').val()) : 0;
+            // var total = v1 + v2 + v3;
+            var total = v1 + v4;
 
             if (total > 100) {
                 Swal.fire({
@@ -458,8 +487,8 @@ Super Admin
                 var formData = new FormData(form);
                 formData.append('round_id', round_id);
                 formData.append('user_vote_mark', v1);
-                formData.append('jury_mark', v2);
-                formData.append('judge_mark', v3);
+                // formData.append('jury_mark', v2);
+                // formData.append('judge_mark', v3);
 
                 // Set header if need any otherwise remove setup part
                 $.ajaxSetup({
@@ -475,33 +504,24 @@ Super Admin
                     contentType: false,
                     type: 'POST',
                     success: function(data) {
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: data.type,
-                            title: data.message,
-                            showConfirmButton: false,
-                            // timer: 1500
-                        })
-                        setTimeout(function() {
-                            location.reload();
-                        }, 1000);
-                        console.log('success')
+                        // Swal.fire({
+                        //     position: 'top-end',
+                        //     icon: data.type,
+                        //     title: data.message,
+                        //     showConfirmButton: false,
+                        //     // timer: 1500
+                        // })
+                        // setTimeout(function() {
+                        //     location.reload();
+                        // }, 1000);
+                        console.log(data)
                     },
                     error: function(data) {
-                        var errorMessage = '<div class="card bg-danger">\n' +
-                            '<div class="card-body text-center p-5">\n' +
-                            '<span class="text-white">';
+                      
                         $.each(data.responseJSON.errors, function(key, value) {
-                            errorMessage += ('' + value + '<br>');
+                            ErrorMessage(key,value);
                         });
-                        errorMessage += '</span>\n' +
-                            '</div>\n' +
-                            '</div>';
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            footer: errorMessage
-                        });
+                        
 
                         console.log(data);
                     }
@@ -550,6 +570,16 @@ Super Admin
         //     alert('Total Mark Will Not Be More Than 100');
         // }
     });
+
+    function wilCardNo(value){
+        if (value == 0) {
+            // $('#wildcard_rounds').html('');
+            // $('#wildcard_rounds').style.display = "none"; 
+            $('.wild_card__two').css("display", "none");
+        }else{
+            $('.wild_card__two').css("display", "block");
+        }
+    }
 
 </script>
 

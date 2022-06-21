@@ -9,7 +9,10 @@ use Illuminate\Http\Request;
 
 use function PHPUnit\Framework\returnSelf;
 use App\Models\Category;
+use App\Models\JuryGroup;
 use Carbon\Carbon;
+use JetBrains\PhpStorm\Pure;
+use PHPUnit\TextUI\XmlConfiguration\Group;
 
 class AuditionRulesController extends Controller
 {
@@ -39,10 +42,11 @@ class AuditionRulesController extends Controller
             'category_id' => 'required',
             'round_num' => 'required',
             'judge_num' => 'required',
-            'jury_num' => 'required',
+            // 'jury_num' => 'required',
             'month' => 'required',
             'day' => 'required',
         ]);
+        // return $request->all();
 
         $audition_rules = AuditionRules::where('category_id', $request->category_id)->first();
         $previous_round_num = (int)$audition_rules->round_num;
@@ -51,7 +55,15 @@ class AuditionRulesController extends Controller
         // return abs($diff);
 
 
-        $audition_rules->fill($request->all());
+        $audition_rules->fill($request->except(['groups_id','group_members']));
+
+        $jury_group_array=array(
+            'groups_id' => $request->groups_id,
+            'group_members' => $request->group_members,
+        );
+       
+        $audition_rules->jury_groups = json_encode($jury_group_array); 
+
         $audition_rules->save();
 
 
@@ -84,20 +96,31 @@ class AuditionRulesController extends Controller
 
     public function show($id)
     {
-        // return $id;
         $rules = AuditionRules::where('category_id', $id)->first();
+  
         return response()->json([
             'status' => 'success',
-            'rules' => $rules,
+            'rules' => $rules, 
         ]);
     }
 
 
     public function edit($id)
     {
+        $rule = AuditionRules::find($id);
+
+
+        if ($rule->jury_groups !== null) {
+            $jurry_group = json_decode($rule->jury_groups);
+             $group_data = $jurry_group->{'group_members'};
+        }
+
         $data = [
-            'rules' => AuditionRules::find($id),
+            'rule' => $rule,
+            'rules' =>  AuditionRules::where('status', 1)->latest()->get(),
             'categories' => Category::orderBy('id', 'DESC')->get(),
+            'groups' => JuryGroup::where([['status', 1],['category_id',$rule->category_id]])->orderBy('name', 'asc')->get(),
+            'group_data' =>  isset($group_data) && count($group_data) > 0 ? $group_data : null ,  
         ];
         return view('SuperAdmin.AuditionRules.edit', $data);
     }
