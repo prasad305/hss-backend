@@ -318,6 +318,12 @@
                         <p>Register List</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.souvenir.showApplyDelete') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Delete List</p>
+                    </a>
+                </li>
             </ul>
         </li>
 

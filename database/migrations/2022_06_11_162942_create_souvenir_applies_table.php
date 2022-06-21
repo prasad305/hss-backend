@@ -28,8 +28,10 @@ class CreateSouvenirAppliesTable extends Migration
             $table->string('image')->nullable();
             $table->string('area')->nullable();
             $table->string('mobile_no')->nullable();
+            $table->string('invoice_no')->nullable();
             $table->float('total_amount')->nullable();
-            $table->integer('status')->default(0)->comment('0 = pending , 1 = approved, 2 = Payment Complete');
+            $table->integer('is_delete')->default(0)->comment('1 = Admin Soft Delete');
+            $table->integer('status')->default(0)->comment('0 = pending , 1 = approved for payment, 2 = Payment Complete, 3 = Processing, 4 = Product Received, 5 = Processing, 6 = Out for Delivery, 7 = Delivered');
             $table->timestamps();
         });
     }

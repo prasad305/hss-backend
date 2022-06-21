@@ -51,8 +51,8 @@
                             <th>Area</th>
                             <th>Star Name</th>
                             <th>Apply Date</th>
-                            <!-- <th>Status</th> -->
-                            <!-- <th style="width: 150px">Action</th> -->
+                            <th>Status</th>
+                            <th style="width: 50px">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -74,54 +74,32 @@
                                     {{ $data->star->phone }}
                                 </td>
                                 <td>{{ $data->created_at->diffForHumans() }}</td>
-                                <!-- <td>
+                                <td>
                                   @if($data->status == 0)
                                   <span class="badge badge-danger" style="width: 70px;">Pending</span>
                                   @elseif($data->status == 1)
                                   <span class="badge badge-primary" style="width: 70px;">Approved for Payment</span>
+                                  @elseif($data->status == 2)
+                                  <span class="badge badge-success" style="width: 70px;">Payment Complete</span>
+                                  @elseif($data->status == 3)
+                                  <span class="badge badge-success" style="width: 70px;">Processing</span>
+                                  @elseif($data->status == 4)
+                                  <span class="badge badge-success" style="width: 70px;">Product Received</span>
+                                  @elseif($data->status == 5)
+                                  <span class="badge badge-success" style="width: 70px;">Processing</span>
+                                  @elseif($data->status == 6)
+                                  <span class="badge badge-success" style="width: 70px;">Out for Delivery</span>
                                   @else
-                                  <span class="badge badge-success" style="width: 70px;">Payment Send</span>
+                                  <span class="badge badge-success" style="width: 70px;">Delivered</span>
                                   @endif
-                                </td> -->
-<!--                                 
-                                <td style="width: 150px">
-                                    <a href="{{ route('managerAdmin.marketplace.allOrderDetails', $data->id) }}" class="btn btn-sm btn-info"><i class="fa fa-eye text-white"></i></a>
-                                        {{-- @if ($data->status == 0)
-                                            <button class="btn btn-success" onclick="activeNow(this)" value="{{ route('superAdmin.marketplace.activeNow', $data->id) }}">
-                                                <i class="fa fa-check" aria-hidden="true"></i>
-                                            </button>
-                                        @elseif($data->status == 1)
-                                            <button class="btn btn-danger" onclick="inactiveNow(this)" value="{{ route('superAdmin.marketplace.inactiveNow', $data->id) }}">
-                                                <i class="fa fa-close"></i>
-                                            </button>
-                                        @endif --}}
-                                </td> -->
+                                </td>
+                                
+                                <td style="width: 50px">
+                                    <a href="{{ route('managerAdmin.souvenir.allOrderDetails', $data->id) }}" class="btn btn-sm btn-info"><i class="fa fa-eye text-white"></i></a>
+
+                                    
+                                </td>
                             </tr>
-
-
-                            <!-- Button trigger modal -->
-{{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Launch demo modal
-  </button>
-  
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div> --}}
   
                         @endforeach
 
@@ -162,8 +140,8 @@
                       success: function(data) {
                           if (data.type == 'success') {
                               Swal.fire(
-                                  'Activated !',
-                                  'Status has been Activated. ' + data.message,
+                                  'Restored !',
+                                  'Done. ' + data.message,
                                   'success'
                               )
                               setTimeout(function() {
