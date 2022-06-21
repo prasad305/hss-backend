@@ -229,8 +229,12 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('souvenir/details/{id}', [SouvenirController::class, 'details'])->name('souvenir.details');
     Route::get('souvenir/edit/{id}', [SouvenirController::class, 'edit'])->name('souvenir.edit');
     Route::get('souvenir/apply/show', [SouvenirController::class, 'showApplySouvenir'])->name('souvenir.showApply');
+    Route::get('souvenir/apply/delete/list', [SouvenirController::class, 'deleteApplySouvenir'])->name('souvenir.showApplyDelete');
     Route::put('souvenir/update/{id}', [SouvenirController::class, 'update'])->name('souvenir.update');
     Route::get('souvenir/set_publish/{id}', [SouvenirController::class, 'set_publish'])->name('souvenir.set_publish');
+    Route::get('souvenir/order/list/{id}', [SouvenirController::class, 'allOrderDetails'])->name('souvenir.allOrderDetails');
+    Route::post('souvenir/restore/{id}', [SouvenirController::class, 'restoreNow'])->name('souvenir.restoreNow');
+    Route::post('souvenir/delete/{id}', [SouvenirController::class, 'deleteNow'])->name('souvenir.deleteNow');
 
     //Fan Group
     Route::get('fangroup/pending', [FanGroupController::class, 'pending'])->name('fangroup.pending');

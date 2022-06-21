@@ -25,6 +25,8 @@ class SouvinerController extends Controller
             'instruction' => 'required',
             'star_id' => 'required',
             'price' => 'required',
+            'delivery_charge' => 'required',
+            'tax' => 'required',
             'banner' => 'required',
             'video' => 'required',
         ]);
@@ -49,6 +51,8 @@ class SouvinerController extends Controller
             $souvenir->sub_category_id = $user->sub_category_id;
 
             $souvenir->price = $request->price;
+            $souvenir->delivery_charge = $request->delivery_charge;
+            $souvenir->tax = $request->tax;
 
             $souvenir->admin_id = $id;
             $souvenir->star_id = $request->star_id;
@@ -91,6 +95,8 @@ class SouvinerController extends Controller
             'description' => 'required',
             'instruction' => 'required',
             'price' => 'required',
+            'delivery_charge' => 'required',
+            'tax' => 'required',
             'banner' => 'required',
             'video' => 'required',
         ]);
@@ -112,6 +118,8 @@ class SouvinerController extends Controller
             $souvenir->description = $request->description;
             $souvenir->instruction = $request->instruction;
             $souvenir->price = $request->price;
+            $souvenir->delivery_charge = $request->delivery_charge;
+            $souvenir->tax = $request->tax;
 
             $souvenir->category_id = $user->category_id;
             $souvenir->sub_category_id = $user->sub_category_id;
@@ -180,6 +188,30 @@ class SouvinerController extends Controller
         
     }
 
+    public function statusSouvenirChange($status, $souvenirId){
+
+        $getSouviner = SouvenirApply::find($souvenirId);
+        $getSouviner->status = $status;
+        $getSouviner->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Souvenir status Updated',
+        ]);
+        
+    }
+
+    public function orderDetailsSouvenir($souvenirId){
+
+        $getSouviner = SouvenirApply::find($souvenirId);
+
+        return response()->json([
+            'status' => 200,
+            'getSouviner' => $getSouviner,
+        ]);
+        
+    }
+
     public function souvinerView($id){
         $viewSouviner = SouvenirCreate::find($id);
 
@@ -195,6 +227,8 @@ class SouvinerController extends Controller
             'description' => 'required',
             'instruction' => 'required',
             'price' => 'required',
+            'delivery_charge' => 'required',
+            'tax' => 'required',
             'star_id' => 'required',
         ]);
 
@@ -217,6 +251,8 @@ class SouvinerController extends Controller
             $souvenir->description = $request->description;
             $souvenir->instruction = $request->instruction;
             $souvenir->price = $request->price;
+            $souvenir->delivery_charge = $request->delivery_charge;
+            $souvenir->tax = $request->tax;
 
             
 
@@ -312,6 +348,8 @@ class SouvinerController extends Controller
             'description' => 'required',
             'instruction' => 'required',
             'price' => 'required',
+            'delivery_charge' => 'required',
+            'tax' => 'required',
         ]);
 
         if($validator->fails())
@@ -330,6 +368,8 @@ class SouvinerController extends Controller
             $souvenir->description = $request->description;
             $souvenir->instruction = $request->instruction;
             $souvenir->price = $request->price;
+            $souvenir->delivery_charge = $request->delivery_charge;
+            $souvenir->tax = $request->tax;
 
             if ($request->hasfile('banner')) {
                 $destination = $souvenir->banner;
@@ -399,8 +439,9 @@ class SouvinerController extends Controller
                 $apply->country_id = $request->country_id;
                 $apply->state_id = $request->state_id;
                 $apply->city_id = $request->city_id;
+                $apply->invoice_no = rand(999999999, 9999999999);
                 $apply->souvenir_id = $request->souvinerId;
-                $apply->total_amount = $souvenirAmount->price;
+                $apply->total_amount =  $souvenirAmount->price + $souvenirAmount->delivery_charge + $souvenirAmount->tax;
                 $apply->description = $request->description;
                 $apply->area = $request->area;
                 $apply->mobile_no = $request->mobile_no;
@@ -442,7 +483,7 @@ class SouvinerController extends Controller
     public function registerUserSouvenirList(){
         $admin = auth('sanctum')->user()->id;
 
-        $registerSouvenir = SouvenirApply::where('admin_id', $admin)->where('status', 0)->latest()->get();
+        $registerSouvenir = SouvenirApply::where('admin_id', $admin)->where('status', 0)->where('is_delete', 0)->latest()->get();
         $userPaymentDueSouvenir = SouvenirApply::where('admin_id', $admin)->where('status', 1)->get();
         $userPaymentSouvenir = SouvenirApply::where('admin_id', $admin)->where('status', '>=', 2)->latest()->get();
 
@@ -494,7 +535,8 @@ class SouvinerController extends Controller
     public function registerSouvenirDecline($id){
 
         $registerSouvenir = SouvenirApply::find($id);
-        $registerSouvenir->delete();
+        $registerSouvenir->is_delete = 1;
+        $registerSouvenir->save();
 
         return response()->json([
             'status' => 200,

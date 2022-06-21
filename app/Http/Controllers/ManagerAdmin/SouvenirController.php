@@ -150,9 +150,63 @@ class SouvenirController extends Controller
     public function showApplySouvenir()
     {
         $applySouvenir = SouvenirApply::where('category_id', auth('sanctum')->user()->category_id)
+                                        ->where('is_delete', '=', 0)
                                         ->latest()
                                         ->get();
 
         return view('ManagerAdmin.souvenir.show-apply', compact('applySouvenir'));
+    }
+
+    public function deleteApplySouvenir()
+    {
+        $applyDeleteSouvenir = SouvenirApply::where('category_id', auth('sanctum')->user()->category_id)
+                                        ->where('is_delete', '=', 1)
+                                        ->latest()
+                                        ->get();
+
+        return view('ManagerAdmin.souvenir.show-Delete-list', compact('applyDeleteSouvenir'));
+    }
+
+    public function allOrderDetails($id){
+        // dd('ok');
+        $order = SouvenirApply::find($id);
+
+        return view('ManagerAdmin.souvenir.order-view', compact('order'));
+    }
+
+    
+    public function restoreNow($id)
+    {
+        $souvenir = SouvenirApply::findOrFail($id);
+        $souvenir->is_delete = 0;
+        try {
+            $souvenir->save();
+            return response()->json([
+                'type' => 'success',
+                'message' => 'Successfully Restored'
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => $exception->getMessage()
+            ]);
+        }
+    }
+
+    public function deleteNow($id)
+    {
+        $souvenir = SouvenirApply::findOrFail($id);
+        try {
+            $souvenir->delete();
+            return response()->json([
+                'type' => 'success',
+                'message' => 'Successfully Deleted'
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => $exception->getMessage()
+            ]);
+        }
     }
 }
