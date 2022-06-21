@@ -39,10 +39,10 @@ class MarketplaceMobileAppController extends Controller
             ]);
         }
     }
-    public function marketplaceUpdate(Request $request, $marketplace_id)
+    public function marketplaceUpdate(Request $request, $marketplace_order_id)
     {
-        $marketplaceOrder = MarketplaceOrder::find($marketplace_id);
-        $marketplace = Marketplace::find($marketplaceOrder->marketplaceid);
+        $marketplaceOrder = MarketplaceOrder::find($marketplace_order_id);
+        $marketplace = Marketplace::find($marketplaceOrder->marketplace_id);
 
         if ($marketplace->total_items >= $marketplace->total_selling + $marketplaceOrder->items) {
             $marketplaceOrder->country_id = $request->country;
