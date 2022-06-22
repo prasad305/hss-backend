@@ -15,6 +15,8 @@ use App\Models\LearningSession;
 use App\Models\LearningSessionEvaluation;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChatRoom;
+use App\Models\Marketplace;
+use App\Models\MarketplaceOrder;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
 use App\Models\Notification;
@@ -104,6 +106,7 @@ class UserMobileAppController extends Controller
             $activity->type = 'qna';
             $event->update();
         }
+
         if ($modelName == 'greeting') {
             $eventRegistration = GreetingsRegistration::find($request->event_registration_id);
             $event = Greeting::find($eventId);
@@ -113,6 +116,19 @@ class UserMobileAppController extends Controller
             $notification = Notification::find($request->notification_id);
             $notification->view_status = 1;
             $notification->save();
+        }
+        if ($modelName == 'marketplace') {
+            $eventRegistration = MarketplaceOrder::find($request->event_registration_id);
+            $event = Marketplace::find($eventId);
+
+            $eventRegistration->cvc = $request->cvc;
+            $eventRegistration->card_no = $request->card_no;
+            $eventRegistration->expire_date = $request->expire_date;
+            $eventRegistration->status = 1;
+            $event->total_selling += $eventRegistration->items;
+            $event->save();
+            $eventRegistration->status = 1;
+            $activity->type = 'marketplace';
         }
         if ($modelName == 'AuditionParticipant') {
             $eventRegistration = new AuditionEventRegistration();

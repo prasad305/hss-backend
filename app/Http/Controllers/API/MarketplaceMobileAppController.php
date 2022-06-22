@@ -27,19 +27,7 @@ class MarketplaceMobileAppController extends Controller
             $marketplaceOrder->superstar_id = $marketplace->superstar_id;
             $marketplaceOrder->superstar_admin_id = $marketplace->superstar_admin_id;
             $marketplaceOrder->total_price = $request->total_price;
-
-            // $marketplaceOrder->cvc = $request->cvc;
-            // $marketplaceOrder->card_no = $request->card_no;
-            // $marketplaceOrder->expire_date = $request->expire_date;
-
-            // $marketplaceOrder->status = 1;
-            // $marketplace->total_selling += $request->items;
-            // $marketplace->save();
-
             $marketplaceOrder->save();
-
-
-
             return response()->json([
                 'status' => 200,
                 'message' => 'Order Stored Successfully',
@@ -50,5 +38,48 @@ class MarketplaceMobileAppController extends Controller
                 'message' => 'Not Enough Product',
             ]);
         }
+    }
+    public function marketplaceUpdate(Request $request, $marketplace_order_id)
+    {
+        $marketplaceOrder = MarketplaceOrder::find($marketplace_order_id);
+        $marketplace = Marketplace::find($marketplaceOrder->marketplace_id);
+
+        if ($marketplace->total_items >= $marketplace->total_selling + $marketplaceOrder->items) {
+            $marketplaceOrder->country_id = $request->country;
+            $marketplaceOrder->state_id = $request->state;
+            $marketplaceOrder->city_id = $request->city;
+            $marketplaceOrder->area = $request->area;
+            $marketplaceOrder->phone = $request->phone;
+            $marketplaceOrder->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Order updated Successfully',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Not Enough Product',
+            ]);
+        }
+    }
+
+    public function checkPaymentUncompletedOrder($marketplace_id ,Marketplace $marketplace){
+        $marketplace = $marketplace->find($marketplace_id);
+
+        $marketplaceOrder = MarketplaceOrder::where([['status', null],['marketplace_id',$marketplace_id]])->first();
+        $isHavePaymentUncompletedOrder = false;
+        if($marketplaceOrder){
+            $isHavePaymentUncompletedOrder = true;
+        }else{
+            $isHavePaymentUncompletedOrder = false;
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'marketplaceOrder' => $marketplaceOrder,
+            'isHavePaymentUncompletedOrder' => $isHavePaymentUncompletedOrder,
+        ]);
     }
 }
