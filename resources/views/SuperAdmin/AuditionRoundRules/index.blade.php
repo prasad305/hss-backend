@@ -117,7 +117,7 @@ Super Admin
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                   
+
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
                     <li class="breadcrumb-item active"> Audition List</li>
                 </ol>
@@ -169,14 +169,21 @@ Super Admin
                     <div class="d-flex  justify-content-between BorderInSA p-2 m-1 col-md-12">
                         <div class="text-light mt-1">
                             <div class="custom-control">
-                                <input type="checkbox" id="checkbox1" class=" mt-3" />
+                                <input type="checkbox" id="checkbox1" class="mt-3" value="1" />
                                 <label class="" for="jury"><span class="px-3">User Vote Mark</span></label>
                             </div>
                         </div>
-                        <div class="text-light">
-                            <input type="number" min="0" max="100" id="textbox1" class="Chexka form-control"
-                                placeholder="0" />
+                    </div>
+
+                    <div class="d-flex flex-row my-3 w-100" id="hid_show_live_or_offile"
+                        style="display: none!important">
+                        <div class="audition__mark">
+                            <input type="radio" name="mark_live_or_offline" value="1"> <span>Live Mark</span>
                         </div>
+                        <div class="audition__mark ml-3">
+                            <input type="radio" name="mark_live_or_offline" value="0"> <span>Offline Mark</span>
+                        </div>
+                        <span class="text-danger" id="mark_live_or_offline_error"></span>
                     </div>
 
                     <div class="d-flex flex-row my-3 w-100">
@@ -190,22 +197,15 @@ Super Admin
                         <span class="text-danger" id="jury_or_judge_error"></span>
 
                         <div class="col-md-4">
-                            <input type="text" name="jury_or_judge_mark" id="jury_or_judge_mark" class="form-control" placeholder="Mark">
+                            <input type="text" name="jury_or_judge_mark" id="jury_or_judge_mark" class="form-control"
+                                placeholder="Mark">
                             <span class="text-danger" id="jury_or_judge_mark_error"></span>
                         </div>
 
                     </div>
 
 
-                    <div class="d-flex flex-row my-3 w-100">
-                        <div class="audition__mark">
-                            <input type="radio" name="mark_live_or_offline" value="1"> <span>Live Mark</span>
-                        </div>
-                        <div class="audition__mark ml-3">
-                            <input type="radio" name="mark_live_or_offline" value="0"> <span>Offline Mark</span>
-                        </div>
-                        <span class="text-danger" id="mark_live_or_offline_error"></span>
-                    </div>
+
 
                     <div class="d-flex flex-column w-100 mt-2">
                         <div class="wildcard__title">
@@ -214,16 +214,18 @@ Super Admin
                         </div>
                         <div class="d-flex flex-row">
                             <div class="wild_card__one">
-                                <input type="radio" name="wildcard" value="1" onchange="wilCardNo(this.value)"> <span>Yes</span>
+                                <input type="radio" name="wildcard" value="1" onchange="wilCardNo(this.value)">
+                                <span>Yes</span>
                             </div>
                             <div class="wild_card__one ml-3">
-                                <input type="radio" name="wildcard" value="0" onchange="wilCardNo(this.value)"> <span>No</span>
+                                <input type="radio" name="wildcard" value="0" onchange="wilCardNo(this.value)">
+                                <span>No</span>
                             </div>
                             <span class="text-danger" id="wildcard_error"></span>
                         </div>
 
-                        <div class="d-flex flex-row justify-content-between my-2"  id="wildcard_rounds">
-                           
+                        <div class="d-flex flex-row justify-content-between my-2" id="wildcard_rounds">
+
                         </div>
 
                     </div>
@@ -235,7 +237,7 @@ Super Admin
                         </div>
                         <div class="d-flex flex-row">
                             <div class="wild_card__one">
-                                <input type="radio"  checked="checked" name="appeal" value="1"> <span>Yes</span>
+                                <input type="radio" checked="checked" name="appeal" value="1"> <span>Yes</span>
                             </div>
                             <div class="wild_card__one ml-3">
                                 <input type="radio" name="appeal" value="0"> <span>No</span>
@@ -333,8 +335,35 @@ Super Admin
 
     };
 
+  
+
     function showRules(round_id) {
         $('#wildcard_rounds').html('');
+        $('#jury_or_judge_mark').val('');
+
+        // $('#checkbox1').click(function() {
+        //     $('#hid_show_live_or_offile').attr("style", "display:block;");
+        // });
+
+        
+
+        $("#checkbox1").click(function() {
+            var checked = $(this).is(':checked');
+            if (checked) {
+                // alert('checked');
+                $('#hid_show_live_or_offile').attr("style", "display:block!important;");
+            } else {
+                $('#hid_show_live_or_offile').attr("style", "display:none!important;");
+                // alert('unchecked');
+            }
+        });
+
+    
+
+        var wild_card_true = $('input:radio[name=wildcard][value=1]').attr('checked', true) ? 1 : 0;
+  
+          wilCardNo(wild_card_true);
+  
 
         var url = "{{ url('super-admin/audition-round-rules/mark/') }}";
 
@@ -343,44 +372,38 @@ Super Admin
             type: 'GET',
             success: function(data) {
                 console.log('get data', data);
+
+
                 $('#round_id').val(round_id);
-                if (data.mark.user_vote_mark > 0) {
-                    $('#checkbox1').attr('checked', 'checked');
-                    $('#textbox1').attr("style", "display:block");
-                    $('#textbox1').val(data.mark.user_vote_mark);
+
+                // if (data.mark.user_vote_mark > 0) {
+                //     $('#checkbox1').attr('checked', 'checked');
+                //     $('#textbox1').attr("style", "display:block");
+                //     $('#textbox1').val(data.mark.user_vote_mark);
+                // }else{
+                //     $('#checkbox1').attr('checked', false);
+                //     $('#textbox1').attr("style", "display:none");
+                //     $('#textbox1').val(0);
+                // }
+
+                if (data.mark.user_vote_mark == 1) {
+                    $('#checkbox1').attr('checked', true);
+                    $('#hid_show_live_or_offile').attr("style", "display:block!important;");
+
                 }else{
                     $('#checkbox1').attr('checked', false);
-                    $('#textbox1').attr("style", "display:none");
-                    $('#textbox1').val(0);
+                    $('#hid_show_live_or_offile').attr("style", "display:none!important;");
                 }
 
-                if (data.mark.jury_mark > 0) {
-                    $('#checkbox2').attr('checked', 'checked');
-                    $('#textbox2').attr("style", "display:block");
-                    $('#textbox2').val(data.mark.jury_mark);
-                }else{
-                    $('#checkbox2').attr('checked', false);
-                    $('#textbox2').attr("style", "display:none");
-                    $('#textbox2').val(0);
-                }
 
-                if (data.mark.judge_mark > 0) {
-                    $('#checkbox3').attr('checked', 'checked');
-                    $('#textbox3').attr("style", "display:block");
-                    $('#textbox3').val(data.mark.judge_mark);
-                }else{
-                    $('#checkbox3').attr('checked', false);
-                    $('#textbox3').attr("style", "display:none");
-                    $('#textbox3').val(0);
-                }
-
+                
                 if (data.mark.jury_or_judge == 0) {
                     $('input:radio[name=jury_or_judge][value=0]').attr('checked', true);
-                }else{
+                }else if(data.mark.jury_or_judge == 1){
                     $('input:radio[name=jury_or_judge][value=1]').attr('checked', true);
                 }
 
-                if (data.mark.jury_or_judge_mark > 0) {
+                if (data.mark.jury_or_judge_mark != null && data.mark.jury_or_judge_mark > 0) {
                     $('#jury_or_judge_mark').val(data.mark.jury_or_judge_mark);
                 }
 
@@ -389,10 +412,7 @@ Super Admin
                 }else{
                     $('input:radio[name=wildcard][value=1]').attr('checked', true);
                 }
-
-                if (data.mark.wildcard_round != null) {
-                    $('input:radio[name=wildcard][value='+data.mark.wildcard_round+']').attr('checked', true);
-                }
+    
 
                 if (data.mark.video_feed == 0) {
                     $('input:radio[name=video_feed][value=0]').attr('checked', true);
@@ -412,20 +432,22 @@ Super Admin
                     $('input:radio[name=appeal][value=1]').attr('checked', true);
                 }
 
-                console.log('data.mark.appea...',data.mark.appeal);
-
 
                 var single_round = "";
 
                 data.rules.forEach((round, index) => {
                     if (round.id > round_id) {
-                        single_round += '<div class="wild_card__two"  style="display: none;">'+
+                        single_round += '<div class="wild_card__two"  style="display: block;">'+
                                         '<input type="radio" name="wildcard_round" value="'+round.id+'"><span>Round '+`${index+1}`+'</span>'+
                                     '</div>';
                     }
                 });
 
                 $('#wildcard_rounds').append(single_round);
+
+                // if (data.mark.wildcard_round != null) {
+                    $('input:radio[name=wildcard_round][value='+data.mark.wildcard_round+']').attr('checked', true);
+                // }
 
 
             },
@@ -458,38 +480,29 @@ Super Admin
 
     }
 
+    // function checkedOrNot() {
+       
+    // }
+
+    // if($("#checkbox1").prop('checked') == true){
+    //     $('#hid_show_live_or_offile').attr("style", "display:block;");
+    // } else {
+    //     $('#hid_show_live_or_offile').attr("style", "display:none;");
+    // }
+    
+           
+
 
     $(document).on('click', '#SubmitRules', function(event) {
             event.preventDefault();
             ErrorMessageClear();
             $('.wild_card__two').css("display", "block");
             var round_id = $('#round_id').val();
-            // alert(round_id);
-            var v1 = parseInt($('#textbox1').val()) > 0 ? parseInt($('#textbox1').val()) : 0;
-            // var v2 = parseInt($('#textbox2').val()) > 0 ? parseInt($('#textbox2').val()) : 0;
-            // var v3 = parseInt($('#textbox3').val()) > 0 ? parseInt($('#textbox3').val()) : 0;
-            var v4 = parseInt($('#jury_or_judge_mark').val()) > 0 ? parseInt($('#jury_or_judge_mark').val()) : 0;
-            // var total = v1 + v2 + v3;
-            var total = v1 + v4;
-
-            if (total > 100) {
-                Swal.fire({
-                    position: 'center'
-                    , icon: 'error'
-                    , title: 'Total Mark Will Not Be More Than 100'
-                    , showConfirmButton: true,
-                    // timer: 1500
-                })
-                // alert('Total Mark Will Not Be More Than 100');
-            } else {
-                var form = $('#create-form')[0];
+            var form = $('#create-form')[0];
 
                 var formData = new FormData(form);
                 formData.append('round_id', round_id);
-                formData.append('user_vote_mark', v1);
-                // formData.append('jury_mark', v2);
-                // formData.append('judge_mark', v3);
-
+                formData.append('user_vote_mark', $('#checkbox1').prop('checked') ? 1: 0);
                 // Set header if need any otherwise remove setup part
                 $.ajaxSetup({
                     headers: {
@@ -504,16 +517,16 @@ Super Admin
                     contentType: false,
                     type: 'POST',
                     success: function(data) {
-                        // Swal.fire({
-                        //     position: 'top-end',
-                        //     icon: data.type,
-                        //     title: data.message,
-                        //     showConfirmButton: false,
-                        //     // timer: 1500
-                        // })
-                        // setTimeout(function() {
-                        //     location.reload();
-                        // }, 1000);
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: data.type,
+                            title: data.message,
+                            showConfirmButton: false,
+                            // timer: 1500
+                        })
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
                         console.log(data)
                     },
                     error: function(data) {
@@ -526,8 +539,6 @@ Super Admin
                         console.log(data);
                     }
                 });
-            }
-
             showRules(round_id);
     });
 
@@ -559,22 +570,12 @@ Super Admin
                 $('#textbox3').attr("style", "display:none");
             }
         });
-
-        // var v1 = $('#textbox1').val();
-        // var v2 = $('#textbox2').val();
-        // var v3 = $('#textbox3').val();
-
-        // var total = v1 + v2 + v3;
-
-        // if (total > 100) {
-        //     alert('Total Mark Will Not Be More Than 100');
-        // }
     });
+
+  
 
     function wilCardNo(value){
         if (value == 0) {
-            // $('#wildcard_rounds').html('');
-            // $('#wildcard_rounds').style.display = "none"; 
             $('.wild_card__two').css("display", "none");
         }else{
             $('.wild_card__two').css("display", "block");

@@ -19,7 +19,7 @@ class CreateAuditionRoundRulesTable extends Migration
             $table->unsignedBigInteger('audition_rules_id');
             $table->integer('jury_or_judge')->nullable()->comment('0 = jury,1= judge');
             $table->double('jury_or_judge_mark')->nullable();
-            $table->double('user_vote_mark')->nullable();
+            $table->integer('user_vote_mark')->default(0);
             $table->integer('mark_live_or_offline')->nullable()->comment('0 = offline,1= live');
             $table->integer('wildcard')->nullable()->comment('0 = no , 1= yes');
             $table->integer('wildcard_round')->nullable();

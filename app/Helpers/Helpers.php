@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\JuryGroup;
 use App\Models\StaticOption;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -179,6 +180,10 @@ if (!function_exists('random_code')) {
 
     function updatedBy(){
         return auth()->user()->id;
+    }
+
+    function juryGroup($id){
+        return JuryGroup::find($id)->name;
     }
 
 }

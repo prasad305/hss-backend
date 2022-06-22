@@ -49,7 +49,7 @@ class AuditionRoundRulesController extends Controller
                 'jury_or_judge' => 'required',
                 'jury_or_judge_mark' => 'required',
                 'appeal' => 'required',
-                'mark_live_or_offline' => 'required',
+                'mark_live_or_offline' => 'required_if:user_vote_mark,1',
                 'wildcard' => 'required',
                 'video_feed' => 'required',
             ],
@@ -57,19 +57,31 @@ class AuditionRoundRulesController extends Controller
                 'jury_or_judge.required' => 'Select Jury Or Judge',
                 'appeal.required' => 'Select Appeal Yes or No',
                 'jury_or_judge_mark.required' => 'Mark is Required',
-                'mark_live_or_offline.required' => 'Select Mark Offline or Live',
+                'mark_live_or_offline.required_if' => 'Select Mark Offline or Live',
                 'wildcard.required' => 'Select Wild Card Options Yes or No',
-                'video_feed.required' => 'Select Video Feed Options Yes or No', 
+                'video_feed.required' => 'Select Video Feed Options Yes or No',
             ]
         );
 
         $round = AuditionRoundRule::find($request->round_id);
         $round->user_vote_mark = $request->user_vote_mark;
+
+        if ($request->user_vote_mark == 1) {
+            $round->mark_live_or_offline = $request->mark_live_or_offline;
+        }else{
+            $round->mark_live_or_offline = null;
+        }
+
         $round->jury_or_judge = $request->jury_or_judge;
         $round->jury_or_judge_mark = $request->jury_or_judge_mark;
-        $round->mark_live_or_offline = $request->mark_live_or_offline;
         $round->wildcard = $request->wildcard;
-        $round->wildcard_round = $request->wildcard_round;
+
+        if ($request->wildcard == 1) {
+            $round->wildcard_round = $request->wildcard_round;
+        }else{
+            $round->wildcard_round = null;
+        }
+
         $round->appeal = $request->appeal;
         $round->video_feed = $request->video_feed;
         $round->save();
@@ -98,7 +110,7 @@ class AuditionRoundRulesController extends Controller
     public function getMark($id)
     {
         $mark = AuditionRoundRule::find($id);
-        $rules = AuditionRoundRule::where('audition_rules_id',$mark->audition_rules_id)->get();
+        $rules = AuditionRoundRule::where('audition_rules_id', $mark->audition_rules_id)->get();
 
         return response()->json([
             'status' => 'success',

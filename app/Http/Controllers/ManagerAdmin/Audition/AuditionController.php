@@ -16,11 +16,37 @@ use function PHPUnit\Framework\isEmpty;
 
 class AuditionController extends Controller
 {
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
         // dd($request->all());
         $auditionRule = AuditionRules::find($request->audition_rule_id);
-        if($auditionRule){
+
+
+
+
+        if ($auditionRule) {
+
+            if ($auditionRule->jury_groups !== null) {
+                $jurry_group = json_decode($auditionRule->jury_groups);
+                $group_data = $jurry_group->{'group_members'};
+            }
+
+            if (isset($group_data)) {
+                $jury_errors = '';
+                foreach ($request->group_ids as $key => $group_id) {
+                    if (count($request->jury[$key]) != $group_data[$key]) {
+                        $jury_errors =$jury_errors."Opps.. You have to select " . $group_data[$key] . " jury for Group ".strtoupper(juryGroup($group_id))." !";
+                    }
+                }
+
+                if ($jury_errors != '') {
+                    session()->flash('error', $jury_errors);
+                    return back();
+                }
+            }
+
+
             // dd($auditionRule->roundRules->count());
             $request->validate([
                 'audition_admin_id' => 'required',
@@ -28,14 +54,14 @@ class AuditionController extends Controller
                 'description' => 'required',
                 'start_date' => 'required',
             ]);
-            if($auditionRule->jury_num != count($request->jury)){
-                session()->flash('error', 'Opps.. You have to select '.$auditionRule->jury_num.' jury !');
+
+
+
+            if ($auditionRule->judge_num != count($request->judge)) {
+                session()->flash('error', 'Opps.. You have to select ' . $auditionRule->judge_num . ' judge !');
                 return back();
-            }elseif($auditionRule->judge_num != count($request->judge)){
-                session()->flash('error', 'Opps.. You have to select '.$auditionRule->judge_num.' judge !');
-                return back();
-            }else{
-                if($auditionRule->roundRules->count() == 0){
+            } else {
+                if ($auditionRule->roundRules->count() == 0) {
                     session()->flash('error', 'Opps.. There is no round rules. Please add some round rules first');
                     return back();
                 }
@@ -62,17 +88,20 @@ class AuditionController extends Controller
                     $auditionAssignJudge->approved_by_judge = 0;
                     $auditionAssignJudge->save();
                 }
-                foreach ($request->jury as $key => $value) {
-                    $auditionAssignJury = new AuditionAssignJury();
-                    $auditionAssignJury->audition_id           =  $audition->id;
-                    $auditionAssignJury->jury_id               =  $value;
-                    $auditionAssignJury->approved_by_jury      =  0;
-                    $auditionAssignJury->status                =   0;
-                    $auditionAssignJury->save();
+
+                foreach ($request->group_ids as $key => $group_id) { // how many groups are allowed total_items
+                    foreach ($request->jury[$key] as $jury) { // per groups jury assigne
+                        $auditionAssignJury = new AuditionAssignJury();
+                        $auditionAssignJury->audition_id           =  $audition->id;
+                        $auditionAssignJury->jury_id               =  $jury;
+                        $auditionAssignJury->approved_by_jury      =  0;
+                        $auditionAssignJury->status                =   0;
+                        $auditionAssignJury->save();
+                    }
                 }
                 session()->flash('success', 'Audition added successfully !');
             }
-        }else{
+        } else {
             session()->flash('error', 'Opps.. No audition rules found !');
         }
         return back();

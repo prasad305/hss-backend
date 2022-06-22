@@ -19,7 +19,6 @@ class JuryBoardController extends Controller
     {
         $data = [
             'juries' =>  User::where([['category_id',auth()->user()->category_id],['user_type', 'jury']])->orderBy('id', 'DESC')->get(),
-
         ];
         return view('ManagerAdmin.jury.index', $data);
     }
@@ -81,7 +80,7 @@ class JuryBoardController extends Controller
     {
         $data = [
             'sub_categories' => SubCategory::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('name', 'asc')->get(),
-            'groups' => JuryGroup::where('status',1)->orderBy('name', 'asc')->get(),
+            'groups' => JuryGroup::where([['status',1],['category_id',auth()->user()->category_id]])->orderBy('name', 'asc')->get(),
         ];
         return view('ManagerAdmin.jury.create', $data);
     }
@@ -174,7 +173,8 @@ class JuryBoardController extends Controller
     {
         $data = [
             'jury' => $jury,
-            'sub_categories' => SubCategory::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('id', 'DESC')->get()
+            'sub_categories' => SubCategory::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('id', 'DESC')->get(),
+            'groups' => JuryGroup::where([['status',1],['category_id',auth()->user()->category_id]])->orderBy('name', 'asc')->get(),
         ];
         return view('ManagerAdmin.jury.edit', $data);
     }
