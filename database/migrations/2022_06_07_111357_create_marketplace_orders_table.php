@@ -32,7 +32,11 @@ class CreateMarketplaceOrdersTable extends Migration
             $table->float('total_price')->nullable();
             $table->string('holder_name')->nullable();
             $table->string('card_no')->nullable();
-            $table->string('expire_date')->nullable();
+            $table->string('card_holder_name')->nullable();
+            $table->string('account_no')->nullable();
+            $table->timestamp('payment_date')->nullable();
+            $table->string('payment_status')->nullable();
+            $table->timestamp('expire_date')->nullable();
             $table->integer('cvc')->nullable();
             $table->integer('status')->nullable()->comment('1 = Ordered, 2 = Received, 3 = Out for Delivery, 4 = Delivered');
             $table->timestamp('delivery_at')->nullable();

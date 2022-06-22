@@ -9,6 +9,35 @@ class MarketplaceOrder extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'id',
+        'user_id',
+        'invoice_no',
+        'order_no',
+        'marketplace_id',
+        'superstar_id',
+        'superstar_admin_id',
+        'country_id',
+        'state_id',
+        'city_id',
+        'area',
+        'phone',
+        'items',
+        'unit_price',
+        'delivery_charge',
+        'total_price',
+        'holder_name',
+        'card_no',
+        'card_holder_name',
+        'account_no',
+        'payment_date',
+        'payment_status',
+        'expire_date',
+        'cvc',
+        'status',
+        'delivery_at',
+    ];
+
     protected $with = ['marketplace', 'user', 'state', 'country', 'city', 'star'];
 
 
@@ -34,7 +63,7 @@ class MarketplaceOrder extends Model
     {
         return $this->belongsTo(City::class, 'city_id');
     }
-    
+
     public function star()
     {
         return $this->belongsTo(User::class, 'superstar_id');
