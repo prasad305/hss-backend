@@ -51,6 +51,7 @@ class FanGroupController extends Controller
             ]);
     }
 
+    // Create Fan Group in Admin
     public function fanGroupStore(Request $request){
         // $validator = Validator::make($request->all(), [
         $validator = Validator::make($request->all(),[
@@ -332,6 +333,8 @@ class FanGroupController extends Controller
             'id' => $id,
         ]);
     }
+
+    // Pending/Approve/Live Fan group List in Admin Panel
     public function statusAdminStar(){
         $id = auth('sanctum')->user()->id;
         // $user = FanGroup::where('created_by', $id);
@@ -448,6 +451,7 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Get Fan Details 
     public function fanGroupDetails($slug){
         $id = auth('sanctum')->user()->id;
         $starId = User::find($id);
@@ -462,6 +466,7 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Active Fan Group
     public function fanGroupActive($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
         $id = auth('sanctum')->user()->id;
@@ -481,6 +486,7 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Fan group Ignore
     public function fanGroupIgnore($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
         $id = auth('sanctum')->user()->id;
@@ -505,8 +511,8 @@ class FanGroupController extends Controller
         $userId = auth('sanctum')->user()->id;
 
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->latest()->where('status', 1)->orderBy('id', 'DESC')->get();
-        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->get();
-        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->get();
+        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
+        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
 
         return response()->json([
             'status' => 200,
@@ -628,8 +634,8 @@ class FanGroupController extends Controller
 
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->orderBy('id', 'DESC')->get();
         $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->orderBy('id', 'DESC')->get();
-        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->get();
-        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->get();
+        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
+        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
 
         $fanWarning = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('warning_count', '!=', 0)->orderBy('id', 'DESC')->get();
 
@@ -834,8 +840,8 @@ class FanGroupController extends Controller
         $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->orderBy('id', 'DESC')->get();
 
         
-        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->get();
-        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->get();
+        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
+        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
 
         $id = auth('sanctum')->user()->id;
         $my_star = User::find($id);
@@ -893,6 +899,8 @@ class FanGroupController extends Controller
         ]);
     }
 
+
+    // User Join Fan Groun in Fan_Group_Join table
     public function getFanGroupStore(Request $request){
         $id = auth('sanctum')->user()->id;
 
@@ -962,6 +970,7 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // User Post in Fan Group in FanPost table
     public function getFanPostStore(Request $request){
         $id = auth('sanctum')->user()->id;
 
@@ -1037,6 +1046,7 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Update banner in Fan Group
     public function updateImageFanGroup(Request $request, $slug){
 
         $fanImage = FanGroup::where('slug', $slug)->first();
@@ -1066,6 +1076,7 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Get FanGroup join details using user_id from Fan_Group_Join table
     public function getFanGroupJoinId($id){
 
         $userId = auth('sanctum')->user()->id;
@@ -1078,6 +1089,7 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Member approve in Star & Admin Panel
     public function approveFanMember($id){
 
         $fanMember = Fan_Group_Join::find($id);
@@ -1089,6 +1101,8 @@ class FanGroupController extends Controller
             'message' => 'Fan Member approved Successfully',
         ]);
     }
+
+    // Approve Post in Star & Admin Panel
     public function approveFanPost($id){
 
         $fanMember = FanPost::find($id);
@@ -1100,6 +1114,8 @@ class FanGroupController extends Controller
             'message' => 'Fan Post approved Successfully',
         ]);
     }
+
+    // Status change on Setting for User Join in Star & Admin Panel
     public function joinFanGroup($slug, $data){
 
         $fanjoin = FanGroup::where('slug', $slug)->first();
@@ -1120,6 +1136,7 @@ class FanGroupController extends Controller
 
     }
 
+    // Status change on Setting for User Post in Star & Admin Panel
     public function postFanGroup($slug, $data){
 
         $fanpost = FanGroup::where('slug', $slug)->first();
