@@ -20,10 +20,13 @@ use App\Http\Controllers\SuperAdmin\StateController;
 use App\Http\Controllers\SuperAdmin\MarketplaceController;
 use App\Http\Controllers\SuperAdmin\CityController;
 use App\Http\Controllers\SuperAdmin\EventsController;
+use App\Http\Controllers\SuperAdmin\FanGroupController;
 use App\Http\Controllers\SuperAdmin\GreetingController;
 use App\Http\Controllers\SuperAdmin\InterestTypeController;
 use App\Http\Controllers\SuperAdmin\JurysAuditionController;
+use App\Http\Controllers\SuperAdmin\LearningSessionController;
 use App\Http\Controllers\SuperAdmin\LiveChatController;
+use App\Http\Controllers\SuperAdmin\MeetupEventController;
 use App\Http\Controllers\SuperAdmin\SimplePostController;
 use App\Http\Controllers\SuperAdmin\SubCategoryController;
 use App\Models\PaymentMethod;
@@ -136,6 +139,39 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('liveChat-edit/{id}', [LiveChatController::class, 'liveChatEdit'])->name('liveChat.edit');
     Route::PUT('liveChat-update/{id}', [LiveChatController::class, 'livechatUpdate'])->name('liveChat.update');
     Route::delete('liveChat-destroy/{id}', [LiveChatController::class, 'liveChatDestroy'])->name('liveChat.destroy');
+
+    //LearningSession
+    Route::get('learningSession-index', [LearningSessionController::class, 'index'])->name('learningSession.index');
+    Route::get('learningSession-list/{id}', [LearningSessionController::class, 'learningSessionList'])->name('learningSession.list');
+    Route::get('learningSession-details/{id}', [LearningSessionController::class, 'learningSessionDetails'])->name('learningSession.details');
+    Route::get('learningSession-edit/{id}', [LearningSessionController::class, 'learningSessionEdit'])->name('learningSession.edit');
+    Route::PUT('learningSession-update/{id}', [LearningSessionController::class, 'LearningSessionUpdate'])->name('learningSession.update');
+    Route::delete('learningSession-destroy/{id}', [LearningSessionController::class, 'learningSessionDestroy'])->name('learningSession.destroy');
+
+    //MeetupEvents
+    Route::get('meetupEvent-index', [MeetupEventController::class, 'index'])->name('meetupEvent.index');
+    Route::get('meetupEvent-list/{id}', [MeetupEventController::class, 'meetupEventList'])->name('meetupEvent.list');
+    Route::get('meetupEvent-details/{id}', [MeetupEventController::class, 'meetupEventDetails'])->name('meetupEvent.details');
+    Route::get('meetupEvent-edit/{id}', [MeetupEventController::class, 'meetupEventEdit'])->name('meetupEvent.edit');
+    Route::PUT('meetupEvent-update/{id}', [MeetupEventController::class, 'meetupEventUpdate'])->name('meetupEvent.update');
+    Route::delete('meetupEvent-destroy/{id}', [MeetupEventController::class, 'meetupEventDestroy'])->name('meetupEvent.destroy');
+
+    //Greeting
+    Route::get('greeting-index', [GreetingController::class, 'events'])->name('greeting.index');
+    Route::get('greeting-list/{id}', [GreetingController::class, 'greetingList'])->name('greeting.list');
+    Route::get('greeting-details/{id}', [GreetingController::class, 'greetingDetails'])->name('greeting.details');
+    Route::get('greeting-edit/{id}', [GreetingController::class, 'greetingEdit'])->name('greeting.edit');
+    Route::PUT('greeting-update/{id}', [GreetingController::class, 'greetingUpdate'])->name('greeting.update');
+    Route::delete('greeting-destroy/{id}', [GreetingController::class, 'greetingDestroy'])->name('greeting.destroy');
+
+    //Fangroup
+    Route::get('fanGroup-index', [FanGroupController::class, 'index'])->name('fanGroup.index');
+    Route::get('fanGroup-list/{id}', [FanGroupController::class, 'fanGroupList'])->name('fanGroup.list');
+    Route::get('fanGroup-details/{id}', [FanGroupController::class, 'fanGroupDetails'])->name('fanGroup.details');
+    Route::get('fanGroup-edit/{id}', [FanGroupController::class, 'fanGroupEdit'])->name('fanGroup.edit');
+    Route::PUT('fanGroup-update/{id}', [FanGroupController::class, 'fanGroupUpdate'])->name('fanGroup.update');
+    Route::delete('fanGroup-destroy/{id}', [FanGroupController::class, 'fanGroupDestroy'])->name('fanGroup.destroy');
+
 
 
 

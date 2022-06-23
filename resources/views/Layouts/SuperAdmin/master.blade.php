@@ -463,8 +463,14 @@
             if (key == 'title') {
                 $('#title_error').html(value);
             }
+            if (key == 'description') {
+                $('#description_error').html(value);
+            }
             if (key == 'instruction') {
                 $('#instruction_error').html(value);
+            }
+            if (key == 'group_name') {
+                $('#group_name_error').html(value);
             }
         }
 
@@ -486,6 +492,7 @@
             $('#title_error').html('');
             $('#description_error').html('');
             $('#instruction_error').html('');
+            $('#group_name_error').html('');
         }
     </script>
 

@@ -14,7 +14,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Live Chats</li>
+                        <li class="breadcrumb-item active">Fan Group</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -36,8 +36,8 @@
                                 <span class="info-box-text">{{ $category->name }}</span>
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
-                                            href="{{ route('superAdmin.liveChat.list', $category->id) }}">see
-                                            Live chats</a></small>
+                                            href="{{ route('superAdmin.fanGroup.list', $category->id) }}">see
+                                            Fan Group</a></small>
                                 </span>
                             </div>
 

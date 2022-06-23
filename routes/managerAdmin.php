@@ -12,7 +12,7 @@ use App\Http\Controllers\ManagerAdmin\SimplePostController;
 use App\Http\Controllers\ManagerAdmin\MarketplaceController;
 use App\Http\Controllers\ManagerAdmin\SouvenirController;
 use App\Http\Controllers\ManagerAdmin\FanGroupController;
-use App\Http\Controllers\API\MeetupEventController;
+use App\Http\Controllers\ManagerAdmin\MeetupEventController;
 use App\Http\Controllers\ManagerAdmin\AuctionController;
 use App\Http\Controllers\ManagerAdmin\GreetingController;
 use App\Http\Controllers\ManagerAdmin\PromoVideoController;

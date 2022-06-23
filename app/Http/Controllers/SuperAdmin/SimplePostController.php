@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\SimplePost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -103,8 +104,10 @@ class SimplePostController extends Controller
     }
     public function simplepostDestroy($id)
     {
+        $post = Post::where('event_id', $id)->first();
         $postDelete = SimplePost::findOrfail($id);
         try {
+            $post->delete();
             $postDelete->delete();
             return response()->json([
                 'type' => 'success',

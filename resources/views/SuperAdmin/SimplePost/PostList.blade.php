@@ -47,7 +47,8 @@
                                 <th>SL</th>
                                 <th>Photo or Video</th>
                                 <th>Title</th>
-                                <th>Description</th>
+                                <th>Admin</th>
+                                <th>Super Star</th>
                                 <th>Status</th>
                                 <th style="width: 150px">Action</th>
                             </tr>
@@ -66,7 +67,8 @@
                                         @endif
                                     </td>
                                     <td>{{ $post->title }}</td>
-                                    <td>{!! Str::words("$post->description", 10, '...') !!}</td>
+                                    <td>{{ $post->admin->first_name }} {{ $post->admin->last_name }}</td>
+                                    <td>{{ $post->star->first_name }} {{ $post->star->last_name }}</td>
                                     <td>
                                         @if ($post->status >= 1)
                                             <span class="badge badge-success">Published<span>

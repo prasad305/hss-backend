@@ -409,29 +409,77 @@
                 <li class="nav-item">
                     <a href="{{ route('superAdmin.liveChat.index') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.liveChat.published') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Published</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.liveChat.pending') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Pending</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.liveChat.all') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>All</p>
+                        <p>All Events</p>
                     </a>
                 </li>
             </ul>
         </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>Learning Session
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.learningSession.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>All Events</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>Meetup Events
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.meetupEvent.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>All Events</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>Greetings
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.greeting.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>All Events</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>Fan Group
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.fanGroup.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>All Group</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <div class="mt-5"></div>
 
         <li class="nav-item">
             <a href="#" class="nav-link">

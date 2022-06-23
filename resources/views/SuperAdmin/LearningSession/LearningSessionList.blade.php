@@ -12,12 +12,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Live Chat List</h1>
+                    <h1 class="m-0">Learning Session List</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Live Chat List</li>
+                        <li class="breadcrumb-item active">Learning Session List</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -35,9 +35,10 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Live Chat List</h3>
+                    <h3 class="card-title">Learning Session List</h3>
                     <a class="btn btn-success btn-sm" style="float: right;"
-                        href="{{ route('superAdmin.liveChat.index') }}"><i class=" fa fa-arrow"></i>&nbsp;Go Back</a>
+                        href="{{ route('superAdmin.learningSession.index') }}"><i class=" fa fa-arrow"></i>&nbsp;Go
+                        Back</a>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -59,7 +60,12 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>
-                                        <img src="{{ asset($post->banner) }}" style="width: 200px; height:100px" />
+                                        @if ($post->banner)
+                                            <img src="{{ asset($post->banner) }}" style="width: 200px; height:100px" />
+                                        @else
+                                            <video width="200" height="100" src="{{ asset($post->video) }}">
+                                            </video>
+                                        @endif
                                     </td>
                                     <td>{{ $post->title }}</td>
                                     <td>{{ $post->admin->first_name }} {{ $post->admin->last_name }}</td>
@@ -72,13 +78,13 @@
                                         @endif
                                     </td>
                                     <td style="width: 150px">
-                                        <a href="{{ route('superAdmin.liveChat.details', [$post->id]) }}"
+                                        <a href="{{ route('superAdmin.learningSession.details', [$post->id]) }}"
                                             class="btn btn-sm btn-success"> <i class="fa fa-eye"></i></a>
                                         <a class="btn btn-sm btn-info"
-                                            onclick="Show('Edit Event','{{ route('superAdmin.liveChat.edit', $post->id) }}')"><i
+                                            onclick="Show('Edit Event','{{ route('superAdmin.learningSession.edit', $post->id) }}')"><i
                                                 class="fa fa-edit text-white"></i></a>
                                         <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
-                                            value="{{ route('superAdmin.liveChat.destroy', $post->id) }}"><i
+                                            value="{{ route('superAdmin.learningSession.destroy', $post->id) }}"><i
                                                 class="fa fa-trash"></i> </button>
                                     </td>
                                 </tr>

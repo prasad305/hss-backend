@@ -12,12 +12,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Live Chat List</h1>
+                    <h1 class="m-0">Meetup Event List</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Live Chat List</li>
+                        <li class="breadcrumb-item active">Meetup Event List</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -35,9 +35,9 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Live Chat List</h3>
+                    <h3 class="card-title">Meetup Event List</h3>
                     <a class="btn btn-success btn-sm" style="float: right;"
-                        href="{{ route('superAdmin.liveChat.index') }}"><i class=" fa fa-arrow"></i>&nbsp;Go Back</a>
+                        href="{{ route('superAdmin.meetupEvent.index') }}"><i class=" fa fa-arrow"></i>&nbsp;Go Back</a>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -72,13 +72,13 @@
                                         @endif
                                     </td>
                                     <td style="width: 150px">
-                                        <a href="{{ route('superAdmin.liveChat.details', [$post->id]) }}"
+                                        <a href="{{ route('superAdmin.meetupEvent.details', [$post->id]) }}"
                                             class="btn btn-sm btn-success"> <i class="fa fa-eye"></i></a>
                                         <a class="btn btn-sm btn-info"
-                                            onclick="Show('Edit Event','{{ route('superAdmin.liveChat.edit', $post->id) }}')"><i
+                                            onclick="Show('Edit Event','{{ route('superAdmin.meetupEvent.edit', $post->id) }}')"><i
                                                 class="fa fa-edit text-white"></i></a>
                                         <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
-                                            value="{{ route('superAdmin.liveChat.destroy', $post->id) }}"><i
+                                            value="{{ route('superAdmin.meetupEvent.destroy', $post->id) }}"><i
                                                 class="fa fa-trash"></i> </button>
                                     </td>
                                 </tr>

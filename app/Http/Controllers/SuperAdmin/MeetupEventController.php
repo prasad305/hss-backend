@@ -4,37 +4,38 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\LiveChat;
+use App\Models\MeetupEvent;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
 
-class LiveChatController extends Controller
+
+class MeetupEventController extends Controller
 {
     public function index()
     {
         $categories = Category::get();
-        return view('SuperAdmin.LiveChat.index', compact('categories'));
+        return view('SuperAdmin.MeetupEvent.index', compact('categories'));
     }
-    public function livechatList($categoryId)
+    public function meetupEventList($categoryId)
     {
-        $postList = LiveChat::where('category_id', $categoryId)->latest()->get();
-        return view('SuperAdmin.LiveChat.LiveChatList', compact('postList'));
+        $postList = MeetupEvent::where('category_id', $categoryId)->latest()->get();
+        return view('SuperAdmin.MeetupEvent.MeetupEventList', compact('postList'));
     }
-    public function livechatDetails($postId)
+    public function meetupEventDetails($postId)
     {
-        $event = LiveChat::findOrFail($postId);
-        return view('SuperAdmin.LiveChat.details', compact('event'));
+        $meetup = MeetupEvent::findOrFail($postId);
+        return view('SuperAdmin.MeetupEvent.details', compact('meetup'));
     }
-    public function livechatEdit($id)
+    public function meetupeventEdit($id)
     {
-        $event = LiveChat::find($id);
+        $event = MeetupEvent::find($id);
 
-        return view('SuperAdmin.LiveChat.edit', compact('event'));
+        return view('SuperAdmin.MeetupEvent.edit', compact('event'));
     }
-    public function livechatUpdate(Request $request, $id)
+    public function meetupEventUpdate(Request $request, $id)
     {
 
         $request->validate([
@@ -48,34 +49,35 @@ class LiveChatController extends Controller
             'instruction.required' => 'This Field Is Required',
         ]);
 
+        $meetup = MeetupEvent::findOrFail($id);
+        $meetup->fill($request->except('_token'));
 
-        $liveChat = LiveChat::findOrFail($id);
-        $liveChat->fill($request->except('_token'));
+        $meetup->title = $request->input('title');
+        $meetup->description = $request->input('description');
+        $meetup->instruction = $request->input('instruction');
 
-        $liveChat->title = $request->input('title');
-        $liveChat->slug = Str::slug($request->input('title'));
-        $liveChat->description = $request->input('description');
-        $liveChat->instruction = $request->input('instruction');
 
         if ($request->hasfile('image')) {
-            $destination = $liveChat->banner;
+            $destination = $meetup->banner;
             if (File::exists($destination)) {
                 File::delete($destination);
             }
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/live_chat/' . time() . '.' . $extension;
+            $filename = 'uploads/images/meetup/' . time() . '.' . $extension;
 
-            Image::make($file)->resize(900, 400)->save($filename, 100);
-            $liveChat->banner = $filename;
+            Image::make($file)->resize(900, 400)
+                ->save($filename, 50);
+
+            $meetup->banner = $filename;
         }
 
         try {
-            $liveChat->update();
-            if ($liveChat) {
+            $meetup->update();
+            if ($meetup) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'LiveChat Event Updated Successfully'
+                    'message' => 'Meetup Event Updated Successfully'
                 ]);
             }
         } catch (\Exception $exception) {
@@ -85,10 +87,10 @@ class LiveChatController extends Controller
             ]);
         }
     }
-    public function livechatDestroy($id)
+    public function meetupEventDestroy($id)
     {
         $post = Post::where('event_id', $id)->first();
-        $postDelete = LiveChat::findOrfail($id);
+        $postDelete = MeetupEvent::findOrfail($id);
         try {
             $post->delete();
             $postDelete->delete();

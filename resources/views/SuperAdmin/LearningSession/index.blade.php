@@ -14,7 +14,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Live Chats</li>
+                        <li class="breadcrumb-item active">Learning Session</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -36,8 +36,8 @@
                                 <span class="info-box-text">{{ $category->name }}</span>
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
-                                            href="{{ route('superAdmin.liveChat.list', $category->id) }}">see
-                                            Live chats</a></small>
+                                            href="{{ route('superAdmin.learningSession.list', $category->id) }}">see
+                                            Learning Session</a></small>
                                 </span>
                             </div>
 
