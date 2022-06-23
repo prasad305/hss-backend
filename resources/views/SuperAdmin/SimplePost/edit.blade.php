@@ -74,7 +74,7 @@
         });
 
         $.ajax({
-            url: "{{ route('managerAdmin.simplePost.update', $event->id) }}", // your request url
+            url: "{{ route('superAdmin.simplePost.update', $event->id) }}", // your request url
             data: formData,
             processData: false,
             contentType: false,
