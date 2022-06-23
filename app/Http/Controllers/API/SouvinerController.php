@@ -484,7 +484,7 @@ class SouvinerController extends Controller
         $admin = auth('sanctum')->user()->id;
 
         $registerSouvenir = SouvenirApply::where('admin_id', $admin)->where('status', 0)->where('is_delete', 0)->latest()->get();
-        $userPaymentDueSouvenir = SouvenirApply::where('admin_id', $admin)->where('status', 1)->get();
+        $userPaymentDueSouvenir = SouvenirApply::where('admin_id', $admin)->where('status', 1)->where('is_delete', 0)->get();
         $userPaymentSouvenir = SouvenirApply::where('admin_id', $admin)->where('status', '>=', 2)->latest()->get();
 
         return response()->json([
@@ -497,9 +497,9 @@ class SouvinerController extends Controller
     public function starRegisterUserSouvenirList(){
         $star = auth('sanctum')->user()->id;
 
-        $registerSouvenir = SouvenirApply::where('star_id', $star)->where('status', 0)->latest()->get();
+        $registerSouvenir = SouvenirApply::where('star_id', $star)->where('status', 0)->where('is_delete', 0)->latest()->get();
 
-        $userPaymentDueSouvenir = SouvenirApply::where('star_id', $star)->where('status', 1)->get();
+        $userPaymentDueSouvenir = SouvenirApply::where('star_id', $star)->where('status', 1)->where('is_delete', 0)->get();
         $userPaymentSouvenir = SouvenirApply::where('star_id', $star)->where('status', '>=', 2)->latest()->get();
 
         return response()->json([
