@@ -113,7 +113,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('auditionAdmin-free', [AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin_notAssinged');
 
     Route::get('audition/registration/rules', [AuditionAdminController::class, 'registrationRules'])->name('audition.registration.rules');
-    Route::get('audition/registration/rules/create', [AuditionAdminController::class, 'createRegistrationRules'])->name('audition.registration.rules.create');
+    Route::get('audition/registration/rules/create/{audition_id}', [AuditionAdminController::class, 'createRegistrationRules'])->name('audition.registration.rules.create');
+    Route::post('audition/registration/rules/store', [AuditionAdminController::class, 'storeRegistrationRules'])->name('audition.registration.rules.store');
     Route::get('audition/registration/rules/edit', [AuditionAdminController::class, 'editRegistrationRules'])->name('audition.registration.rules.edit');
 
     // Jury Board route

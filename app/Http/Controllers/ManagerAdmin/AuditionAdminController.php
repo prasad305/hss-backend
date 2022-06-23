@@ -23,7 +23,7 @@ class AuditionAdminController extends Controller
     public function index()
     {
 
-        $auditionAdmins = User::where([['category_id',auth()->user()->category_id],['user_type','audition-admin']])->orderBy('id', 'DESC')->get();
+        $auditionAdmins = User::where([['category_id', auth()->user()->category_id], ['user_type', 'audition-admin']])->orderBy('id', 'DESC')->get();
         return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins'));
     }
 
@@ -36,30 +36,30 @@ class AuditionAdminController extends Controller
 
         $userIds = [];
         foreach ($assignJuries as $jury) {
-            if($jury->jury_id != null){
+            if ($jury->jury_id != null) {
                 array_push($userIds, $jury->jury_id);
             }
         }
 
-        $avaiable_juries = User::whereNotIn('id', $userIds)->where('user_type','jury')->orderBy('id', 'DESC')->get();
+        $avaiable_juries = User::whereNotIn('id', $userIds)->where('user_type', 'jury')->orderBy('id', 'DESC')->get();
 
-        $filter_videos = AuditionParticipant::where([['audition_id',$audition_id],['accept_status', 1],['filter_status', 1],['send_manager_admin',1],['jury_id', null]])->get();
+        $filter_videos = AuditionParticipant::where([['audition_id', $audition_id], ['accept_status', 1], ['filter_status', 1], ['send_manager_admin', 1], ['jury_id', null]])->get();
 
         $total_jury = count($avaiable_juries);
         $total_video = count($filter_videos);
 
         $videoPackArray = [];
-       if($total_jury > 0){
+        if ($total_jury > 0) {
             $video_pack = floor($total_video / $total_jury);
             for ($total_jury; $total_jury > 0; $total_jury--) {
-                if($total_jury == 1){
+                if ($total_jury == 1) {
                     array_push($videoPackArray, $total_video);
-                }else{
+                } else {
                     array_push($videoPackArray, $video_pack);
                     $total_video = $total_video - $video_pack;
                 }
             }
-       }
+        }
 
         $data = [
             'filter_videos' => $filter_videos,
@@ -68,7 +68,7 @@ class AuditionAdminController extends Controller
             'audition_id' => $audition_id,
         ];
 
-        return view('ManagerAdmin.Audition.jury_published',$data);
+        return view('ManagerAdmin.Audition.jury_published', $data);
     }
 
 
@@ -100,16 +100,18 @@ class AuditionAdminController extends Controller
     }
 
 
-    public function instruction($audition_id){
+    public function instruction($audition_id)
+    {
         $audition = Audition::find($audition_id);
-         $data = [
+        $data = [
             'instruction' => AuditionRoundRule::find($audition->audition_round_rules_id),
             'audition' => $audition,
         ];
-        return view('ManagerAdmin.Audition.instruction',$data);
+        return view('ManagerAdmin.Audition.instruction', $data);
     }
 
-    public function sendInstructionToParticipant($audition_id){
+    public function sendInstructionToParticipant($audition_id)
+    {
 
         $audition = Audition::find($audition_id);
 
@@ -117,22 +119,21 @@ class AuditionAdminController extends Controller
         $instruction->status = 2;
         $instruction->save();
 
-        $participants = AuditionParticipant::where('audition_id',$audition_id)->update([
+        $participants = AuditionParticipant::where('audition_id', $audition_id)->update([
             'audition_round_rules_id' => $audition->audition_round_rules_id,
         ]);
 
-        session()->flash('success','Send To Participant Successfully');
+        session()->flash('success', 'Send To Participant Successfully');
         return redirect()->back();
-
     }
 
 
     public function create()
     {
         $data = [
-            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBy('name','asc')->get(),
+            'sub_categories' => SubCategory::where('category_id', auth()->user()->category_id)->orderBy('name', 'asc')->get(),
         ];
-        return view('ManagerAdmin.auditionAdmin.create',$data);
+        return view('ManagerAdmin.auditionAdmin.create', $data);
     }
 
 
@@ -146,14 +147,14 @@ class AuditionAdminController extends Controller
             'phone' => 'required|numeric|min:11|unique:users',
             'image' => 'mimes:jpeg,jpg,png,gif|max:2000',
             'cover' => 'mimes:jpeg,jpg,png,gif|max:2000',
-        ],[
+        ], [
             'sub_category_id.required' => 'The Category Field is Required',
         ]);
 
 
 
         $user = new User();
-        $user->fill($request->except(['_token','image','cover']));
+        $user->fill($request->except(['_token', 'image', 'cover']));
         $user->password = Hash::make('12345');
         $user->user_type = 'audition-admin'; // Admin user_type == 'audition-admin'
         $user->otp = rand(100000, 999999);
@@ -199,11 +200,11 @@ class AuditionAdminController extends Controller
     public function show($search)
     {
         $search_text = $search;
-        $auditionAdmins = User::when($search != null,function($query) use($search){
-            return $query->where('first_name','like','%'.$search.'%')->orWhere('last_name','like','%'.$search.'%');
+        $auditionAdmins = User::when($search != null, function ($query) use ($search) {
+            return $query->where('first_name', 'like', '%' . $search . '%')->orWhere('last_name', 'like', '%' . $search . '%');
         })->where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
 
-        return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins','search_text'));
+        return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins', 'search_text'));
     }
 
 
@@ -211,7 +212,7 @@ class AuditionAdminController extends Controller
     {
         $data = [
             'auditionAdmin' => $auditionAdmin,
-            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBy('name','asc')->get(),
+            'sub_categories' => SubCategory::where('category_id', auth()->user()->category_id)->orderBy('name', 'asc')->get(),
         ];
         return view('ManagerAdmin.auditionAdmin.edit', $data);
     }
@@ -220,14 +221,15 @@ class AuditionAdminController extends Controller
     {
         $request->validate(
             [
-            'sub_category_id' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            // 'email' => 'required',
-            // 'phone' => 'required',
-            'image' => 'mimes:jpeg,jpg,png,gif|max:2000',
-            'cover' => 'mimes:jpeg,jpg,png,gif|max:2000',
-            ],[
+                'sub_category_id' => 'required',
+                'first_name' => 'required',
+                'last_name' => 'required',
+                // 'email' => 'required',
+                // 'phone' => 'required',
+                'image' => 'mimes:jpeg,jpg,png,gif|max:2000',
+                'cover' => 'mimes:jpeg,jpg,png,gif|max:2000',
+            ],
+            [
                 'sub_category_id.required' => 'The Category Field is Required',
             ]
         );
@@ -277,7 +279,8 @@ class AuditionAdminController extends Controller
         }
     }
 
-    public function customSearch($text){
+    public function customSearch($text)
+    {
         return $text;
     }
 
@@ -344,7 +347,7 @@ class AuditionAdminController extends Controller
 
     public function all()
     {
-        $audition = Audition::where('status','>',1)->latest()->get();
+        $audition = Audition::where('status', '>', 1)->latest()->get();
 
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
@@ -364,8 +367,8 @@ class AuditionAdminController extends Controller
     public function details($id)
     {
         $audition = Audition::find($id);
-        $judges = AuditionAssignJudge::where('audition_id',$audition->id)->get();
-        return view('ManagerAdmin.Audition.details')->with('audition',$audition)->with('judges', $judges);
+        $judges = AuditionAssignJudge::where('audition_id', $audition->id)->get();
+        return view('ManagerAdmin.Audition.details')->with('audition', $audition)->with('judges', $judges);
     }
 
 
@@ -431,15 +434,14 @@ class AuditionAdminController extends Controller
             $audition->status = 2;
             $audition->update();
 
-            $post =  Post::where('type','audition')->where('event_id',$audition->id)->first();
+            $post =  Post::where('type', 'audition')->where('event_id', $audition->id)->first();
             if ($post) {
                 $post->delete();
             }
-
         } else {
             $audition->status = 3;
             $audition->update();
-            $post =  Post::where('type','audition')->where('event_id',$audition->id)->first();
+            $post =  Post::where('type', 'audition')->where('event_id', $audition->id)->first();
             $category_id = Auth::user()->category_id;
 
             if (!isset($post)) {
@@ -451,7 +453,7 @@ class AuditionAdminController extends Controller
                     'title' => $audition->title,
                     'details' => $audition->description,
                     'status' => 1,
-                    ]);
+                ]);
             }
         }
 
@@ -459,50 +461,116 @@ class AuditionAdminController extends Controller
     }
 
 
-    public function auditionAdmins(){
+    public function auditionAdmins()
+    {
         return view('ManagerAdmin.Audition.admins');
     }
 
 
-    public function adminAssign(){
+    public function adminAssign()
+    {
         return view('ManagerAdmin.Audition.adminAssign');
     }
 
-    public function adminAssignSubmit(){
+    public function adminAssignSubmit()
+    {
         return view('ManagerAdmin.Audition.adminAssignSubmit');
     }
-    public function auditionDashboard(){
+    public function auditionDashboard()
+    {
         return view('ManagerAdmin.Audition.auditionAdminDashboard');
     }
-    public function auditionJuries(){
+    public function auditionJuries()
+    {
         return view('ManagerAdmin.Audition.juries');
     }
-    public function auditionEvents(){
-       $round_rules = AuditionRoundRule::where('status',1)->get();
-       $auditions = [];
+    public function auditionEvents()
+    {
+        $round_rules = AuditionRoundRule::where('status', 1)->get();
+        $auditions = [];
         foreach ($round_rules as $key => $rule) {
-            $auditions = Audition::where('audition_round_rules_id',[$rule->id])->get();
+            $auditions = Audition::where('audition_round_rules_id', [$rule->id])->get();
         }
 
         $data = [
             'pending_instructions' => $round_rules,
             'auditions' => $auditions,
         ];
-        return view('ManagerAdmin.Audition.events',$data);
+        return view('ManagerAdmin.Audition.events', $data);
     }
 
     public function registrationRules()
     {
-        return view('ManagerAdmin.registrationRule.index');
+        $data = [
+            'auditions' => Audition::where('category_id', auth()->user()->category_id)
+                ->get(),
+        ];
+        return view('ManagerAdmin.registrationRule.index', $data);
     }
 
-    public function createRegistrationRules()
+    public function createRegistrationRules($audition_id)
     {
-        return view('ManagerAdmin.registrationRule.create');
+        $audition = Audition::find($audition_id);
+        $groups = json_decode($audition->auditionRules->jury_groups);
+         $round_rules = AuditionRoundRule::where('audition_rules_id', $audition->audition_rules_id)->get();
+
+        $data = [
+            'audition' => $audition,
+            'groups' => $groups->{'groups_id'},
+            'juries_num' => $groups->{'group_members'},
+            'round_rules' => $round_rules,
+        ];
+
+        return view('ManagerAdmin.registrationRule.create', $data);
     }
+
+
+    public function storeRegistrationRules(Request $request)
+    {
+        // return $request->all();
+        $request->validate([
+            'registration_start_date' => 'required',
+            'registration_end_date' => 'required',
+            'final_result_published_date' => 'required',
+            'fees' => 'required',
+        ]);
+
+        $audition = Audition::find($request->audition_id);
+        $audition->user_reg_start_date = date('Y-m-d',strtotime($request->registration_start_date));
+        $audition->user_reg_end_date = date('Y-m-d',strtotime($request->registration_end_date));
+        $audition->final_result_published_date = $request->final_result_published_date;
+        $audition->fees = $request->fees;
+
+        try {
+            $audition->save();
+            foreach ($request->round_ids as $key => $round) {
+                AuditionRoundRule::where('id', $round)->update(
+                    [
+                        'start_date' => $request->round_start_date[$key],
+                        'end_date' => $request->round_end_date[$key],
+                    ]
+                );
+            }
+            return response()->json([
+                'status' => 200,
+                'message' => 'Audition Rules Updated Successfully!',
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => $exception->getMessage(),
+            ]);
+        }
+
+
+
+        // return $request->all();
+    }
+
+
+
     public function editRegistrationRules()
     {
         return view('ManagerAdmin.registrationRule.edit');
     }
 }
-

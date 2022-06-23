@@ -33,6 +33,8 @@ class CreateAuditionRoundRulesTable extends Migration
             $table->text('instruction')->nullable();
             $table->integer('num_of_videos')->nullable();
             $table->timestamp('uploade_date')->nullable();
+            $table->timestamp('start_date')->nullable();
+            $table->timestamp('end_date')->nullable();
             $table->text('banner')->nullable();
             $table->text('video')->nullable();
             $table->integer('status')->default(0)->comment('0 = unactive, 1= active');

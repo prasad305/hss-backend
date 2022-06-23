@@ -341,12 +341,6 @@ Super Admin
         $('#wildcard_rounds').html('');
         $('#jury_or_judge_mark').val('');
 
-        // $('#checkbox1').click(function() {
-        //     $('#hid_show_live_or_offile').attr("style", "display:block;");
-        // });
-
-        
-
         $("#checkbox1").click(function() {
             var checked = $(this).is(':checked');
             if (checked) {
@@ -358,33 +352,18 @@ Super Admin
             }
         });
 
-    
-
         var wild_card_true = $('input:radio[name=wildcard][value=1]').attr('checked', true) ? 1 : 0;
   
-          wilCardNo(wild_card_true);
+        wilCardNo(wild_card_true);
   
-
         var url = "{{ url('super-admin/audition-round-rules/mark/') }}";
 
         $.ajax({
             url: url + "/" + round_id, // your request url
             type: 'GET',
             success: function(data) {
-                console.log('get data', data);
-
 
                 $('#round_id').val(round_id);
-
-                // if (data.mark.user_vote_mark > 0) {
-                //     $('#checkbox1').attr('checked', 'checked');
-                //     $('#textbox1').attr("style", "display:block");
-                //     $('#textbox1').val(data.mark.user_vote_mark);
-                // }else{
-                //     $('#checkbox1').attr('checked', false);
-                //     $('#textbox1').attr("style", "display:none");
-                //     $('#textbox1').val(0);
-                // }
 
                 if (data.mark.user_vote_mark == 1) {
                     $('#checkbox1').attr('checked', true);
@@ -394,8 +373,6 @@ Super Admin
                     $('#checkbox1').attr('checked', false);
                     $('#hid_show_live_or_offile').attr("style", "display:none!important;");
                 }
-
-
                 
                 if (data.mark.jury_or_judge == 0) {
                     $('input:radio[name=jury_or_judge][value=0]').attr('checked', true);
@@ -444,12 +421,7 @@ Super Admin
                 });
 
                 $('#wildcard_rounds').append(single_round);
-
-                // if (data.mark.wildcard_round != null) {
-                    $('input:radio[name=wildcard_round][value='+data.mark.wildcard_round+']').attr('checked', true);
-                // }
-
-
+                $('input:radio[name=wildcard_round][value='+data.mark.wildcard_round+']').attr('checked', true);  
             },
             error: function(data) {
                 var errorMessage = '<div class="card bg-danger">\n' +
@@ -479,19 +451,6 @@ Super Admin
 
 
     }
-
-    // function checkedOrNot() {
-       
-    // }
-
-    // if($("#checkbox1").prop('checked') == true){
-    //     $('#hid_show_live_or_offile').attr("style", "display:block;");
-    // } else {
-    //     $('#hid_show_live_or_offile').attr("style", "display:none;");
-    // }
-    
-           
-
 
     $(document).on('click', '#SubmitRules', function(event) {
             event.preventDefault();
@@ -524,9 +483,9 @@ Super Admin
                             showConfirmButton: false,
                             // timer: 1500
                         })
-                        setTimeout(function() {
-                            location.reload();
-                        }, 1000);
+                        // setTimeout(function() {
+                        //     location.reload();
+                        // }, 1000);
                         console.log(data)
                     },
                     error: function(data) {
