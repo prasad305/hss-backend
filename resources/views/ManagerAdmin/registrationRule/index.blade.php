@@ -21,7 +21,7 @@
                     </div>
                     <div class="card-footer">
                         <a class="btn btn-success text-light" href="{{route('managerAdmin.audition.registration.rules.create',$audition->id)}}">Create new rules</a>
-                        <a class="btn btn-warning text-light" href="{{route('managerAdmin.audition.registration.rules.edit')}}">edit rules</a>
+                        <a class="btn btn-warning text-light" href="{{route('managerAdmin.audition.registration.rules.edit',$audition->id)}}">edit rules</a>
                     </div>
                 </div>
             </div>

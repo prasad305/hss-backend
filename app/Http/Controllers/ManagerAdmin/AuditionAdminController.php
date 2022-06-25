@@ -569,8 +569,49 @@ class AuditionAdminController extends Controller
 
 
 
-    public function editRegistrationRules()
+    public function editRegistrationRules($audition_id)
     {
-        return view('ManagerAdmin.registrationRule.edit');
+        $audition = Audition::find($audition_id);
+        $groups = json_decode($audition->auditionRules->jury_groups);
+        $round_rules = AuditionRoundRule::where('audition_rules_id', $audition->audition_rules_id)->get();
+
+        $data = [
+            'audition' => $audition,
+            'groups' => $groups->{'groups_id'},
+            'juries_num' => $groups->{'group_members'},
+            'round_rules' => $round_rules,
+        ];
+
+        return view('ManagerAdmin.registrationRule.edit',$data);
+    }
+
+    public function getRoundInfo($round_id){
+       $round = AuditionRoundRule::find($round_id);
+
+       return view('ManagerAdmin.registrationRule.round_rules',compact('round'));
+    //    return response()->json([
+    //     'status' => 200,
+    //     'round' => $round,
+    //    ]);
+
+    }
+
+    public function updateRegistrationRound(Request $request,$round_id){
+        // return $request->all();
+        $round = AuditionRoundRule::find($round_id);
+
+        $round->video_duration           = $request->video_duration;
+        $round->jury_marking_start_date  = $request->jury_marking_start_date;
+        $round->jury_marking_end_date    = $request->jury_marking_end_date;
+        $round->judge_marking_start_date = $request->judge_marking_start_date;
+        $round->judge_marking_end_date   = $request->judge_marking_end_date;
+        $round->appeal_start_date        = $request->appeal_start_date;
+        $round->appeal_end_date          = $request->appeal_end_date;
+        $round->result_published_date    = $request->result_published_date;
+        $round->appeal_result_date       = $request->appeal_result_date;
+
+        $round->save();
+        session()->flash('success','Updated Successfully');
+        return redirect()->back();
     }
 }

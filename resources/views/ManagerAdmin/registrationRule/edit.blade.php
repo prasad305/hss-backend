@@ -1,7 +1,7 @@
 @extends('Layouts.ManagerAdmin.master')
 
 @push('title')
-    Edit audition rules
+    Edit Audition Rules
 @endpush
 
 @section('content')
@@ -166,9 +166,9 @@
         .audition__rule__time__item input{
             border: 2px solid #fdd700;
             appearance: none;
-            border-radius: 50%;
+            /* border-radius: 50%;
             width: 14px;
-            height: 14px;
+            height: 14px; */
             transition: all ease-in 0.2s;
             margin-top: 10px;
         }
@@ -262,36 +262,44 @@
 
     <div class="content">
         <div class="container-fluid">
+
             <div class="audition_type d-flex flex-column">
-                <img src="{{asset('assets/manager-admin/musicIcon.png')}}" class="img-fluid" alt="music">
-                <p>Music</p>
+                <img src="{{asset($audition->category ? $audition->category->icon : '')}}" class="img-fluid" alt="music">
+                <p>{{$audition->category ? $audition->category->name : ''}}</p> 
             </div>
 
             <div class="audition__rules d-flex flex-column my-4">
-                <p>Music Audition</p>
+                <p>{{ $audition->title }}</p>
                 <hr>
                 <div class="audition__rules__summary d-flex flex-row justify-content-around">
+
                     <div class="audition__rules__summary__item d-flex flex-column">
                         <img src="{{asset('assets/manager-admin/select.png')}}" class="img-fluid" alt="music">
                         <p>Rounds</p>
                         <div>
-                            <h3>6</h3>
+                            <h3>{{ $audition->auditionRules ? $audition->auditionRules->round_num : '' }}</h3>
                         </div>
                     </div>
+
                     <div class="audition__rules__summary__item">
                         <img src="{{asset('assets/manager-admin/star.png')}}" class="img-fluid" alt="star">
                         <p style="padding: 2px 0px">SuperStart</p>
                         <div>
-                            <h3>3</h3>
+                            <h3>{{ $audition->auditionRules ? $audition->auditionRules->judge_num : '' }}</h3>
                         </div>
                     </div>
+
                     <div class="audition__rules__summary__item">
                         <img src="{{asset('assets/manager-admin/jury.png')}}" class="img-fluid" alt="jury">
                         <p>Jurys</p>
                         <div>
-                            <h3>6</h3>
+                            @foreach($groups as $key => $group)
+                                <span>Group {{ juryGroup($group) }} : </span>
+                                <h3>{{ $juries_num[$key] }}</h3>
+                            @endforeach
                         </div>
                     </div>
+
                     <div class="audition__rules__summary__item__two">
                         <img src="{{asset('assets/manager-admin/table.png')}}" class="img-fluid" alt="calender">
                         <p>Select time</p>
@@ -301,8 +309,8 @@
                                 <div class="pr-2">Day</div>
                             </div>
                             <div class="d-flex flex-row month__date__numeric">
-                                <div class="pr-2">05</div>
-                                <div class="pl-3">15</div>
+                                <div class="pr-2">{{ $audition->auditionRules ? $audition->auditionRules->month : '' }}</div>
+                                <div class="pl-3">{{ $audition->auditionRules ? $audition->auditionRules->day : '' }}</div>
                             </div>
                         </div>
                     </div>
@@ -312,125 +320,55 @@
 
 
                 <div class="audition__round__summary d-flex flex-row justify-content-around mt-4 mb-3">
-                    <div class="text-center round__wrap">
-                        <p class="font-weight-bold audition__round__text">Round</p>
-                        <div class="audition__round__number">01</div>
-                        <button class="w-100 audition__round__button_active">Rolls</button>
-                    </div>
-                    <div class="text-center round__wrap">
+                    @if (isset($round_rules[0]))
+                    @foreach ($round_rules as $key => $round)
+                        <div class="text-center round__wrap" onclick="changeRound('{{$round->id}}')">
+                            <p class="font-weight-bold audition__round__text">Round</p>
+                            <div class="audition__round__number">{{ $key+1 }}</div>
+                            <button class="w-100 audition__round__button_active">Rolls</button>
+                        </div>
+                    @endforeach
+                    @endif
+                   
+
+                    {{-- <div class="text-center round__wrap">
                         <p class="font-weight-bold audition__round__text">Round</p>
                         <div class="audition__round__number">02</div>
                         <button class="w-100 audition__round__button__inactive">Rolls</button>
-                    </div>
-                    <div class="text-center round__wrap">
-                        <p class="font-weight-bold audition__round__text">Round</p>
-                        <div class="audition__round__number">03</div>
-                        <button class="w-100 audition__round__button__inactive">Rolls</button>
-                    </div>
-                    <div class="text-center round__wrap">
-                        <p class="font-weight-bold audition__round__text">Round</p>
-                        <div class="audition__round__number">04</div>
-                        <button class="w-100 audition__round__button__inactive">Rolls</button>
-                    </div>
-                    <div class="text-center round__wrap">
-                        <p class="font-weight-bold audition__round__text">Round</p>
-                        <div class="audition__round__number">05</div>
-                        <button class="w-100 audition__round__button__inactive">Rolls</button>
-                    </div>
-                    <div class="text-center round__wrap">
-                        <p class="font-weight-bold audition__round__text">Round</p>
-                        <div class="audition__round__number">06</div>
-                        <button class="w-100 audition__round__button__inactive">Rolls</button>
-                    </div>
+                        </div> --}}
+
+
                 </div>
 
+               <div id="round_rules">
+                
+               </div>
 
-
-
-                <div class="audition__rules__final__time d-flex flex-row justify-content-center my-4">
-                    <img src="{{asset('assets/manager-admin/table.png')}}" class="img-fluid" alt="calender">
-                    <p class="text-capitalize">20 april 2022 To 20 may 2022</p>
-                </div>
-
-                <div class="audition__rule__time d-flex flex-column">
-                    <p>Post Requirement Before Started Rounds</p>
-                    <div class="audition__rule__time__item d-flex flex-row my-1 justify-content-between">
-                        <div class="d-flex flex-row">
-                            <input type="radio" name="time">
-                            <p class="audition__rule__time__item__user">Uploaded Videos Time Duration</p>
-                        </div>
-                        <div class="d-flex flex-row mr-4">
-                            <p class="audition__rule__time__item__time"><img src="{{asset('assets/manager-admin/clock.png')}}" alt="calender"> 16 april 2022</p>
-                            <span>To</span>
-                            <p class="audition__rule__time__item__time"><img src="{{asset('assets/manager-admin/clock.png')}}" alt="calender"> 16 april 2022</p>
-                        </div>
-                    </div>
-
-                    <div class="audition__rule__time__item d-flex flex-row my-1 justify-content-between">
-                        <div class="d-flex flex-row">
-                            <input type="radio" name="time">
-                            <p class="audition__rule__time__item__user">Jury Video checking and marking Time Period</p>
-                        </div>
-                        <div class="d-flex flex-row mr-4">
-                            <p class="audition__rule__time__item__time"><img src="{{asset('assets/manager-admin/calendar.jpg')}}" alt="calender"> 16 april 2022</p>
-                            <span>To</span>
-                            <p class="audition__rule__time__item__time"><img src="{{asset('assets/manager-admin/calendar.jpg')}}" alt="calender"> 16 april 2022</p>
-                        </div>
-                    </div>
-
-                    <div class="audition__rule__time__item d-flex flex-row my-1 justify-content-between">
-                        <div class="d-flex flex-row">
-                            <input type="radio" name="time">
-                            <p class="audition__rule__time__item__user">Star/Jaz Marking Time Period</p>
-                        </div>
-                        <div class="d-flex flex-row mr-4">
-                            <p class="audition__rule__time__item__time"><img src="{{asset('assets/manager-admin/calendar.jpg')}}" alt="calender"> 16 april 2022</p>
-                            <span>To</span>
-                            <p class="audition__rule__time__item__time"><img src="{{asset('assets/manager-admin/calendar.jpg')}}" alt="calender"> 16 april 2022</p>
-                        </div>
-                    </div>
-
-                    <div class="audition__rule__time__item d-flex flex-row my-1 justify-content-between">
-                        <div class="d-flex flex-row">
-                            <input type="radio" name="time">
-                            <p class="audition__rule__time__item__user">Applied Video Time Duration</p>
-                        </div>
-                        <div class="d-flex flex-row mr-4">
-                            <p class="audition__rule__time__item__time"><img src="{{asset('assets/manager-admin/calendar.jpg')}}" alt="calender"> 16 april 2022</p>
-                            <span>To</span>
-                            <p class="audition__rule__time__item__time"><img src="{{asset('assets/manager-admin/calendar.jpg')}}" alt="calender"> 16 april 2022</p>
-                        </div>
-                    </div>
-
-                    <div class="audition__rule__time__item d-flex flex-row my-1 justify-content-between">
-                        <div class="d-flex flex-row">
-                            <input type="radio" name="time">
-                            <p class="audition__rule__time__item__user">Result Publish Date</p>
-                        </div>
-                        <div class="d-flex flex-row mr-4">
-                            <p class="audition__rule__time__item__time"><img src="{{asset('assets/manager-admin/calendar.jpg')}}" alt="calender"> 16 april 2022</p>
-                            <span>To</span>
-                            <p class="audition__rule__time__item__time"><img src="{{asset('assets/manager-admin/calendar.jpg')}}" alt="calender"> 16 april 2022</p>
-                        </div>
-                    </div>
-
-                    <div class="audition__rule__time__item d-flex flex-row my-1 justify-content-between">
-                        <div class="d-flex flex-row">
-                            <input type="radio" name="time">
-                            <p class="audition__rule__time__item__user">Applyed Video Result Publish Date</p>
-                        </div>
-                        <div class="d-flex flex-row mr-4">
-                            <p class="audition__rule__time__item__time"><img src="{{asset('assets/manager-admin/calendar.jpg')}}" alt="calender"> 16 april 2022</p>
-                            <span>To</span>
-                            <p class="audition__rule__time__item__time"><img src="{{asset('assets/manager-admin/calendar.jpg')}}" alt="calender"> 16 april 2022</p>
-                        </div>
-                    </div>
-
-                <div class="my-4 text-right mr-4">
-                    <button class="btn bg-info px-5" id="SubmitRules">Update</button>
-                </div>
-            </div>
         </div>
     </div>
+
+    <script>
+        function changeRound(round_id) {
+            // alert(round_id);
+            $("#round_rules").html('');
+            
+            var url = "{{ url('manager-admin/audition/registration-rules/') }}";
+            console.log(url + "/" + round_id);
+            $.ajax({
+                url: url + "/" + round_id, // your request url
+                type: 'GET',
+                success: function(data) {
+                    $("#round_rules").append(data);
+                },
+                error: function(data) {
+                    $("#round_rules").html('Sorry!! Something Went Wrong.');
+                }
+            });
+
+        }
+
+      
+    </script>
+
 @endsection
 

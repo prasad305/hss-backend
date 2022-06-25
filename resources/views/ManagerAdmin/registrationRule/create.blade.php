@@ -272,18 +272,17 @@ Create new audition rules
                     <img src="{{asset('assets/manager-admin/star.png')}}" class="img-fluid" alt="star">
                     <p style="padding: 2px 0px">Judges</p>
                     <div>
-                        <h3>{{$audition->auditionRules ? $audition->auditionRules->judge_num : ''}}</h3>
+                        <h3>{{ $audition->auditionRules ? $audition->auditionRules->judge_num : '' }}</h3>
                     </div>
                 </div>
                 <div class="audition__rules__summary__item">
                     <img src="{{asset('assets/manager-admin/jury.png')}}" class="img-fluid" alt="jury">
                     <p>Juries</p>
                     <div>
-                        @foreach ($groups as $key => $group)
+                        @foreach($groups as $key => $group)
                         <span>Group {{juryGroup($group)}} : </span>
                         <h3>{{$juries_num[$key]}}</h3>
                         @endforeach
-
                     </div>
                 </div>
 
@@ -296,8 +295,8 @@ Create new audition rules
                             <div class="pr-2">Day</div>
                         </div>
                         <div class="d-flex flex-row month__date__numeric">
-                            <div class="pr-2">{{$audition->auditionRules ? $audition->auditionRules->month : ''}}</div>
-                            <div class="pl-3">{{$audition->auditionRules ? $audition->auditionRules->day : ''}}</div>
+                            <div class="pr-2">{{ $audition->auditionRules ? $audition->auditionRules->month : '' }}</div>
+                            <div class="pl-3">{{ $audition->auditionRules ? $audition->auditionRules->day : '' }}</div>
                         </div>
                     </div>
                 </div>
@@ -321,9 +320,9 @@ Create new audition rules
                         </div>
                         <div class="d-flex flex-row mr-4">
 
-                            <input type="text" class="form-control" id="datepicker" name="registration_start_date" value="{{date('Y-m-d',strtotime($audition->user_reg_start_date))}}">
+                            <input type="text" class="form-control" id="datepicker" name="registration_start_date" value="{{$audition->user_reg_start_date != null ? date('Y-m-d',strtotime($audition->user_reg_start_date)) : ""}}">
                             &nbsp;<h6 class="mt-2">To</h6>&nbsp;
-                            <input type="text" class="form-control" id="datepicker1" name="registration_end_date" value="{{date('Y-m-d',strtotime($audition->user_reg_end_date))}}">
+                            <input type="text" class="form-control" id="datepicker1" name="registration_end_date" value="{{$audition->user_reg_end_date != null ? date('Y-m-d',strtotime($audition->user_reg_end_date)) : ''}}">
                         </div>
                     </div>
 
@@ -354,7 +353,7 @@ Create new audition rules
                             <p class="audition__rule__time__item__user">Final result publish date</p>
                         </div>
                         <div class="d-flex flex-row mr-4">
-                            <input type="date" name="final_result_published_date" value="{{date('Y-m-d',strtotime($audition->final_result_published_date))}}" className='form-control'>
+                            <input type="date" name="final_result_published_date" value="{{$audition->final_result_published_date != null ?date('Y-m-d',strtotime($audition->final_result_published_date)) : ''}}" className='form-control'>
                         </div>
                     </div>
 
@@ -369,7 +368,8 @@ Create new audition rules
                 </div>
 
                 <div class="my-4 text-right mr-4">
-                    <button class="btn bg-info px-5" id="SubmitRules">Next</button>
+                    <button class="btn bg-info px-5" id="SubmitRules">Update Rules</button>
+                    <a href="{{route('managerAdmin.audition.registration.rules.edit',$audition->id)}}" class="btn bg-info px-5" >Next <i class="fa fa-arrow-right"></i></a>
                 </div>
             </form>
         </div>

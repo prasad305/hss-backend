@@ -25,6 +25,15 @@ class CreateAuditionRoundRulesTable extends Migration
             $table->integer('wildcard_round')->nullable();
             $table->integer('appeal')->nullable()->comment('0 = no, 1= yes');
             $table->integer('video_feed')->nullable()->comment('0 = no, 1= yes');
+            $table->integer('video_duration')->nullable();
+            $table->date('jury_marking_start_date')->nullable();
+            $table->date('jury_marking_end_date')->nullable();
+            $table->date('judge_marking_start_date')->nullable();
+            $table->date('judge_marking_end_date')->nullable();
+            $table->date('appeal_start_date')->nullable();
+            $table->date('appeal_end_date')->nullable();
+            $table->date('result_published_date')->nullable();
+            $table->date('appeal_result_date')->nullable();
             $table->text('title')->nullable();
             $table->longText('description')->nullable();
             $table->longText('video_instruction')->nullable();
