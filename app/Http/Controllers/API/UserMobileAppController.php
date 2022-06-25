@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Acquired_app;
 use App\Models\Activity;
+use App\Models\Auction;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\AuditionEventRegistration;
+use App\Models\Bidding;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
 use App\Models\LiveChatRegistration;
@@ -116,6 +119,23 @@ class UserMobileAppController extends Controller
             $notification = Notification::find($request->notification_id);
             $notification->view_status = 1;
             $notification->save();
+        }
+        if ($modelName == 'auction') {
+            $eventRegistration = Bidding::find($request->event_registration_id);
+            $event = Auction::find($eventId);
+            if ($eventRegistration->applied_status == 0) {
+                $eventRegistration->applied_status = 1;
+            }
+            $activity->type = 'auction';
+            $aquired_app = new Acquired_app();
+            $aquired_app->name = $request->card_holder_name;
+            $aquired_app->bidding_id = $eventRegistration->id;
+            $aquired_app->payment_id = 1;
+            $aquired_app->card_number = $request->card_number;
+            $aquired_app->phone = auth()->user()->phone;
+            $aquired_app->ccv = 454654;
+            $aquired_app->expiry_date = Carbon::now()->addDays(100);
+            $aquired_app->save();
         }
         if ($modelName == 'marketplace') {
             $eventRegistration = MarketplaceOrder::find($request->event_registration_id);
