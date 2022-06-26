@@ -44,7 +44,6 @@ Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 Route::get('/user/all_post', [UserController::class, 'all_post']);
 Route::get('/user/all_post/with-paginate/{limit}', [UserController::class, 'paginate_all_post']);
 Route::get('/user/post/{type}', [UserController::class, 'single_type_post']);
-Route::get('/user/post/{type}/with-paginate/{limit}', [UserController::class, 'single_type_post_paginate']);
 
 
 Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
@@ -53,6 +52,8 @@ Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearnin
 Route::get('/star_photos/{id}', [UserController::class, 'star_photo']);
 Route::get('/star_videos/{id}', [UserController::class, 'star_video']);
 Route::get('/user/getStarPost/{id}/{type}', [UserController::class, 'getStarPost']);
+Route::get('/user/getStarPost/{id}/{type}/with-paginate/{limit}', [UserController::class, 'paginate_getStarPost']);
+
 
 // Data Fetching For Landing Page Right Side Bar
 Route::get('/user/learning_session/all', [LearningSessionController::class, 'user_all']);
@@ -231,6 +232,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // User Photos
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
+    Route::get('/user/activitiesData/with-paginate/{limit}', [UserController::class, 'paginate_userActivites']);
 
     //Registration Checker
     Route::get('/user/registration_checker/{type}/{slug}', [UserController::class, 'registration_checker']);
