@@ -386,6 +386,9 @@
     }
 
     function ErrorMessage(key,value) {
+        if (key == 'name') {
+            $('#name_error').html(value);
+        }
         if (key == 'category_id') {
             $('#category_error').html(value);
         }
@@ -426,10 +429,30 @@
         if (key == 'acquired_instruction') {
             $('#acquired_instruction_error').html(value);
         }
+        if (key == 'jury_or_judge') {
+            $('#jury_or_judge_error').html(value);
+        }
+        if (key == 'jury_or_judge_mark') {
+            $('#jury_or_judge_mark_error').html(value);
+        }
+        if (key == 'mark_live_or_offline') {
+            $('#mark_live_or_offline_error').html(value);
+        }
+        if (key == 'appeal') {
+            $('#appeal_error').html(value);
+        }
+        if (key == 'wildcard') {
+            $('#wildcard_error').html(value);
+        }
+        if (key == 'video_feed') {
+            $('#video_feed_error').html(value);
+        }
+        
     }
 
 
     function ErrorMessageClear() {
+        $('#name_error').html('');
         $('#sub_category_error').html('');
         $('#first_name_error').html('');
         $('#last_name_error').html('');
@@ -443,6 +466,12 @@
         $('#star_error').html('');
         $('#reminder_error').html('');
         $('#acquired_instruction_error').html('');
+        $('#jury_or_judge_error').html('');
+        $('#appeal_error').html('');
+        $('#jury_or_judge_mark_error').html('');
+        $('#mark_live_or_offline_error').html('');
+        $('#wild_card_error').html('');
+        $('#video_feed_error').html('');
     }
 
 
