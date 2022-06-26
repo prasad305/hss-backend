@@ -44,6 +44,7 @@ Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 Route::get('/user/all_post', [UserController::class, 'all_post']);
 Route::get('/user/all_post/with-paginate/{limit}', [UserController::class, 'paginate_all_post']);
 Route::get('/user/post/{type}', [UserController::class, 'single_type_post']);
+Route::get('/user/post/{type}/with-paginate/{limit}', [UserController::class, 'paginate_single_type_post']);
 
 
 Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
@@ -59,7 +60,7 @@ Route::get('/user/getStarPost/{id}/{type}/with-paginate/{limit}', [UserControlle
 Route::get('/user/learning_session/all', [LearningSessionController::class, 'user_all']);
 Route::get('/user/live_chat/all', [LiveChatController::class, 'userAll']);
 
-Route::get('/user_info/{id}', [AuthController::class, 'user_data']);
+
 Route::post('/chatting/message', [UserController::class, 'message']);
 Route::get('/chatting/message/{id}', [UserController::class, 'get_message']);
 Route::post('/group/message', [UserController::class, 'group_message']);
@@ -77,6 +78,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user_data/{id}', [AuthController::class, 'user_data']);
 
     Route::get('/user/total_notification_count', [UserController::class, 'total_notification_count']);
+    Route::get('/user/notification/view_status/update/{id}', [UserController::class, 'notification_view_status_update']);
+
 
     Route::get('/user/activity_count', [AuthController::class, 'activity_count']);
 
@@ -794,6 +797,8 @@ Route::get('/sold/auction/product', [AuctionController::class, 'soldProduct']);
 Route::get('/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
 Route::post('/bidding/auction/product/{id}', [AuctionController::class, 'bidNow']);
 Route::get('/live/allProduct', [AuctionController::class, 'allLiveProduct']);
+
+Route::get('/user_info/{id}', [AuthController::class, 'user_data']);
 
 
 

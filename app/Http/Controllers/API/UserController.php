@@ -75,6 +75,20 @@ class UserController extends Controller
         ]);
     }
 
+    public function notification_view_status_update($id)
+    {
+        $notification = Notification::find($id);
+        $notification->view_status = 1;
+        $notification->update();
+
+        $total_notification = Notification::where([['user_id', auth('sanctum')->user()->id],['view_status',0]])->count();
+
+        return response()->json([
+            'status' => 200,
+            'totalNotification' => $total_notification,
+        ]);
+    }
+
 
     public function all_post()
     {
@@ -182,6 +196,45 @@ class UserController extends Controller
             $sub_sub_cat_post = Post::select("*")
                 ->whereIn('user_id', $selectedSubSubCat)
                 ->latest()->get();
+        } else {
+            $sub_sub_cat_post = [];
+        }
+
+        $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'post' => $post,
+        ]);
+    }
+
+    public function paginate_single_type_post($type, $limit)
+    {
+        $id = auth('sanctum')->user()->id;
+
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
+        $selectedCat = json_decode($selectedCategory->category);
+        $selectedSubCat = json_decode($selectedCategory->subcategory);
+        $selectedSubSubCat = json_decode($selectedCategory->star_id);
+
+        $cat_post = Post::select("*")
+            ->whereIn('category_id', $selectedCat)
+            ->where('type', $type)
+            ->paginate($limit);
+
+        if (isset($sub_cat_post)) {
+            $sub_cat_post = Post::select("*")
+                ->whereIn('sub_category_id', $selectedSubCat)
+                ->paginate($limit);
+        } else {
+            $sub_cat_post = [];
+        }
+
+        if (isset($sub_sub_cat_post)) {
+            $sub_sub_cat_post = Post::select("*")
+                ->whereIn('user_id', $selectedSubSubCat)
+                ->paginate($limit);
         } else {
             $sub_sub_cat_post = [];
         }
@@ -874,8 +927,9 @@ class UserController extends Controller
      */
     public function checkUserNotifiaction()
     {
-        $notification = Notification::where([['user_id', auth('sanctum')->user()->id], ['view_status', 0]])->orderBy('id', 'ASC')->get();
+        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->orderBy('updated_at','ASC')->get();
         $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
+
         if ($greeting_reg)
             $greeting_info = Greeting::find($greeting_reg->greeting_id);
         else
@@ -1343,6 +1397,7 @@ class UserController extends Controller
         $message->group_id = $request->group_id;
         $message->sender_id = $request->sender_id;
         $message->sender_name = $request->sender_name;
+        $message->sender_image = $request->sender_image;
         $message->position = $request->position;
         $message->text = $request->text;
         $message->save();
