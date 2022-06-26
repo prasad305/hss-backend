@@ -22,6 +22,7 @@ use App\Http\Controllers\SuperAdmin\CityController;
 use App\Http\Controllers\SuperAdmin\EventsController;
 use App\Http\Controllers\SuperAdmin\GreetingController;
 use App\Http\Controllers\SuperAdmin\InterestTypeController;
+use App\Http\Controllers\SuperAdmin\JuryGroupController;
 use App\Http\Controllers\SuperAdmin\JurysAuditionController;
 use App\Http\Controllers\SuperAdmin\SubCategoryController;
 use App\Models\PaymentMethod;
@@ -94,21 +95,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
 
 
-    // Audition Dashboard
-    Route::resource('audition-dashboard', AuditionDashboardController::class);
-
-    // Audition Rules
-    Route::resource('audition-rules', AuditionRulesController::class);
-
-    // Audition Round Rules
-    Route::resource('audition-round-rules', AuditionRoundRulesController::class);
-    Route::get('audition-round-rules/mark/{rules_id}', [AuditionRoundRulesController::class,'getMark']);
-
-    // Audition Round Rules
-    Route::resource('audition-admin', AdminAuditionController::class);
-
-    // Audition Round Rules
-    Route::resource('audition-jury', JurysAuditionController::class);
+    
 
     // Auction Routes
     Route::get('auction-index', [AuctionController::class, 'index'])->name('auction.index');
@@ -125,10 +112,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // Events
     Route::resource('events', EventsController::class);
 
-    //audtion
-    Route::resource('audition', AuditionController::class);
-    Route::get('setMark/{id}', [AuditionController::class, 'setMark'])->name('audition.setMark');
-    Route::put('setMark/{id}', [AuditionController::class, 'setMarkUpdate'])->name('audition.setMarkUpdate');
+
 
     // Greeting Type
     Route::resource('greeting-type', GreetingController::class);
@@ -197,10 +181,37 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('jury/active/{id}', [JuryBoardController::class, 'activeNow'])->name('jury.activeNow');
     Route::post('jury/inactive/{id}', [JuryBoardController::class, 'inactiveNow'])->name('jury.inactiveNow');
 
+    //<===========================Audition Releated Route Star=====================================>
+
     // Adudition Admin Create by Monir
+
+    Route::resource('jury_groups', JuryGroupController::class);
 
     Route::resource('auditionAdmin', AuditionAdminController::class);
     
     Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');
     Route::post('auditionAdmin/inactive/{id}', [AuditionAdminController::class, 'inactiveNow'])->name('auditionAdmin.inactiveNow');
+
+    //audtion
+    Route::resource('audition', AuditionController::class);
+    Route::get('setMark/{id}', [AuditionController::class, 'setMark'])->name('audition.setMark');
+    Route::put('setMark/{id}', [AuditionController::class, 'setMarkUpdate'])->name('audition.setMarkUpdate');
+
+    // Audition Dashboard
+    Route::resource('audition-dashboard', AuditionDashboardController::class);
+
+    // Audition Rules
+    Route::resource('audition-rules', AuditionRulesController::class);
+
+    // Audition Round Rules
+    Route::resource('audition-round-rules', AuditionRoundRulesController::class);
+    Route::get('audition-round-rules/mark/{rules_id}', [AuditionRoundRulesController::class,'getMark']);
+
+    // Audition Round Rules
+    Route::resource('audition-admin', AdminAuditionController::class);
+
+    // Audition Round Rules
+    Route::resource('audition-jury', JurysAuditionController::class);
+
+    //<===========================Audition Releated Route End=====================================>
 });

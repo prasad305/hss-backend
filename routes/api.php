@@ -44,6 +44,7 @@ Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 Route::get('/user/all_post', [UserController::class, 'all_post']);
 Route::get('/user/all_post/with-paginate/{limit}', [UserController::class, 'paginate_all_post']);
 Route::get('/user/post/{type}', [UserController::class, 'single_type_post']);
+Route::get('/user/post/{type}/with-paginate/{limit}', [UserController::class, 'single_type_post_paginate']);
 
 
 Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);

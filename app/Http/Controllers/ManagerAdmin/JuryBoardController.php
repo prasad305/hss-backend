@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\JuryBoard;
+use App\Models\JuryGroup;
 use App\Models\SubCategory;
 use App\Models\User;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -18,7 +19,6 @@ class JuryBoardController extends Controller
     {
         $data = [
             'juries' =>  User::where([['category_id',auth()->user()->category_id],['user_type', 'jury']])->orderBy('id', 'DESC')->get(),
-
         ];
         return view('ManagerAdmin.jury.index', $data);
     }
@@ -79,7 +79,8 @@ class JuryBoardController extends Controller
     public function create()
     {
         $data = [
-            'sub_categories' => SubCategory::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('name', 'asc')->get()
+            'sub_categories' => SubCategory::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('name', 'asc')->get(),
+            'groups' => JuryGroup::where([['status',1],['category_id',auth()->user()->category_id]])->orderBy('name', 'asc')->get(),
         ];
         return view('ManagerAdmin.jury.create', $data);
     }
@@ -134,6 +135,7 @@ class JuryBoardController extends Controller
 
             $jury = new JuryBoard();
             $jury->star_id = $user->id;
+            $jury->group_id = $request->group_id;
             // $jury->admin_id = auth()->user()->id;
             // $jury->category_id = $request->category_id;
             // $jury->sub_category_id = $request->sub_category_id;
@@ -171,7 +173,8 @@ class JuryBoardController extends Controller
     {
         $data = [
             'jury' => $jury,
-            'sub_categories' => SubCategory::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('id', 'DESC')->get()
+            'sub_categories' => SubCategory::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('id', 'DESC')->get(),
+            'groups' => JuryGroup::where([['status',1],['category_id',auth()->user()->category_id]])->orderBy('name', 'asc')->get(),
         ];
         return view('ManagerAdmin.jury.edit', $data);
     }

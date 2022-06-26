@@ -239,7 +239,40 @@
                                                         @enderror
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group row">
+                                                    <div class="col-2">
+                                                        <label>Select Jury By Group</label> <br>
+                                                    </div>
+
+
+                                                    @foreach ($groups  as $key => $group)
+                                                            <div class="col-3">
+                                                                <input type="hidden" name="group_ids[]" value="{{ $group->id }}">
+                                                                <label for="">Group {{$group->name}} <span class="text-danger">You have to select
+                                                                    {{ $group_data[$key]}} jury !</span></label>
+                                                                <select name="jury[{{$key}}][]" class="select2" multiple="multiple"
+                                                                    style="width: 100%;">
+                                                                    @foreach ($juries as $jury)
+                                                                        @if ($jury->jury->group_id == $group->id)
+                                                                            <option value="{{ $jury->id }}">
+                                                                                {{ $jury->first_name . ' ' . $jury->last_name }}
+                                                                            </option>
+                                                                        @endif
+                                                                        
+                                                                    @endforeach
+                                                                </select>
+                                                                @error('jury')
+                                                                    <p class="text-danger">{{ $message }}</p>
+                                                                @enderror
+                                                            </div>
+                                                    @endforeach
+
+                                                   
+
+                                                </div>
+
+                                                {{-- <div class="form-group row">
                                                     <div class="col-2">
                                                         <label>Select Juries</label> <br>
                                                         <span class="text-danger">You have to select
@@ -258,7 +291,9 @@
                                                             <p class="text-danger">{{ $message }}</p>
                                                         @enderror
                                                     </div>
-                                                </div>
+                                                </div> --}}
+
+
                                                 <div class="form-group row">
                                                     <div class="col-2">
                                                         <label>Select Judges</label> <br>
