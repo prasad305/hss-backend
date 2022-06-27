@@ -47,6 +47,7 @@ Route::get('/user/post/{type}', [UserController::class, 'single_type_post']);
 Route::get('/user/post/{type}/with-paginate/{limit}', [UserController::class, 'paginate_single_type_post']);
 
 
+
 Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
 
 //Star Photo and videos
