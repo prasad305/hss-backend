@@ -157,6 +157,14 @@ class SimplePostController extends Controller
             $file->move($path, $file_name);
             $post->video = $path . '/' . $file_name;
         }
+        if ($request->hasFile('thumbnail')) {
+
+            $file        = $request->file('thumbnail');
+            $path        = 'uploads/videos/post';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $post->thumbnail = $path . '/' . $file_name;
+        }
         $post->save();
 
         return response()->json([
@@ -230,6 +238,21 @@ class SimplePostController extends Controller
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
             $post->video = $path . '/' . $file_name;
+            $post->image = null;
+        }
+        if ($request->hasFile('thumbnail')) {
+            if (File::exists($post->image)) {
+                File::delete($post->image);
+            }
+            if (File::exists($post->thumbnail)) {
+                File::delete($post->thumbnail);
+            }
+
+            $file        = $request->file('thumbnail');
+            $path        = 'uploads/videos/post';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $post->thumbnail = $path . '/' . $file_name;
             $post->image = null;
         }
         $post->save();
@@ -498,6 +521,14 @@ class SimplePostController extends Controller
             $file->move($path, $file_name);
             $post->video = $path . '/' . $file_name;
         }
+        if ($request->hasFile('thumbnail')) {
+
+            $file        = $request->file('thumbnail');
+            $path        = 'uploads/videos/post';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $post->thumbnail = $path . '/' . $file_name;
+        }
 
         $post->save();
 
@@ -584,6 +615,20 @@ class SimplePostController extends Controller
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
             $post->video = $path . '/' . $file_name;
+            $post->image = null;
+        }
+        if ($request->hasFile('thumbnail')) {
+            if (File::exists($post->image)) {
+                File::delete($post->image);
+            }
+            if (File::exists($post->thumbnail)) {
+                File::delete($post->thumbnail);
+            }
+            $file        = $request->file('video');
+            $path        = 'uploads/videos/post';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $post->thumbnail = $path . '/' . $file_name;
             $post->image = null;
         }
         $post->save();
