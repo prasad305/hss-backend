@@ -17,6 +17,7 @@ class CreateFanGroupMessagesTable extends Migration
             $table->id();
             $table->integer('sender_id')->nullable();
             $table->string('sender_name')->nullable();
+            $table->string('sender_image')->nullable();
             $table->integer('group_id')->nullable();
             $table->integer('position')->nullable();
             $table->text('text')->nullable();
