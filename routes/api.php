@@ -44,7 +44,8 @@ Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 Route::get('/user/all_post', [UserController::class, 'all_post']);
 Route::get('/user/all_post/with-paginate/{limit}', [UserController::class, 'paginate_all_post']);
 Route::get('/user/post/{type}', [UserController::class, 'single_type_post']);
-Route::get('/user/post/{type}/with-paginate/{limit}', [UserController::class, 'single_type_post_paginate']);
+Route::get('/user/post/{type}/with-paginate/{limit}', [UserController::class, 'paginate_single_type_post']);
+
 
 
 Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
@@ -53,12 +54,14 @@ Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearnin
 Route::get('/star_photos/{id}', [UserController::class, 'star_photo']);
 Route::get('/star_videos/{id}', [UserController::class, 'star_video']);
 Route::get('/user/getStarPost/{id}/{type}', [UserController::class, 'getStarPost']);
+Route::get('/user/getStarPost/{id}/{type}/with-paginate/{limit}', [UserController::class, 'paginate_getStarPost']);
+
 
 // Data Fetching For Landing Page Right Side Bar
 Route::get('/user/learning_session/all', [LearningSessionController::class, 'user_all']);
 Route::get('/user/live_chat/all', [LiveChatController::class, 'userAll']);
 
-Route::get('/user_info/{id}', [AuthController::class, 'user_data']);
+
 Route::post('/chatting/message', [UserController::class, 'message']);
 Route::get('/chatting/message/{id}', [UserController::class, 'get_message']);
 Route::post('/group/message', [UserController::class, 'group_message']);
@@ -76,6 +79,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user_data/{id}', [AuthController::class, 'user_data']);
 
     Route::get('/user/total_notification_count', [UserController::class, 'total_notification_count']);
+    Route::get('/user/notification/view_status/update/{id}', [UserController::class, 'notification_view_status_update']);
+
 
     Route::get('/user/activity_count', [AuthController::class, 'activity_count']);
 
@@ -229,8 +234,11 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/souvenir/activities/view/{id}', [SouvinerController::class, 'activitiesDetailsUserSouvenir']);
     Route::get('/user/souvenir/order/view/{id}', [SouvinerController::class, 'orderDetailsSouvenir']);
 
+
+
     // User Photos
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
+    Route::get('/user/activitiesData/with-paginate/{limit}', [UserController::class, 'paginate_userActivites']);
 
     //Registration Checker
     Route::get('/user/registration_checker/{type}/{slug}', [UserController::class, 'registration_checker']);
@@ -792,6 +800,8 @@ Route::get('/sold/auction/product', [AuctionController::class, 'soldProduct']);
 Route::get('/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
 Route::post('/bidding/auction/product/{id}', [AuctionController::class, 'bidNow']);
 Route::get('/live/allProduct', [AuctionController::class, 'allLiveProduct']);
+
+Route::get('/user_info/{id}', [AuthController::class, 'user_data']);
 
 
 
