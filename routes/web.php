@@ -18,22 +18,16 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     // return view('welcome');
 
-    if(Auth::user())
-    {
-        if(Auth::user()->user_type == 'super-admin')
-        {
+    if (Auth::user()) {
+        if (Auth::user()->user_type == 'super-admin') {
             return redirect()->route('superAdmin.dashboard');
         }
-        if(Auth::user()->user_type == 'manager-admin')
-        {
+        if (Auth::user()->user_type == 'manager-admin') {
             return redirect()->route('managerAdmin.dashboard');
         }
-    }
-    else
-    {
+    } else {
         return view('custom-welcome');
     }
-
 })->name('forntend.index');
 
 
@@ -52,11 +46,13 @@ Route::get('/reboot', [HomeController::class, 'reboot']);
 
 
 
+
+
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth'])->name('dashboard');
 
-require __DIR__.'/auth.php';
-require __DIR__.'/superAdmin.php';
-require __DIR__.'/managerAdmin.php';
-require __DIR__.'/admin.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/superAdmin.php';
+require __DIR__ . '/managerAdmin.php';
+require __DIR__ . '/admin.php';

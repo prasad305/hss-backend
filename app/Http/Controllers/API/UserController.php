@@ -1515,6 +1515,8 @@ class UserController extends Controller
         ]);
     }
 
+
+
     public function UserAuditionRegistrationChecker($slug)
     {
         $audition = Audition::where('slug', $slug)->first();
@@ -1523,6 +1525,52 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'participant' => $participant,
+        ]);
+    }
+
+    /**
+     * laerning session video upload for mobile
+     */
+    public function lerningSessionAssinmentVideoUplad(Request $request)
+    {
+        $LearningSessionAssignment = LearningSessionAssignment::where([['event_id', $request->video['learningSessionId']], ['user_id', auth()->user()->id]])->get();
+
+
+
+        try {
+
+
+            if ($LearningSessionAssignment->count() >  $request->video['taskNumber']) {
+                $evaluation = LearningSessionEvaluation::where([['event_id', $request->video['learningSessionId']], ['user_id', auth()->user()->id]])->first();
+
+                $learning_video = new LearningSessionAssignment();
+                $learning_video->event_id = $request->video['learningSessionId'];
+                $learning_video->user_id = auth()->user()->id;
+                $learning_video->evaluation_id = $evaluation->id;
+
+                $path = "uploads/" . $request->video['name'] . ".mp4";
+
+                $learning_video->video = $path;
+                $learning_video->save();
+                file_put_contents($path, base64_decode($request->video['data'], true));
+            } else {
+                return response()->json([
+                    'status' => 300,
+                    'message' => 'Aleardy Done ',
+                ]);
+            }
+        } catch (\Exception $exception) {
+            return response()->json([
+                'status' => 500,
+                'message' =>  $exception->getMessage(),
+            ]);
+        }
+
+
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Learning Videos Uploaded Successfully!',
         ]);
     }
 
