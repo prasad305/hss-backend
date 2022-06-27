@@ -235,8 +235,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/souvenir/order/view/{id}', [SouvinerController::class, 'orderDetailsSouvenir']);
 
 
-    Route::get('/user/souvenir/order/view2/{id}', [SouvinerController::class, 'orderDetailsSouvenir']);
-
 
     // User Photos
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
