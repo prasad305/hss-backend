@@ -36,7 +36,7 @@ class CreateFanGroupsTable extends Migration
             $table->longText('another_user_join')->nullable()->comment('another_user_join_by_id');
             $table->integer('join_approval_status')->nullable()->comment('1 = Anyone can Join, 0 = Join by Admin/Star');
             $table->integer('post_approval_status')->nullable()->comment('1 = Anyone can Post, 0 = Post by Admin/Star');
-            $table->integer('status')->nullable()->comment('1 = active, 0 = inactive');
+            $table->integer('status')->nullable()->comment('1 = active, 0 = inactive, 2=manager Approval');
             $table->timestamps();
         });
     }
