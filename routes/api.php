@@ -238,6 +238,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
 
     // User Photos
+    // User Photos
+    // User Photos
+    // User Photos
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
     Route::get('/user/activitiesData/with-paginate/{limit}', [UserController::class, 'paginate_userActivites']);
 
