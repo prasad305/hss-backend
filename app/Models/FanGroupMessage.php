@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class FanGroupMessage extends Model
 {
     use HasFactory;
+
+    protected $with = ['user'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'sender_id');
+    }
 }
