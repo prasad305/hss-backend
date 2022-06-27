@@ -127,7 +127,7 @@ class UserController extends Controller
         $selectedSubSubCat = json_decode($selectedCategory->star_id);
 
         $cat_post = Post::select("*")
-            ->whereIn('category_id', $selectedCat)->paginate($limit);
+            ->whereIn('category_id', $selectedCat)->latest()->paginate($limit);
 
         if (isset($sub_cat_post)) {
             $sub_cat_post = Post::select("*")
@@ -1537,34 +1537,37 @@ class UserController extends Controller
 
 
 
-        try {
 
+        if ($LearningSessionAssignment->count() <  (int)$request->video['taskNumber']) {
+            $evaluation = LearningSessionEvaluation::where([['event_id', $request->video['learningSessionId']], ['user_id', auth()->user()->id]])->first();
 
-            if ($LearningSessionAssignment->count() >  $request->video['taskNumber']) {
-                $evaluation = LearningSessionEvaluation::where([['event_id', $request->video['learningSessionId']], ['user_id', auth()->user()->id]])->first();
+            $learning_video = new LearningSessionAssignment();
+            $learning_video->event_id = $request->video['learningSessionId'];
+            $learning_video->user_id = auth()->user()->id;
+            $learning_video->evaluation_id = $evaluation->id;
 
-                $learning_video = new LearningSessionAssignment();
-                $learning_video->event_id = $request->video['learningSessionId'];
-                $learning_video->user_id = auth()->user()->id;
-                $learning_video->evaluation_id = $evaluation->id;
+            $path = "uploads/" . time() . rand('0000', '9999') . $request->video['name'] . ".mp4";
 
-                $path = "uploads/" . $request->video['name'] . ".mp4";
+            $learning_video->video = $path;
+            $learning_video->save();
 
-                $learning_video->video = $path;
-                $learning_video->save();
+            try {
+
                 file_put_contents($path, base64_decode($request->video['data'], true));
-            } else {
+            } catch (\Exception $exception) {
                 return response()->json([
-                    'status' => 300,
-                    'message' => 'Aleardy Done ',
+                    'status' => 500,
+                    'message' =>  $exception->getMessage(),
                 ]);
             }
-        } catch (\Exception $exception) {
+        } else {
             return response()->json([
-                'status' => 500,
-                'message' =>  $exception->getMessage(),
+                'status' => 300,
+                'message' => 'Aleardy Done ',
             ]);
         }
+
+
 
 
 
