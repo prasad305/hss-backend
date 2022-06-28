@@ -444,7 +444,7 @@ class SouvinerController extends Controller
                 $apply->star_id = $starId;
                 $apply->admin_id = $star->parent_user;
                 $apply->category_id = $star->category_id;
-                if ($request->isRequestFromApp === true) {
+                if ( $request->isRequestFromApp && $request->isRequestFromApp === true) {
                     if($request['image']['type'] && $request['image']['data']){
                         // code for image save by base64 data
                         $originalExtension = str_ireplace("image/","",$request['image']['type']);
