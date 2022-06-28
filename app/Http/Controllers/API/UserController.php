@@ -883,7 +883,7 @@ class UserController extends Controller
     }
 
 
-    public function submit_react($id)
+    public function submit_react2($id)
     {
         $post = Post::find($id);
 
@@ -909,6 +909,21 @@ class UserController extends Controller
             'message' => 'Ok',
         ]);
     }
+
+    // Store Fan Post Like count
+    public function submit_react(Request $request, $id){
+        $post = Post::find($id);
+        $post->user_like_id = $request->showlike;
+        $post->save();
+
+        return response()->json([
+            'status' => 200,
+            // 'liker_id' => $post->user_like_id,
+            'message' => 'React Submitted',
+        ]);
+    }
+
+
 
     public function check_react($id)
     {

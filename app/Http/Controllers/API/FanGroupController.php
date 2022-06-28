@@ -104,7 +104,7 @@ class FanGroupController extends Controller
                 $fangroup->category_id = $adminId->category_id;
                 $fangroup->sub_category_id = $adminId->sub_category_id;
             }
-            
+
             $fangroup->another_star_status = 0;
 
             if ($request->hasfile('banner')) {
@@ -132,7 +132,7 @@ class FanGroupController extends Controller
 
     // Update Fan Group in Admin
     public function updateFanGroup(Request $request, $slug){
- 
+
         $validator = Validator::make($request->all(),[
             'group_name' => 'required',
             'description' => 'required',
@@ -141,7 +141,7 @@ class FanGroupController extends Controller
             'club_points' => 'required',
         ]);
 
-        
+
 
         if($validator->fails())
         {
@@ -189,7 +189,7 @@ class FanGroupController extends Controller
             $fangroup->status = 0;
 
             $fangroup->save();
-            
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Fan Group Updated Successfully',
@@ -226,7 +226,7 @@ class FanGroupController extends Controller
             'club_points' => 'required',
         ]);
 
-        
+
         if($validator->fails())
         {
             return response()->json([
@@ -244,23 +244,23 @@ class FanGroupController extends Controller
             $fangroup->end_date = $request->end_date;
             $fangroup->min_member = $request->min_member;
             $fangroup->max_member = $request->max_member;
-    
+
             if ($request->hasfile('banner')) {
                 $destination = $fangroup->banner;
                 if (File::exists($destination)) {
                     File::delete($destination);
                 }
-    
+
                 $file = $request->file('banner');
                 $extension = $file->getClientOriginalExtension();
                 $filename = 'uploads/images/fangroup/' . time() . '.' . $extension;
-    
+
                 Image::make($file)->resize(800, 300)->save($filename, 100);
                 $fangroup->banner = $filename;
             }
-    
+
             $fangroup->save();
-    
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Fan Group Updated Successfully',
@@ -269,7 +269,7 @@ class FanGroupController extends Controller
 
     }
 
-    // Approve/Ignore/Rejected Status report in Star Panel of FanGroup 
+    // Approve/Ignore/Rejected Status report in Star Panel of FanGroup
     public function statusStar(){
         $id = auth('sanctum')->user()->id;
 
@@ -502,7 +502,7 @@ class FanGroupController extends Controller
 
         $fanDetails->status = 2;
         $fanDetails->save();
-        
+
         return response()->json([
             'status' => 200,
             'message' => 'Fan Group Approval Request Done!',
@@ -513,12 +513,11 @@ class FanGroupController extends Controller
     public function postFanPostLike(Request $request, $postId){
         $fanPostId = FanPost::find($postId);
         $fanPostId->user_like_id = $request->showlike;
-        $fanPostId->like_count = count(json_decode($request->showlike));
         $fanPostId->save();
 
         return response()->json([
             'status' => 200,
-            'message' => 'Admin Fan Post Done',
+            'message' => 'React Submitted',
         ]);
     }
 
@@ -535,7 +534,7 @@ class FanGroupController extends Controller
 
     // User FanGroup Join count & show list in user Panel
     public function getFanGroupList(){
-        
+
         $id = auth('sanctum')->user()->id;
 
         $useFan = User::where('id', $id)->first();
@@ -564,7 +563,7 @@ class FanGroupController extends Controller
 
     // two user member list in user panel
     public function getFanGroupDetails($slug){
-        // Get User Points for checking 
+        // Get User Points for checking
         // $userPoints = User::find(Auth('sanctum')->user()->id);
         $userPoints = Wallet::where('user_id', Auth('sanctum')->user()->id)->first();
         if($userPoints){
@@ -667,17 +666,17 @@ class FanGroupController extends Controller
     public function showFanGroupAnalytics($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
 
-        // Total Fan Post under first star 
+        // Total Fan Post under first star
         $myStarPost = FanPost::where('fan_group_id', $fanDetails->id)
                                 ->where('star_id', $fanDetails->my_star)
                                 ->count();
 
-        // Total Fan Post under second star 
+        // Total Fan Post under second star
         $anotherStarPost = FanPost::where('fan_group_id', $fanDetails->id)
                                 ->where('star_id', $fanDetails->another_star)
                                 ->count();
 
-        // Analytics Fan Post under first star 
+        // Analytics Fan Post under first star
         $users = FanPost::select('id', 'created_at')
         ->where('fan_group_id', $fanDetails->id)
                         ->where('star_id', $fanDetails->my_star)
@@ -696,14 +695,14 @@ class FanGroupController extends Controller
 
                 for($i = 1; $i <= 12; $i++){
                     if(!empty($usermcount[$i])){
-                        $userArr[$i] = $usermcount[$i];    
+                        $userArr[$i] = $usermcount[$i];
                     }else{
-                        $userArr[$i] = 0;    
+                        $userArr[$i] = 0;
                     }
                 }
 
         $myStarAna=array();
-        
+
         foreach ($userArr as $key => $value){
             array_push($myStarAna, $value);
         }
@@ -711,7 +710,7 @@ class FanGroupController extends Controller
         $myStarAnalytics = $myStarAna;
 
 
-        // Analytics Fan Post under first star 
+        // Analytics Fan Post under first star
         $users2 = FanPost::select('id', 'created_at')
         ->where('fan_group_id', $fanDetails->id)
                         ->where('star_id', $fanDetails->another_star)
@@ -730,14 +729,14 @@ class FanGroupController extends Controller
 
                 for($i = 1; $i <= 12; $i++){
                     if(!empty($usermcount2[$i])){
-                        $userArr2[$i] = $usermcount2[$i];    
+                        $userArr2[$i] = $usermcount2[$i];
                     }else{
-                        $userArr2[$i] = 0;    
+                        $userArr2[$i] = 0;
                     }
                 }
 
         $anotherStarAna=array();
-        
+
         foreach ($userArr2 as $key => $value){
             array_push($anotherStarAna, $value);
         }
@@ -801,7 +800,7 @@ class FanGroupController extends Controller
     }
 
 
-    // Post/Media/Video/Member list 
+    // Post/Media/Video/Member list
     public function showStarFanGroup($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
         $fanMember = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('approveStatus', 0)->orderBy('id', 'DESC')->get();
@@ -809,7 +808,7 @@ class FanGroupController extends Controller
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->orderBy('id', 'DESC')->get();
         $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->orderBy('id', 'DESC')->get();
 
-        
+
         $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
         $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
 
@@ -896,7 +895,7 @@ class FanGroupController extends Controller
 
         $fanStore->save();
 
-        
+
         Fan_Group_Join::where('fan_group_id', $fan_group_id)->where('user_id', $id)->where('id', '!=', $fanStore->id)->delete();
 
         // Add ID(json) in User table
