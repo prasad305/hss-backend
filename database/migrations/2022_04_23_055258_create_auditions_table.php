@@ -28,8 +28,13 @@ class CreateAuditionsTable extends Migration
             $table->string('video')->nullable();
             $table->integer('round_status')->nullable();
             $table->string('template_id')->nullable();
+            $table->timestamp('user_reg_start_date')->nullable();
+            $table->timestamp('user_reg_end_date')->nullable();
+            $table->time('start_time')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
+            $table->timestamp('final_result_published_date')->nullable();
+            $table->double('fees')->nullable();
             $table->integer('status')->default(0)->comment('3 = live');
             $table->timestamps();
         });

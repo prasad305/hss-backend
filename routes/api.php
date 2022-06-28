@@ -48,6 +48,9 @@ Route::post('/user/general-post/payment', [UserController::class, 'generalPostPa
 Route::get('/user/generalPost/payment/check/{post_id}', [UserController::class, 'generalPostPaymentCheck']);
 Route::get('/user/generalPost/payment/check', [UserController::class, 'simplePostPaymentCheck']);
 
+Route::get('/user/post/{type}/with-paginate/{limit}', [UserController::class, 'paginate_single_type_post']);
+
+
 
 Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
 
@@ -55,12 +58,14 @@ Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearnin
 Route::get('/star_photos/{id}', [UserController::class, 'star_photo']);
 Route::get('/star_videos/{id}', [UserController::class, 'star_video']);
 Route::get('/user/getStarPost/{id}/{type}', [UserController::class, 'getStarPost']);
+Route::get('/user/getStarPost/{id}/{type}/with-paginate/{limit}', [UserController::class, 'paginate_getStarPost']);
+
 
 // Data Fetching For Landing Page Right Side Bar
 Route::get('/user/learning_session/all', [LearningSessionController::class, 'user_all']);
 Route::get('/user/live_chat/all', [LiveChatController::class, 'userAll']);
 
-Route::get('/user_info/{id}', [AuthController::class, 'user_data']);
+
 Route::post('/chatting/message', [UserController::class, 'message']);
 Route::get('/chatting/message/{id}', [UserController::class, 'get_message']);
 Route::post('/group/message', [UserController::class, 'group_message']);
@@ -78,6 +83,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user_data/{id}', [AuthController::class, 'user_data']);
 
     Route::get('/user/total_notification_count', [UserController::class, 'total_notification_count']);
+    Route::get('/user/notification/view_status/update/{id}', [UserController::class, 'notification_view_status_update']);
+
 
     Route::get('/user/activity_count', [AuthController::class, 'activity_count']);
 
@@ -136,8 +143,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/fan/group/join/{join_id}', [FanGroupController::class, 'getFanGroupJoinId']);
     Route::post('/user/fan/group/post/store', [FanGroupController::class, 'getFanPostStore']);
     Route::get('/user/fan/group/post/show/{slug}', [FanGroupController::class, 'getFanPostShow']);
-    Route::get('/user/fan/group/post/like/{id}', [FanGroupController::class, 'getFanPostLike']);
-    Route::post('/user/fan/group/post/like/{id}', [FanGroupController::class, 'postFanPostLike']);
+    Route::get('/user/fan/group/post/like/{postId}', [FanGroupController::class, 'getFanPostLike']);
+    Route::post('/user/fan/group/post/like/{postId}', [FanGroupController::class, 'postFanPostLike']);
 
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
@@ -231,8 +238,11 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/souvenir/activities/view/{id}', [SouvinerController::class, 'activitiesDetailsUserSouvenir']);
     Route::get('/user/souvenir/order/view/{id}', [SouvinerController::class, 'orderDetailsSouvenir']);
 
+
+
     // User Photos
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
+    Route::get('/user/activitiesData/with-paginate/{limit}', [UserController::class, 'paginate_userActivites']);
 
     //Registration Checker
     Route::get('/user/registration_checker/{type}/{slug}', [UserController::class, 'registration_checker']);
@@ -269,16 +279,16 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/fan/group/analytics/{slug}', [FanGroupController::class, 'showFanGroupAnalytics']);
     Route::post('/admin/fan/group/update/{slug}', [FanGroupController::class, 'updateFanGroup']);
     Route::delete('/admin/fan/group/delete/{slug}', [FanGroupController::class, 'deleteFanGroup']);
-    Route::post('/admin/fan/member/approve/{id}', [FanGroupController::class, 'approveFanMember']);
-    Route::post('/admin/fan/member/post/{id}', [FanGroupController::class, 'approveFanPost']);
+    Route::post('/admin/fan/member/approve/{joinMemberId}', [FanGroupController::class, 'approveFanMember']);
+    Route::post('/admin/fan/member/post/{postId}', [FanGroupController::class, 'approveFanPost']);
 
     Route::post('/admin/fan-group/join/{slug}/{data}', [FanGroupController::class, 'joinFanGroup']);
     Route::post('/admin/fan-group/post/{slug}/{data}', [FanGroupController::class, 'postFanGroup']);
     Route::post('/admin/fan/group/image/update/{slug}', [FanGroupController::class, 'updateImageFanGroup']);
     Route::post('/admin/fan-group/manager/approval/{slug}', [FanGroupController::class, 'fanGroupManagerApproval']);
-    Route::get('/admin/fan/group/settings/delete/{id}', [FanGroupController::class, 'deleteSettingsFan']);
-    Route::post('/admin/fan/group/settings/no-warning/{id}', [FanGroupController::class, 'noWarningSettingsFan']);
-    Route::post('/admin/fan/group/approval/warning/{id}/{fanid}', [FanGroupController::class, 'warningSettingsFan']);
+    Route::get('/admin/fan/group/settings/delete/{fanJoinId}', [FanGroupController::class, 'deleteSettingsFan']);
+    Route::post('/admin/fan/group/settings/no-warning/{warningId}', [FanGroupController::class, 'noWarningSettingsFan']);
+    Route::post('/admin/fan/group/approval/warning/{fanUserId}/{fanGroupId}', [FanGroupController::class, 'warningSettingsFan']);
 
     // Marketplace Section
     Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
@@ -480,14 +490,14 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('star/fan/group/active/{slug}', [FanGroupController::class, 'fanGroupActive']);
     Route::get('star/fan/group/ignore/{slug}', [FanGroupController::class, 'fanGroupIgnore']);
     Route::get('/star/fan/group/show/{slug}', [FanGroupController::class, 'showStarFanGroup']);
-    Route::post('/star/fan/member/approve/{id}', [FanGroupController::class, 'approveFanMember']);
-    Route::post('/star/fan/member/post/{id}', [FanGroupController::class, 'approveFanPost']);
+    Route::post('/star/fan/member/approve/{joinMemberId}', [FanGroupController::class, 'approveFanMember']);
+    Route::post('/star/fan/member/post/{postId}', [FanGroupController::class, 'approveFanPost']);
     Route::post('/star/fan-group/join/{slug}/{data}', [FanGroupController::class, 'joinFanGroup']);
     Route::post('/star/fan-group/post/{slug}/{data}', [FanGroupController::class, 'postFanGroup']);
     Route::post('/star/fan/group/image/update/{slug}', [FanGroupController::class, 'updateImageFanGroup']);
-    Route::get('/star/fan/group/settings/delete/{id}', [FanGroupController::class, 'deleteSettingsFan']);
-    Route::post('/star/fan/group/settings/no-warning/{id}', [FanGroupController::class, 'noWarningSettingsFan']);
-    Route::post('/star/fan/group/approval/warning/{id}/{fanid}', [FanGroupController::class, 'warningSettingsFan']);
+    Route::get('/star/fan/group/settings/delete/{fanJoinId}', [FanGroupController::class, 'deleteSettingsFan']);
+    Route::post('/star/fan/group/settings/no-warning/{warningId}', [FanGroupController::class, 'noWarningSettingsFan']);
+    Route::post('/star/fan/group/approval/warning/{fanUserId}/{fanGroupId}', [FanGroupController::class, 'warningSettingsFan']);
     Route::get('/star/fan/group/analytics/{slug}', [FanGroupController::class, 'showFanGroupAnalytics']);
 
     // Marketplace Section
@@ -794,6 +804,8 @@ Route::get('/sold/auction/product', [AuctionController::class, 'soldProduct']);
 Route::get('/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
 Route::post('/bidding/auction/product/{id}', [AuctionController::class, 'bidNow']);
 Route::get('/live/allProduct', [AuctionController::class, 'allLiveProduct']);
+
+Route::get('/user_info/{id}', [AuthController::class, 'user_data']);
 
 
 

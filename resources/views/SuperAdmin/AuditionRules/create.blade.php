@@ -327,6 +327,7 @@
 
             var category_id = category_id;
             var round_num = $("#round").val();
+            alert(round_num)
             var judge_num = $("#superstar").val();
             var jury_num = $("#jury").val();
             var month = $("#root3").text();

@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Validator;
 
 class FanGroupController extends Controller
 {
+    // Star List for create in Fan Group
     public function allStarList(){
         // $allStar = User::where('user_type', 'star')->get();
         $allStar = User::where('parent_user', auth('sanctum')->user()->id)->get();
@@ -27,6 +28,8 @@ class FanGroupController extends Controller
             'allStar' => $allStar,
         ]);
     }
+
+    //Another Star List except my Star
     public function someStarList($data){
         $user =  User::find($data);
 
@@ -51,6 +54,7 @@ class FanGroupController extends Controller
             ]);
     }
 
+    // Create Fan Group in Admin
     public function fanGroupStore(Request $request){
         // $validator = Validator::make($request->all(), [
         $validator = Validator::make($request->all(),[
@@ -100,7 +104,7 @@ class FanGroupController extends Controller
                 $fangroup->category_id = $adminId->category_id;
                 $fangroup->sub_category_id = $adminId->sub_category_id;
             }
-            
+
             $fangroup->another_star_status = 0;
 
             if ($request->hasfile('banner')) {
@@ -125,8 +129,10 @@ class FanGroupController extends Controller
             ]);
         }
     }
+
+    // Update Fan Group in Admin
     public function updateFanGroup(Request $request, $slug){
- 
+
         $validator = Validator::make($request->all(),[
             'group_name' => 'required',
             'description' => 'required',
@@ -135,7 +141,7 @@ class FanGroupController extends Controller
             'club_points' => 'required',
         ]);
 
-        
+
 
         if($validator->fails())
         {
@@ -183,13 +189,15 @@ class FanGroupController extends Controller
             $fangroup->status = 0;
 
             $fangroup->save();
-            
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Fan Group Updated Successfully',
             ]);
         }
     }
+
+    // Delete Fan Group in Admin
     public function deleteFanGroup($slug){
 
         $fangroup = FanGroup::where('slug', $slug)->first();
@@ -207,6 +215,7 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Update Fan Group in Star Panel
     public function starUpdate(Request $request, $slug){
 
         $validator = Validator::make($request->all(),[
@@ -217,7 +226,7 @@ class FanGroupController extends Controller
             'club_points' => 'required',
         ]);
 
-        
+
         if($validator->fails())
         {
             return response()->json([
@@ -235,23 +244,23 @@ class FanGroupController extends Controller
             $fangroup->end_date = $request->end_date;
             $fangroup->min_member = $request->min_member;
             $fangroup->max_member = $request->max_member;
-    
+
             if ($request->hasfile('banner')) {
                 $destination = $fangroup->banner;
                 if (File::exists($destination)) {
                     File::delete($destination);
                 }
-    
+
                 $file = $request->file('banner');
                 $extension = $file->getClientOriginalExtension();
                 $filename = 'uploads/images/fangroup/' . time() . '.' . $extension;
-    
+
                 Image::make($file)->resize(800, 300)->save($filename, 100);
                 $fangroup->banner = $filename;
             }
-    
+
             $fangroup->save();
-    
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Fan Group Updated Successfully',
@@ -260,23 +269,9 @@ class FanGroupController extends Controller
 
     }
 
+    // Approve/Ignore/Rejected Status report in Star Panel of FanGroup
     public function statusStar(){
         $id = auth('sanctum')->user()->id;
-
-        // $starActive = FanGroup::where('my_star', $id)->orWhere('another_star', $id)->get();
-
-        // $starActive = FanGroup::where(['my_star' => $id, 'my_star_status' => 0])->get();
-
-        // $starActive = FanGroup::where(function ($query) {
-        //         $query->where('my_star', $id)
-        //               ->orWhere('another_star', $id); })->get();
-
-        // $starActive = FanGroup::where('my_star_status',0)->
-        //     where('another_star_status',0)->
-        //     where(function ($query) use($id) {
-        //         $query->where('my_star',$id)
-        //             ->orWhere('another_star',$id);
-        //     })->get();
 
         $starActive = FanGroup::where(function ($query) use($id) {
             $query->where('my_star_status', 0)
@@ -332,20 +327,10 @@ class FanGroupController extends Controller
             'id' => $id,
         ]);
     }
+
+    // Pending/Approve/Live Fan group List in Admin Panel
     public function statusAdminStar(){
         $id = auth('sanctum')->user()->id;
-        // $user = FanGroup::where('created_by', $id);
-        // another_star_admin_id
-
-
-        // $fanApproved = FanGroup::where(function ($query) use($id) {
-        //     $query->where('my_star_status', 1)
-        //         ->where('created_by', $id);
-        //     })->
-        //     orWhere(function ($query) use($id) {
-        //             $query->where('another_star_status', 1)
-        //                 ->where('another_star_admin_id',$id);
-        //         })->where('status', 1)->get();
 
         $fanApproved = FanGroup::where(function ($query) use($id) {
                     $query->where('another_star_admin_id', $id)
@@ -365,16 +350,6 @@ class FanGroupController extends Controller
                     ->where('status', 1)
                     ->where('another_star_status', 1)
                     ->count();
-
-        // $fanApprovedCount = FanGroup::where(function ($query) use($id) {
-        //     $query->where('my_star_status', 1)
-        //         ->where('created_by', $id);
-        //     })->
-        //     orWhere(function ($query) use($id) {
-        //             $query->where('another_star_status', 1)
-        //                 ->where('another_star_admin_id',$id);
-        //         })->where('status', 1)->count();
-
 
         $fanPending = FanGroup::where(function ($query) use($id) {
             $query->where('my_star_status', 0)
@@ -448,6 +423,7 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Get Fan Details in Star
     public function fanGroupDetails($slug){
         $id = auth('sanctum')->user()->id;
         $starId = User::find($id);
@@ -462,6 +438,7 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Active Fan Group
     public function fanGroupActive($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
         $id = auth('sanctum')->user()->id;
@@ -481,6 +458,7 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Fan group Ignore in Star
     public function fanGroupIgnore($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
         $id = auth('sanctum')->user()->id;
@@ -500,13 +478,14 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Fan Post/Image/Video show in User Panel
     public function getFanPostShow($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
         $userId = auth('sanctum')->user()->id;
 
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->latest()->where('status', 1)->orderBy('id', 'DESC')->get();
-        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->get();
-        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->get();
+        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
+        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
 
         return response()->json([
             'status' => 200,
@@ -514,38 +493,37 @@ class FanGroupController extends Controller
             'fanMedia' => $fanMedia,
             'fanVideo' => $fanVideo,
             'userId' => $userId,
-            // 'useFanGroup' => $useFanGroup,
         ]);
     }
 
+    // Forward Manager Admin for Approval
     public function fanGroupManagerApproval($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
 
         $fanDetails->status = 2;
         $fanDetails->save();
-        
+
         return response()->json([
             'status' => 200,
             'message' => 'Fan Group Approval Request Done!',
         ]);
     }
 
-    // Fan Post Like
-
-    public function postFanPostLike(Request $request, $id){
-        $fanPostId = FanPost::find($id);
+    // Store Fan Post Like count
+    public function postFanPostLike(Request $request, $postId){
+        $fanPostId = FanPost::find($postId);
         $fanPostId->user_like_id = $request->showlike;
-        $fanPostId->like_count = count(json_decode($request->showlike));
         $fanPostId->save();
 
         return response()->json([
             'status' => 200,
-            'message' => 'Admin Fan Post Done',
+            'message' => 'React Submitted',
         ]);
     }
 
-    public function getFanPostLike($id){
-        $fanPostId = FanPost::find($id);
+    // Get Fan Post user Like Array & it's count
+    public function getFanPostLike($postId){
+        $fanPostId = FanPost::find($postId);
 
         return response()->json([
             'status' => 200,
@@ -554,8 +532,9 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // User FanGroup Join count & show list in user Panel
     public function getFanGroupList(){
-        
+
         $id = auth('sanctum')->user()->id;
 
         $useFan = User::where('id', $id)->first();
@@ -582,8 +561,9 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // two user member list in user panel
     public function getFanGroupDetails($slug){
-        // Get User Points for checking 
+        // Get User Points for checking
         // $userPoints = User::find(Auth('sanctum')->user()->id);
         $userPoints = Wallet::where('user_id', Auth('sanctum')->user()->id)->first();
         if($userPoints){
@@ -622,14 +602,15 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Fan Group post/image/video, warning, two user join lists in Admin Panel
     public function showFanGroup($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
         $fanMember = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('approveStatus', 0)->get();
 
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->orderBy('id', 'DESC')->get();
         $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->orderBy('id', 'DESC')->get();
-        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->get();
-        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->get();
+        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
+        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
 
         $fanWarning = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('warning_count', '!=', 0)->orderBy('id', 'DESC')->get();
 
@@ -681,20 +662,21 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Analytics show in Admin/Star Panel
     public function showFanGroupAnalytics($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
 
-        // Total Fan Post under first star 
+        // Total Fan Post under first star
         $myStarPost = FanPost::where('fan_group_id', $fanDetails->id)
                                 ->where('star_id', $fanDetails->my_star)
                                 ->count();
 
-        // Total Fan Post under second star 
+        // Total Fan Post under second star
         $anotherStarPost = FanPost::where('fan_group_id', $fanDetails->id)
                                 ->where('star_id', $fanDetails->another_star)
                                 ->count();
 
-        // Analytics Fan Post under first star 
+        // Analytics Fan Post under first star
         $users = FanPost::select('id', 'created_at')
         ->where('fan_group_id', $fanDetails->id)
                         ->where('star_id', $fanDetails->my_star)
@@ -713,14 +695,14 @@ class FanGroupController extends Controller
 
                 for($i = 1; $i <= 12; $i++){
                     if(!empty($usermcount[$i])){
-                        $userArr[$i] = $usermcount[$i];    
+                        $userArr[$i] = $usermcount[$i];
                     }else{
-                        $userArr[$i] = 0;    
+                        $userArr[$i] = 0;
                     }
                 }
 
         $myStarAna=array();
-        
+
         foreach ($userArr as $key => $value){
             array_push($myStarAna, $value);
         }
@@ -728,7 +710,7 @@ class FanGroupController extends Controller
         $myStarAnalytics = $myStarAna;
 
 
-        // Analytics Fan Post under first star 
+        // Analytics Fan Post under first star
         $users2 = FanPost::select('id', 'created_at')
         ->where('fan_group_id', $fanDetails->id)
                         ->where('star_id', $fanDetails->another_star)
@@ -747,14 +729,14 @@ class FanGroupController extends Controller
 
                 for($i = 1; $i <= 12; $i++){
                     if(!empty($usermcount2[$i])){
-                        $userArr2[$i] = $usermcount2[$i];    
+                        $userArr2[$i] = $usermcount2[$i];
                     }else{
-                        $userArr2[$i] = 0;    
+                        $userArr2[$i] = 0;
                     }
                 }
 
         $anotherStarAna=array();
-        
+
         foreach ($userArr2 as $key => $value){
             array_push($anotherStarAna, $value);
         }
@@ -771,24 +753,11 @@ class FanGroupController extends Controller
             'anotherStarAnalytics' => $anotherStarAnalytics,
         ]);
     }
-    public function deleteSettingsFan($id){
 
-        $fanWarning = Fan_Group_Join::find($id);
+    // Delete member in Admin/Star Panel
+    public function deleteSettingsFan($fanJoinId){
 
-        // if ($fanWarning->image) {
-        //     $destination = $fanWarning->image;
-        //     if(File::exists($destination))
-        //     {
-        //         File::delete($destination);
-        //     }
-        // }
-        // if ($fanWarning->video) {
-        //     $destination = $fanWarning->video;
-        //     if(File::exists($destination))
-        //     {
-        //         File::delete($destination);
-        //     }
-        // }
+        $fanWarning = Fan_Group_Join::find($fanJoinId);
 
         $fanWarning->delete();
 
@@ -797,9 +766,11 @@ class FanGroupController extends Controller
             'message' => 'Fan Group Deleted Successfully',
         ]);
     }
-    public function noWarningSettingsFan($id){
 
-        $fanWarning = Fan_Group_Join::find($id);
+    // Remove warning in Star/Admin Panel
+    public function noWarningSettingsFan($warningId){
+
+        $fanWarning = Fan_Group_Join::find($warningId);
 
 
         $fanWarning->warning_count = 0;
@@ -811,9 +782,11 @@ class FanGroupController extends Controller
             'message' => 'Admin Removed Warning',
         ]);
     }
-    public function warningSettingsFan($id, $fanid){
 
-        $fanWarning = Fan_Group_Join::where('user_id', $id)->where('fan_group_id', $fanid)->first();
+    // Warning count in post approval in Star/Admin Panel
+    public function warningSettingsFan($fanUserId, $fanGroupId){
+
+        $fanWarning = Fan_Group_Join::where('user_id', $fanUserId)->where('fan_group_id', $fanGroupId)->first();
 
 
         $fanWarning->warning_count++;
@@ -826,6 +799,8 @@ class FanGroupController extends Controller
         ]);
     }
 
+
+    // Post/Media/Video/Member list
     public function showStarFanGroup($slug){
         $fanDetails = FanGroup::where('slug', $slug)->first();
         $fanMember = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('approveStatus', 0)->orderBy('id', 'DESC')->get();
@@ -833,13 +808,13 @@ class FanGroupController extends Controller
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 0)->orderBy('id', 'DESC')->get();
         $allFanPost = FanPost::where('fan_group_id', $fanDetails->id)->where('status', 1)->orderBy('id', 'DESC')->get();
 
-        
-        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->get();
-        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->get();
+
+        $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
+        $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
 
         $id = auth('sanctum')->user()->id;
         $my_star = User::find($id);
-        $fanId = $my_star->	parent_user;
+        $fanId = $my_star->parent_user;
 
         // return $fanId;
 
@@ -893,6 +868,8 @@ class FanGroupController extends Controller
         ]);
     }
 
+
+    // User Join Fan Groun in Fan_Group_Join table
     public function getFanGroupStore(Request $request){
         $id = auth('sanctum')->user()->id;
 
@@ -918,7 +895,7 @@ class FanGroupController extends Controller
 
         $fanStore->save();
 
-        
+
         Fan_Group_Join::where('fan_group_id', $fan_group_id)->where('user_id', $id)->where('id', '!=', $fanStore->id)->delete();
 
         // Add ID(json) in User table
@@ -962,6 +939,7 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // User Post in Fan Group in FanPost table
     public function getFanPostStore(Request $request){
         $id = auth('sanctum')->user()->id;
 
@@ -1037,6 +1015,7 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Update banner in Fan Group
     public function updateImageFanGroup(Request $request, $slug){
 
         $fanImage = FanGroup::where('slug', $slug)->first();
@@ -1066,6 +1045,7 @@ class FanGroupController extends Controller
         ]);
     }
 
+    // Get FanGroup join details using user_id from Fan_Group_Join table
     public function getFanGroupJoinId($id){
 
         $userId = auth('sanctum')->user()->id;
@@ -1078,9 +1058,10 @@ class FanGroupController extends Controller
         ]);
     }
 
-    public function approveFanMember($id){
+    // Member approve in Star & Admin Panel
+    public function approveFanMember($joinMemberId){
 
-        $fanMember = Fan_Group_Join::find($id);
+        $fanMember = Fan_Group_Join::find($joinMemberId);
         $fanMember->approveStatus = 1;
         $fanMember->save();
 
@@ -1089,9 +1070,11 @@ class FanGroupController extends Controller
             'message' => 'Fan Member approved Successfully',
         ]);
     }
-    public function approveFanPost($id){
 
-        $fanMember = FanPost::find($id);
+    // Approve Post in Star & Admin Panel
+    public function approveFanPost($postId){
+
+        $fanMember = FanPost::find($postId);
         $fanMember->status = 1;
         $fanMember->save();
 
@@ -1100,6 +1083,8 @@ class FanGroupController extends Controller
             'message' => 'Fan Post approved Successfully',
         ]);
     }
+
+    // Status change on Setting for User Join in Star & Admin Panel
     public function joinFanGroup($slug, $data){
 
         $fanjoin = FanGroup::where('slug', $slug)->first();
@@ -1120,6 +1105,7 @@ class FanGroupController extends Controller
 
     }
 
+    // Status change on Setting for User Post in Star & Admin Panel
     public function postFanGroup($slug, $data){
 
         $fanpost = FanGroup::where('slug', $slug)->first();

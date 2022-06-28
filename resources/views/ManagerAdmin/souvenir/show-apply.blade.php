@@ -76,21 +76,21 @@
                                 <td>{{ $data->created_at->diffForHumans() }}</td>
                                 <td>
                                   @if($data->status == 0)
-                                  <span class="badge badge-danger" style="width: 70px;">Pending</span>
+                                  <span class="badge badge-danger" style="width: 100%;">Pending</span>
                                   @elseif($data->status == 1)
-                                  <span class="badge badge-primary" style="width: 70px;">Approved for Payment</span>
+                                  <span class="badge badge-primary" style="width: 100%;">Approved for Payment</span>
                                   @elseif($data->status == 2)
-                                  <span class="badge badge-success" style="width: 70px;">Payment Complete</span>
+                                  <span class="badge badge-success" style="width: 100%;">Payment Complete</span>
                                   @elseif($data->status == 3)
-                                  <span class="badge badge-success" style="width: 70px;">Processing</span>
+                                  <span class="badge badge-success" style="width: 100%;">Processing</span>
                                   @elseif($data->status == 4)
-                                  <span class="badge badge-success" style="width: 70px;">Product Received</span>
+                                  <span class="badge badge-success" style="width: 100%;">Product Received</span>
                                   @elseif($data->status == 5)
-                                  <span class="badge badge-success" style="width: 70px;">Processing</span>
+                                  <span class="badge badge-success" style="width: 100%;">Processing</span>
                                   @elseif($data->status == 6)
-                                  <span class="badge badge-success" style="width: 70px;">Out for Delivery</span>
+                                  <span class="badge badge-success" style="width: 100%;">Out for Delivery</span>
                                   @else
-                                  <span class="badge badge-success" style="width: 70px;">Delivered</span>
+                                  <span class="badge badge-success" style="width: 100%;">Delivered</span>
                                   @endif
                                 </td>
                                 

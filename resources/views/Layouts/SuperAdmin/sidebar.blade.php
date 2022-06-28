@@ -187,9 +187,16 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ route('superAdmin.jury_groups.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Jury Groups</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('superAdmin.audition-jury.index') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Jurys</p>
+                        <p>Juries</p>
                     </a>
                 </li>
                 <li class="nav-item">

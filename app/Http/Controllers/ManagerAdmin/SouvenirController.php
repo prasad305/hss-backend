@@ -25,14 +25,14 @@ class SouvenirController extends Controller
 
     public function pending()
     {
-        $post = SouvenirCreate::where('status',0)->where('category_id',auth()->user()->category_id)->latest()->get();
+        $post = SouvenirCreate::where('status',0)->where('approval_status', 1)->where('category_id',auth()->user()->category_id)->latest()->get();
 
         return view('ManagerAdmin.souvenir.index', compact('post'));
     }
 
     public function published()
     {
-        $post = SouvenirCreate::where('status',1)->where('category_id',auth()->user()->category_id)->latest()->get();
+        $post = SouvenirCreate::where('status',1)->where('approval_status', 1)->where('category_id',auth()->user()->category_id)->latest()->get();
 
         return view('ManagerAdmin.souvenir.index', compact('post'));
     }

@@ -11,6 +11,7 @@ class JuryBoard extends Model
 
     protected $fillable = [
         'star_id',
+        'group_id',
         'terms_and_condition',
         'description',
         'qr_code',
@@ -18,10 +19,15 @@ class JuryBoard extends Model
         'status',
     ];
 
-    protected $with = ['juryBoard'];
+    protected $with = ['juryBoard','group'];
 
     public function juryBoard()
     {
         return $this->belongsto(User::class,'star_id','id');
+    }
+
+    public function group()
+    {
+        return $this->belongsto(JuryGroup::class,'group_id','id');
     }
 }
