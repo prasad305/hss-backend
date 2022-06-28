@@ -1550,6 +1550,7 @@ class UserController extends Controller
 
             $learning_video->video = $path;
             $learning_video->save();
+            $LearningSessionAssignment = LearningSessionAssignment::where([['event_id', $request->video['learningSessionId']], ['user_id', auth()->user()->id]])->get();
 
             try {
 
@@ -1563,7 +1564,8 @@ class UserController extends Controller
         } else {
             return response()->json([
                 'status' => 300,
-                'message' => 'Aleardy Done ',
+                'message' => 'Video Already Submitted',
+                'assinmentNumber' => $LearningSessionAssignment->count()
             ]);
         }
 
@@ -1574,6 +1576,7 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Learning Videos Uploaded Successfully!',
+            'assinmentNumber' => $LearningSessionAssignment->count()
         ]);
     }
 
