@@ -68,7 +68,7 @@ class UserController extends Controller
 
     public function total_notification_count()
     {
-        $notification = Notification::where([['user_id', auth('sanctum')->user()->id],['view_status',0]])->count();
+        $notification = Notification::where([['user_id', auth('sanctum')->user()->id], ['view_status', 0]])->count();
 
         return response()->json([
             'status' => 200,
@@ -82,7 +82,7 @@ class UserController extends Controller
         $notification->view_status = 1;
         $notification->update();
 
-        $total_notification = Notification::where([['user_id', auth('sanctum')->user()->id],['view_status',0]])->count();
+        $total_notification = Notification::where([['user_id', auth('sanctum')->user()->id], ['view_status', 0]])->count();
 
         return response()->json([
             'status' => 200,
@@ -223,6 +223,7 @@ class UserController extends Controller
 
         ], [
             'name.required' => 'This Field Is Required',
+            'amount.required' => 'This Field Is Required',
             'card_number.required' => 'This Field Is Required',
             'ccv.required' => 'This Field Is Required',
             'expiry_date.required' => 'This Field Is Required',
@@ -239,7 +240,7 @@ class UserController extends Controller
         $postPayment = GeneralPostPayment::create([
 
             'post_id' => $request->post_id,
-            'user_id' => $request->user_id,
+            'user_id' => auth('sanctum')->user()->id,
             'name' => $request->name,
             'amount' => $request->amount,
             'card_number' => $request->card_number,
@@ -978,7 +979,8 @@ class UserController extends Controller
     }
 
     // Store Fan Post Like count
-    public function submit_react(Request $request, $id){
+    public function submit_react(Request $request, $id)
+    {
         $post = Post::find($id);
         $post->user_like_id = $request->showlike;
         $post->save();
@@ -1009,7 +1011,7 @@ class UserController extends Controller
      */
     public function checkUserNotifiaction()
     {
-        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->orderBy('updated_at','ASC')->get();
+        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->orderBy('updated_at', 'ASC')->get();
         $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
 
         if ($greeting_reg)
