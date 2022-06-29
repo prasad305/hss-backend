@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionAssignJudge;
 use App\Models\Audition\AuditionAssignJury;
+use App\Models\Audition\AuditionInfo;
 use App\Models\Audition\AuditionRules;
+use App\Models\SubCategory;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -18,6 +21,12 @@ class AuditionController extends Controller
 {
     public function store(Request $request)
     {
+        $request->validate([
+            'audition_admin_id' => 'required',
+            'title' => 'required',
+            'description' => 'required',
+            'start_date' => 'required',
+        ]);
 
         // dd($request->all());
         $auditionRule = AuditionRules::find($request->audition_rule_id);
@@ -67,7 +76,6 @@ class AuditionController extends Controller
                 }
                 $audition                       = new Audition();
                 $audition->category_id          =  Auth::user()->category_id;
-                $audition->audition_rules_id    = $request->audition_rule_id;
                 $audition->audition_round_rules_id  = $auditionRule->roundRules->first()->id;
                 $audition->creater_id           =  Auth::user()->id;
                 $audition->audition_admin_id    =  $request->audition_admin_id;
@@ -80,6 +88,21 @@ class AuditionController extends Controller
                 $audition->end_time             =  Carbon::parse($request->start_date)->addDays($auditionRule->day)->addMonths($auditionRule->month);
                 $audition->status               =  0;
                 $audition->save();
+
+
+                //setup audition info from general audition rule
+                $general_audition_info = AuditionRules::where('category_id',Auth::user()->category_id)->first();
+
+                $audition_info = new AuditionInfo();
+                $audition_info->audition_id = $audition->id;
+                $audition_info->category_id = Auth::user()->category_id;
+                $audition_info->round_num = $general_audition_info->round_num;
+                $audition_info->judge_num = $general_audition_info->judge_num;
+                $audition_info->jury_groups = $general_audition_info->jury_groups;
+                $audition_info->start_date =Carbon::parse( $request->stat_date);
+                $audition_info->end_date = Carbon::parse($request->end_date);
+                $audition_info->save();
+
 
                 foreach ($request->judge as $key => $value) {
                     $auditionAssignJudge = new AuditionAssignJudge();
@@ -105,5 +128,14 @@ class AuditionController extends Controller
             session()->flash('error', 'Opps.. No audition rules found !');
         }
         return back();
+    }
+
+
+    public function create()
+    {
+        $auditionAdmins = User::whereNotIn('id', Audition::pluck('audition_admin_id'))->where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
+        $subCategories = SubCategory::where([['category_id',auth()->user()->category_id],['status',1]])->orderBY('id','desc')->get();
+
+        return view('ManagerAdmin.auditionAdmin.create', compact('auditionAdmins','subCategories'));
     }
 }

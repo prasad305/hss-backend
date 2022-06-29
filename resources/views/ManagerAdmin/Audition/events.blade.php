@@ -54,7 +54,6 @@
             font-size: 40px;
             font-weight: 800;
         }
-
     </style>
 
     <!-- Content Header (Page header) -->
@@ -75,178 +74,78 @@
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
+    @include('ManagerAdmin.Audition.includes.audition-sub-nav')
 
-    <!-- /.content-header -->
-    <ul class="nav nav-tabs m-4" role="tablist">
-        <li class="nav-item custom-nav-item m-2 TextBH">
-            <a class="nav-link border-warning " data-toggle="tab" href="#tabs-1" role="tab">
-                <center>
-                    <div class='displaySide'>
-                        <img src="{{ asset('assets/manager-admin/instagram-live.png') }}" class="ARRimg pt-2" alt="">
-                        <div class='fontBold'>00</div>
-                    </div>
+    <div class="row">
+        <div class="col-md-12 mx-2 mt-3">
+            <div class="row">
 
-                </center>
-                <a class="btn border-warning nav-link active " data-toggle="tab" href="#tabs-1" role="tab">Live Audition</a>
-            </a>
-
-        </li>
-        <li class="nav-item custom-nav-item m-2 ">
-            <a class="nav-link border-warning" data-toggle="tab" href="#tabs-2" role="tab">
-                <center>
-                    <div class='displaySide'>
-                        <img src="{{ asset('assets/manager-admin/Group1176.png') }}" class="ARRimg pt-2" alt="">
-                        <div class='fontBold'>{{ $pending_instructions->count() }}</div>
-                    </div>
-                </center>
-                <a class="btn border-warning nav-link " data-toggle="tab" href="#tabs-2" role="tab">Request for Approval</a>
-            </a>
-        </li>
-        <li class="nav-item custom-nav-item m-2 ">
-            <a class="nav-link border-warning" data-toggle="tab" href="#tabs-3" role="tab">
-                <center class="displaySide">
-                    <img src="{{ asset('assets/manager-admin/pending-audition.png') }}" class="ARRimg pt-2" alt="">
-                    <div class='fontBold'>00</div>
-                </center>
-                <a class="btn border-warning nav-link " data-toggle="tab" href="#tabs-3" role="tab">Pending Audition</a>
-            </a>
-        </li>
-
-    </ul><!-- Tab panes -->
-
-    <div class="tab-content m-4">
-
-        <div class="row">
-            <div class="col-md-12 mx-2 mt-3">
                 <h4>Previous Events list</h4>
-                <div class='bottomBlackLine'></div>
+                <a class="btn btn-success btn-sm mr-4 " style="margin-bottom: 10px; margin-left: auto;"
+                onclick="Show('Create Audition','{{ route('managerAdmin.audition.create') }}')">
+                <i class=" fa fa-plus"></i>&nbsp;Add New</a>
+            </div>
+            <div class='bottomBlackLine'></div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="row info-box bg-dark shadow-none pb-4 m-3 BGa">
+                <img src="{{ asset('assets/super-admin/images/unsplash_hUHzaiAHuUc (1).png') }}" alt="Admin Image"
+                    class="img-fluid ImgBlue mr-3 mb-2">
+
+                <div className="d-flex py-3 justify-contnet-center ">
+
+                    <div>
+                        <h5 class="text-center text-bold">Guitar Competition</h5>
+                        <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
+                            industry. Lorem
+                            Ipsum has been. </p>
+                        <center><button class="text-center btn GoldBtn px-4 text-bold ">On Going</button></center>
+
+                    </div>
+
+                </div>
             </div>
         </div>
 
-        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="row info-box bg-dark shadow-none pb-4 m-3 BGaB">
+                <img src="{{ asset('assets/super-admin/images/unsplash_hUHzaiAHuUc.png') }}" alt="Admin Image"
+                    class="img-fluid ImgBlue mr-3 mb-2">
 
+                <div className="d-flex py-3 justify-contnet-center ">
+                    <div>
+                        <h5 class="text-center text-bold">Swimming Competition</h5>
+                        <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
+                            industry. Lorem
+                            Ipsum has been. </p>
+                        <center><button class="text-center btn BlueBtn px-4 text-bold ">Done</button></center>
 
-            <div class="row">
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="row info-box bg-dark shadow-none pb-4 m-3 BGa">
-                        <img src="{{ asset('assets/super-admin/images/unsplash_hUHzaiAHuUc (1).png') }}" alt="Admin Image"
-                            class="img-fluid ImgBlue mr-3 mb-2">
-
-                        <div className="d-flex py-3 justify-contnet-center ">
-
-                            <div>
-                                <h5 class="text-center text-bold">Guitar Competition</h5>
-                                <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
-                                    industry. Lorem
-                                    Ipsum has been. </p>
-                                <center><button class="text-center btn GoldBtn px-4 text-bold ">On Going</button></center>
-
-                            </div>
-
-                        </div>
                     </div>
                 </div>
-
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="row info-box bg-dark shadow-none pb-4 m-3 BGaB">
-                        <img src="{{ asset('assets/super-admin/images/unsplash_hUHzaiAHuUc.png') }}" alt="Admin Image"
-                            class="img-fluid ImgBlue mr-3 mb-2">
-
-                        <div className="d-flex py-3 justify-contnet-center ">
-                            <div>
-                                <h5 class="text-center text-bold">Swimming Competition</h5>
-                                <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
-                                    industry. Lorem
-                                    Ipsum has been. </p>
-                                <center><button class="text-center btn BlueBtn px-4 text-bold ">Done</button></center>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="row info-box bg-dark shadow-none pb-4 m-3 BGaB">
-                        <img src="{{ asset('assets/super-admin/images/unsplash_hUHzaiAHuUc (2).png') }}" alt="Admin Image"
-                            class="img-fluid ImgBlue mr-3 mb-2">
-
-                        <div className="d-flex py-3 justify-contnet-center ">
-                            <div>
-                                <h5 class="text-center text-bold">Football Competition</h5>
-                                <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
-                                    industry. Lorem
-                                    Ipsum has been. </p>
-                                <center><button class="text-center btn BlueBtn px-4 text-bold ">Done</button></center>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-
-
         </div>
 
-        <div class="tab-pane" id="tabs-2" role="tabpanel">
-            {{-- <p>Second Panel</p> --}}
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="row info-box bg-dark shadow-none pb-4 m-3 BGaB">
+                <img src="{{ asset('assets/super-admin/images/unsplash_hUHzaiAHuUc (2).png') }}" alt="Admin Image"
+                    class="img-fluid ImgBlue mr-3 mb-2">
 
-            <div class="row">
+                <div className="d-flex py-3 justify-contnet-center ">
+                    <div>
+                        <h5 class="text-center text-bold">Football Competition</h5>
+                        <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
+                            industry. Lorem
+                            Ipsum has been. </p>
+                        <center><button class="text-center btn BlueBtn px-4 text-bold ">Done</button></center>
 
-
-                @if (isset($auditions[0]))
-                    @foreach ($auditions as $key => $audition)
-                        <div class="col-md-3 col-sm-6 col-12">
-                            <div class="row info-box bg-dark shadow-none pb-4 m-3 BGa">
-                                <img src="{{ asset($audition->banner) }}"
-                                    alt="Admin Image" class="img-fluid ImgBlue mr-3 mb-2">
-
-                                <div className="d-flex py-3 justify-contnet-center ">
-                                    <a href="{{ route('managerAdmin.audition.instruction',$audition->id) }}">
-                                        <div>
-                                            <h5 class="text-center text-bold">{{ $audition->title }}</h5>
-                                            <p class="text-center">{!! $audition->description !!} </p>
-                                            <center><button class="text-center btn GoldBtn px-4 text-bold ">On
-                                                    Going</button></center>
-
-                                        </div>
-                                    </a>
-                                </div>
-
-                            </div>
-                        </div>
-                    @endforeach
-                @endif
-
-
-
-
-
+                    </div>
+                </div>
             </div>
-
-        </div>
-        <div class="tab-pane" id="tabs-3" role="tabpanel">
-            <p>Third Panel</p>
-        </div>
-        <div class="tab-pane" id="tabs-4" role="tabpanel">
-            <p>Four Panel</p>
-        </div>
-        <div class="tab-pane" id="tabs-5" role="tabpanel">
-            <p>5Panel</p>
         </div>
 
-        <div class="tab-pane" id="tabs-6" role="tabpanel">
-            <p>6 Panel</p>
-        </div>
-
-        <div class="tab-pane" id="tabs-7" role="tabpanel">
-            <p>7 Panel</p>
-        </div>
-        <div class="tab-pane" id="tabs-8" role="tabpanel">
-            <p>8 Panel</p>
-        </div>
-        <div class="tab-pane" id="tabs-9" role="tabpanel">
-            <p>9 Panel</p>
-        </div>
     </div>
 @endsection

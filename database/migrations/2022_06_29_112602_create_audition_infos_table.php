@@ -15,6 +15,7 @@ class CreateAuditionInfosTable extends Migration
     {
         Schema::create('audition_infos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('audition_id');
             $table->unsignedBigInteger('category_id');
             $table->integer('round_num')->default(0);
             $table->integer('judge_num')->default(0);
