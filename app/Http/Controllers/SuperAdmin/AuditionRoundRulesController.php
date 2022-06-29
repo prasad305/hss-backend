@@ -46,15 +46,23 @@ class AuditionRoundRulesController extends Controller
 
         $request->validate(
             [
-                'jury_or_judge' => 'required',
+                'has_jury_or_judge_mark' => 'required',
                 'jury_or_judge_mark' => 'required',
                 'appeal' => 'required',
                 'mark_live_or_offline' => 'required_if:user_vote_mark,1',
                 'wildcard' => 'required',
                 'video_feed' => 'required',
+                'video_duration' => 'required',
+                'round_period' => 'required',
+                'instruction_prepare_period' => 'required',
+                'video_upload_period' => 'required',
+                'jury_or_judge_mark_period' => 'required',
+                'result_publish_period' => 'required',
+                'appeal_period' => 'required',
+                'appeal_result_publish_period' => 'required',
             ],
             [
-                'jury_or_judge.required' => 'Select Jury Or Judge',
+                'has_jury_or_judge_mark.required' => 'Select Jury Or Judge',
                 'appeal.required' => 'Select Appeal Yes or No',
                 'jury_or_judge_mark.required' => 'Mark is Required',
                 'mark_live_or_offline.required_if' => 'Select Mark Offline or Live',
@@ -64,26 +72,37 @@ class AuditionRoundRulesController extends Controller
         );
 
         $round = AuditionRoundRule::find($request->round_id);
-        $round->user_vote_mark = $request->user_vote_mark;
+       
+        $round->has_user_vote_mark = $request->has_user_vote_mark;
 
-        if ($request->user_vote_mark == 1) {
+        if ($request->has_user_vote_mark == 1) {
             $round->mark_live_or_offline = $request->mark_live_or_offline;
+            $round->user_vote_mark = $request->user_vote_mark;
         }else{
             $round->mark_live_or_offline = null;
+            $round->user_vote_mark = null;
         }
 
-        $round->jury_or_judge = $request->jury_or_judge;
+        $round->has_jury_or_judge_mark = $request->has_jury_or_judge_mark;
         $round->jury_or_judge_mark = $request->jury_or_judge_mark;
-        $round->wildcard = $request->wildcard;
 
+        $round->wildcard = $request->wildcard;
         if ($request->wildcard == 1) {
             $round->wildcard_round = $request->wildcard_round;
         }else{
             $round->wildcard_round = null;
         }
-
         $round->appeal = $request->appeal;
         $round->video_feed = $request->video_feed;
+
+        $round->video_duration = $request->video_duration;
+        $round->round_period = $request->round_period;
+        $round->instruction_prepare_period = $request->instruction_prepare_period;
+        $round->video_upload_period = $request->video_upload_period;
+        $round->jury_or_judge_mark_period = $request->jury_or_judge_mark_period;
+        $round->result_publish_period = $request->result_publish_period;
+        $round->appeal_period = $request->appeal_period;
+        $round->appeal_result_publish_period = $request->appeal_result_publish_period;
         $round->save();
         return response()->json([
             'status' => 'success',

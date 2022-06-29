@@ -250,26 +250,14 @@ Super Admin
 
                             <div class="sds">
                                 <div class="row justify-content-around mb-2">
-                                    <span class="btn btn-sm d-flex ms-2 NumAdd" onclick="increment3()">+</span>
-                                    <span class="btn btn-sm d-flex ms-2 NumAdd" onclick="increment4()">+</span>
+                                    <label for="">Event Preiod</label>
+                                    <input type="text" class="form-control" name="event_period" placeholder="120 days" value="{{ $rule->event_period > 0 ? $rule->event_period : '' }}">
+                                    <span id="event_preiod_error" class="text-danger"></span>
                                 </div>
-                                <div class="bg-dark card mb-2 py-1">
-                                    <div class="row justify-content-around py-2">
-                                        <b class="d-flex ms-2  px-3 ">Month</b>
-                                        <b class="d-flex ms-2  px-3 ">Day</b>
-                                    </div>
-
-                                    <div class="row justify-content-around pb-2">
-                                        {{-- <input type="text" name="month" class="d-flex ms-2 selects px-3" id="root3"
-                                            value="0"> --}}
-                                        <b class="d-flex ms-2 selects px-3 " id="root3">{{isset($rule) ? $rule->month : 0}}</b>
-                                        <b class="d-flex ms-2 selects px-3 " id="root4">{{isset($rule) ? $rule->day : 0}}</b>
-                                    </div>
-                                </div>
-
                                 <div class="row justify-content-around mt-2">
-                                    <span class="btn btn-sm d-flex ms-2 NumAdd" onclick="decrement3()">-</span>
-                                    <span class="btn btn-sm d-flex ms-2 NumAdd" onclick="decrement4()">-</span>
+                                    <label for="">Registration Preiod</label>
+                                    <input type="text" class="form-control" name="registration_period" placeholder="2 days" value="{{ $rule->registration_period > 0 ? $rule->registration_period : '' }}">
+                                    <span id="registration_preiod_error" class="text-danger"></span>
                                 </div>
                             </div>
 
@@ -337,18 +325,15 @@ Super Admin
 
         $(document).on('click', '#submitAuditionRules', function(event) {
             event.preventDefault();
+            ErrorMessageClear();
             var form = $('#create-form')[0];
             // var category_id = "";
             if ($("input[type='radio'].radioBtnClass").is(':checked')) {
                 var category_id = $("input[type='radio'].radioBtnClass:checked").val();
             }
-
-
-
             var category_id = category_id;
             var round_num = $("#round").val();
             var judge_num = $("#superstar").val();
-            // var jury_num = $("#jury").val();
             var month = $("#root3").text();
             var day = $("#root4").text();
             console.log('Category_id', category_id);
@@ -358,9 +343,6 @@ Super Admin
             formData.append('category_id', category_id);
             formData.append('round_num', round_num);
             formData.append('judge_num', judge_num);
-            // formData.append('jury_num', jury_num);
-            formData.append('month', month);
-            formData.append('day', day);
 
             // Set header if need any otherwise remove setup part
             $.ajaxSetup({
@@ -390,20 +372,11 @@ Super Admin
                     console.log('success')
                 },
                 error: function(data) {
-                    var errorMessage = '<div class="card bg-danger">\n' +
-                        '<div class="card-body text-center p-5">\n' +
-                        '<span class="text-white">';
+                   
                     $.each(data.responseJSON.errors, function(key, value) {
-                        errorMessage += ('' + value + '<br>');
+                        ErrorMessage(key,value);
                     });
-                    errorMessage += '</span>\n' +
-                        '</div>\n' +
-                        '</div>';
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        footer: errorMessage
-                    });
+                   
 
                     console.log(data);
                 }

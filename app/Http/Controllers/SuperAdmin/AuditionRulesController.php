@@ -38,13 +38,12 @@ class AuditionRulesController extends Controller
 
     public function store(Request $request)
     {
+        // return $request->all();  
         $request->validate([
             'category_id' => 'required',
             'round_num' => 'required',
-            'judge_num' => 'required',
-            // 'jury_num' => 'required',
-            'month' => 'required',
-            'day' => 'required',
+            'event_period' => 'required',
+            'registration_period' => 'required',
         ]);
         // return $request->all();
 
@@ -52,7 +51,6 @@ class AuditionRulesController extends Controller
         $previous_round_num = (int)$audition_rules->round_num;
         $new_round_num = $request->round_num;
         $diff = $new_round_num - $previous_round_num;
-        // return abs($diff);
 
 
         $audition_rules->fill($request->except(['groups_id','group_members']));
@@ -70,6 +68,7 @@ class AuditionRulesController extends Controller
             if ($diff > 0) {
                 for ($i = 0; $i < $diff; $i++) {
                     AuditionRoundRule::create([
+                        'round_num' => $i+1,
                         'audition_rules_id' => $audition_rules->id,
                     ]);
                 }

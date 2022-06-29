@@ -20,8 +20,10 @@ class CreateAuditionInfosTable extends Migration
             $table->integer('round_num')->default(0);
             $table->integer('judge_num')->default(0);
             $table->text('jury_groups')->nullable()->comment('how many groups & num of jury of each group');
-            $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
+            $table->date('registration_start_date')->nullable();
+            $table->date('registration_end_date')->nullable();
+            $table->date('event_start_date')->nullable();
+            $table->date('event_end_date')->nullable();
             $table->integer('status')->default(1)->comment('0 = inactive, 1= active');
             $table->timestamps();
         });
