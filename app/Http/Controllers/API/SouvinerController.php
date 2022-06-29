@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use App\Models\SouvenirCreate;
 use App\Models\SouvenirApply;
+use App\Models\Activity;
 use App\Models\SouvenirPayment;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -464,6 +465,13 @@ class SouvinerController extends Controller
                     $apply->image = $filename;
                 }
                 $apply->save();
+
+                $activity = new Activity();
+                $activity->user_id = auth('sanctum')->user()->id;
+                $activity->event_id = $souvenirAmount->id;
+                $activity->event_registration_id =  $apply->id;
+                $activity->type = 'souvenir';
+                $activity->save();
 
                 return response()->json([
                     'status' => 200,
