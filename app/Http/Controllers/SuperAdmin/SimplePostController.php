@@ -50,21 +50,21 @@ class SimplePostController extends Controller
         ]);
 
         $meetup = SimplePost::findOrFail($id);
-        $meetup->fill($request->except('_token'));
+        $meetup->fill($request->except('_token', 'image', 'video'));
 
         $meetup->title = $request->input('title');
         $meetup->description = $request->input('description');
 
         if ($request->hasfile('image')) {
 
-            $destination = $meetup->image;
-            if (File::exists($destination)) {
-                File::delete($destination);
+            $destination = ($meetup->image);
+            if (File::exists(public_path($destination))) {
+                File::delete(public_path($destination));
             }
 
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/post/' . time() . '.' . $extension;
+            $filename = 'uploads/images/post/' . time() . rand('0000', '9999')  . '.' . $extension;
 
             Image::make($file)->resize(900, 400)->save($filename, 50);
             $meetup->image = $filename;
@@ -73,8 +73,8 @@ class SimplePostController extends Controller
         if ($request->hasfile('video')) {
 
             $destination = $meetup->image;
-            if (File::exists($destination)) {
-                File::delete($destination);
+            if (File::exists(public_path($destination))) {
+                File::delete(public_path($destination));
             }
             if ($request->hasFile('video')) {
 

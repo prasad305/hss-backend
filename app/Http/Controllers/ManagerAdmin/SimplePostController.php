@@ -68,14 +68,14 @@ class SimplePostController extends Controller
         $meetup = SimplePost::findOrFail($id);
         $meetup->fill($request->except('_token'));
 
-        $meetup->title = $request->input('title');
+        $meetup->title = $request->input('title', 'image', 'video');
         $meetup->description = $request->input('description');
 
         if ($request->hasfile('image')) {
 
             $destination = $meetup->image;
-            if (File::exists($destination)) {
-                File::delete($destination);
+            if (File::exists(public_path($destination))) {
+                File::delete(public_path($destination));
             }
 
             $file = $request->file('image');
@@ -89,8 +89,8 @@ class SimplePostController extends Controller
         if ($request->hasfile('video')) {
 
             $destination = $meetup->image;
-            if (File::exists($destination)) {
-                File::delete($destination);
+            if (File::exists(public_path($destination))) {
+                File::delete(public_path($destination));
             }
             if ($request->hasFile('video')) {
 

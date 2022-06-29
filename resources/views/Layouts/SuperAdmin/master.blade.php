@@ -53,6 +53,7 @@
     <link href="{{ asset('assets/super-admin/plugins/datatables/scroller.bootstrap.min.css') }}" rel="stylesheet"
         type="text/css" />
 
+
 </head>
 
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -411,10 +412,18 @@
 
         }
 
+
+
+
+        function sweet(message) {
+            Swal.fire({
+                icon: 'error',
+                title: message,
+                footer: ''
+            });
+        }
+
         function ErrorMessage(key, value) {
-            if (key == 'name') {
-                $('#name_error').html(value);
-            }
             if (key == 'category_id') {
                 $('#category_error').html(value);
             }
@@ -438,154 +447,89 @@
             }
             if (key == 'cover') {
                 $('#cover_error').html(value);
-
             }
 
-
-            function sweet(message) {
-                Swal.fire({
-                    icon: 'error',
-                    title: message,
-                    footer: ''
-                });
+            if (key == 'dob') {
+                $('#dob_error').html(value);
+            }
+            if (key == 'terms_and_condition') {
+                $('#terms_error').html(value);
+            }
+            if (key == 'star_id') {
+                $('#star_error').html(value);
+            }
+            if (key == 'reminder_date') {
+                $('#reminder_error').html(value);
+            }
+            if (key == 'acquired_instruction') {
+                $('#acquired_instruction_error').html(value);
+            }
+            if (key == 'title') {
+                $('#title_error').html(value);
+            }
+            if (key == 'description') {
+                $('#description_error').html(value);
+            }
+            if (key == 'instruction') {
+                $('#instruction_error').html(value);
+            }
+            if (key == 'group_name') {
+                $('#group_name_error').html(value);
+            }
+            if (key == 'reminder_date') {
+                $('#reminder_error').html(value);
+            }
+            if (key == 'acquired_instruction') {
+                $('#acquired_instruction_error').html(value);
+            }
+            if (key == 'jury_or_judge') {
+                $('#jury_or_judge_error').html(value);
+            }
+            if (key == 'jury_or_judge_mark') {
+                $('#jury_or_judge_mark_error').html(value);
+            }
+            if (key == 'mark_live_or_offline') {
+                $('#mark_live_or_offline_error').html(value);
+            }
+            if (key == 'appeal') {
+                $('#appeal_error').html(value);
+            }
+            if (key == 'wildcard') {
+                $('#wildcard_error').html(value);
+            }
+            if (key == 'video_feed') {
+                $('#video_feed_error').html(value);
             }
 
-            function ErrorMessage(key, value) {
-                if (key == 'category_id') {
-                    $('#category_error').html(value);
-                }
-                if (key == 'sub_category_id') {
-                    $('#sub_category_error').html(value);
-                }
-                if (key == 'first_name') {
-                    $('#first_name_error').html(value);
-                }
-                if (key == 'last_name') {
-                    $('#last_name_error').html(value);
-                }
-                if (key == 'email') {
-                    $('#email_error').html(value);
-                }
-                if (key == 'phone') {
-                    $('#phone_error').html(value);
-                }
-                if (key == 'image') {
-                    $('#image_error').html(value);
-                }
-                if (key == 'cover') {
-                    $('#cover_error').html(value);
-                }
-
-                if (key == 'dob') {
-                    $('#dob_error').html(value);
-                }
-                if (key == 'terms_and_condition') {
-                    $('#terms_error').html(value);
-                }
-                if (key == 'star_id') {
-                    $('#star_error').html(value);
-                }
-                if (key == 'reminder_date') {
-                    $('#reminder_error').html(value);
-                }
-                if (key == 'acquired_instruction') {
-                    $('#acquired_instruction_error').html(value);
-                }
-                if (key == 'title') {
-                    $('#title_error').html(value);
-                }
-                if (key == 'description') {
-                    $('#description_error').html(value);
-                }
-                if (key == 'instruction') {
-                    $('#instruction_error').html(value);
-                }
-                if (key == 'group_name') {
-                    $('#group_name_error').html(value);
-                }
-            } <<
-            << << < HEAD
+        }
 
 
-            function ErrorMessageClear() {
-                $('#sub_category_error').html('');
-                $('#first_name_error').html('');
-                $('#last_name_error').html('');
-                $('#email_error').html('');
-                $('#phone_error').html('');
-                $('#image_error').html('');
-                $('#cover_error').html('');
-                $('#dob_error').html('');
-                $('#terms_error').html('');
-                $('#category_error').html('');
-                $('#star_error').html('');
-                $('#reminder_error').html('');
-                $('#acquired_instruction_error').html('');
-                $('#title_error').html('');
-                $('#description_error').html('');
-                $('#instruction_error').html('');
-                $('#group_name_error').html('');
-            }
+        function ErrorMessageClear() {
+            $('#sub_category_error').html('');
+            $('#first_name_error').html('');
+            $('#last_name_error').html('');
+            $('#email_error').html('');
+            $('#phone_error').html('');
+            $('#image_error').html('');
+            $('#cover_error').html('');
+            $('#dob_error').html('');
+            $('#terms_error').html('');
+            $('#category_error').html('');
+            $('#star_error').html('');
+            $('#reminder_error').html('');
+            $('#acquired_instruction_error').html('');
+            $('#title_error').html('');
+            $('#description_error').html('');
+            $('#instruction_error').html('');
+            $('#group_name_error').html('');
+            $('#jury_or_judge_error').html('');
+            $('#appeal_error').html('');
+            $('#jury_or_judge_mark_error').html('');
+            $('#mark_live_or_offline_error').html('');
+            $('#wild_card_error').html('');
+            $('#video_feed_error').html('');
+        }
     </script>
-    =======
-    if (key == 'star_id') {
-    $('#star_error').html(value);
-    }
-    if (key == 'reminder_date') {
-    $('#reminder_error').html(value);
-    }
-    if (key == 'acquired_instruction') {
-    $('#acquired_instruction_error').html(value);
-    }
-    if (key == 'jury_or_judge') {
-    $('#jury_or_judge_error').html(value);
-    }
-    if (key == 'jury_or_judge_mark') {
-    $('#jury_or_judge_mark_error').html(value);
-    }
-    if (key == 'mark_live_or_offline') {
-    $('#mark_live_or_offline_error').html(value);
-    }
-    if (key == 'appeal') {
-    $('#appeal_error').html(value);
-    }
-    if (key == 'wildcard') {
-    $('#wildcard_error').html(value);
-    }
-    if (key == 'video_feed') {
-    $('#video_feed_error').html(value);
-    }
-
-    }
-
-
-    function ErrorMessageClear() {
-    $('#name_error').html('');
-    $('#sub_category_error').html('');
-    $('#first_name_error').html('');
-    $('#last_name_error').html('');
-    $('#email_error').html('');
-    $('#phone_error').html('');
-    $('#image_error').html('');
-    $('#cover_error').html('');
-    $('#dob_error').html('');
-    $('#terms_error').html('');
-    $('#category_error').html('');
-    $('#star_error').html('');
-    $('#reminder_error').html('');
-    $('#acquired_instruction_error').html('');
-    $('#jury_or_judge_error').html('');
-    $('#appeal_error').html('');
-    $('#jury_or_judge_mark_error').html('');
-    $('#mark_live_or_offline_error').html('');
-    $('#wild_card_error').html('');
-    $('#video_feed_error').html('');
-    }
-
-
-    </script>
-    >>>>>>> master
-
 
 </body>
 

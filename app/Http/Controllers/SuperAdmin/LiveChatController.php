@@ -50,7 +50,7 @@ class LiveChatController extends Controller
 
 
         $liveChat = LiveChat::findOrFail($id);
-        $liveChat->fill($request->except('_token'));
+        $liveChat->fill($request->except('_token', 'image'));
 
         $liveChat->title = $request->input('title');
         $liveChat->slug = Str::slug($request->input('title'));
