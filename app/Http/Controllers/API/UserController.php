@@ -146,7 +146,7 @@ class UserController extends Controller
         if (isset($sub_cat_post)) {
             $sub_cat_post = Post::select("*")
                 ->whereIn('sub_category_id', $selectedSubCat)
-                ->latest()->paginate($limit);
+                ->latest()->paginate($limit)->latest()->paginate($limit);
         } else {
             $sub_cat_post = [];
         }
@@ -154,7 +154,7 @@ class UserController extends Controller
         if (isset($sub_sub_cat_post)) {
             $sub_sub_cat_post = Post::select("*")
                 ->whereIn('user_id', $selectedSubSubCat)
-                ->latest()->paginate($limit);
+                ->latest()->paginate($limit)->latest()->paginate($limit);
         } else {
             $sub_sub_cat_post = [];
         }
@@ -221,12 +221,12 @@ class UserController extends Controller
         $cat_post = Post::select("*")
             ->whereIn('category_id', $selectedCat)
             ->where('type', $type)
-            ->paginate($limit);
+            ->latest()->paginate($limit);
 
         if (isset($sub_cat_post)) {
             $sub_cat_post = Post::select("*")
                 ->whereIn('sub_category_id', $selectedSubCat)
-                ->paginate($limit);
+                ->latest()->paginate($limit);
         } else {
             $sub_cat_post = [];
         }
@@ -234,7 +234,8 @@ class UserController extends Controller
         if (isset($sub_sub_cat_post)) {
             $sub_sub_cat_post = Post::select("*")
                 ->whereIn('user_id', $selectedSubSubCat)
-                ->paginate($limit);
+                ->latest()->paginate($limit);
+
         } else {
             $sub_sub_cat_post = [];
         }
