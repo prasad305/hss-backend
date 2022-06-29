@@ -397,7 +397,7 @@
         if (key == 'terms_and_condition') {
             $('#terms_error').html(value);
         }
-        
+
         if (key == 'star_id') {
             $('#star_error').html(value);
         }
@@ -464,11 +464,15 @@
         if (key == 'group_name') {
             $('#group_name_error').html(value);
         }
+        if (key == 'group_name') {
+            $('#audition_admin_id_error').html(value);
+        }
 
     }
 
     function ErrorMessageClear() {
         $('#sub_category_error').html('');
+        $('#audition_admin_id_error').html('');
         $('#group_name_error').html('');
         $('#first_name_error').html('');
         $('#last_name_error').html('');

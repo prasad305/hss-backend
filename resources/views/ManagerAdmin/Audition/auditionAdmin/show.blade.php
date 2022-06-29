@@ -204,19 +204,7 @@
                                                         @enderror
                                                     </div>
                                                 </div>
-                                                <div class="form-group row">
-                                                    <div class="col-2">
-                                                        <label>Assign To</label>
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <select readonly class="custom-select" name="job_type">
-                                                            <option selected value="audition">Audition</option>
-                                                        </select>
-                                                        @error('job_type')
-                                                            <p class="text-danger">{{ $message }}</p>
-                                                        @enderror
-                                                    </div>
-                                                </div>
+
                                                 <div class="form-group row">
                                                     <div class="col-2">
                                                         <label>Title</label>
@@ -259,7 +247,7 @@
                                                                                 {{ $jury->first_name . ' ' . $jury->last_name }}
                                                                             </option>
                                                                         @endif
-                                                                        
+
                                                                     @endforeach
                                                                 </select>
                                                                 @error('jury')
@@ -268,30 +256,10 @@
                                                             </div>
                                                     @endforeach
 
-                                                   
 
                                                 </div>
 
-                                                {{-- <div class="form-group row">
-                                                    <div class="col-2">
-                                                        <label>Select Juries</label> <br>
-                                                        <span class="text-danger">You have to select
-                                                            {{ $auditionRule->jury_num ?? '' }} jury !</span>
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <select name="jury[]" class="select2" multiple="multiple"
-                                                            style="width: 100%;">
-                                                            @foreach ($juries as $jury)
-                                                                <option value="{{ $jury->id }}">
-                                                                    {{ $jury->first_name . ' ' . $jury->last_name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                        @error('jury')
-                                                            <p class="text-danger">{{ $message }}</p>
-                                                        @enderror
-                                                    </div>
-                                                </div> --}}
+
 
 
                                                 <div class="form-group row">
@@ -314,6 +282,17 @@
                                                         @enderror
                                                     </div>
                                                 </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-2">
+                                                    </div>
+                                                    <div class="col-10">
+                                                        <h6 class="text-warning">The audition will have to complete within {{ $auditionRule->event_period ?? 0 }} day(s)</h6>
+                                                    </div>
+                                                    <hr>
+                                                </div>
+
+
                                                 <div class="form-group row">
                                                     <div class="col-2">
                                                         <label>Event Start</label>
@@ -448,17 +427,23 @@
 
 @push('js')
     <script>
+
         function setEndDate() {
-            var start_date = document.getElementById('start_date').value;
-            var month = '{{ $auditionRule->month ?? 0 }}';
-            var day = '{{ $auditionRule->day ?? 0 }}';
-            var total_day = (parseInt(month * 30)) + parseInt(day);
+            var date = document.getElementById('start_date').value;
+            var number = '{{ $auditionRule->event_period ?? 0 }}';
+            const newDate = new Date(date);
 
-            var end_date = new Date(start_date);
-            end_date.setDate(end_date.getDate() + total_day);
+            var end_date = new Date(newDate.setDate(newDate.getDate() + parseInt(number)));
 
-            var final_date = parseInt(parseInt(end_date.getMonth()) + 1) + '/' + end_date.getDate() + '/' + end_date
-                .getFullYear()
+            let day, month, year;
+
+            day = end_date.getDate();
+            month = end_date.getMonth() + 1;
+            year = end_date.getFullYear();
+
+            var final_date = month+'/'+day+'/'+year;
+
+
             document.getElementById('end_date').value = final_date;
         }
     </script>

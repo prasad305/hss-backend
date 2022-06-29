@@ -44,7 +44,7 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:categories',
-            
+
         ]);
 
         $category = new Category();
