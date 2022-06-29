@@ -8,6 +8,8 @@ use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionAssignJudge;
 use App\Models\Audition\AuditionAssignJury;
 use App\Models\Audition\AuditionInfo;
+use App\Models\Audition\AuditionRoundInfo;
+use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionRules;
 use App\Models\SubCategory;
 use App\Models\User;
@@ -26,21 +28,15 @@ class AuditionController extends Controller
             'title' => 'required',
             'description' => 'required',
             'start_date' => 'required',
+            'jury' => 'required|array',
         ]);
-
-        // dd($request->all());
         $auditionRule = AuditionRules::find($request->audition_rule_id);
 
-
-
-
         if ($auditionRule) {
-
             if ($auditionRule->jury_groups !== null) {
                 $jurry_group = json_decode($auditionRule->jury_groups);
                 $group_data = $jurry_group->{'group_members'};
             }
-
             if (isset($group_data)) {
                 $jury_errors = '';
                 foreach ($request->group_ids as $key => $group_id) {
@@ -48,23 +44,19 @@ class AuditionController extends Controller
                         $jury_errors =$jury_errors."Opps.. You have to select " . $group_data[$key] . " jury for Group ".strtoupper(juryGroup($group_id))." !";
                     }
                 }
-
                 if ($jury_errors != '') {
                     session()->flash('error', $jury_errors);
                     return back();
                 }
             }
 
-
-            // dd($auditionRule->roundRules->count());
-            $request->validate([
-                'audition_admin_id' => 'required',
-                'title' => 'required',
-                'description' => 'required',
-                'start_date' => 'required',
-            ]);
-
-
+            // // dd($auditionRule->roundRules->count());
+            // $request->validate([
+            //     'audition_admin_id' => 'required',
+            //     'title' => 'required',
+            //     'description' => 'required',
+            //     'start_date' => 'required',
+            // ]);
 
             if ($auditionRule->judge_num != count($request->judge)) {
                 session()->flash('error', 'Opps.. You have to select ' . $auditionRule->judge_num . ' judge !');
@@ -102,6 +94,14 @@ class AuditionController extends Controller
                 $audition_info->start_date =Carbon::parse( $request->stat_date);
                 $audition_info->end_date = Carbon::parse($request->end_date);
                 $audition_info->save();
+
+
+                $auditionRoundRule = AuditionRoundRule::where('audition_rules_id',$general_audition_info->id)->orderBy('round_num','ASC')->get();
+                return $auditionRoundRule;
+
+
+                // $auditionRoundInfo = new AuditionRoundInfo();
+                // $auditionRoundInfo->round_num = $auditionRoundRule->round_num;
 
 
                 foreach ($request->judge as $key => $value) {
