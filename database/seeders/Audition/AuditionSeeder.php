@@ -19,7 +19,7 @@ class AuditionSeeder extends Seeder
         for ($i = 1; $i < 10; $i++) {
             $audition = new Audition();
             $audition->category_id =  $faker->numberBetween(1, 8);
-            $audition->audition_rules_id =  $faker->numberBetween(1, 8);
+            // $audition->audition_rules_id =  $faker->numberBetween(1, 8);
             $audition->audition_round_rules_id =  $faker->numberBetween(1, 10);
             $audition->creater_id =  2;
             $audition->audition_admin_id =  $faker->numberBetween(12, 21);
@@ -33,7 +33,7 @@ class AuditionSeeder extends Seeder
 
         $audition = new Audition();
         $audition->category_id = 1;
-        $audition->audition_rules_id =  1;
+        // $audition->audition_rules_id =  1;
         $audition->audition_round_rules_id = 1;
         $audition->creater_id =  2;
         $audition->audition_admin_id =  12;

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAuditionJudgeInstructionsTable extends Migration
+class CreateAuditionInstructionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,17 @@ class CreateAuditionJudgeInstructionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('audition_judge_instructions', function (Blueprint $table) {
+        Schema::create('audition_instructions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('audition_id')->nullable();
-            $table->unsignedBigInteger('audition_instruction_id')->nullable();
-            $table->unsignedBigInteger('judge_id')->nullable();
             $table->unsignedBigInteger('round_id')->nullable();
             $table->longText('instruction')->nullable();
             $table->longText('description')->nullable();
             $table->string('image')->nullable();
             $table->string('video')->nullable();
+            $table->date('submittion_end_date')->nullable();
+            $table->boolean('send_to_judge')->default(0);
+            $table->boolean('send_to_manager')->default(0);
             $table->timestamps();
         });
     }
@@ -34,6 +35,6 @@ class CreateAuditionJudgeInstructionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('audition_judge_instructions');
+        Schema::dropIfExists('audition_instructions');
     }
 }

@@ -18,7 +18,7 @@ class CreateAssignJudgesTable extends Migration
             $table->unsignedBigInteger('judge_id')->nullable();
             $table->unsignedBigInteger('audition_id')->nullable();
             $table->integer('approved_by_judge')->default(0)->comment('0 = unapproved, 1= approved');
-            $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
+            $table->integer('status')->default(0)->comment('0 = inactive, 1= active');
             $table->timestamps();
         });
     }

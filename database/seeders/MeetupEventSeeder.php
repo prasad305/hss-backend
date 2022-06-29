@@ -27,14 +27,11 @@ class MeetupEventSeeder extends Seeder
             $MeetEvent->description =  $faker->text(50);
             $MeetEvent->venue =  $faker->country();
             $MeetEvent->total_seat =  $faker->numberBetween(200, 500);
-            $MeetEvent->banner =  $faker->imageUrl($width = 300, $height = 200);;
-            $MeetEvent->participant_number =  $faker->numberBetween(100, 200);
+            $MeetEvent->banner =  $faker->imageUrl($width = 300, $height = 200);
             $MeetEvent->video =  "https://youtu.be/lyXjeJN9lyg";
-            $MeetEvent->date =  Carbon::now();
             // $MeetEvent->time =  Carbon::now()->setTime(22, 32, 5);
             $MeetEvent->fee =  $faker->numberBetween(400, 500);
             $MeetEvent->status = 1;
-            $MeetEvent->total_amount = $faker->numberBetween(100, 150);
             $MeetEvent->save();
         }
     }

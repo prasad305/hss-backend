@@ -21,7 +21,7 @@ class CreateAuditionParticipantNotificationsTable extends Migration
             $table->integer('round_status')->nullable()->comment(' 0 = 1st round , 1 = 2nd round, 3 = 3rd round');
             $table->string('title')->nullable();
             $table->longText('details')->nullable();
-            $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
+            $table->integer('status')->default(0)->comment('0 = inactive, 1= active');
             $table->timestamps();
         });
     }

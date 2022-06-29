@@ -20,7 +20,7 @@ class CreateAuditionInterectsTable extends Migration
             $table->integer('like')->nullable();
             $table->string('comments')->nullable();
             $table->integer('vote')->nullable();
-            $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
+            $table->integer('status')->default(0)->comment('0 = inactive, 1= active');
             $table->timestamps();
         });
     }

@@ -32,7 +32,6 @@ class LiveChatSeeder extends Seeder
             $liveChat->banner = 'demo_image/banner.jpg';
             $liveChat->video = 'https://youtu.be/gvyUuxdRdR4';
             $liveChat->total_seat = 40;
-            $liveChat->total_amount = 39;
             $liveChat->fee = $faker->numberBetween(100, 5000);;
             // $liveChat->participant_number = 20;
             $liveChat->registration_end_date =  Carbon::now()->addDays(20);
