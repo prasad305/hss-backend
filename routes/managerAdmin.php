@@ -20,6 +20,7 @@ use App\Http\Controllers\ManagerAdmin\QnaController;
 use App\Http\Controllers\ManagerAdmin\ScheduleController;
 use App\Http\Controllers\ManagerAdmin\StarAssignedController;
 use App\Http\Controllers\ManagerAdmin\SuperStarController;
+use App\Http\Controllers\ManagerAdmin\Audition\AuditionController;
 use Illuminate\Support\Facades\Route;
 
 // manager Admin route
@@ -117,7 +118,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::post('audition/registration/rules/store', [AuditionAdminController::class, 'storeRegistrationRules'])->name('audition.registration.rules.store');
     Route::get('audition/registration/rules/{audition_id}/edit', [AuditionAdminController::class, 'editRegistrationRules'])->name('audition.registration.rules.edit');
     Route::get('audition/registration-rules/{round_id}', [AuditionAdminController::class, 'getRoundInfo']);
-    
+
     Route::post('audition/registration/round/update/{round_id}', [AuditionAdminController::class, 'updateRegistrationRound'])->name('audition.registration.round.update');
     // Jury Board route
     Route::resource('jury', JuryBoardController::class);
@@ -170,7 +171,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     // Audition Routes
     Route::group(['prefix' => 'audition/', 'as' => 'audition.'], function () {
         // audition
-        Route::post('store', [App\Http\Controllers\ManagerAdmin\Audition\AuditionController::class, 'store'])->name('store');
+        Route::get('create', [AuditionController::class, 'create'])->name('create');
+        Route::post('store', [AuditionController::class, 'store'])->name('store');
         // audition admin
         Route::resource('auditionAdmin', App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class);
         Route::get('assinged', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'assinged'])->name('auditionAdmin.assinged');

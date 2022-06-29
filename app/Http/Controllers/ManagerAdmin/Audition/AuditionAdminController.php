@@ -20,10 +20,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AuditionAdminController extends Controller
 {
-   
+
     public function index()
     {
-        $auditionAdmins = User::where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
+        $auditionAdmins = User::where([['user_type', 'audition-admin'],['category_id', Auth::user()->category_id]])->orderBy('id', 'DESC')->get();
         return view('ManagerAdmin.Audition.auditionAdmin.index', compact('auditionAdmins'));
     }
 
@@ -52,7 +52,7 @@ class AuditionAdminController extends Controller
          return view('ManagerAdmin.Audition.auditionAdmin.index', compact('auditionAdmins'));
     }
 
- 
+
     public function create()
     {
         $categories = Category::orderBy('name','ASC')->get();
@@ -123,18 +123,17 @@ class AuditionAdminController extends Controller
 
         $auditionRule = AuditionRules::where('category_id', Auth::user()->category_id)->orderBy('id','DESC')->first();
 
-
         if ($auditionRule->jury_groups !== null) {
             $jurry_group = json_decode($auditionRule->jury_groups);
             $group_data = $jurry_group->{'group_members'};
         }
 
-      
+
 
         // for not assigned judge
         $auditionAssignJudges = AuditionAssignJudge::pluck('judge_id');
 
-      
+
         $judges = User::whereNotIn('id', $auditionAssignJudges)->where('user_type', 'star')->where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->get();
 
         $groups = JuryGroup::where([['status',1],['category_id', Auth::user()->category_id]])->orderBy('name','asc')->get();
@@ -154,7 +153,7 @@ class AuditionAdminController extends Controller
                 'judges' => $judges,
                 'auditionRule' => $auditionRule,
                 'groups' => $groups,
-                'group_data' => isset($group_data) && count($group_data) > 0 ? $group_data : null, 
+                'group_data' => isset($group_data) && count($group_data) > 0 ? $group_data : null,
           ];
 
         return view('ManagerAdmin.Audition.auditionAdmin.show',$data);

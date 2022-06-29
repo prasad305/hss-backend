@@ -77,8 +77,13 @@
                                 value="{{ route('managerAdmin.auditionAdmin.destroy', $auditionAdmin->id) }}"><i
                                     class="fa fa-trash"></i>
                             </button>
+
+
+
                         </div>
                     </div>
+
+
                 </div>
             @endforeach
         </div>

@@ -30,7 +30,6 @@ class CreateAuditionRoundInfosTable extends Migration
 
             $table->integer('video_slot_num')->nullable();
 
-
             $table->date('round_start_date')->nullable();
             $table->date('round_end_date')->nullable();
             $table->date('instruction_prepare_start_date')->nullable();

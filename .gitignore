@@ -1,8 +1,8 @@
 /node_modules/
-/public/
+# /public/
 /public/hot
 /public/storage
-/public/uploads
+# /public/uploads
 /storage/*.key
 /vendor/
 .env
