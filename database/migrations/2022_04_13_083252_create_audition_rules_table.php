@@ -19,8 +19,8 @@ class CreateAuditionRulesTable extends Migration
             $table->integer('round_num')->default(0);
             $table->integer('judge_num')->default(0);
             $table->text('jury_groups')->nullable();
-            $table->integer('month')->default(0);
-            $table->integer('day')->default(0);
+            $table->integer('event_period')->nullable();
+            $table->integer('registration_period')->nullable();
             $table->integer('status')->default(1)->comment('0 = inactive, 1= active');
             $table->timestamps();
         });

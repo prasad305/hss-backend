@@ -157,6 +157,9 @@ class CategoryController extends Controller
 
         try {
             $category->save();
+            // AuditionRules::create([
+            //     'category_id' => $category->id,
+            // ]);
             return response()->json([
                 'success' => 'success',
                 'message' => 'Category Updated Successfully'
