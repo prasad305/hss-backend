@@ -20,10 +20,15 @@ use App\Http\Controllers\SuperAdmin\StateController;
 use App\Http\Controllers\SuperAdmin\MarketplaceController;
 use App\Http\Controllers\SuperAdmin\CityController;
 use App\Http\Controllers\SuperAdmin\EventsController;
+use App\Http\Controllers\SuperAdmin\FanGroupController;
 use App\Http\Controllers\SuperAdmin\GreetingController;
 use App\Http\Controllers\SuperAdmin\InterestTypeController;
 use App\Http\Controllers\SuperAdmin\JuryGroupController;
 use App\Http\Controllers\SuperAdmin\JurysAuditionController;
+use App\Http\Controllers\SuperAdmin\LearningSessionController;
+use App\Http\Controllers\SuperAdmin\LiveChatController;
+use App\Http\Controllers\SuperAdmin\MeetupEventController;
+use App\Http\Controllers\SuperAdmin\SimplePostController;
 use App\Http\Controllers\SuperAdmin\SubCategoryController;
 use App\Models\PaymentMethod;
 use App\Models\Slider;
@@ -73,6 +78,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/all/upcoming/live-chat', [DashboardInfoController::class, 'allUpcomingLiveChat'])->name('allUpcomingLiveChat');
     Route::get('/all/running/live-chat', [DashboardInfoController::class, 'allRunningLiveChat'])->name('allRunningLiveChat');
 
+
     //Greetings
     Route::get('/all/greetings', [DashboardInfoController::class, 'allGreeting'])->name('allGreeting');
     Route::get('/all/complete/greetings', [DashboardInfoController::class, 'allCompleteGreeting'])->name('allCompleteGreeting');
@@ -95,7 +101,22 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
 
 
-    
+    // Audition Dashboard
+    Route::resource('audition-dashboard', AuditionDashboardController::class);
+
+    // Audition Rules
+    Route::resource('audition-rules', AuditionRulesController::class);
+
+    // Audition Round Rules
+    Route::resource('audition-round-rules', AuditionRoundRulesController::class);
+    Route::get('audition-round-rules/mark/{rules_id}', [AuditionRoundRulesController::class, 'getMark']);
+
+    // Audition Round Rules
+    Route::resource('audition-admin', AdminAuditionController::class);
+
+    // Audition Round Rules
+    Route::resource('audition-jury', JurysAuditionController::class);
+
 
     // Auction Routes
     Route::get('auction-index', [AuctionController::class, 'index'])->name('auction.index');
@@ -104,6 +125,56 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('terms-edit/{id}', [AuctionController::class, 'termsEdit'])->name('auctionTerms.edit');
     Route::put('terms-update/{id}', [AuctionController::class, 'termsUpdate'])->name('auctionTerms.update');
     Route::delete('terms-destroy/{id}', [AuctionController::class, 'termsDestroy'])->name('auctionTerms.destroy');
+
+    // SimplePost 
+    Route::get('simplepost-index', [SimplePostController::class, 'index'])->name('simplePost.index');
+    Route::get('simplepost-list/{id}', [SimplePostController::class, 'simplepostList'])->name('simplePost.list');
+    Route::get('simplepost-details/{id}', [SimplePostController::class, 'simplepostDetails'])->name('simplePost.details');
+    Route::get('simplepost-edit/{id}', [SimplePostController::class, 'simplepostEdit'])->name('simplePost.edit');
+    Route::PUT('simplepost-update/{id}', [SimplePostController::class, 'simplepostUpdate'])->name('simplePost.update');
+    Route::delete('simplepost-destroy/{id}', [SimplePostController::class, 'simplepostDestroy'])->name('simplePost.destroy');
+
+    //LiveChat
+    Route::get('liveChat-index', [LiveChatController::class, 'index'])->name('liveChat.index');
+    Route::get('liveChat-list/{id}', [LiveChatController::class, 'liveChatList'])->name('liveChat.list');
+    Route::get('liveChat-details/{id}', [LiveChatController::class, 'liveChatDetails'])->name('liveChat.details');
+    Route::get('liveChat-edit/{id}', [LiveChatController::class, 'liveChatEdit'])->name('liveChat.edit');
+    Route::PUT('liveChat-update/{id}', [LiveChatController::class, 'livechatUpdate'])->name('liveChat.update');
+    Route::delete('liveChat-destroy/{id}', [LiveChatController::class, 'liveChatDestroy'])->name('liveChat.destroy');
+
+    //LearningSession
+    Route::get('learningSession-index', [LearningSessionController::class, 'index'])->name('learningSession.index');
+    Route::get('learningSession-list/{id}', [LearningSessionController::class, 'learningSessionList'])->name('learningSession.list');
+    Route::get('learningSession-details/{id}', [LearningSessionController::class, 'learningSessionDetails'])->name('learningSession.details');
+    Route::get('learningSession-edit/{id}', [LearningSessionController::class, 'learningSessionEdit'])->name('learningSession.edit');
+    Route::PUT('learningSession-update/{id}', [LearningSessionController::class, 'LearningSessionUpdate'])->name('learningSession.update');
+    Route::delete('learningSession-destroy/{id}', [LearningSessionController::class, 'learningSessionDestroy'])->name('learningSession.destroy');
+
+    //MeetupEvents
+    Route::get('meetupEvent-index', [MeetupEventController::class, 'index'])->name('meetupEvent.index');
+    Route::get('meetupEvent-list/{id}', [MeetupEventController::class, 'meetupEventList'])->name('meetupEvent.list');
+    Route::get('meetupEvent-details/{id}', [MeetupEventController::class, 'meetupEventDetails'])->name('meetupEvent.details');
+    Route::get('meetupEvent-edit/{id}', [MeetupEventController::class, 'meetupEventEdit'])->name('meetupEvent.edit');
+    Route::PUT('meetupEvent-update/{id}', [MeetupEventController::class, 'meetupEventUpdate'])->name('meetupEvent.update');
+    Route::delete('meetupEvent-destroy/{id}', [MeetupEventController::class, 'meetupEventDestroy'])->name('meetupEvent.destroy');
+
+    //Greeting
+    Route::get('greeting-index', [GreetingController::class, 'events'])->name('greeting.index');
+    Route::get('greeting-list/{id}', [GreetingController::class, 'greetingList'])->name('greeting.list');
+    Route::get('greeting-details/{id}', [GreetingController::class, 'greetingDetails'])->name('greeting.details');
+    Route::get('greeting-edit/{id}', [GreetingController::class, 'greetingEdit'])->name('greeting.edit');
+    Route::PUT('greeting-update/{id}', [GreetingController::class, 'greetingUpdate'])->name('greeting.update');
+    Route::delete('greeting-destroy/{id}', [GreetingController::class, 'greetingDestroy'])->name('greeting.destroy');
+
+    //Fangroup
+    Route::get('fanGroup-index', [FanGroupController::class, 'index'])->name('fanGroup.index');
+    Route::get('fanGroup-list/{id}', [FanGroupController::class, 'fanGroupList'])->name('fanGroup.list');
+    Route::get('fanGroup-details/{id}', [FanGroupController::class, 'fanGroupDetails'])->name('fanGroup.details');
+    Route::get('fanGroup-edit/{id}', [FanGroupController::class, 'fanGroupEdit'])->name('fanGroup.edit');
+    Route::PUT('fanGroup-update/{id}', [FanGroupController::class, 'fanGroupUpdate'])->name('fanGroup.update');
+    Route::delete('fanGroup-destroy/{id}', [FanGroupController::class, 'fanGroupDestroy'])->name('fanGroup.destroy');
+
+
 
 
 
@@ -188,7 +259,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::resource('jury_groups', JuryGroupController::class);
 
     Route::resource('auditionAdmin', AuditionAdminController::class);
-    
+
     Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');
     Route::post('auditionAdmin/inactive/{id}', [AuditionAdminController::class, 'inactiveNow'])->name('auditionAdmin.inactiveNow');
 
@@ -205,7 +276,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // Audition Round Rules
     Route::resource('audition-round-rules', AuditionRoundRulesController::class);
-    Route::get('audition-round-rules/mark/{rules_id}', [AuditionRoundRulesController::class,'getMark']);
+    Route::get('audition-round-rules/mark/{rules_id}', [AuditionRoundRulesController::class, 'getMark']);
 
     // Audition Round Rules
     Route::resource('audition-admin', AdminAuditionController::class);

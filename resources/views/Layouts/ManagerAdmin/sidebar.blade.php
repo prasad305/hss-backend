@@ -25,8 +25,7 @@
 
         <li class="nav-item">
             <a href="{{ route('managerAdmin.admin.index') }}" class="nav-link">
-                <i
-                    class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-users">
+                <i class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-users">
                 </i>
                 {{-- <i class="fa-solid fa-list-check"></i> --}}
                 <p>
@@ -313,12 +312,12 @@
                         <p>Register List</p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('managerAdmin.souvenir.showApplyDelete') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Delete List</p>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </li>
 
@@ -1186,7 +1185,7 @@
                 <p>Informational</p>
             </a>
         </li>
-        
+
     </ul>
 </nav>
 <!-- /.sidebar-menu -->
