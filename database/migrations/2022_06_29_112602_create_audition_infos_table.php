@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAuditionRulesTable extends Migration
+class CreateAuditionInfosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateAuditionRulesTable extends Migration
      */
     public function up()
     {
-        Schema::create('audition_rules', function (Blueprint $table) {
+        Schema::create('audition_infos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->integer('round_num')->default(0);
             $table->integer('judge_num')->default(0);
-            $table->text('jury_groups')->nullable();
-            $table->integer('month')->default(0);
-            $table->integer('day')->default(0);
+            $table->text('jury_groups')->nullable()->comment('how many groups & num of jury of each group');
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->integer('status')->default(1)->comment('0 = inactive, 1= active');
             $table->timestamps();
         });
@@ -33,6 +33,6 @@ class CreateAuditionRulesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('audition_rules');
+        Schema::dropIfExists('audition_infos');
     }
 }

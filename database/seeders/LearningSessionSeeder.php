@@ -24,8 +24,6 @@ class LearningSessionSeeder extends Seeder
             $LearningSession->registration_end_date =  Carbon::now()->addDays(20);
             $LearningSession->registration_start_date =  Carbon::now();
             $LearningSession->description =  $faker->text(50);
-            $LearningSession->venue =  $faker->country();
-            $LearningSession->total_seat =  $faker->numberBetween(200, 500);
             $LearningSession->banner =  $faker->imageUrl($width = 300, $height = 200);;
             $LearningSession->participant_number =  $faker->numberBetween(100, 200);
             $LearningSession->video =  "https://youtu.be/lyXjeJN9lyg";
