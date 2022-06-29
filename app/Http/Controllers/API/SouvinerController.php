@@ -18,8 +18,9 @@ use Illuminate\Support\Facades\Hash;
 
 class SouvinerController extends Controller
 {
-    public function souvinerStore(Request $request){
-        $validator = Validator::make($request->all(),[
+    public function souvinerStore(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
             'instruction' => 'required',
@@ -31,14 +32,11 @@ class SouvinerController extends Controller
             'video' => 'required',
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'validation_errors' => $validator->errors(),
             ]);
-        }
-
-        else{
+        } else {
             $id = auth('sanctum')->user()->id;
             $user = User::find($id);
 
@@ -86,11 +84,11 @@ class SouvinerController extends Controller
                 'status' => 200,
                 'message' => 'Souvenir Added Successfully',
             ]);
-
         }
     }
-    public function souvinerStarStore(Request $request){
-        $validator = Validator::make($request->all(),[
+    public function souvinerStarStore(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
             'instruction' => 'required',
@@ -101,16 +99,13 @@ class SouvinerController extends Controller
             'video' => 'required',
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'validation_errors' => $validator->errors(),
             ]);
-        }
-
-        else{
+        } else {
             $id = auth('sanctum')->user()->id;
-            $user = User::find($id);         
+            $user = User::find($id);
 
             $souvenir = new SouvenirCreate();
             $souvenir->title = $request->title;
@@ -156,11 +151,11 @@ class SouvinerController extends Controller
                 'status' => 200,
                 'message' => 'Souvenir Added Successfully',
             ]);
-
         }
     }
 
-    public function souvinerCheck(){
+    public function souvinerCheck()
+    {
         $id = auth('sanctum')->user()->id;
 
         $getUser = SouvenirCreate::where('admin_id', $id)->first();
@@ -171,24 +166,25 @@ class SouvinerController extends Controller
         ]);
     }
 
-    public function getUserSouvenir($starId){
+    public function getUserSouvenir($starId)
+    {
 
         $getSouviner = SouvenirCreate::where('star_id', $starId)->where('status', 1)->first();
 
-        if($getSouviner){
+        if ($getSouviner) {
             return response()->json([
                 'status' => 200,
                 'getSouviner' => $getSouviner,
             ]);
-        }else{
+        } else {
             return response()->json([
                 'message' => 'Not Services!',
             ]);
         }
-        
     }
 
-    public function statusSouvenirChange($status, $souvenirId){
+    public function statusSouvenirChange($status, $souvenirId)
+    {
 
         $getSouviner = SouvenirApply::find($souvenirId);
         $getSouviner->status = $status;
@@ -198,10 +194,10 @@ class SouvinerController extends Controller
             'status' => 200,
             'message' => 'Souvenir status Updated',
         ]);
-        
     }
 
-    public function orderDetailsSouvenir($souvenirId){
+    public function orderDetailsSouvenir($souvenirId)
+    {
 
         $getSouviner = SouvenirApply::find($souvenirId);
 
@@ -209,10 +205,10 @@ class SouvinerController extends Controller
             'status' => 200,
             'getSouviner' => $getSouviner,
         ]);
-        
     }
 
-    public function souvinerView($id){
+    public function souvinerView($id)
+    {
         $viewSouviner = SouvenirCreate::find($id);
 
         return response()->json([
@@ -221,8 +217,9 @@ class SouvinerController extends Controller
         ]);
     }
 
-    public function souvinerUpdate(Request $request, $id){
-        $validator = Validator::make($request->all(),[
+    public function souvinerUpdate(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
             'instruction' => 'required',
@@ -232,14 +229,11 @@ class SouvinerController extends Controller
             'star_id' => 'required',
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'validation_errors' => $validator->errors(),
             ]);
-        }
-
-        else{
+        } else {
             $idd = auth('sanctum')->user()->id;
 
             $user = User::find($idd);
@@ -254,7 +248,7 @@ class SouvinerController extends Controller
             $souvenir->delivery_charge = $request->delivery_charge;
             $souvenir->tax = $request->tax;
 
-            
+
 
             $souvenir->admin_id = $idd;
             $souvenir->star_id = $request->star_id;
@@ -272,7 +266,7 @@ class SouvinerController extends Controller
                 Image::make($file)->resize(800, 300)->save($filename, 100);
                 $souvenir->banner = $filename;
             }
-    
+
 
             if ($request->hasFile('video')) {
                 if ($souvenir->video != null && file_exists($souvenir->video)) {
@@ -293,11 +287,11 @@ class SouvinerController extends Controller
                 'status' => 200,
                 'message' => 'Souvenir Updated Successfully',
             ]);
-
         }
     }
 
-    public function souvinerStarCheck(){
+    public function souvinerStarCheck()
+    {
         $id = auth('sanctum')->user()->id;
 
         $getSouviner = SouvenirCreate::where('star_id', $id)->first();
@@ -308,7 +302,8 @@ class SouvinerController extends Controller
         ]);
     }
 
-    public function souvinerStarApprove($id){
+    public function souvinerStarApprove($id)
+    {
 
         $souviner = SouvenirCreate::find($id);
         $souviner->approval_status = 1;
@@ -320,7 +315,8 @@ class SouvinerController extends Controller
         ]);
     }
 
-    public function souvinerStarDecline($id){
+    public function souvinerStarDecline($id)
+    {
 
         $souviner = SouvenirCreate::find($id);
         $souviner->delete();
@@ -331,7 +327,8 @@ class SouvinerController extends Controller
         ]);
     }
 
-    public function souvinerStarEdit($id){
+    public function souvinerStarEdit($id)
+    {
 
         $getSouviner = SouvenirCreate::find($id);
 
@@ -341,9 +338,10 @@ class SouvinerController extends Controller
         ]);
     }
 
-    public function souvinerStarUpdate(Request $request, $id){
+    public function souvinerStarUpdate(Request $request, $id)
+    {
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
             'instruction' => 'required',
@@ -352,14 +350,11 @@ class SouvinerController extends Controller
             'tax' => 'required',
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'validation_errors' => $validator->errors(),
             ]);
-        }
-
-        else{
+        } else {
 
             $souvenir = SouvenirCreate::find($id);
 
@@ -384,7 +379,7 @@ class SouvinerController extends Controller
                 Image::make($file)->resize(800, 300)->save($filename, 100);
                 $souvenir->banner = $filename;
             }
-    
+
 
             if ($request->hasFile('video')) {
                 if ($souvenir->video != null && file_exists($souvenir->video)) {
@@ -403,14 +398,14 @@ class SouvinerController extends Controller
                 'status' => 200,
                 'message' => 'Souvenir Updated Successfully',
             ]);
-
         }
     }
 
     // User Apply Souvenir
-    public function applyUserSouvenir(Request $request, $starId){
+    public function applyUserSouvenir(Request $request, $starId)
+    {
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'country_id' => 'required',
             'state_id' => 'required',
@@ -422,17 +417,17 @@ class SouvinerController extends Controller
             'password' => 'required',
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
             ]);
-        }else{
+        } else {
             $user = User::find(auth('sanctum')->user()->id);
             $star = User::find($starId);
             $souvenirAmount = SouvenirCreate::find($request->souvinerId);
 
-            if (Hash::check($request->password, $user->password)){
+            if (Hash::check($request->password, $user->password)) {
 
                 $apply = new SouvenirApply();
                 $apply->name = $request->name;
@@ -449,29 +444,40 @@ class SouvinerController extends Controller
                 $apply->star_id = $starId;
                 $apply->admin_id = $star->parent_user;
                 $apply->category_id = $star->category_id;
-
-                if ($request->hasfile('image')) {
-                    $destination = $apply->image;
-                    if (File::exists($destination)) {
-                        File::delete($destination);
+                if ( $request->isRequestFromApp && $request->isRequestFromApp === true) {
+                    if($request['image']['type'] && $request['image']['data']){
+                        // code for image save by base64 data
+                        $originalExtension = str_ireplace("image/","",$request['image']['type']);
+                        $folder_path       = 'uploads/images/souviner/apply/';
+                        $image_new_name    = Str::random(20).'-'.now()->timestamp.'.'.$originalExtension;
+                        $decodedBase64 = $request['image']['data'];
+                        Image::make($decodedBase64)->save($folder_path.$image_new_name);
+                        $apply->image = $folder_path.$image_new_name;
                     }
 
-                    $file = $request->file('image');
-                    $extension = $file->getClientOriginalExtension();
-                    $filename = 'uploads/images/souviner/apply/' . time() . '.' . $extension;
+                } else {
+                    if ($request->hasfile('image')) {
+                        $destination = $apply->image;
+                        if (File::exists($destination)) {
+                            File::delete($destination);
+                        }
 
-                    Image::make($file)->resize(400, 400)->save($filename, 100);
-                    $apply->image = $filename;
+                        $file = $request->file('image');
+                        $extension = $file->getClientOriginalExtension();
+                        $filename = 'uploads/images/souviner/apply/' . time() . '.' . $extension;
+
+                        Image::make($file)->resize(400, 400)->save($filename, 100);
+                        $apply->image = $filename;
+                    }
                 }
+
                 $apply->save();
 
                 return response()->json([
                     'status' => 200,
                     'message' => 'Souvenir Applied Successfully',
                 ]);
-                
-
-            }else {
+            } else {
                 return response()->json([
                     'status' => 201,
                     'message' => 'Passowrd Not Match'
@@ -480,7 +486,8 @@ class SouvinerController extends Controller
         }
     }
 
-    public function registerUserSouvenirList(){
+    public function registerUserSouvenirList()
+    {
         $admin = auth('sanctum')->user()->id;
 
         $registerSouvenir = SouvenirApply::where('admin_id', $admin)->where('status', 0)->where('is_delete', 0)->latest()->get();
@@ -494,7 +501,8 @@ class SouvinerController extends Controller
             'userPaymentSouvenir' => $userPaymentSouvenir,
         ]);
     }
-    public function starRegisterUserSouvenirList(){
+    public function starRegisterUserSouvenirList()
+    {
         $star = auth('sanctum')->user()->id;
 
         $registerSouvenir = SouvenirApply::where('star_id', $star)->where('status', 0)->where('is_delete', 0)->latest()->get();
@@ -510,7 +518,8 @@ class SouvinerController extends Controller
         ]);
     }
 
-    public function activitiesUserSouvenir(){
+    public function activitiesUserSouvenir()
+    {
         $user = auth('sanctum')->user()->id;
 
         $userSouvenir = SouvenirApply::where('user_id', $user)->latest()->get();
@@ -521,7 +530,8 @@ class SouvinerController extends Controller
         ]);
     }
 
-    public function registerSouvenirApprove($id){
+    public function registerSouvenirApprove($id)
+    {
 
         $registerSouvenir = SouvenirApply::find($id);
         $registerSouvenir->status = 1;
@@ -532,7 +542,8 @@ class SouvinerController extends Controller
             'message' => 'Souvenir Approve Successfully'
         ]);
     }
-    public function registerSouvenirDecline($id){
+    public function registerSouvenirDecline($id)
+    {
 
         $registerSouvenir = SouvenirApply::find($id);
         $registerSouvenir->is_delete = 1;
@@ -544,7 +555,8 @@ class SouvinerController extends Controller
         ]);
     }
 
-    public function registerSouvenirView($id){
+    public function registerSouvenirView($id)
+    {
 
         $souvinerView = SouvenirApply::find($id);
 
@@ -554,7 +566,8 @@ class SouvinerController extends Controller
         ]);
     }
 
-    public function activitiesDetailsUserSouvenir($id){
+    public function activitiesDetailsUserSouvenir($id)
+    {
 
         $detailsSouvenir = SouvenirApply::find($id);
 
@@ -564,21 +577,21 @@ class SouvinerController extends Controller
         ]);
     }
 
-    public function userSouvenirPaymentStore(Request $request){
+    public function userSouvenirPaymentStore(Request $request)
+    {
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'card_holder_name' => 'required',
             'card_no' => 'required',
             'card_expire_date' => 'required',
             'card_cvv' => 'required',
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'validation_errors' => $validator->errors(),
             ]);
-        }else{
+        } else {
             $statusChangeSouvenir = SouvenirApply::find($request->souvenir_apply_id);
             $statusChangeSouvenir->status = 2;
             $statusChangeSouvenir->save();
@@ -603,8 +616,5 @@ class SouvinerController extends Controller
                 'message' => 'Souvenir Payment Successfully'
             ]);
         }
-        
-
     }
-
 }

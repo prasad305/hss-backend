@@ -24,8 +24,12 @@ use App\Http\Controllers\API\PromoVideoController;
 use App\Http\Controllers\API\QnaController;
 use App\Http\Controllers\API\StarGreetingController;
 use App\Http\Controllers\API\StarScheduleController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/uplad-video', [HomeController::class, 'video_upload']);
+
 
 // Authentication API
 Route::post('register', [AuthController::class, 'register']);
@@ -73,6 +77,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
         return response()->json(['message' => 'You are in', 'status' => 200], 200);
     });
 
+
+    Route::post('/learning-assinment-upload', [UserController::class, 'lerningSessionAssinmentVideoUplad']);
     Route::get('/user_info', [AuthController::class, 'user_info']);
     Route::post('/user_info_update', [AuthController::class, 'user_info_update']);
     Route::post('/user_otherInfo_update', [AuthController::class, 'user_OtherInfo_update']);
