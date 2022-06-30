@@ -459,6 +459,9 @@
         if (key == 'registration_preiod') {
             $('#registration_preiod_error').html(value);
         }
+        if (key == 'instruction_prepare_period') {
+            $('#instruction_prepare_period_error').html(value);
+        }
         
     }
 
@@ -487,6 +490,7 @@
         $('#round_num_error').html('');
         $('#event_preiod_error').html('');
         $('#registration_preiod_error').html('');
+        $('#instruction_prepare_period_error').html('');
     }
 
 

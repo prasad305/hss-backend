@@ -160,7 +160,9 @@ Super Admin
 <div class="m-4" id="show-rules" style="display:none">
     <div class="tab-pane " id="tabs-90" role="tabpanel">
         <div class="container">
-            <p>Mark Distribution</p>
+
+            <p>Mark Distribution </p>
+
             <form id="create-form">
                 @csrf
 
@@ -174,23 +176,24 @@ Super Admin
                             </div>
                         </div>
                     </div>
+                    <div id="hid_show_live_or_offile" style="display: none!important">
+                        <div class="d-flex flex-row my-3 w-100">
+                            <div class="audition__mark">
+                                <input type="radio" name="mark_live_or_offline" value="1"> <span>Live Mark</span>
+                            </div>
+                            <div class="audition__mark ml-3">
+                                <input type="radio" name="mark_live_or_offline" value="0"> <span>Offline Mark</span>
+                            </div>
+                            <span class="text-danger" id="mark_live_or_offline_error"></span>
 
-                    <div class="d-flex flex-row my-3 w-100" id="hid_show_live_or_offile"
-                        style="display: none!important">
-                        <div class="audition__mark">
-                            <input type="radio" name="mark_live_or_offline" value="1"> <span>Live Mark</span>
-                        </div>
-                        <div class="audition__mark ml-3">
-                            <input type="radio" name="mark_live_or_offline" value="0"> <span>Offline Mark</span>
-                        </div>
-                        <span class="text-danger" id="mark_live_or_offline_error"></span>
-
-                        <div class="col-md-4">
-                            <input type="text" name="user_vote_mark" id="user_vote_mark" class="form-control"
-                                placeholder="User Vote Mark">
-                            <span class="text-danger" id="user_vote_mark_error"></span>
+                            <div class="col-md-4">
+                                <input type="text" name="user_vote_mark" id="user_vote_mark" class="form-control"
+                                    placeholder="User Vote Mark">
+                                <span class="text-danger" id="user_vote_mark_error"></span>
+                            </div>
                         </div>
                     </div>
+
 
                     <div class="d-flex flex-row my-3 w-100">
                         <div class="audition__mark">
@@ -275,19 +278,33 @@ Super Admin
                                 <p>Video Duration</p>
                                 <hr>
                             </div>
-                            <div class="d-flex flex-row col-md-6">
-                                 <input type="text" class="form-control" name="video_duration" id="video_duration" placeholder="ex: 3min">
+                            <div class="d-flex flex-row col-md-4">
+                                <input type="text" class="form-control" name="video_duration" id="video_duration"
+                                    placeholder="ex: 3min">
                             </div>
                         </div>
-    
+
+                        <div class="d-flex flex-column w-100 mt-2">
+                            <div class="wildcard__title">
+                                <p>Video Slot Num</p>
+                                <hr>
+                            </div>
+                            <div class="d-flex flex-row col-md-4">
+                                <input type="text" class="form-control" name="video_slot_num" id="video_slot_num"
+                                    placeholder="ex: 4 videos">
+                            </div>
+                        </div>
+
                         <div class="d-flex flex-column w-100 mt-2">
                             <div class="wildcard__title">
                                 <p>Round Period</p>
                                 <hr>
                             </div>
-                            <div class="d-flex flex-row col-md-6">
-                                 <input type="text" class="form-control" name="round_period" id="round_period" placeholder="ex: 123 days">
+                            <div class="d-flex flex-row col-md-4">
+                                <input type="text" class="form-control" name="round_period" id="round_period"
+                                    onkeyup="checkAvaibaleDays()" placeholder="ex: 123 days">
                             </div>
+                            <span id="round_peroid_days_error" class="text-danger"></span>
                         </div>
                     </div>
 
@@ -298,17 +315,19 @@ Super Admin
                                 <hr>
                             </div>
                             <div class="d-flex flex-row col-md-6">
-                                 <input type="text" class="form-control" name="instruction_prepare_period" id="instruction_prepare_period" placeholder="ex: 123 days">
+                                <input type="text" class="form-control" name="instruction_prepare_period"
+                                    id="instruction_prepare_period" placeholder="ex: 123 days">
                             </div>
                         </div>
-    
+
                         <div class="d-flex flex-column w-100 mt-2">
                             <div class="wildcard__title">
                                 <p>Video Upload Period</p>
                                 <hr>
                             </div>
                             <div class="d-flex flex-row col-md-6">
-                                 <input type="text" class="form-control" name="video_upload_period" id="video_upload_period" placeholder="ex: 123 days">
+                                <input type="text" class="form-control" name="video_upload_period"
+                                    id="video_upload_period" placeholder="ex: 123 days">
                             </div>
                         </div>
                     </div>
@@ -320,17 +339,19 @@ Super Admin
                                 <hr>
                             </div>
                             <div class="d-flex flex-row col-md-6">
-                                 <input type="text" class="form-control" name="jury_or_judge_mark_period" id="jury_or_judge_mark_period" placeholder="ex: 123 days">
+                                <input type="text" class="form-control" name="jury_or_judge_mark_period"
+                                    id="jury_or_judge_mark_period" placeholder="ex: 123 days">
                             </div>
                         </div>
-    
+
                         <div class="d-flex flex-column w-100 mt-2">
                             <div class="wildcard__title">
                                 <p>Result Publish Period</p>
                                 <hr>
                             </div>
                             <div class="d-flex flex-row col-md-6">
-                                 <input type="text" class="form-control" name="result_publish_period" id="result_publish_period" placeholder="ex: 123 days">
+                                <input type="text" class="form-control" name="result_publish_period"
+                                    id="result_publish_period" placeholder="ex: 123 days">
                             </div>
                         </div>
                     </div>
@@ -342,27 +363,29 @@ Super Admin
                                 <hr>
                             </div>
                             <div class="d-flex flex-row col-md-6">
-                                 <input type="text" class="form-control" name="appeal_period" id="appeal_period" placeholder="ex: 123 days">
+                                <input type="text" class="form-control" name="appeal_period" id="appeal_period"
+                                    placeholder="ex: 123 days">
                             </div>
                         </div>
-    
+
                         <div class="d-flex flex-column w-100 mt-2">
                             <div class="wildcard__title">
                                 <p>Appeal Result Publish Period</p>
                                 <hr>
                             </div>
                             <div class="d-flex flex-row col-md-6">
-                                 <input type="text" class="form-control" name="appeal_result_publish_period" id="appeal_result_publish_period"  placeholder="ex: 123 days">
+                                <input type="text" class="form-control" name="appeal_result_publish_period"
+                                    id="appeal_result_publish_period" placeholder="ex: 123 days">
                             </div>
                         </div>
                     </div>
 
-                 
 
-                  
+
+
 
                     <div class="d-flex col-md-12 justify-content-center mt-4 mb-4">
-                        <button class="btn bg-info px-3 BTNback mr-3" id="SubmitRules">Back</button>
+                        <button class="btn bg-info px-3 BTNback mr-3" id="back">Back</button>
                         <button class="btn bg-warning px-3 BTNdone" id="SubmitRules">Done</button>
                     </div>
 
@@ -375,6 +398,7 @@ Super Admin
 
 
 <script>
+    var round_available_days = 0;
     function selectedCategory(rules_id) {
         console.log('category', rules_id);
         var url = "{{ url('super-admin/audition-round-rules/') }}";
@@ -385,6 +409,9 @@ Super Admin
             , success: function(data) {
                 console.log('get data', data);
                 $('#tab-content').html("");
+                $('#round_available_days').html(data.round_available_days);
+                round_available_days+=data.round_available_days;
+                
 
                 if (data.round_rules.length === 0) {
                     $('#show-rules').attr("style", "display:none");
@@ -405,7 +432,9 @@ Super Admin
                 });
 
                 $('#tab-content').append(
-                    '<div>' +
+                    '<center class="text-warning"><span style="font-size: 22px">Available Days :</span> <span id="round_available_days" style="font-size: 25px;color:white">'+data.round_available_days+'</span> <small>(Set Time Period be carefully)</small> </center>'+
+
+                '<div>' +
                     '<ul class="nav nav-tabs" role="tablist">' + single_round + '</ul>' +
                     '</div>'
                 );
@@ -462,11 +491,13 @@ Super Admin
             success: function(data) {
 
                 $('#round_id').val(round_id);
+                
+
 
                 if (data.mark.has_user_vote_mark == 1) {
                     $('#checkbox1').attr('checked', true);
                     $('#hid_show_live_or_offile').attr("style", "display:block!important;");
-                    $('#user_vote_mark').val(data.mark.user_vote_mark);
+                    
 
                     if (data.mark.mark_live_or_offline == 0) {
                         $('input:radio[name=mark_live_or_offline][value=0]').attr('checked', true);
@@ -485,9 +516,9 @@ Super Admin
                     $('input:radio[name=has_jury_or_judge_mark][value=1]').attr('checked', true);
                 }
 
-                if (data.mark.jury_or_judge_mark != null && data.mark.jury_or_judge_mark > 0) {
-                    $('#jury_or_judge_mark').val(data.mark.jury_or_judge_mark);
-                }
+              
+                $('#jury_or_judge_mark').val(data.mark.jury_or_judge_mark);
+           
 
                 if (data.mark.wildcard == 0) {
                     $('input:radio[name=wildcard][value=0]').attr('checked', true);
@@ -510,10 +541,12 @@ Super Admin
                     $('input:radio[name=appeal][value=1]').attr('checked', true);
                 }
 
-                // if (data.mark.video_duration != null) {
-                    $('#video_duration').val(data.mark.video_duration);
-                // }
+             
+                $('#video_duration').val(data.mark.video_duration);
+                $('#user_vote_mark').val(data.mark.user_vote_mark);
+         
                 $('#round_period').val(data.mark.round_period);
+                $('#video_slot_num').val(data.mark.video_slot_num);
                 $('#instruction_prepare_period').val(data.mark.instruction_prepare_period);
                 $('#video_upload_period').val(data.mark.video_upload_period);
                 $('#jury_or_judge_mark_period').val(data.mark.jury_or_judge_mark_period);
@@ -563,6 +596,16 @@ Super Admin
 
     }
 
+    function checkAvaibaleDays() {
+        var round_period = $('#round_period').val();
+        $('#round_peroid_days_error').html(' ');
+        $("#SubmitRules").prop("disabled",false);
+        if (round_available_days == 0 || round_available_days < round_period) {
+            $('#round_peroid_days_error').html('Round Available Days is Over');
+            $("#SubmitRules").prop("disabled",true);
+        }
+    }
+
     $(document).on('click', '#SubmitRules', function(event) {
             event.preventDefault();
             // var checkhas = $('#checkbox1').prop('checked') ? 1: 0;
@@ -571,10 +614,12 @@ Super Admin
             $('.wild_card__two').css("display", "block");
             var round_id = $('#round_id').val();
             var form = $('#create-form')[0];
+          
 
                 var formData = new FormData(form);
                 formData.append('round_id', round_id);
                 formData.append('has_user_vote_mark', $('#checkbox1').prop('checked') ? 1: 0);
+         
                 // Set header if need any otherwise remove setup part
                 $.ajaxSetup({
                     headers: {
@@ -596,9 +641,9 @@ Super Admin
                             showConfirmButton: false,
                             // timer: 1500
                         })
-                        // setTimeout(function() {
-                        //     location.reload();
-                        // }, 1000);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
                         console.log(data)
                     },
                     error: function(data) {
