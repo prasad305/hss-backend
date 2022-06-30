@@ -154,6 +154,7 @@ class AuditionController extends Controller
                         $auditionAssignJury = new AuditionAssignJury();
                         $auditionAssignJury->audition_id           =  $audition->id;
                         $auditionAssignJury->jury_id               =  $jury;
+                        $auditionAssignJury->group_id               =  $group_id;
                         $auditionAssignJury->approved_by_jury      =  0;
                         $auditionAssignJury->status                =   0;
                         $auditionAssignJury->save();

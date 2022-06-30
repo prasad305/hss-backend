@@ -706,6 +706,11 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::post('audition-admin/submit-jury-assign-video', [AuditionController::class, 'updateJuryAssignVideo']);
     Route::post('audition-admin/submit-jury-auto-assign-video', [AuditionController::class, 'updateJuryAutoAssignVideo']);
     Route::get('audition-admin/jury-mark-on-videos-status/{audition_id}/{round_rule_id}', [AuditionController::class, 'juryMarkOnVideosStatus']);
+
+
+    Route::get('audition-admin/audition/group_juries/{audition_id}/{group_id}', [AuditionController::class, 'group_juries']);
+
+
 });
 
 
