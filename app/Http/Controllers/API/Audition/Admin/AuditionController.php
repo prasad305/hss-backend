@@ -18,6 +18,7 @@ use App\Models\Audition\AuditionMark;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\JudgeMarks;
+use App\Models\JuryGroup;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -445,27 +446,18 @@ class AuditionController extends Controller
 
 
     // Audition Details
+
     public function getAudition($slug)
     {
         $event = Audition::with(['assignedJudges', 'participant'])->where('slug', $slug)->first();
-
+        $ids = $event->assignedJuries->unique('group_id')->pluck('group_id');
+        $juryGroups =  JuryGroup::whereIn('id', $ids)->get();
         return response()->json([
             'status' => 200,
             'event' => $event,
+            'juryGroups' => $juryGroups,
         ]);
     }
-
-
-
-
-
-
-
-
-
-    // Star Audtion End
-
-
 
     // Star Admin Adution Start
     public function starAdminPendingAudition()
@@ -1030,6 +1022,18 @@ class AuditionController extends Controller
             'juryMarkingVideos' => $juryMarkingVideos,
             'juryPassedVideos' => $juryPassedVideos,
             'juryFailedVideos' => $juryFailedVideos,
+        ]);
+
+    }
+
+
+    public function group_juries($audition_id, $group_id){
+
+        $juries = AuditionAssignJury::where([['audition_id',$audition_id],['group_id',$group_id]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'juries' => $juries,
         ]);
 
     }
