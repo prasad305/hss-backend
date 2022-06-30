@@ -22,7 +22,6 @@ class AuditionAdminController extends Controller
 {
     public function index()
     {
-
         $auditionAdmins = User::where([['category_id', auth()->user()->category_id], ['user_type', 'audition-admin']])->orderBy('id', 'DESC')->get();
         return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins'));
     }
