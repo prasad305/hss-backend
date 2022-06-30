@@ -27,6 +27,6 @@ class AuditionAssignJudge extends Model
     }
 
     public function judge_instruction(){
-        return $this->belongsTo(AuditionJudgeInstruction::class,  'judge_id', 'star_id');
+        return $this->belongsTo(AuditionJudgeInstruction::class,  'judge_id', 'judge_id');
     }
 }

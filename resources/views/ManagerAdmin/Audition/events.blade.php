@@ -79,73 +79,34 @@
     <div class="row">
         <div class="col-md-12 mx-2 mt-3">
             <div class="row">
-
-                <h4>Previous Events list</h4>
+                <h4>Events list</h4>
                 <a class="btn btn-success btn-sm mr-4 " style="margin-bottom: 10px; margin-left: auto;"
-                onclick="Show('Create Audition','{{ route('managerAdmin.audition.create') }}')">
-                <i class=" fa fa-plus"></i>&nbsp;Add New</a>
+                    onclick="Show('Create Audition','{{ route('managerAdmin.audition.create') }}')">
+                    <i class=" fa fa-plus"></i>&nbsp;Add New
+                </a>
             </div>
             <div class='bottomBlackLine'></div>
         </div>
-
     </div>
 
     <div class="row">
-        <div class="col-md-3 col-sm-6 col-12">
-            <div class="row info-box bg-dark shadow-none pb-4 m-3 BGa">
-                <img src="{{ asset('assets/super-admin/images/unsplash_hUHzaiAHuUc (1).png') }}" alt="Admin Image"
-                    class="img-fluid ImgBlue mr-3 mb-2">
+        @foreach ($auditions as $audition)
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="p-2 bg-dark shadow-none pb-4 m-3 BGaB">
+                    <img src="{{ asset($audition->banner ?? get_static_option('audition_demo_image')) }}" alt="Admin Image"
+                        class="img-fluid ImgBlue mr-3 mb-2 w-100">
 
-                <div className="d-flex py-3 justify-contnet-center ">
+                    <div className="">
+                        <div>
+                            <h5 class="text-center text-bold">{{ $audition->title }}</h5>
 
-                    <div>
-                        <h5 class="text-center text-bold">Guitar Competition</h5>
-                        <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
-                            industry. Lorem
-                            Ipsum has been. </p>
-                        <center><button class="text-center btn GoldBtn px-4 text-bold ">On Going</button></center>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 col-sm-6 col-12">
-            <div class="row info-box bg-dark shadow-none pb-4 m-3 BGaB">
-                <img src="{{ asset('assets/super-admin/images/unsplash_hUHzaiAHuUc.png') }}" alt="Admin Image"
-                    class="img-fluid ImgBlue mr-3 mb-2">
-
-                <div className="d-flex py-3 justify-contnet-center ">
-                    <div>
-                        <h5 class="text-center text-bold">Swimming Competition</h5>
-                        <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
-                            industry. Lorem
-                            Ipsum has been. </p>
-                        <center><button class="text-center btn BlueBtn px-4 text-bold ">Done</button></center>
-
+                            <center>
+                                <span class="text-center btn btn-info px-4 text-bold">Done</span>
+                            </center>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="col-md-3 col-sm-6 col-12">
-            <div class="row info-box bg-dark shadow-none pb-4 m-3 BGaB">
-                <img src="{{ asset('assets/super-admin/images/unsplash_hUHzaiAHuUc (2).png') }}" alt="Admin Image"
-                    class="img-fluid ImgBlue mr-3 mb-2">
-
-                <div className="d-flex py-3 justify-contnet-center ">
-                    <div>
-                        <h5 class="text-center text-bold">Football Competition</h5>
-                        <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting
-                            industry. Lorem
-                            Ipsum has been. </p>
-                        <center><button class="text-center btn BlueBtn px-4 text-bold ">Done</button></center>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        @endforeach
     </div>
 @endsection

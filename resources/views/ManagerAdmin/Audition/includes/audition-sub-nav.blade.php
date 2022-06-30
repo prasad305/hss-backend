@@ -19,7 +19,7 @@
                 <center>
                     <div class='displaySide'>
                         <img src="{{ asset('assets/manager-admin/Group1176.png') }}" class="ARRimg pt-2" alt="">
-                        <div class='fontBold'>{{ $pending_instructions->count() }}</div>
+                        <div class='fontBold'>16156</div>
                     </div>
                 </center>
                 <a class="btn border-warning nav-link " href="#">Request for Approval</a>
