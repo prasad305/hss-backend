@@ -22,7 +22,6 @@ class AuditionAdminController extends Controller
 {
     public function index()
     {
-
         $auditionAdmins = User::where([['category_id', auth()->user()->category_id], ['user_type', 'audition-admin']])->orderBy('id', 'DESC')->get();
         return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins'));
     }
@@ -174,7 +173,7 @@ class AuditionAdminController extends Controller
 
         if ($request->hasFile('cover')) {
             $image             = $request->file('cover');
-            $folder_path       = 'uploads/images/users/audition_admins/';
+            $folder_path       = 'uploads/images/users/audition_admins/cover/';
             $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->resize(879, 200)->save($folder_path . $image_new_name);
@@ -256,7 +255,7 @@ class AuditionAdminController extends Controller
                 File::delete(public_path($user->cover_photo)); //Old image delete
 
             $image             = $request->file('cover');
-            $folder_path       = 'uploads/images/users/audition_admins/';
+            $folder_path       = 'uploads/images/users/audition_admins/cover/';
             $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->resize(879, 200)->save($folder_path . $image_new_name);
