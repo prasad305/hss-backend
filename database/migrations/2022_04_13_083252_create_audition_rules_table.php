@@ -15,11 +15,12 @@ class CreateAuditionRulesTable extends Migration
     {
         Schema::create('audition_rules', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->integer('round_num')->default(0);
             $table->integer('judge_num')->default(0);
             $table->text('jury_groups')->nullable();
             $table->integer('event_period')->nullable();
+            $table->integer('instruction_prepare_period')->nullable()->comment('for initial event prepration');
             $table->integer('registration_period')->nullable();
             $table->integer('status')->default(1)->comment('0 = inactive, 1= active');
             $table->timestamps();

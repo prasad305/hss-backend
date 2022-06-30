@@ -122,26 +122,20 @@ class AuditionAdminController extends Controller
         }
 
         $auditionRule = AuditionRules::where('category_id', Auth::user()->category_id)->orderBy('id','DESC')->first();
-
         if ($auditionRule->jury_groups !== null) {
             $jurry_group = json_decode($auditionRule->jury_groups);
             $group_data = $jurry_group->{'group_members'};
         }
 
-
-
-        // for not assigned judge
         $auditionAssignJudges = AuditionAssignJudge::pluck('judge_id');
-
-
+        // for not assigned judge
         $judges = User::whereNotIn('id', $auditionAssignJudges)->where('user_type', 'star')->where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->get();
 
         $groups = JuryGroup::where([['status',1],['category_id', Auth::user()->category_id]])->orderBy('name','asc')->get();
 
-          // for not assigned juries
-          $auditionAssignJurys = AuditionAssignJury::pluck('jury_id');
-
-          $juries = User::whereNotIn('id', $auditionAssignJurys)
+        $auditionAssignJurys = AuditionAssignJury::pluck('jury_id');
+        // for not assigned juries
+        $juries = User::whereNotIn('id', $auditionAssignJurys)
                           ->where('user_type', 'jury')
                           ->where('category_id', Auth::user()->category_id)
                           ->orderBy('id', 'DESC')
