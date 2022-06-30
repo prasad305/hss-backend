@@ -14,7 +14,7 @@ class AuditionUploadVideo extends Model
         'audition_id',
         'user_id',
         'round_id',
-        'jury_id',
+        'jury_or_judge_id',
         'judge_id',
         'video',
         'approval_status',
@@ -38,7 +38,7 @@ class AuditionUploadVideo extends Model
     // }
     public function jury()
     {
-        return $this->belongsTo(User::class, 'jury_id');
+        return $this->belongsTo(User::class, 'jury_or_judge_id');
     }
     public function judge()
     {

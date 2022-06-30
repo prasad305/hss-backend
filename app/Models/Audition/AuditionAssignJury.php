@@ -37,6 +37,6 @@ class AuditionAssignJury extends Model
     }
     public function assignedVideos()
     {
-        return $this->hasMany(AuditionUploadVideo::class, 'jury_id');
+        return $this->hasMany(AuditionUploadVideo::class, 'jury_or_judge_id');
     }
 }

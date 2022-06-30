@@ -15,6 +15,7 @@ class StaticOptionSeeder extends Seeder
     {
         set_static_option('logo', 'uploads/images/logo.png');
         set_static_option('no_image', 'uploads/images/setting/no-image.png');
+        set_static_option('audition_demo_image', 'uploads/images/setting/no-image.png');
         set_static_option('user', 'uploads/images/setting/user.png');
     }
 }
