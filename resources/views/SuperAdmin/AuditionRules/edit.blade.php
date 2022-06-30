@@ -259,6 +259,12 @@ Super Admin
                                     <input type="text" class="form-control" name="registration_period" placeholder="2 days" value="{{ $rule->registration_period > 0 ? $rule->registration_period : '' }}">
                                     <span id="registration_preiod_error" class="text-danger"></span>
                                 </div>
+                                
+                                <div class="row justify-content-around mt-2">
+                                    <label for="">Instruction Prepare Period</label>
+                                    <input type="text" class="form-control" name="instruction_prepare_period" placeholder="2 days" value="{{ $rule->instruction_prepare_period > 0 ? $rule->instruction_prepare_period : '' }}">
+                                    <span id="instruction_prepare_period_error" class="text-danger"></span>
+                                </div>
                             </div>
 
                         </div>

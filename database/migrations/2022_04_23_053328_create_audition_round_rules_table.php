@@ -29,6 +29,7 @@ class CreateAuditionRoundRulesTable extends Migration
             $table->integer('video_duration')->nullable();
 
             $table->integer('round_period')->nullable();
+            $table->integer('video_slot_num')->nullable();
             $table->integer('instruction_prepare_period')->nullable();
             $table->integer('video_upload_period')->nullable();
             $table->integer('jury_or_judge_mark_period')->nullable();
