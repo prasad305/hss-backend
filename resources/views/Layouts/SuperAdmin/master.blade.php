@@ -447,6 +447,18 @@
         if (key == 'video_feed') {
             $('#video_feed_error').html(value);
         }
+
+        if (key == 'round_num') {
+            $('#round_num_error').html(value);
+        }
+
+        if (key == 'event_preiod') {
+            $('#event_preiod_error').html(value);
+        }
+
+        if (key == 'registration_preiod') {
+            $('#registration_preiod_error').html(value);
+        }
         
     }
 
@@ -472,6 +484,9 @@
         $('#mark_live_or_offline_error').html('');
         $('#wild_card_error').html('');
         $('#video_feed_error').html('');
+        $('#round_num_error').html('');
+        $('#event_preiod_error').html('');
+        $('#registration_preiod_error').html('');
     }
 
 

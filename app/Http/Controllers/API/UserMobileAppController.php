@@ -48,7 +48,10 @@ class UserMobileAppController extends Controller
             'live_chat_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'liveChat')->orderBy('id', 'DESC')->get(),
             'qna_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'qna')->orderBy('id', 'DESC')->get(),
             'meetup_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'meetup')->orderBy('id', 'DESC')->get(),
-
+            'auction_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'auction')->orderBy('id', 'DESC')->get(),
+            'marketplace_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'marketplace')->orderBy('id', 'DESC')->get(),
+            'souviner_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'souviner')->orderBy('id', 'DESC')->get(),
+            // 'all_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->orderBy('id', 'DESC')->get(),
         ]);
     }
     public function eventRegister(Request $request)

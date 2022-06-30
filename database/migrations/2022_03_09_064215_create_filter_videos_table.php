@@ -20,7 +20,7 @@ class CreateFilterVideosTable extends Migration
             $table->unsignedBigInteger('participant_id')->nullable();
             $table->text('comments')->nullable();
             $table->integer('accept_status')->nullable()->comment('0 = rejected, 1 = accepted');
-            $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
+            $table->integer('status')->default(0)->comment('0 = inactive, 1= active');
             $table->timestamps();
         });
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAudtionAppealsTable extends Migration
+class CreateAuditionRegistrationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,23 @@ class CreateAudtionAppealsTable extends Migration
      */
     public function up()
     {
-        Schema::create('audtion_appeals', function (Blueprint $table) {
+        Schema::create('audition_registrations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('audition_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->date('appeal_date_line')->nullable();
-            $table->text('video_url')->nullable();
+            $table->integer('wining_status')->nullable();
+            $table->string('certificates')->nullable();
             $table->integer('status')->default(0)->comment('0 = inactive, 1= active');
+
+            $table->string('payment_method')->nullable();
+            $table->boolean('payment_status')->nullable();
+            $table->timestamp('payment_date')->nullable();
+            $table->float('amount')->nullable();
+            $table->string('card_holder_name')->nullable();
+            $table->string('account_no')->nullable();
+
             $table->timestamps();
+
         });
     }
 
@@ -31,6 +40,6 @@ class CreateAudtionAppealsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('audtion_appeals');
+        Schema::dropIfExists('audition_registrations');
     }
 }

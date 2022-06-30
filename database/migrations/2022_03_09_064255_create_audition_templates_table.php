@@ -18,7 +18,7 @@ class CreateAuditionTemplatesTable extends Migration
             $table->unsignedBigInteger('judge_id')->nullable();
             $table->unsignedBigInteger('audition_id')->nullable();
             $table->text('banner')->nullable();
-            $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
+            $table->integer('status')->default(0)->comment('0 = inactive, 1= active');
             $table->timestamps();
         });
     }

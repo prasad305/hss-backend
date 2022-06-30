@@ -21,7 +21,7 @@ class CreateAuditionPaymentsTable extends Migration
             $table->string('card_holder_name')->nullable();
             $table->string('card_number')->nullable();
             $table->date('date')->nullable();
-            $table->integer('status')->default(0)->comment('0 = unactive, 1= active');
+            $table->integer('status')->default(0)->comment('0 = inactive, 1= active');
             $table->timestamps();
         });
     }

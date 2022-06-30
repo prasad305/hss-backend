@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAuditionRoundRulesTable extends Migration
+class CreateAuditionRoundInfosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAuditionRoundRulesTable extends Migration
      */
     public function up()
     {
-        Schema::create('audition_round_rules', function (Blueprint $table) {
+        Schema::create('audition_round_infos', function (Blueprint $table) {
             $table->id();
             $table->integer('round_num')->nullable();
             $table->unsignedBigInteger('audition_rules_id');
@@ -28,13 +28,22 @@ class CreateAuditionRoundRulesTable extends Migration
             $table->integer('video_feed')->nullable()->comment('0 = no, 1= yes');
             $table->integer('video_duration')->nullable();
 
-            $table->integer('round_period')->nullable();
-            $table->integer('instruction_prepare_period')->nullable();
-            $table->integer('video_upload_period')->nullable();
-            $table->integer('jury_or_judge_mark_period')->nullable();
-            $table->integer('result_publish_period')->nullable();
-            $table->integer('appeal_period')->nullable();
-            $table->integer('appeal_result_publish_period')->nullable();
+            $table->integer('video_slot_num')->nullable();
+
+            $table->date('round_start_date')->nullable();
+            $table->date('round_end_date')->nullable();
+            $table->date('instruction_prepare_start_date')->nullable();
+            $table->date('instruction_prepare_end_date')->nullable();
+            $table->date('video_upload_start_date')->nullable();
+            $table->date('video_upload_end_date')->nullable();
+            $table->date('jury_or_judge_mark_start_date')->nullable();
+            $table->date('jury_or_judge_mark_end_date')->nullable();
+            $table->date('result_publish_start_date')->nullable();
+            $table->date('result_publish_end_date')->nullable();
+            $table->date('appeal_start_date')->nullable();
+            $table->date('appeal_end_date')->nullable();
+            $table->date('appeal_result_publish_start_date')->nullable();
+            $table->date('appeal_result_publish_end_date')->nullable();
 
             $table->integer('status')->default(0)->comment('0 = inactive, 1= active');
             $table->timestamps();
@@ -48,6 +57,6 @@ class CreateAuditionRoundRulesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('audition_round_rules');
+        Schema::dropIfExists('audition_round_infos');
     }
 }

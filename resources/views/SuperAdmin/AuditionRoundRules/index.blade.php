@@ -184,14 +184,20 @@ Super Admin
                             <input type="radio" name="mark_live_or_offline" value="0"> <span>Offline Mark</span>
                         </div>
                         <span class="text-danger" id="mark_live_or_offline_error"></span>
+
+                        <div class="col-md-4">
+                            <input type="text" name="user_vote_mark" id="user_vote_mark" class="form-control"
+                                placeholder="User Vote Mark">
+                            <span class="text-danger" id="user_vote_mark_error"></span>
+                        </div>
                     </div>
 
                     <div class="d-flex flex-row my-3 w-100">
                         <div class="audition__mark">
-                            <input type="radio" name="jury_or_judge" value="0"> <span>Jury Mark</span>
+                            <input type="radio" name="has_jury_or_judge_mark" value="0"> <span>Jury Mark</span>
                         </div>
                         <div class="audition__mark ml-3">
-                            <input type="radio" name="jury_or_judge" value="1"> <span>Judge Mark</span>
+                            <input type="radio" name="has_jury_or_judge_mark" value="1"> <span>Judge Mark</span>
                         </div>
 
                         <span class="text-danger" id="jury_or_judge_error"></span>
@@ -262,6 +268,98 @@ Super Admin
                         </div>
 
                     </div>
+
+                    <div class="d-flex flex-row col-md-12">
+                        <div class="d-flex flex-column w-100 mt-2">
+                            <div class="wildcard__title">
+                                <p>Video Duration</p>
+                                <hr>
+                            </div>
+                            <div class="d-flex flex-row col-md-6">
+                                 <input type="text" class="form-control" name="video_duration" id="video_duration" placeholder="ex: 3min">
+                            </div>
+                        </div>
+    
+                        <div class="d-flex flex-column w-100 mt-2">
+                            <div class="wildcard__title">
+                                <p>Round Period</p>
+                                <hr>
+                            </div>
+                            <div class="d-flex flex-row col-md-6">
+                                 <input type="text" class="form-control" name="round_period" id="round_period" placeholder="ex: 123 days">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-row col-md-12">
+                        <div class="d-flex flex-column w-100 mt-2">
+                            <div class="wildcard__title">
+                                <p>Instruction Prepare Period</p>
+                                <hr>
+                            </div>
+                            <div class="d-flex flex-row col-md-6">
+                                 <input type="text" class="form-control" name="instruction_prepare_period" id="instruction_prepare_period" placeholder="ex: 123 days">
+                            </div>
+                        </div>
+    
+                        <div class="d-flex flex-column w-100 mt-2">
+                            <div class="wildcard__title">
+                                <p>Video Upload Period</p>
+                                <hr>
+                            </div>
+                            <div class="d-flex flex-row col-md-6">
+                                 <input type="text" class="form-control" name="video_upload_period" id="video_upload_period" placeholder="ex: 123 days">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-row col-md-12">
+                        <div class="d-flex flex-column w-100 mt-2">
+                            <div class="wildcard__title">
+                                <p>Jury / Judge Mark Period</p>
+                                <hr>
+                            </div>
+                            <div class="d-flex flex-row col-md-6">
+                                 <input type="text" class="form-control" name="jury_or_judge_mark_period" id="jury_or_judge_mark_period" placeholder="ex: 123 days">
+                            </div>
+                        </div>
+    
+                        <div class="d-flex flex-column w-100 mt-2">
+                            <div class="wildcard__title">
+                                <p>Result Publish Period</p>
+                                <hr>
+                            </div>
+                            <div class="d-flex flex-row col-md-6">
+                                 <input type="text" class="form-control" name="result_publish_period" id="result_publish_period" placeholder="ex: 123 days">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-row col-md-12">
+                        <div class="d-flex flex-column w-100 mt-2">
+                            <div class="wildcard__title">
+                                <p>Appeal Period</p>
+                                <hr>
+                            </div>
+                            <div class="d-flex flex-row col-md-6">
+                                 <input type="text" class="form-control" name="appeal_period" id="appeal_period" placeholder="ex: 123 days">
+                            </div>
+                        </div>
+    
+                        <div class="d-flex flex-column w-100 mt-2">
+                            <div class="wildcard__title">
+                                <p>Appeal Result Publish Period</p>
+                                <hr>
+                            </div>
+                            <div class="d-flex flex-row col-md-6">
+                                 <input type="text" class="form-control" name="appeal_result_publish_period" id="appeal_result_publish_period"  placeholder="ex: 123 days">
+                            </div>
+                        </div>
+                    </div>
+
+                 
+
+                  
 
                     <div class="d-flex col-md-12 justify-content-center mt-4 mb-4">
                         <button class="btn bg-info px-3 BTNback mr-3" id="SubmitRules">Back</button>
@@ -365,19 +463,26 @@ Super Admin
 
                 $('#round_id').val(round_id);
 
-                if (data.mark.user_vote_mark == 1) {
+                if (data.mark.has_user_vote_mark == 1) {
                     $('#checkbox1').attr('checked', true);
                     $('#hid_show_live_or_offile').attr("style", "display:block!important;");
+                    $('#user_vote_mark').val(data.mark.user_vote_mark);
+
+                    if (data.mark.mark_live_or_offline == 0) {
+                        $('input:radio[name=mark_live_or_offline][value=0]').attr('checked', true);
+                    }else{
+                        $('input:radio[name=mark_live_or_offline][value=1]').attr('checked', true);
+                    }
 
                 }else{
                     $('#checkbox1').attr('checked', false);
                     $('#hid_show_live_or_offile').attr("style", "display:none!important;");
                 }
                 
-                if (data.mark.jury_or_judge == 0) {
-                    $('input:radio[name=jury_or_judge][value=0]').attr('checked', true);
-                }else if(data.mark.jury_or_judge == 1){
-                    $('input:radio[name=jury_or_judge][value=1]').attr('checked', true);
+                if (data.mark.has_jury_or_judge_mark == 0) {
+                    $('input:radio[name=has_jury_or_judge_mark][value=0]').attr('checked', true);
+                }else if(data.mark.has_jury_or_judge_mark == 1){
+                    $('input:radio[name=has_jury_or_judge_mark][value=1]').attr('checked', true);
                 }
 
                 if (data.mark.jury_or_judge_mark != null && data.mark.jury_or_judge_mark > 0) {
@@ -397,11 +502,7 @@ Super Admin
                     $('input:radio[name=video_feed][value=1]').attr('checked', true);
                 }
 
-                if (data.mark.mark_live_or_offline == 0) {
-                    $('input:radio[name=mark_live_or_offline][value=0]').attr('checked', true);
-                }else{
-                    $('input:radio[name=mark_live_or_offline][value=1]').attr('checked', true);
-                }
+               
 
                 if (data.mark.appeal == 0) {
                     $('input:radio[name=appeal][value=0]').attr('checked', true);
@@ -409,6 +510,16 @@ Super Admin
                     $('input:radio[name=appeal][value=1]').attr('checked', true);
                 }
 
+                // if (data.mark.video_duration != null) {
+                    $('#video_duration').val(data.mark.video_duration);
+                // }
+                $('#round_period').val(data.mark.round_period);
+                $('#instruction_prepare_period').val(data.mark.instruction_prepare_period);
+                $('#video_upload_period').val(data.mark.video_upload_period);
+                $('#jury_or_judge_mark_period').val(data.mark.jury_or_judge_mark_period);
+                $('#result_publish_period').val(data.mark.result_publish_period);
+                $('#appeal_period').val(data.mark.appeal_period);
+                $('#appeal_result_publish_period').val(data.mark.appeal_result_publish_period);
 
                 var single_round = "";
 
@@ -454,6 +565,8 @@ Super Admin
 
     $(document).on('click', '#SubmitRules', function(event) {
             event.preventDefault();
+            // var checkhas = $('#checkbox1').prop('checked') ? 1: 0;
+            // alert(checkhas);
             ErrorMessageClear();
             $('.wild_card__two').css("display", "block");
             var round_id = $('#round_id').val();
@@ -461,7 +574,7 @@ Super Admin
 
                 var formData = new FormData(form);
                 formData.append('round_id', round_id);
-                formData.append('user_vote_mark', $('#checkbox1').prop('checked') ? 1: 0);
+                formData.append('has_user_vote_mark', $('#checkbox1').prop('checked') ? 1: 0);
                 // Set header if need any otherwise remove setup part
                 $.ajaxSetup({
                     headers: {

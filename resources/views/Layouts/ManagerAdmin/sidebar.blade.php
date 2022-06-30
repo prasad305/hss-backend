@@ -154,7 +154,7 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                
+
                 <li class="nav-item">
                     <a href="{{ route('managerAdmin.audition.published') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
@@ -595,7 +595,7 @@
             <a href="#"
                 class="nav-link {{ \Illuminate\Support\Facades\Request::is('manager-admin/audition*') ? 'active ' : '' }}">
                 <i class="nav-icon fas fa-chart-pie"></i>
-                <p>Audition
+                <p>Audition Management
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
@@ -1186,7 +1186,7 @@
                 <p>Informational</p>
             </a>
         </li>
-        
+
     </ul>
 </nav>
 <!-- /.sidebar-menu -->
