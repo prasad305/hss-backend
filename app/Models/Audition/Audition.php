@@ -3,6 +3,7 @@
 namespace App\Models\Audition;
 
 use App\Models\Category;
+use App\Models\JuryGroup;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,12 +13,16 @@ class Audition extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $with = ['assignedJudges','category','participant','auditionRules','assignedJuries','uploadedVideos','admin','auditionAdmin'];
+    protected $with = ['assignedJudges','info', 'category', 'participant', 'auditionRules', 'assignedJuries', 'uploadedVideos', 'admin', 'auditionAdmin'];
 
 
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
+    }
+    public function info()
+    {
+        return $this->hasOne(AuditionInfo::class, 'audition_id');
     }
     public function star()
     {
