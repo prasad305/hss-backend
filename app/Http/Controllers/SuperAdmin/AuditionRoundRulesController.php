@@ -10,11 +10,7 @@ use Illuminate\Http\Request;
 
 class AuditionRoundRulesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+  
     public function index()
     {
         $data = [
@@ -24,22 +20,13 @@ class AuditionRoundRulesController extends Controller
         return view('SuperAdmin.AuditionRoundRules.index', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+   
     public function store(Request $request)
     {
         // return $request->all();
@@ -96,6 +83,7 @@ class AuditionRoundRulesController extends Controller
         $round->video_feed = $request->video_feed;
 
         $round->video_duration = $request->video_duration;
+        $round->video_slot_num = $request->video_slot_num;
         $round->round_period = $request->round_period;
         $round->instruction_prepare_period = $request->instruction_prepare_period;
         $round->video_upload_period = $request->video_upload_period;
@@ -110,63 +98,51 @@ class AuditionRoundRulesController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function show($id)
     {
 
         $round_rules = AuditionRoundRule::where('audition_rules_id', $id)->get();
 
+        $audition_rule = AuditionRules::find($id);
+
+        $total_round_days = $round_rules->sum('round_period');
+
+        $round_available_days = $audition_rule->event_period -($audition_rule->registration_period+$audition_rule->instruction_prepare_period);
+
         return response()->json([
             'status' => 'success',
-            'round_rules' => $round_rules
+            'round_rules' => $round_rules,
+            'round_available_days' => $round_available_days-$total_round_days,
         ]);
     }
     public function getMark($id)
     {
         $mark = AuditionRoundRule::find($id);
         $rules = AuditionRoundRule::where('audition_rules_id', $mark->audition_rules_id)->get();
+        
 
         return response()->json([
             'status' => 'success',
             'mark' => $mark,
             'rules' => $rules,
+            
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+ 
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy($id)
     {
         //
