@@ -29,6 +29,7 @@ use App\Models\User;
 use App\Models\UserInfo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use File;
 
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
@@ -227,7 +228,6 @@ class UserMobileAppController extends Controller
         $userInfo = new UserInfo();
 
 
-
         try {
             if ($request->img['data']) {
 
@@ -251,6 +251,60 @@ class UserMobileAppController extends Controller
             $user->save();
             return response()->json([
                 "message" => "Profile image updated ",
+                "status" => "200",
+                "userInfo" =>  $user
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                "message" => "Image field required, invalid image !",
+                "error" => $exception->getMessage(),
+                "status" => "0",
+            ]);
+        }
+    }
+
+    /**
+     * profile & cover image upload
+     */
+    public function userMediaUpload(Request $request)
+    {
+
+        $user = User::find(auth('sanctum')->user()->id);
+
+
+
+        try {
+            if ($request->img['data']) {
+
+                $originalExtension = str_ireplace("image/", "", $request->img['type']);
+
+                $folder_path       = 'uploads/images/users/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->img['data'];
+            }
+
+            Image::make($decodedBase64)->save($folder_path . $image_new_name);
+
+
+            //profile image upload
+            if ($request->img['for'] == "profile") {
+                $user->image = $folder_path . $image_new_name;
+            }
+            //cover image upload
+            if ($request->img['for'] == "cover") {
+                $user->cover_photo = $folder_path . $image_new_name;
+            }
+
+
+
+
+            $user->save();
+            if ($request->img['oldImage'] != "") {
+                File::delete($request->img['oldImage']);
+            }
+            return response()->json([
+                "message" => $request->img['for'] . " updated",
                 "status" => "200",
                 "userInfo" =>  $user
             ]);
