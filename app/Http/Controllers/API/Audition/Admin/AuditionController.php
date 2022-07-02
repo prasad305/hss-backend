@@ -15,6 +15,8 @@ use App\Models\Audition\AuditionAssignJury;
 use App\Models\Audition\AuditionJudgeInstruction;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionMark;
+use App\Models\Audition\AuditionPromoInstruction;
+use App\Models\Audition\AuditionPromoInstructionSendInfo;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\JudgeMarks;
@@ -192,6 +194,87 @@ class AuditionController extends Controller
             'auditionJudgeInstruction' => $auditionJudgeInstruction,
         ]);
     }
+
+    public function storePromoInstruction(Request $request)
+    {
+        // return $request->all();
+        $validator = Validator::make($request->all(), [
+            'instruction' => 'required',
+            'submission_date' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $instruction = new AuditionPromoInstruction();
+            $instruction->audition_id = $request->audition_id;
+            $instruction->instruction = $request->instruction;
+            $instruction->submission_end_date = date('Y-m-d',strtotime($request->submission_date));
+            
+            try {
+
+                if ($request->hasfile('image')) {
+                    $image             = $request->image;
+                    $image_folder_path       = 'uploads/images/auditions/instructions/';
+                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                    // save to server
+                    $request->image->move($image_folder_path, $image_new_name);
+                    $instruction->image = $image_folder_path.'/'.$image_new_name;
+                }
+
+                if ($request->hasfile('video')) {
+                    $file             = $request->video;
+                    $folder_path       = 'uploads/videos/auditions/instructions/';
+                    $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
+                    // save to server
+                    $request->video->move($folder_path, $file_new_name);
+                    $instruction->video = $folder_path.'/'.$file_new_name;
+                }
+
+                if ($request->hasfile('pdf')) {
+                    $image             = $request->pdf;
+                    $pdf_folder_path       = 'uploads/pdf/auditions/instructions/';
+                    $pdf_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                    // save to server
+                    $request->pdf->move($pdf_folder_path, $pdf_new_name);
+                    $instruction->document = $pdf_folder_path.'/'.$pdf_new_name;
+                }
+
+                $instruction->save();
+
+                if (count($request->star_ids) > 0) {
+
+                   
+
+                    foreach ($request->star_ids as $key => $star) {
+                        $instruction_info = new AuditionPromoInstructionSendInfo();
+                        $instruction_info->audition_id = $request->audition_id;
+                        $instruction_info->audition_promo_ins_id = $instruction->id;
+                        $instruction_info->judge_id = $star;
+                        $instruction_info->instruction = $request->instruction;
+
+                        $instruction_info->image = $instruction->image;
+                        $instruction_info->video = $instruction->video;
+                        $instruction_info->document = $instruction->document;
+                        $instruction_info->save();
+                    }
+                }
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Audition Promo instruction submitted successfully !!',
+                ]);
+            } catch (\Exception $exception) {
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  $exception->getMessage(),
+                ]);
+            }
+        }
+    }
+
     public function sendDummyInstructionToJudges(Request $request)
     {
         $validator = Validator::make($request->all(), [
