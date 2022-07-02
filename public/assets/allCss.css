@@ -1,0 +1,30 @@
+.title {
+    border-radius: 10px;
+    background-color: #343434;
+}
+
+.divClass {
+    position: relative;
+}
+
+.banner__overlay {
+    position: absolute;
+    top: 80%;
+    left: 24%;
+    /* display: flex;
+    justify-content: center; */
+    /* align-items: end; */
+    /* height: 100%; */
+}
+
+.boldOverlay {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 32px;
+    text-align: center;
+}
+
+.underLineWhite{
+    border-bottom: 2px solid white;
+}
