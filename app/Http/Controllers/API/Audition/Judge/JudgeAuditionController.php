@@ -7,6 +7,7 @@ use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionAssignJudge;
 use App\Models\Audition\AuditionAssignJury;
 use App\Models\Audition\AuditionJudgeInstruction;
+use App\Models\Audition\AuditionPromoInstructionSendInfo;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -20,12 +21,23 @@ class JudgeAuditionController extends Controller
         $pendingAuditions = Audition::with('judge')
             ->whereHas('judge', function ($q) {
                 $q->where([['judge_id', auth('sanctum')->user()->id], ['approved_by_judge', 0]]);
-            })->where('status',1)
+            })->where('status', 1)
+            ->get();
+        return response()->json([
+            'status' => 200,
+            'pending_auditions' => $pendingAuditions,
+        ]);
+    }
+    public function starPromoInstructionPending()
+    {
+        $auditions = Audition::with(['assignedJudges' => function ($q) {
+            return $q->where('judge_id', auth('sanctum')->user()->id);
+        }])->where('status', 1)
             ->get();
 
         return response()->json([
             'status' => 200,
-            'pending_auditions' => $pendingAuditions,
+            'auditions' => $auditions,
         ]);
     }
 

@@ -632,6 +632,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
 
     // Super Star Audtion Routes
+    Route::get('superstar/audition/promo-instruction-pending', [JudgeAuditionController::class, 'starPromoInstructionPending']);
     Route::get('superstar/audition/pendings', [JudgeAuditionController::class, 'starPendingAudtion']);
     Route::get('superstar/audition/live', [JudgeAuditionController::class, 'starLiveAudtion']);
     Route::get('/star/pending-audition/{id}', [JudgeAuditionController::class, 'starSingleAudition']);
