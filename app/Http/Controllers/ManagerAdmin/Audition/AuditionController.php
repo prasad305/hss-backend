@@ -41,7 +41,7 @@ class AuditionController extends Controller
                 $jury_errors = '';
                 foreach ($request->group_ids as $key => $group_id) {
                     if (count($request->jury[$key]) != $group_data[$key]) {
-                        $jury_errors =$jury_errors."Opps.. You have to select " . $group_data[$key] . " jury for Group ".strtoupper(juryGroup($group_id))." !";
+                        $jury_errors = $jury_errors . "Opps.. You have to select " . $group_data[$key] . " jury for Group " . strtoupper(juryGroup($group_id)) . " !";
                     }
                 }
                 if ($jury_errors != '') {
@@ -49,14 +49,6 @@ class AuditionController extends Controller
                     return back();
                 }
             }
-
-            // // dd($auditionRule->roundRules->count());
-            // $request->validate([
-            //     'audition_admin_id' => 'required',
-            //     'title' => 'required',
-            //     'description' => 'required',
-            //     'start_date' => 'required',
-            // ]);
 
             if ($auditionRule->judge_num != count($request->judge)) {
                 session()->flash('error', 'Opps.. You have to select ' . $auditionRule->judge_num . ' judge !');
@@ -83,26 +75,71 @@ class AuditionController extends Controller
 
 
                 //setup audition info from general audition rule
-                $general_audition_info = AuditionRules::where('category_id',Auth::user()->category_id)->first();
+                $auditionRule = AuditionRules::where('category_id', Auth::user()->category_id)->first();
 
                 $audition_info = new AuditionInfo();
                 $audition_info->audition_id = $audition->id;
                 $audition_info->category_id = Auth::user()->category_id;
-                $audition_info->round_num = $general_audition_info->round_num;
-                $audition_info->judge_num = $general_audition_info->judge_num;
-                $audition_info->jury_groups = $general_audition_info->jury_groups;
-                $audition_info->start_date =Carbon::parse( $request->stat_date);
-                $audition_info->end_date = Carbon::parse($request->end_date);
+                $audition_info->round_num = $auditionRule->round_num;
+                $audition_info->judge_num = $auditionRule->judge_num;
+                $audition_info->jury_groups = $auditionRule->jury_groups;
+
+                $audition_info->event_start_date = Carbon::parse($request->stat_date);
+                $audition_info->event_end_date = Carbon::parse($request->stat_date)->addDays($auditionRule->event_period);
+
+                $audition_info->instruction_prepare_start_date = Carbon::parse($request->stat_date);
+                $audition_info->instruction_prepare_end_date = Carbon::parse($request->stat_date)->addDays($auditionRule->instruction_prepare_period);
+                $audition_info->registration_start_date = Carbon::parse($audition_info->instruction_prepare_end_date)->addDays(1);
+                $audition_info->registration_end_date = Carbon::parse($audition_info->registration_start_date)->addDays($auditionRule->registration_period);
                 $audition_info->save();
 
 
-                $auditionRoundRule = AuditionRoundRule::where('audition_rules_id',$general_audition_info->id)->orderBy('round_num','ASC')->get();
-                return $auditionRoundRule;
+                $auditionRoundRules = AuditionRoundRule::where('audition_rules_id', $auditionRule->id)->orderBy('round_num', 'ASC')->get();
+
+                $roundStartDate = Carbon::parse($audition_info->registration_end_date)->addDays(1);
+                foreach ($auditionRoundRules as $key => $auditionRoundRule) {
+                    $auditionRoundInfo = new AuditionRoundInfo();
+                    $auditionRoundInfo->audition_info_id = $audition_info->id;
+                    $auditionRoundInfo->audition_id = $audition->id;
+                    $auditionRoundInfo->round_num = $auditionRoundRule->round_num;
+                    $auditionRoundInfo->has_jury_or_judge_mark =  $auditionRoundRule->has_jury_or_judge_mark;
+                    $auditionRoundInfo->jury_or_judge_mark =  $auditionRoundRule->jury_or_judge_mark;
+                    $auditionRoundInfo->has_user_vote_mark =  $auditionRoundRule->has_user_vote_mark;
+                    $auditionRoundInfo->user_vote_mark =  $auditionRoundRule->user_vote_mark;
+                    $auditionRoundInfo->mark_live_or_offline =  $auditionRoundRule->mark_live_or_offline;
+                    $auditionRoundInfo->wildcard =  $auditionRoundRule->wildcard;
+                    $auditionRoundInfo->wildcard_round =  $auditionRoundRule->wildcard_round;
+                    $auditionRoundInfo->appeal =  $auditionRoundRule->appeal;
+                    $auditionRoundInfo->video_feed =  $auditionRoundRule->video_feed;
+                    $auditionRoundInfo->video_duration =  $auditionRoundRule->video_duration;
+                    $auditionRoundInfo->video_slot_num =  $auditionRoundRule->video_slot_num;
 
 
-                // $auditionRoundInfo = new AuditionRoundInfo();
-                // $auditionRoundInfo->round_num = $auditionRoundRule->round_num;
+                    $auditionRoundInfo->round_start_date =  $roundStartDate;
+                    $auditionRoundInfo->round_end_date = Carbon::parse($roundStartDate)->addDays($auditionRoundRule->round_period);
 
+                    $auditionRoundInfo->instruction_prepare_start_date = $auditionRoundInfo->round_start_date;
+                    $auditionRoundInfo->instruction_prepare_end_date = Carbon::parse($auditionRoundInfo->instruction_prepare_start_date)->addDays($auditionRoundRule->instruction_prepare_period);
+
+                    $auditionRoundInfo->video_upload_start_date = Carbon::parse($auditionRoundInfo->instruction_prepare_end_date)->addDays(1);
+                    $auditionRoundInfo->video_upload_end_date = Carbon::parse($auditionRoundInfo->video_upload_start_date)->addDays($auditionRoundRule->video_upload_period);
+
+                    $auditionRoundInfo->jury_or_judge_mark_start_date = Carbon::parse($auditionRoundInfo->video_upload_end_date)->addDays(1);
+                    $auditionRoundInfo->jury_or_judge_mark_end_date = Carbon::parse($auditionRoundInfo->jury_or_judge_mark_start_date)->addDays($auditionRoundRule->jury_or_judge_mark_period);
+
+                    $auditionRoundInfo->result_publish_start_date = Carbon::parse($auditionRoundInfo->jury_or_judge_mark_end_date)->addDays(1);
+                    $auditionRoundInfo->result_publish_end_date = Carbon::parse($auditionRoundInfo->result_publish_start_date)->addDays($auditionRoundRule->result_publish_period);
+
+                    $auditionRoundInfo->appeal_start_date = Carbon::parse($auditionRoundInfo->result_publish_end_date)->addDays(1);
+                    $auditionRoundInfo->appeal_end_date = Carbon::parse($auditionRoundInfo->appeal_start_date)->addDays($auditionRoundRule->appeal_period);
+
+                    $auditionRoundInfo->appeal_result_publish_start_date = Carbon::parse($auditionRoundInfo->appeal_end_date)->addDays(1);
+                    $auditionRoundInfo->appeal_result_publish_end_date = Carbon::parse($auditionRoundInfo->appeal_result_publish_start_date)->addDays($auditionRoundRule->appeal_result_publish_period);
+
+                    $auditionRoundInfo->save();
+
+                    $roundStartDate = Carbon::parse($auditionRoundInfo->round_end_date)->addDays(1);
+                }
 
                 foreach ($request->judge as $key => $value) {
                     $auditionAssignJudge = new AuditionAssignJudge();
@@ -117,6 +154,7 @@ class AuditionController extends Controller
                         $auditionAssignJury = new AuditionAssignJury();
                         $auditionAssignJury->audition_id           =  $audition->id;
                         $auditionAssignJury->jury_id               =  $jury;
+                        $auditionAssignJury->group_id               =  $group_id;
                         $auditionAssignJury->approved_by_jury      =  0;
                         $auditionAssignJury->status                =   0;
                         $auditionAssignJury->save();
@@ -134,8 +172,8 @@ class AuditionController extends Controller
     public function create()
     {
         $auditionAdmins = User::whereNotIn('id', Audition::pluck('audition_admin_id'))->where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
-        $subCategories = SubCategory::where([['category_id',auth()->user()->category_id],['status',1]])->orderBY('id','desc')->get();
+        $subCategories = SubCategory::where([['category_id', auth()->user()->category_id], ['status', 1]])->orderBY('id', 'desc')->get();
 
-        return view('ManagerAdmin.auditionAdmin.create', compact('auditionAdmins','subCategories'));
+        return view('ManagerAdmin.auditionAdmin.create', compact('auditionAdmins', 'subCategories'));
     }
 }

@@ -44,6 +44,7 @@ class AuditionRulesController extends Controller
             'round_num' => 'required',
             'event_period' => 'required',
             'registration_period' => 'required',
+            'instruction_prepare_period' => 'required',
         ]);
         // return $request->all();
 

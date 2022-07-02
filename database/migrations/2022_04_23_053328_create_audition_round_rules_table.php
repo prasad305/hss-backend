@@ -16,7 +16,7 @@ class CreateAuditionRoundRulesTable extends Migration
         Schema::create('audition_round_rules', function (Blueprint $table) {
             $table->id();
             $table->integer('round_num')->nullable();
-            $table->unsignedBigInteger('audition_rules_id');
+            $table->unsignedBigInteger('audition_rules_id')->nullable();
             $table->integer('has_jury_or_judge_mark')->nullable()->comment('0 = jury,1= judge');
             $table->integer('jury_or_judge_mark')->nullable()->comment('mark in percentage');
             $table->integer('has_user_vote_mark')->default(0)->comment('0 = no , 1= yes');
@@ -29,6 +29,7 @@ class CreateAuditionRoundRulesTable extends Migration
             $table->integer('video_duration')->nullable();
 
             $table->integer('round_period')->nullable();
+            $table->integer('video_slot_num')->nullable();
             $table->integer('instruction_prepare_period')->nullable();
             $table->integer('video_upload_period')->nullable();
             $table->integer('jury_or_judge_mark_period')->nullable();

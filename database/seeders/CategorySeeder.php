@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Audition\AuditionRules;
 use Illuminate\Database\Seeder;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
@@ -16,88 +17,124 @@ class CategorySeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        
+        $category = new Category();
+        $category->name = 'Flim Stars';
+        $category->slug = 'flim-stars';
+        $category->icon = $faker->imageUrl($width = 200, $height = 200);
+        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->status = true;
+        $category->save();
 
-            $Categorty = new Category();
-            $Categorty->name = 'Flim Stars';
-            $Categorty->slug = 'flim-stars';
-            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
-            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
-            $Categorty->status = true;
-            $Categorty->save();
+        $auditionRule = new AuditionRules();
+        $auditionRule->category_id = $category->id;
+        $auditionRule->save();
 
-            $Categorty = new Category();
-            
-            $Categorty->name = 'Sports';
-            $Categorty->slug = 'sports';
-            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
-            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
-            $Categorty->status = true;
-            $Categorty->save();
+        $category = new Category();
+        $category->name = 'Sports';
+        $category->slug = 'sports';
+        $category->icon = $faker->imageUrl($width = 200, $height = 200);
+        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->status = true;
+        $category->save();
 
-            $Categorty = new Category();
-            $Categorty->name = 'Musician';
-            $Categorty->slug = 'musician';
-            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
-            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
-            $Categorty->status = true;
-            $Categorty->save();
+        $auditionRule = new AuditionRules();
+        $auditionRule->category_id = $category->id;
+        $auditionRule->save();
 
-            $Categorty = new Category();
-            $Categorty->name = 'Dancers';
-            $Categorty->slug = 'dancers';
-            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
-            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
-            $Categorty->status = true;
-            $Categorty->save();
+        $category = new Category();
+        $category->name = 'Musician';
+        $category->slug = 'musician';
+        $category->icon = $faker->imageUrl($width = 200, $height = 200);
+        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->status = true;
+        $category->save();
 
-            $Categorty = new Category();
-            $Categorty->name = 'Chefs';
-            $Categorty->slug = 'chefs';
-            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
-            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
-            $Categorty->status = true;
-            $Categorty->save();
+        $auditionRule = new AuditionRules();
+        $auditionRule->category_id = $category->id;
+        $auditionRule->save();
 
-            $Categorty = new Category();
-            $Categorty->name = 'Drama';
-            $Categorty->slug = 'drama';
-            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
-            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
-            $Categorty->status = true;
-            $Categorty->save();
+        $category = new Category();
+        $category->name = 'Dancers';
+        $category->slug = 'dancers';
+        $category->icon = $faker->imageUrl($width = 200, $height = 200);
+        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->status = true;
+        $category->save();
 
-            $Categorty = new Category();
-            $Categorty->name = 'Tech';
-            $Categorty->slug = 'tech';
-            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
-            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
-            $Categorty->status = true;
-            $Categorty->save();
+        $auditionRule = new AuditionRules();
+        $auditionRule->category_id = $category->id;
+        $auditionRule->save();
 
-            $Categorty = new Category();
-            $Categorty->name = 'Motivational Speaker';
-            $Categorty->slug = 'motivational-speaker';
-            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
-            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
-            $Categorty->status = true;
-            $Categorty->save();
+        $category = new Category();
+        $category->name = 'Chefs';
+        $category->slug = 'chefs';
+        $category->icon = $faker->imageUrl($width = 200, $height = 200);
+        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->status = true;
+        $category->save();
 
-            $Categorty = new Category();
-            $Categorty->name = 'Religion';
-            $Categorty->slug = 'religion';
-            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
-            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
-            $Categorty->status = true;
-            $Categorty->save();
+        $auditionRule = new AuditionRules();
+        $auditionRule->category_id = $category->id;
+        $auditionRule->save();
 
-            $Categorty = new Category();
-            $Categorty->name = 'Comedians';
-            $Categorty->slug = 'comedians';
-            $Categorty->icon = $faker->imageUrl($width = 200, $height = 200);
-            $Categorty->image = $faker->imageUrl($width = 300, $height = 200);
-            $Categorty->status = true;
-            $Categorty->save();
-        
+        $category = new Category();
+        $category->name = 'Drama';
+        $category->slug = 'drama';
+        $category->icon = $faker->imageUrl($width = 200, $height = 200);
+        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->status = true;
+        $category->save();
+
+        $auditionRule = new AuditionRules();
+        $auditionRule->category_id = $category->id;
+        $auditionRule->save();
+
+        $category = new Category();
+        $category->name = 'Tech';
+        $category->slug = 'tech';
+        $category->icon = $faker->imageUrl($width = 200, $height = 200);
+        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->status = true;
+        $category->save();
+
+        $auditionRule = new AuditionRules();
+        $auditionRule->category_id = $category->id;
+        $auditionRule->save();
+
+        $category = new Category();
+        $category->name = 'Motivational Speaker';
+        $category->slug = 'motivational-speaker';
+        $category->icon = $faker->imageUrl($width = 200, $height = 200);
+        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->status = true;
+        $category->save();
+
+        $auditionRule = new AuditionRules();
+        $auditionRule->category_id = $category->id;
+        $auditionRule->save();
+
+        $category = new Category();
+        $category->name = 'Religion';
+        $category->slug = 'religion';
+        $category->icon = $faker->imageUrl($width = 200, $height = 200);
+        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->status = true;
+        $category->save();
+
+        $auditionRule = new AuditionRules();
+        $auditionRule->category_id = $category->id;
+        $auditionRule->save();
+
+        $category = new Category();
+        $category->name = 'Comedians';
+        $category->slug = 'comedians';
+        $category->icon = $faker->imageUrl($width = 200, $height = 200);
+        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->status = true;
+        $category->save();
+
+        $auditionRule = new AuditionRules();
+        $auditionRule->category_id = $category->id;
+        $auditionRule->save();
     }
 }

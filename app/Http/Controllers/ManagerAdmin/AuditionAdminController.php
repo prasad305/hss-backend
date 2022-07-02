@@ -486,17 +486,8 @@ class AuditionAdminController extends Controller
     }
     public function auditionEvents()
     {
-        $round_rules = AuditionRoundRule::where('status', 1)->get();
-        $auditions = [];
-        foreach ($round_rules as $key => $rule) {
-            $auditions = Audition::where('audition_round_rules_id', [$rule->id])->get();
-        }
-
-        $data = [
-            'pending_instructions' => $round_rules,
-            'auditions' => $auditions,
-        ];
-        return view('ManagerAdmin.Audition.events', $data);
+        $auditions =  Audition::where('category_id', auth()->user()->category_id )->get();
+        return view('ManagerAdmin.Audition.events',compact('auditions'));
     }
 
     public function registrationRules()
