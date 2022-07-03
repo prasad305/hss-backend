@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Svg\Tag\Rect;
 
 class JudgeAuditionController extends Controller
 {
@@ -48,6 +49,68 @@ class JudgeAuditionController extends Controller
             'auditionPromoInstructionSendInfo' => $auditionPromoInstructionSendInfo,
             'audition' => $auditionPromoInstructionSendInfo->audition,
         ]);
+    }
+    public function starAuditionByPromoInstructionUpdate(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'instruction' => 'required|min:5',
+            'image' => 'required|mimes:jpg,jpeg,png',
+            'video' => 'required|mimes:mp4,mkv',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+
+            try {
+
+                $auditionPromoInstructionSendInfo  = AuditionPromoInstructionSendInfo::find($request->audition_promo_instruction_send_info_id);
+                $auditionPromoInstructionSendInfo->instruction = $request->instruction;
+                $auditionPromoInstructionSendInfo->status = 1;
+
+                if ($request->hasfile('image')) {
+                    $image             = $request->image;
+                    $image_folder_path       = 'uploads/images/auditions/instructions/';
+                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                    // save to server
+                    $request->image->move($image_folder_path, $image_new_name);
+                    $auditionPromoInstructionSendInfo->image = $image_folder_path . '/' . $image_new_name;
+                }
+
+                if ($request->hasfile('video')) {
+                    $file             = $request->video;
+                    $folder_path       = 'uploads/videos/auditions/instructions/';
+                    $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
+                    // save to server
+                    $request->video->move($folder_path, $file_new_name);
+                    $auditionPromoInstructionSendInfo->video = $folder_path . '/' . $file_new_name;
+                }
+
+                if ($request->hasfile('pdf')) {
+                    $image             = $request->pdf;
+                    $pdf_folder_path       = 'uploads/pdf/auditions/instructions/';
+                    $pdf_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                    // save to server
+                    $request->pdf->move($pdf_folder_path, $pdf_new_name);
+                    $auditionPromoInstructionSendInfo->document = $pdf_folder_path . '/' . $pdf_new_name;
+                }
+
+                $auditionPromoInstructionSendInfo->save();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Audition Promo instruction updated successfully !!',
+                    'auditionPromoInstructionSendInfo' => $auditionPromoInstructionSendInfo,
+                ]);
+            } catch (\Exception $exception) {
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  $exception->getMessage(),
+                ]);
+            }
+        }
     }
 
     public function starLiveAudtion()
