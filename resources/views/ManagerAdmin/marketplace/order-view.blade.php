@@ -1,14 +1,4 @@
-@extends('Layouts.ManagerAdmin.master')
 
-@push('title')
-    Super Admin | Order View
-@endpush
-
-
-
-@section('content')
-
-<!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -147,5 +137,3 @@
        </div>
     </div>
  </section>
-
-@endsection
