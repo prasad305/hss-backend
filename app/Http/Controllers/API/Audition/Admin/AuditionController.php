@@ -380,7 +380,7 @@ class AuditionController extends Controller
 
     public function count()
     {
-        $live = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 3]])->count();
+        $live = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 2]])->count();
         $pending = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 0]])->count();
         $request_approval_pending = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 1]])->count();
 
@@ -415,7 +415,7 @@ class AuditionController extends Controller
     // Live Auditions
     public function live()
     {
-        $lives = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 3]])->get();
+        $lives = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 2]])->get();
         return response()->json([
             'status' => 200,
             'lives' => $lives,
