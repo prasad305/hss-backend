@@ -153,7 +153,7 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                
+
                 <li class="nav-item">
                     <a href="{{ route('managerAdmin.audition.published') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
@@ -674,7 +674,22 @@
                 </li>
             </ul>
         </li>
-
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>Accounts
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.accounts.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
 
 

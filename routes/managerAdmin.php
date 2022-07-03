@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ManagerAdmin\AccountsController;
 use App\Http\Controllers\ManagerAdmin\AuditionAdminController;
 use App\Http\Controllers\ManagerAdmin\JuryBoardController;
 use App\Http\Controllers\ManagerAdmin\AdminController;
@@ -117,7 +118,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::post('audition/registration/rules/store', [AuditionAdminController::class, 'storeRegistrationRules'])->name('audition.registration.rules.store');
     Route::get('audition/registration/rules/{audition_id}/edit', [AuditionAdminController::class, 'editRegistrationRules'])->name('audition.registration.rules.edit');
     Route::get('audition/registration-rules/{round_id}', [AuditionAdminController::class, 'getRoundInfo']);
-    
+
     Route::post('audition/registration/round/update/{round_id}', [AuditionAdminController::class, 'updateRegistrationRound'])->name('audition.registration.round.update');
     // Jury Board route
     Route::resource('jury', JuryBoardController::class);
@@ -313,4 +314,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('promoVideo/edit/{id}', [PromoVideoController::class, 'edit'])->name('promoVideo.edit');
     Route::put('promoVideo/edit/{id}', [PromoVideoController::class, 'update'])->name('promoVideo.update');
     Route::post('promoVideo/set_publish/{id}', [PromoVideoController::class, 'set_publish'])->name('promoVideo.set_publish');
+
+    //====================== Accounts Route =================
+
+    Route::get('accounts-dashboaad', [AccountsController::class, 'index'])->name('accounts.index');
 });
