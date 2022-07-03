@@ -551,10 +551,14 @@ class AuditionController extends Controller
         $event = Audition::with(['assignedJudges', 'participant','promoInstruction'])->where('slug', $slug)->first();
         $ids = $event->assignedJuries->unique('group_id')->pluck('group_id');
         $juryGroups =  JuryGroup::whereIn('id', $ids)->get();
+
+        $promo_instruction_infos = AuditionPromoInstructionSendInfo::with('judge')->where('audition_id',$event->id)->get();
+
         return response()->json([
             'status' => 200,
             'event' => $event,
             'juryGroups' => $juryGroups,
+            'promo_instruction_infos' => $promo_instruction_infos,
         ]);
     }
 
