@@ -8,6 +8,7 @@ use App\Models\Audition\AuditionAssignJury;
 use App\Models\Audition\AuditionMark;
 use App\Models\Category;
 use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\AuditionPromoInstructionSendInfo;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -68,12 +69,17 @@ class User extends Authenticatable
 
 
     //Relation For API
-    protected $with = ['userInfo', 'admin','star.starDetails','category','subCategory'];
+    protected $with = ['assignedToMePromoInstructionSendInfo','userInfo', 'admin','star.starDetails','category','subCategory'];
 
 
     public function admin()
     {
         return $this->hasOne(User::class, 'parent_user');
+    }
+
+    public function assignedToMePromoInstructionSendInfo()
+    {
+        return $this->hasOne(AuditionPromoInstructionSendInfo::class, 'judge_id');
     }
 
     public function starDetails()
