@@ -1,0 +1,120 @@
+.card-border{
+   border: 2px solid gold;
+   border-radius: 5px;
+}
+
+
+.audition-txt{
+    background: linear-gradient(180deg, #E7A825 0%, #F6EA45 50.52%, #E7A825 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-family: 'Bebas Neue';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 100px;
+   
+    
+}
+
+.banner-1{
+width: 100%;
+}
+
+.three-star{
+    background: linear-gradient(270deg, #490163 0%, #FFAD00 70%);
+    border-radius: 5px;
+    
+}
+
+.btn-1{
+    background-color: #3A8FF2;
+    
+}
+.ImBanner{
+    position: relative;
+}
+
+.crnye{
+    position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 58px;
+}
+
+.center {
+    display: 'flex';
+	justify-content: 'center';
+	align-items: 'center';
+  }
+
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid blue;
+    border-right: 16px solid green;
+    border-bottom: 16px solid red;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
+  
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+@media only screen and (max-width: 600px) {
+    .three-star{
+        width: 100%;
+    }
+
+    .btn-1{
+        width: 50%;
+        
+    }
+
+    .audition-txt{
+        width: 80%;
+        font-weight: 400;
+        font-size: 28px !important;
+        
+    }
+
+    .crnye{
+     position: absolute;
+      bottom: -20px !important;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-weight: 500;
+      font-size: 10px;
+      line-height: 15px;
+      
+    }
+  }
+
+  
+  
+
+  @media only screen and (max-width: 768px) {
+    .three-star{
+        width: 100%;
+    }
+
+    .audition-txt{
+        width: 80%;
+        font-weight: 400;
+        font-size: 60px;
+    }
+
+  }
