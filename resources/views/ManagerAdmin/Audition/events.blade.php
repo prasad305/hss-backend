@@ -102,7 +102,9 @@
 
                             <center>
                                 <span class="text-center btn btn-info px-4 text-bold">Done</span>
+                                <a href="">Promo Instruction</a>
                             </center>
+                        
                         </div>
                     </div>
                 </div>
