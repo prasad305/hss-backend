@@ -42,11 +42,11 @@ class JudgeAuditionController extends Controller
     }
     public function starAuditionByPromoInstructionPending($id)
     {
-        return $auditionPromoInstructionSendInfo  = AuditionPromoInstructionSendInfo::find($id);
-
+        $auditionPromoInstructionSendInfo  = AuditionPromoInstructionSendInfo::find($id);
         return response()->json([
             'status' => 200,
             'auditionPromoInstructionSendInfo' => $auditionPromoInstructionSendInfo,
+            'audition' => $auditionPromoInstructionSendInfo->audition,
         ]);
     }
 
