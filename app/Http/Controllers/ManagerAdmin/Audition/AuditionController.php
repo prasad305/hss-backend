@@ -8,6 +8,7 @@ use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionAssignJudge;
 use App\Models\Audition\AuditionAssignJury;
 use App\Models\Audition\AuditionInfo;
+use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionRules;
@@ -175,5 +176,15 @@ class AuditionController extends Controller
         $subCategories = SubCategory::where([['category_id', auth()->user()->category_id], ['status', 1]])->orderBY('id', 'desc')->get();
 
         return view('ManagerAdmin.auditionAdmin.create', compact('auditionAdmins', 'subCategories'));
+    }
+
+
+    public function registerUser($audition_id){
+        $audition = Audition::find($audition_id);
+
+        $users = AuditionParticipant::where([['audition_id',$audition_id]])->get();
+
+        return view('ManagerAdmin.audition.register_users',compact('audition','users'));
+
     }
 }

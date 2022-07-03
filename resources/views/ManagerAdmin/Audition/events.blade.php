@@ -102,7 +102,8 @@
 
                             <center>
                                 <span class="text-center btn btn-info px-4 text-bold">Done</span>
-                                <a href="">Promo Instruction</a>
+                                <a href="{{route('managerAdmin.audition.promoInstruction',$audition->id)}}" class="btn btn-warning">Promo Instruction</a><br>
+                                <a href="{{route('managerAdmin.audition.registerUser',$audition->id)}}" class="btn btn-warning">Register User</a>
                             </center>
                         
                         </div>
