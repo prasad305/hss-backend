@@ -267,11 +267,4 @@ class DashboardController extends Controller
         $juryList = AssignJury::with(['user', 'auditions'])->where('category_id', auth()->user()->category_id)->get();
         return view('ManagerAdmin.Audition.auditionsJuries', compact('juryList'));
     }
-
-
-    public function page555()
-    {
-        
-        return view('ManagerAdmin.StaticView.page555');
-    }
 }

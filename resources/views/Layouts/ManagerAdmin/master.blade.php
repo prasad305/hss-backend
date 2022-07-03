@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{ asset('assets/custom-style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/super-admin/Events.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/manager-admin/plugins/summernote/summernote-bs4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/pages.css') }}">
+
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
