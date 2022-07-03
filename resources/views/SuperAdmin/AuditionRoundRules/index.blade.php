@@ -316,7 +316,7 @@ Super Admin
                             </div>
                             <div class="d-flex flex-row col-md-6">
                                 <input type="text" class="form-control" name="instruction_prepare_period"
-                                    id="instruction_prepare_period" placeholder="ex: 123 days">
+                                    id="instruction_prepare_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
                             </div>
                         </div>
 
@@ -327,7 +327,7 @@ Super Admin
                             </div>
                             <div class="d-flex flex-row col-md-6">
                                 <input type="text" class="form-control" name="video_upload_period"
-                                    id="video_upload_period" placeholder="ex: 123 days">
+                                    id="video_upload_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
                             </div>
                         </div>
                     </div>
@@ -340,7 +340,7 @@ Super Admin
                             </div>
                             <div class="d-flex flex-row col-md-6">
                                 <input type="text" class="form-control" name="jury_or_judge_mark_period"
-                                    id="jury_or_judge_mark_period" placeholder="ex: 123 days">
+                                    id="jury_or_judge_mark_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
                             </div>
                         </div>
 
@@ -351,7 +351,7 @@ Super Admin
                             </div>
                             <div class="d-flex flex-row col-md-6">
                                 <input type="text" class="form-control" name="result_publish_period"
-                                    id="result_publish_period" placeholder="ex: 123 days">
+                                    id="result_publish_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
                             </div>
                         </div>
                     </div>
@@ -363,7 +363,7 @@ Super Admin
                                 <hr>
                             </div>
                             <div class="d-flex flex-row col-md-6">
-                                <input type="text" class="form-control" name="appeal_period" id="appeal_period"
+                                <input type="text" class="form-control" onkeyup="periodCheck()" name="appeal_period" id="appeal_period"
                                     placeholder="ex: 123 days">
                             </div>
                         </div>
@@ -375,12 +375,14 @@ Super Admin
                             </div>
                             <div class="d-flex flex-row col-md-6">
                                 <input type="text" class="form-control" name="appeal_result_publish_period"
-                                    id="appeal_result_publish_period" placeholder="ex: 123 days">
+                                    id="appeal_result_publish_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
                             </div>
                         </div>
+
+                       
                     </div>
 
-
+                    <center><span id="hole_round_peroid_error" class="text-danger"></span></center>
 
 
 
@@ -603,6 +605,29 @@ Super Admin
         if (round_available_days == 0 || round_available_days < round_period) {
             $('#round_peroid_days_error').html('Round Available Days is Over');
             $("#SubmitRules").prop("disabled",true);
+        }
+    }
+   
+    function periodCheck(){
+        $("#SubmitRules").prop("disabled",false);
+        $('#hole_round_peroid_error').html('');
+        // alert('hello')
+        let round_period = Number($('#round_period').val());
+        let prepare_period = Number($('#instruction_prepare_period').val());
+        let video_upload_period = Number($('#video_upload_period').val());
+        let jury_or_judge_mark_period = Number($('#jury_or_judge_mark_period').val());
+        let result_publish_period = Number($('#result_publish_period').val());
+        let appeal_period =Number($('#appeal_period').val());
+        let appeal_result_publish_period = Number($('#appeal_result_publish_period').val());
+
+        let sum_of_round_period = prepare_period+video_upload_period+jury_or_judge_mark_period+result_publish_period+appeal_period+appeal_result_publish_period;
+
+        // console.log('Round Period is small or bigger : ',sum_of_round_period);
+        if (Number(round_period) < Number(sum_of_round_period)) {
+            $("#SubmitRules").prop("disabled",true);
+            $('#hole_round_peroid_error').html('Round Period Over! Please Cehck and Try Again!');
+            
+
         }
     }
 

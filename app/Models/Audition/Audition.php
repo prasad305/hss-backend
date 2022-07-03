@@ -25,6 +25,12 @@ class Audition extends Model
         return $this->hasOne(AuditionInfo::class, 'audition_id');
     }
 
+    public function promoInstruction()
+    {
+        return $this->hasOne(AuditionPromoInstruction::class, 'audition_id');
+    }
+
+
     public function star()
     {
         return $this->belongsTo(User::class, 'star_id');
@@ -82,4 +88,6 @@ class Audition extends Model
     {
         return $this->hasMany(AuditionUploadVideo::class, 'audition_id', 'id');
     }
+
+    
 }

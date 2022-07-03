@@ -22,7 +22,6 @@ class CreateAuditionRulesTable extends Migration
             $table->integer('event_period')->nullable();
             $table->integer('instruction_prepare_period')->nullable()->comment('for initial event prepration');
             $table->integer('registration_period')->nullable();
-            $table->integer('instruction_prepare_period')->nullable();
             $table->integer('status')->default(1)->comment('0 = inactive, 1= active');
             $table->timestamps();
         });
