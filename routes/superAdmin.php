@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SuperAdmin\AccountsController;
 use App\Http\Controllers\SuperAdmin\AdminAuditionController;
 use App\Http\Controllers\SuperAdmin\AuditionAdminController;
 use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
@@ -285,4 +286,109 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::resource('audition-jury', JurysAuditionController::class);
 
     //<===========================Audition Releated Route End=====================================>
+
+
+
+    //<=========================== Accounts Releated Route Start =====================================>
+
+    // all events
+    Route::get('accounts-index', [AccountsController::class, 'index'])->name('accounts.index');
+    Route::get('accounts-total-events', [AccountsController::class, 'totalEvents'])->name('accounts.totalEvents');
+    Route::get('accounts-daily-events', [AccountsController::class, 'dailyEvents'])->name('accounts.dailyEvents');
+    Route::get('accounts-weekly-events', [AccountsController::class, 'weeklyEvents'])->name('accounts.weeklyEvents');
+    Route::get('accounts-monthly-events', [AccountsController::class, 'monthlyEvents'])->name('accounts.monthlyEvents');
+    Route::get('accounts-yearly-events', [AccountsController::class, 'yearlyEvents'])->name('accounts.yearlyEvents');
+    // simple posts
+    Route::get('simplePost-totalIncome', [AccountsController::class, 'simplePostTotalIncome'])->name('simplePostTotalIncome');
+    Route::get('simplePost-dailyIncome', [AccountsController::class, 'simplePostDailyIncome'])->name('simplePostDailyIncome');
+    Route::get('simplePost-weeklyIncome', [AccountsController::class, 'simplePostweeklyIncome'])->name('simplePostWeeklyIncome');
+    Route::get('simplePost-monthlyIncome', [AccountsController::class, 'simplePostMonthlyIncome'])->name('simplePostMonthlyIncome');
+    Route::get('simplePost-yearlyIncome', [AccountsController::class, 'simplePostYearlyIncome'])->name('simplePostYearlyIncome');
+    // live chats
+    Route::get('liveChat-totalIncome', [AccountsController::class, 'liveChatTotalIncome'])->name('liveChatTotalIncome');
+    Route::get('liveChat-dailyIncome', [AccountsController::class, 'liveChatDailyIncome'])->name('liveChatDailyIncome');
+    Route::get('liveChat-weeklyIncome', [AccountsController::class, 'liveChatweeklyIncome'])->name('liveChatWeeklyIncome');
+    Route::get('liveChat-monthlyIncome', [AccountsController::class, 'liveChatMonthlyIncome'])->name('liveChatMonthlyIncome');
+    Route::get('liveChat-yearlyIncome', [AccountsController::class, 'liveChatYearlyIncome'])->name('liveChatYearlyIncome');
+    // meetup events
+    Route::get('meetup-totalIncome', [AccountsController::class, 'meetupTotalIncome'])->name('meetupTotalIncome');
+    Route::get('meetup-dailyIncome', [AccountsController::class, 'meetupDailyIncome'])->name('meetupDailyIncome');
+    Route::get('meetup-weeklyIncome', [AccountsController::class, 'meetupweeklyIncome'])->name('meetupWeeklyIncome');
+    Route::get('meetup-monthlyIncome', [AccountsController::class, 'meetupMonthlyIncome'])->name('meetupMonthlyIncome');
+    Route::get('meetup-yearlyIncome', [AccountsController::class, 'meetupYearlyIncome'])->name('meetupYearlyIncome');
+    // Audition
+    Route::get('audition-totalIncome', [AccountsController::class, 'auditionTotalIncome'])->name('auditionTotalIncome');
+    Route::get('audition-dailyIncome', [AccountsController::class, 'auditionDailyIncome'])->name('auditionDailyIncome');
+    Route::get('audition-weeklyIncome', [AccountsController::class, 'auditionweeklyIncome'])->name('auditionWeeklyIncome');
+    Route::get('audition-monthlyIncome', [AccountsController::class, 'auditionMonthlyIncome'])->name('auditionMonthlyIncome');
+    Route::get('audition-yearlyIncome', [AccountsController::class, 'auditionYearlyIncome'])->name('auditionYearlyIncome');
+    // Greeting
+    Route::get('greeting-totalIncome', [AccountsController::class, 'greetingTotalIncome'])->name('greetingTotalIncome');
+    Route::get('greeting-dailyIncome', [AccountsController::class, 'greetingDailyIncome'])->name('greetingDailyIncome');
+    Route::get('greeting-weeklyIncome', [AccountsController::class, 'greetingweeklyIncome'])->name('greetingWeeklyIncome');
+    Route::get('greeting-monthlyIncome', [AccountsController::class, 'greetingMonthlyIncome'])->name('greetingMonthlyIncome');
+    Route::get('greeting-yearlyIncome', [AccountsController::class, 'greetingYearlyIncome'])->name('greetingYearlyIncome');
+    // learning Session
+    Route::get('learningSession-totalIncome', [AccountsController::class, 'learningSessionTotalIncome'])->name('learningSessionTotalIncome');
+    Route::get('learningSession-dailyIncome', [AccountsController::class, 'learningSessionDailyIncome'])->name('learningSessionDailyIncome');
+    Route::get('learningSession-weeklyIncome', [AccountsController::class, 'learningSessionweeklyIncome'])->name('learningSessionWeeklyIncome');
+    Route::get('learningSession-monthlyIncome', [AccountsController::class, 'learningSessionMonthlyIncome'])->name('learningSessionMonthlyIncome');
+    Route::get('learningSession-yearlyIncome', [AccountsController::class, 'learningSessionYearlyIncome'])->name('learningSessionYearlyIncome');
+    // Q&A
+    Route::get('qna-totalIncome', [AccountsController::class, 'qnaTotalIncome'])->name('qnaTotalIncome');
+    Route::get('qna-dailyIncome', [AccountsController::class, 'qnaDailyIncome'])->name('qnaDailyIncome');
+    Route::get('qna-weeklyIncome', [AccountsController::class, 'qnaweeklyIncome'])->name('qnaWeeklyIncome');
+    Route::get('qna-monthlyIncome', [AccountsController::class, 'qnaMonthlyIncome'])->name('qnaMonthlyIncome');
+    Route::get('qna-yearlyIncome', [AccountsController::class, 'qnaYearlyIncome'])->name('qnaYearlyIncome');
+    // fan group
+    Route::get('fanGroup-totalIncome', [AccountsController::class, 'fanGroupTotalIncome'])->name('fanGroupTotalIncome');
+    Route::get('fanGroup-dailyIncome', [AccountsController::class, 'fanGroupDailyIncome'])->name('fanGroupDailyIncome');
+    Route::get('fanGroup-weeklyIncome', [AccountsController::class, 'fanGroupweeklyIncome'])->name('fanGroupWeeklyIncome');
+    Route::get('fanGroup-monthlyIncome', [AccountsController::class, 'fanGroupMonthlyIncome'])->name('fanGroupMonthlyIncome');
+    Route::get('fanGroup-yearlyIncome', [AccountsController::class, 'fanGroupYearlyIncome'])->name('fanGroupYearlyIncome');
+    // marketplace
+    Route::get('marketplace-totalIncome', [AccountsController::class, 'marketplaceTotalIncome'])->name('marketplaceTotalIncome');
+    Route::get('marketplace-dailyIncome', [AccountsController::class, 'marketplaceDailyIncome'])->name('marketplaceDailyIncome');
+    Route::get('marketplace-weeklyIncome', [AccountsController::class, 'marketplaceweeklyIncome'])->name('marketplaceWeeklyIncome');
+    Route::get('marketplace-monthlyIncome', [AccountsController::class, 'marketplaceMonthlyIncome'])->name('marketplaceMonthlyIncome');
+    Route::get('marketplace-yearlyIncome', [AccountsController::class, 'marketplaceYearlyIncome'])->name('marketplaceYearlyIncome');
+    // souvenir
+    Route::get('souvenir-totalIncome', [AccountsController::class, 'souvenirTotalIncome'])->name('souvenirTotalIncome');
+    Route::get('souvenir-dailyIncome', [AccountsController::class, 'souvenirDailyIncome'])->name('souvenirDailyIncome');
+    Route::get('souvenir-weeklyIncome', [AccountsController::class, 'souvenirweeklyIncome'])->name('souvenirWeeklyIncome');
+    Route::get('souvenir-monthlyIncome', [AccountsController::class, 'souvenirMonthlyIncome'])->name('souvenirMonthlyIncome');
+    Route::get('souvenir-yearlyIncome', [AccountsController::class, 'souvenirYearlyIncome'])->name('souvenirYearlyIncome');
+    // auction
+    Route::get('auction-totalIncome', [AccountsController::class, 'auctionTotalIncome'])->name('auctionTotalIncome');
+    Route::get('auction-dailyIncome', [AccountsController::class, 'auctionDailyIncome'])->name('auctionDailyIncome');
+    Route::get('auction-weeklyIncome', [AccountsController::class, 'auctionweeklyIncome'])->name('auctionWeeklyIncome');
+    Route::get('auction-monthlyIncome', [AccountsController::class, 'auctionMonthlyIncome'])->name('auctionMonthlyIncome');
+    Route::get('auction-yearlyIncome', [AccountsController::class, 'auctionYearlyIncome'])->name('auctionYearlyIncome');
+
+
+    // manager Admin
+
+    Route::get('manager-admin', [AccountsController::class, 'managerAdminList'])->name('accounts.managerAdminList');
+    Route::get('manager-admin-income', [AccountsController::class, 'managerAdminIncome'])->name('managerAdmin.income');
+
+    //  Admin
+
+    Route::get('admin-accounts', [AccountsController::class, 'adminList'])->name('accounts.adminList');
+    Route::get('admin-income', [AccountsController::class, 'adminIncome'])->name('admin.income');
+
+    // star
+
+    Route::get('superstar-accounts', [AccountsController::class, 'superstarList'])->name('accounts.superstarList');
+    Route::get('superstar-income', [AccountsController::class, 'superstarIncome'])->name('superstar.income');
+
+    // audition Admin
+
+    Route::get('audition-admin-accounts', [AccountsController::class, 'auditionAdminList'])->name('accounts.auditionAdminList');
+    Route::get('audition-admin-income', [AccountsController::class, 'auditionAdminIncome'])->name('auditionAdmin.income');
+
+
+
+    //<=========================== Accounts Releated Route End =====================================>
+
+
 });
