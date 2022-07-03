@@ -218,7 +218,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('marketplace/published', [MarketplaceController::class, 'published'])->name('marketplace.published');
     Route::get('marketplace/all', [MarketplaceController::class, 'all'])->name('marketplace.all');
     Route::get('marketplace/order/list', [MarketplaceController::class, 'allOrderList'])->name('marketplace.allOrderList');
-    Route::get('marketplace/order/list/{id}', [MarketplaceController::class, 'allOrderDetails'])->name('marketplace.allOrderDetails');
 
     Route::get('marketplace/details/{id}', [MarketplaceController::class, 'details'])->name('marketplace.details');
     Route::get('marketplace/edit/{id}', [MarketplaceController::class, 'edit'])->name('marketplace.edit');
@@ -235,7 +234,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('souvenir/apply/delete/list', [SouvenirController::class, 'deleteApplySouvenir'])->name('souvenir.showApplyDelete');
     Route::put('souvenir/update/{id}', [SouvenirController::class, 'update'])->name('souvenir.update');
     Route::get('souvenir/set_publish/{id}', [SouvenirController::class, 'set_publish'])->name('souvenir.set_publish');
-    Route::get('souvenir/order/list/{id}', [SouvenirController::class, 'allOrderDetails'])->name('souvenir.allOrderDetails');
     Route::post('souvenir/restore/{id}', [SouvenirController::class, 'restoreNow'])->name('souvenir.restoreNow');
     Route::post('souvenir/delete/{id}', [SouvenirController::class, 'deleteNow'])->name('souvenir.deleteNow');
 
@@ -314,3 +312,9 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::put('promoVideo/edit/{id}', [PromoVideoController::class, 'update'])->name('promoVideo.update');
     Route::post('promoVideo/set_publish/{id}', [PromoVideoController::class, 'set_publish'])->name('promoVideo.set_publish');
 });
+
+
+
+Route::get('manager-admin/souvenir/order/list/{id}', [SouvenirController::class, 'allOrderDetails'])->name('managerAdmin.souvenir.allOrderDetails');
+Route::get('manager-admin/marketplace/order/list/{id}', [MarketplaceController::class, 'allOrderDetails'])->name('managerAdmin.marketplace.allOrderDetails');
+
