@@ -12,7 +12,7 @@ class SimplePost extends Model
     protected $guarded = [];
 
     //Relation For API
-    protected $with = ['star','admin'];
+    protected $with = ['star', 'admin', 'generalPostPayment'];
 
 
     public function star()
@@ -23,5 +23,9 @@ class SimplePost extends Model
     public function admin()
     {
         return $this->belongsTo(User::class, 'created_by_id');
+    }
+    public function generalPostPayment()
+    {
+        return $this->hasMany(GeneralPostPayment::class, 'post_id');
     }
 }

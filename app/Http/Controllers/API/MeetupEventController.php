@@ -242,13 +242,13 @@ class MeetupEventController extends Controller
 
     public function star_meetup_list($type)
     {
-        if($type == 'pending')
+        if ($type == 'pending')
             $events = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '<', 1]]);
-        if($type == 'approved')
+        if ($type == 'approved')
             $events = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0], ['status', '<', 10]]);
-        if($type == 'completed')
+        if ($type == 'completed')
             $events = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', 9]]);
-        if($type == 'rejected')
+        if ($type == 'rejected')
             $events = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', 11]]);
 
         return response()->json([
@@ -306,43 +306,6 @@ class MeetupEventController extends Controller
 
     /// Manager Part ////
 
-    public function manager_all()
-    {
-        $upcommingEvent = MeetupEvent::where([['status', '>', 0], ['category_id', auth()->user()->category_id]])->latest()->get();
-
-        return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
-    }
-
-
-    public function manager_pending()
-    {
-        $upcommingEvent = MeetupEvent::where([['status', 1], ['category_id', auth()->user()->category_id]])->latest()->get();
-
-        return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
-    }
-
-    public function manager_published()
-    {
-        $upcommingEvent = MeetupEvent::where([['status', 2], ['category_id', auth()->user()->category_id]])->latest()->get();
-
-        return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
-    }
-
-
-
-    public function set_approve_by_manager($id)
-    {
-        $meetup = MeetupEvent::find($id);
-        $meetup->star_approval = 1;
-        $meetup->update();
-
-        return response()->json([
-            'status' => 200,
-            'meetup' => $meetup,
-            'message' => 'Approved',
-        ]);
-    }
-
     public function event_info($id)
     {
 
@@ -355,58 +318,6 @@ class MeetupEventController extends Controller
         ]);
     }
 
-
-
-    public function manager_event_details($id)
-    {
-        $meetup = MeetupEvent::find($id);
-
-        return view('ManagerAdmin.MeetupEvents.details', compact('meetup'));
-    }
-
-
-    public function manager_event_set_publish(Request $request, $id)
-    {
-        $meetup = MeetupEvent::find($id);
-
-        if ($meetup->status != 2) {
-
-            $request->validate([
-                'post_start_date' => 'required',
-                'post_end_date' => 'required',
-            ]);
-
-            $meetup->status = 2;
-            $meetup->update();
-
-            $starCat = SuperStar::where('star_id', $meetup->star_id)->first();
-            // Create New post //
-            $post = new Post();
-            $post->type = 'meetup';
-            $post->user_id = $meetup->star_id;
-            $post->event_id = $meetup->id;
-            $post->category_id = $starCat->category_id;
-            $post->sub_category_id = $starCat->sub_category_id;
-            $post->post_start_date = Carbon::parse($request->post_start_date);
-            $post->post_end_date = Carbon::parse($request->post_end_date);
-            $post->save();
-
-            return redirect()->back()->with('success', 'Published');
-        } else {
-            $meetup->status = 10;
-            $meetup->update();
-            //Remove post //
-            $post = Post::where('event_id', $id)->first();
-            $post->delete();
-
-            return redirect()->back()->with('warning', 'Removed');
-        }
-
-
-        return redirect()->back()->with('success', 'Published');
-
-
-    }
 
 
     // User Part

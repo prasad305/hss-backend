@@ -25,8 +25,7 @@
 
         <li class="nav-item">
             <a href="{{ route('managerAdmin.admin.index') }}" class="nav-link">
-                <i
-                    class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-users">
+                <i class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-users">
                 </i>
                 {{-- <i class="fa-solid fa-list-check"></i> --}}
                 <p>
@@ -313,12 +312,12 @@
                         <p>Register List</p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('managerAdmin.souvenir.showApplyDelete') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Delete List</p>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </li>
 
@@ -679,7 +678,22 @@
                 </li>
             </ul>
         </li>
-
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>Accounts
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.accounts.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
 
 
