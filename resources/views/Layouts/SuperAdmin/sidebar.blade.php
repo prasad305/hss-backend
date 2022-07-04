@@ -29,8 +29,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.meetupEvents') }}"
-                        class="nav-link {{ Request::routeIs('superAdmin.meetupEvents') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.meetupEvents.dashboard') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.meetupEvents.dashboard') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Meetup Events</p>
                     </a>

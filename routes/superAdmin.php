@@ -42,6 +42,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/auditions', [DashboardController::class, 'auditions'])->name('auditions');
     Route::get('/meetup-events', [DashboardController::class, 'meetupEvents'])->name('meetupEvents');
+    Route::get('/meetup-events-dashboard', [DashboardController::class, 'meetupEventsDashboard'])->name('meetupEvents.dashboard');
     Route::get('/learning-session', [DashboardController::class, 'learningSessions'])->name('learningSessions');
     Route::get('/live-chats', [DashboardController::class, 'liveChats'])->name('liveChats');
     Route::get('/fan-group', [DashboardController::class, 'fanGroup'])->name('fanGroup');

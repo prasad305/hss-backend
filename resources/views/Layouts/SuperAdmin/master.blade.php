@@ -369,6 +369,7 @@
 
     <!-- Summernote -->
     <script src="{{ asset('assets/manager-admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
+    @stack('js')
 
     <script>
         $(function() {
