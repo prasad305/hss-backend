@@ -641,6 +641,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::post('superstar/audition/by-promo-instruction-update', [JudgeAuditionController::class, 'starAuditionByPromoInstructionUpdate']);
     Route::get('superstar/audition/pendings', [JudgeAuditionController::class, 'starPendingAudtion']);
     Route::get('superstar/audition/live', [JudgeAuditionController::class, 'starLiveAudtion']);
+    Route::get('superstar/audition/details/{audition_id}', [JudgeAuditionController::class, 'starAudtionDetails']);
     Route::get('/star/pending-audition/{id}', [JudgeAuditionController::class, 'starSingleAudition']);
     Route::put('/star/approved/audition/{id}', [JudgeAuditionController::class, 'starApprovedAudition']);
     Route::put('/star/decline/audition/{id}', [JudgeAuditionController::class, 'starDeclineAudition']);
@@ -685,6 +686,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/get-promo-instruction/{audition_id}', [AuditionController::class, 'auditionPromoInstruction']);
 
     Route::post('/audition-admin/audition/promo-instruction/store', [AuditionController::class, 'storePromoInstruction']);
+    Route::post('/audition-admin/audition/promo-instruction/update', [AuditionController::class, 'updatePromoInstruction']);
 
 
     Route::post('/audition-admin/audition/sendDummyInstructionToJudges', [AuditionController::class, 'sendDummyInstructionToJudges']);
