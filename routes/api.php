@@ -632,6 +632,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
 
     // Super Star Audtion Routes
+    Route::get('superstar/audition/promo-instruction-pending', [JudgeAuditionController::class, 'starPromoInstructionPending']);
+    Route::get('superstar/audition/by-promo-instruction-pending/{id}', [JudgeAuditionController::class, 'starAuditionByPromoInstructionPending']);
+    Route::post('superstar/audition/by-promo-instruction-update', [JudgeAuditionController::class, 'starAuditionByPromoInstructionUpdate']);
     Route::get('superstar/audition/pendings', [JudgeAuditionController::class, 'starPendingAudtion']);
     Route::get('superstar/audition/live', [JudgeAuditionController::class, 'starLiveAudtion']);
     Route::get('/star/pending-audition/{id}', [JudgeAuditionController::class, 'starSingleAudition']);
@@ -672,7 +675,14 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/singleAuditionVideos/{audition_id}', [AuditionController::class, 'singleAuditionVideos']);
     Route::get('/audition-admin/audition/singleAuditionRoundWithRoundId/{audition_id}/{audition_round_id}', [AuditionController::class, 'singleAuditionRoundWithRoundId']);
     Route::get('/audition-admin/audition/singleAuditionVideoWithRoundId/{audition_id}/{audition_round_id}', [AuditionController::class, 'singleAuditionVideoWithRoundId']);
+
     Route::get('/audition-admin/audition/singleAuditionInstruction/{instruction_id}', [AuditionController::class, 'singleAuditionInstruction']);
+
+    Route::get('/audition-admin/get-promo-instruction/{audition_id}', [AuditionController::class, 'auditionPromoInstruction']);
+
+    Route::post('/audition-admin/audition/promo-instruction/store', [AuditionController::class, 'storePromoInstruction']);
+
+
     Route::post('/audition-admin/audition/sendDummyInstructionToJudges', [AuditionController::class, 'sendDummyInstructionToJudges']);
     Route::post('/audition-admin/videoStatusChange', [AuditionController::class, 'videoStatusChange']);
     Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'pending']);
