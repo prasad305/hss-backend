@@ -223,7 +223,11 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/audition/round-instruction/{round_id}', [UserController::class, 'roundInstruction']);
     Route::get('/user/registration_checker/audition/{slug}', [UserController::class, 'UserAuditionRegistrationChecker']);
     Route::post('/user/audition/round-video-upload', [UserController::class, 'userRoundVideoUpload']);
+
     // Route::post('user/audition/videos/{audition_id}', [UserController::class, 'checkAuditionVideoUpload']);
+
+    Route::get('/user/audition/current_round_info/{event_slug}', [UserController::class, 'current_round_info']);
+
 
     // Promo Videos
     Route::get('/user/PromoVideos', [UserController::class, 'getPromoVideo']);
@@ -721,8 +725,6 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 
 
     Route::get('audition-admin/audition/group_juries/{audition_id}/{group_id}', [AuditionController::class, 'group_juries']);
-
-
 });
 
 
@@ -765,6 +767,7 @@ Route::post('superStar/register', [StarAuthController::class, 'superStar_registe
 Route::post('star_login', [StarAuthController::class, 'login']);
 
 Route::post('star_otp_verify', [StarAuthController::class, 'otp_verify']);
+Route::get('star-instrucation', [StarAuthController::class, 'starInstrucation']);
 
 Route::post('star_qr_verify', [StarAuthController::class, 'qr_verify']);
 
