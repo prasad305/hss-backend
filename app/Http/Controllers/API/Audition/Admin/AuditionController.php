@@ -16,9 +16,10 @@ use App\Models\Audition\AuditionJudgeInstruction;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionMark;
 use App\Models\Audition\AuditionPromoInstruction;
-use App\Models\Audition\AuditionPromoInstructionSendInfo;
+use App\Models\Audition\AuditionRoundInstructionSendInfo;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
+use App\Models\AuditionRoundInstruction;
 use App\Models\JudgeMarks;
 use App\Models\JuryGroup;
 use Carbon\Carbon;
@@ -214,7 +215,8 @@ class AuditionController extends Controller
             $instruction = new AuditionPromoInstruction();
             $instruction->audition_id = $request->audition_id;
             $instruction->instruction = $request->instruction;
-            $instruction->submission_end_date = date('Y-m-d', strtotime($request->submission_date));
+            // $instruction->submission_end_date = date('Y-m-d', strtotime($request->submission_date));
+            $instruction->submission_end_date = Carbon::parse($request->submission_date);
 
             try {
 
@@ -283,9 +285,148 @@ class AuditionController extends Controller
         }
     }
 
-    public function auditionPromoInstruction($audition_id){
-       $instruction = AuditionPromoInstruction::where('audition_id',$audition_id)->first();
-       return response()->json([
+    
+    public function storeRoundInstruction(Request $request)
+    {
+        // return $request->star_ids;
+        // return $request->all();
+        $old_instruction = AuditionRoundInstruction::where([['audition_id',$request->audition_id],['round_info_id',$request->round_info_id]])->first();
+
+        if (isset($old_instruction->id)) {
+            $validator = Validator::make($request->all(), [
+                'round_info_id' => 'required',
+                'instruction' => 'required|min:5',
+                'submission_date' => 'required',
+                'star_ids' => 'required',
+            ],[
+                'round_info_id.required' => 'Please Select Round Number',
+                'star_ids.required' => 'Select At Least One Star'
+            ]);
+        }else{
+            $validator = Validator::make($request->all(), [
+                'round_info_id' => 'required',
+                'instruction' => 'required|min:5',
+                'submission_date' => 'required',
+                'image' => 'required|mimes:jpg,jpeg,png',
+                'video' => 'required|mimes:mp4,mkv',
+                'star_ids' => 'required',
+            ],[
+                'round_info_id.required' => 'Please Select Round Number',
+                'star_ids.required' => 'Select At Least One Star'
+            ]);
+        }
+       
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+
+           
+
+            if (isset($old_instruction->id)) {
+                $instruction = $old_instruction;
+            }else{
+                $instruction = new AuditionRoundInstruction();
+            }
+            
+            $instruction->round_info_id = $request->round_info_id;
+            $instruction->audition_id = $request->audition_id;
+            $instruction->instruction = $request->instruction;
+            $instruction->submission_end_date = Carbon::parse($request->submission_date);
+
+            try {
+                if ($request->hasfile('image')) {
+                    $image             = $request->image;
+                    $image_folder_path       = 'uploads/images/auditions/round/instructions/';
+                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                    // save to server
+                    $request->image->move($image_folder_path, $image_new_name);
+                    $instruction->image = $image_folder_path . '/' . $image_new_name;
+                }
+
+                if ($request->hasfile('video')) {
+                    $file             = $request->video;
+                    $folder_path       = 'uploads/videos/auditions/round/instructions/';
+                    $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
+                    // save to server
+                    $request->video->move($folder_path, $file_new_name);
+                    $instruction->video = $folder_path . '/' . $file_new_name;
+                }
+
+                if ($request->hasfile('pdf')) {
+                    $image             = $request->pdf;
+                    $pdf_folder_path       = 'uploads/pdf/auditions/round/instructions/';
+                    $pdf_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                    // save to server
+                    $request->pdf->move($pdf_folder_path, $pdf_new_name);
+                    $instruction->document = $pdf_folder_path . '/' . $pdf_new_name;
+                }
+                $instruction->send_to_judge = 1;
+                $instruction->save();
+
+                if ($instruction) {
+
+                    if ($request->star_ids) {
+                        AuditionRoundInstructionSendInfo::where([['audition_id',$request->audition_id],['round_info_id',$request->round_info_id]])->delete();
+
+                        // if (isset($old_send_infos)) {
+                        //     foreach ($old_send_infos as $key => $old_send_info) {
+                        //         # code...
+                        //         $old_send_info->delete();
+                        //     }
+                        // }
+                        foreach ($request->star_ids as $key => $star) {
+                            
+                            // delete previous Round Send info
+                         
+                           // new round instruction for star create
+
+                            $instruction_info = new AuditionRoundInstructionSendInfo();
+                            $instruction_info->audition_id = $request->audition_id;
+                            $instruction_info->round_info_id = $instruction->round_info_id;
+                            $instruction_info->audition_round_ins_id = $instruction->id;
+                            $instruction_info->judge_id = $star;
+                            $instruction_info->instruction = $request->instruction;
+
+                            $instruction_info->image = $instruction->image;
+                            $instruction_info->video = $instruction->video;
+                            $instruction_info->document = $instruction->document;
+                            $instruction_info->submission_end_date = $instruction->submission_end_date;
+                            $instruction_info->save();
+                        }
+                    }
+                }
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Audition Round Instruction submitted successfully !!',
+                ]);
+            } catch (\Exception $exception) {
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  $exception->getMessage(),
+                ]);
+            }
+        }
+    }
+
+    public function getRoundInstruction($audition_id,$round_info_id){
+        $auditon_round_instruction = AuditionRoundInstruction::where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->first();
+        $audition = Audition::find($audition_id);
+        return response()->json([
+            'status' => 200,
+            'auditon_round_instruction' => $auditon_round_instruction,
+            'event' => $audition,
+        ]);
+
+    }
+
+    public function auditionPromoInstruction($audition_id)
+    {
+        $instruction = AuditionPromoInstruction::where('audition_id', $audition_id)->first();
+        return response()->json([
             'status' => 200,
             'instruction' => $instruction,
         ]);
@@ -548,7 +689,7 @@ class AuditionController extends Controller
 
     public function getAudition($slug)
     {
-        $event = Audition::with(['assignedJudges', 'participant','promoInstruction'])->where('slug', $slug)->first();
+        $event = Audition::with(['assignedJudges', 'participant', 'promoInstruction'])->where('slug', $slug)->first();
         $ids = $event->assignedJuries->unique('group_id')->pluck('group_id');
         $juryGroups =  JuryGroup::whereIn('id', $ids)->get();
         return response()->json([
