@@ -588,6 +588,18 @@ class AuditionController extends Controller
         ]);
     }
 
+    public function getRoundInstructionJudges($audition_id,$round_info_id){
+        
+        $round_ins_send_info = AuditionRoundInstructionSendInfo::where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'round_ins_send_info' => $round_ins_send_info,
+        ]);
+
+
+    }
+
 
     public function totalJudgeApproval($slug)
     {
