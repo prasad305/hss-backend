@@ -22,8 +22,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.auditions') }}"
-                        class="nav-link {{ Request::routeIs('superAdmin.auditions') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.auditionEvents.dashboard') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.auditionEvents.dashboard') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Auditions Dashboard</p>
                     </a>
@@ -36,38 +36,45 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.learningSessions') }}"
-                        class="nav-link {{ Request::routeIs('superAdmin.learningSessions') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.learningSessionEvents.dashboard') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.learningSessionEvents.dashboard') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Learning Sessions</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.liveChats') }}"
-                        class="nav-link {{ Request::routeIs('superAdmin.liveChats') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.liveChatEvents.dashboard') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.liveChatEvents.dashboard') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Live Chats</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.fanGroup') }}"
-                        class="nav-link {{ Request::routeIs('superAdmin.fanGroup') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.fanGroupEvents.dashboard') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.fanGroupEvents.dashboard') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Fan Group</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.greetings') }}"
-                        class="nav-link {{ Request::routeIs('superAdmin.greetings') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.greetingEvents.dashboard') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.greetingEvents.dashboard') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Greetings</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.userPosts') }}"
-                        class="nav-link {{ Request::routeIs('superAdmin.userPosts') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.simplePostEvents.dashboard') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.simplePostEvents.dashboard') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
-                        <p>User Posts</p>
+                        <p>Simple Posts</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.qnaEvents.dashboard') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.qnaEvents.dashboard') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Q&A</p>
                     </a>
                 </li>
 

@@ -267,6 +267,241 @@ class DashboardController extends Controller
   // Dashboard Meetup
   public function meetupEventsDashboard()
   {
-    return view('SuperAdmin.dashboard.Meetup.meetup_dashboard');
+    return view('SuperAdmin.dashboard.Meetup.dashboard');
+  }
+  public function meetupManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.Meetup.ManagerAdmin.manager_admin');
+  }
+  public function meetupManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.Meetup.ManagerAdmin.manager_admin_events');
+  }
+  public function meetupAdminList()
+  {
+    return view('SuperAdmin.dashboard.Meetup.Admin.admin');
+  }
+  public function meetupAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.Meetup.Admin.admin_events');
+  }
+  public function meetupSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.Meetup.Superstar.superstar');
+  }
+  public function meetupSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.Meetup.Superstar.superstar_events');
+  }
+  // Dashboard Learning Session
+  public function learningSessionEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.LearningSession.dashboard');
+  }
+  public function learningSessionManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.LearningSession.ManagerAdmin.manager_admin');
+  }
+  public function learningSessionManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.LearningSession.ManagerAdmin.manager_admin_events');
+  }
+  public function learningSessionAdminList()
+  {
+    return view('SuperAdmin.dashboard.LearningSession.Admin.admin');
+  }
+  public function learningSessionAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.LearningSession.Admin.admin_events');
+  }
+  public function learningSessionSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.LearningSession.Superstar.superstar');
+  }
+  public function learningSessionSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.LearningSession.Superstar.superstar_events');
+  }
+  // Dashboard Live Chat
+  public function liveChatEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.LiveChat.dashboard');
+  }
+  public function liveChatManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.LiveChat.ManagerAdmin.manager_admin');
+  }
+  public function liveChatManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.LiveChat.ManagerAdmin.manager_admin_events');
+  }
+  public function liveChatAdminList()
+  {
+    return view('SuperAdmin.dashboard.LiveChat.Admin.admin');
+  }
+  public function liveChatAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.LiveChat.Admin.admin_events');
+  }
+  public function liveChatSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.LiveChat.Superstar.superstar');
+  }
+  public function liveChatSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.LiveChat.Superstar.superstar_events');
+  }
+  // Dashboard Greeting
+  public function greetingEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.Greeting.dashboard');
+  }
+  public function greetingManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.Greeting.ManagerAdmin.manager_admin');
+  }
+  public function greetingManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.Greeting.ManagerAdmin.manager_admin_events');
+  }
+  public function greetingAdminList()
+  {
+    return view('SuperAdmin.dashboard.Greeting.Admin.admin');
+  }
+  public function greetingAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.Greeting.Admin.admin_events');
+  }
+  public function greetingSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.Greeting.Superstar.superstar');
+  }
+  public function greetingSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.Greeting.Superstar.superstar_events');
+  }
+  // Dashboard Fan Group
+  public function fanGroupEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.FanGroup.dashboard');
+  }
+  public function fanGroupManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.FanGroup.ManagerAdmin.manager_admin');
+  }
+  public function fanGroupManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.FanGroup.ManagerAdmin.manager_admin_events');
+  }
+  public function fanGroupAdminList()
+  {
+    return view('SuperAdmin.dashboard.FanGroup.Admin.admin');
+  }
+  public function fanGroupAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.FanGroup.Admin.admin_events');
+  }
+  public function fanGroupSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.FanGroup.Superstar.superstar');
+  }
+  public function fanGroupSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.FanGroup.Superstar.superstar_events');
+  }
+  // Dashboard Q&A
+  public function qnaEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.QnA.dashboard');
+  }
+  public function qnaManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.QnA.ManagerAdmin.manager_admin');
+  }
+  public function qnaManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.QnA.ManagerAdmin.manager_admin_events');
+  }
+  public function qnaAdminList()
+  {
+    return view('SuperAdmin.dashboard.QnA.Admin.admin');
+  }
+  public function qnaAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.QnA.Admin.admin_events');
+  }
+  public function qnaSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.QnA.Superstar.superstar');
+  }
+  public function qnaSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.QnA.Superstar.superstar_events');
+  }
+  // Dashboard simple post
+  public function simplePostEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.SimplePost.dashboard');
+  }
+  public function simplePostManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.SimplePost.ManagerAdmin.manager_admin');
+  }
+  public function simplePostManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.SimplePost.ManagerAdmin.manager_admin_events');
+  }
+  public function simplePostAdminList()
+  {
+    return view('SuperAdmin.dashboard.SimplePost.Admin.admin');
+  }
+  public function simplePostAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.SimplePost.Admin.admin_events');
+  }
+  public function simplePostSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.SimplePost.Superstar.superstar');
+  }
+  public function simplePostSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.SimplePost.Superstar.superstar_events');
+  }
+  // Dashboard Audition
+  public function auditionEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.Audition.dashboard');
+  }
+  public function auditionManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.Audition.ManagerAdmin.manager_admin');
+  }
+  public function auditionManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.Audition.ManagerAdmin.manager_admin_events');
+  }
+  public function adminList()
+  {
+    return view('SuperAdmin.dashboard.Audition.Admin.admin');
+  }
+  public function adminEvents()
+  {
+    return view('SuperAdmin.dashboard.Audition.Admin.admin_events');
+  }
+  public function auditionAdminList()
+  {
+    return view('SuperAdmin.dashboard.Audition.AuditionAdmin.audition_admin');
+  }
+  public function auditionAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.Audition.AuditionAdmin.audition_admin_events');
+  }
+  public function auditionSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.Audition.Superstar.superstar');
+  }
+  public function auditionSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.Audition.Superstar.superstar_events');
   }
 }
