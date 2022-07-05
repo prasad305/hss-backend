@@ -117,8 +117,8 @@ class JudgeAuditionController extends Controller
     {
         $liveAuditions = Audition::with('judge')
             ->whereHas('judge', function ($q) {
-                $q->where([['judge_id', auth('sanctum')->user()->id], ['approved_by_judge', 1]]);
-            })->get();
+                $q->where([['judge_id', auth('sanctum')->user()->id]]);
+            })->where('status', 2)->get();
 
         return response()->json([
             'status' => 200,
@@ -128,12 +128,25 @@ class JudgeAuditionController extends Controller
     public function liveEditInstructions($audition_id)
     {
         $audition = Audition::find($audition_id);
-        $auditionInstruction = AuditionJudgeInstruction::where('audition_id', $audition_id)->where('round_id', $audition->audition_round_rules_id)->where('star_id', auth('sanctum')->user()->id)->orderBy('id', 'DESC')->first();
+
+
+        $auditionInstruction = AuditionJudgeInstruction::where('audition_id', $audition_id)->where('round_id', $audition->audition_round_rules_id)->where('judge_id', auth('sanctum')->user()->id)->orderBy('id', 'DESC')->first();
 
         return response()->json([
             'status' => 200,
             'audition' => $audition,
             'auditionInstruction' => $auditionInstruction,
+        ]);
+    }
+    public function starAudtionDetails($audition_id)
+    {
+        $audition = Audition::find($audition_id);
+        // $auditionInstruction = AuditionJudgeInstruction::where('audition_id', $audition_id)->where('round_id', $audition->audition_round_rules_id)->where('judge_id', auth('sanctum')->user()->id)->orderBy('id', 'DESC')->first();
+
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
+            // 'auditionInstruction' => $auditionInstruction,
         ]);
     }
 

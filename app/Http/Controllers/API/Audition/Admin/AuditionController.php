@@ -282,10 +282,69 @@ class AuditionController extends Controller
             }
         }
     }
+    public function updatePromoInstruction(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'instruction' => 'required|min:5',
+            'image' => 'required|mimes:jpg,jpeg,png',
+            'video' => 'required|mimes:mp4,mkv',
+        ]);
 
-    public function auditionPromoInstruction($audition_id){
-       $instruction = AuditionPromoInstruction::where('audition_id',$audition_id)->first();
-       return response()->json([
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $instruction = AuditionPromoInstruction::find($request->audition_promo_instruction_id);
+            $instruction->audition_id = $request->audition_id;
+            $instruction->instruction = $request->instruction;
+            try {
+                if ($request->hasfile('image')) {
+                    $image             = $request->image;
+                    $image_folder_path       = 'uploads/images/auditions/instructions/';
+                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                    // save to server
+                    $request->image->move($image_folder_path, $image_new_name);
+                    $instruction->image = $image_folder_path . '/' . $image_new_name;
+                }
+
+                if ($request->hasfile('video')) {
+                    $file             = $request->video;
+                    $folder_path       = 'uploads/videos/auditions/instructions/';
+                    $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
+                    // save to server
+                    $request->video->move($folder_path, $file_new_name);
+                    $instruction->video = $folder_path . '/' . $file_new_name;
+                }
+
+                if ($request->hasfile('pdf')) {
+                    $image             = $request->pdf;
+                    $pdf_folder_path       = 'uploads/pdf/auditions/instructions/';
+                    $pdf_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                    // save to server
+                    $request->pdf->move($pdf_folder_path, $pdf_new_name);
+                    $instruction->document = $pdf_folder_path . '/' . $pdf_new_name;
+                }
+                $instruction->send_to_manager = 1;
+                $instruction->save();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Audition Promo instruction updated successfully !!',
+                ]);
+            } catch (\Exception $exception) {
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  $exception->getMessage(),
+                ]);
+            }
+        }
+    }
+
+    public function auditionPromoInstruction($audition_id)
+    {
+        $instruction = AuditionPromoInstruction::where('audition_id', $audition_id)->first();
+        return response()->json([
             'status' => 200,
             'instruction' => $instruction,
         ]);
@@ -548,13 +607,17 @@ class AuditionController extends Controller
 
     public function getAudition($slug)
     {
-        $event = Audition::with(['assignedJudges', 'participant','promoInstruction'])->where('slug', $slug)->first();
+        $event = Audition::with(['assignedJudges', 'participant', 'promoInstruction'])->where('slug', $slug)->first();
         $ids = $event->assignedJuries->unique('group_id')->pluck('group_id');
         $juryGroups =  JuryGroup::whereIn('id', $ids)->get();
+
+        $promo_instruction_infos = AuditionPromoInstructionSendInfo::with('judge')->where('audition_id', $event->id)->get();
+
         return response()->json([
             'status' => 200,
             'event' => $event,
             'juryGroups' => $juryGroups,
+            'promo_instruction_infos' => $promo_instruction_infos,
         ]);
     }
 
