@@ -372,15 +372,7 @@ class AuditionController extends Controller
                     if ($request->star_ids) {
                         AuditionRoundInstructionSendInfo::where([['audition_id',$request->audition_id],['round_info_id',$request->round_info_id]])->delete();
 
-                        // if (isset($old_send_infos)) {
-                        //     foreach ($old_send_infos as $key => $old_send_info) {
-                        //         # code...
-                        //         $old_send_info->delete();
-                        //     }
-                        // }
                         foreach ($request->star_ids as $key => $star) {
-                            
-                            // delete previous Round Send info
                          
                            // new round instruction for star create
 
@@ -402,6 +394,94 @@ class AuditionController extends Controller
                 return response()->json([
                     'status' => 200,
                     'message' => 'Audition Round Instruction submitted successfully !!',
+                ]);
+            } catch (\Exception $exception) {
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  $exception->getMessage(),
+                ]);
+            }
+        }
+    }
+
+    public function updateRoundInstruction(Request $request)
+    {
+        
+        $old_instruction = AuditionRoundInstruction::where([['audition_id',$request->audition_id],['round_info_id',$request->round_info_id]])->first();
+
+        if (isset($old_instruction->id)) {
+            $validator = Validator::make($request->all(), [
+                'round_info_id' => 'required',
+                'instruction' => 'required|min:5',
+            ],[
+                'round_info_id.required' => 'Please Select Round Number',
+            ]);
+        }else{
+            $validator = Validator::make($request->all(), [
+                'round_info_id' => 'required',
+                'instruction' => 'required|min:5',
+                'image' => 'required|mimes:jpg,jpeg,png',
+                'video' => 'required|mimes:mp4,mkv',
+                'pdf' => 'required|mimes:pdf',
+            ],[
+                'round_info_id.required' => 'Please Select Round Number',
+            ]);
+        }
+       
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+
+            if (isset($old_instruction->id)) {
+                $instruction = $old_instruction;
+            }else{
+                $instruction = new AuditionRoundInstruction();
+            }
+            
+            $instruction->round_info_id = $request->round_info_id;
+            $instruction->audition_id = $request->audition_id;
+            $instruction->instruction = $request->instruction;
+            $instruction->submission_end_date = Carbon::parse($request->submission_date);
+
+            try {
+                if ($request->hasfile('image')) {
+                    // fileDelete($instruction->image);
+                    $image             = $request->image;
+                    $image_folder_path       = 'uploads/images/auditions/round/instructions/';
+                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                    // save to server
+                    $request->image->move($image_folder_path, $image_new_name);
+                    $instruction->image = $image_folder_path . '/' . $image_new_name;
+                }
+
+                if ($request->hasfile('video')) {
+                    // fileDelete($instruction->video);
+                    $file             = $request->video;
+                    $folder_path       = 'uploads/videos/auditions/round/instructions/';
+                    $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
+                    // save to server
+                    $request->video->move($folder_path, $file_new_name);
+                    $instruction->video = $folder_path . '/' . $file_new_name;
+                }
+
+                if ($request->hasfile('pdf')) {
+                    // fileDelete($instruction->pdf);
+                    $image             = $request->pdf;
+                    $pdf_folder_path       = 'uploads/pdf/auditions/round/instructions/';
+                    $pdf_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                    // save to server
+                    $request->pdf->move($pdf_folder_path, $pdf_new_name);
+                    $instruction->document = $pdf_folder_path . '/' . $pdf_new_name;
+                }
+                $instruction->send_to_manager = 1;
+                $instruction->save();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Round Instruction Send Manager Admin successfully !!',
                 ]);
             } catch (\Exception $exception) {
                 return response()->json([
@@ -590,10 +670,14 @@ class AuditionController extends Controller
 
     public function getRoundInstructionJudges($audition_id,$round_info_id){
         
+        $round_instruction = AuditionRoundInstruction::where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->first();
+
         $round_ins_send_info = AuditionRoundInstructionSendInfo::where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->get();
+       
 
         return response()->json([
             'status' => 200,
+            'round_instruction' => $round_instruction,
             'round_ins_send_info' => $round_ins_send_info,
         ]);
 

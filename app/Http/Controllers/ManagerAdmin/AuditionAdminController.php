@@ -537,6 +537,11 @@ class AuditionAdminController extends Controller
         return view('ManagerAdmin.Audition.promo_instruction',compact('instruction','event'));
     }
 
+    public function getRoundInstruction($audition_id){
+         $event = Audition::find($audition_id);
+        return view('ManagerAdmin.Audition.round_instruction',compact('event'));
+    }
+
     public function registrationRules()
     {
         $data = [
