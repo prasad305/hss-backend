@@ -8,6 +8,8 @@ use Auth;
 use App\Models\FanGroup;
 use App\Models\FanPost;
 use App\Models\User;
+use App\Models\NotificationText;
+use App\Models\Notification;
 use App\Models\Wallet;
 use App\Models\Fan_Group_Join;
 use Illuminate\Support\Str;
@@ -52,6 +54,33 @@ class FanGroupController extends Controller
                 'status' => 200,
                 'starFanPost' => $starFanPost,
             ]);
+    }
+
+    //Notification decline post
+    public function declineFanPostNotification(Request $request, $postId){
+
+        $fanpost = FanPost::find($postId);
+        $fanpost->status = 2;
+        $fanpost->save();
+
+        $text = new NotificationText();
+        $text->text = $request->text;
+        $text->type = "fangroup";
+        $text->save();
+
+        Notification::insert([
+            'notification_id' => $text->id,
+            'event_id' => $fanpost->fan_group_id,
+            'user_id' => $fanpost->user_id,
+            'view_status' => 0,
+            'status' => 0,
+            'created_at' => Carbon::now(),
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Fan Post Declined Successfully',
+        ]);
     }
 
     // Create Fan Group in Admin
@@ -955,6 +984,8 @@ class FanGroupController extends Controller
         $fanPost->star_id = $star->star_id;
         $fanPost->star_name = $star->star_name;
         $fanPost->user_like_id = '[]';
+        $fanPost->share_count = 0;
+        $fanPost->share_link = 'https://hellosuperstars.com/group/'.$request->slug;
 
         $fanPost->like_count = 0;
 
