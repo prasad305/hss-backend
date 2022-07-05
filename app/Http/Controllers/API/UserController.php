@@ -10,6 +10,7 @@ use App\Models\AuctionTerms;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPayment;
+use App\Models\Audition\AuditionRoundRegistration;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\Bidding;
@@ -1264,6 +1265,18 @@ class UserController extends Controller
         ]);
         return response()->json([
             'status' => 200,
+        ]);
+    }
+
+    public function current_round_info($event_slug)
+    {
+        $audition = Audition::where('slug',$event_slug)->first();
+
+        $round_info = AuditionRoundRegistration::where([['user_id', Auth::user('sanctum')->id],['audition_id',$audition->id]])->latest()->first();
+
+        return response()->json([
+            'status' => 200,
+            'round_info' => $round_info,
         ]);
     }
 

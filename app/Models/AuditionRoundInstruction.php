@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Audition\AuditionRoundInstructionSendInfo;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,3 +20,4 @@ class AuditionRoundInstruction extends Model
 
     
 }
+

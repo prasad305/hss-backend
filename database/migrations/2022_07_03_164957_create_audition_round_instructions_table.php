@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAuditionPromoInstructionsTable extends Migration
+class CreateAuditionRoundInstructionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateAuditionPromoInstructionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('audition_promo_instructions', function (Blueprint $table) {
+        Schema::create('audition_round_instructions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('audition_id')->nullable();
+            $table->unsignedBigInteger('audition_round_id')->nullable();
             $table->longText('instruction')->nullable();
             $table->longText('description')->nullable();
             $table->string('video')->nullable();
@@ -36,6 +37,6 @@ class CreateAuditionPromoInstructionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('audition_promo_instructions');
+        Schema::dropIfExists('audition_round_instructions');
     }
 }

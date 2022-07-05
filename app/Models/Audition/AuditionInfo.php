@@ -10,6 +10,7 @@ class AuditionInfo extends Model
     use HasFactory;
     protected $with = ['auditionRounds'];
     
+
     public function auditionRounds()
     {
         return $this->hasMany(AuditionRoundInfo::class,'audition_info_id');
