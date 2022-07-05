@@ -10,9 +10,11 @@ use App\Models\AuctionTerms;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPayment;
+use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundRegistration;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
+use App\Models\AuditionRoundInstruction;
 use App\Models\Bidding;
 use App\Models\FanGroupMessage;
 use App\Models\Greeting;
@@ -41,6 +43,7 @@ use App\Models\QnA;
 use App\Models\QnaRegistration;
 use App\Models\User;
 use Carbon\Carbon;
+use CreateAuditionRoundInstructionsTable;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Support\Facades\File;
@@ -1268,17 +1271,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function current_round_info($event_slug)
-    {
-        $audition = Audition::where('slug',$event_slug)->first();
 
-        $round_info = AuditionRoundRegistration::where([['user_id', Auth::user('sanctum')->id],['audition_id',$audition->id]])->latest()->first();
-
-        return response()->json([
-            'status' => 200,
-            'round_info' => $round_info,
-        ]);
-    }
 
     public function userRoundVideoUpload(Request $request)
     {
@@ -1609,24 +1602,40 @@ class UserController extends Controller
         ]);
     }
 
-    public function roundInstruction($rule_id)
+    public function current_round_info($event_slug)
     {
+        $audition = Audition::where('slug',$event_slug)->first();
+        $current_round = AuditionParticipant::where([['user_id', Auth::user()->id],['audition_id',$audition->id]])->first();
 
-        $instruction = AuditionRoundRule::find($rule_id);
-        $audition = Audition::where('audition_round_rules_id', $instruction->id)->first();
-
-        // for user audition video uploaded or not
-        $is_video_uploaded = false;
-        if ($audition->uploadedVideos->where('round_id', $audition->audition_round_rules_id)->where('user_id', auth()->user()->id)->count() > 0) {
-            $is_video_uploaded  = true;
-        } else {
-            $is_video_uploaded  = false;
-        }
+        $round_info = AuditionRoundInfo::find($current_round->round_info_id);
+        $round_instruction = AuditionRoundInstruction::where('round_info_id',$round_info->id)->first();
 
         return response()->json([
             'status' => 200,
             'audition' => $audition,
-            'instruction' => $instruction,
+            'round_info' => $round_info,
+            'round_instruction' => $round_instruction,
+        ]);
+    }
+
+    public function roundInstruction($audition_id, $round_num)
+    {
+        $roundInfo = AuditionRoundInfo::where([['audition_id', $audition_id],['round_num',$round_num]])->first();
+        $roundInstruction = AuditionRoundInstruction::where('round_info_id',$roundInfo->id)->first();
+
+
+
+        $is_video_uploaded = false;
+        // if ($roundInfo->uploadedVideos->where('round_id', $roundInfo->audition_round_rules_id)->where('user_id', auth()->user()->id)->count() > 0) {
+        //     $is_video_uploaded  = true;
+        // } else {
+        //     $is_video_uploaded  = false;
+        // }
+
+        return response()->json([
+            'status' => 200,
+            'roundInfo' => $roundInfo,
+            'roundInstruction' => $roundInstruction,
             'is_video_uploaded' => $is_video_uploaded,
         ]);
     }

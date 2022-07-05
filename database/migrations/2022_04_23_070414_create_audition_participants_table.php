@@ -18,6 +18,7 @@ class CreateAuditionParticipantsTable extends Migration
             $table->unsignedBigInteger('audition_round_rules_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('audition_id')->nullable();
+            $table->Integer('round_info_id')->nullable();
             $table->integer('wining_status')->nullable();
             $table->string('certificates')->nullable();
             $table->integer('status')->default(0)->comment('0 = inactive, 1= active');
