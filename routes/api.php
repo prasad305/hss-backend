@@ -220,9 +220,10 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/audition/enrolled', [UserController::class, 'enrolledAuditions']);
     Route::get('/user/pendingEnrollAudition', [UserController::class, 'enrolledAuditionsPending']);
     Route::get('/user/audition/details/{slug}', [UserController::class, 'UserAuditionDetails']);
-    Route::get('/user/audition/round-instruction/{round_id}', [UserController::class, 'roundInstruction']);
+    Route::get('/user/audition/round-instruction/{audition_id}/{round_num}', [UserController::class, 'roundInstruction']);
     Route::get('/user/registration_checker/audition/{slug}', [UserController::class, 'UserAuditionRegistrationChecker']);
     Route::post('/user/audition/round-video-upload', [UserController::class, 'userRoundVideoUpload']);
+    Route::get('/user/audition/uploaded_round_videos/{audition_id}/{round_info_id}', [UserController::class, 'uploaded_round_videos']);
 
     // Route::post('user/audition/videos/{audition_id}', [UserController::class, 'checkAuditionVideoUpload']);
 
