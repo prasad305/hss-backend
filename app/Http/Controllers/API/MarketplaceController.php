@@ -11,6 +11,7 @@ use App\Models\State;
 use App\Models\MarketplaceOrder;
 use App\Models\City;
 use App\Models\ChoiceList;
+use App\Models\Activity;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -245,6 +246,14 @@ class MarketplaceController extends Controller
 
                 $marketplace->total_selling += $request->items;
                 $marketplace->save();
+
+
+                $activity = new Activity();
+                $activity->user_id = auth('sanctum')->user()->id;
+                $activity->event_id = $marketplace->id;
+                $activity->event_registration_id =  $data->id;
+                $activity->type = 'marketplace';
+                $activity->save();
 
 
                 return response()->json([

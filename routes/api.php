@@ -84,6 +84,14 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user_otherInfo_update', [AuthController::class, 'user_OtherInfo_update']);
     Route::get('/user_data/{id}', [AuthController::class, 'user_data']);
 
+    //User post share
+    Route::get('/user/post/share/{postId}', [UserController::class, 'postShare']);
+    Route::post('/user/post/share/store/{postId}', [UserController::class, 'postShareStore']);
+
+    //fan post share
+    Route::get('/user/fan/post/share/{postId}', [UserController::class, 'fanPostShare']);
+    Route::post('/user/fan/post/share/store/{postId}', [UserController::class, 'fanPostShareStore']);
+
     Route::get('/user/total_notification_count', [UserController::class, 'total_notification_count']);
     Route::get('/user/notification/view_status/update/{id}', [UserController::class, 'notification_view_status_update']);
 
@@ -147,6 +155,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/fan/group/post/show/{slug}', [FanGroupController::class, 'getFanPostShow']);
     Route::get('/user/fan/group/post/like/{postId}', [FanGroupController::class, 'getFanPostLike']);
     Route::post('/user/fan/group/post/like/{postId}', [FanGroupController::class, 'postFanPostLike']);
+    Route::get('/user/fan/group/analytics/{slug}', [FanGroupController::class, 'showFanGroupAnalytics']);
 
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
@@ -288,6 +297,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::delete('/admin/fan/group/delete/{slug}', [FanGroupController::class, 'deleteFanGroup']);
     Route::post('/admin/fan/member/approve/{joinMemberId}', [FanGroupController::class, 'approveFanMember']);
     Route::post('/admin/fan/member/post/{postId}', [FanGroupController::class, 'approveFanPost']);
+    Route::post('/admin/fan/group/deline/nofification/{postId}', [FanGroupController::class, 'declineFanPostNotification']);
 
     Route::post('/admin/fan-group/join/{slug}/{data}', [FanGroupController::class, 'joinFanGroup']);
     Route::post('/admin/fan-group/post/{slug}/{data}', [FanGroupController::class, 'postFanGroup']);
@@ -506,6 +516,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::post('/star/fan/group/settings/no-warning/{warningId}', [FanGroupController::class, 'noWarningSettingsFan']);
     Route::post('/star/fan/group/approval/warning/{fanUserId}/{fanGroupId}', [FanGroupController::class, 'warningSettingsFan']);
     Route::get('/star/fan/group/analytics/{slug}', [FanGroupController::class, 'showFanGroupAnalytics']);
+    Route::post('/star/fan/group/deline/nofification/{postId}', [FanGroupController::class, 'declineFanPostNotification']);
 
     // Marketplace Section
     Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);
