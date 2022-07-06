@@ -2,6 +2,7 @@
 
 namespace App\Models\Audition;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,6 +22,8 @@ class AuditionUploadVideo extends Model
         'comments',
         'status',
     ];
+
+    protected $with = ['user'];
 
     public function audition()
     {
