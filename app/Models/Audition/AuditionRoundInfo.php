@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models\Audition;
+use App\Models\Audition\Audition as AuditionTwo;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,7 @@ class AuditionRoundInfo extends Model
     protected $fillable = [
         'id',
         'round_num',
+        'audition_id',
         'audition_info_id',
         'has_jury_or_judge_mark',
         'jury_or_judge_mark',
@@ -40,5 +42,6 @@ class AuditionRoundInfo extends Model
         'appeal_result_publish_end_date',
         'status',
     ];
+
 
 }

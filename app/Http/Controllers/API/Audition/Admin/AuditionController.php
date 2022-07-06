@@ -1332,4 +1332,45 @@ class AuditionController extends Controller
             'juries' => $juries,
         ]);
     }
+
+    public function round_videos($round_info_id)
+    {
+
+        $videos = AuditionUploadVideo::where([['round_info_id', $round_info_id],['approval_status',0]])->get();
+        $selectedVideos = AuditionUploadVideo::where([['round_info_id', $round_info_id],['approval_status',1]])->get();
+        $rejectedVideos = AuditionUploadVideo::where([['round_info_id', $round_info_id],['approval_status',2]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'videos' => $videos,
+            'selectedVideos' => $selectedVideos,
+            'rejectedVideos' => $rejectedVideos,
+        ]);
+    }
+
+    public function round_videos_set_approved(Request $req, $id)
+    {
+
+        $video = AuditionUploadVideo::find($id);
+        $video->approval_status = 1;
+        $video->comment = $req->comment;
+        $video->save();
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+
+    public function round_videos_set_reject(Request $req, $id)
+    {
+
+        $video = AuditionUploadVideo::find($id);
+        $video->approval_status = 2;
+        $video->comment = $req->comment;
+        $video->save();
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
 }
