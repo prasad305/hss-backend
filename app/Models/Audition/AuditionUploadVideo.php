@@ -13,7 +13,7 @@ class AuditionUploadVideo extends Model
         'id',
         'audition_id',
         'user_id',
-        'round_id',
+        'round_info_id',
         'jury_or_judge_id',
         'judge_id',
         'video',

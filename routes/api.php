@@ -692,7 +692,10 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 
     Route::post('/audition-admin/audition/round-instruction/store', [AuditionController::class, 'storeRoundInstruction']);
     Route::post('/audition-admin/audition/round-instruction/update', [AuditionController::class, 'updateRoundInstruction']);
+
     Route::get('/audition-admin/audition/get-round-instruction/{audition_id}/{round_info_id}', [AuditionController::class, 'getRoundInstruction']);
+
+    Route::get('audition-admin/audition/get-round-info/{audition_id}/{round_info_id}', [AuditionController::class, 'getRoundInfo']);
 
     Route::post('/audition-admin/audition/promo-instruction/update', [AuditionController::class, 'updatePromoInstruction']);
 
