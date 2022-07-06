@@ -24,6 +24,8 @@ class CreateFanPostsTable extends Migration
             $table->unsignedBigInteger('like_count')->nullable();
             $table->longText('user_like_id')->nullable();
             $table->string('video')->nullable();
+            $table->string('share_link')->nullable();
+            $table->string('share_count')->default(0);
             $table->integer('status')->nullable()->comment('1 = active, 0 = inactive');
             $table->timestamps();
         });
