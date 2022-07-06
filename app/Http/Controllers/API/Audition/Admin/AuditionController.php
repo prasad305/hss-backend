@@ -16,6 +16,7 @@ use App\Models\Audition\AuditionJudgeInstruction;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionMark;
 use App\Models\Audition\AuditionPromoInstruction;
+use App\Models\Audition\AuditionPromoInstructionSendInfo;
 use App\Models\Audition\AuditionRoundInstructionSendInfo;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
@@ -301,31 +302,32 @@ class AuditionController extends Controller
             $instruction = AuditionPromoInstruction::find($request->audition_promo_instruction_id);
             $instruction->audition_id = $request->audition_id;
             $instruction->instruction = $request->instruction;
-            try {
-                if ($request->hasfile('image')) {
-                    $image             = $request->image;
-                    $image_folder_path       = 'uploads/images/auditions/instructions/';
-                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
-                    // save to server
-                    $request->image->move($image_folder_path, $image_new_name);
-                    $instruction->image = $image_folder_path . '/' . $image_new_name;
-                }
 
-                if ($request->hasfile('video')) {
-                    $file             = $request->video;
-                    $folder_path       = 'uploads/videos/auditions/instructions/';
-                    $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
-                    // save to server
-                    $request->video->move($folder_path, $file_new_name);
-                    $instruction->video = $folder_path . '/' . $file_new_name;
-                }
+            if ($request->hasfile('image')) {
+                $image             = $request->image;
+                $image_folder_path       = 'uploads/images/auditions/instructions/';
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                // save to server
+                $request->image->move($image_folder_path, $image_new_name);
+                $instruction->image = $image_folder_path . '/' . $image_new_name;
+            }
 
-    
+            if ($request->hasfile('video')) {
+                $file             = $request->video;
+                $folder_path       = 'uploads/videos/auditions/instructions/';
+                $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
+                // save to server
+                $request->video->move($folder_path, $file_new_name);
+                $instruction->video = $folder_path . '/' . $file_new_name;
+            }
+            $instruction->save();
+        }
+    }
     public function storeRoundInstruction(Request $request)
     {
         // return $request->star_ids;
         // return $request->all();
-        $old_instruction = AuditionRoundInstruction::where([['audition_id',$request->audition_id],['round_info_id',$request->round_info_id]])->first();
+        $old_instruction = AuditionRoundInstruction::where([['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->first();
 
         if (isset($old_instruction->id)) {
             $validator = Validator::make($request->all(), [
@@ -333,11 +335,11 @@ class AuditionController extends Controller
                 'instruction' => 'required|min:5',
                 'submission_date' => 'required',
                 'star_ids' => 'required',
-            ],[
+            ], [
                 'round_info_id.required' => 'Please Select Round Number',
                 'star_ids.required' => 'Select At Least One Star'
             ]);
-        }else{
+        } else {
             $validator = Validator::make($request->all(), [
                 'round_info_id' => 'required',
                 'instruction' => 'required|min:5',
@@ -345,12 +347,12 @@ class AuditionController extends Controller
                 'image' => 'required|mimes:jpg,jpeg,png',
                 'video' => 'required|mimes:mp4,mkv',
                 'star_ids' => 'required',
-            ],[
+            ], [
                 'round_info_id.required' => 'Please Select Round Number',
                 'star_ids.required' => 'Select At Least One Star'
             ]);
         }
-       
+
 
         if ($validator->fails()) {
             return response()->json([
@@ -359,14 +361,14 @@ class AuditionController extends Controller
             ]);
         } else {
 
-           
+
 
             if (isset($old_instruction->id)) {
                 $instruction = $old_instruction;
-            }else{
+            } else {
                 $instruction = new AuditionRoundInstruction();
             }
-            
+
             $instruction->round_info_id = $request->round_info_id;
             $instruction->audition_id = $request->audition_id;
             $instruction->instruction = $request->instruction;
@@ -407,11 +409,10 @@ class AuditionController extends Controller
                 if ($instruction) {
 
                     if ($request->star_ids) {
-                        AuditionRoundInstructionSendInfo::where([['audition_id',$request->audition_id],['round_info_id',$request->round_info_id]])->delete();
+                        AuditionRoundInstructionSendInfo::where([['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->delete();
 
                         foreach ($request->star_ids as $key => $star) {
-                         
-                           // new round instruction for star create
+                            // new round instruction for star create
 
                             $instruction_info = new AuditionRoundInstructionSendInfo();
                             $instruction_info->audition_id = $request->audition_id;
@@ -441,6 +442,7 @@ class AuditionController extends Controller
             }
         }
     }
+
 
     public function updateRoundInstruction(Request $request)
     {
@@ -530,15 +532,17 @@ class AuditionController extends Controller
         }
     }
 
-    public function getRoundInstruction($audition_id,$round_info_id){
-        $auditon_round_instruction = AuditionRoundInstruction::where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->first();
+ 
+    public function getRoundInstruction($audition_id, $round_info_id)
+    {
+        $auditon_round_instruction = AuditionRoundInstruction::where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->first();
+
         $audition = Audition::find($audition_id);
         return response()->json([
             'status' => 200,
             'auditon_round_instruction' => $auditon_round_instruction,
             'event' => $audition,
         ]);
-
     }
 
     public function auditionPromoInstruction($audition_id)
@@ -674,6 +678,8 @@ class AuditionController extends Controller
     // Live Auditions
     public function live()
     {
+        // return auth('sanctum')->user()->id;
+
         $lives = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 2]])->get();
         return response()->json([
             'status' => 200,
@@ -706,20 +712,19 @@ class AuditionController extends Controller
         ]);
     }
 
+
     public function getRoundInstructionJudges($audition_id,$round_info_id){
         
         $round_instruction = AuditionRoundInstruction::where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->first();
 
         $round_ins_send_info = AuditionRoundInstructionSendInfo::where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->get();
-       
+
 
         return response()->json([
             'status' => 200,
             'round_instruction' => $round_instruction,
             'round_ins_send_info' => $round_ins_send_info,
         ]);
-
-
     }
 
 
