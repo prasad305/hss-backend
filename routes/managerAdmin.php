@@ -182,6 +182,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
         Route::get('instruction/{audition_id}', [AuditionAdminController::class, 'instruction'])->name('instruction');
         Route::get('send-instruction/{audition_id}', [AuditionAdminController::class, 'sendInstructionToParticipant'])->name('sendInstruction');
 
+
+
         Route::get('pending', [AuditionAdminController::class, 'pending'])->name('pending');
         Route::get('published', [AuditionAdminController::class, 'published'])->name('published');
         Route::get('all', [AuditionAdminController::class, 'all'])->name('all');
@@ -189,7 +191,9 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
         Route::get('details/{id}', [AuditionAdminController::class, 'details'])->name('details');
         Route::get('edit/{id}', [AuditionAdminController::class, 'auditionEdit'])->name('edit');
         Route::put('update/{id}', [AuditionAdminController::class, 'auditionUpdate'])->name('update');
-        Route::get('set_publish/{id}', [AuditionAdminController::class, 'set_publish'])->name('set_publish');
+        // Route::get('set_publish/{id}', [AuditionAdminController::class, 'set_publish'])->name('set_publish');
+        
+        Route::post('set_publish/{audition_id}', [AuditionAdminController::class, 'manager_audition_set_publish'])->name('set_publish');
 
         //admins
         Route::get('admin-assign', [AuditionAdminController::class, 'adminAssign'])->name('adminAssign');
@@ -197,6 +201,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
         Route::get('dashboard', [AuditionAdminController::class, 'auditionDashboard'])->name('auditionDashboard');
         Route::get('juries', [AuditionAdminController::class, 'auditionJuries'])->name('juries');
         Route::get('events', [AuditionAdminController::class, 'auditionEvents'])->name('events');
+        Route::get('promoInstruction/{audition_id}', [AuditionAdminController::class, 'getPromoInstruction'])->name('promoInstruction');
+        Route::get('registerUser/{audition_id}', [AuditionController::class, 'registerUser'])->name('registerUser');
 
         // Jury Audition Routes
         Route::get('jury-published/{id}', [AuditionAdminController::class, 'juryPublished'])->name('jury_published');
