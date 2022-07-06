@@ -212,6 +212,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     // greeting
     Route::group(['prefix' => 'greeting/', 'as' => 'greeting.'], function () {
         Route::get('dashboard', [GreetingController::class, 'dashboard'])->name('dashboard');
+        Route::get('subcategory/{id}', [GreetingController::class, 'subcategory'])->name('subcategory');
         Route::get('request', [GreetingController::class, 'request'])->name('request');
         Route::get('published', [GreetingController::class, 'published'])->name('published');
         Route::get('show/{id}', [GreetingController::class, 'show'])->name('show');
