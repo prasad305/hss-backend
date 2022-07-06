@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware' => ['auth', 'managerAdmin']], function () {
 
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    Route::get('category', [DashboardController::class, 'category'])->name('category');
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
 
     // Dashboard Routes By Srabon
@@ -43,13 +44,30 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('meetup-events', [DashboardController::class, 'meetupEvents'])->name('dashboard.meetupEvent');
     Route::get('meetup-events-data/{type}', [DashboardController::class, 'meetupEventsData'])->name('dashboard.meetupEventData');
     Route::get('meetup-events-details/{id}', [DashboardController::class, 'meetupEventsDetails'])->name('dashboard.meetupEventDetails');
-    // Live Chats
+    Route::get('meetup-manager-list', [DashboardController::class, 'meetupManagerList'])->name('dashboard.meetupManagerList');
 
+    // simple Post
+    Route::get('simple-post', [DashboardController::class, 'simplePost'])->name('dashboard.simplePost');
+    Route::get('subsimplepost-list/{id}', [DashboardController::class, 'subsimplepostList'])->name('subsimplePost.list');
+    Route::get('simple-post-data/{type}', [DashboardController::class, 'simplePostData'])->name('dashboard.simplePostData');
+    Route::get('simple-post-details/{id}', [DashboardController::class, 'simplePostDetails'])->name('dashboard.simplePostDetails');
+    Route::get('simplePost-admin-list', [DashboardController::class, 'simplePostAdminList'])->name('simplePostEvents.adminList');
+    Route::get('simplePost-admin-events/{adminId}', [DashboardController::class, 'simplePostAdminEvents'])->name('simplePostEvents.adminEvents');
+    Route::get('simplePost-superstar-list', [DashboardController::class, 'simplePostSuperstarList'])->name('simplePostEvents.superstarList');
+    Route::get('simplePost-superstar-events/{starId}', [DashboardController::class, 'simplePostSuperstarEvents'])->name('simplePostEvents.superstarEvents');
+
+    // Live Chats
     Route::get('live-chats', [DashboardController::class, 'liveChats'])->name('dashboard.liveChat');
     Route::get('live-chats-data/{type}', [DashboardController::class, 'liveChatsData'])->name('dashboard.liveChatData');
     Route::get('live-chats-details/{id}', [DashboardController::class, 'liveChatsDetails'])->name('dashboard.liveChatDetails');
+    Route::get('liveChat-manager-list', [DashboardController::class, 'liveChatManagerList'])->name('dashboard.liveChatManagerList');
+
 
     //Question And Answers
+    Route::get('qna', [DashboardController::class, 'qna'])->name('dashboard.qna');
+    Route::get('qna-data/{type}', [DashboardController::class, 'qnaData'])->name('dashboard.qnaData');
+    Route::get('qna-details/{id}', [DashboardController::class, 'qnaDetails'])->name('dashboard.qnaDetails');
+    Route::get('qna-manager-list', [DashboardController::class, 'qnaManagerList'])->name('dashboard.qnaManagerList');
 
 
     // Auditions
@@ -58,12 +76,14 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('auditions-details/{id}', [DashboardController::class, 'auditionsDetails'])->name('dashboard.auditionDetails');
     Route::get('auditions-judge', [DashboardController::class, 'auditionsJudgeData'])->name('dashboard.auditionsJudgeData');
     Route::get('auditions-jury', [DashboardController::class, 'auditionsJuryData'])->name('dashboard.auditionsJuryData');
+    Route::get('auditions-manager-list', [DashboardController::class, 'auditionManagerList'])->name('dashboard.auditionManagerList');
 
     // fan Group
     Route::get('fan-group', [DashboardController::class, 'fanGroups'])->name('dashboard.fanGroup');
     Route::get('fan-group-data', [DashboardController::class, 'fanGroupsData'])->name('dashboard.fanGroupData');
     Route::get('fan-group-post', [DashboardController::class, 'fanGroupsPost'])->name('dashboard.fanGroupsPost');
     Route::get('fan-group-details/{id}', [DashboardController::class, 'fanGroupsDetails'])->name('dashboard.fanGroupDetails');
+    Route::get('fangroup-manager-list', [DashboardController::class, 'fanGroupManagerList'])->name('dashboard.fanGroupManagerList');
 
     //  learing Session
 
@@ -71,6 +91,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('learning-sessions', [DashboardController::class, 'learningSessions'])->name('dashboard.learningSession');
     Route::get('learning-session/{type}', [DashboardController::class, 'learninSessionData'])->name('dashboard.learningSessionData');
     Route::get('learning-session-details/{id}', [DashboardController::class, 'learninSessionDetails'])->name('dashboard.learninSessionDetails');
+    Route::get('learning-sessions-manager-list', [DashboardController::class, 'learningSessionManagerList'])->name('dashboard.learningSessionManagerList');
 
 
     //up commingevent
@@ -192,7 +213,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
         Route::get('edit/{id}', [AuditionAdminController::class, 'auditionEdit'])->name('edit');
         Route::put('update/{id}', [AuditionAdminController::class, 'auditionUpdate'])->name('update');
         // Route::get('set_publish/{id}', [AuditionAdminController::class, 'set_publish'])->name('set_publish');
-        
+
         Route::post('set_publish/{audition_id}', [AuditionAdminController::class, 'manager_audition_set_publish'])->name('set_publish');
 
         //admins

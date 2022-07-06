@@ -12,6 +12,7 @@ use App\Models\Category;
 use App\Models\Fan_Group_Join;
 use App\Models\FanGroup;
 use App\Models\FanPost;
+use App\Models\GeneralPostPayment;
 use App\Models\Greeting;
 use App\Models\JuryBoard;
 use App\Models\LearningSession;
@@ -21,6 +22,8 @@ use App\Models\LiveChatRegistration;
 use App\Models\Marketplace;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
+use App\Models\SimplePost;
+use App\Models\SubCategory;
 use App\Models\User;
 use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
@@ -41,6 +44,11 @@ class DashboardController extends Controller
         return view('ManagerAdmin.dashboard', compact(['totalUser', 'totalAdmin', 'totalStar', 'totalAuctionProduct', 'totalMarketPlaceProduct']));
     }
 
+    public function category()
+    {
+        $categories = Category::all();
+        return view('ManagerAdmin.dashboard', compact('categories'));
+    }
     public function profile()
     {
         $user = Auth::user();
@@ -134,6 +142,76 @@ class DashboardController extends Controller
         $data = MeetupEvent::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->find($id);
 
         return view('ManagerAdmin.MeetupEvents.meetupEventsDetails', compact(['data', 'totalParticipant', 'totalFee']));
+    }
+    public function simplePost()
+
+    {
+
+        $categories = SubCategory::with(['subSimplePosts'])->where('category_id', auth()->user()->category_id)->get();
+
+
+        // Total
+        $total = SimplePost::where('category_id', auth()->user()->category_id)->count();
+        $upcoming = SimplePost::where('status', 0)->where('category_id', auth()->user()->category_id)->count();
+        $complete = SimplePost::where('status', 1)->where('category_id', auth()->user()->category_id)->count();
+        $admin = User::where('user_type', 'admin')->where('category_id', auth()->user()->category_id)->count();
+        $superstar = User::where('user_type', 'star')->where('category_id', auth()->user()->category_id)->count();
+
+        // Registered User
+        $weeklyUser = GeneralPostPayment::where('status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+        // Income Statement
+        $weeklyIncome = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $monthlyIncome = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $yearlyIncome = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+        return view('ManagerAdmin.SimplePost.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']));
+    }
+    public function simplePostData($type)
+    {
+        if ($type == 'total') {
+            $portalData = SimplePost::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'upcoming') {
+            $portalData = SimplePost::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = SimplePost::with(['star', 'category'])->where('status', 1)->where('category_id', auth()->user()->category_id)->get();
+        }
+        return view('ManagerAdmin.SimplePost.simplePostData', compact('portalData'));
+    }
+    public function simplePostDetails($id)
+    {
+        $totalParticipant = GeneralPostPayment::where('post_id', $id)->where('status', 1)->count();
+        $totalFee = GeneralPostPayment::where('post_id', $id)->where('status', 1)->sum('amount');
+        $data = SimplePost::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->find($id);
+
+        return view('ManagerAdmin.SimplePost.simplePostDetails', compact(['data', 'totalParticipant', 'totalFee']));
+    }
+    public function subsimplepostList($subcategoryId)
+    {
+        $postList = SimplePost::where('subcategory_id', $subcategoryId)->latest()->get();
+        return view('ManagerAdmin.SimplePost.postList', compact('postList'));
+    }
+
+    public function simplePostAdminList()
+    {
+        return $admins = SimplePost::with('starAdmin')->where('category_id', auth()->user()->category_id)->latest()->get();
+        return view('ManagerAdmin.SimplePost.Admin.admin', compact('admins'));
+    }
+    public function simplePostAdminEvents($adminId)
+    {
+        $simplePost = SimplePost::where('admin_id', $adminId)->latest()->get();
+        return view('ManagerAdmin.SimplePost.Admin.admin_events', compact('simplePost'));
+    }
+    public function simplePostSuperstarList()
+    {
+        $superstars = User::where('category_id', auth()->user()->id)->where('user_type', 'star')->latest()->get();
+        return view('ManagerAdmin.SimplePost.Superstar.superstar', compact('superstars'));
+    }
+    public function simplePostSuperstarEvents($starId)
+    {
+        $simplePost = SimplePost::where('admin_id', $starId)->latest()->get();
+        return view('ManagerAdmin.SimplePost.Superstar.superstar_events', compact('simplePost'));
     }
     public function liveChats()
     {

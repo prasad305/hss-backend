@@ -28,4 +28,12 @@ class SimplePost extends Model
     {
         return $this->hasMany(GeneralPostPayment::class, 'post_id');
     }
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+    public function starAdmin()
+    {
+        return $this->hasOne(User::class, 'id', 'admin_id');
+    }
 }
