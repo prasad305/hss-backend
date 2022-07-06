@@ -1285,12 +1285,11 @@ class UserController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-
             foreach ($request->file as $key => $file) {
                 $audition_video = new AuditionUploadVideo();
                 $audition_video->audition_id = $request->audition_id;
-                $audition_video->round_id = $request->round_id;
-                $audition_video->user_id = auth()->user()->id;
+                $audition_video->round_info_id = $request->round_info_id;
+                $audition_video->user_id = auth('sanctum')->user()->id;
 
                 $file_name   = time() . rand('0000', '9999') . $key . '.' . $file->getClientOriginalName();
                 $file_path = 'uploads/videos/auditions/';
@@ -1305,6 +1304,18 @@ class UserController extends Controller
         }
     }
 
+
+    public function uploaded_round_videos($audition_id, $round_info_id)
+    {
+        $videos = AuditionUploadVideo::where([['audition_id', $audition_id],['round_info_id', $round_info_id]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'videos' => $videos,
+            'message' => 'Success!',
+        ]);
+    }
+
     // public function checkAuditionVideoUpload($audition_id){
 
     //         $is_video_uploaded = false;
@@ -1314,8 +1325,6 @@ class UserController extends Controller
     //             $is_video_uploaded  = false;
     //         }
 
-
-
     // }
 
 
@@ -1324,9 +1333,7 @@ class UserController extends Controller
     {
 
 
-
         $audition = AuditionParticipant::where('audition_id', $request->audition_id)->where('user_id', Auth::user()->id)->first();
-
 
 
         if ($request->hasFile('video_url') && $audition->video_url == null) {
@@ -1622,8 +1629,6 @@ class UserController extends Controller
     {
         $roundInfo = AuditionRoundInfo::where([['audition_id', $audition_id],['round_num',$round_num]])->first();
         $roundInstruction = AuditionRoundInstruction::where('round_info_id',$roundInfo->id)->first();
-
-
 
         $is_video_uploaded = false;
         // if ($roundInfo->uploadedVideos->where('round_id', $roundInfo->audition_round_rules_id)->where('user_id', auth()->user()->id)->count() > 0) {
