@@ -145,12 +145,13 @@ class UserController extends Controller
         $selectedSubSubCat = json_decode($selectedCategory->star_id);
 
         $cat_post = Post::select("*")
-            ->whereIn('category_id', $selectedCat)->latest()->paginate($limit);
+            ->whereIn('category_id', $selectedCat)
+            ->orderBy('id','DESC')->paginate($limit);
 
         if (isset($sub_cat_post)) {
             $sub_cat_post = Post::select("*")
                 ->whereIn('sub_category_id', $selectedSubCat)
-                ->latest()->paginate($limit)->latest()->paginate($limit);
+                ->orderBy('id','DESC')->paginate($limit);
         } else {
             $sub_cat_post = [];
         }
@@ -158,7 +159,7 @@ class UserController extends Controller
         if (isset($sub_sub_cat_post)) {
             $sub_sub_cat_post = Post::select("*")
                 ->whereIn('user_id', $selectedSubSubCat)
-                ->latest()->paginate($limit)->latest()->paginate($limit);
+                ->orderBy('id','DESC')->paginate($limit);
         } else {
             $sub_sub_cat_post = [];
         }
