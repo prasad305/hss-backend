@@ -48,10 +48,12 @@
                                             href="{{ route('managerAdmin.dashboard.learninSessionDetails', $post->id) }}">See
                                             All</a></small>
                                 </span>
-                                @if ($post->status == 2)
+                                @if ($post->status < 2)
+                                    <span class="badge badge-warning">Pending</span>
+                                @elseif($post->status == 2)
                                     <span class="badge badge-success">Published</span>
                                 @else
-                                    <span class="badge badge-warning">Pending</span>
+                                    <span class="badge badge-primary">Completed</span>
                                 @endif
                             </div>
                         </div>
