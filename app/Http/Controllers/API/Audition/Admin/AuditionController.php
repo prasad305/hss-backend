@@ -204,7 +204,7 @@ class AuditionController extends Controller
             return $query->where([['round_info_id', $audition_round_info_id], ['approval_status', 1]])->get();
         }, 'participant'])->where([['audition_id', $audition_id], ['round_info_id', $audition_round_info_id]])->get();
 
-        $totalNumberOfVideos = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id],[$audition_id, 'audition_id'], ['approval_status', 1]])->count();
+        $totalNumberOfVideos = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id],['audition_id',$audition_id], ['approval_status', 1]])->count();
 
         return response()->json([
             'status' => 200,
