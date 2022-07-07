@@ -1427,16 +1427,28 @@ class AuditionController extends Controller
         
         $round_info = AuditionRoundInfo::find($round_info_id);
 
-        $videos = AuditionParticipant::with(['videos' => function($query) use($round_info_id){
-            return $query->where('round_info_id',$round_info_id)->get();
-        },'participant'])->where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->get();
+        $assignJuries = AuditionAssignJury::with('juryGroup')->whereHas('juryGroup', function ($q) {
+            $q->where('is_primary', false);
+        })->where('audition_id', $audition_id)->get();
 
-        // $round_marked_videos = AuditionVideoMark::where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->get();
 
+        $assignJuriesOrderByGroup = $assignJuries->groupBy('group_id');
+
+        $group_b_videos = AuditionParticipant::with(['videos' => function($query) use($round_info_id){
+                                        return $query->where([['round_info_id',$round_info_id],['group_b_jury_id','!=',null]])->get();
+                                    },'participant'])->where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->get();
+
+        $group_c_videos = AuditionParticipant::with(['videos' => function($query) use($round_info_id){
+                                        return $query->where([['round_info_id',$round_info_id],['group_c_jury_id','!=',null]])->get();
+                                    },'participant'])->where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->get();
+
+        
         return response()->json([
             'status' => 200,
             'round_info' => $round_info,
-            'round_marked_videos' => $videos,
+            'group_b_videos' => $group_b_videos,
+            'group_c_videos' => $group_c_videos,
+            'juriesByGroup' => $assignJuriesOrderByGroup,
         ]);
     }
     

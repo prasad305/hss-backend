@@ -3,6 +3,7 @@
 namespace App\Models\Audition;
 
 use App\Models\Category;
+use App\Models\JuryGroup;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +21,8 @@ class AuditionAssignJury extends Model
         'status',
     ];
 
-    protected $with = ['user','assignedVideos'];
+    protected $with = ['user'];
+    // protected $with = ['user','assignedVideos'];
 
     public function audition()
     {
@@ -35,8 +37,13 @@ class AuditionAssignJury extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
-    public function assignedVideos()
+    // public function assignedVideos()
+    // {
+    //     return $this->hasMany(AuditionUploadVideo::class, 'jury_or_judge_id');
+    // }
+
+    public function juryGroup()
     {
-        return $this->hasMany(AuditionUploadVideo::class, 'jury_or_judge_id');
+        return $this->belongsTo(JuryGroup::class, 'group_id');
     }
 }

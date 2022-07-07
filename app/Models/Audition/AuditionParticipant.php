@@ -26,8 +26,5 @@ class AuditionParticipant extends Model
     public function videos(){
         return $this->hasMany(AuditionUploadVideo::class,'user_id','user_id');
     }
-
-  
-
     
 }
