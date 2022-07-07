@@ -28,6 +28,7 @@ use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
 use App\Models\Notification;
 use App\Models\Post;
+use App\Models\FanPost;
 use App\Models\React;
 use App\Models\SimplePost;
 use App\Models\ChoiceList;
@@ -66,6 +67,44 @@ class UserController extends Controller
             'status' => 200,
             'message' => 'Ok',
             'star' => $star,
+        ]);
+    }
+
+    public function postShare($postId){
+        $post = Post::find($postId);
+        return response()->json([
+            'status' => 200,
+            'post' => $post,
+            'message' => 'Success',
+        ]);
+    }
+    public function postShareStore($postId){
+        $post = Post::find($postId);
+        $post->share_count += 1;
+        $post->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success',
+        ]);
+    }
+
+    public function fanPostShare($postId){
+        $post = FanPost::find($postId);
+        return response()->json([
+            'status' => 200,
+            'post' => $post,
+            'message' => 'Success',
+        ]);
+    }
+    public function fanPostShareStore($postId){
+        $post = FanPost::find($postId);
+        $post->share_count += 1;
+        $post->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success',
         ]);
     }
 
@@ -145,12 +184,13 @@ class UserController extends Controller
         $selectedSubSubCat = json_decode($selectedCategory->star_id);
 
         $cat_post = Post::select("*")
-            ->whereIn('category_id', $selectedCat)->latest()->paginate($limit);
+            ->whereIn('category_id', $selectedCat)
+            ->orderBy('id','DESC')->paginate($limit);
 
         if (isset($sub_cat_post)) {
             $sub_cat_post = Post::select("*")
                 ->whereIn('sub_category_id', $selectedSubCat)
-                ->latest()->paginate($limit)->latest()->paginate($limit);
+                ->orderBy('id','DESC')->paginate($limit);
         } else {
             $sub_cat_post = [];
         }
@@ -158,7 +198,7 @@ class UserController extends Controller
         if (isset($sub_sub_cat_post)) {
             $sub_sub_cat_post = Post::select("*")
                 ->whereIn('user_id', $selectedSubSubCat)
-                ->latest()->paginate($limit)->latest()->paginate($limit);
+                ->orderBy('id','DESC')->paginate($limit);
         } else {
             $sub_sub_cat_post = [];
         }

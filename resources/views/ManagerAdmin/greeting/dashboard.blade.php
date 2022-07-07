@@ -2,12 +2,13 @@
 
 
 @section('content')
+
     <!-- Content Header (Page header) -->
-    <div class="content-header">
+    <div class="content-header" style="background: black; margin-bottom: 9px; border-bottom: 2px solid #fff;">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Dashboard</h1>
+                    <h1 class="m-0">Greeting Dashboard</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -25,6 +26,26 @@
         <div class="container-fluid">
             <!-- Info boxes -->
             <div class="row">
+            @foreach($subcategory as $data)
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box" style="border: 1px solid #43f92d;">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text text-center">{{ $data->name }}</span>
+                            <a href="{{ route('managerAdmin.greeting.subcategory', $data->id) }}" class="text-center">
+                                <span class="my-link"><i class="fas fa-eye"> View </i> </span>
+                            </a>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                @endforeach
+                <br>
+            </div>
+            <div class="row">
+                
                 <div class="col-12 col-sm-6 col-md-3">
                     <div class="info-box">
                         <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
