@@ -9,13 +9,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Simple Post Dashboard</h1>
+                    <h1 class="m-0">Q&A Dashboard</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('managerAdmin.dashboard.simplePost') }}">Home</a>
+                        <li class="breadcrumb-item"><a href="{{ route('managerAdmin.dashboard.qna') }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Simple Post</li>
+                        <li class="breadcrumb-item active">Q&A</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -30,23 +30,25 @@
                 <div class="col-12 col-sm-6 col-md-12">
                     <div class="info-box text-center">
                         <div class="info-box-content">
-                            <span class="info-box-text text-warning">Superstar</span>
+                            <span class="info-box-text text-warning">Admin</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                @foreach ($superstars as $star)
+                @foreach ($admins as $admin)
                     <div class="col-12 col-sm-6 col-md-3">
                         <div class="info-box mb-3 text-center border border-warning">
                             <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
                                     aria-hidden="true"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">{{ $star->starPosts->first_name }}
-                                    {{ $star->starPosts->last_name }}</span>
+                                <span class="info-box-text">Admin</span>
+                                <span class="info-box-number">
+                                    {{ $admin->admin->first_name }} {{ $admin->admin->last_name }}
+                                </span>
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
-                                            href="{{ route('managerAdmin.simplePostEvents.superstarEvents', $star->starPosts->id) }}">See
+                                            href="{{ route('managerAdmin.qnaEvents.adminEvents', $admin->admin->id) }}">See
                                             All</a></small>
                                 </span>
                             </div>

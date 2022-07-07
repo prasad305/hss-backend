@@ -93,11 +93,11 @@
                             <div class="col-12">
                                 <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i
                                         class="fas fa-print"></i> Print</a>
-                                <a href="{{ route('managerAdmin.dashboard.learningSession') }}"
+                                <a href="{{ route('managerAdmin.dashboard.qna') }}"
                                     class=" btn btn-success float-right"><i class="far fa-credit-card"></i> Go Back
                                 </a>
-                                <a href="{{ route('managerAdmin.dashboard.learningSession') }}"
-                                    class="btn btn-primary float-right" style="margin-right: 5px;">
+                                <a href="{{ route('managerAdmin.dashboard.qna') }}" class="btn btn-primary float-right"
+                                    style="margin-right: 5px;">
                                     <i class="fas fa-download"></i> Generate PDF
                                 </a>
                             </div>

@@ -13,7 +13,7 @@
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('managerAdmin.dashboard.simplePost') }}">Home</a>
+                        <li class="breadcrumb-item"><a href="{{ route('managerAdmin.dashboard.learningSession') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item active">Simple Post</li>
                     </ol>
@@ -42,11 +42,11 @@
                             <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
                                     aria-hidden="true"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">{{ $star->starPosts->first_name }}
-                                    {{ $star->starPosts->last_name }}</span>
+                                <span class="info-box-text">{{ $star->starSession->first_name }}
+                                    {{ $star->starSession->last_name }}</span>
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
-                                            href="{{ route('managerAdmin.simplePostEvents.superstarEvents', $star->starPosts->id) }}">See
+                                            href="{{ route('managerAdmin.learningSessionEvents.superstarEvents', $star->starSession->id) }}">See
                                             All</a></small>
                                 </span>
                             </div>

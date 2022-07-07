@@ -31,7 +31,8 @@
                 <div class="col-12 col-sm-6 col-md-12">
                     <div class="info-box text-center">
                         <div class="info-box-content">
-                            <span class="info-box-text text-warning">Categories</span>
+                            <span class="info-box-text text-warning">
+                                {{ auth()->user()->category->name }}</span>
                         </div>
                     </div>
 

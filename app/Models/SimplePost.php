@@ -34,6 +34,10 @@ class SimplePost extends Model
     }
     public function starAdmin()
     {
-        return $this->hasOne(User::class, 'id', 'admin_id');
+        return $this->belongsTo(User::class, 'admin_id');
+    }
+    public function starPosts()
+    {
+        return $this->belongsTo(User::class, 'star_id');
     }
 }

@@ -43,10 +43,12 @@
                                     aria-hidden="true"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Admin</span>
-                                <span class="info-box-number">{{ $admin->first_name }} {{ $admin->last_name }}</span>
+                                <span class="info-box-number">
+                                    {{ $admin->starAdmin->first_name }} {{ $admin->starAdmin->last_name }}
+                                </span>
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
-                                            href="{{ route('managerAdmin.simplePostEvents.adminEvents', $admin->id) }}">See
+                                            href="{{ route('managerAdmin.simplePostEvents.adminEvents', $admin->starAdmin->id) }}">See
                                             All</a></small>
                                 </span>
                             </div>

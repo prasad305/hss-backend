@@ -44,7 +44,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('meetup-events', [DashboardController::class, 'meetupEvents'])->name('dashboard.meetupEvent');
     Route::get('meetup-events-data/{type}', [DashboardController::class, 'meetupEventsData'])->name('dashboard.meetupEventData');
     Route::get('meetup-events-details/{id}', [DashboardController::class, 'meetupEventsDetails'])->name('dashboard.meetupEventDetails');
-    Route::get('meetup-manager-list', [DashboardController::class, 'meetupManagerList'])->name('dashboard.meetupManagerList');
+
 
     // simple Post
     Route::get('simple-post', [DashboardController::class, 'simplePost'])->name('dashboard.simplePost');
@@ -60,14 +60,27 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('live-chats', [DashboardController::class, 'liveChats'])->name('dashboard.liveChat');
     Route::get('live-chats-data/{type}', [DashboardController::class, 'liveChatsData'])->name('dashboard.liveChatData');
     Route::get('live-chats-details/{id}', [DashboardController::class, 'liveChatsDetails'])->name('dashboard.liveChatDetails');
-    Route::get('liveChat-manager-list', [DashboardController::class, 'liveChatManagerList'])->name('dashboard.liveChatManagerList');
+
+
+    Route::get('subliveChat-list/{id}', [DashboardController::class, 'subliveChatList'])->name('subliveChat.list');
+    Route::get('liveChat-admin-list', [DashboardController::class, 'liveChatAdminList'])->name('liveChatEvents.adminList');
+    Route::get('liveChat-admin-events/{adminId}', [DashboardController::class, 'liveChatAdminEvents'])->name('liveChatEvents.adminEvents');
+    Route::get('liveChat-superstar-list', [DashboardController::class, 'liveChatSuperstarList'])->name('liveChatEvents.superstarList');
+    Route::get('liveChat-superstar-events/{starId}', [DashboardController::class, 'liveChatSuperstarEvents'])->name('liveChatEvents.superstarEvents');
+
 
 
     //Question And Answers
-    Route::get('qna', [DashboardController::class, 'qna'])->name('dashboard.qna');
+    Route::get('qna-dashboard', [DashboardController::class, 'qna'])->name('dashboard.qna');
     Route::get('qna-data/{type}', [DashboardController::class, 'qnaData'])->name('dashboard.qnaData');
     Route::get('qna-details/{id}', [DashboardController::class, 'qnaDetails'])->name('dashboard.qnaDetails');
-    Route::get('qna-manager-list', [DashboardController::class, 'qnaManagerList'])->name('dashboard.qnaManagerList');
+
+    Route::get('subqna-list/{id}', [DashboardController::class, 'subqnaList'])->name('subqna.list');
+    Route::get('qna-admin-list', [DashboardController::class, 'qnaAdminList'])->name('qnaEvents.adminList');
+    Route::get('qna-admin-events/{adminId}', [DashboardController::class, 'qnaAdminEvents'])->name('qnaEvents.adminEvents');
+    Route::get('qna-superstar-list', [DashboardController::class, 'qnaSuperstarList'])->name('qnaEvents.superstarList');
+    Route::get('qna-superstar-events/{starId}', [DashboardController::class, 'qnaSuperstarEvents'])->name('qnaEvents.superstarEvents');
+
 
 
     // Auditions
@@ -93,6 +106,11 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('learning-session-details/{id}', [DashboardController::class, 'learninSessionDetails'])->name('dashboard.learninSessionDetails');
     Route::get('learning-sessions-manager-list', [DashboardController::class, 'learningSessionManagerList'])->name('dashboard.learningSessionManagerList');
 
+    Route::get('sublearning-sessions-list/{id}', [DashboardController::class, 'sublearningSessionList'])->name('sublearningSession.list');
+    Route::get('learningSession-admin-list', [DashboardController::class, 'learningSessionAdminList'])->name('learningSessionEvents.adminList');
+    Route::get('learningSession-admin-events/{adminId}', [DashboardController::class, 'learningSessionAdminEvents'])->name('learningSessionEvents.adminEvents');
+    Route::get('learningSession-superstar-list', [DashboardController::class, 'learningSessionSuperstarList'])->name('learningSessionEvents.superstarList');
+    Route::get('learningSession-superstar-events/{starId}', [DashboardController::class, 'learningSessionSuperstarEvents'])->name('learningSessionEvents.superstarEvents');
 
     //up commingevent
     Route::get('upcomming-events', [LiveEventController::class, 'UpcommingEvent'])->name('UpcommingEvent');

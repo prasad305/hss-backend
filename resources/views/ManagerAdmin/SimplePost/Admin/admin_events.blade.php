@@ -38,14 +38,21 @@
                 @foreach ($simplePost as $post)
                     <div class="col-12 col-sm-6 col-md-3">
                         <div class="info-box mb-3 text-center border border-warning">
-                            <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
-                                    aria-hidden="true"></i></span>
+                            <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-blog"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-number">{{ $post->title }}</span>
+                                <span>{!! Str::words($post->title, 5, ' ...') !!}</span>
+                                <span>{{ date('d M Y', strtotime($post->created_at)) }}</span>
+
                                 <span class="info-box-number">
-                                    <small><a class="text-warning" href="#">See
+                                    <small><a class="text-warning"
+                                            href="{{ route('managerAdmin.dashboard.simplePostDetails', $post->id) }}">See
                                             All</a></small>
                                 </span>
+                                @if ($post->status == 1)
+                                    <span class="badge badge-success">Published</span>
+                                @else
+                                    <span class="badge badge-warning">Pending</span>
+                                @endif
                             </div>
                         </div>
                     </div>
