@@ -17,6 +17,7 @@ use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionMark;
 use App\Models\Audition\AuditionPromoInstruction;
 use App\Models\Audition\AuditionPromoInstructionSendInfo;
+use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundInstructionSendInfo;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
@@ -186,6 +187,23 @@ class AuditionController extends Controller
             'is_already_submitted' => $is_already_submitted,
             'is_all_star_responsed' => $is_all_star_responsed,
             'is_any_star_responsed' => $is_any_star_responsed,
+        ]);
+    }
+    public function singleAuditionApprovedVideoWithRoundId($audition_id, $audition_round_info_id)
+    {
+        $audition = Audition::find($audition_id);
+        $auditionRoundInfo  = AuditionRoundInfo::find($audition_round_info_id);
+
+        $assignJuries = AuditionAssignJury::with('juryGroup')->whereHas('juryGroup', function ($q) {
+            $q->where('is_primary', false);
+        })->where([['audition_id', $audition->id]])->get();
+
+        $assignJuriesOrderByGroup = $assignJuries->groupBy('group_id');
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
+            'auditionRoundInfo' => $auditionRoundInfo,
+            'assignJuriesOrderByGroup' => $assignJuriesOrderByGroup,
         ]);
     }
     public function singleAuditionInstruction($id)

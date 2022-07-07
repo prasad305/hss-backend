@@ -3,6 +3,7 @@
 namespace App\Models\Audition;
 
 use App\Models\Category;
+use App\Models\JuryGroup;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,8 @@ class AuditionAssignJury extends Model
         'id',
         'audition_id',
         'jury_id',
+        'is_primary',
+        'group_id',
         'category_id',
         'approved_by_jury',
         'status',
@@ -25,6 +28,10 @@ class AuditionAssignJury extends Model
     public function audition()
     {
         return $this->belongsTo(Audition::class, 'audition_id');
+    }
+    public function juryGroup()
+    {
+        return $this->belongsTo(JuryGroup::class, 'group_id');
     }
 
     public function user()
