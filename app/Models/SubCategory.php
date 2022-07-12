@@ -26,6 +26,24 @@ class SubCategory extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+    public function simplePosts()
+    {
+        return $this->hasMany(SimplePost::class, 'category_id');
+    }
+    public function subSimplePosts()
+    {
+        return $this->hasMany(SimplePost::class, 'subcategory_id');
+    }
+    public function subLearningSession()
+    {
+        return $this->hasMany(LearningSession::class, 'sub_category_id');
+    }
+    public function subliveChat()
+    {
+        return $this->hasMany(LiveChat::class, 'sub_category_id');
+    }
+    public function subqna()
+    {
+        return $this->hasMany(QnA::class, 'sub_category_id');
+    }
 }
-
-

@@ -23,6 +23,42 @@
         <a href="{{ route('managerAdmin.dashboard') }}" class="btn btn-sm btn-warning float-right">Go Back</a>
     </div>
     <!-- Main content -->
+    <div class="content">
+
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-12">
+                    <div class="info-box text-center">
+                        <div class="info-box-content">
+                            <span class="info-box-text text-warning">
+                                {{ auth()->user()->category->name }}</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                @foreach ($categories as $category)
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3 text-center border border-warning">
+                            <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
+                                    aria-hidden="true"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">{{ $category->name }}</span>
+                                <span class="info-box-number">{{ $category->subliveChat->count() }}</span>
+                                <span class="info-box-number">
+                                    <small><a class="text-warning"
+                                            href="{{ route('managerAdmin.subliveChat.list', $category->id) }}">See
+                                            All</a></small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
     <section class="content">
         <div class="container-fluid">
             <!-- Info boxes -->
@@ -183,7 +219,60 @@
         <!--/. container-fluid -->
     </section>
     <!-- /.content -->
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-12">
+            <div class="info-box text-center">
+                <div class="info-box-content">
+                    <span class="info-box-text text-warning">Admin and Stars</span>
+                </div>
+            </div>
 
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Info boxes -->
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-6">
+                    <div class="info-box border border-warning">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+
+                        <div class="info-box-content text-center">
+                            <span class="info-box-text">Admin</span>
+                            <span class="info-box-number">
+                                {{ $admin }}
+                            </span>
+                            <a href="{{ route('managerAdmin.liveChatEvents.adminList') }}">
+                                <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
+                            </a>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12 col-sm-6 col-md-6">
+                    <div class="info-box mb-3 border border-warning">
+                        <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-users"></i></span>
+
+                        <div class="info-box-content text-center">
+                            <span class="info-box-text">Superstar</span>
+                            <span class="info-box-number">{{ $superstar }}</span>
+                            <a href="{{ route('managerAdmin.liveChatEvents.superstarList') }}">
+                                <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
+                            </a>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!--/. container-fluid -->
+    </section>
     <section class="content">
         <div class="container-fluid">
             <div class="row">

@@ -34,222 +34,474 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function dashboard(){
-      $january = 150;
-      $february = 259;
-      $march =  56;
-      $april =  800;
-      $may =  600;
-      $june =  588;
-      $july =  38;
-      $august =  237;
-      $september =  52;
-      $octobar =  5;
-      $november =  349;
-      $december =  429;
-      $year = ['Jan','Feb','Mar','Apr','May','Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  public function dashboard()
+  {
+    $january = 150;
+    $february = 259;
+    $march =  56;
+    $april =  800;
+    $may =  600;
+    $june =  588;
+    $july =  38;
+    $august =  237;
+    $september =  52;
+    $octobar =  5;
+    $november =  349;
+    $december =  429;
+    $year = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-      $user = [$january, $february, $march, $april, $may, $june, $july, $august, $september, $octobar, $november, $december];
-      // foreach ($year as $key => $value) {
-      //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
-      // }
-      
-      $data['year'] = json_encode($year,JSON_NUMERIC_CHECK);
-      $data['user'] = json_encode($user,JSON_NUMERIC_CHECK);
+    $user = [$january, $february, $march, $april, $may, $june, $july, $august, $september, $octobar, $november, $december];
+    // foreach ($year as $key => $value) {
+    //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
+    // }
 
-      //All user & count
-      $data['userCount'] = User::where('user_type', 'user')->count();
-      $data['managerAdminCount'] = User::where('user_type', 'manager-admin')->count();
-      $data['starCount'] = User::where('user_type', 'star')->count();
-      $data['adminCount'] = User::where('user_type', 'admin')->count();
-      $data['categoryCount'] = Category::count();
-      $data['subCategoryCount'] = SubCategory::count();
-      $data['countryCount'] = Country::count();
-      $data['stateCount'] = State::count();
-      $data['cityCount'] = City::count();
-      $data['interestTypeCount'] = InterestType::count();
-      $data['marketplaceCount'] = Marketplace::count();
-      $data['auctionCount'] = Auction::count();
+    $data['year'] = json_encode($year, JSON_NUMERIC_CHECK);
+    $data['user'] = json_encode($user, JSON_NUMERIC_CHECK);
+
+    //All user & count
+    $data['userCount'] = User::where('user_type', 'user')->count();
+    $data['managerAdminCount'] = User::where('user_type', 'manager-admin')->count();
+    $data['starCount'] = User::where('user_type', 'star')->count();
+    $data['adminCount'] = User::where('user_type', 'admin')->count();
+    $data['categoryCount'] = Category::count();
+    $data['subCategoryCount'] = SubCategory::count();
+    $data['countryCount'] = Country::count();
+    $data['stateCount'] = State::count();
+    $data['cityCount'] = City::count();
+    $data['interestTypeCount'] = InterestType::count();
+    $data['marketplaceCount'] = Marketplace::count();
+    $data['auctionCount'] = Auction::count();
 
     return view('SuperAdmin.dashboard.index', $data);
-    }
+  }
 
-    public function auditions(){
-      $year = ['Jan','Feb','Mar','Apr','May','Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  public function auditions()
+  {
+    $year = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-      $user = ['2017','1158','2019','20','586','2022', '2417','1158','2019','20','586','222'];
-      // foreach ($year as $key => $value) {
-      //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
-      // }
+    $user = ['2017', '1158', '2019', '20', '586', '2022', '2417', '1158', '2019', '20', '586', '222'];
+    // foreach ($year as $key => $value) {
+    //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
+    // }
 
-    return view('SuperAdmin.dashboard.auditions')->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('user',json_encode($user,JSON_NUMERIC_CHECK));
-    }
+    return view('SuperAdmin.dashboard.auditions')->with('year', json_encode($year, JSON_NUMERIC_CHECK))->with('user', json_encode($user, JSON_NUMERIC_CHECK));
+  }
 
-    public function meetupEvents(){
-      $year = ['Jan','Feb','Mar','Apr','May','Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  public function meetupEvents()
+  {
+    $year = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-      $user = ['2017','1158','2019','20','586','2022', '2417','1158','2019','20','586','222'];
-      // foreach ($year as $key => $value) {
-      //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
-      // }
-      $data['year'] = json_encode($year,JSON_NUMERIC_CHECK);
-      $data['user'] = json_encode($user,JSON_NUMERIC_CHECK);
+    $user = ['2017', '1158', '2019', '20', '586', '2022', '2417', '1158', '2019', '20', '586', '222'];
+    // foreach ($year as $key => $value) {
+    //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
+    // }
+    $data['year'] = json_encode($year, JSON_NUMERIC_CHECK);
+    $data['user'] = json_encode($user, JSON_NUMERIC_CHECK);
 
-      $data['meetUpOnlineCount'] = MeetupEvent::where('meetup_type', 'Online')->count();
-      $data['meetUpOfflineCount'] = MeetupEvent::where('meetup_type', 'Offline')->count();
-      $data['completeMeetUpOfflineCount'] = MeetupEvent::where('meetup_type', 'Offline')->whereDate('date', '>', Carbon::now())->count();
-      $data['completeMeetUpOnlineCount'] = MeetupEvent::where('meetup_type', 'Offline')->whereDate('date', '>', Carbon::now())->count();
-      $data['upcomingMeetUpOfflineCount'] = MeetupEvent::where('meetup_type', 'Offline')->whereDate('date', '<', Carbon::now())->count();
-      $data['upcomingMeetUpOnlineCount'] = MeetupEvent::where('meetup_type', 'Online')->whereDate('date', '<', Carbon::now())->count();
+    $data['meetUpOnlineCount'] = MeetupEvent::where('meetup_type', 'Online')->count();
+    $data['meetUpOfflineCount'] = MeetupEvent::where('meetup_type', 'Offline')->count();
+    $data['completeMeetUpOfflineCount'] = MeetupEvent::where('meetup_type', 'Offline')->whereDate('event_date', '>', Carbon::now())->count();
+    $data['completeMeetUpOnlineCount'] = MeetupEvent::where('meetup_type', 'Offline')->whereDate('event_date', '>', Carbon::now())->count();
+    $data['upcomingMeetUpOfflineCount'] = MeetupEvent::where('meetup_type', 'Offline')->whereDate('event_date', '<', Carbon::now())->count();
+    $data['upcomingMeetUpOnlineCount'] = MeetupEvent::where('meetup_type', 'Online')->whereDate('event_date', '<', Carbon::now())->count();
 
-      $data['userMeetUpOnlineCount'] = MeetupEventRegistration::count();
-      $data['registerUserAmount'] = MeetupEventRegistration::sum('amount');
+    $data['userMeetUpOnlineCount'] = MeetupEventRegistration::count();
+    $data['registerUserAmount'] = MeetupEventRegistration::sum('amount');
 
     return view('SuperAdmin.dashboard.meetup-events', $data);
-    }
+  }
 
-    public function learningSessions(){
-      $year = ['Jan','Feb','Mar','Apr','May','Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  public function learningSessions()
+  {
+    $year = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-      $user = ['2017','1158','2019','20','586','2022', '2417','1158','2019','20','586','222'];
-      // foreach ($year as $key => $value) {
-      //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
-      // }
+    $user = ['2017', '1158', '2019', '20', '586', '2022', '2417', '1158', '2019', '20', '586', '222'];
+    // foreach ($year as $key => $value) {
+    //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
+    // }
 
-      $data['year'] = json_encode($year,JSON_NUMERIC_CHECK);
-      $data['user'] = json_encode($user,JSON_NUMERIC_CHECK);
+    $data['year'] = json_encode($year, JSON_NUMERIC_CHECK);
+    $data['user'] = json_encode($user, JSON_NUMERIC_CHECK);
 
-      $data['allLearningCount'] = LearningSession::count();
-      $data['completeLearningCount'] = LearningSession::whereDate('date', '>', Carbon::now())->count();
-      $data['upcomingLearningCount'] = LearningSession::whereDate('date', '<', Carbon::now())->count();
-      $data['userLearningCount'] = LearningSessionRegistration::count();
-      $data['amountLearningCount'] = LearningSessionRegistration::sum('amount');
+    $data['allLearningCount'] = LearningSession::count();
+    $data['completeLearningCount'] = LearningSession::whereDate('event_date', '>', Carbon::now())->count();
+    $data['upcomingLearningCount'] = LearningSession::whereDate('event_date', '<', Carbon::now())->count();
+    $data['userLearningCount'] = LearningSessionRegistration::count();
+    $data['amountLearningCount'] = LearningSessionRegistration::sum('amount');
 
     return view('SuperAdmin.dashboard.learning-sessions', $data);
-    }
+  }
 
-    public function liveChats(){
-      $year = ['Jan','Feb','Mar','Apr','May','Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  public function liveChats()
+  {
+    $year = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-      $user = ['2017','1158','2019','20','586','2022', '2417','1158','2019','20','586','222'];
-      // foreach ($year as $key => $value) {
-      //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
-      // }
+    $user = ['2017', '1158', '2019', '20', '586', '2022', '2417', '1158', '2019', '20', '586', '222'];
+    // foreach ($year as $key => $value) {
+    //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
+    // }
 
 
 
-    $data['year'] = json_encode($year,JSON_NUMERIC_CHECK);
-    $data['user'] = json_encode($user,JSON_NUMERIC_CHECK);
+    $data['year'] = json_encode($year, JSON_NUMERIC_CHECK);
+    $data['user'] = json_encode($user, JSON_NUMERIC_CHECK);
 
     $data['allLiveChatCount'] = LiveChat::count();
-    $data['completeLiveChatCount'] = LiveChat::whereDate('date', '>', Carbon::now())->count();
-    $data['upcomingLiveChatCount'] = LiveChat::whereDate('date', '<', Carbon::now())->count();
-    $data['runningLiveChatCount'] = LiveChat::whereDate('date', '=', Carbon::now())->count();
+    $data['completeLiveChatCount'] = LiveChat::whereDate('event_date', '>', Carbon::now())->count();
+    $data['upcomingLiveChatCount'] = LiveChat::whereDate('event_date', '<', Carbon::now())->count();
+    $data['runningLiveChatCount'] = LiveChat::whereDate('event_date', '=', Carbon::now())->count();
     $data['userLiveChatCount'] = LiveChatRegistration::count();
     $data['amountLiveChatCount'] = LiveChatRegistration::sum('amount');
 
     return view('SuperAdmin.dashboard.live-chats', $data);
-    }
+  }
 
-    public function fanGroup(){
-      $year = ['Jan','Feb','Mar','Apr','May','Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  public function fanGroup()
+  {
+    $year = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-      $user = ['2017','1158','2019','20','586','2022', '2417','1158','2019','20','586','222'];
-      // foreach ($year as $key => $value) {
-      //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
-      // }
+    $user = ['2017', '1158', '2019', '20', '586', '2022', '2417', '1158', '2019', '20', '586', '222'];
+    // foreach ($year as $key => $value) {
+    //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
+    // }
 
-      $data['year'] = json_encode($year,JSON_NUMERIC_CHECK);
-      $data['user'] = json_encode($user,JSON_NUMERIC_CHECK);
+    $data['year'] = json_encode($year, JSON_NUMERIC_CHECK);
+    $data['user'] = json_encode($user, JSON_NUMERIC_CHECK);
 
-      $data['allFanGroup'] = FanGroup::count();
-      $data['allFanGroupJoin'] = Fan_Group_Join::count();
-      $data['allFanPost'] = FanPost::count();
+    $data['allFanGroup'] = FanGroup::count();
+    $data['allFanGroupJoin'] = Fan_Group_Join::count();
+    $data['allFanPost'] = FanPost::count();
 
     return view('SuperAdmin.dashboard.fan-group', $data);
-    }
+  }
 
-    public function greetings(){
-      $year = ['Jan','Feb','Mar','Apr','May','Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  public function greetings()
+  {
+    $year = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-      $user = ['2017','1158','2019','20','586','2022', '2417','1158','2019','20','586','222'];
-      // foreach ($year as $key => $value) {
-      //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
-      // }
-      
-      $data['year'] = json_encode($year,JSON_NUMERIC_CHECK);
-      $data['user'] = json_encode($user,JSON_NUMERIC_CHECK);
-      
-  
+    $user = ['2017', '1158', '2019', '20', '586', '2022', '2417', '1158', '2019', '20', '586', '222'];
+    // foreach ($year as $key => $value) {
+    //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
+    // }
+
+    $data['year'] = json_encode($year, JSON_NUMERIC_CHECK);
+    $data['user'] = json_encode($user, JSON_NUMERIC_CHECK);
+
+
     $data['allGreetingCount'] = Greeting::count();
-    $data['completeGreetingCount'] = Greeting::whereDate('date', '>', Carbon::now())->count();
-    $data['upcomingGreetingCount'] = Greeting::whereDate('date', '<', Carbon::now())->count();
+    $data['completeGreetingCount'] = Greeting::whereDate('event_date', '>', Carbon::now())->count();
+    $data['upcomingGreetingCount'] = Greeting::whereDate('event_date', '<', Carbon::now())->count();
 
     return view('SuperAdmin.dashboard.greetings', $data);
-    }
+  }
 
-    public function userPosts(){
-      $year = ['Jan','Feb','Mar','Apr','May','Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  public function userPosts()
+  {
+    $year = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-      $user = ['2017','1158','2019','20','586','2022', '2417','1158','2019','20','586','222'];
-      // foreach ($year as $key => $value) {
-      //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
-      // }
+    $user = ['2017', '1158', '2019', '20', '586', '2022', '2417', '1158', '2019', '20', '586', '222'];
+    // foreach ($year as $key => $value) {
+    //     $user[] = User::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->count();
+    // }
 
-      $data['year'] = json_encode($year,JSON_NUMERIC_CHECK);
-      $data['user'] = json_encode($user,JSON_NUMERIC_CHECK);
+    $data['year'] = json_encode($year, JSON_NUMERIC_CHECK);
+    $data['user'] = json_encode($user, JSON_NUMERIC_CHECK);
 
-      $data['allPostCount'] = Post::count();
-      $data['dailyPostCount'] = Post::whereDate('created_at', '=', Carbon::now())->count();
-      $data['weeklyPostCount'] = Post::whereBetween('created_at', [
-                                          Carbon::parse('last monday')->startOfDay(),
-                                          Carbon::parse('next friday')->endOfDay(),
-                                      ])->count();
-      $data['monthlyPostCount'] = Post::whereMonth('created_at',date('m'))->count();
+    $data['allPostCount'] = Post::count();
+    $data['dailyPostCount'] = Post::whereDate('created_at', '=', Carbon::now())->count();
+    $data['weeklyPostCount'] = Post::whereBetween('created_at', [
+      Carbon::parse('last monday')->startOfDay(),
+      Carbon::parse('next friday')->endOfDay(),
+    ])->count();
+    $data['monthlyPostCount'] = Post::whereMonth('created_at', date('m'))->count();
 
-      $data['likesPost'] = Post::sum('react_number');
-      $data['commentPost'] = Post::sum('comment_number');
-      $data['sharePost'] = Post::sum('share_number');
+    $data['likesPost'] = Post::sum('react_number');
+    $data['commentPost'] = Post::sum('comment_number');
+    $data['sharePost'] = Post::sum('share_number');
 
     return view('SuperAdmin.dashboard.user-posts', $data);
-    }
-    
-    public function wallets(){
-      return view('SuperAdmin.dashboard.wallets');
-    }
-    
+  }
 
-    public function packageStore(Request $request){
-      $package = new Package();
-      $package->title = $request->title;
-      $package->club_points = $request->club_points;
-      $package->auditions = $request->auditions;
-      $package->learning_session = $request->learning_session;
-      $package->live_chats = $request->live_chats;
-      $package->meetup = $request->meetup;
-      $package->greetings = $request->greetings;
-      $package->price = $request->price;
-      $package->status = 1;
-      $package->save();
+  public function wallets()
+  {
+    return view('SuperAdmin.dashboard.wallets');
+  }
+
+
+  public function packageStore(Request $request)
+  {
+    $package = new Package();
+    $package->title = $request->title;
+    $package->club_points = $request->club_points;
+    $package->auditions = $request->auditions;
+    $package->learning_session = $request->learning_session;
+    $package->live_chats = $request->live_chats;
+    $package->meetup = $request->meetup;
+    $package->greetings = $request->greetings;
+    $package->price = $request->price;
+    $package->status = 1;
+    $package->save();
 
 
     try {
-        $package->save();
-        return response()->json([
-            'type' => 'success',
-            'message' => 'Package created successfully',
-        ]);
+      $package->save();
+      return response()->json([
+        'type' => 'success',
+        'message' => 'Package created successfully',
+      ]);
     } catch (\Exception $exception) {
-        return response()->json([
-            'type' => 'error',
-            'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
-        ]);
+      return response()->json([
+        'type' => 'error',
+        'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+      ]);
     }
-    }
-   
+  }
 
-    public function profile(){
-        $user = Auth::user();
-        return view('SuperAdmin.profile.index', compact('user'));
-    }
+
+  public function profile()
+  {
+    $user = Auth::user();
+    return view('SuperAdmin.profile.index', compact('user'));
+  }
+
+  // Dashboard Meetup
+  public function meetupEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.Meetup.dashboard');
+  }
+  public function meetupManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.Meetup.ManagerAdmin.manager_admin');
+  }
+  public function meetupManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.Meetup.ManagerAdmin.manager_admin_events');
+  }
+  public function meetupAdminList()
+  {
+    return view('SuperAdmin.dashboard.Meetup.Admin.admin');
+  }
+  public function meetupAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.Meetup.Admin.admin_events');
+  }
+  public function meetupSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.Meetup.Superstar.superstar');
+  }
+  public function meetupSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.Meetup.Superstar.superstar_events');
+  }
+  // Dashboard Learning Session
+  public function learningSessionEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.LearningSession.dashboard');
+  }
+  public function learningSessionManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.LearningSession.ManagerAdmin.manager_admin');
+  }
+  public function learningSessionManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.LearningSession.ManagerAdmin.manager_admin_events');
+  }
+  public function learningSessionAdminList()
+  {
+    return view('SuperAdmin.dashboard.LearningSession.Admin.admin');
+  }
+  public function learningSessionAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.LearningSession.Admin.admin_events');
+  }
+  public function learningSessionSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.LearningSession.Superstar.superstar');
+  }
+  public function learningSessionSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.LearningSession.Superstar.superstar_events');
+  }
+  // Dashboard Live Chat
+  public function liveChatEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.LiveChat.dashboard');
+  }
+  public function liveChatManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.LiveChat.ManagerAdmin.manager_admin');
+  }
+  public function liveChatManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.LiveChat.ManagerAdmin.manager_admin_events');
+  }
+  public function liveChatAdminList()
+  {
+    return view('SuperAdmin.dashboard.LiveChat.Admin.admin');
+  }
+  public function liveChatAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.LiveChat.Admin.admin_events');
+  }
+  public function liveChatSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.LiveChat.Superstar.superstar');
+  }
+  public function liveChatSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.LiveChat.Superstar.superstar_events');
+  }
+  // Dashboard Greeting
+  public function greetingEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.Greeting.dashboard');
+  }
+  public function greetingManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.Greeting.ManagerAdmin.manager_admin');
+  }
+  public function greetingManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.Greeting.ManagerAdmin.manager_admin_events');
+  }
+  public function greetingAdminList()
+  {
+    return view('SuperAdmin.dashboard.Greeting.Admin.admin');
+  }
+  public function greetingAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.Greeting.Admin.admin_events');
+  }
+  public function greetingSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.Greeting.Superstar.superstar');
+  }
+  public function greetingSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.Greeting.Superstar.superstar_events');
+  }
+  // Dashboard Fan Group
+  public function fanGroupEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.FanGroup.dashboard');
+  }
+  public function fanGroupManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.FanGroup.ManagerAdmin.manager_admin');
+  }
+  public function fanGroupManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.FanGroup.ManagerAdmin.manager_admin_events');
+  }
+  public function fanGroupAdminList()
+  {
+    return view('SuperAdmin.dashboard.FanGroup.Admin.admin');
+  }
+  public function fanGroupAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.FanGroup.Admin.admin_events');
+  }
+  public function fanGroupSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.FanGroup.Superstar.superstar');
+  }
+  public function fanGroupSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.FanGroup.Superstar.superstar_events');
+  }
+  // Dashboard Q&A
+  public function qnaEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.QnA.dashboard');
+  }
+  public function qnaManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.QnA.ManagerAdmin.manager_admin');
+  }
+  public function qnaManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.QnA.ManagerAdmin.manager_admin_events');
+  }
+  public function qnaAdminList()
+  {
+    return view('SuperAdmin.dashboard.QnA.Admin.admin');
+  }
+  public function qnaAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.QnA.Admin.admin_events');
+  }
+  public function qnaSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.QnA.Superstar.superstar');
+  }
+  public function qnaSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.QnA.Superstar.superstar_events');
+  }
+  // Dashboard simple post
+  public function simplePostEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.SimplePost.dashboard');
+  }
+  public function simplePostManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.SimplePost.ManagerAdmin.manager_admin');
+  }
+  public function simplePostManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.SimplePost.ManagerAdmin.manager_admin_events');
+  }
+  public function simplePostAdminList()
+  {
+    return view('SuperAdmin.dashboard.SimplePost.Admin.admin');
+  }
+  public function simplePostAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.SimplePost.Admin.admin_events');
+  }
+  public function simplePostSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.SimplePost.Superstar.superstar');
+  }
+  public function simplePostSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.SimplePost.Superstar.superstar_events');
+  }
+  // Dashboard Audition
+  public function auditionEventsDashboard()
+  {
+    return view('SuperAdmin.dashboard.Audition.dashboard');
+  }
+  public function auditionManagerAdminList()
+  {
+    return view('SuperAdmin.dashboard.Audition.ManagerAdmin.manager_admin');
+  }
+  public function auditionManagerAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.Audition.ManagerAdmin.manager_admin_events');
+  }
+  public function adminList()
+  {
+    return view('SuperAdmin.dashboard.Audition.Admin.admin');
+  }
+  public function adminEvents()
+  {
+    return view('SuperAdmin.dashboard.Audition.Admin.admin_events');
+  }
+  public function auditionAdminList()
+  {
+    return view('SuperAdmin.dashboard.Audition.AuditionAdmin.audition_admin');
+  }
+  public function auditionAdminEvents()
+  {
+    return view('SuperAdmin.dashboard.Audition.AuditionAdmin.audition_admin_events');
+  }
+  public function auditionSuperstarList()
+  {
+    return view('SuperAdmin.dashboard.Audition.Superstar.superstar');
+  }
+  public function auditionSuperstarEvents()
+  {
+    return view('SuperAdmin.dashboard.Audition.Superstar.superstar_events');
+  }
 }

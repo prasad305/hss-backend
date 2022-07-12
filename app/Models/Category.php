@@ -17,6 +17,7 @@ class Category extends Model
         'status'
     ];
 
+
     public function starCategory()
     {
         return $this->hasOne(StarCategory::class, 'category_id');
@@ -33,5 +34,9 @@ class Category extends Model
     public function subCategories()
     {
         return $this->hasMany(SubCategory::class, 'category_id');
+    }
+    public function simplePosts()
+    {
+        return $this->hasMany(SimplePost::class, 'category_id');
     }
 }
