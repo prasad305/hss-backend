@@ -84,14 +84,23 @@ class DashboardController extends Controller
         $monthlyIncome = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
         $yearlyIncome = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
-        $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-        $data = [];
-        foreach ($labels as $key => $value) {
-            $data[] = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+
+        $labels = LearningSessionRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('M');
+        });
+
+        $months = [];
+        $amountCount = [];
+        foreach ($labels as $month => $values) {
+            $months[] = $month;
+            $amountCount[] = $values->sum('amount');
         }
 
+        // dd($monthCount);
 
-        return view('ManagerAdmin.LearningSession.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('labels', json_encode($labels, JSON_NUMERIC_CHECK))->with('data', json_encode($data, JSON_NUMERIC_CHECK));
+
+
+        return view('ManagerAdmin.LearningSession.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
     }
     public function learninSessionData($type)
     {

@@ -325,13 +325,16 @@
             //--------------
 
             // Get context with jQuery - using jQuery's .get() method.
-            var labels = <?php echo $labels; ?>;
-            var data = <?php echo $data; ?>;
+            var labels = <?php echo $months; ?>;
+            var data = <?php echo $amountCount; ?>;
+
+            // var labels = JSON.parse(JSON.encode($months));
+            // var data = JSON.parse(JSON.encode($monthCount));
 
             var areaChartData = {
                 labels: labels,
                 datasets: [{
-                    label: 'Learning Session',
+                    label: 'Revenue',
                     backgroundColor: 'rgba(60,141,188,0.9)',
                     borderColor: 'rgba(60,141,188,0.8)',
                     pointRadius: false,
