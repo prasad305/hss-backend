@@ -1561,4 +1561,19 @@ class AuditionController extends Controller
             'status' => 200,
         ]);
     }
+
+    public function getPercentageVideoForJury($audition_id,$round_info_id,$value){
+
+        $percentage_videos = AuditionUploadVideo::where([['audition_id',$audition_id],['round_info_id',$round_info_id],['group_b_jury_mark','!=',null],['group_c_jury_mark','!=',null]])->get();
+    }
+
+    public function getRandomForJury($audition_id,$round_info_id,$value){
+
+        $percentage_videos = AuditionUploadVideo::where([['audition_id',$audition_id],['round_info_id',$round_info_id],['group_b_jury_mark','!=',null],['group_c_jury_mark','!=',null]])->inRandomOrder()->limit($value)->get();
+
+        return response()->json([
+            'status' => 200,
+            'percentage_videos' => $percentage_videos,
+        ]);
+    }
 }
