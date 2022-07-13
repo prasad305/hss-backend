@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateJuryGroupsTable extends Migration
 {
-    
+
     public function up()
     {
         Schema::create('jury_groups', function (Blueprint $table) {
@@ -14,11 +14,12 @@ class CreateJuryGroupsTable extends Migration
             $table->string('name');
             $table->unsignedBigInteger('category_id');
             $table->integer('status')->default(1);
+            $table->boolean('is_primary')->default(false);
             $table->timestamps();
         });
     }
 
-  
+
     public function down()
     {
         Schema::dropIfExists('jury_groups');
