@@ -222,6 +222,35 @@ class AuditionController extends Controller
 
 
     }
+
+
+    public function assignMainJuries(Request $request)
+    {
+        // return $request->all();
+        try {
+            foreach ($request->juries as $key => $jury_id) {
+                AuditionUploadVideo::where([['group_a_jury_id', null], ['audition_id', $request->audition_id], ['round_info_id',$request->round_info_id]])->take($request->random_videos[$key])->update([
+                    'group_a_jury_id'=>$jury_id,
+                ]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Jury assigned successfully !',
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Opps... Something went wrong ! '.$exception->getMessage(),
+            ]);
+        }
+
+
+    }
+    
+    
+
+
     public function singleAuditionApprovedVideoWithRoundId($audition_id, $audition_round_info_id)
     {
         $audition = Audition::find($audition_id);
@@ -1495,6 +1524,10 @@ class AuditionController extends Controller
             $q->where('is_primary', false);
         })->where('audition_id', $audition_id)->get();
 
+        $alreadyAssignedCount = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['audition_id', $audition_id], ['approval_status', 1],['group_a_jury_id','!=', null]])->count();
+
+        $isVideoAlreadyAssigned = $alreadyAssignedCount > 0 ? true : false;
+
 
         $assignJuriesOrderByGroup = $assignJuries->groupBy('group_id');
 
@@ -1518,6 +1551,7 @@ class AuditionController extends Controller
             'group_c_videos' => $group_c_videos,
             'juriesByGroup' => $assignJuriesOrderByGroup,
             'mainJury' => $mainJury,
+            'isVideoAlreadyAssigned' => $isVideoAlreadyAssigned,
         ]);
     }
     
@@ -1564,16 +1598,72 @@ class AuditionController extends Controller
 
     public function getPercentageVideoForJury($audition_id,$round_info_id,$value){
 
-        $percentage_videos = AuditionUploadVideo::where([['audition_id',$audition_id],['round_info_id',$round_info_id],['group_b_jury_mark','!=',null],['group_c_jury_mark','!=',null]])->get();
+        $percentage_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['group_b_jury_mark', '!=', null], ['group_c_jury_mark', '!=', null]])->get();
+
+        $videoIds = [];
+        foreach ($percentage_videos as $key => $percentage_video) {
+            if($percentage_video->group_b_jury_mark > $percentage_video->group_c_jury_mark && ($percentage_video->group_b_jury_mark - $percentage_video->group_c_jury_mark >= $value )){
+                array_push($videoIds, $percentage_video->id);
+            }
+            if($percentage_video->group_c_jury_mark > $percentage_video->group_b_jury_mark && ($percentage_video->group_c_jury_mark - $percentage_video->group_b_jury_mark >= $value )){
+                array_push($videoIds, $percentage_video->id);
+            }
+        }
+
+        $percentage_videos = AuditionUploadVideo::whereIn('id', $videoIds)->get();
+
+        return response()->json([
+            'status' => 200,
+            'whice' => 'p',
+            'percentage_videos' => $percentage_videos,
+        ]);
+    }
+
+    public function assignMainJuriesForPercentage(Request $request)
+    {
+        // return $request->all();
+        try {
+
+            $percentage_videos = AuditionUploadVideo::where([['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id], ['group_b_jury_mark', '!=', null], ['group_c_jury_mark', '!=', null]])->get();
+
+            $videoIds = [];
+            foreach ($percentage_videos as $key => $percentage_video) {
+                if($percentage_video->group_b_jury_mark > $percentage_video->group_c_jury_mark && ($percentage_video->group_b_jury_mark - $percentage_video->group_c_jury_mark >= $request->value )){
+                    array_push($videoIds, $percentage_video->id);
+                }
+                if($percentage_video->group_c_jury_mark > $percentage_video->group_b_jury_mark && ($percentage_video->group_c_jury_mark - $percentage_video->group_b_jury_mark >= $request->value )){
+                    array_push($videoIds, $percentage_video->id);
+                }
+            }
+
+            foreach ($request->juries as $key => $jury_id) {
+                AuditionUploadVideo::whereIn('id', $videoIds)->where([['group_a_jury_id', null], ['audition_id', $request->audition_id], ['round_info_id',$request->round_info_id]])->take($request->random_videos[$key])->update([
+                    'group_a_jury_id'=>$jury_id,
+                ]);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Jury assigned successfully !',
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Opps... Something went wrong ! '.$exception->getMessage(),
+            ]);
+        }
+
+
     }
 
     public function getRandomForJury($audition_id,$round_info_id,$value){
 
-        $percentage_videos = AuditionUploadVideo::where([['audition_id',$audition_id],['round_info_id',$round_info_id],['group_b_jury_mark','!=',null],['group_c_jury_mark','!=',null]])->inRandomOrder()->limit($value)->get();
+        $random_videos = AuditionUploadVideo::where([['audition_id',$audition_id],['round_info_id',$round_info_id],['group_b_jury_mark','!=',null],['group_c_jury_mark','!=',null]])->inRandomOrder()->limit($value)->get();
 
         return response()->json([
             'status' => 200,
-            'percentage_videos' => $percentage_videos,
+            'whice' => 'r',
+            'random_videos' => $random_videos,
         ]);
     }
 }
