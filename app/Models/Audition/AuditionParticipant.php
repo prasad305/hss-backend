@@ -11,10 +11,13 @@ class AuditionParticipant extends Model
     use HasFactory;
     protected $guarded = [];
 
-    // protected $with = ['audition'];
+    protected $with = ['videos'];
 
     public function audition(){
         return $this->belongsTo(Audition::class,'audition_id');
+    }
+    public function videos(){
+        return $this->hasMany(AuditionUploadVideo::class,'user_id', 'user_id');
     }
 
     public function participant(){
