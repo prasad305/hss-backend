@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class AuditionRoundInstruction extends Model
 {
     use HasFactory;
+    
     protected $with = ['instructionSendInfos'];
 
     public function instructionSendInfos()

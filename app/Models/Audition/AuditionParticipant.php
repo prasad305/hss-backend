@@ -3,6 +3,8 @@
 namespace App\Models\Audition;
 
 use App\Models\User;
+use App\Models\Audition\AuditionUploadVideo;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,4 +25,9 @@ class AuditionParticipant extends Model
     public function participant(){
         return $this->belongsTo(User::class,'user_id');
     }
+
+    public function videos(){
+        return $this->hasMany(AuditionUploadVideo::class,'user_id','user_id');
+    }
+    
 }
