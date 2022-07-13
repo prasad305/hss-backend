@@ -742,7 +742,7 @@ class AuditionController extends Controller
     // Live Auditions
     public function live()
     {
-        // return auth('sanctum')->user()->id;
+        // return 'Audition::all()';
 
         $lives = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 2]])->get();
         return response()->json([
@@ -892,7 +892,9 @@ class AuditionController extends Controller
 
     public function getAudition($slug)
     {
+       
         $event = Audition::with(['assignedJudges', 'participant', 'promoInstruction'])->where('slug', $slug)->first();
+    
         $ids = $event->assignedJuries->unique('group_id')->pluck('group_id');
         $juryGroups =  JuryGroup::whereIn('id', $ids)->get();
 
@@ -1496,6 +1498,10 @@ class AuditionController extends Controller
 
         $assignJuriesOrderByGroup = $assignJuries->groupBy('group_id');
 
+        $mainJury = AuditionAssignJury::with('juryGroup')->whereHas('juryGroup', function ($q) {
+            $q->where('is_primary', true);
+        })->where('audition_id', $audition_id)->get();
+
         $group_b_videos = AuditionParticipant::with(['videos' => function($query) use($round_info_id){
                                         return $query->where([['round_info_id',$round_info_id],['group_b_jury_id','!=',null]])->get();
                                     },'participant'])->where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->get();
@@ -1511,6 +1517,7 @@ class AuditionController extends Controller
             'group_b_videos' => $group_b_videos,
             'group_c_videos' => $group_c_videos,
             'juriesByGroup' => $assignJuriesOrderByGroup,
+            'mainJury' => $mainJury,
         ]);
     }
     
