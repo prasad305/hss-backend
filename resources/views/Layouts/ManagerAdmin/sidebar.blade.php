@@ -183,7 +183,7 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.greeting.dashboard') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.greeting') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Dashboard</p>
                     </a>

@@ -46,4 +46,16 @@ class SubCategory extends Model
     {
         return $this->hasMany(QnA::class, 'sub_category_id');
     }
+    public function submeetup()
+    {
+        return $this->hasMany(MeetupEvent::class, 'sub_category_id');
+    }
+    public function subfangroup()
+    {
+        return $this->hasMany(FanGroup::class, 'sub_category_id');
+    }
+    public function subgreeting()
+    {
+        return $this->hasMany(Greeting::class, 'sub_category_id');
+    }
 }

@@ -50,7 +50,7 @@
                                         {{ $data->star ? $data->star->last_name : '' }}</div>
                                 </td>
                                 <td>
-                                    <a href="{{ route('managerAdmin.dashboard.liveChatDetails', $data->id) }} "
+                                    <a href="{{ route('managerAdmin.dashboard.qnaDetails', $data->id) }} "
                                         class="btn btn-primary"><i class="fas fa-eye"></i> View </a>
                                 </td>
                             </tr>
@@ -63,7 +63,7 @@
         </div>
 
         <div class="card-footer clearfix">
-            <a href="{{ route('managerAdmin.dashboard.liveChat') }}" class="btn btn-sm btn-info float-left">Go Back</a>
+            <a href="{{ route('managerAdmin.dashboard.qna') }}" class="btn btn-sm btn-info float-left">Go Back</a>
             <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">View All</a>
         </div>
 

@@ -46,6 +46,7 @@ class MeetupEventController extends Controller
             $meetup->created_by_id = auth('sanctum')->user()->id;
             $meetup->star_id = $request->input('star_id');
             $meetup->category_id = $star->category_id;
+            $meetup->sub_category_id = $star->sub_category_id;
             $meetup->admin_id = $star->admin_id;
             $meetup->title = $request->input('title');
             $meetup->slug = Str::slug($request->input('title'));
@@ -464,6 +465,7 @@ class MeetupEventController extends Controller
             $meetup->star_id = auth('sanctum')->user()->id;
             $meetup->admin_id = $superStar->admin_id;
             $meetup->category_id = $superStar->category_id;
+            $meetup->sub_category_id = $superStar->sub_category_id;
             $meetup->title = $request->input('title');
             $meetup->slug = Str::slug($request->input('title'));
             $meetup->event_link = $request->input('event_link');

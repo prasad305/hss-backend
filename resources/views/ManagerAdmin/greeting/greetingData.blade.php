@@ -34,11 +34,11 @@
                         @foreach ($portalData as $key => $data)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                                <td>{{ $data->group_name }}</td>
+                                <td>{{ $data->title }}</td>
                                 <td>{{ $data->category->name }}</td>
                                 <td>{!! date('d-m-y', strtotime($data->created_at)) !!}</td>
                                 <td>
-                                    @if ($data->status === 10)
+                                    @if ($data->status >= 2)
                                         <span class="badge badge-success">Completed</span>
                                     @else
                                         <span class="badge badge-warning">Upcoming</span>
@@ -46,16 +46,11 @@
                                 </td>
                                 <td>
                                     <div class="sparkbar" data-color="#00a65a" data-height="20">
-                                        {{-- {{ $data->star ? $data->star->first_name : '' }}
-                                        {{ $data->star ? $data->star->last_name : '' }} --}}
-                                        {{ $data->my_superstar->first_name }}
-                                        {{ $data->my_superstar->last_name }} VS
-                                        {{ $data->another_superstar->first_name }}
-                                        {{ $data->another_superstar->last_name }}
-                                    </div>
+                                        {{ $data->star ? $data->star->first_name : '' }}
+                                        {{ $data->star ? $data->star->last_name : '' }}</div>
                                 </td>
                                 <td>
-                                    <a href="{{ route('managerAdmin.dashboard.fanGroupDetails', $data->id) }} "
+                                    <a href="{{ route('managerAdmin.greeting.show', $data->id) }} "
                                         class="btn btn-primary"><i class="fas fa-eye"></i> View </a>
                                 </td>
                             </tr>
@@ -68,7 +63,7 @@
         </div>
 
         <div class="card-footer clearfix">
-            <a href="{{ route('managerAdmin.dashboard.fanGroup') }}" class="btn btn-sm btn-info float-left">Go Back</a>
+            <a href="{{ route('managerAdmin.dashboard.greeting') }}" class="btn btn-sm btn-info float-left">Go Back</a>
             <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">View All</a>
         </div>
 

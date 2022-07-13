@@ -45,6 +45,13 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('meetup-events-data/{type}', [DashboardController::class, 'meetupEventsData'])->name('dashboard.meetupEventData');
     Route::get('meetup-events-details/{id}', [DashboardController::class, 'meetupEventsDetails'])->name('dashboard.meetupEventDetails');
 
+    Route::get('submeetup-list/{id}', [DashboardController::class, 'submeetupList'])->name('submeetup.list');
+    Route::get('meetup-admin-list', [DashboardController::class, 'meetupAdminList'])->name('meetupEvents.adminList');
+    Route::get('meetup-admin-events/{adminId}', [DashboardController::class, 'meetupAdminEvents'])->name('meetupEvents.adminEvents');
+    Route::get('meetup-superstar-list', [DashboardController::class, 'meetupSuperstarList'])->name('meetupEvents.superstarList');
+    Route::get('meetup-superstar-events/{starId}', [DashboardController::class, 'meetupSuperstarEvents'])->name('meetupEvents.superstarEvents');
+
+
 
     // simple Post
     Route::get('simple-post', [DashboardController::class, 'simplePost'])->name('dashboard.simplePost');
@@ -81,6 +88,17 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('qna-superstar-list', [DashboardController::class, 'qnaSuperstarList'])->name('qnaEvents.superstarList');
     Route::get('qna-superstar-events/{starId}', [DashboardController::class, 'qnaSuperstarEvents'])->name('qnaEvents.superstarEvents');
 
+    //Greetings
+    Route::get('greeting-dashboard', [DashboardController::class, 'greeting'])->name('dashboard.greeting');
+    Route::get('greeting-data/{type}', [DashboardController::class, 'greetingData'])->name('dashboard.greetingData');
+    Route::get('greeting-details/{id}', [DashboardController::class, 'greetingDetails'])->name('dashboard.greetingDetails');
+
+    Route::get('subgreeting-list/{id}', [DashboardController::class, 'subgreetingList'])->name('subgreeting.list');
+    Route::get('greeting-admin-list', [DashboardController::class, 'greetingAdminList'])->name('greetingEvents.adminList');
+    Route::get('greeting-admin-events/{adminId}', [DashboardController::class, 'greetingAdminEvents'])->name('greetingEvents.adminEvents');
+    Route::get('greeting-superstar-list', [DashboardController::class, 'greetingSuperstarList'])->name('greetingEvents.superstarList');
+    Route::get('greeting-superstar-events/{starId}', [DashboardController::class, 'greetingSuperstarEvents'])->name('greetingEvents.superstarEvents');
+
 
 
     // Auditions
@@ -96,7 +114,14 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('fan-group-data', [DashboardController::class, 'fanGroupsData'])->name('dashboard.fanGroupData');
     Route::get('fan-group-post', [DashboardController::class, 'fanGroupsPost'])->name('dashboard.fanGroupsPost');
     Route::get('fan-group-details/{id}', [DashboardController::class, 'fanGroupsDetails'])->name('dashboard.fanGroupDetails');
-    Route::get('fangroup-manager-list', [DashboardController::class, 'fanGroupManagerList'])->name('dashboard.fanGroupManagerList');
+
+
+    Route::get('subFanGroup-list/{id}', [DashboardController::class, 'subFanGroupList'])->name('subFanGroup.list');
+    Route::get('fanGroup-admin-list', [DashboardController::class, 'fanGroupAdminList'])->name('fanGroupEvents.adminList');
+    Route::get('fanGroup-admin-events/{adminId}', [DashboardController::class, 'fanGroupAdminEvents'])->name('fanGroupEvents.adminEvents');
+    Route::get('fanGroup-superstar-list', [DashboardController::class, 'fanGroupSuperstarList'])->name('fanGroupEvents.superstarList');
+    Route::get('fanGroup-superstar-events/{starId}', [DashboardController::class, 'fanGroupSuperstarEvents'])->name('fanGroupEvents.superstarEvents');
+
 
     //  learing Session
 
@@ -251,8 +276,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     // greeting
     Route::group(['prefix' => 'greeting/', 'as' => 'greeting.'], function () {
-        Route::get('dashboard', [GreetingController::class, 'dashboard'])->name('dashboard');
-        Route::get('subcategory/{id}', [GreetingController::class, 'subcategory'])->name('subcategory');
+        // Route::get('dashboard', [GreetingController::class, 'dashboard'])->name('dashboard');
+        // Route::get('subcategory/{id}', [GreetingController::class, 'subcategory'])->name('subcategory');
         Route::get('request', [GreetingController::class, 'request'])->name('request');
         Route::get('published', [GreetingController::class, 'published'])->name('published');
         Route::get('show/{id}', [GreetingController::class, 'show'])->name('show');
@@ -448,4 +473,3 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
 Route::get('manager-admin/souvenir/order/list/{id}', [SouvenirController::class, 'allOrderDetails'])->name('managerAdmin.souvenir.allOrderDetails');
 Route::get('manager-admin/marketplace/order/list/{id}', [MarketplaceController::class, 'allOrderDetails'])->name('managerAdmin.marketplace.allOrderDetails');
-
