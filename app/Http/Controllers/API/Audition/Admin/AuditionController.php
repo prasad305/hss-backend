@@ -510,7 +510,7 @@ class AuditionController extends Controller
 
     public function updateRoundInstruction(Request $request)
     {
-        
+
         $old_instruction = AuditionRoundInstruction::where([['audition_id',$request->audition_id],['round_info_id',$request->round_info_id]])->first();
 
         if (isset($old_instruction->id)) {
@@ -531,7 +531,7 @@ class AuditionController extends Controller
                 'round_info_id.required' => 'Please Select Round Number',
             ]);
         }
-       
+
 
         if ($validator->fails()) {
             return response()->json([
@@ -545,7 +545,7 @@ class AuditionController extends Controller
             }else{
                 $instruction = new AuditionRoundInstruction();
             }
-            
+
             $instruction->round_info_id = $request->round_info_id;
             $instruction->audition_id = $request->audition_id;
             $instruction->instruction = $request->instruction;
@@ -596,7 +596,7 @@ class AuditionController extends Controller
         }
     }
 
- 
+
     public function getRoundInstruction($audition_id, $round_info_id)
     {
         $auditon_round_instruction = AuditionRoundInstruction::where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->first();
@@ -778,7 +778,7 @@ class AuditionController extends Controller
 
 
     public function getRoundInstructionJudges($audition_id,$round_info_id){
-        
+
         $round_instruction = AuditionRoundInstruction::where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->first();
 
         $round_ins_send_info = AuditionRoundInstructionSendInfo::where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->get();
@@ -892,9 +892,9 @@ class AuditionController extends Controller
 
     public function getAudition($slug)
     {
-       
+
         $event = Audition::with(['assignedJudges', 'participant', 'promoInstruction'])->where('slug', $slug)->first();
-    
+
         $ids = $event->assignedJuries->unique('group_id')->pluck('group_id');
         $juryGroups =  JuryGroup::whereIn('id', $ids)->get();
 
@@ -1488,7 +1488,7 @@ class AuditionController extends Controller
 
 
     public function getRoundInfo($audition_id, $round_info_id){
-        
+
         $round_info = AuditionRoundInfo::find($round_info_id);
 
         $assignJuries = AuditionAssignJury::with('juryGroup')->whereHas('juryGroup', function ($q) {
@@ -1510,7 +1510,7 @@ class AuditionController extends Controller
                                         return $query->where([['round_info_id',$round_info_id],['group_c_jury_id','!=',null]])->get();
                                     },'participant'])->where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->get();
 
-        
+
         return response()->json([
             'status' => 200,
             'round_info' => $round_info,
@@ -1520,7 +1520,7 @@ class AuditionController extends Controller
             'mainJury' => $mainJury,
         ]);
     }
-    
+
     public function round_videos($round_info_id)
     {
 
@@ -1563,8 +1563,22 @@ class AuditionController extends Controller
     }
 
     public function getPercentageVideoForJury($audition_id,$round_info_id,$value){
+        $percentage_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['group_b_jury_mark', '!=', null], ['group_c_jury_mark', '!=', null]])->get();
 
-        $percentage_videos = AuditionUploadVideo::where([['audition_id',$audition_id],['round_info_id',$round_info_id],['group_b_jury_mark','!=',null],['group_c_jury_mark','!=',null]])->get();
+        $videoIds = [];
+        foreach ($percentage_videos as $key => $percentage_video) {
+            if($percentage_video->group_b_jury_mark > $percentage_video->group_c_jury_mark && ($percentage_video->group_b_jury_mark - $percentage_video->group_c_jury_mark >= $value )){
+                array_push($videoIds, $percentage_video->id);
+            }
+            if($percentage_video->group_c_jury_mark > $percentage_video->group_b_jury_mark && ($percentage_video->group_c_jury_mark - $percentage_video->group_b_jury_mark >= $value )){
+                array_push($videoIds, $percentage_video->id);
+            }
+        }
+
+        $final_videos = AuditionUploadVideo::whereIn('id', $videoIds)->get();
+
+        return $final_videos;
+
     }
 
     public function getRandomForJury($audition_id,$round_info_id,$value){
