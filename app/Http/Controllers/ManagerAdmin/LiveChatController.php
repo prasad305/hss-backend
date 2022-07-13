@@ -65,6 +65,7 @@ class LiveChatController extends Controller
             $post = new Post();
             $post->type = 'livechat';
             $post->user_id = $event->star_id;
+            $post->star_id = json_decode($event->star_id);
             $post->event_id = $event->id;
             $post->category_id = $starCat->category_id;
             $post->sub_category_id = $starCat->sub_category_id;

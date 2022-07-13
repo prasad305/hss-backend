@@ -204,6 +204,7 @@ class UserController extends Controller
         }
 
         $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
+        // $post = $cat_post;
 
         return response()->json([
             'status' => 200,
@@ -444,18 +445,25 @@ class UserController extends Controller
 
     public function paginate_getStarPost($id, $type, $limit)
     {
+        // $star_ids = '['.$id.']';
+        $star_id = json_decode($id);
+
+
         if ($type == 'livechat') {
-            $post = Post::where([['user_id', $id], ['type', 'livechat']])->latest()->paginate($limit);
+            $post = Post::where([['type', 'livechat']])->whereJsonContains('star_id',$star_id)->latest()->paginate($limit);
         }
         if ($type == 'meetup') {
-            $post = Post::where([['user_id', $id], ['type', 'meetup']])->latest()->paginate($limit);
+            $post = Post::where([['type', 'meetup']])->whereJsonContains('star_id',$star_id)->latest()->paginate($limit);
         }
         if ($type == 'learning') {
-            $post = Post::where([['user_id', $id], ['type', 'learningSession']])->latest()->paginate($limit);
+            $post = Post::where([['type', 'learningSession']])->whereJsonContains('star_id',$star_id)->latest()->paginate($limit);
         }
         if ($type == 'all') {
-            $post = Post::where('user_id', $id)->latest()->paginate($limit);
+            $post = Post::whereJsonContains('star_id',$star_id)->latest()->paginate($limit);
         }
+
+        // $post2 = Post::where('id',26)->first();
+
 
         return response()->json([
             'status' => 200,
