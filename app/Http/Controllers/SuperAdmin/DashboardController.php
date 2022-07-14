@@ -27,6 +27,7 @@ use App\Models\Marketplace;
 use App\Models\Auction;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
+use App\Models\SimplePost;
 use App\Models\Vaccination;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -441,7 +442,13 @@ class DashboardController extends Controller
   // Dashboard simple post
   public function simplePostEventsDashboard()
   {
-    return view('SuperAdmin.dashboard.SimplePost.dashboard');
+    $categories = Category::get();
+    $total = SimplePost::where('status', 1)->count();
+    $published = SimplePost::where('status', ">=", 1)->count();
+    $pending = SimplePost::where('status', 0)->where('star_approval', 1)->count();
+    $rejected = SimplePost::where('star_approval', 2)->count();
+
+    return view('SuperAdmin.dashboard.SimplePost.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected'));
   }
   public function simplePostManagerAdminList()
   {

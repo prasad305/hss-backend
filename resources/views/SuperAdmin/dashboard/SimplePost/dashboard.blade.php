@@ -37,62 +37,26 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Sports</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning" href="#">See
-                                        All</a></small>
-                            </span>
+
+                @foreach ($categories as $category)
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3 text-center border border-warning">
+                            <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
+                                    aria-hidden="true"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">{{ $category->name }}</span>
+                                <span class="info-box-number">{{ $category->simplePosts->count() }}</span>
+                                <span class="info-box-number">
+                                    <small><a class="text-warning"
+                                            href="{{ route('superAdmin.simplePost.list', $category->id) }}">See
+                                            All</a></small>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Music</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning" href="#">See
-                                        All</a></small>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Tech</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning" href="#">See
-                                        All</a></small>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Drama</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning" href="#">See
-                                        All</a></small>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
+
+
             </div>
         </div>
     </div>
@@ -117,7 +81,7 @@
                                 aria-hidden="true"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Total</span>
-                            <span class="info-box-number">410</span>
+                            <span class="info-box-number">{{ $total }}</span>
                             <span class="info-box-number">
                                 <small><a class="text-warning" href="#">See
                                         All</a></small>
@@ -131,7 +95,7 @@
                                 aria-hidden="true"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Pending</span>
-                            <span class="info-box-number">410</span>
+                            <span class="info-box-number">{{ $pending }}</span>
                             <span class="info-box-number">
                                 <small><a class="text-warning" href="#">See
                                         All</a></small>
@@ -144,8 +108,8 @@
                         <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
                                 aria-hidden="true"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">Runing</span>
-                            <span class="info-box-number">410</span>
+                            <span class="info-box-text">Published</span>
+                            <span class="info-box-number">{{ $published }}</span>
                             <span class="info-box-number">
                                 <small><a class="text-warning" href="#">See
                                         All</a></small>
@@ -158,8 +122,8 @@
                         <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
                                 aria-hidden="true"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">Completed</span>
-                            <span class="info-box-number">410</span>
+                            <span class="info-box-text">Rejected</span>
+                            <span class="info-box-number">{{ $rejected }}</span>
                             <span class="info-box-number">
                                 <small><a class="text-warning" href="#">See
                                         All</a></small>
