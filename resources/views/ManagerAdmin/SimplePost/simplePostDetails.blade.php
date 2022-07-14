@@ -62,24 +62,12 @@
                                     <table class="table">
                                         <tbody>
                                             <tr>
-                                                <th style="width:50%">Total Registration:</th>
+                                                <th style="width:50%">Total User:</th>
                                                 <td>{{ $totalParticipant }}</td>
                                             </tr>
                                             <tr>
                                                 <th>Total Fee:</th>
                                                 <td>{{ $totalFee }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Total Seat:</th>
-                                                <td>{{ $data->total_seat }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Registration Start Date</th>
-                                                <td>{{ date('d-m-y', strtotime($data->registration_start_date)) }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Registration End Date</th>
-                                                <td>{{ date('d-m-y', strtotime($data->registration_start_date)) }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -93,10 +81,10 @@
                             <div class="col-12">
                                 <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i
                                         class="fas fa-print"></i> Print</a>
-                                <a href="{{ route('managerAdmin.dashboard.learningSession') }}"
+                                <a href="{{ route('managerAdmin.dashboard.simplePost') }}"
                                     class=" btn btn-success float-right"><i class="far fa-credit-card"></i> Go Back
                                 </a>
-                                <a href="{{ route('managerAdmin.dashboard.learningSession') }}"
+                                <a href="{{ route('managerAdmin.dashboard.simplePost') }}"
                                     class="btn btn-primary float-right" style="margin-right: 5px;">
                                     <i class="fas fa-download"></i> Generate PDF
                                 </a>

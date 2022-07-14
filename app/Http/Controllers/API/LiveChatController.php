@@ -37,13 +37,13 @@ class LiveChatController extends Controller
     {
         $id = auth('sanctum')->user()->id;
 
-        if($type == 'pending')
+        if ($type == 'pending')
             $events = LiveChat::where([['star_id', $id], ['status', '<', 1]]);
-        if($type == 'approved')
+        if ($type == 'approved')
             $events = LiveChat::where([['star_id', $id], ['status', '>', 0], ['status', '<', 10]]);
-        if($type == 'completed')
+        if ($type == 'completed')
             $events = LiveChat::where([['star_id', $id], ['status', 9]]);
-        if($type == 'rejected')
+        if ($type == 'rejected')
             $events = LiveChat::where([['star_id', $id], ['status', 11]]);
 
         return response()->json([
@@ -166,6 +166,7 @@ class LiveChatController extends Controller
             $liveChat->slug = Str::slug($request->input('title'));
             $liveChat->star_id = $request->input('star_id');
             $liveChat->category_id = $superStar->category_id;
+            $liveChat->sub_category_id = $superStar->sub_category_id;
             $liveChat->admin_id = $superStar->admin_id;
             $liveChat->created_by_id = auth('sanctum')->user()->id;
             $liveChat->instruction = $request->input('instruction');
@@ -489,6 +490,7 @@ class LiveChatController extends Controller
             $liveChat->slug = Str::slug($request->input('title'));
             $liveChat->star_id = auth('sanctum')->user()->id;
             $liveChat->category_id = $superStar->category_id;
+            $liveChat->sub_category_id = $superStar->sub_category_id;
             $liveChat->admin_id = $superStar->admin_id;
             $liveChat->created_by_id = auth('sanctum')->user()->id;
             $liveChat->instruction = $request->input('instruction');
@@ -584,7 +586,6 @@ class LiveChatController extends Controller
                 'message' => 'Live Session Updated',
             ]);
         }
-
     }
 
     public function set_reject_by_star($id)

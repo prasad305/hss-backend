@@ -25,8 +25,7 @@
 
         <li class="nav-item">
             <a href="{{ route('managerAdmin.admin.index') }}" class="nav-link">
-                <i
-                    class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-users">
+                <i class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-users">
                 </i>
                 {{-- <i class="fa-solid fa-list-check"></i> --}}
                 <p>
@@ -81,13 +80,13 @@
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-chart-pie"></i>
-                <p>Post
+                <p>Simple Post
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.simplePost') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
@@ -184,7 +183,7 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.greeting.dashboard') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.greeting') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
@@ -313,12 +312,12 @@
                         <p>Register List</p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('managerAdmin.souvenir.showApplyDelete') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Delete List</p>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </li>
 
@@ -621,7 +620,7 @@
                     </a>
                 </li>
 
-               
+
 
                 <li class="nav-item">
                     <a href="{{ route('managerAdmin.audition.auditionAdmin.index') }}"
@@ -654,7 +653,7 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.qna') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
@@ -679,7 +678,22 @@
                 </li>
             </ul>
         </li>
-
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>Accounts
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.accounts.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
 
 

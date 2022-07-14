@@ -46,8 +46,13 @@
                                 </td>
                                 <td>
                                     <div class="sparkbar" data-color="#00a65a" data-height="20">
-                                        {{ $data->star ? $data->star->first_name : '' }}
-                                        {{ $data->star ? $data->star->last_name : '' }}</div>
+                                        {{-- {{ $data->star ? $data->star->first_name : '' }}
+                                        {{ $data->star ? $data->star->last_name : '' }} --}}
+                                        {{ $data->my_superstar->first_name }}
+                                        {{ $data->my_superstar->last_name }} VS
+                                        {{ $data->another_superstar->first_name }}
+                                        {{ $data->another_superstar->last_name }}
+                                    </div>
                                 </td>
                                 <td>
                                     <a href="{{ route('managerAdmin.dashboard.fanGroupDetails', $data->id) }} "
