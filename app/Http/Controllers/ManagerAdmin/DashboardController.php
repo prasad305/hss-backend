@@ -8,6 +8,7 @@ use App\Models\Auction;
 use App\Models\Audition\AssignJudge;
 use App\Models\Audition\Audition;
 use App\Models\AuditionEventRegistration;
+use App\Models\Bidding;
 use App\Models\Category;
 use App\Models\Fan_Group_Join;
 use App\Models\FanGroup;
@@ -21,11 +22,14 @@ use App\Models\LearningSessionRegistration;
 use App\Models\LiveChat;
 use App\Models\LiveChatRegistration;
 use App\Models\Marketplace;
+use App\Models\MarketplaceOrder;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
 use App\Models\QnA;
 use App\Models\QnaRegistration;
 use App\Models\SimplePost;
+use App\Models\SouvenirApply;
+use App\Models\SouvenirCreate;
 use App\Models\SubCategory;
 use App\Models\User;
 use Barryvdh\DomPDF\PDF;
@@ -702,5 +706,240 @@ class DashboardController extends Controller
     {
         $greeting = Greeting::where('star_id', $starId)->latest()->get();
         return view('ManagerAdmin.greeting.Superstar.superstar_events', compact('greeting'));
+    }
+
+    // Auction
+
+    public function auction()
+    {
+        $categories = SubCategory::with(['subauction'])->where('category_id', auth()->user()->category_id)->get();
+        // Total
+        $total = Auction::where('category_id', auth()->user()->category_id)->count();
+        $upcoming = Auction::where('status', 1)->where('product_status', 0)->where('category_id', auth()->user()->category_id)->count();
+        $complete = Auction::where('product_status', 1)->where('category_id', auth()->user()->category_id)->count();
+        $admin = Auction::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
+        $superstar = Auction::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
+
+
+        // Registered User
+
+        $weeklyUser = Bidding::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = Bidding::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = Bidding::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+        // Income Statement
+
+        $weeklyIncome = Bidding::where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->distinct()->get('amount')->sum('amount');
+        $monthlyIncome = Bidding::where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->distinct()->get('amount')->sum('amount');
+        $yearlyIncome = Bidding::where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->distinct()->get('amount')->sum('amount');
+
+        $labels = Bidding::where('win_status', 1)->get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('M');
+        });
+
+        $months = [];
+        $amountCount = [];
+        foreach ($labels as $month => $values) {
+            $months[] = $month;
+            $amountCount[] = $values->sum('amount');
+        }
+
+        return view('ManagerAdmin.Auction.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    }
+    public function auctionData($type)
+    {
+        if ($type == 'total') {
+            $portalData = Auction::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'upcoming') {
+            $portalData = Auction::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = Auction::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
+        }
+        return view('ManagerAdmin.Auction.auctionData', compact('portalData'));
+    }
+
+    public function subauctionList($subcategoryId)
+    {
+        $postList = Auction::where('subcategory_id', $subcategoryId)->latest()->get();
+        return view('ManagerAdmin.Auction.postList', compact('postList'));
+    }
+
+    public function auctionAdminList()
+    {
+        $admins = Auction::with('admin')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('admin_id')->get(['admin_id']);
+        return view('ManagerAdmin.Auction.Admin.admin', compact('admins'));
+    }
+    public function auctionAdminEvents($adminId)
+    {
+        $auction = Auction::where('admin_id', $adminId)->latest()->get();
+        return view('ManagerAdmin.Auction.Admin.admin_events', compact('auction'));
+    }
+    public function auctionSuperstarList()
+    {
+        $superstars = Auction::with('star')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('star_id')->get(['star_id']);
+        return view('ManagerAdmin.Auction.Superstar.superstar', compact('superstars'));
+    }
+    public function auctionSuperstarEvents($starId)
+    {
+        $auction = Auction::where('star_id', $starId)->latest()->get();
+        return view('ManagerAdmin.Auction.Superstar.superstar_events', compact('auction'));
+    }
+
+    // Marketplace
+
+    public function marketplace()
+    {
+        $categories = SubCategory::with(['submarketplace'])->where('category_id', auth()->user()->category_id)->get();
+
+        // Total
+        $total = Marketplace::where('category_id', auth()->user()->category_id)->sum('total_items');
+        $soldItem = Marketplace::where('status', 1)->where('category_id', auth()->user()->category_id)->sum('total_selling');
+
+        $admin = Marketplace::distinct('superstar_admin_id')->where('category_id', auth()->user()->category_id)->count();
+        $superstar = Marketplace::distinct('superstar_id')->where('category_id', auth()->user()->category_id)->count();
+
+
+        // Registered User
+
+        $weeklyUser = MarketplaceOrder::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = MarketplaceOrder::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = MarketplaceOrder::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+        // Income Statement
+
+        $weeklyIncome = MarketplaceOrder::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_price');
+        $monthlyIncome = MarketplaceOrder::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_price');
+        $yearlyIncome = MarketplaceOrder::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_price');
+
+        $labels = MarketplaceOrder::get(['id', 'created_at', 'total_price'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('M');
+        });
+
+        $months = [];
+        $amountCount = [];
+        foreach ($labels as $month => $values) {
+            $months[] = $month;
+            $amountCount[] = $values->sum('total_price');
+        }
+
+        return view('ManagerAdmin.marketplace.dashboard', compact(['total', 'soldItem', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    }
+    public function marketplaceData($type)
+    {
+        if ($type == 'total') {
+            $portalData = Marketplace::with(['superstar', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'instock') {
+            $portalData = Marketplace::with(['superstar', 'category'])->where('total_items', '>', 0)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = Marketplace::with(['superstar', 'category'])->where('total_items', '>', 0)->where('category_id', auth()->user()->category_id)->get();
+        }
+        return view('ManagerAdmin.marketplace.marketplaceData', compact('portalData'));
+    }
+
+    public function submarketplaceList($subcategoryId)
+    {
+        $postList = Marketplace::where('subcategory_id', $subcategoryId)->latest()->get();
+        return view('ManagerAdmin.marketplace.postList', compact('postList'));
+    }
+
+    public function marketplaceAdminList()
+    {
+        $admins = Marketplace::with('starAdmin')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('superstar_admin_id')->get(['superstar_admin_id']);
+        return view('ManagerAdmin.marketplace.Admin.admin', compact('admins'));
+    }
+    public function marketplaceAdminEvents($adminId)
+    {
+        $marketplace = Marketplace::where('superstar_admin_id', $adminId)->latest()->get();
+        return view('ManagerAdmin.marketplace.Admin.admin_events', compact('marketplace'));
+    }
+    public function marketplaceSuperstarList()
+    {
+        $superstars = Marketplace::with('superstar')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('superstar_id')->get(['superstar_id']);
+        return view('ManagerAdmin.marketplace.Superstar.superstar', compact('superstars'));
+    }
+    public function marketplaceSuperstarEvents($starId)
+    {
+        $marketplace = Marketplace::where('superstar_id', $starId)->latest()->get();
+        return view('ManagerAdmin.marketplace.Superstar.superstar_events', compact('marketplace'));
+    }
+
+
+    // Souvenir 
+
+    public function souvenir()
+    {
+        $categories = SubCategory::with(['subsouvenir'])->where('category_id', auth()->user()->category_id)->get();
+
+        // Total
+        $total = SouvenirCreate::where('category_id', auth()->user()->category_id)->count();
+        $available = SouvenirCreate::where('status', 1)->where('category_id', auth()->user()->category_id)->count();
+        $notAvailable = SouvenirCreate::where('status', 0)->where('category_id', auth()->user()->category_id)->count();
+
+        $admin = SouvenirCreate::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
+        $superstar = SouvenirCreate::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
+
+
+        // Registered User
+
+        $weeklyUser = SouvenirApply::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = SouvenirApply::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = SouvenirApply::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+        // Income Statement
+
+        $weeklyIncome = SouvenirApply::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_amount');
+        $monthlyIncome = SouvenirApply::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_amount');
+        $yearlyIncome = SouvenirApply::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_amount');
+
+        $labels = SouvenirApply::get(['id', 'created_at', 'total_amount'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('M');
+        });
+
+        $months = [];
+        $amountCount = [];
+        foreach ($labels as $month => $values) {
+            $months[] = $month;
+            $amountCount[] = $values->sum('total_amount');
+        }
+
+        return view('ManagerAdmin.souvenir.dashboard', compact(['total', 'available', 'notAvailable', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    }
+    public function souvenirData($type)
+    {
+        if ($type == 'total') {
+            $portalData = SouvenirCreate::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'available') {
+            $portalData = SouvenirCreate::with(['star', 'category'])->where('status', 1)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = SouvenirCreate::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        }
+        return view('ManagerAdmin.souvenir.souvenirData', compact('portalData'));
+    }
+
+    public function subsouvenirList($subcategoryId)
+    {
+        $postList = SouvenirCreate::where('sub_category_id', $subcategoryId)->latest()->get();
+        return view('ManagerAdmin.souvenir.postList', compact('postList'));
+    }
+
+    public function souvenirAdminList()
+    {
+        $admins = SouvenirCreate::with('admin')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('admin_id')->get(['admin_id']);
+        return view('ManagerAdmin.souvenir.Admin.admin', compact('admins'));
+    }
+    public function souvenirAdminEvents($adminId)
+    {
+        $souvenir = SouvenirCreate::where('admin_id', $adminId)->latest()->get();
+        return view('ManagerAdmin.souvenir.Admin.admin_events', compact('souvenir'));
+    }
+    public function souvenirSuperstarList()
+    {
+        $superstars = SouvenirCreate::with('star')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('star_id')->get(['star_id']);
+        return view('ManagerAdmin.souvenir.Superstar.superstar', compact('superstars'));
+    }
+    public function souvenirSuperstarEvents($starId)
+    {
+        $souvenir = SouvenirCreate::where('star_id', $starId)->latest()->get();
+        return view('ManagerAdmin.souvenir.Superstar.superstar_events', compact('souvenir'));
     }
 }

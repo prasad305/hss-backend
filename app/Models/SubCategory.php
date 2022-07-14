@@ -58,4 +58,16 @@ class SubCategory extends Model
     {
         return $this->hasMany(Greeting::class, 'sub_category_id');
     }
+    public function subauction()
+    {
+        return $this->hasMany(Auction::class, 'subcategory_id');
+    }
+    public function submarketplace()
+    {
+        return $this->hasMany(Marketplace::class, 'subcategory_id');
+    }
+    public function subsouvenir()
+    {
+        return $this->hasMany(SouvenirCreate::class, 'sub_category_id');
+    }
 }

@@ -221,18 +221,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::put('post/edit/{id}', [SimplePostController::class, 'update'])->name('simplePost.update');
     Route::get('post/set_publish/{id}', [SimplePostController::class, 'set_publish'])->name('simplePost.set_publish');
 
-
-    // StarShowcase Auction
-    Route::get('auction/pending', [AuctionController::class, 'pending'])->name('auctionProduct.pending');
-    Route::get('auction/published', [AuctionController::class, 'published'])->name('auctionProduct.published');
-    Route::get('auction/all', [AuctionController::class, 'all'])->name('auctionProduct.all');
-
-    Route::get('auction/details/{id}', [AuctionController::class, 'details'])->name('auctionProduct.details');
-    Route::get('auction/edit/{id}', [AuctionController::class, 'edit'])->name('auctionProduct.edit');
-    Route::put('auction/edit/{id}', [AuctionController::class, 'update'])->name('auctionProduct.update');
-    Route::get('auction/set_publish/{id}', [AuctionController::class, 'set_publish'])->name('auctionProduct.set_publish');
-
-
     // Audition Routes
     Route::group(['prefix' => 'audition/', 'as' => 'audition.'], function () {
         // audition
@@ -294,6 +282,30 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     });
 
 
+
+
+    // StarShowcase
+
+
+    // Auction
+    Route::get('auction/pending', [AuctionController::class, 'pending'])->name('auctionProduct.pending');
+    Route::get('auction/published', [AuctionController::class, 'published'])->name('auctionProduct.published');
+    Route::get('auction/all', [AuctionController::class, 'all'])->name('auctionProduct.all');
+
+    Route::get('auction/details/{id}', [AuctionController::class, 'details'])->name('auctionProduct.details');
+    Route::get('auction/edit/{id}', [AuctionController::class, 'edit'])->name('auctionProduct.edit');
+    Route::put('auction/edit/{id}', [AuctionController::class, 'update'])->name('auctionProduct.update');
+    Route::get('auction/set_publish/{id}', [AuctionController::class, 'set_publish'])->name('auctionProduct.set_publish');
+
+    Route::get('auction-dashboard', [DashboardController::class, 'auction'])->name('dashboard.auction');
+    Route::get('auction-data/{type}', [DashboardController::class, 'auctionData'])->name('dashboard.auctionData');
+    Route::get('subauction-list/{id}', [DashboardController::class, 'subauctionList'])->name('subauction.list');
+    Route::get('auction-admin-list', [DashboardController::class, 'auctionAdminList'])->name('auctionEvents.adminList');
+    Route::get('auction-admin-events/{adminId}', [DashboardController::class, 'auctionAdminEvents'])->name('auctionEvents.adminEvents');
+    Route::get('auction-superstar-list', [DashboardController::class, 'auctionSuperstarList'])->name('auctionEvents.superstarList');
+    Route::get('auction-superstar-events/{starId}', [DashboardController::class, 'auctionSuperstarEvents'])->name('auctionEvents.superstarEvents');
+
+
     //Marketplace Post
     Route::get('marketplace/pending', [MarketplaceController::class, 'pending'])->name('marketplace.pending');
     Route::get('marketplace/published', [MarketplaceController::class, 'published'])->name('marketplace.published');
@@ -304,6 +316,14 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('marketplace/edit/{id}', [MarketplaceController::class, 'edit'])->name('marketplace.edit');
     Route::put('marketplace/update/{id}', [MarketplaceController::class, 'update'])->name('marketplace.update');
     Route::get('marketplace/set_publish/{id}', [MarketplaceController::class, 'set_publish'])->name('marketplace.set_publish');
+
+    Route::get('marketplace-dashboard', [DashboardController::class, 'marketplace'])->name('dashboard.marketplace');
+    Route::get('marketplace-data/{type}', [DashboardController::class, 'marketplaceData'])->name('dashboard.marketplaceData');
+    Route::get('submarketplace-list/{id}', [DashboardController::class, 'submarketplaceList'])->name('submarketplace.list');
+    Route::get('marketplace-admin-list', [DashboardController::class, 'marketplaceAdminList'])->name('marketplaceEvents.adminList');
+    Route::get('marketplace-admin-events/{adminId}', [DashboardController::class, 'marketplaceAdminEvents'])->name('marketplaceEvents.adminEvents');
+    Route::get('marketplace-superstar-list', [DashboardController::class, 'marketplaceSuperstarList'])->name('marketplaceEvents.superstarList');
+    Route::get('marketplace-superstar-events/{starId}', [DashboardController::class, 'marketplaceSuperstarEvents'])->name('marketplaceEvents.superstarEvents');
 
     //Souviner Post
     Route::get('souvenir/pending', [SouvenirController::class, 'pending'])->name('souvenir.pending');
@@ -317,6 +337,15 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('souvenir/set_publish/{id}', [SouvenirController::class, 'set_publish'])->name('souvenir.set_publish');
     Route::post('souvenir/restore/{id}', [SouvenirController::class, 'restoreNow'])->name('souvenir.restoreNow');
     Route::post('souvenir/delete/{id}', [SouvenirController::class, 'deleteNow'])->name('souvenir.deleteNow');
+
+    Route::get('souvenir-dashboard', [DashboardController::class, 'souvenir'])->name('dashboard.souvenir');
+    Route::get('souvenir-data/{type}', [DashboardController::class, 'souvenirData'])->name('dashboard.souvenirData');
+    Route::get('subsouvenir-list/{id}', [DashboardController::class, 'subsouvenirList'])->name('subsouvenir.list');
+    Route::get('souvenir-admin-list', [DashboardController::class, 'souvenirAdminList'])->name('souvenirEvents.adminList');
+    Route::get('souvenir-admin-events/{adminId}', [DashboardController::class, 'souvenirAdminEvents'])->name('souvenirEvents.adminEvents');
+    Route::get('souvenir-superstar-list', [DashboardController::class, 'souvenirSuperstarList'])->name('souvenirEvents.superstarList');
+    Route::get('souvenir-superstar-events/{starId}', [DashboardController::class, 'souvenirSuperstarEvents'])->name('souvenirEvents.superstarEvents');
+
 
     //Fan Group
     Route::get('fangroup/pending', [FanGroupController::class, 'pending'])->name('fangroup.pending');
