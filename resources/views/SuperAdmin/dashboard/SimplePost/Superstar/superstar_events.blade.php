@@ -35,62 +35,30 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Simple Post</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning" href="#">See
-                                        All</a></small>
-                            </span>
+                @foreach ($posts as $post)
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3 text-center border border-warning">
+                            <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-blog"></i></span>
+                            <div class="info-box-content">
+                                <span>{!! Str::words($post->title, 5, ' ...') !!}</span>
+                                <span>{{ date('d M Y', strtotime($post->created_at)) }}</span>
+
+                                <span class="info-box-number">
+                                    <small><a class="text-warning"
+                                            href="{{ route('superAdmin.simplePost.details', $post->id) }}">See
+                                            All</a></small>
+                                </span>
+                                @if ($post->status >= 1)
+                                    <span class="badge badge-success">Published<span>
+                                        @elseif ($post->star_approval == 2)
+                                            <span class="badge badge-danger">Rejected<span>
+                                                @else
+                                                    <span class="badge badge-warning">Pending<span>
+                                @endif
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Simple Post</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning" href="#">See
-                                        More</a></small>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Simple Post</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning" href="#">See
-                                        More</a></small>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Simple Post</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning" href="#">See
-                                        More</a></small>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>

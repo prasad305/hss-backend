@@ -25,6 +25,7 @@ use App\Models\LiveChatRegistration;
 use App\Models\LearningSessionRegistration;
 use App\Models\Marketplace;
 use App\Models\Auction;
+use App\Models\GeneralPostPayment;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
 use App\Models\SimplePost;
@@ -326,32 +327,69 @@ class DashboardController extends Controller
   // Dashboard Live Chat
   public function liveChatEventsDashboard()
   {
-    return view('SuperAdmin.dashboard.LiveChat.dashboard');
+    $categories = Category::get();
+    $total = LiveChat::count();
+    $published = LiveChat::where('status', 2)->count();
+    $pending = LiveChat::where('status', '<', 2)->count();
+    $rejected = LiveChat::where('status', 11)->count();
+    $labels = LiveChatRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+      return Carbon::parse($date->created_at)->format('M');
+    });
+
+    $months = [];
+    $amountCount = [];
+    foreach ($labels as $month => $values) {
+      $months[] = $month;
+      $amountCount[] = $values->sum('amount');
+    }
+
+    return view('SuperAdmin.dashboard.LiveChat.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+  }
+  public function liveChatDataList($type)
+  {
+    if ($type == 'total') {
+      $postList = LiveChat::with(['star', 'category'])->get();
+    } elseif ($type == 'published') {
+      $postList = LiveChat::with(['star', 'category'])->where('status', 2)->get();
+    } elseif ($type == 'pending') {
+      $postList = LiveChat::with(['star', 'category'])->where('status', '<', 2)->get();
+    } else {
+      $postList = LiveChat::with(['star', 'category'])->where('status', 11)->get();
+    }
+    return view('SuperAdmin.dashboard.LiveChat.postDataList', compact('postList'));
   }
   public function liveChatManagerAdminList()
   {
-    return view('SuperAdmin.dashboard.LiveChat.ManagerAdmin.manager_admin');
+    $users = User::where('user_type', 'manager-admin')->latest()->get();
+    return view('SuperAdmin.dashboard.LiveChat.ManagerAdmin.manager_admin', compact('users'));
   }
-  public function liveChatManagerAdminEvents()
+  public function liveChatManagerAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.LiveChat.ManagerAdmin.manager_admin_events');
+    $posts = LiveChat::where('category_id', $id)->get();
+    return view('SuperAdmin.dashboard.LiveChat.ManagerAdmin.manager_admin_events', compact('posts'));
   }
   public function liveChatAdminList()
   {
-    return view('SuperAdmin.dashboard.LiveChat.Admin.admin');
+    $users = User::where('user_type', 'admin')->latest()->get();
+    return view('SuperAdmin.dashboard.LiveChat.Admin.admin', compact('users'));
   }
-  public function liveChatAdminEvents()
+  public function liveChatAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.LiveChat.Admin.admin_events');
+
+    $posts = LiveChat::where('admin_id', $id)->get();
+    return view('SuperAdmin.dashboard.LiveChat.Admin.admin_events', compact('posts'));
   }
   public function liveChatSuperstarList()
   {
-    return view('SuperAdmin.dashboard.LiveChat.Superstar.superstar');
+    $users = User::where('user_type', 'star')->latest()->get();
+    return view('SuperAdmin.dashboard.LiveChat.Superstar.superstar', compact('users'));
   }
-  public function liveChatSuperstarEvents()
+  public function liveChatSuperstarEvents($id)
   {
-    return view('SuperAdmin.dashboard.LiveChat.Superstar.superstar_events');
+    $posts = LiveChat::where('star_id', $id)->get();
+    return view('SuperAdmin.dashboard.LiveChat.Superstar.superstar_events', compact('posts'));
   }
+
   // Dashboard Greeting
   public function greetingEventsDashboard()
   {
@@ -443,36 +481,65 @@ class DashboardController extends Controller
   public function simplePostEventsDashboard()
   {
     $categories = Category::get();
-    $total = SimplePost::where('status', 1)->count();
+    $total = SimplePost::count();
     $published = SimplePost::where('status', ">=", 1)->count();
     $pending = SimplePost::where('status', 0)->where('star_approval', 1)->count();
     $rejected = SimplePost::where('star_approval', 2)->count();
+    $labels = GeneralPostPayment::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+      return Carbon::parse($date->created_at)->format('M');
+    });
 
-    return view('SuperAdmin.dashboard.SimplePost.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected'));
+    $months = [];
+    $amountCount = [];
+    foreach ($labels as $month => $values) {
+      $months[] = $month;
+      $amountCount[] = $values->sum('amount');
+    }
+
+    return view('SuperAdmin.dashboard.SimplePost.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+  }
+  public function postDataList($type)
+  {
+    if ($type == 'total') {
+      $postList = SimplePost::with(['star', 'category'])->get();
+    } elseif ($type == 'published') {
+      $postList = SimplePost::with(['star', 'category'])->where('status', 1)->get();
+    } elseif ($type == 'pending') {
+      $postList = SimplePost::with(['star', 'category'])->where('status', 0)->where('star_approval', 1)->get();
+    } else {
+      $postList = SimplePost::with(['star', 'category'])->where('star_approval', 2)->get();
+    }
+    return view('SuperAdmin.dashboard.SimplePost.postDataList', compact('postList'));
   }
   public function simplePostManagerAdminList()
   {
-    return view('SuperAdmin.dashboard.SimplePost.ManagerAdmin.manager_admin');
+    $users = User::where('user_type', 'manager-admin')->latest()->get();
+    return view('SuperAdmin.dashboard.SimplePost.ManagerAdmin.manager_admin', compact('users'));
   }
-  public function simplePostManagerAdminEvents()
+  public function simplePostManagerAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.SimplePost.ManagerAdmin.manager_admin_events');
+    $posts = SimplePost::where('category_id', $id)->get();
+    return view('SuperAdmin.dashboard.SimplePost.ManagerAdmin.manager_admin_events', compact('posts'));
   }
   public function simplePostAdminList()
   {
-    return view('SuperAdmin.dashboard.SimplePost.Admin.admin');
+    $users = User::where('user_type', 'admin')->latest()->get();
+    return view('SuperAdmin.dashboard.SimplePost.Admin.admin', compact('users'));
   }
-  public function simplePostAdminEvents()
+  public function simplePostAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.SimplePost.Admin.admin_events');
+    $posts = SimplePost::where('admin_id', $id)->get();
+    return view('SuperAdmin.dashboard.SimplePost.Admin.admin_events', compact('posts'));
   }
   public function simplePostSuperstarList()
   {
-    return view('SuperAdmin.dashboard.SimplePost.Superstar.superstar');
+    $users = User::where('user_type', 'star')->latest()->get();
+    return view('SuperAdmin.dashboard.SimplePost.Superstar.superstar', compact('users'));
   }
-  public function simplePostSuperstarEvents()
+  public function simplePostSuperstarEvents($id)
   {
-    return view('SuperAdmin.dashboard.SimplePost.Superstar.superstar_events');
+    $posts = SimplePost::where('star_id', $id)->get();
+    return view('SuperAdmin.dashboard.SimplePost.Superstar.superstar_events', compact('posts'));
   }
   // Dashboard Audition
   public function auditionEventsDashboard()
