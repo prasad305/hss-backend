@@ -251,6 +251,54 @@ class AuditionController extends Controller
             'isVideoAlreadyAssigned' => $isVideoAlreadyAssigned,
         ]);
     }
+    public function videoReportBasedOnSingleJury($audition_id, $audition_round_info_id, $jury_id)
+    {
+        // return $audition_id."-------".$audition_round_info_id."-------".$jury_id;
+        $audition = Audition::find($audition_id);
+        $auditionRoundInfo  = AuditionRoundInfo::find($audition_round_info_id);
+
+
+        if (AuditionUploadVideo::where([['group_b_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count() > 0) {
+            $videos =  AuditionUploadVideo::where([['group_b_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+            $video_number = AuditionUploadVideo::where([['group_b_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count();
+            $marked_video_number = AuditionUploadVideo::where([['group_b_jury_mark','!=', null],['group_b_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count();
+            $non_marked_video_number = AuditionUploadVideo::where([['group_b_jury_mark', null],['group_b_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count();
+
+        } else if (AuditionUploadVideo::where([['group_c_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count() > 0) {
+            $videos = AuditionUploadVideo::where([['group_c_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+            $video_number =  AuditionUploadVideo::where([['group_c_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count();
+            $marked_video_number = AuditionUploadVideo::where([['group_c_jury_mark','!=', null],['group_c_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count();
+            $non_marked_video_number = AuditionUploadVideo::where([['group_c_jury_mark', null],['group_c_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count();
+        } else if (AuditionUploadVideo::where([['group_a_ran_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count() > 0 || AuditionUploadVideo::where([['group_a_per_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count() > 0) {
+
+            $auditionUploadVideoARan = AuditionUploadVideo::where([['group_a_ran_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+            $auditionUploadVideoAPer = AuditionUploadVideo::where([['group_a_per_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+            $markedauditionUploadVideoARan = AuditionUploadVideo::where([['group_a_ran_jury_id','!=', null],['group_a_ran_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+            $markedauditionUploadVideoAPer = AuditionUploadVideo::where([['group_a_per_jury_id','!=', null],['group_a_per_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+            $nonMarkedauditionUploadVideoARan = AuditionUploadVideo::where([['group_a_ran_jury_id', null],['group_a_ran_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+            $nonMarkedauditionUploadVideoAPer = AuditionUploadVideo::where([['group_a_per_jury_id', null],['group_a_per_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+
+
+            $videos =  $auditionUploadVideoARan->concat($auditionUploadVideoAPer);
+            $video_number =  $videos->count();
+
+            $marked_video =  $markedauditionUploadVideoARan->concat($markedauditionUploadVideoAPer);
+            $non_marked_video = $nonMarkedauditionUploadVideoARan->concat($nonMarkedauditionUploadVideoAPer);
+
+            $marked_video_number =  $marked_video->count();
+            $non_marked_video_number = $non_marked_video->count();
+        };
+
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
+            'auditionRoundInfo' => $auditionRoundInfo,
+            'video_number' => $video_number,
+            'videos' => $videos,
+            'marked_video_number' => $marked_video_number,
+            'non_marked_video_number' => $non_marked_video_number,
+        ]);
+    }
 
 
     public function singleAuditionRoundAssessmentResult($audition_id, $audition_round_info_id)
@@ -1606,7 +1654,7 @@ class AuditionController extends Controller
     public function getRandomForJury($audition_id, $round_info_id, $value)
     {
 
-        $random_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['group_b_jury_mark', '!=', null], ['group_c_jury_mark', '!=', null],['group_a_per_jury_id',null]])->inRandomOrder()->limit($value)->get();
+        $random_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['group_b_jury_mark', '!=', null], ['group_c_jury_mark', '!=', null], ['group_a_per_jury_id', null]])->inRandomOrder()->limit($value)->get();
 
         return response()->json([
             'status' => 200,
@@ -1625,11 +1673,10 @@ class AuditionController extends Controller
             if (
                 $video->group_b_jury_mark > $video->group_c_jury_mark &&
                 ($video->group_b_jury_mark - $video->group_c_jury_mark >= $value)
-            )
-            {
+            ) {
                 array_push($videoIds, $video->id);
             }
-            if(
+            if (
                 $video->group_c_jury_mark > $video->group_b_jury_mark &&
                 ($video->group_c_jury_mark - $video->group_b_jury_mark >= $value)
             ) {
@@ -1637,7 +1684,7 @@ class AuditionController extends Controller
             }
         }
 
-        $percentage_videos = AuditionUploadVideo::whereIn('id', $videoIds)->where('group_a_ran_jury_id',null)->get();
+        $percentage_videos = AuditionUploadVideo::whereIn('id', $videoIds)->where('group_a_ran_jury_id', null)->get();
 
         return response()->json([
             'status' => 200,
@@ -1651,7 +1698,7 @@ class AuditionController extends Controller
         // return $request->all();
         try {
             foreach ($request->juries as $key => $jury_id) {
-                AuditionUploadVideo::where([['group_a_ran_jury_id', null], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id],['group_a_per_jury_id',null]])->inRandomOrder()->take($request->random_videos[$key])->update([
+                AuditionUploadVideo::where([['group_a_ran_jury_id', null], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id], ['group_a_per_jury_id', null]])->inRandomOrder()->take($request->random_videos[$key])->update([
                     'group_a_ran_jury_id' => $jury_id,
                 ]);
             }
@@ -1685,7 +1732,7 @@ class AuditionController extends Controller
             }
 
             foreach ($request->juries as $key => $jury_id) {
-                AuditionUploadVideo::whereIn('id', $videoIds)->where([['group_a_per_jury_id', null],['group_a_ran_jury_id',null], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->take($request->random_videos[$key])->update([
+                AuditionUploadVideo::whereIn('id', $videoIds)->where([['group_a_per_jury_id', null], ['group_a_ran_jury_id', null], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->take($request->random_videos[$key])->update([
                     'group_a_per_jury_id' => $jury_id,
                 ]);
             }
