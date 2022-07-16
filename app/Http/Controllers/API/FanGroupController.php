@@ -599,9 +599,8 @@ class FanGroupController extends Controller
     // two user member list in user panel
     public function getFanGroupDetails($slug)
     {
-        // Get User Points for checking
-        // $userPoints = User::find(Auth('sanctum')->user()->id);
         $userPoints = Wallet::where('user_id', Auth('sanctum')->user()->id)->first();
+
         if ($userPoints) {
             $userPoints = $userPoints;
         } else {
@@ -609,7 +608,6 @@ class FanGroupController extends Controller
         }
 
         $fanDetails = FanGroup::where('slug', $slug)->first();
-
         $users_one = json_decode($fanDetails->my_user_join ? $fanDetails->my_user_join : '[]');
 
         $my_user_join = User::select("*")
@@ -641,11 +639,6 @@ class FanGroupController extends Controller
     // Fan Group post/image/video, warning, two user join lists in Admin Panel
     public function showFanGroup($slug)
     {
-
-
-
-
-
         $fanDetails = FanGroup::where('slug', $slug)->first();
         $fanMember = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->where('approveStatus', 0)->get();
 
