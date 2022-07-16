@@ -480,11 +480,9 @@ Super Admin
                 // alert('unchecked');
             }
         });
-
         var wild_card_true = $('input:radio[name=wildcard][value=1]').attr('checked', true) ? 1 : 0;
   
         wilCardNo(wild_card_true);
-  
         var url = "{{ url('super-admin/audition-round-rules/mark/') }}";
 
         $.ajax({
@@ -589,13 +587,7 @@ Super Admin
             }
         });
 
-
-
         $('#show-rules').attr("style", "display:block");
-
-
-
-
     }
 
     function checkAvaibaleDays() {
@@ -611,7 +603,7 @@ Super Admin
     function periodCheck(){
         $("#SubmitRules").prop("disabled",false);
         $('#hole_round_peroid_error').html('');
-        // alert('hello')
+       
         let round_period = Number($('#round_period').val());
         let prepare_period = Number($('#instruction_prepare_period').val());
         let video_upload_period = Number($('#video_upload_period').val());
@@ -622,7 +614,6 @@ Super Admin
 
         let sum_of_round_period = prepare_period+video_upload_period+jury_or_judge_mark_period+result_publish_period+appeal_period+appeal_result_publish_period;
 
-        // console.log('Round Period is small or bigger : ',sum_of_round_period);
         if (Number(round_period) < Number(sum_of_round_period)) {
             $("#SubmitRules").prop("disabled",true);
             $('#hole_round_peroid_error').html('Round Period Over! Please Cehck and Try Again!');
@@ -633,8 +624,6 @@ Super Admin
 
     $(document).on('click', '#SubmitRules', function(event) {
             event.preventDefault();
-            // var checkhas = $('#checkbox1').prop('checked') ? 1: 0;
-            // alert(checkhas);
             ErrorMessageClear();
             $('.wild_card__two').css("display", "block");
             var round_id = $('#round_id').val();
@@ -685,7 +674,6 @@ Super Admin
     });
 
     $(document).ready(function() {
-        // $('#textbox1').val($(this).is(':checked'));
 
         $('#textbox1').attr("style", "display:none");
         $('#textbox2').attr("style", "display:none");

@@ -16,7 +16,6 @@ class CreateAuditionPromoInstructionsTable extends Migration
         Schema::create('audition_promo_instructions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('audition_id')->nullable();
-            $table->unsignedBigInteger('audition_round_id')->nullable();
             $table->longText('instruction')->nullable();
             $table->longText('description')->nullable();
             $table->string('video')->nullable();

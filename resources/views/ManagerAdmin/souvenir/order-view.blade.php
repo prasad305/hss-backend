@@ -1,4 +1,4 @@
-@extends('Layouts.ManagerAdmin.master')
+<!-- @extends('Layouts.ManagerAdmin.master')
 
 @push('title')
     Super Admin | Order View
@@ -6,7 +6,7 @@
 
 
 
-@section('content')
+@section('content') -->
 
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -150,4 +150,4 @@
     </div>
  </section>
 
-@endsection
+<!-- @endsection -->

@@ -13,7 +13,8 @@ class Audition extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $with = ['assignedJudges','info', 'category', 'participant', 'auditionRules', 'assignedJuries', 'uploadedVideos', 'admin', 'auditionAdmin'];
+    protected $with = ['assignedJudges','info', 'category', 'participant', 'auditionRules', 'assignedJuries', 'uploadedVideos','admin', 'auditionAdmin', 'auditionRound'];
+    // protected $with = ['assignedJudges','info', 'category', 'participant', 'auditionRules', 'assignedJuries', 'uploadedVideos', 'admin', 'auditionAdmin', 'auditionRound'];
 
 
     public function category()
@@ -55,15 +56,15 @@ class Audition extends Model
     }
     public function assignedJudges()
     {
-        return $this->hasMany(AuditionAssignJudge::class);
+        return $this->hasMany(AuditionAssignJudge::class,'audition_id','id');
     }
     public function assignedJuries()
     {
-        return $this->hasMany(AuditionAssignJury::class);
+        return $this->hasMany(AuditionAssignJury::class,'audition_id','id');
     }
     public function participant()
     {
-        return $this->hasMany(AuditionParticipant::class);
+        return $this->hasMany(AuditionParticipant::class,'audition_id','id');
     }
 
     public function judge()
@@ -89,5 +90,10 @@ class Audition extends Model
         return $this->hasMany(AuditionUploadVideo::class, 'audition_id', 'id');
     }
 
-    
+    public function auditionRound()
+    {
+        return $this->hasMany(AuditionRoundInfo::class, 'audition_id', 'id');
+    }
+
+
 }
