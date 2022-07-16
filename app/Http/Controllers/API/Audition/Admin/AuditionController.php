@@ -287,7 +287,14 @@ class AuditionController extends Controller
 
             $marked_video_number =  $marked_video->count();
             $non_marked_video_number = $non_marked_video->count();
-        };
+        }else{
+            $video_number  = 0;
+            $videos = [];
+            $marked_video_number = 0;
+            $non_marked_video_number = 0;
+        }
+
+
 
         return response()->json([
             'status' => 200,
