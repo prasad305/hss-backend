@@ -53,7 +53,7 @@ class SimplePostController extends Controller
     {
 
         $request->validate([
-    
+
             'title' => 'required',
             'description' => 'required',
 
@@ -87,7 +87,7 @@ class SimplePostController extends Controller
 
 
         }
-        
+
         if ($request->hasfile('video')) {
 
             $destination = $meetup->image;
@@ -95,7 +95,7 @@ class SimplePostController extends Controller
                 File::delete($destination);
             }
             if ($request->hasFile('video')) {
-    
+
                 $file        = $request->file('video');
                 $path        = 'uploads/videos/post';
                 $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
@@ -137,6 +137,7 @@ class SimplePostController extends Controller
             $post = new Post();
             $post->type='general';
             $post->user_id=$spost->star_id;
+            $post->star_id = json_decode($spost->star_id);
             $post->event_id = $spost->id;
             $post->category_id=$spost->category_id;
             $post->title=$spost->title;
