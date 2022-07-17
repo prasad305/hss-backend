@@ -816,6 +816,7 @@ Route::get('star-instrucation', [StarAuthController::class, 'starInstrucation'])
 Route::post('star_qr_verify', [StarAuthController::class, 'qr_verify']);
 
 Route::post('star_register', [StarAuthController::class, 'register']);
+Route::post('star/image-upload', [StarAuthController::class, 'MobileImageUp']);
 
 // Route for Jury Board Panel
 Route::post('jury-register', [JuryAuthController::class, 'register']);

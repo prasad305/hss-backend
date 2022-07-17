@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 
+
 class StarAuthController extends Controller
 {
     public function register(Request $request)
@@ -174,6 +175,44 @@ class StarAuthController extends Controller
                 'name' => $user->first_name . ' ' . $user->last_name,
                 'token' => $token,
                 'message' => 'Verify Phone Number',
+            ]);
+        }
+    }
+
+    /**
+     * mobile media upload
+     */
+    public function MobileImageUp(Request $request)
+    {
+        try {
+            if ($request->img['data']) {
+
+                $originalExtension = str_ireplace("image/", "", $request->img['type']);
+
+                $folder_path       = 'uploads/images/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->img['data'];
+            }
+
+            Image::make($decodedBase64)->save($folder_path . $image_new_name);
+
+            $filePath = $folder_path . $image_new_name;
+
+            //old image delete
+            if ($request->img['oldImage'] != "") {
+                File::delete($request->img['oldImage']);
+            }
+            return response()->json([
+                "message" => "uload successfully",
+                "status" => "200",
+                "path" =>   $filePath
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                "message" => "Image field required, invalid image !",
+                "error" => $exception->getMessage(),
+                "path" => "",
             ]);
         }
     }
