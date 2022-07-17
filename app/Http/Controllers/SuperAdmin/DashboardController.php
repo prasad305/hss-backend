@@ -26,8 +26,11 @@ use App\Models\LearningSessionRegistration;
 use App\Models\Marketplace;
 use App\Models\Auction;
 use App\Models\GeneralPostPayment;
+use App\Models\GreetingsRegistration;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
+use App\Models\QnA;
+use App\Models\QnaRegistration;
 use App\Models\SimplePost;
 use App\Models\Vaccination;
 use Illuminate\Http\Request;
@@ -269,60 +272,133 @@ class DashboardController extends Controller
   // Dashboard Meetup
   public function meetupEventsDashboard()
   {
-    return view('SuperAdmin.dashboard.Meetup.dashboard');
+
+    $categories = Category::get();
+    $total = MeetupEvent::count();
+    $published = MeetupEvent::where('status', 2)->count();
+    $pending = MeetupEvent::where('status', '<', 2)->count();
+    $rejected = MeetupEvent::where('status', 11)->count();
+    $labels = MeetupEventRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+      return Carbon::parse($date->created_at)->format('M');
+    });
+
+    $months = [];
+    $amountCount = [];
+    foreach ($labels as $month => $values) {
+      $months[] = $month;
+      $amountCount[] = $values->sum('amount');
+    }
+
+    return view('SuperAdmin.dashboard.Meetup.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+  }
+  public function meetupDataList($type)
+  {
+    if ($type == 'total') {
+      $postList = MeetupEvent::with(['star', 'category'])->get();
+    } elseif ($type == 'published') {
+      $postList = MeetupEvent::with(['star', 'category'])->where('status', 2)->get();
+    } elseif ($type == 'pending') {
+      $postList = MeetupEvent::with(['star', 'category'])->where('status', '<', 2)->get();
+    } else {
+      $postList = MeetupEvent::with(['star', 'category'])->where('status', 11)->get();
+    }
+    return view('SuperAdmin.dashboard.Meetup.postDataList', compact('postList'));
   }
   public function meetupManagerAdminList()
   {
-    return view('SuperAdmin.dashboard.Meetup.ManagerAdmin.manager_admin');
+    $users = User::where('user_type', 'manager-admin')->latest()->get();
+    return view('SuperAdmin.dashboard.Meetup.ManagerAdmin.manager_admin', compact('users'));
   }
-  public function meetupManagerAdminEvents()
+  public function meetupManagerAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.Meetup.ManagerAdmin.manager_admin_events');
+    $posts = MeetupEvent::where('category_id', $id)->get();
+    return view('SuperAdmin.dashboard.Meetup.ManagerAdmin.manager_admin_events', compact('posts'));
   }
   public function meetupAdminList()
   {
-    return view('SuperAdmin.dashboard.Meetup.Admin.admin');
+    $users = User::where('user_type', 'admin')->latest()->get();
+    return view('SuperAdmin.dashboard.Meetup.Admin.admin', compact('users'));
   }
-  public function meetupAdminEvents()
+  public function meetupAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.Meetup.Admin.admin_events');
+    $posts = MeetupEvent::where('admin_id', $id)->get();
+    return view('SuperAdmin.dashboard.Meetup.Admin.admin_events', compact('posts'));
   }
   public function meetupSuperstarList()
   {
-    return view('SuperAdmin.dashboard.Meetup.Superstar.superstar');
+    $users = User::where('user_type', 'star')->latest()->get();
+    return view('SuperAdmin.dashboard.Meetup.Superstar.superstar', compact('users'));
   }
-  public function meetupSuperstarEvents()
+  public function meetupSuperstarEvents($id)
   {
-    return view('SuperAdmin.dashboard.Meetup.Superstar.superstar_events');
+
+    $posts = MeetupEvent::where('star_id', $id)->get();
+    return view('SuperAdmin.dashboard.Meetup.Superstar.superstar_events', compact('posts'));
   }
+
   // Dashboard Learning Session
   public function learningSessionEventsDashboard()
   {
-    return view('SuperAdmin.dashboard.LearningSession.dashboard');
+    $categories = Category::get();
+    $total = LearningSession::count();
+    $published = LearningSession::where('status', 2)->count();
+    $pending = LearningSession::where('status', '<', 2)->count();
+    $rejected = LearningSession::where('status', 11)->count();
+    $labels = LearningSessionRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+      return Carbon::parse($date->created_at)->format('M');
+    });
+
+    $months = [];
+    $amountCount = [];
+    foreach ($labels as $month => $values) {
+      $months[] = $month;
+      $amountCount[] = $values->sum('amount');
+    }
+
+    return view('SuperAdmin.dashboard.LearningSession.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+  }
+  public function learningSessionDataList($type)
+  {
+    if ($type == 'total') {
+      $postList = LearningSession::with(['star', 'category'])->get();
+    } elseif ($type == 'published') {
+      $postList = LearningSession::with(['star', 'category'])->where('status', 2)->get();
+    } elseif ($type == 'pending') {
+      $postList = LearningSession::with(['star', 'category'])->where('status', '<', 2)->get();
+    } else {
+      $postList = LearningSession::with(['star', 'category'])->where('status', 11)->get();
+    }
+    return view('SuperAdmin.dashboard.LearningSession.postDataList', compact('postList'));
   }
   public function learningSessionManagerAdminList()
   {
-    return view('SuperAdmin.dashboard.LearningSession.ManagerAdmin.manager_admin');
+    $users = User::where('user_type', 'manager-admin')->latest()->get();
+    return view('SuperAdmin.dashboard.LearningSession.ManagerAdmin.manager_admin', compact('users'));
   }
-  public function learningSessionManagerAdminEvents()
+  public function learningSessionManagerAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.LearningSession.ManagerAdmin.manager_admin_events');
+    $posts = LearningSession::where('category_id', $id)->get();
+    return view('SuperAdmin.dashboard.LearningSession.ManagerAdmin.manager_admin_events', compact('posts'));
   }
   public function learningSessionAdminList()
   {
-    return view('SuperAdmin.dashboard.LearningSession.Admin.admin');
+    $users = User::where('user_type', 'admin')->latest()->get();
+    return view('SuperAdmin.dashboard.LearningSession.Admin.admin', compact('users'));
   }
-  public function learningSessionAdminEvents()
+  public function learningSessionAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.LearningSession.Admin.admin_events');
+    $posts = LearningSession::where('admin_id', $id)->get();
+    return view('SuperAdmin.dashboard.LearningSession.Admin.admin_events', compact('posts'));
   }
   public function learningSessionSuperstarList()
   {
-    return view('SuperAdmin.dashboard.LearningSession.Superstar.superstar');
+    $users = User::where('user_type', 'star')->latest()->get();
+    return view('SuperAdmin.dashboard.LearningSession.Superstar.superstar', compact('users'));
   }
-  public function learningSessionSuperstarEvents()
+  public function learningSessionSuperstarEvents($id)
   {
-    return view('SuperAdmin.dashboard.LearningSession.Superstar.superstar_events');
+    $posts = LearningSession::where('star_id', $id)->get();
+    return view('SuperAdmin.dashboard.LearningSession.Superstar.superstar_events', compact('posts'));
   }
   // Dashboard Live Chat
   public function liveChatEventsDashboard()
@@ -393,31 +469,66 @@ class DashboardController extends Controller
   // Dashboard Greeting
   public function greetingEventsDashboard()
   {
-    return view('SuperAdmin.dashboard.Greeting.dashboard');
+    $categories = Category::get();
+    $total = Greeting::count();
+    $published = Greeting::where('status', 2)->count();
+    $pending = Greeting::where('status', '<', 2)->count();
+    $rejected = Greeting::where('status', 11)->count();
+    $labels = GreetingsRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+      return Carbon::parse($date->created_at)->format('M');
+    });
+
+    $months = [];
+    $amountCount = [];
+    foreach ($labels as $month => $values) {
+      $months[] = $month;
+      $amountCount[] = $values->sum('amount');
+    }
+
+    return view('SuperAdmin.dashboard.Greeting.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+  }
+  public function greetingDataList($type)
+  {
+    if ($type == 'total') {
+      $postList = Greeting::with(['star', 'category'])->get();
+    } elseif ($type == 'published') {
+      $postList = Greeting::with(['star', 'category'])->where('status', 2)->get();
+    } elseif ($type == 'pending') {
+      $postList = Greeting::with(['star', 'category'])->where('status', '<', 2)->get();
+    } else {
+      $postList = Greeting::with(['star', 'category'])->where('status', 11)->get();
+    }
+    return view('SuperAdmin.dashboard.Greeting.postDataList', compact('postList'));
   }
   public function greetingManagerAdminList()
   {
-    return view('SuperAdmin.dashboard.Greeting.ManagerAdmin.manager_admin');
+    $users = User::where('user_type', 'manager-admin')->latest()->get();
+    return view('SuperAdmin.dashboard.Greeting.ManagerAdmin.manager_admin', compact('users'));
   }
-  public function greetingManagerAdminEvents()
+  public function greetingManagerAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.Greeting.ManagerAdmin.manager_admin_events');
+    $posts = Greeting::where('category_id', $id)->get();
+    return view('SuperAdmin.dashboard.Greeting.ManagerAdmin.manager_admin_events', compact('posts'));
   }
   public function greetingAdminList()
   {
-    return view('SuperAdmin.dashboard.Greeting.Admin.admin');
+    $users = User::where('user_type', 'admin')->latest()->get();
+    return view('SuperAdmin.dashboard.Greeting.Admin.admin', compact('users'));
   }
-  public function greetingAdminEvents()
+  public function greetingAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.Greeting.Admin.admin_events');
+    $posts = Greeting::where('admin_id', $id)->get();
+    return view('SuperAdmin.dashboard.Greeting.Admin.admin_events', compact('posts'));
   }
   public function greetingSuperstarList()
   {
-    return view('SuperAdmin.dashboard.Greeting.Superstar.superstar');
+    $users = User::where('user_type', 'star')->latest()->get();
+    return view('SuperAdmin.dashboard.Greeting.Superstar.superstar', compact('users'));
   }
-  public function greetingSuperstarEvents()
+  public function greetingSuperstarEvents($id)
   {
-    return view('SuperAdmin.dashboard.Greeting.Superstar.superstar_events');
+    $posts = Greeting::where('star_id', $id)->get();
+    return view('SuperAdmin.dashboard.Greeting.Superstar.superstar_events', compact('posts'));
   }
   // Dashboard Fan Group
   public function fanGroupEventsDashboard()
@@ -448,35 +559,75 @@ class DashboardController extends Controller
   {
     return view('SuperAdmin.dashboard.FanGroup.Superstar.superstar_events');
   }
+
+
   // Dashboard Q&A
+
   public function qnaEventsDashboard()
   {
-    return view('SuperAdmin.dashboard.QnA.dashboard');
+    $categories = Category::get();
+    $total = QnA::count();
+    $published = QnA::where('status', 2)->count();
+    $pending = QnA::where('status', '<', 2)->count();
+    $rejected = QnA::where('status', 11)->count();
+    $labels = QnaRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+      return Carbon::parse($date->created_at)->format('M');
+    });
+
+    $months = [];
+    $amountCount = [];
+    foreach ($labels as $month => $values) {
+      $months[] = $month;
+      $amountCount[] = $values->sum('amount');
+    }
+
+    return view('SuperAdmin.dashboard.QnA.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
   }
+  public function qnaDataList($type)
+  {
+    if ($type == 'total') {
+      $postList = QnA::with(['star', 'category'])->get();
+    } elseif ($type == 'published') {
+      $postList = QnA::with(['star', 'category'])->where('status', 2)->get();
+    } elseif ($type == 'pending') {
+      $postList = QnA::with(['star', 'category'])->where('status', '<', 2)->get();
+    } else {
+      $postList = QnA::with(['star', 'category'])->where('status', 11)->get();
+    }
+    return view('SuperAdmin.dashboard.QnA.postDataList', compact('postList'));
+  }
+
   public function qnaManagerAdminList()
   {
-    return view('SuperAdmin.dashboard.QnA.ManagerAdmin.manager_admin');
+    $users = User::where('user_type', 'manager-admin')->latest()->get();
+    return view('SuperAdmin.dashboard.QnA.ManagerAdmin.manager_admin', compact('users'));
   }
-  public function qnaManagerAdminEvents()
+  public function qnaManagerAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.QnA.ManagerAdmin.manager_admin_events');
+    $posts = QnA::where('category_id', $id)->get();
+    return view('SuperAdmin.dashboard.QnA.ManagerAdmin.manager_admin_events', compact('posts'));
   }
   public function qnaAdminList()
   {
-    return view('SuperAdmin.dashboard.QnA.Admin.admin');
+    $users = User::where('user_type', 'admin')->latest()->get();
+    return view('SuperAdmin.dashboard.QnA.Admin.admin', compact('users'));
   }
-  public function qnaAdminEvents()
+  public function qnaAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.QnA.Admin.admin_events');
+    $posts = QnA::where('admin_id', $id)->get();
+    return view('SuperAdmin.dashboard.QnA.Admin.admin_events', compact('posts'));
   }
   public function qnaSuperstarList()
   {
-    return view('SuperAdmin.dashboard.QnA.Superstar.superstar');
+    $users = User::where('user_type', 'star')->latest()->get();
+    return view('SuperAdmin.dashboard.QnA.Superstar.superstar', compact('users'));
   }
-  public function qnaSuperstarEvents()
+  public function qnaSuperstarEvents($id)
   {
-    return view('SuperAdmin.dashboard.QnA.Superstar.superstar_events');
+    $posts = QnA::where('star_id', $id)->get();
+    return view('SuperAdmin.dashboard.QnA.Superstar.superstar_events', compact('posts'));
   }
+
   // Dashboard simple post
   public function simplePostEventsDashboard()
   {

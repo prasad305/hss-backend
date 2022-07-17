@@ -9,13 +9,14 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Learning Session Events Dashboard</h1>
+                    <h1 class="m-0">Learning Session Dashboard</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a
-                                href="{{ route('superAdmin.learningSessionEvents.managerAdminEvents') }}">Home</a></li>
-                        <li class="breadcrumb-item active">Learning Session Events</li>
+                                href="{{ route('superAdmin.learningSessionEvents.dashboard') }}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">Learning Session</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -36,64 +37,26 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Manager Admin</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning"
-                                        href="{{ route('superAdmin.learningSessionEvents.managerAdminEvents') }}">See
-                                        All</a></small>
-                            </span>
+                @foreach ($users as $user)
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3 text-center border border-warning">
+                            <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
+                                    aria-hidden="true"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Category : {{ $user->category->name }}</span>
+                                <span class="info-box-text">{{ $user->first_name }}
+                                    {{ $user->last_name }}</span>
+                                <span class="info-box-number">{{ $user->category->learningSession->count() }}</span>
+                                <span class="info-box-number">
+                                    <small><a class="text-warning"
+                                            href="{{ route('superAdmin.learningSessionEvents.managerAdminEvents', $user->category->id) }}">See
+                                            All</a></small>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Manager Admin</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning"
-                                        href="{{ route('superAdmin.learningSessionEvents.managerAdminEvents') }}">See
-                                        All</a></small>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Manager Admin</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning" href="#">See
-                                        All</a></small>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Manager Admin</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning" href="#">See
-                                        All</a></small>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
+
             </div>
         </div>
     </div>

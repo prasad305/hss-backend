@@ -1,10 +1,8 @@
-@extends('Layouts.ManagerAdmin.master')
+@extends('Layouts.SuperAdmin.master')
 
 @push('title')
-    Manager Admin
+    Super Admin
 @endpush
-
-
 
 @section('content')
     <!-- Content Header (Page header) -->
@@ -12,12 +10,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Meetup Events</h1>
+                    <h1 class="m-0">Event List</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Meetup Events</li>
+                        <li class="breadcrumb-item active">Event List</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -32,9 +30,9 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Meetup Events</h3>
+                    <h3 class="card-title">Event List</h3>
                     <a class="btn btn-success btn-sm" style="float: right;"
-                        href="{{ route('managerAdmin.dashboard.meetupEvent') }}"><i class=" fa fa-arrow"></i>&nbsp;Go
+                        href="{{ route('superAdmin.meetupEvents.dashboard') }}"><i class=" fa fa-arrow"></i>&nbsp;Go
                         Back</a>
                 </div>
                 <!-- /.card-header -->
@@ -75,21 +73,23 @@
                                     <td>{{ $post->admin->first_name }} {{ $post->admin->last_name }}</td>
                                     <td>{{ $post->star->first_name }} {{ $post->star->last_name }}</td>
                                     <td>
-                                        @if ($post->status >= 1)
+                                        @if ($post->status == 2)
                                             <span class="badge badge-success">Published<span>
-                                                @else
-                                                    <span class="badge badge-warning">Pending<span>
+                                                @elseif ($post->status == 11)
+                                                    <span class="badge badge-danger">Rejected<span>
+                                                        @else
+                                                            <span class="badge badge-warning">Pending<span>
                                         @endif
                                     </td>
                                     <td style="width: 150px">
-                                        <a href="{{ route('managerAdmin.meetupEvent.details', [$post->id]) }}"
+                                        <a href="{{ route('superAdmin.meetupEvent.details', [$post->id]) }}"
                                             class="btn btn-sm btn-success"> <i class="fa fa-eye"></i></a>
                                         <a class="btn btn-sm btn-info"
-                                            onclick="Show('Edit Post','{{ route('managerAdmin.meetupEvent.edit', $post->id) }}')"><i
+                                            onclick="Show('Edit Post','{{ route('superAdmin.meetupEvent.edit', $post->id) }}')"><i
                                                 class="fa fa-edit text-white"></i></a>
-                                        {{-- <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
-                                            value="{{ route('managerAdmin.meetupEvent.destroy', $post->id) }}"><i
-                                                class="fa fa-trash"></i> </button> --}}
+                                        <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
+                                            value="{{ route('superAdmin.meetupEvent.destroy', $post->id) }}"><i
+                                                class="fa fa-trash"></i> </button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -99,10 +99,6 @@
                 </div>
                 <!-- /.card-body -->
             </div>
-
-
-
-
         </div> <!-- container -->
     </div> <!-- content -->
 

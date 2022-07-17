@@ -30,6 +30,22 @@ class Category extends Model
     {
         return $this->hasMany(LiveChat::class, 'category_id');
     }
+    public function qna()
+    {
+        return $this->hasMany(QnA::class, 'category_id');
+    }
+    public function meetup()
+    {
+        return $this->hasMany(MeetupEvent::class, 'category_id');
+    }
+    public function learningSession()
+    {
+        return $this->hasMany(LearningSession::class, 'category_id');
+    }
+    public function greeting()
+    {
+        return $this->hasMany(Greeting::class, 'category_id');
+    }
 
     public function subCategories()
     {

@@ -1,7 +1,7 @@
-@extends('Layouts.ManagerAdmin.master')
+@extends('Layouts.SuperAdmin.master')
 
 @push('title')
-    Manager Admin
+    Super Admin
 @endpush
 
 
@@ -12,12 +12,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Meetup Events</h1>
+                    <h1 class="m-0">Q&A List</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Meetup Events</li>
+                        <li class="breadcrumb-item active">Q&A List</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -30,12 +30,14 @@
     <div class="content">
 
         <div class="container-fluid">
+
+
+
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Meetup Events</h3>
-                    <a class="btn btn-success btn-sm" style="float: right;"
-                        href="{{ route('managerAdmin.dashboard.meetupEvent') }}"><i class=" fa fa-arrow"></i>&nbsp;Go
-                        Back</a>
+                    <h3 class="card-title">Q&A List</h3>
+                    <a class="btn btn-success btn-sm" style="float: right;" href="{{ route('superAdmin.qna.index') }}"><i
+                            class=" fa fa-arrow"></i>&nbsp;Go Back</a>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -46,11 +48,11 @@
                             <option value="Published">Published</option>
                         </select>
                     </div>
-                    <table id="myTable" class="table table-bordered table-striped ">
+                    <table id="myTable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>SL</th>
-                                <th>Photo or Video</th>
+                                <th>Photo</th>
                                 <th>Title</th>
                                 <th>Admin</th>
                                 <th>Super Star</th>
@@ -64,32 +66,27 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>
-                                        @if ($post->image)
-                                            <img src="{{ asset($post->image) }}" style="width: 200px; height:100px" />
-                                        @else
-                                            <video width="200" height="100" src="{{ asset($post->video) }}">
-                                            </video>
-                                        @endif
+                                        <img src="{{ asset($post->banner) }}" style="width: 200px; height:100px" />
                                     </td>
                                     <td>{{ $post->title }}</td>
                                     <td>{{ $post->admin->first_name }} {{ $post->admin->last_name }}</td>
                                     <td>{{ $post->star->first_name }} {{ $post->star->last_name }}</td>
                                     <td>
-                                        @if ($post->status >= 1)
+                                        @if ($post->status >= 2)
                                             <span class="badge badge-success">Published<span>
                                                 @else
                                                     <span class="badge badge-warning">Pending<span>
                                         @endif
                                     </td>
                                     <td style="width: 150px">
-                                        <a href="{{ route('managerAdmin.meetupEvent.details', [$post->id]) }}"
+                                        <a href="{{ route('superAdmin.qna.details', [$post->id]) }}"
                                             class="btn btn-sm btn-success"> <i class="fa fa-eye"></i></a>
                                         <a class="btn btn-sm btn-info"
-                                            onclick="Show('Edit Post','{{ route('managerAdmin.meetupEvent.edit', $post->id) }}')"><i
+                                            onclick="Show('Edit Event','{{ route('superAdmin.qna.edit', $post->id) }}')"><i
                                                 class="fa fa-edit text-white"></i></a>
-                                        {{-- <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
-                                            value="{{ route('managerAdmin.meetupEvent.destroy', $post->id) }}"><i
-                                                class="fa fa-trash"></i> </button> --}}
+                                        <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
+                                            value="{{ route('superAdmin.qna.destroy', $post->id) }}"><i
+                                                class="fa fa-trash"></i> </button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -110,6 +107,7 @@
     {{-- Datatable --}}
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
     <script>
         $("document").ready(function() {
 
