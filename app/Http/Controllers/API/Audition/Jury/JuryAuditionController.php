@@ -144,6 +144,8 @@ class JuryAuditionController extends Controller
         $user = auth('sanctum')->user();
         $auditionIds = $user->assignedAuditionsJury->pluck('audition_id');
         $events = Audition::whereIn('id', $auditionIds)->where('status', 2)->get();
+        // return $user->jury;
+
         $is_my_group_primary = $user->jury->group->is_primary == 1 ? true : false;
         return response()->json([
             'status' => 200,
