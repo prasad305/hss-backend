@@ -259,6 +259,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     // User Photos
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
     Route::get('/user/activitiesData/with-paginate/{limit}', [UserController::class, 'paginate_userActivites']);
+    Route::get('/user/{id}/activitiesData/with-paginate/{limit}', [UserController::class, 'paginate_userActivites_by_id']);
 
     //Registration Checker
     Route::get('/user/registration_checker/{type}/{slug}', [UserController::class, 'registration_checker']);

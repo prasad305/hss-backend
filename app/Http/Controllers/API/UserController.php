@@ -1622,6 +1622,16 @@ class UserController extends Controller
         ]);
     }
 
+    public function paginate_userActivites_by_id($id, $limit)
+    {
+        $userActivites = Activity::orderBy('id', 'DESC')->where('user_id', $id)->paginate($limit);
+
+        return response()->json([
+            'status' => 200,
+            'userActivites' => $userActivites
+        ]);
+    }
+
     public function registration_checker($type, $slug)
     {
         if ($type == 'livechat') {
