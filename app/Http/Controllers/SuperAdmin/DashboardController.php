@@ -25,13 +25,17 @@ use App\Models\LiveChatRegistration;
 use App\Models\LearningSessionRegistration;
 use App\Models\Marketplace;
 use App\Models\Auction;
+use App\Models\Bidding;
 use App\Models\GeneralPostPayment;
 use App\Models\GreetingsRegistration;
+use App\Models\MarketplaceOrder;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
 use App\Models\QnA;
 use App\Models\QnaRegistration;
 use App\Models\SimplePost;
+use App\Models\SouvenirApply;
+use App\Models\SouvenirCreate;
 use App\Models\Vaccination;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -278,6 +282,19 @@ class DashboardController extends Controller
     $published = MeetupEvent::where('status', 2)->count();
     $pending = MeetupEvent::where('status', '<', 2)->count();
     $rejected = MeetupEvent::where('status', 11)->count();
+    // Registered User
+
+    $weeklyUser = MeetupEventRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $monthlyUser = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+    $yearlyUser = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+    // Income Statement
+
+    $weeklyIncome = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+    $monthlyIncome = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+    $yearlyIncome = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+
     $labels = MeetupEventRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
       return Carbon::parse($date->created_at)->format('M');
     });
@@ -289,7 +306,7 @@ class DashboardController extends Controller
       $amountCount[] = $values->sum('amount');
     }
 
-    return view('SuperAdmin.dashboard.Meetup.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    return view('SuperAdmin.dashboard.Meetup.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
   }
   public function meetupDataList($type)
   {
@@ -348,6 +365,19 @@ class DashboardController extends Controller
       return Carbon::parse($date->created_at)->format('M');
     });
 
+    // Registered User
+
+    $weeklyUser = LearningSessionRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $monthlyUser = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+    $yearlyUser = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+    // Income Statement
+
+    $weeklyIncome = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+    $monthlyIncome = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+    $yearlyIncome = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+
     $months = [];
     $amountCount = [];
     foreach ($labels as $month => $values) {
@@ -355,7 +385,7 @@ class DashboardController extends Controller
       $amountCount[] = $values->sum('amount');
     }
 
-    return view('SuperAdmin.dashboard.LearningSession.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    return view('SuperAdmin.dashboard.LearningSession.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
   }
   public function learningSessionDataList($type)
   {
@@ -408,6 +438,19 @@ class DashboardController extends Controller
     $published = LiveChat::where('status', 2)->count();
     $pending = LiveChat::where('status', '<', 2)->count();
     $rejected = LiveChat::where('status', 11)->count();
+    // Registered User
+
+    $weeklyUser = LiveChatRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $monthlyUser = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+    $yearlyUser = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+    // Income Statement
+
+    $weeklyIncome = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+    $monthlyIncome = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+    $yearlyIncome = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+
     $labels = LiveChatRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
       return Carbon::parse($date->created_at)->format('M');
     });
@@ -419,7 +462,7 @@ class DashboardController extends Controller
       $amountCount[] = $values->sum('amount');
     }
 
-    return view('SuperAdmin.dashboard.LiveChat.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    return view('SuperAdmin.dashboard.LiveChat.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
   }
   public function liveChatDataList($type)
   {
@@ -474,6 +517,19 @@ class DashboardController extends Controller
     $published = Greeting::where('status', 2)->count();
     $pending = Greeting::where('status', '<', 2)->count();
     $rejected = Greeting::where('status', 11)->count();
+    // Registered User
+
+    $weeklyUser = GreetingsRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $monthlyUser = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+    $yearlyUser = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+    // Income Statement
+
+    $weeklyIncome = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+    $monthlyIncome = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+    $yearlyIncome = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+
     $labels = GreetingsRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
       return Carbon::parse($date->created_at)->format('M');
     });
@@ -485,7 +541,7 @@ class DashboardController extends Controller
       $amountCount[] = $values->sum('amount');
     }
 
-    return view('SuperAdmin.dashboard.Greeting.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    return view('SuperAdmin.dashboard.Greeting.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
   }
   public function greetingDataList($type)
   {
@@ -533,31 +589,72 @@ class DashboardController extends Controller
   // Dashboard Fan Group
   public function fanGroupEventsDashboard()
   {
-    return view('SuperAdmin.dashboard.FanGroup.dashboard');
+    $categories = Category::get();
+    $total = FanGroup::count();
+    $published = FanGroup::where('status', 1)->count();
+    $pending = FanGroup::where('status', 0)->count();
+    $rejected = FanGroup::where('status', 11)->count();
+
+    $weeklyUser = Fan_Group_Join::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $monthlyUser = Fan_Group_Join::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+    $yearlyUser = Fan_Group_Join::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+    // $labels = LiveChatRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+    //   return Carbon::parse($date->created_at)->format('M');
+    // });
+
+    // $months = [];
+    // $amountCount = [];
+    // foreach ($labels as $month => $values) {
+    //   $months[] = $month;
+    //   $amountCount[] = $values->sum('amount');
+    // }
+
+    return view('SuperAdmin.dashboard.FanGroup.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected', 'weeklyUser', 'monthlyUser', 'yearlyUser'));
+  }
+  public function fanGroupDataList($type)
+  {
+    if ($type == 'total') {
+      $postList = FanGroup::with(['star', 'category'])->get();
+    } elseif ($type == 'published') {
+      $postList = FanGroup::with(['star', 'category'])->where('status', 1)->get();
+    } elseif ($type == 'pending') {
+      $postList = FanGroup::with(['star', 'category'])->where('status', 0)->get();
+    } else {
+      $postList = FanGroup::with(['star', 'category'])->where('status', 11)->get();
+    }
+    return view('SuperAdmin.dashboard.FanGroup.postDataList', compact('postList'));
   }
   public function fanGroupManagerAdminList()
   {
-    return view('SuperAdmin.dashboard.FanGroup.ManagerAdmin.manager_admin');
+    $users = User::where('user_type', 'manager-admin')->latest()->get();
+    return view('SuperAdmin.dashboard.FanGroup.ManagerAdmin.manager_admin', compact('users'));
   }
-  public function fanGroupManagerAdminEvents()
+  public function fanGroupManagerAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.FanGroup.ManagerAdmin.manager_admin_events');
+
+    $posts = FanGroup::where('category_id', $id)->get();
+    return view('SuperAdmin.dashboard.FanGroup.ManagerAdmin.manager_admin_events', compact('posts'));
   }
   public function fanGroupAdminList()
   {
-    return view('SuperAdmin.dashboard.FanGroup.Admin.admin');
+    $users = User::where('user_type', 'admin')->latest()->get();
+    return view('SuperAdmin.dashboard.FanGroup.Admin.admin', compact('users'));
   }
-  public function fanGroupAdminEvents()
+  public function fanGroupAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.FanGroup.Admin.admin_events');
+    $posts = FanGroup::where('created_by', $id)->orWhere('another_star_admin_id', $id)->get();
+    return view('SuperAdmin.dashboard.FanGroup.Admin.admin_events', compact('posts'));
   }
   public function fanGroupSuperstarList()
   {
-    return view('SuperAdmin.dashboard.FanGroup.Superstar.superstar');
+    $users = User::where('user_type', 'star')->latest()->get();
+    return view('SuperAdmin.dashboard.FanGroup.Superstar.superstar', compact('users'));
   }
-  public function fanGroupSuperstarEvents()
+  public function fanGroupSuperstarEvents($id)
   {
-    return view('SuperAdmin.dashboard.FanGroup.Superstar.superstar_events');
+    $posts = FanGroup::where('star_id', $id)->get();
+    return view('SuperAdmin.dashboard.FanGroup.Superstar.superstar_events', compact('posts'));
   }
 
 
@@ -570,6 +667,20 @@ class DashboardController extends Controller
     $published = QnA::where('status', 2)->count();
     $pending = QnA::where('status', '<', 2)->count();
     $rejected = QnA::where('status', 11)->count();
+
+    // Registered User
+
+    $weeklyUser = QnaRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $monthlyUser = QnaRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+    $yearlyUser = QnaRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+    // Income Statement
+
+    $weeklyIncome = QnaRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+    $monthlyIncome = QnaRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+    $yearlyIncome = QnaRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+
     $labels = QnaRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
       return Carbon::parse($date->created_at)->format('M');
     });
@@ -581,7 +692,7 @@ class DashboardController extends Controller
       $amountCount[] = $values->sum('amount');
     }
 
-    return view('SuperAdmin.dashboard.QnA.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    return view('SuperAdmin.dashboard.QnA.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
   }
   public function qnaDataList($type)
   {
@@ -636,6 +747,17 @@ class DashboardController extends Controller
     $published = SimplePost::where('status', ">=", 1)->count();
     $pending = SimplePost::where('status', 0)->where('star_approval', 1)->count();
     $rejected = SimplePost::where('star_approval', 2)->count();
+
+    // Registered User
+    $weeklyUser = GeneralPostPayment::where('status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $monthlyUser = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+    $yearlyUser = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+    // Income Statement
+    $weeklyIncome = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+    $monthlyIncome = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+    $yearlyIncome = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
     $labels = GeneralPostPayment::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
       return Carbon::parse($date->created_at)->format('M');
     });
@@ -647,7 +769,7 @@ class DashboardController extends Controller
       $amountCount[] = $values->sum('amount');
     }
 
-    return view('SuperAdmin.dashboard.SimplePost.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    return view('SuperAdmin.dashboard.SimplePost.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
   }
   public function postDataList($type)
   {
@@ -728,5 +850,239 @@ class DashboardController extends Controller
   public function auditionSuperstarEvents()
   {
     return view('SuperAdmin.dashboard.Audition.Superstar.superstar_events');
+  }
+
+  // Auction
+
+  public function auctionEventsDashboard()
+  {
+    $categories = Category::get();
+    $total = Auction::count();
+    $published = Auction::where('product_status', 1)->count();
+    $pending = Auction::where('product_status', 0)->count();
+    $rejected = Auction::where('star_approval', 2)->count();
+
+    // Registered User
+
+    $weeklyUser = Bidding::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $monthlyUser = Bidding::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+    $yearlyUser = Bidding::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+    // Income Statement
+
+    $weeklyIncome = Bidding::where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->distinct()->get('amount')->sum('amount');
+    $monthlyIncome = Bidding::where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->distinct()->get('amount')->sum('amount');
+    $yearlyIncome = Bidding::where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->distinct()->get('amount')->sum('amount');
+
+    $labels = Bidding::where('win_status', 1)->get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+      return Carbon::parse($date->created_at)->format('M');
+    });
+
+    $months = [];
+    $amountCount = [];
+    foreach ($labels as $month => $values) {
+      $months[] = $month;
+      $amountCount[] = $values->sum('amount');
+    }
+
+    return view('SuperAdmin.dashboard.Auction.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+  }
+  public function auctionDataList($type)
+  {
+    if ($type == 'total') {
+      $postList = Auction::with(['star', 'category'])->get();
+    } elseif ($type == 'sold') {
+      $postList = Auction::with(['star', 'category'])->where('product_status', 1)->get();
+    } elseif ($type == 'unsold') {
+      $postList = Auction::with(['star', 'category'])->where('status', 0)->get();
+    } else {
+      $postList = Auction::with(['star', 'category'])->where('star_approval', 2)->get();
+    }
+    return view('SuperAdmin.dashboard.Auction.postDataList', compact('postList'));
+  }
+  public function auctionManagerAdminList()
+  {
+    $users = User::where('user_type', 'manager-admin')->latest()->get();
+    return view('SuperAdmin.dashboard.Auction.ManagerAdmin.manager_admin', compact('users'));
+  }
+  public function auctionManagerAdminEvents($id)
+  {
+    $posts = Auction::where('category_id', $id)->get();
+    return view('SuperAdmin.dashboard.Auction.ManagerAdmin.manager_admin_events', compact('posts'));
+  }
+  public function auctionAdminList()
+  {
+    $users = User::where('user_type', 'admin')->latest()->get();
+    return view('SuperAdmin.dashboard.Auction.Admin.admin', compact('users'));
+  }
+  public function auctionAdminEvents($id)
+  {
+    $posts = Auction::where('admin_id', $id)->get();
+    return view('SuperAdmin.dashboard.Auction.Admin.admin_events', compact('posts'));
+  }
+  public function auctionSuperstarList()
+  {
+    $users = User::where('user_type', 'star')->latest()->get();
+    return view('SuperAdmin.dashboard.Auction.Superstar.superstar', compact('users'));
+  }
+  public function auctionSuperstarEvents($id)
+  {
+    $posts = Auction::where('star_id', $id)->get();
+    return view('SuperAdmin.dashboard.Auction.Superstar.superstar_events', compact('posts'));
+  }
+
+  // Marketplace
+
+  public function marketplaceEventsDashboard()
+  {
+    $categories = Category::get();
+    $total = Marketplace::count();
+    $published = Marketplace::where('status', 1)->count();
+    $pending = Marketplace::where('status', 0)->count();
+    $rejected = Marketplace::where('status', 2)->count();
+    // Registered User
+
+    $weeklyUser = MarketplaceOrder::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $monthlyUser = MarketplaceOrder::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+    $yearlyUser = MarketplaceOrder::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+    // Income Statement
+
+    $weeklyIncome = MarketplaceOrder::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_price');
+    $monthlyIncome = MarketplaceOrder::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_price');
+    $yearlyIncome = MarketplaceOrder::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_price');
+
+    $labels = MarketplaceOrder::get(['id', 'created_at', 'total_price'])->groupBy(function ($date) {
+      return Carbon::parse($date->created_at)->format('M');
+    });
+
+    $months = [];
+    $amountCount = [];
+    foreach ($labels as $month => $values) {
+      $months[] = $month;
+      $amountCount[] = $values->sum('total_price');
+    }
+
+    return view('SuperAdmin.dashboard.Marketplace.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+  }
+  public function marketplaceDataList($type)
+  {
+    if ($type == 'total') {
+      $postList = Marketplace::with(['superstar', 'category'])->get();
+    } elseif ($type == 'sold') {
+      $postList = Marketplace::with(['superstar', 'category'])->where('status', 1)->get();
+    } elseif ($type == 'unsold') {
+      $postList = Marketplace::with(['superstar', 'category'])->where('status', 0)->get();
+    } else {
+      $postList = Marketplace::with(['superstar', 'category'])->where('status', 2)->get();
+    }
+    return view('SuperAdmin.dashboard.Marketplace.postDataList', compact('postList'));
+  }
+  public function marketplaceManagerAdminList()
+  {
+    $users = User::where('user_type', 'manager-admin')->latest()->get();
+    return view('SuperAdmin.dashboard.Marketplace.ManagerAdmin.manager_admin', compact('users'));
+  }
+  public function marketplaceManagerAdminEvents($id)
+  {
+    $posts = Marketplace::where('category_id', $id)->get();
+    return view('SuperAdmin.dashboard.Marketplace.ManagerAdmin.manager_admin_events', compact('posts'));
+  }
+  public function marketplaceAdminList()
+  {
+    $users = User::where('user_type', 'admin')->latest()->get();
+    return view('SuperAdmin.dashboard.Marketplace.Admin.admin', compact('users'));
+  }
+  public function marketplaceAdminEvents($id)
+  {
+    $posts = Marketplace::where('superstar_admin_id', $id)->get();
+    return view('SuperAdmin.dashboard.Marketplace.Admin.admin_events', compact('posts'));
+  }
+  public function marketplaceSuperstarList()
+  {
+    $users = User::where('user_type', 'star')->latest()->get();
+    return view('SuperAdmin.dashboard.Marketplace.Superstar.superstar', compact('users'));
+  }
+  public function marketplaceSuperstarEvents($id)
+  {
+    $posts = Marketplace::where('superstar_id', $id)->get();
+    return view('SuperAdmin.dashboard.Marketplace.Superstar.superstar_events', compact('posts'));
+  }
+  // Souvenir
+
+  public function souvenirEventsDashboard()
+  {
+    $categories = Category::get();
+    $total = SouvenirCreate::count();
+    $published = SouvenirCreate::where('status', 1)->count();
+    $pending = SouvenirCreate::where('status', 0)->count();
+    $rejected = SouvenirCreate::where('status', 2)->count();
+    // Registered User
+
+    $weeklyUser = SouvenirApply::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $monthlyUser = SouvenirApply::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+    $yearlyUser = SouvenirApply::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+    // Income Statement
+
+    $weeklyIncome = SouvenirApply::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_amount');
+    $monthlyIncome = SouvenirApply::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_amount');
+    $yearlyIncome = SouvenirApply::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_amount');
+
+    $labels = SouvenirApply::get(['id', 'created_at', 'total_amount'])->groupBy(function ($date) {
+      return Carbon::parse($date->created_at)->format('M');
+    });
+
+    $months = [];
+    $amountCount = [];
+    foreach ($labels as $month => $values) {
+      $months[] = $month;
+      $amountCount[] = $values->sum('total_amount');
+    }
+
+    return view('SuperAdmin.dashboard.Souvenir.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+  }
+  public function souvenirDataList($type)
+  {
+    if ($type == 'total') {
+      $postList = SouvenirCreate::with(['star', 'category'])->get();
+    } elseif ($type == 'sold') {
+      $postList = SouvenirCreate::with(['star', 'category'])->where('status', 1)->get();
+    } elseif ($type == 'unsold') {
+      $postList = SouvenirCreate::with(['star', 'category'])->where('status', 0)->get();
+    } else {
+      $postList = SouvenirCreate::with(['star', 'category'])->where('status', 2)->get();
+    }
+    return view('SuperAdmin.dashboard.Souvenir.postDataList', compact('postList'));
+  }
+  public function souvenirManagerAdminList()
+  {
+    $users = User::where('user_type', 'manager-admin')->latest()->get();
+    return view('SuperAdmin.dashboard.Souvenir.ManagerAdmin.manager_admin', compact('users'));
+  }
+  public function souvenirManagerAdminEvents($id)
+  {
+    $posts = SouvenirCreate::where('category_id', $id)->get();
+    return view('SuperAdmin.dashboard.Souvenir.ManagerAdmin.manager_admin_events', compact('posts'));
+  }
+  public function souvenirAdminList()
+  {
+    $users = User::where('user_type', 'admin')->latest()->get();
+    return view('SuperAdmin.dashboard.Souvenir.Admin.admin', compact('users'));
+  }
+  public function souvenirAdminEvents($id)
+  {
+    $posts = SouvenirCreate::where('admin_id', $id)->get();
+    return view('SuperAdmin.dashboard.Souvenir.Admin.admin_events', compact('posts'));
+  }
+  public function souvenirSuperstarList()
+  {
+    $users = User::where('user_type', 'star')->latest()->get();
+    return view('SuperAdmin.dashboard.Souvenir.Superstar.superstar', compact('users'));
+  }
+  public function souvenirSuperstarEvents($id)
+  {
+    $posts = SouvenirCreate::where('star_id', $id)->get();
+    return view('SuperAdmin.dashboard.Souvenir.Superstar.superstar_events', compact('posts'));
   }
 }

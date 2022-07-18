@@ -77,6 +77,27 @@
                         <p>Q&A</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.marketplaceEvents.dashboard') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.marketplaceEvents.dashboard') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Marketplace</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.auctionEvents.dashboard') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.auctionEvents.dashboard') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Auction</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.souvenirEvents.dashboard') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.souvenirEvents.dashboard') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Souvenir</p>
+                    </a>
+                </li>
 
             </ul>
         </li>
@@ -303,7 +324,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('superAdmin.marketplace.index') }}" class="nav-link">
+            <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-shopping-cart"></i>
                 <p>
                     Marketplace

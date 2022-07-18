@@ -55,4 +55,20 @@ class Category extends Model
     {
         return $this->hasMany(SimplePost::class, 'category_id');
     }
+    public function fanGroup()
+    {
+        return $this->hasMany(FanGroup::class, 'category_id');
+    }
+    public function marketplace()
+    {
+        return $this->hasMany(Marketplace::class, 'category_id');
+    }
+    public function auction()
+    {
+        return $this->hasMany(Auction::class, 'category_id');
+    }
+    public function souvenir()
+    {
+        return $this->hasMany(SouvenirCreate::class, 'category_id');
+    }
 }

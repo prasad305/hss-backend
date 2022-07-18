@@ -1,4 +1,4 @@
-@extends('Layouts.ManagerAdmin.master')
+@extends('Layouts.SuperAdmin.master')
 
 
 @section('content')
@@ -20,7 +20,7 @@
     </div>
     <!-- /.content-header -->
     <div class="card-footer clearfix">
-        <a href="{{ route('managerAdmin.dashboard') }}" class="btn btn-sm btn-warning float-right">Go Back</a>
+        <a href="{{ route('superAdmin.dashboard') }}" class="btn btn-sm btn-warning float-right">Go Back</a>
     </div>
     <!-- Main content -->
     <div class="content">
@@ -46,10 +46,10 @@
                                     aria-hidden="true"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">{{ $category->name }}</span>
-                                <span class="info-box-number">{{ $category->submarketplace->count() }}</span>
+                                <span class="info-box-number">{{ $category->marketplace->count() }}</span>
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
-                                            href="{{ route('managerAdmin.submarketplace.list', $category->id) }}">See
+                                            href="{{ route('superAdmin.submarketplace.list', $category->id) }}">See
                                             All</a></small>
                                 </span>
                             </div>
@@ -72,7 +72,7 @@
                             <span class="info-box-number">
                                 {{ $total }}
                             </span>
-                            <a href="{{ route('managerAdmin.dashboard.marketplaceData', 'total') }}">
+                            <a href="{{ route('superAdmin.dashboard.marketplaceData', 'total') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
@@ -88,7 +88,7 @@
                         <div class="info-box-content">
                             <span class="info-box-text">Sold</span>
                             <span class="info-box-number">{{ $soldItem }}</span>
-                            <a href="{{ route('managerAdmin.dashboard.marketplaceData', 'sold') }}">
+                            <a href="{{ route('superAdmin.dashboard.marketplaceData', 'sold') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
@@ -108,105 +108,9 @@
                         <div class="info-box-content">
                             <span class="info-box-text">InStock</span>
                             <span class="info-box-number">{{ $total - $soldItem }}</span>
-                            <a href="{{ route('managerAdmin.dashboard.marketplaceData', 'instock') }}">
+                            <a href="{{ route('superAdmin.dashboard.marketplaceData', 'instock') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
-            </div>
-            <div class="row">
-                <div class="col-12 col-sm-6 col-md-4">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-flag"></i></span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">Weekly Users</span>
-                            <span class="info-box-number">
-                                {{ $weeklyUser }}
-                            </span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
-                <div class="col-12 col-sm-6 col-md-4">
-                    <div class="info-box mb-3">
-                        <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-map"></i></span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">Monthly Users</span>
-                            <span class="info-box-number">{{ $monthlyUser }}</span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
-
-                <!-- fix for small devices only -->
-                <div class="clearfix hidden-md-up"></div>
-
-                <div class="col-12 col-sm-6 col-md-4">
-                    <div class="info-box mb-3">
-                        <span class="info-box-icon bg-success elevation-1"><i class="fas fa-map-location"></i></span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">Yearly Users</span>
-                            <span class="info-box-number">{{ $yearlyUser }}</span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
-            </div>
-            <div class="row">
-                <div class="col-12 col-sm-6 col-md-4">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-info elevation-1"><i
-                                class="fa-solid fa-square-poll-vertical"></i></span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">Weekly Income</span>
-                            <span class="info-box-number">
-                                {{ $weeklyIncome }}
-                            </span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
-                <div class="col-12 col-sm-6 col-md-4">
-                    <div class="info-box mb-3">
-                        <span class="info-box-icon bg-danger elevation-1"><i
-                                class="fa-solid fa-square-poll-vertical"></i></span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">Monthly Income</span>
-                            <span class="info-box-number">{{ $monthlyIncome }}</span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
-
-                <!-- fix for small devices only -->
-                <div class="clearfix hidden-md-up"></div>
-
-                <div class="col-12 col-sm-6 col-md-4">
-                    <div class="info-box mb-3">
-                        <span class="info-box-icon bg-success elevation-1"><i class="fas fa-book"></i></span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">Yearly Income</span>
-                            <span class="info-box-number">{{ $yearlyIncome }}</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -242,7 +146,7 @@
                             <span class="info-box-number">
                                 {{ $admin }}
                             </span>
-                            <a href="{{ route('managerAdmin.marketplaceEvents.adminList') }}">
+                            <a href="{{ route('superAdmin.marketplaceEvents.adminList') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
@@ -258,7 +162,7 @@
                         <div class="info-box-content text-center">
                             <span class="info-box-text">Superstar</span>
                             <span class="info-box-number">{{ $superstar }}</span>
-                            <a href="{{ route('managerAdmin.marketplaceEvents.superstarList') }}">
+                            <a href="{{ route('superAdmin.marketplaceEvents.superstarList') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>

@@ -135,6 +135,87 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-12 col-sm-6 col-md-2">
+                    <div class="info-box text-center border border-warning">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-flag"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Weekly Users</span>
+                            <span class="info-box-number">
+                                {{ $weeklyUser }}
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12 col-sm-6 col-md-2">
+                    <div class="info-box mb-3 text-center border border-warning">
+                        <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-map"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Monthly Users</span>
+                            <span class="info-box-number">{{ $monthlyUser }}</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <div class="col-12 col-sm-6 col-md-2">
+                    <div class="info-box mb-3 text-center border border-warning">
+                        <span class="info-box-icon bg-success elevation-1"><i class="fas fa-map-location"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Yearly Users</span>
+                            <span class="info-box-number">{{ $yearlyUser }}</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <div class="col-12 col-sm-6 col-md-2">
+                    <div class="info-box text-center border border-warning">
+                        <span class="info-box-icon bg-info elevation-1"><i
+                                class="fa-solid fa-square-poll-vertical"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Weekly Income</span>
+                            <span class="info-box-number">
+                                {{ $weeklyIncome }}
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12 col-sm-6 col-md-2">
+                    <div class="info-box mb-3 text-center border border-warning">
+                        <span class="info-box-icon bg-danger elevation-1"><i
+                                class="fa-solid fa-square-poll-vertical"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Monthly Income</span>
+                            <span class="info-box-number">{{ $monthlyIncome }}</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-2">
+                    <div class="info-box mb-3 text-center border border-warning">
+                        <span class="info-box-icon bg-success elevation-1"><i class="fas fa-book"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Yearly Income</span>
+                            <span class="info-box-number">{{ $yearlyIncome }}</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
             </div>
         </div>
     </div>
