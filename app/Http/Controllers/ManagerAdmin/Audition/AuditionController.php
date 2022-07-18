@@ -12,6 +12,7 @@ use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionRules;
+use App\Models\Audition\AuditionUploadVideo;
 use App\Models\AuditionRoundInstruction;
 use App\Models\SubCategory;
 use App\Models\User;
@@ -187,6 +188,12 @@ class AuditionController extends Controller
 
         return view('ManagerAdmin.audition.register_users',compact('audition','users'));
 
+    }
+
+    public function getResultByRound($audition_id,$round_info_id){
+        $audition = Audition::find($audition_id);
+        $round_result =  AuditionRoundInfo::where([['id',$round_info_id],['audition_id',$audition_id]])->get();
+        return view('ManagerAdmin.audition.view_round_result',compact('round_result','audition'));
     }
 
     public function getRoundInstruction($audition_id,$round_info_id){

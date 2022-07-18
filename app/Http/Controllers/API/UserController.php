@@ -11,6 +11,7 @@ use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPayment;
 use App\Models\Audition\AuditionRoundInfo;
+use App\Models\Audition\AuditionRoundMarkTracking;
 use App\Models\Audition\AuditionRoundRegistration;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
@@ -1355,11 +1356,14 @@ class UserController extends Controller
 
     public function uploaded_round_videos($audition_id, $round_info_id)
     {
-        $videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
+        $videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id],['user_id',auth()->user()->id]])->get();
+
+        $round_status = AuditionRoundMarkTracking::where([['user_id',auth()->user()->id],['audition_id',$audition_id],['round_info_id',$round_info_id]])->first();
 
         return response()->json([
             'status' => 200,
             'videos' => $videos,
+            'round_status' => $round_status,
             'message' => 'Success!',
         ]);
     }
