@@ -271,4 +271,12 @@ class DashboardController extends Controller
     {
         return view('ManagerAdmin.Audition.AuditionStatic.wildCardUser');
     }
+    public function roundResult()
+    {
+        return view('ManagerAdmin.Audition.AuditionStatic.roundResult');
+    }
+    public function roundCompleteCard()
+    {
+        return view('ManagerAdmin.Audition.AuditionStatic.roundCompleteCard');
+    }
 }

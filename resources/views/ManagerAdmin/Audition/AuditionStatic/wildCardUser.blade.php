@@ -12,48 +12,56 @@
                         <div class="card-body">
 
 
-                            <div class="title">
-                                <div class="text-light p-2 my-3">
-                                    <h4>Round Status</h4>
+                            <section>
+                                <div class="title">
+                                    <div class="text-light p-2 my-3">
+                                        <h4>Round Status</h4>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div>
-                                <h5 class="text-muted">Submitted Account</h5>
-                            </div>
-
-                            <div class="underLineWhite"></div>
-
-
-                            <div class="divClass my-3">
-                                <img class='w-100 img-fluid' src="{{ asset('/assets/manager-admin/auditionBanner.png') }}"
-                                    alt="">
-
-                                <div class='banner__overlay'>
-                                    <h4 class='boldOverlay'>1st round time duration JUNE 25 - july 30</h4>
+                                <div>
+                                    <h5 class="text-muted">Submitted Account</h5>
                                 </div>
-                            </div>
-                            <div class="title">
-                                <div class="text-light p-2 my-3">
-                                    <h4>Round Status</h4>
+
+                                <div class="underLineWhite"></div>
+
+
+                                <div class="divClass my-3">
+                                    <img class='w-100 img-fluid'
+                                        src="{{ asset('/assets/manager-admin/auditionBanner.png') }}" alt="">
+
+                                    <div class='banner__overlay'>
+                                        <h4 class='boldOverlay'>1st round time duration JUNE 25 - july 30</h4>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div>
-                                <h5 class="text-muted">Submitted Wildcard Content</h5>
-                            </div>
-
-                            <div class="underLineWhite"></div>
+                            </section>
 
 
-                            <div class="divClass my-3">
-                                <img class='w-100 img-fluid' src="{{ asset('/assets/manager-admin/auditionBanner.png') }}"
-                                    alt="">
-
-                                <div class='banner__overlay'>
-                                    <h4 class='boldOverlay'>1st round time duration JUNE 25 - july 30</h4>
+                            <section>
+                                <div class="title">
+                                    <div class="text-light p-2 my-3">
+                                        <h4>Round Status</h4>
+                                    </div>
                                 </div>
-                            </div>
+
+                                <div>
+                                    <h5 class="text-muted">Submitted Wildcard Content</h5>
+                                </div>
+
+                                <div class="underLineWhite"></div>
+
+
+                                <div class="divClass my-3">
+                                    <img class='w-100 img-fluid'
+                                        src="{{ asset('/assets/manager-admin/auditionBanner.png') }}" alt="">
+
+                                    <div class='banner__overlay'>
+                                        <h4 class='boldOverlay'>1st round time duration JUNE 25 - july 30</h4>
+                                    </div>
+                                </div>
+                            </section>
+
+
 
                             <!-- Content Header (Page header) -->
                             <section class="content-header">
@@ -149,16 +157,12 @@
                                                             <tr>
                                                                 <td>Gecko</td>
                                                                 <td>Firefox 3.0</td>
-                                                                <td>Win 2k+ / OSX.3+</td>
-                                                                <td>1.9</td>
-                                                                <td>A</td>
+
                                                             </tr>
                                                             <tr>
                                                                 <td>Gecko</td>
                                                                 <td>Camino 1.0</td>
-                                                                <td>OSX.2+</td>
-                                                                <td>1.8</td>
-                                                                <td>A</td>
+
                                                             </tr>
                                                             <tr>
                                                                 <td>Gecko</td>
@@ -287,55 +291,6 @@
 
                                                             </tr>
                                                             <tr>
-                                                                <td>Presto</td>
-                                                                <td>Opera 8.5</td>
-                                                                <td>Win 95+ / OSX.2+</td>
-                                                                <td>-</td>
-                                                                <td>A</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Presto</td>
-                                                                <td>Opera 9.0</td>
-                                                                <td>Win 95+ / OSX.3+</td>
-                                                                <td>-</td>
-                                                                <td>A</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Presto</td>
-                                                                <td>Opera 9.2</td>
-                                                                <td>Win 88+ / OSX.3+</td>
-                                                                <td>-</td>
-                                                                <td>A</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Presto</td>
-                                                                <td>Opera 9.5</td>
-                                                                <td>Win 88+ / OSX.3+</td>
-                                                                <td>-</td>
-                                                                <td>A</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Presto</td>
-                                                                <td>Opera for Wii</td>
-                                                                <td>Wii</td>
-                                                                <td>-</td>
-                                                                <td>A</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Presto</td>
-                                                                <td>Nokia N800</td>
-                                                                <td>N800</td>
-                                                                <td>-</td>
-                                                                <td>A</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Presto</td>
-                                                                <td>Nintendo DS browser</td>
-                                                                <td>Nintendo DS</td>
-                                                                <td>8.5</td>
-                                                                <td>C/A<sup>1</sup></td>
-                                                            </tr>
-                                                            <tr>
                                                                 <td>KHTML</td>
                                                                 <td>Konqureror 3.1</td>
 
@@ -345,65 +300,7 @@
                                                                 <td>Konqureror 3.3</td>
 
                                                             </tr>
-                                                            <tr>
-                                                                <td>KHTML</td>
-                                                                <td>Konqureror 3.5</td>
 
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Tasman</td>
-                                                                <td>Internet Explorer 4.5</td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Tasman</td>
-                                                                <td>Internet Explorer 5.1</td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Tasman</td>
-                                                                <td>Internet Explorer 5.2</td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Misc</td>
-                                                                <td>NetFront 3.1</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Misc</td>
-                                                                <td>NetFront 3.4</td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Misc</td>
-                                                                <td>Dillo 0.8</td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Misc</td>
-                                                                <td>Links</td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Misc</td>
-                                                                <td>Lynx</td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Misc</td>
-                                                                <td>IE Mobile</td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Misc</td>
-                                                                <td>PSP browser</td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Other browsers</td>
-                                                                <td>All others</td>
-
-                                                            </tr>
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
@@ -428,7 +325,16 @@
                             </section>
                             <!-- /.content -->
 
-
+                            <section>
+                                <div class='d-flex justify-content-center bg-success'>
+                                    <i class="fa-solid fa-video videoIcon"></i>
+                                    <p class='showMessage'>Showing All The Video in the <br>
+                                        Video Feed</p>
+                                </div>
+                                <button class="btn btnGradient text-center w-100">
+                                    Publish for web
+                                </button>
+                            </section>
                         </div>
 
 
