@@ -199,10 +199,6 @@ class StarAuthController extends Controller
 
             $filePath = $folder_path . $image_new_name;
 
-            //old image delete
-            if ($request->img['oldImage'] != "") {
-                File::delete($request->img['oldImage']);
-            }
             return response()->json([
                 "message" => "uload successfully",
                 "status" => "200",
