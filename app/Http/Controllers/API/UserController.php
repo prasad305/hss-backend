@@ -70,7 +70,8 @@ class UserController extends Controller
         ]);
     }
 
-    public function postShare($postId){
+    public function postShare($postId)
+    {
         $post = Post::find($postId);
         return response()->json([
             'status' => 200,
@@ -78,7 +79,8 @@ class UserController extends Controller
             'message' => 'Success',
         ]);
     }
-    public function postShareStore($postId){
+    public function postShareStore($postId)
+    {
         $post = Post::find($postId);
         $post->share_count += 1;
         $post->save();
@@ -89,7 +91,8 @@ class UserController extends Controller
         ]);
     }
 
-    public function fanPostShare($postId){
+    public function fanPostShare($postId)
+    {
         $post = FanPost::find($postId);
         return response()->json([
             'status' => 200,
@@ -97,7 +100,8 @@ class UserController extends Controller
             'message' => 'Success',
         ]);
     }
-    public function fanPostShareStore($postId){
+    public function fanPostShareStore($postId)
+    {
         $post = FanPost::find($postId);
         $post->share_count += 1;
         $post->save();
@@ -110,7 +114,7 @@ class UserController extends Controller
 
     public function total_notification_count()
     {
-        $notification = Notification::where([['user_id', auth('sanctum')->user()->id],['view_status',0]])->count();
+        $notification = Notification::where([['user_id', auth('sanctum')->user()->id], ['view_status', 0]])->count();
 
         return response()->json([
             'status' => 200,
@@ -124,7 +128,7 @@ class UserController extends Controller
         $notification->view_status = 1;
         $notification->update();
 
-        $total_notification = Notification::where([['user_id', auth('sanctum')->user()->id],['view_status',0]])->count();
+        $total_notification = Notification::where([['user_id', auth('sanctum')->user()->id], ['view_status', 0]])->count();
 
         return response()->json([
             'status' => 200,
@@ -185,12 +189,12 @@ class UserController extends Controller
 
         $cat_post = Post::select("*")
             ->whereIn('category_id', $selectedCat)
-            ->orderBy('id','DESC')->paginate($limit);
+            ->orderBy('id', 'DESC')->paginate($limit);
 
         if (isset($sub_cat_post)) {
             $sub_cat_post = Post::select("*")
                 ->whereIn('sub_category_id', $selectedSubCat)
-                ->orderBy('id','DESC')->paginate($limit);
+                ->orderBy('id', 'DESC')->paginate($limit);
         } else {
             $sub_cat_post = [];
         }
@@ -198,7 +202,7 @@ class UserController extends Controller
         if (isset($sub_sub_cat_post)) {
             $sub_sub_cat_post = Post::select("*")
                 ->whereIn('user_id', $selectedSubSubCat)
-                ->orderBy('id','DESC')->paginate($limit);
+                ->orderBy('id', 'DESC')->paginate($limit);
         } else {
             $sub_sub_cat_post = [];
         }
@@ -279,7 +283,6 @@ class UserController extends Controller
             $sub_sub_cat_post = Post::select("*")
                 ->whereIn('user_id', $selectedSubSubCat)
                 ->latest()->paginate($limit);
-
         } else {
             $sub_sub_cat_post = [];
         }
@@ -445,22 +448,26 @@ class UserController extends Controller
     public function paginate_getStarPost($id, $type, $limit)
     {
         if ($type == 'livechat') {
-            $post = Post::where([['user_id', $id], ['type', 'livechat']])->latest()->paginate($limit);
+            $post = Post::select("*")->where([['user_id', $id], ['type', 'livechat']])->latest()->paginate($limit);
         }
         if ($type == 'meetup') {
-            $post = Post::where([['user_id', $id], ['type', 'meetup']])->latest()->paginate($limit);
+            $post = Post::select("*")->where([['user_id', $id], ['type', 'meetup']])->latest()->paginate($limit);
         }
         if ($type == 'learning') {
-            $post = Post::where([['user_id', $id], ['type', 'learningSession']])->latest()->paginate($limit);
+            $post = Post::select("*")->where([['user_id', $id], ['type', 'learningSession']])->latest()->paginate($limit);
         }
         if ($type == 'all') {
-            $post = Post::where('user_id', $id)->latest()->paginate($limit);
+            $post = Post::select("*")->where('user_id', $id)->latest()->paginate($limit);
         }
+
+
+        $demo = [];
+        $starpost = $post->concat($demo);
 
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
-            'posts' => $post,
+            'posts' => $starpost,
         ]);
     }
 
@@ -956,7 +963,8 @@ class UserController extends Controller
     }
 
     // Store Fan Post Like count
-    public function submit_react(Request $request, $id){
+    public function submit_react(Request $request, $id)
+    {
         $post = Post::find($id);
         $post->user_like_id = $request->showlike;
         $post->save();
@@ -987,7 +995,7 @@ class UserController extends Controller
      */
     public function checkUserNotifiaction()
     {
-        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->orderBy('updated_at','ASC')->get();
+        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->orderBy('updated_at', 'ASC')->get();
         $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
 
         if ($greeting_reg)
@@ -1347,7 +1355,7 @@ class UserController extends Controller
 
     public function uploaded_round_videos($audition_id, $round_info_id)
     {
-        $videos = AuditionUploadVideo::where([['audition_id', $audition_id],['round_info_id', $round_info_id]])->get();
+        $videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
 
         return response()->json([
             'status' => 200,
@@ -1651,11 +1659,11 @@ class UserController extends Controller
 
     public function current_round_info($event_slug)
     {
-        $audition = Audition::where('slug',$event_slug)->first();
-        $current_round = AuditionParticipant::where([['user_id', Auth::user()->id],['audition_id',$audition->id]])->first();
+        $audition = Audition::where('slug', $event_slug)->first();
+        $current_round = AuditionParticipant::where([['user_id', Auth::user()->id], ['audition_id', $audition->id]])->first();
 
         $round_info = AuditionRoundInfo::find($current_round->round_info_id);
-        $round_instruction = AuditionRoundInstruction::where('round_info_id',$round_info->id)->first();
+        $round_instruction = AuditionRoundInstruction::where('round_info_id', $round_info->id)->first();
 
         return response()->json([
             'status' => 200,
@@ -1667,8 +1675,8 @@ class UserController extends Controller
 
     public function roundInstruction($audition_id, $round_num)
     {
-        $roundInfo = AuditionRoundInfo::where([['audition_id', $audition_id],['round_num',$round_num]])->first();
-        $roundInstruction = AuditionRoundInstruction::where('round_info_id',$roundInfo->id)->first();
+        $roundInfo = AuditionRoundInfo::where([['audition_id', $audition_id], ['round_num', $round_num]])->first();
+        $roundInstruction = AuditionRoundInstruction::where('round_info_id', $roundInfo->id)->first();
 
         $is_video_uploaded = false;
         // if ($roundInfo->uploadedVideos->where('round_id', $roundInfo->audition_round_rules_id)->where('user_id', auth()->user()->id)->count() > 0) {

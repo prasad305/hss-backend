@@ -163,7 +163,7 @@ class UserMobileAppController extends Controller
             $eventRegistration->amount = $event->fee;
             $activity->type = 'audition';
 
-            $first_round_info = AuditionRoundInfo::where([['audition_id',$eventId]])->first();
+            $first_round_info = AuditionRoundInfo::where([['audition_id', $eventId]])->first();
 
             // $round = new AuditionRoundRegistration();
             // $round->user_id = $user->id;
@@ -327,6 +327,8 @@ class UserMobileAppController extends Controller
             ]);
         }
     }
+
+
 
     /**
      * all upcomming events get
