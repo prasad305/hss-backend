@@ -39,4 +39,8 @@ class Greeting extends Model
     {
         return $this->belongsTo(User::class, 'admin_id');
     }
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
 }

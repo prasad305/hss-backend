@@ -16,6 +16,7 @@ class CreateLearningSessionsTable extends Migration
         Schema::create('learning_sessions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('sub_category_id')->nullable();
             $table->unsignedBigInteger('created_by_id')->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
@@ -31,16 +32,16 @@ class CreateLearningSessionsTable extends Migration
             $table->timestamp('event_date')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
-            $table->double('fee',8,2)->nullable();
+            $table->double('fee', 8, 2)->nullable();
             $table->string('room_id')->nullable();
             $table->integer('assignment')->default(0);
             $table->timestamp('assignment_reg_end_date')->nullable();
             $table->timestamp('assignment_reg_start_date')->nullable();
-            $table->double('assignment_fee',8,2)->nullable();
+            $table->double('assignment_fee', 8, 2)->nullable();
             $table->integer('assignment_video_slot_number')->nullable();
             $table->longText('assignment_instruction')->nullable();
             $table->integer('status')->default(0)->comment('0 = pending, 1 = star_approval, 2 = posted by Manager Admin, 3 = evaluation, 9 = completed, 10 = removed, 11 = rejeced by Star, 22 = rejected by Manager Admin');
-            $table->double('total_amount',8,2)->nullable();
+            $table->double('total_amount', 8, 2)->nullable();
             $table->timestamps();
         });
     }

@@ -22,7 +22,42 @@
     <div class="card-footer clearfix">
         <a href="{{ route('managerAdmin.dashboard') }}" class="btn btn-sm btn-warning float-right">Go Back</a>
     </div>
+    <div class="content">
 
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-12">
+                    <div class="info-box text-center">
+                        <div class="info-box-content">
+                            <span class="info-box-text text-warning">
+                                {{ auth()->user()->category->name }}</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                @foreach ($categories as $category)
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3 text-center border border-warning">
+                            <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
+                                    aria-hidden="true"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">{{ $category->name }}</span>
+                                <span class="info-box-number">{{ $category->subfangroup->count() }}</span>
+                                <span class="info-box-number">
+                                    <small><a class="text-warning"
+                                            href="{{ route('managerAdmin.subFanGroup.list', $category->id) }}">See
+                                            All</a></small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">

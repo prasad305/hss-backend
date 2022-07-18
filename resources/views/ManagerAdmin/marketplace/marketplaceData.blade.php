@@ -26,6 +26,7 @@
                             <th>Date</th>
                             <th>Status</th>
                             <th>Star</th>
+                            <th>Items</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -38,19 +39,20 @@
                                 <td>{{ $data->category->name }}</td>
                                 <td>{!! date('d-m-y', strtotime($data->created_at)) !!}</td>
                                 <td>
-                                    @if ($data->status === 10)
-                                        <span class="badge badge-success">Completed</span>
+                                    @if ($data->total_items >= 1)
+                                        <span class="badge badge-success">In Stock</span>
                                     @else
-                                        <span class="badge badge-warning">Upcoming</span>
+                                        <span class="badge badge-warning"> Out of Stock</span>
                                     @endif
                                 </td>
                                 <td>
                                     <div class="sparkbar" data-color="#00a65a" data-height="20">
-                                        {{ $data->star ? $data->star->first_name : '' }}
-                                        {{ $data->star ? $data->star->last_name : '' }}</div>
+                                        {{ $data->superstar ? $data->superstar->first_name : '' }}
+                                        {{ $data->superstar ? $data->superstar->last_name : '' }}</div>
                                 </td>
+                                <td>{{ $data->total_items }}</td>
                                 <td>
-                                    <a href="{{ route('managerAdmin.dashboard.liveChatDetails', $data->id) }} "
+                                    <a href="{{ route('managerAdmin.marketplace.details', $data->id) }} "
                                         class="btn btn-primary"><i class="fas fa-eye"></i> View </a>
                                 </td>
                             </tr>
@@ -63,7 +65,7 @@
         </div>
 
         <div class="card-footer clearfix">
-            <a href="{{ route('managerAdmin.dashboard.liveChat') }}" class="btn btn-sm btn-info float-left">Go Back</a>
+            <a href="{{ route('managerAdmin.dashboard.marketplace') }}" class="btn btn-sm btn-info float-left">Go Back</a>
             <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">View All</a>
         </div>
 

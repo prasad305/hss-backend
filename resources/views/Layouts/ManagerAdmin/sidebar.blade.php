@@ -25,8 +25,7 @@
 
         <li class="nav-item">
             <a href="{{ route('managerAdmin.admin.index') }}" class="nav-link">
-                <i
-                    class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-users">
+                <i class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fas fa-users">
                 </i>
                 {{-- <i class="fa-solid fa-list-check"></i> --}}
                 <p>
@@ -81,13 +80,13 @@
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-chart-pie"></i>
-                <p>Post
+                <p>Simple Post
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.simplePost') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
@@ -184,7 +183,7 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.greeting.dashboard') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.greeting') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
@@ -203,124 +202,6 @@
                 </li>
             </ul>
         </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-chart-pie"></i>
-                <p>Auction
-                    <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.auctionProduct.published') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Published</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.auctionProduct.pending') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Pending</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.auctionProduct.all') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>All</p>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-chart-pie"></i>
-                <p>Marketplace
-                    <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.marketplace.published') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Published</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.marketplace.pending') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Pending</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.marketplace.all') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>All</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.marketplace.allOrderList') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Order List</p>
-                    </a>
-                </li>
-
-                {{-- </li>
-          <li class="nav-item">
-            <a href="" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Order</p>
-            </a>
-          </li> --}}
-            </ul>
-        </li>
-
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-chart-pie"></i>
-                <p>Souvenir
-                    <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.souvenir.published') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Published</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.souvenir.pending') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Pending</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.souvenir.all') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>All</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.souvenir.showApply') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Register List</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.souvenir.showApplyDelete') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Delete List</p>
-                    </a>
-                </li>
-            </ul>
-        </li>
 
 
         <li class="nav-item">
@@ -334,60 +215,85 @@
             <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>
-                            Marketplace
+                        <i class="nav-icon fas fa-chart-pie"></i>
+                        <p>Marketplace
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-dot-circle nav-icon"></i>
-                                <p>Level 3</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-dot-circle nav-icon"></i>
-                                <p>Level 3</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-dot-circle nav-icon"></i>
-                                <p>Level 3</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>
-                            Auction
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-dot-circle nav-icon"></i>
+                            <a href="{{ route('managerAdmin.dashboard.marketplace') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-dot-circle nav-icon"></i>
-                                <p>Level 3</p>
+                            <a href="{{ route('managerAdmin.marketplace.published') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Published</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-dot-circle nav-icon"></i>
-                                <p>Level 3</p>
+                            <a href="{{ route('managerAdmin.marketplace.pending') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Pending</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('managerAdmin.marketplace.all') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>All</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('managerAdmin.marketplace.allOrderList') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Order List</p>
+                            </a>
+                        </li>
+
+                        {{-- </li>
+                  <li class="nav-item">
+                    <a href="" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Order</p>
+                    </a>
+                  </li> --}}
+                    </ul>
+                </li>
+
+            </ul>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-chart-pie"></i>
+                        <p>Auction
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('managerAdmin.dashboard.auction') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('managerAdmin.auctionProduct.published') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Published</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('managerAdmin.auctionProduct.pending') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Pending</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('managerAdmin.auctionProduct.all') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>All</p>
                             </a>
                         </li>
                     </ul>
@@ -396,33 +302,51 @@
             <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>
-                            Souvenir
+                        <i class="nav-icon fas fa-chart-pie"></i>
+                        <p>Souvenir
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-dot-circle nav-icon"></i>
-                                <p>Level 3</p>
+                            <a href="{{ route('managerAdmin.dashboard.souvenir') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Dashboard</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-dot-circle nav-icon"></i>
-                                <p>Level 3</p>
+                            <a href="{{ route('managerAdmin.souvenir.published') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Published</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-dot-circle nav-icon"></i>
-                                <p>Level 3</p>
+                            <a href="{{ route('managerAdmin.souvenir.pending') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Pending</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('managerAdmin.souvenir.all') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>All</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('managerAdmin.souvenir.showApply') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Register List</p>
+                            </a>
+                        </li>
+                        {{-- <li class="nav-item">
+                            <a href="{{ route('managerAdmin.souvenir.showApplyDelete') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Delete List</p>
+                            </a>
+                        </li> --}}
                     </ul>
                 </li>
+
             </ul>
         </li>
 
@@ -621,7 +545,7 @@
                     </a>
                 </li>
 
-               
+
 
                 <li class="nav-item">
                     <a href="{{ route('managerAdmin.audition.auditionAdmin.index') }}"
@@ -654,7 +578,7 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.qna') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
@@ -679,7 +603,22 @@
                 </li>
             </ul>
         </li>
-
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>Accounts
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.accounts.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
 
 

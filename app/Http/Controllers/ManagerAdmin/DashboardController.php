@@ -8,24 +8,34 @@ use App\Models\Auction;
 use App\Models\Audition\AssignJudge;
 use App\Models\Audition\Audition;
 use App\Models\AuditionEventRegistration;
+use App\Models\Bidding;
 use App\Models\Category;
 use App\Models\Fan_Group_Join;
 use App\Models\FanGroup;
 use App\Models\FanPost;
+use App\Models\GeneralPostPayment;
 use App\Models\Greeting;
+use App\Models\GreetingsRegistration;
 use App\Models\JuryBoard;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChat;
 use App\Models\LiveChatRegistration;
 use App\Models\Marketplace;
+use App\Models\MarketplaceOrder;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
+use App\Models\QnA;
+use App\Models\QnaRegistration;
+use App\Models\SimplePost;
+use App\Models\SouvenirApply;
+use App\Models\SouvenirCreate;
+use App\Models\SubCategory;
 use App\Models\User;
 use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 
 class DashboardController extends Controller
@@ -41,6 +51,11 @@ class DashboardController extends Controller
         return view('ManagerAdmin.dashboard', compact(['totalUser', 'totalAdmin', 'totalStar', 'totalAuctionProduct', 'totalMarketPlaceProduct']));
     }
 
+    public function category()
+    {
+        $categories = Category::all();
+        return view('ManagerAdmin.dashboard', compact('categories'));
+    }
     public function profile()
     {
         $user = Auth::user();
@@ -48,11 +63,19 @@ class DashboardController extends Controller
     }
 
     public function learningSessions()
+
     {
+
+        $categories = SubCategory::with(['subLearningSession'])->where('category_id', auth()->user()->category_id)->get();
+
+
         // Total
         $total = LearningSession::where('category_id', auth()->user()->category_id)->count();
         $upcoming = LearningSession::where('status', 0)->where('category_id', auth()->user()->category_id)->count();
         $complete = LearningSession::where('status', 10)->where('category_id', auth()->user()->category_id)->count();
+        $admin = LearningSession::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
+        $superstar = LearningSession::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
+
 
         // Registered User
 
@@ -66,14 +89,23 @@ class DashboardController extends Controller
         $monthlyIncome = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
         $yearlyIncome = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
-        $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-        $data = [];
-        foreach ($labels as $key => $value) {
-            $data[] = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+
+        $labels = LearningSessionRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('M');
+        });
+
+        $months = [];
+        $amountCount = [];
+        foreach ($labels as $month => $values) {
+            $months[] = $month;
+            $amountCount[] = $values->sum('amount');
         }
 
+        // dd($monthCount);
 
-        return view('ManagerAdmin.LearningSession.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome']))->with('labels', json_encode($labels, JSON_NUMERIC_CHECK))->with('data', json_encode($data, JSON_NUMERIC_CHECK));
+
+
+        return view('ManagerAdmin.LearningSession.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
     }
     public function learninSessionData($type)
     {
@@ -96,12 +128,43 @@ class DashboardController extends Controller
 
         return view('ManagerAdmin.LearningSession.sessionDetails', compact(['data', 'totalParticipant', 'totalFee']));
     }
+    public function sublearningSessionList($subcategoryId)
+    {
+        $postList = LearningSession::where('sub_category_id', $subcategoryId)->latest()->get();
+        return view('ManagerAdmin.LearningSession.postList', compact('postList'));
+    }
+
+    public function learningSessionAdminList()
+    {
+        $admins = LearningSession::with('starAdmin')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('admin_id')->get(['admin_id']);
+        return view('ManagerAdmin.LearningSession.Admin.admin', compact('admins'));
+    }
+    public function learningSessionAdminEvents($adminId)
+    {
+        $learningSession = LearningSession::where('admin_id', $adminId)->latest()->get();
+        return view('ManagerAdmin.LearningSession.Admin.admin_events', compact('learningSession'));
+    }
+    public function learningSessionSuperstarList()
+    {
+        $superstars = LearningSession::with('starSession')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('star_id')->get(['star_id']);
+        return view('ManagerAdmin.LearningSession.Superstar.superstar', compact('superstars'));
+    }
+    public function learningSessionSuperstarEvents($starId)
+    {
+        $learningSession = LearningSession::where('star_id', $starId)->latest()->get();
+        return view('ManagerAdmin.LearningSession.Superstar.superstar_events', compact('learningSession'));
+    }
     public function meetupEvents()
     {
+        $categories = SubCategory::with(['submeetup'])->where('category_id', auth()->user()->category_id)->get();
+
         // Total
         $total = MeetupEvent::where('category_id', auth()->user()->category_id)->count();
         $upcoming = MeetupEvent::where('status', 0)->where('category_id', auth()->user()->category_id)->count();
         $complete = MeetupEvent::where('status', 10)->where('category_id', auth()->user()->category_id)->count();
+        $admin = MeetupEvent::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
+        $superstar = MeetupEvent::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
+
 
         // Registered User
 
@@ -114,9 +177,24 @@ class DashboardController extends Controller
         $weeklyIncome = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
         $monthlyIncome = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
         $yearlyIncome = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
-        return view('ManagerAdmin.MeetupEvents.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome']));
+
+        $labels = MeetupEventRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('M');
+        });
+
+        $months = [];
+        $amountCount = [];
+        foreach ($labels as $month => $values) {
+            $months[] = $month;
+            $amountCount[] = $values->sum('amount');
+        }
+
+
+        return view('ManagerAdmin.MeetupEvents.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
     }
+
     public function meetupEventsData($type)
+
     {
         if ($type == 'total') {
             $portalData = MeetupEvent::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
@@ -135,12 +213,125 @@ class DashboardController extends Controller
 
         return view('ManagerAdmin.MeetupEvents.meetupEventsDetails', compact(['data', 'totalParticipant', 'totalFee']));
     }
+    public function submeetupList($subcategoryId)
+    {
+        $postList = MeetupEvent::where('sub_category_id', $subcategoryId)->latest()->get();
+        return view('ManagerAdmin.MeetupEvents.postList', compact('postList'));
+    }
+
+    public function meetupAdminList()
+    {
+        $admins = MeetupEvent::with('admin')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('admin_id')->get(['admin_id']);
+        return view('ManagerAdmin.MeetupEvents.Admin.admin', compact('admins'));
+    }
+    public function meetupAdminEvents($adminId)
+    {
+        $meetup = MeetupEvent::where('admin_id', $adminId)->latest()->get();
+        return view('ManagerAdmin.MeetupEvents.Admin.admin_events', compact('meetup'));
+    }
+    public function meetupSuperstarList()
+    {
+        $superstars = MeetupEvent::with('star')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('star_id')->get(['star_id']);
+        return view('ManagerAdmin.MeetupEvents.Superstar.superstar', compact('superstars'));
+    }
+    public function meetupSuperstarEvents($starId)
+    {
+        $meetup = MeetupEvent::where('star_id', $starId)->latest()->get();
+        return view('ManagerAdmin.MeetupEvents.Superstar.superstar_events', compact('meetup'));
+    }
+
+    public function simplePost()
+
+    {
+
+        $categories = SubCategory::with(['subSimplePosts'])->where('category_id', auth()->user()->category_id)->get();
+
+
+        // Total
+        $total = SimplePost::where('category_id', auth()->user()->category_id)->count();
+        $upcoming = SimplePost::where('status', 0)->where('category_id', auth()->user()->category_id)->count();
+        $complete = SimplePost::where('status', 1)->where('category_id', auth()->user()->category_id)->count();
+        $admin = simplePost::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
+        $superstar = simplePost::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
+
+        // Registered User
+        $weeklyUser = GeneralPostPayment::where('status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+        // Income Statement
+        $weeklyIncome = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $monthlyIncome = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $yearlyIncome = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+        $labels = GeneralPostPayment::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('M');
+        });
+
+        $months = [];
+        $amountCount = [];
+        foreach ($labels as $month => $values) {
+            $months[] = $month;
+            $amountCount[] = $values->sum('amount');
+        }
+
+        return view('ManagerAdmin.SimplePost.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    }
+    public function simplePostData($type)
+    {
+        if ($type == 'total') {
+            $portalData = SimplePost::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'upcoming') {
+            $portalData = SimplePost::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = SimplePost::with(['star', 'category'])->where('status', 1)->where('category_id', auth()->user()->category_id)->get();
+        }
+        return view('ManagerAdmin.SimplePost.simplePostData', compact('portalData'));
+    }
+    public function simplePostDetails($id)
+    {
+        $totalParticipant = GeneralPostPayment::where('post_id', $id)->where('status', 1)->count();
+        $totalFee = GeneralPostPayment::where('post_id', $id)->where('status', 1)->sum('amount');
+        $data = SimplePost::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->find($id);
+
+        return view('ManagerAdmin.SimplePost.simplePostDetails', compact(['data', 'totalParticipant', 'totalFee']));
+    }
+    public function subsimplepostList($subcategoryId)
+    {
+        $postList = SimplePost::where('subcategory_id', $subcategoryId)->latest()->get();
+        return view('ManagerAdmin.SimplePost.postList', compact('postList'));
+    }
+
+    public function simplePostAdminList()
+    {
+        $admins = SimplePost::with('starAdmin')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('admin_id')->get(['admin_id']);
+        return view('ManagerAdmin.SimplePost.Admin.admin', compact('admins'));
+    }
+    public function simplePostAdminEvents($adminId)
+    {
+        $simplePost = SimplePost::where('admin_id', $adminId)->latest()->get();
+        return view('ManagerAdmin.SimplePost.Admin.admin_events', compact('simplePost'));
+    }
+    public function simplePostSuperstarList()
+    {
+        $superstars = SimplePost::with('starPosts')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('star_id')->get(['star_id']);
+        return view('ManagerAdmin.SimplePost.Superstar.superstar', compact('superstars'));
+    }
+    public function simplePostSuperstarEvents($starId)
+    {
+        $simplePost = SimplePost::where('star_id', $starId)->latest()->get();
+        return view('ManagerAdmin.SimplePost.Superstar.superstar_events', compact('simplePost'));
+    }
     public function liveChats()
     {
+        $categories = SubCategory::with(['subliveChat'])->where('category_id', auth()->user()->category_id)->get();
         // Total
         $total = LiveChat::where('category_id', auth()->user()->category_id)->count();
         $upcoming = LiveChat::where('status', 0)->where('category_id', auth()->user()->category_id)->count();
         $complete = LiveChat::where('status', 10)->where('category_id', auth()->user()->category_id)->count();
+        $admin = LiveChat::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
+        $superstar = LiveChat::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
+
 
         // Registered User
 
@@ -153,7 +344,19 @@ class DashboardController extends Controller
         $weeklyIncome = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
         $monthlyIncome = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
         $yearlyIncome = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
-        return view('ManagerAdmin.LiveChat.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome']));
+
+        $labels = LiveChatRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('M');
+        });
+
+        $months = [];
+        $amountCount = [];
+        foreach ($labels as $month => $values) {
+            $months[] = $month;
+            $amountCount[] = $values->sum('amount');
+        }
+
+        return view('ManagerAdmin.LiveChat.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));;
     }
     public function liveChatsData($type)
     {
@@ -174,6 +377,34 @@ class DashboardController extends Controller
 
         return view('ManagerAdmin.LiveChat.liveChatsDetails', compact(['totalParticipant', 'totalFee', 'data']));
     }
+    public function subliveChatList($subcategoryId)
+    {
+        $postList = LiveChat::where('sub_category_id', $subcategoryId)->latest()->get();
+        return view('ManagerAdmin.LiveChat.postList', compact('postList'));
+    }
+
+    public function liveChatAdminList()
+    {
+        $admins = LiveChat::with('admin')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('admin_id')->get(['admin_id']);
+        return view('ManagerAdmin.LiveChat.Admin.admin', compact('admins'));
+    }
+    public function liveChatAdminEvents($adminId)
+    {
+        $liveChat = LiveChat::where('admin_id', $adminId)->latest()->get();
+        return view('ManagerAdmin.LiveChat.Admin.admin_events', compact('liveChat'));
+    }
+    public function liveChatSuperstarList()
+    {
+        $superstars = LiveChat::with('star')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('star_id')->get(['star_id']);
+        return view('ManagerAdmin.LiveChat.Superstar.superstar', compact('superstars'));
+    }
+    public function liveChatSuperstarEvents($starId)
+    {
+        $liveChat = LiveChat::where('star_id', $starId)->latest()->get();
+        return view('ManagerAdmin.LiveChat.Superstar.superstar_events', compact('liveChat'));
+    }
+
+
     public function auditions()
     {
         // Total
@@ -224,6 +455,12 @@ class DashboardController extends Controller
     }
     public function fanGroups()
     {
+
+        $categories = SubCategory::with(['subfangroup'])->where('category_id', auth()->user()->category_id)->get();
+        // $admin = FanGroup::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
+        // $superstar = FanGroup::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
+
+
         $total = FanGroup::where('category_id', auth()->user()->category_id)->count();
         $totalFanPost = FanPost::count();
         $totalUser = Fan_Group_Join::count();
@@ -232,7 +469,18 @@ class DashboardController extends Controller
         $monthlyUser = Fan_Group_Join::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
         $yearlyUser = Fan_Group_Join::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
-        return view('ManagerAdmin.fangroup.dashboard', compact(['total', 'totalFanPost', 'totalUser', 'weeklyUser', 'monthlyUser', 'yearlyUser']));
+        // $labels = FanGroup::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+        //     return Carbon::parse($date->created_at)->format('M');
+        // });
+
+        // $months = [];
+        // $amountCount = [];
+        // foreach ($labels as $month => $values) {
+        //     $months[] = $month;
+        //     $amountCount[] = $values->sum('amount');
+        // }
+
+        return view('ManagerAdmin.fangroup.dashboard', compact(['total', 'totalFanPost', 'totalUser', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'categories']));
     }
     public function fanGroupsData()
     {
@@ -254,6 +502,32 @@ class DashboardController extends Controller
         $data = FanGroup::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->find($id);
         return view('ManagerAdmin.fangroup.fanGroupDetails', compact('data'));
     }
+    public function subFanGroupList($subcategoryId)
+    {
+        $postList = FanGroup::where('sub_category_id', $subcategoryId)->latest()->get();
+        return view('ManagerAdmin.fangroup.postList', compact('postList'));
+    }
+
+    public function fanGroupAdminList()
+    {
+        $admins = FanGroup::with('admin')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('admin_id')->get(['admin_id']);
+        return view('ManagerAdmin.fangroup.Admin.admin', compact('admins'));
+    }
+    public function fanGroupAdminEvents($adminId)
+    {
+        $fanGroup = FanGroup::where('admin_id', $adminId)->latest()->get();
+        return view('ManagerAdmin.fangroup.Admin.admin_events', compact('fanGroup'));
+    }
+    public function fanGroupSuperstarList()
+    {
+        $superstars = FanGroup::with('star')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('star_id')->get(['star_id']);
+        return view('ManagerAdmin.fangroup.Superstar.superstar', compact('superstars'));
+    }
+    public function fanGroupSuperstarEvents($starId)
+    {
+        $fanGroup = FanGroup::where('star_id', $starId)->latest()->get();
+        return view('ManagerAdmin.fangroup.Superstar.superstar_events', compact('fanGroup'));
+    }
 
     public function auditionsJudgeData()
     {
@@ -266,5 +540,406 @@ class DashboardController extends Controller
     {
         $juryList = AssignJury::with(['user', 'auditions'])->where('category_id', auth()->user()->category_id)->get();
         return view('ManagerAdmin.Audition.auditionsJuries', compact('juryList'));
+    }
+
+    public function qna()
+    {
+        $categories = SubCategory::with(['subqna'])->where('category_id', auth()->user()->category_id)->get();
+        // Total
+        $total = Qna::where('category_id', auth()->user()->category_id)->count();
+        $upcoming = Qna::where('status', 0)->where('category_id', auth()->user()->category_id)->count();
+        $complete = Qna::where('status', 10)->where('category_id', auth()->user()->category_id)->count();
+        $admin = Qna::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
+        $superstar = Qna::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
+
+
+        // Registered User
+
+        $weeklyUser = QnaRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = QnaRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = QnaRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+        // Income Statement
+
+        $weeklyIncome = QnaRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $monthlyIncome = QnaRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $yearlyIncome = QnaRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+        $labels = QnaRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('M');
+        });
+
+        $months = [];
+        $amountCount = [];
+        foreach ($labels as $month => $values) {
+            $months[] = $month;
+            $amountCount[] = $values->sum('amount');
+        }
+
+        return view('ManagerAdmin.QnA.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    }
+    public function qnaData($type)
+    {
+        if ($type == 'total') {
+            $portalData = QnA::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'upcoming') {
+            $portalData = Qna::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = Qna::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
+        }
+        return view('ManagerAdmin.QnA.qnaData', compact('portalData'));
+    }
+    public function qnaDetails($id)
+    {
+        $totalParticipant = QnaRegistration::where('qna_id', $id)->where('payment_status', 1)->count();
+        $totalFee = QnaRegistration::where('qna_id', $id)->where('payment_status', 1)->sum('amount');
+        $data = Qna::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->find($id);
+
+        return view('ManagerAdmin.QnA.qnaDetails', compact(['totalParticipant', 'totalFee', 'data']));
+    }
+    public function subqnaList($subcategoryId)
+    {
+        $postList = Qna::where('sub_category_id', $subcategoryId)->latest()->get();
+        return view('ManagerAdmin.QnA.postList', compact('postList'));
+    }
+
+    public function qnaAdminList()
+    {
+        $admins = Qna::with('admin')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('admin_id')->get(['admin_id']);
+        return view('ManagerAdmin.QnA.Admin.admin', compact('admins'));
+    }
+    public function qnaAdminEvents($adminId)
+    {
+        $qna = Qna::where('admin_id', $adminId)->latest()->get();
+        return view('ManagerAdmin.QnA.Admin.admin_events', compact('qna'));
+    }
+    public function qnaSuperstarList()
+    {
+        $superstars = Qna::with('star')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('star_id')->get(['star_id']);
+        return view('ManagerAdmin.QnA.Superstar.superstar', compact('superstars'));
+    }
+    public function qnaSuperstarEvents($starId)
+    {
+        $qna = Qna::where('star_id', $starId)->latest()->get();
+        return view('ManagerAdmin.QnA.Superstar.superstar_events', compact('qna'));
+    }
+
+    // Greeting
+
+    public function greeting()
+    {
+        $categories = SubCategory::with(['subgreeting'])->where('category_id', auth()->user()->category_id)->get();
+        // Total
+        $total = Greeting::where('category_id', auth()->user()->category_id)->count();
+        $upcoming = Greeting::where('status', 1)->where('category_id', auth()->user()->category_id)->count();
+        $complete = Greeting::where('status', 2)->where('category_id', auth()->user()->category_id)->count();
+        $admin = Greeting::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
+        $superstar = Greeting::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
+
+
+        // Registered User
+
+        $weeklyUser = GreetingsRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+        // Income Statement
+
+        $weeklyIncome = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $monthlyIncome = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $yearlyIncome = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+        $labels = GreetingsRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('M');
+        });
+
+        $months = [];
+        $amountCount = [];
+        foreach ($labels as $month => $values) {
+            $months[] = $month;
+            $amountCount[] = $values->sum('amount');
+        }
+
+        return view('ManagerAdmin.greeting.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    }
+    public function greetingData($type)
+    {
+        if ($type == 'total') {
+            $portalData = Greeting::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'upcoming') {
+            $portalData = Greeting::with(['star', 'category'])->where('status', 1)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = Greeting::with(['star', 'category'])->where('status', 2)->where('category_id', auth()->user()->category_id)->get();
+        }
+        return view('ManagerAdmin.greeting.greetingData', compact('portalData'));
+    }
+    public function greetingDetails($id)
+    {
+        $totalParticipant = GreetingsRegistration::where('greeting_id', $id)->where('payment_status', 1)->count();
+        $totalFee = GreetingsRegistration::where('greeting_id', $id)->where('payment_status', 1)->sum('amount');
+        $data = Greeting::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->find($id);
+
+        return view('ManagerAdmin.greeting.show', compact(['totalParticipant', 'totalFee', 'data']));
+    }
+    public function subgreetingList($subcategoryId)
+    {
+        $postList = Greeting::where('sub_category_id', $subcategoryId)->latest()->get();
+        return view('ManagerAdmin.greeting.postList', compact('postList'));
+    }
+
+    public function greetingAdminList()
+    {
+        $admins = Greeting::with('admin')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('admin_id')->get(['admin_id']);
+        return view('ManagerAdmin.greeting.Admin.admin', compact('admins'));
+    }
+    public function greetingAdminEvents($adminId)
+    {
+        $greeting = Greeting::where('admin_id', $adminId)->latest()->get();
+        return view('ManagerAdmin.greeting.Admin.admin_events', compact('greeting'));
+    }
+    public function greetingSuperstarList()
+    {
+        $superstars = Greeting::with('star')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('star_id')->get(['star_id']);
+        return view('ManagerAdmin.greeting.Superstar.superstar', compact('superstars'));
+    }
+    public function greetingSuperstarEvents($starId)
+    {
+        $greeting = Greeting::where('star_id', $starId)->latest()->get();
+        return view('ManagerAdmin.greeting.Superstar.superstar_events', compact('greeting'));
+    }
+
+    // Auction
+
+    public function auction()
+    {
+        $categories = SubCategory::with(['subauction'])->where('category_id', auth()->user()->category_id)->get();
+        // Total
+        $total = Auction::where('category_id', auth()->user()->category_id)->count();
+        $upcoming = Auction::where('status', 1)->where('product_status', 0)->where('category_id', auth()->user()->category_id)->count();
+        $complete = Auction::where('product_status', 1)->where('category_id', auth()->user()->category_id)->count();
+        $admin = Auction::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
+        $superstar = Auction::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
+
+
+        // Registered User
+
+        $weeklyUser = Bidding::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = Bidding::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = Bidding::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+        // Income Statement
+
+        $weeklyIncome = Bidding::where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->distinct()->get('amount')->sum('amount');
+        $monthlyIncome = Bidding::where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->distinct()->get('amount')->sum('amount');
+        $yearlyIncome = Bidding::where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->distinct()->get('amount')->sum('amount');
+
+        $labels = Bidding::where('win_status', 1)->get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('M');
+        });
+
+        $months = [];
+        $amountCount = [];
+        foreach ($labels as $month => $values) {
+            $months[] = $month;
+            $amountCount[] = $values->sum('amount');
+        }
+
+        return view('ManagerAdmin.Auction.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    }
+    public function auctionData($type)
+    {
+        if ($type == 'total') {
+            $portalData = Auction::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'upcoming') {
+            $portalData = Auction::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = Auction::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
+        }
+        return view('ManagerAdmin.Auction.auctionData', compact('portalData'));
+    }
+
+    public function subauctionList($subcategoryId)
+    {
+        $postList = Auction::where('subcategory_id', $subcategoryId)->latest()->get();
+        return view('ManagerAdmin.Auction.postList', compact('postList'));
+    }
+
+    public function auctionAdminList()
+    {
+        $admins = Auction::with('admin')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('admin_id')->get(['admin_id']);
+        return view('ManagerAdmin.Auction.Admin.admin', compact('admins'));
+    }
+    public function auctionAdminEvents($adminId)
+    {
+        $auction = Auction::where('admin_id', $adminId)->latest()->get();
+        return view('ManagerAdmin.Auction.Admin.admin_events', compact('auction'));
+    }
+    public function auctionSuperstarList()
+    {
+        $superstars = Auction::with('star')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('star_id')->get(['star_id']);
+        return view('ManagerAdmin.Auction.Superstar.superstar', compact('superstars'));
+    }
+    public function auctionSuperstarEvents($starId)
+    {
+        $auction = Auction::where('star_id', $starId)->latest()->get();
+        return view('ManagerAdmin.Auction.Superstar.superstar_events', compact('auction'));
+    }
+
+    // Marketplace
+
+    public function marketplace()
+    {
+        $categories = SubCategory::with(['submarketplace'])->where('category_id', auth()->user()->category_id)->get();
+
+        // Total
+        $total = Marketplace::where('category_id', auth()->user()->category_id)->sum('total_items');
+        $soldItem = Marketplace::where('status', 1)->where('category_id', auth()->user()->category_id)->sum('total_selling');
+
+        $admin = Marketplace::distinct('superstar_admin_id')->where('category_id', auth()->user()->category_id)->count();
+        $superstar = Marketplace::distinct('superstar_id')->where('category_id', auth()->user()->category_id)->count();
+
+
+        // Registered User
+
+        $weeklyUser = MarketplaceOrder::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = MarketplaceOrder::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = MarketplaceOrder::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+        // Income Statement
+
+        $weeklyIncome = MarketplaceOrder::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_price');
+        $monthlyIncome = MarketplaceOrder::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_price');
+        $yearlyIncome = MarketplaceOrder::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_price');
+
+        $labels = MarketplaceOrder::get(['id', 'created_at', 'total_price'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('M');
+        });
+
+        $months = [];
+        $amountCount = [];
+        foreach ($labels as $month => $values) {
+            $months[] = $month;
+            $amountCount[] = $values->sum('total_price');
+        }
+
+        return view('ManagerAdmin.marketplace.dashboard', compact(['total', 'soldItem', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    }
+    public function marketplaceData($type)
+    {
+        if ($type == 'total') {
+            $portalData = Marketplace::with(['superstar', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'instock') {
+            $portalData = Marketplace::with(['superstar', 'category'])->where('total_items', '>', 0)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = Marketplace::with(['superstar', 'category'])->where('total_items', '>', 0)->where('category_id', auth()->user()->category_id)->get();
+        }
+        return view('ManagerAdmin.marketplace.marketplaceData', compact('portalData'));
+    }
+
+    public function submarketplaceList($subcategoryId)
+    {
+        $postList = Marketplace::where('subcategory_id', $subcategoryId)->latest()->get();
+        return view('ManagerAdmin.marketplace.postList', compact('postList'));
+    }
+
+    public function marketplaceAdminList()
+    {
+        $admins = Marketplace::with('starAdmin')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('superstar_admin_id')->get(['superstar_admin_id']);
+        return view('ManagerAdmin.marketplace.Admin.admin', compact('admins'));
+    }
+    public function marketplaceAdminEvents($adminId)
+    {
+        $marketplace = Marketplace::where('superstar_admin_id', $adminId)->latest()->get();
+        return view('ManagerAdmin.marketplace.Admin.admin_events', compact('marketplace'));
+    }
+    public function marketplaceSuperstarList()
+    {
+        $superstars = Marketplace::with('superstar')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('superstar_id')->get(['superstar_id']);
+        return view('ManagerAdmin.marketplace.Superstar.superstar', compact('superstars'));
+    }
+    public function marketplaceSuperstarEvents($starId)
+    {
+        $marketplace = Marketplace::where('superstar_id', $starId)->latest()->get();
+        return view('ManagerAdmin.marketplace.Superstar.superstar_events', compact('marketplace'));
+    }
+
+
+    // Souvenir 
+
+    public function souvenir()
+    {
+        $categories = SubCategory::with(['subsouvenir'])->where('category_id', auth()->user()->category_id)->get();
+
+        // Total
+        $total = SouvenirCreate::where('category_id', auth()->user()->category_id)->count();
+        $available = SouvenirCreate::where('status', 1)->where('category_id', auth()->user()->category_id)->count();
+        $notAvailable = SouvenirCreate::where('status', 0)->where('category_id', auth()->user()->category_id)->count();
+
+        $admin = SouvenirCreate::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
+        $superstar = SouvenirCreate::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
+
+
+        // Registered User
+
+        $weeklyUser = SouvenirApply::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = SouvenirApply::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = SouvenirApply::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+        // Income Statement
+
+        $weeklyIncome = SouvenirApply::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_amount');
+        $monthlyIncome = SouvenirApply::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_amount');
+        $yearlyIncome = SouvenirApply::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_amount');
+
+        $labels = SouvenirApply::get(['id', 'created_at', 'total_amount'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('M');
+        });
+
+        $months = [];
+        $amountCount = [];
+        foreach ($labels as $month => $values) {
+            $months[] = $month;
+            $amountCount[] = $values->sum('total_amount');
+        }
+
+        return view('ManagerAdmin.souvenir.dashboard', compact(['total', 'available', 'notAvailable', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    }
+    public function souvenirData($type)
+    {
+        if ($type == 'total') {
+            $portalData = SouvenirCreate::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'available') {
+            $portalData = SouvenirCreate::with(['star', 'category'])->where('status', 1)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = SouvenirCreate::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        }
+        return view('ManagerAdmin.souvenir.souvenirData', compact('portalData'));
+    }
+
+    public function subsouvenirList($subcategoryId)
+    {
+        $postList = SouvenirCreate::where('sub_category_id', $subcategoryId)->latest()->get();
+        return view('ManagerAdmin.souvenir.postList', compact('postList'));
+    }
+
+    public function souvenirAdminList()
+    {
+        $admins = SouvenirCreate::with('admin')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('admin_id')->get(['admin_id']);
+        return view('ManagerAdmin.souvenir.Admin.admin', compact('admins'));
+    }
+    public function souvenirAdminEvents($adminId)
+    {
+        $souvenir = SouvenirCreate::where('admin_id', $adminId)->latest()->get();
+        return view('ManagerAdmin.souvenir.Admin.admin_events', compact('souvenir'));
+    }
+    public function souvenirSuperstarList()
+    {
+        $superstars = SouvenirCreate::with('star')->where('category_id', auth()->user()->category_id)->distinct()->whereNotNull('star_id')->get(['star_id']);
+        return view('ManagerAdmin.souvenir.Superstar.superstar', compact('superstars'));
+    }
+    public function souvenirSuperstarEvents($starId)
+    {
+        $souvenir = SouvenirCreate::where('star_id', $starId)->latest()->get();
+        return view('ManagerAdmin.souvenir.Superstar.superstar_events', compact('souvenir'));
     }
 }
