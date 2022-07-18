@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Audition\Audition;
 use App\Models\Post;
 use App\Models\SuperStar;
 use App\Models\LearningSession;
@@ -322,6 +323,8 @@ class LearningSessionController extends Controller
         return redirect()->back()->with('success', 'Published');
     }
 
+
+   
 
     // User Part
 

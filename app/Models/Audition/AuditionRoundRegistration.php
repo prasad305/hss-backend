@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class AuditionRoundRegistration extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    protected $with = ['audition','round'];
+
+    public function audition(){
+        return $this->belongsTo(Audition::class,'audition_id');
+    }
+
+    public function round(){
+        return $this->belongsTo(AuditionRoundInfo::class, 'audition_round_info_id');
+    }
 }

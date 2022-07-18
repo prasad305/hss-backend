@@ -16,27 +16,24 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 
+
 class StarAuthController extends Controller
 {
     public function register(Request $request)
     {
 
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             // 'email' => 'required|unique:users,email',
             // 'phone' => 'required|unique:users,phone',
             'terms_and_condition' => 'required|min:4',
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'validation_errors' => $validator->errors(),
             ]);
-        }
-
-        else
-        {
+        } else {
 
             $user = User::find($request->star_id);
 
@@ -57,10 +54,10 @@ class StarAuthController extends Controller
             $user->save();
 
             if ($user) {
-                $star_profile = SuperStar::where('star_id',$user->id)->first();
+                $star_profile = SuperStar::where('star_id', $user->id)->first();
                 if (isset($star_profile) && $star_profile->id) {
                     $star = $star_profile;
-                }else{
+                } else {
                     $star = new SuperStar();
                 }
 
@@ -70,7 +67,7 @@ class StarAuthController extends Controller
                 $star->category_id = auth('sanctum')->user()->category_id;
                 $star->sub_category_id =  auth('sanctum')->user()->sub_category_id;
                 $star->terms_and_condition = $request->input('terms_and_condition');
-                $star->qr_code = rand( 10000000 , 99999999 );
+                $star->qr_code = rand(10000000, 99999999);
 
                 if ($request->hasfile('signature')) {
 
@@ -112,25 +109,38 @@ class StarAuthController extends Controller
             }
 
             return response()->json([
-                'status'=>200,
-                'message'=> 'Star Added Successfully',
+                'status' => 200,
+                'message' => 'Star Added Successfully',
             ]);
         }
     }
 
-    public function star_details($id){
+    public function star_details($id)
+    {
         $star = User::find($id);
-        $star_details = SuperStar::where('star_id',$id)->first();
+        $star_details = SuperStar::where('star_id', $id)->first();
         return response()->json([
-            'status'=>200,
-            'star_details'=> $star_details,
+            'status' => 200,
+            'star_details' => $star_details,
         ]);
+    }
 
+    /**
+     * star instruction
+     */
+    public function starInstrucation()
+    {
+        $star = SuperStar::where('star_id', auth('sanctum')->user()->id)->first();
+
+        return response()->json([
+            'status' => 200,
+            'star_details' => $star,
+        ]);
     }
 
     public function superStar_register(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'email' => 'required|unique:users,email',
             'phone' => 'required|unique:users,phone',
             'password' => 'required|min:4'
@@ -138,15 +148,11 @@ class StarAuthController extends Controller
 
 
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'validation_errors' => $validator->errors(),
             ]);
-        }
-
-        else
-        {
+        } else {
 
             $user = User::find($request->input('id'));
 
@@ -157,18 +163,52 @@ class StarAuthController extends Controller
 
             $user->save();
 
-            $token = $user->createToken($user->email.'_Token')->plainTextToken;
+            $token = $user->createToken($user->email . '_Token')->plainTextToken;
 
             send_sms('Welcome to Hello SuperStars, your otp is : ' . $user->otp, $user->phone);
 
 
             return response()->json([
-                'status'=>200,
-                'id'=>$user->id,
-                'auth_type'=>$user->user_type,
-                'name'=>$user->first_name.' '.$user->last_name,
-                'token'=>$token,
-                'message'=>'Verify Phone Number',
+                'status' => 200,
+                'id' => $user->id,
+                'auth_type' => $user->user_type,
+                'name' => $user->first_name . ' ' . $user->last_name,
+                'token' => $token,
+                'message' => 'Verify Phone Number',
+            ]);
+        }
+    }
+
+    /**
+     * mobile media upload
+     */
+    public function MobileImageUp(Request $request)
+    {
+        try {
+            if ($request->img['data']) {
+
+                $originalExtension = str_ireplace("image/", "", $request->img['type']);
+
+                $folder_path       = 'uploads/images/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->img['data'];
+            }
+
+            Image::make($decodedBase64)->save($folder_path . $image_new_name);
+
+            $filePath = $folder_path . $image_new_name;
+
+            return response()->json([
+                "message" => "uload successfully",
+                "status" => "200",
+                "path" =>   $filePath
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                "message" => "Image field required, invalid image !",
+                "error" => $exception->getMessage(),
+                "path" => "",
             ]);
         }
     }
@@ -176,20 +216,16 @@ class StarAuthController extends Controller
 
     public function admin_add_live_session(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'title' => 'required|unique:live_chats,title',
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'validation_errors' => $validator->errors(),
             ]);
-        }
-
-        else
-        {
-            $superStar = SuperStar::where('star_id',$request->input('star_id'))->first();
+        } else {
+            $superStar = SuperStar::where('star_id', $request->input('star_id'))->first();
 
             $liveChat = new LiveChat();
             $liveChat->title = $request->input('title');
@@ -203,98 +239,80 @@ class StarAuthController extends Controller
             $liveChat->end_time = Carbon::parse($request->input('end_time'));
             $liveChat->fee = $request->input('fee');
 
-            if($request->hasfile('image'))
-            {
+            if ($request->hasfile('image')) {
                 $destination = $liveChat->banner;
-                if(File::exists($destination))
-                {
+                if (File::exists($destination)) {
                     File::delete($destination);
                 }
                 $file = $request->file('image');
                 $extension = $file->getClientOriginalExtension();
-                $filename = 'uploads/images/live_chat/'.time(). '.' . $extension;
+                $filename = 'uploads/images/live_chat/' . time() . '.' . $extension;
 
-                Image::make($file)->resize(400,400)->save($filename, 100);
+                Image::make($file)->resize(400, 400)->save($filename, 100);
                 $liveChat->banner = $filename;
             }
 
             $liveChat->save();
             return response()->json([
-                'status'=>200,
-                'message'=>'Live Session Added',
+                'status' => 200,
+                'message' => 'Live Session Added',
             ]);
         }
     }
 
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'email' => 'required',
             'password' => 'required|min:4'
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'validation_errors' => $validator->errors(),
             ]);
-        }
-        else
-        {
+        } else {
             $user = User::where('email', $request->email)->orWhere('phone', $request->email)->first();
 
-            if (! $user || ! Hash::check($request->password, $user->password)) {
+            if (!$user || !Hash::check($request->password, $user->password)) {
                 return response()->json([
-                    'status'=>401,
-                    'message'=>'Invalid Credantials',
+                    'status' => 401,
+                    'message' => 'Invalid Credantials',
                 ]);
-            }
-            else
-            {
-                if($user->user_type == 'admin' && $user->status == 1)
-                {
-                    $token = $user->createToken($user->email.'_AdminToken', ['server:admin'])->plainTextToken;
+            } else {
+                if ($user->user_type == 'admin' && $user->status == 1) {
+                    $token = $user->createToken($user->email . '_AdminToken', ['server:admin'])->plainTextToken;
                     $role = 'admin';
-                }
-                else if($user->user_type == 'star' && $user->status == 1)
-                {
-                    $token = $user->createToken($user->email.'_StarToken', ['server:star'])->plainTextToken;
+                } else if ($user->user_type == 'star' && $user->status == 1) {
+                    $token = $user->createToken($user->email . '_StarToken', ['server:star'])->plainTextToken;
                     $role = 'star';
-                }
-                else if($user->user_type == 'audition-admin' && $user->status == 1)
-                {
-                    $token = $user->createToken($user->email.'_StarToken', ['server:audition-admin'])->plainTextToken;
+                } else if ($user->user_type == 'audition-admin' && $user->status == 1) {
+                    $token = $user->createToken($user->email . '_StarToken', ['server:audition-admin'])->plainTextToken;
                     $role = 'audition-admin';
-                }
-                else if($user->user_type == 'jury' && $user->status == 1)
-                {
-                    $token = $user->createToken($user->email.'_StarToken', ['server:audition-admin'])->plainTextToken;
+                } else if ($user->user_type == 'jury' && $user->status == 1) {
+                    $token = $user->createToken($user->email . '_StarToken', ['server:audition-admin'])->plainTextToken;
                     $role = 'jury';
-                }
-                else if($user->status != 1)
-                {
+                } else if ($user->status != 1) {
                     return response()->json([
-                        'status'=>401,
-                        'message'=>'You are not approved yet..',
+                        'status' => 401,
+                        'message' => 'You are not approved yet..',
                     ]);
-                }
-                else
-                {
+                } else {
                     return response()->json([
-                        'status'=>401,
-                        'message'=>'Invalid Credantials',
+                        'status' => 401,
+                        'message' => 'Invalid Credantials',
                     ]);
                 }
 
                 send_sms('Welcome to Hello Super Stars, Your otp is : ' . $user->otp, $user->phone);
 
                 return response()->json([
-                    'status'=>200,
-                    'name'=>$user->first_name.' '.$user->last_name,
-                    'token'=>$token,
-                    'role'=>$role,
-                    'phone'=>$user->phone,
-                    'message'=>'Verify Your Phone Number',
+                    'status' => 200,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                    'token' => $token,
+                    'role' => $role,
+                    'phone' => $user->phone,
+                    'message' => 'Verify Your Phone Number',
                 ]);
             }
         }
@@ -304,24 +322,22 @@ class StarAuthController extends Controller
     public function otp_verify(Request $request)
     {
 
-            $user = User::where('email', auth('sanctum')->user()->email)->first();
+        $user = User::where('email', auth('sanctum')->user()->email)->first();
 
-            if ($request->otp == $user->otp) {
+        if ($request->otp == $user->otp) {
 
-                return response()->json([
-                    'status'=>200,
-                    'message'=>'You are logged in successfully!',
-                    'phone'=>$user->phone,
-                    'auth_type'=>$user->user_type,
-                ]);
-            }
-            else
-            {
-                return response()->json([
-                    'status'=>401,
-                    'message'=>'Invalid OTP',
-                ]);
-            }
+            return response()->json([
+                'status' => 200,
+                'message' => 'You are logged in successfully!',
+                'phone' => $user->phone,
+                'auth_type' => $user->user_type,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Invalid OTP',
+            ]);
+        }
     }
 
     public function qr_verify(Request $request)
@@ -333,32 +349,29 @@ class StarAuthController extends Controller
 
         $merged = $superStar->merge($juryBoard);
 
-        $user = $merged->where('qr_code',$request->qr_code)->first();
+        $user = $merged->where('qr_code', $request->qr_code)->first();
 
-        
 
-            if ($user) {
-                if (User::find($user->star_id)->email && User::find($user->star_id)->phone) {
-                    return response()->json([
-                        'status'=>409,
-                        'message'=>'This Star Already Registered!',
-                    ]);
-                }else{
-                    return response()->json([
-                        'status'=>200,
-                        'star_id' => $user->star_id,
-                        'auth_type' => User::find($user->star_id)->user_type,
-                        'message'=>'QR Code Matched!',
-                    ]);
-                }
-               
-            }
-            else
-            {
+
+        if ($user) {
+            if (User::find($user->star_id)->email && User::find($user->star_id)->phone) {
                 return response()->json([
-                    'status'=>401,
-                    'message'=>'Invalid QR Code!',
+                    'status' => 409,
+                    'message' => 'This Star Already Registered!',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 200,
+                    'star_id' => $user->star_id,
+                    'auth_type' => User::find($user->star_id)->user_type,
+                    'message' => 'QR Code Matched!',
                 ]);
             }
+        } else {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Invalid QR Code!',
+            ]);
+        }
     }
 }

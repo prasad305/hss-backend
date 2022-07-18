@@ -8,9 +8,11 @@ use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionAssignJudge;
 use App\Models\Audition\AuditionAssignJury;
 use App\Models\Audition\AuditionInfo;
+use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionRules;
+use App\Models\AuditionRoundInstruction;
 use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -175,5 +177,29 @@ class AuditionController extends Controller
         $subCategories = SubCategory::where([['category_id', auth()->user()->category_id], ['status', 1]])->orderBY('id', 'desc')->get();
 
         return view('ManagerAdmin.auditionAdmin.create', compact('auditionAdmins', 'subCategories'));
+    }
+
+
+    public function registerUser($audition_id){
+        $audition = Audition::find($audition_id);
+
+        $users = AuditionParticipant::where([['audition_id',$audition_id]])->get();
+
+        return view('ManagerAdmin.audition.register_users',compact('audition','users'));
+
+    }
+
+    public function getRoundInstruction($audition_id,$round_info_id){
+        $round_instruction =  AuditionRoundInstruction::where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->first();
+        return view('ManagerAdmin.audition.round_based_instruction',compact('round_instruction'));
+    }
+
+    public function roundInstructionPublished($instruction_id){
+        $info = AuditionRoundInstruction::find($instruction_id);
+        $info->send_to_user = 1;
+        $info->save();
+
+        session()->flash('success', 'Round Instruction Published Successfully!');
+        return redirect()->back();
     }
 }

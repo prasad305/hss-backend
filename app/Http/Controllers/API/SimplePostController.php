@@ -240,6 +240,7 @@ class SimplePostController extends Controller
         ]);
     }
 
+
     public function count()
     {
         $pending = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 0]])->count();

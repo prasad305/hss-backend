@@ -8,6 +8,8 @@ use App\Models\Activity;
 use App\Models\Auction;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\AuditionRoundInfo;
+use App\Models\Audition\AuditionRoundRegistration;
 use App\Models\AuditionEventRegistration;
 use App\Models\Bidding;
 use App\Models\Greeting;
@@ -161,9 +163,18 @@ class UserMobileAppController extends Controller
             $eventRegistration->amount = $event->fee;
             $activity->type = 'audition';
 
+            $first_round_info = AuditionRoundInfo::where([['audition_id', $eventId]])->first();
+
+            // $round = new AuditionRoundRegistration();
+            // $round->user_id = $user->id;
+            // $round->audition_id = $eventId;
+            // $round->audition_round_info_id = $first_round->id;
+            // $round->save();
+
             $participant = new AuditionParticipant();
             $participant->user_id = $user->id;
             $participant->audition_id = $eventId;
+            $participant->round_info_id = $first_round_info->id;
             $eventRegistration->amount = $event->fee;
             $participant->save();
         }
@@ -316,6 +327,8 @@ class UserMobileAppController extends Controller
             ]);
         }
     }
+
+
 
     /**
      * all upcomming events get

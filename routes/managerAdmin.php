@@ -181,6 +181,14 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
         Route::get('instruction/{audition_id}', [AuditionAdminController::class, 'instruction'])->name('instruction');
         Route::get('send-instruction/{audition_id}', [AuditionAdminController::class, 'sendInstructionToParticipant'])->name('sendInstruction');
 
+
+        Route::get('round-instruction/{audition_id}/{round_info_id}', [AuditionController::class, 'getRoundInstruction']);
+
+
+        Route::post('round-instruction/published/{instruction_id}', [AuditionController::class, 'roundInstructionPublished'])->name('roundInstruction.published');
+
+
+
         Route::get('pending', [AuditionAdminController::class, 'pending'])->name('pending');
         Route::get('published', [AuditionAdminController::class, 'published'])->name('published');
         Route::get('all', [AuditionAdminController::class, 'all'])->name('all');
@@ -188,7 +196,9 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
         Route::get('details/{id}', [AuditionAdminController::class, 'details'])->name('details');
         Route::get('edit/{id}', [AuditionAdminController::class, 'auditionEdit'])->name('edit');
         Route::put('update/{id}', [AuditionAdminController::class, 'auditionUpdate'])->name('update');
-        Route::get('set_publish/{id}', [AuditionAdminController::class, 'set_publish'])->name('set_publish');
+        // Route::get('set_publish/{id}', [AuditionAdminController::class, 'set_publish'])->name('set_publish');
+        
+        Route::post('set_publish/{audition_id}', [AuditionAdminController::class, 'manager_audition_set_publish'])->name('set_publish');
 
         //admins
         Route::get('admin-assign', [AuditionAdminController::class, 'adminAssign'])->name('adminAssign');
@@ -196,6 +206,9 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
         Route::get('dashboard', [AuditionAdminController::class, 'auditionDashboard'])->name('auditionDashboard');
         Route::get('juries', [AuditionAdminController::class, 'auditionJuries'])->name('juries');
         Route::get('events', [AuditionAdminController::class, 'auditionEvents'])->name('events');
+        Route::get('promoInstruction/{audition_id}', [AuditionAdminController::class, 'getPromoInstruction'])->name('promoInstruction');
+        Route::get('roundInstruction/{audition_id}', [AuditionAdminController::class, 'getRoundInstruction'])->name('roundInstruction');
+        Route::get('registerUser/{audition_id}', [AuditionController::class, 'registerUser'])->name('registerUser');
 
         // Jury Audition Routes
         Route::get('jury-published/{id}', [AuditionAdminController::class, 'juryPublished'])->name('jury_published');
@@ -206,6 +219,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     // greeting
     Route::group(['prefix' => 'greeting/', 'as' => 'greeting.'], function () {
         Route::get('dashboard', [GreetingController::class, 'dashboard'])->name('dashboard');
+        Route::get('subcategory/{id}', [GreetingController::class, 'subcategory'])->name('subcategory');
         Route::get('request', [GreetingController::class, 'request'])->name('request');
         Route::get('published', [GreetingController::class, 'published'])->name('published');
         Route::get('show/{id}', [GreetingController::class, 'show'])->name('show');
@@ -220,7 +234,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('marketplace/published', [MarketplaceController::class, 'published'])->name('marketplace.published');
     Route::get('marketplace/all', [MarketplaceController::class, 'all'])->name('marketplace.all');
     Route::get('marketplace/order/list', [MarketplaceController::class, 'allOrderList'])->name('marketplace.allOrderList');
-    Route::get('marketplace/order/list/{id}', [MarketplaceController::class, 'allOrderDetails'])->name('marketplace.allOrderDetails');
 
     Route::get('marketplace/details/{id}', [MarketplaceController::class, 'details'])->name('marketplace.details');
     Route::get('marketplace/edit/{id}', [MarketplaceController::class, 'edit'])->name('marketplace.edit');
@@ -237,7 +250,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('souvenir/apply/delete/list', [SouvenirController::class, 'deleteApplySouvenir'])->name('souvenir.showApplyDelete');
     Route::put('souvenir/update/{id}', [SouvenirController::class, 'update'])->name('souvenir.update');
     Route::get('souvenir/set_publish/{id}', [SouvenirController::class, 'set_publish'])->name('souvenir.set_publish');
-    Route::get('souvenir/order/list/{id}', [SouvenirController::class, 'allOrderDetails'])->name('souvenir.allOrderDetails');
     Route::post('souvenir/restore/{id}', [SouvenirController::class, 'restoreNow'])->name('souvenir.restoreNow');
     Route::post('souvenir/delete/{id}', [SouvenirController::class, 'deleteNow'])->name('souvenir.deleteNow');
 
@@ -322,3 +334,9 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     
     Route::get('dashboard/roundCompleteCard', [DashboardController::class, 'roundCompleteCard'])->name('roundCompleteCard');
 });
+
+
+
+Route::get('manager-admin/souvenir/order/list/{id}', [SouvenirController::class, 'allOrderDetails'])->name('managerAdmin.souvenir.allOrderDetails');
+Route::get('manager-admin/marketplace/order/list/{id}', [MarketplaceController::class, 'allOrderDetails'])->name('managerAdmin.marketplace.allOrderDetails');
+
