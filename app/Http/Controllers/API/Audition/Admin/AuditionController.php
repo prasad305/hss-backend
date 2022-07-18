@@ -19,6 +19,7 @@ use App\Models\Audition\AuditionPromoInstruction;
 use App\Models\Audition\AuditionPromoInstructionSendInfo;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundInstructionSendInfo;
+use App\Models\Audition\AuditionRoundMarkTracking;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\Audition\AuditionVideoMark;
@@ -233,7 +234,7 @@ class AuditionController extends Controller
         $assignJuriesOrderByGroup = $assignJuries->groupBy('group_id');
 
         $auditionParticipantWithVideos = AuditionParticipant::with(['videos' => function ($query) use ($audition_round_info_id) {
-            return $query->where([['round_info_id', $audition_round_info_id], ['approval_status', 1]])->get();
+            return $query->where([['round_info_id', $audition_round_info_id]])->get();
         }, 'participant'])->where([['audition_id', $audition_id], ['round_info_id', $audition_round_info_id]])->get();
 
         $totalNumberOfVideos = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id], ['approval_status', 1]])->count();
@@ -317,10 +318,15 @@ class AuditionController extends Controller
         $roundBasedAuditionUploadVideos = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id], ['approval_status', 1]])->get();
 
         if (AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['jury_final_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->count() > 0) {
-            $isAbleToMerge = false;
-        }else{
             $isAbleToMerge = true;
+        }else{
+            $isAbleToMerge = false;
         }
+
+        $participants = AuditionParticipant::with(['videos' => function ($query) use ($audition_round_info_id) {
+            return $query->where([['round_info_id', $audition_round_info_id]])->get();
+        }, 'participant'])->where([['audition_id', $audition_id]])->get();
+
 
         return response()->json([
             'status' => 200,
@@ -328,20 +334,43 @@ class AuditionController extends Controller
             'auditionRoundInfo' => $auditionRoundInfo,
             'assignJuriesOrderByGroup' => $assignJuriesOrderByGroup,
             'roundBasedAuditionUploadVideos' => $roundBasedAuditionUploadVideos,
+            'participants' => $participants,
             'isAbleToMerge' => $isAbleToMerge,
         ]);
     }
     public function singleAuditionRoundVideoMerge($audition_id, $audition_round_info_id)
     {
+        $auditionRoundInfo = AuditionRoundInfo::find($audition_round_info_id);
         $roundBasedAuditionUploadVideos = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['jury_final_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->get();
         foreach ($roundBasedAuditionUploadVideos as $key => $roundBasedAuditionUploadVideo) {
             if ($roundBasedAuditionUploadVideo->group_a_jury_mark != null) {
                 $roundBasedAuditionUploadVideo->jury_final_mark =  $roundBasedAuditionUploadVideo->group_a_jury_mark;
             } else {
-                $max_mark =   max($roundBasedAuditionUploadVideo->group_a_jury_mark, $roundBasedAuditionUploadVideo->group_a_jury_mark);
+                $max_mark =   max($roundBasedAuditionUploadVideo->group_b_jury_mark, $roundBasedAuditionUploadVideo->group_c_jury_mark);
                 $roundBasedAuditionUploadVideo->jury_final_mark =  $max_mark;
             }
             $roundBasedAuditionUploadVideo->save();
+        }
+        // set average mark for specific round
+
+        $participants = AuditionParticipant::with(['videos' => function ($query) use ($audition_round_info_id) {
+            return $query->where([['round_info_id', $audition_round_info_id]])->get();
+        }, 'participant'])->where([['audition_id', $audition_id]])->get();
+
+
+        foreach ($participants as $key => $auditionParticipant) {
+            $sum_of_final_mark = 0;
+            foreach ($auditionParticipant->videos as $key => $video) {
+              $sum_of_final_mark += $video->jury_final_mark == null ? 0 : $video->jury_final_mark;
+            }
+            $average = number_format(($sum_of_final_mark / $auditionRoundInfo->video_slot_num), 2);
+
+            $auditionRoundMarkTracking  = new AuditionRoundMarkTracking();
+            $auditionRoundMarkTracking->user_id = $auditionParticipant->user_id;
+            $auditionRoundMarkTracking->round_info_id = $audition_round_info_id;
+            $auditionRoundMarkTracking->audition_id = $audition_id;
+            $auditionRoundMarkTracking->avg_mark = $average;
+            $auditionRoundMarkTracking->save();
         }
         return response()->json([
             'status' => 200,
