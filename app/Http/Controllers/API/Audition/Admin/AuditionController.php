@@ -377,6 +377,17 @@ class AuditionController extends Controller
             'message' => 'Video mark merged Successfully',
         ]);
     }
+
+    public function singleAuditionRoundVideoResultByPercentage($audition_id, $audition_round_info_id, $percentage_range)
+    {
+        $percentageBaseRoundMarkTrackings = AuditionRoundMarkTracking::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id], ['avg_mark', '>=', $percentage_range ]])->get();
+        return response()->json([
+            'status' => 200,
+            'message' => 'OK',
+            'percentageBaseRoundMarkTrackings' => $percentageBaseRoundMarkTrackings,
+        ]);
+    }
+
     public function singleAuditionInstruction($id)
     {
         $auditionJudgeInstruction = AuditionJudgeInstruction::find($id);
