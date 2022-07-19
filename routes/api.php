@@ -768,6 +768,9 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 
 
     Route::get('audition-admin/audition/group_juries/{audition_id}/{group_id}', [AuditionController::class, 'group_juries']);
+
+
+    Route::post('audition-admin/audition/roundResultSendToManager', [AuditionController::class, 'roundResultSendToManager']);
 });
 
 
