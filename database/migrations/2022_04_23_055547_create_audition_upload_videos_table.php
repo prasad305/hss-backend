@@ -27,12 +27,12 @@ class CreateAuditionUploadVideosTable extends Migration
             $table->string('video')->nullable();
             $table->integer('approval_status')->nullable()->default(0)->comment('0 = not reviewed , 1 = approved, 2 = rejected');
             $table->string('audition_admin_comment')->nullable();
-            $table->string('group_a_jury_mark')->nullable();
-            $table->string('group_b_jury_mark')->nullable();
-            $table->string('group_c_jury_mark')->nullable();
-            $table->string('jury_final_mark')->nullable();
-            $table->string('jury_or_judge_avg_mark')->nullable();
-            $table->string('user_vote_avg_mark')->nullable();
+            $table->double('group_a_jury_mark', 8, 2)->nullable();
+            $table->double('group_b_jury_mark', 8, 2)->nullable();
+            $table->double('group_c_jury_mark', 8, 2)->nullable();
+            $table->double('jury_final_mark', 8, 2)->nullable();
+            $table->double('jury_or_judge_avg_mark', 8, 2)->nullable();
+            $table->double('user_vote_avg_mark', 8, 2)->nullable();
             $table->string('comment')->nullable();
             $table->timestamps();
         });
