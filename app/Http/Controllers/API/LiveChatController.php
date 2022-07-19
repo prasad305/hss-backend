@@ -37,6 +37,8 @@ class LiveChatController extends Controller
     {
         $id = auth('sanctum')->user()->id;
 
+        if ($type == 'all')
+            $events = LiveChat::where([['star_id', $id], ['status', '>', 0]]);
         if ($type == 'pending')
             $events = LiveChat::where([['star_id', $id], ['status', '<', 1]]);
         if ($type == 'approved')
