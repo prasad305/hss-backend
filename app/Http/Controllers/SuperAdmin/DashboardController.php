@@ -284,7 +284,7 @@ class DashboardController extends Controller
     $rejected = MeetupEvent::where('status', 11)->count();
     // Registered User
 
-    $weeklyUser = MeetupEventRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $weeklyUser = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
     $monthlyUser = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
     $yearlyUser = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
@@ -367,7 +367,7 @@ class DashboardController extends Controller
 
     // Registered User
 
-    $weeklyUser = LearningSessionRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $weeklyUser = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
     $monthlyUser = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
     $yearlyUser = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
@@ -440,7 +440,7 @@ class DashboardController extends Controller
     $rejected = LiveChat::where('status', 11)->count();
     // Registered User
 
-    $weeklyUser = LiveChatRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $weeklyUser = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
     $monthlyUser = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
     $yearlyUser = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
@@ -519,7 +519,7 @@ class DashboardController extends Controller
     $rejected = Greeting::where('status', 11)->count();
     // Registered User
 
-    $weeklyUser = GreetingsRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $weeklyUser = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
     $monthlyUser = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
     $yearlyUser = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
@@ -670,7 +670,7 @@ class DashboardController extends Controller
 
     // Registered User
 
-    $weeklyUser = QnaRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $weeklyUser = QnaRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
     $monthlyUser = QnaRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
     $yearlyUser = QnaRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
@@ -749,7 +749,7 @@ class DashboardController extends Controller
     $rejected = SimplePost::where('star_approval', 2)->count();
 
     // Registered User
-    $weeklyUser = GeneralPostPayment::where('status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $weeklyUser = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
     $monthlyUser = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
     $yearlyUser = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
@@ -894,7 +894,7 @@ class DashboardController extends Controller
     } elseif ($type == 'sold') {
       $postList = Auction::with(['star', 'category'])->where('product_status', 1)->get();
     } elseif ($type == 'unsold') {
-      $postList = Auction::with(['star', 'category'])->where('status', 0)->get();
+      $postList = Auction::with(['star', 'category'])->where('product_status', 0)->get();
     } else {
       $postList = Auction::with(['star', 'category'])->where('star_approval', 2)->get();
     }

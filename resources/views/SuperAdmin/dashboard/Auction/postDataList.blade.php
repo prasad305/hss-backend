@@ -42,8 +42,8 @@
                     <div class="category-filter mb-3">
                         <select id="categoryFilter" class="form-control">
                             <option value="">Show All</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Published">Published</option>
+                            <option value="Sold">Sold</option>
+                            <option value="Unsold">Unsold</option>
                         </select>
                     </div>
                     <table id="myTable" class="table table-bordered table-striped ">

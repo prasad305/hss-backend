@@ -45,6 +45,7 @@
                             <option value="">Show All</option>
                             <option value="Pending">Pending</option>
                             <option value="Published">Published</option>
+                            <option value="Rejected">Rejected</option>
                         </select>
                     </div>
                     <table id="myTable" class="table table-bordered table-striped ">
