@@ -9,4 +9,8 @@ class GeneralPostPayment extends Model
 {
     protected $guarded = [];
     use HasFactory;
+    public function simpleposts()
+    {
+        return $this->belongsTo(SimplePost::class, 'post_id');
+    }
 }

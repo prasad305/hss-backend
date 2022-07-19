@@ -95,11 +95,11 @@
                         <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
                                 aria-hidden="true"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">Unsold</span>
+                            <span class="info-box-text">Pending</span>
                             <span class="info-box-number">{{ $pending }}</span>
                             <span class="info-box-number">
                                 <small><a class="text-warning"
-                                        href="{{ route('superAdmin.souvenirEvents.souvenirDataList', 'unsold') }}">See
+                                        href="{{ route('superAdmin.souvenirEvents.souvenirDataList', 'pending') }}">See
                                         All</a></small>
                             </span>
                         </div>
@@ -110,11 +110,11 @@
                         <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
                                 aria-hidden="true"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">Sold</span>
+                            <span class="info-box-text">Published</span>
                             <span class="info-box-number">{{ $published }}</span>
                             <span class="info-box-number">
                                 <small><a class="text-warning"
-                                        href="{{ route('superAdmin.souvenirEvents.souvenirDataList', 'sold') }}">See
+                                        href="{{ route('superAdmin.souvenirEvents.souvenirDataList', 'published') }}">See
                                         All</a></small>
                             </span>
                         </div>

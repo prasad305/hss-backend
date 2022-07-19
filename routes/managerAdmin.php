@@ -111,8 +111,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     // fan Group
     Route::get('fan-group', [DashboardController::class, 'fanGroups'])->name('dashboard.fanGroup');
-    Route::get('fan-group-data', [DashboardController::class, 'fanGroupsData'])->name('dashboard.fanGroupData');
-    Route::get('fan-group-post', [DashboardController::class, 'fanGroupsPost'])->name('dashboard.fanGroupsPost');
+    Route::get('fan-group-data/{type}', [DashboardController::class, 'fanGroupsData'])->name('dashboard.fanGroupData');
+    // Route::get('fan-group-post', [DashboardController::class, 'fanGroupsPost'])->name('dashboard.fanGroupsPost');
     Route::get('fan-group-details/{id}', [DashboardController::class, 'fanGroupsDetails'])->name('dashboard.fanGroupDetails');
 
 

@@ -936,10 +936,8 @@ class DashboardController extends Controller
   public function marketplaceEventsDashboard()
   {
     $categories = Category::get();
-    $total = Marketplace::count();
-    $published = Marketplace::where('status', 1)->count();
-    $pending = Marketplace::where('status', 0)->count();
-    $rejected = Marketplace::where('status', 2)->count();
+    $total = Marketplace::sum('total_items');
+    $soldItem = Marketplace::sum('total_selling');
     // Registered User
 
     $weeklyUser = MarketplaceOrder::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
@@ -963,18 +961,16 @@ class DashboardController extends Controller
       $amountCount[] = $values->sum('total_price');
     }
 
-    return view('SuperAdmin.dashboard.Marketplace.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+    return view('SuperAdmin.dashboard.Marketplace.dashboard', compact('categories', 'total', 'soldItem', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
   }
   public function marketplaceDataList($type)
   {
     if ($type == 'total') {
       $postList = Marketplace::with(['superstar', 'category'])->get();
-    } elseif ($type == 'sold') {
-      $postList = Marketplace::with(['superstar', 'category'])->where('status', 1)->get();
-    } elseif ($type == 'unsold') {
-      $postList = Marketplace::with(['superstar', 'category'])->where('status', 0)->get();
+    } elseif ($type == 'instock') {
+      $postList = Marketplace::with(['superstar', 'category'])->where('status', 1)->where('total_items', '>', 0)->get();
     } else {
-      $postList = Marketplace::with(['superstar', 'category'])->where('status', 2)->get();
+      $postList = Marketplace::with(['superstar', 'category'])->where('status', 1)->where('total_items', '>', 0)->where('total_selling', '>', 0)->get();
     }
     return view('SuperAdmin.dashboard.Marketplace.postDataList', compact('postList'));
   }
@@ -1046,9 +1042,9 @@ class DashboardController extends Controller
   {
     if ($type == 'total') {
       $postList = SouvenirCreate::with(['star', 'category'])->get();
-    } elseif ($type == 'sold') {
+    } elseif ($type == 'published') {
       $postList = SouvenirCreate::with(['star', 'category'])->where('status', 1)->get();
-    } elseif ($type == 'unsold') {
+    } elseif ($type == 'pending') {
       $postList = SouvenirCreate::with(['star', 'category'])->where('status', 0)->get();
     } else {
       $postList = SouvenirCreate::with(['star', 'category'])->where('status', 2)->get();

@@ -42,8 +42,8 @@
                     <div class="category-filter mb-3">
                         <select id="categoryFilter" class="form-control">
                             <option value="">Show All</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Published">Published</option>
+                            <option value="In Stock">In Stock</option>
+                            <option value="Out of Stock">Out of Stock</option>
                         </select>
                     </div>
                     <table id="myTable" class="table table-bordered table-striped ">
@@ -55,6 +55,8 @@
                                 <th>Admin</th>
                                 <th>Super Star</th>
                                 <th>Status</th>
+                                <th>Items</th>
+                                <th>Sold</th>
                                 <th style="width: 150px">Action</th>
                             </tr>
                         </thead>
@@ -75,12 +77,14 @@
                                     <td>{{ $post->starAdmin->first_name }} {{ $post->starAdmin->last_name }}</td>
                                     <td>{{ $post->superstar->first_name }} {{ $post->superstar->last_name }}</td>
                                     <td>
-                                        @if ($post->status == 1)
-                                            <span class="badge badge-success">Sold<span>
+                                        @if ($post->total_items >= 1)
+                                            <span class="badge badge-success">In Stock<span>
                                                 @else
-                                                    <span class="badge badge-warning">Unsold<span>
+                                                    <span class="badge badge-warning">Out of Stock<span>
                                         @endif
                                     </td>
+                                    <td>{{ $post->total_items }}</td>
+                                    <td>{{ $post->total_selling }}</td>
                                     <td style="width: 150px">
                                         <a href="{{ route('superAdmin.marketplace.details', [$post->id]) }}"
                                             class="btn btn-sm btn-success"> <i class="fa fa-eye"></i></a>

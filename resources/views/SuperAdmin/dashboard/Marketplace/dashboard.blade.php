@@ -75,7 +75,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12 col-sm-6 col-md-3">
+                <div class="col-12 col-sm-6 col-md-4">
                     <div class="info-box mb-3 text-center border border-warning">
                         <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
                                 aria-hidden="true"></i></span>
@@ -90,28 +90,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Unsold</span>
-                            <span class="info-box-number">{{ $pending }}</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning"
-                                        href="{{ route('superAdmin.marketplaceEvents.marketplaceDataList', 'unsold') }}">See
-                                        All</a></small>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
+                <div class="col-12 col-sm-6 col-md-4">
                     <div class="info-box mb-3 text-center border border-warning">
                         <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
                                 aria-hidden="true"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Sold</span>
-                            <span class="info-box-number">{{ $published }}</span>
+                            <span class="info-box-number">{{ $soldItem }}</span>
                             <span class="info-box-number">
                                 <small><a class="text-warning"
                                         href="{{ route('superAdmin.marketplaceEvents.marketplaceDataList', 'sold') }}">See
@@ -120,16 +105,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-sm-6 col-md-3">
+                <div class="col-12 col-sm-6 col-md-4">
                     <div class="info-box mb-3 text-center border border-warning">
                         <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
                                 aria-hidden="true"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">Rejected</span>
-                            <span class="info-box-number">{{ $rejected }}</span>
+                            <span class="info-box-text">In Stack</span>
+                            <span class="info-box-number">{{ $total - $soldItem }}</span>
                             <span class="info-box-number">
                                 <small><a class="text-warning"
-                                        href="{{ route('superAdmin.marketplaceEvents.marketplaceDataList', 'rejected') }}">See
+                                        href="{{ route('superAdmin.marketplaceEvents.marketplaceDataList', 'instock') }}">See
                                         All</a></small>
                             </span>
                         </div>

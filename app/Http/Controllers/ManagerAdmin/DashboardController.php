@@ -71,7 +71,7 @@ class DashboardController extends Controller
 
         // Total
         $total = LearningSession::where('category_id', auth()->user()->category_id)->count();
-        $upcoming = LearningSession::where('status', 0)->where('category_id', auth()->user()->category_id)->count();
+        $running = LearningSession::where('status', 2)->where('category_id', auth()->user()->category_id)->count();
         $complete = LearningSession::where('status', 10)->where('category_id', auth()->user()->category_id)->count();
         $admin = LearningSession::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
         $superstar = LearningSession::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
@@ -79,18 +79,32 @@ class DashboardController extends Controller
 
         // Registered User
 
-        $weeklyUser = LearningSessionRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
-        $monthlyUser = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
-        $yearlyUser = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+        $weeklyUser = LearningSessionRegistration::whereHas('learningSession', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = LearningSessionRegistration::whereHas('learningSession', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = LearningSessionRegistration::whereHas('learningSession', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where([['created_at', '>', Carbon::now()->startOfYear()], ['created_at', '<', Carbon::now()->endOfYear()]])->count();
 
         // Income Statement
 
-        $weeklyIncome = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
-        $monthlyIncome = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
-        $yearlyIncome = LearningSessionRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+        $weeklyIncome = LearningSessionRegistration::whereHas('learningSession', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $monthlyIncome = LearningSessionRegistration::whereHas('learningSession', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $yearlyIncome = LearningSessionRegistration::whereHas('learningSession', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
 
-        $labels = LearningSessionRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+        $labels = LearningSessionRegistration::whereHas('learningSession', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('M');
         });
 
@@ -105,15 +119,15 @@ class DashboardController extends Controller
 
 
 
-        return view('ManagerAdmin.LearningSession.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+        return view('ManagerAdmin.LearningSession.dashboard', compact(['total', 'running', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
     }
     public function learninSessionData($type)
     {
 
         if ($type == 'total') {
             $portalData = LearningSession::with(['star', 'category'])->orderBy('id', 'DESC')->where('category_id', auth()->user()->category_id)->get();
-        } elseif ($type == 'upcoming') {
-            $portalData = LearningSession::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'running') {
+            $portalData = LearningSession::with(['star', 'category'])->where('status', 2)->where('category_id', auth()->user()->category_id)->get();
         } else {
             $portalData = LearningSession::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
         }
@@ -122,7 +136,7 @@ class DashboardController extends Controller
     }
     public function learninSessionDetails($id)
     {
-        $totalParticipant = LearningSessionRegistration::where('learning_session_id', $id)->where('payment_status', 1)->count();
+        $totalParticipant = LearningSessionRegistration::where('learning_session_id', $id)->count();
         $totalFee = LearningSessionRegistration::where('learning_session_id', $id)->where('payment_status', 1)->sum('amount');
         $data = LearningSession::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->find($id);
 
@@ -160,7 +174,7 @@ class DashboardController extends Controller
 
         // Total
         $total = MeetupEvent::where('category_id', auth()->user()->category_id)->count();
-        $upcoming = MeetupEvent::where('status', 0)->where('category_id', auth()->user()->category_id)->count();
+        $running = MeetupEvent::where('status', 2)->where('category_id', auth()->user()->category_id)->count();
         $complete = MeetupEvent::where('status', 10)->where('category_id', auth()->user()->category_id)->count();
         $admin = MeetupEvent::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
         $superstar = MeetupEvent::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
@@ -168,17 +182,31 @@ class DashboardController extends Controller
 
         // Registered User
 
-        $weeklyUser = MeetupEventRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
-        $monthlyUser = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
-        $yearlyUser = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+        $weeklyUser = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
         // Income Statement
 
-        $weeklyIncome = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
-        $monthlyIncome = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
-        $yearlyIncome = MeetupEventRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+        $weeklyIncome = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $monthlyIncome = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $yearlyIncome = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
-        $labels = MeetupEventRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+        $labels = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('M');
         });
 
@@ -190,7 +218,7 @@ class DashboardController extends Controller
         }
 
 
-        return view('ManagerAdmin.MeetupEvents.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+        return view('ManagerAdmin.MeetupEvents.dashboard', compact(['total', 'running', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
     }
 
     public function meetupEventsData($type)
@@ -198,8 +226,8 @@ class DashboardController extends Controller
     {
         if ($type == 'total') {
             $portalData = MeetupEvent::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
-        } elseif ($type == 'upcoming') {
-            $portalData = MeetupEvent::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'running') {
+            $portalData = MeetupEvent::with(['star', 'category'])->where('status', 2)->where('category_id', auth()->user()->category_id)->get();
         } else {
             $portalData = MeetupEvent::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
         }
@@ -255,14 +283,26 @@ class DashboardController extends Controller
         $superstar = simplePost::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
 
         // Registered User
-        $weeklyUser = GeneralPostPayment::where('status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
-        $monthlyUser = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
-        $yearlyUser = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+        $weeklyUser = GeneralPostPayment::whereHas('simpleposts', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = GeneralPostPayment::whereHas('simpleposts', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = GeneralPostPayment::whereHas('simpleposts', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
         // Income Statement
-        $weeklyIncome = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
-        $monthlyIncome = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
-        $yearlyIncome = GeneralPostPayment::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+        $weeklyIncome = GeneralPostPayment::whereHas('simpleposts', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $monthlyIncome = GeneralPostPayment::whereHas('simpleposts', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $yearlyIncome = GeneralPostPayment::whereHas('simpleposts', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
         $labels = GeneralPostPayment::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('M');
@@ -327,7 +367,7 @@ class DashboardController extends Controller
         $categories = SubCategory::with(['subliveChat'])->where('category_id', auth()->user()->category_id)->get();
         // Total
         $total = LiveChat::where('category_id', auth()->user()->category_id)->count();
-        $upcoming = LiveChat::where('status', 0)->where('category_id', auth()->user()->category_id)->count();
+        $running = LiveChat::where('status', 2)->where('category_id', auth()->user()->category_id)->count();
         $complete = LiveChat::where('status', 10)->where('category_id', auth()->user()->category_id)->count();
         $admin = LiveChat::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
         $superstar = LiveChat::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
@@ -335,17 +375,31 @@ class DashboardController extends Controller
 
         // Registered User
 
-        $weeklyUser = LiveChatRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
-        $monthlyUser = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
-        $yearlyUser = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+        $weeklyUser = LiveChatRegistration::whereHas('liveChat', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = LiveChatRegistration::whereHas('liveChat', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = LiveChatRegistration::whereHas('liveChat', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
         // Income Statement
 
-        $weeklyIncome = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
-        $monthlyIncome = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
-        $yearlyIncome = LiveChatRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+        $weeklyIncome = LiveChatRegistration::whereHas('liveChat', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $monthlyIncome = LiveChatRegistration::whereHas('liveChat', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $yearlyIncome = LiveChatRegistration::whereHas('liveChat', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
-        $labels = LiveChatRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+        $labels = LiveChatRegistration::whereHas('liveChat', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('M');
         });
 
@@ -356,14 +410,14 @@ class DashboardController extends Controller
             $amountCount[] = $values->sum('amount');
         }
 
-        return view('ManagerAdmin.LiveChat.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));;
+        return view('ManagerAdmin.LiveChat.dashboard', compact(['total', 'running', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));;
     }
     public function liveChatsData($type)
     {
         if ($type == 'total') {
             $portalData = LiveChat::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
-        } elseif ($type == 'upcoming') {
-            $portalData = LiveChat::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'running') {
+            $portalData = LiveChat::with(['star', 'category'])->where('status', 2)->where('category_id', auth()->user()->category_id)->get();
         } else {
             $portalData = LiveChat::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
         }
@@ -462,12 +516,22 @@ class DashboardController extends Controller
 
 
         $total = FanGroup::where('category_id', auth()->user()->category_id)->count();
-        $totalFanPost = FanPost::count();
+        $pending = FanGroup::where('status', 0)->where('category_id', auth()->user()->category_id)->count();
+        $published = FanGroup::where('status', 1)->where('category_id', auth()->user()->category_id)->count();
+        $totalFanPost = FanPost::whereHas('fangroup', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->count();
         $totalUser = Fan_Group_Join::count();
 
-        $weeklyUser = Fan_Group_Join::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
-        $monthlyUser = Fan_Group_Join::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
-        $yearlyUser = Fan_Group_Join::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+        $weeklyUser = Fan_Group_Join::whereHas('fangroup', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = Fan_Group_Join::whereHas('fangroup', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = Fan_Group_Join::whereHas('fangroup', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
         // $labels = FanGroup::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
         //     return Carbon::parse($date->created_at)->format('M');
@@ -480,22 +544,32 @@ class DashboardController extends Controller
         //     $amountCount[] = $values->sum('amount');
         // }
 
-        return view('ManagerAdmin.fangroup.dashboard', compact(['total', 'totalFanPost', 'totalUser', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'categories']));
+        return view('ManagerAdmin.fangroup.dashboard', compact(['total', 'totalFanPost', 'totalUser', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'categories', 'pending', 'published']));
     }
-    public function fanGroupsData()
+    public function fanGroupsData($type)
     {
 
-        $portalData = FanGroup::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        if ($type == 'total') {
+            $portalData = FanGroup::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'pending') {
+            $portalData = FanGroup::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'published') {
+            $portalData = FanGroup::with(['star', 'category'])->where('status', 1)->where('category_id', auth()->user()->category_id)->get();
+        } else {
+            $portalData = FanGroup::with(['star', 'category'])->where('status', 1)->where('category_id', auth()->user()->category_id)->get();
+        }
 
         return view('ManagerAdmin.fangroup.fanGroupData', compact('portalData'));
     }
-    public function fanGroupsPost()
-    {
+    // public function fanGroupsPost()
+    // {
 
-        $portalData = FanPost::with(['category'])->where('category_id', auth()->user()->category_id)->get();
+    //     $portalData = FanPost::whereHas('fangroup', function ($q) {
+    //         $q->where([['category_id', auth()->user()->category_id]]);
+    //     })->get();
 
-        return view('ManagerAdmin.fangroup.fanGroupData', compact('portalData'));
-    }
+    //     return view('ManagerAdmin.fangroup.fanGroupData', compact('portalData'));
+    // }
 
     public function fanGroupsDetails($id)
     {
@@ -547,7 +621,7 @@ class DashboardController extends Controller
         $categories = SubCategory::with(['subqna'])->where('category_id', auth()->user()->category_id)->get();
         // Total
         $total = Qna::where('category_id', auth()->user()->category_id)->count();
-        $upcoming = Qna::where('status', 0)->where('category_id', auth()->user()->category_id)->count();
+        $running = Qna::where('status', 2)->where('category_id', auth()->user()->category_id)->count();
         $complete = Qna::where('status', 10)->where('category_id', auth()->user()->category_id)->count();
         $admin = Qna::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
         $superstar = Qna::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
@@ -555,17 +629,31 @@ class DashboardController extends Controller
 
         // Registered User
 
-        $weeklyUser = QnaRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
-        $monthlyUser = QnaRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
-        $yearlyUser = QnaRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+        $weeklyUser = QnaRegistration::whereHas('qna', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = QnaRegistration::whereHas('qna', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = QnaRegistration::whereHas('qna', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
         // Income Statement
 
-        $weeklyIncome = QnaRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
-        $monthlyIncome = QnaRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
-        $yearlyIncome = QnaRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+        $weeklyIncome = QnaRegistration::whereHas('qna', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $monthlyIncome = QnaRegistration::whereHas('qna', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $yearlyIncome = QnaRegistration::whereHas('qna', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
-        $labels = QnaRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+        $labels = QnaRegistration::whereHas('qna', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('M');
         });
 
@@ -576,14 +664,14 @@ class DashboardController extends Controller
             $amountCount[] = $values->sum('amount');
         }
 
-        return view('ManagerAdmin.QnA.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+        return view('ManagerAdmin.QnA.dashboard', compact(['total', 'running', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
     }
     public function qnaData($type)
     {
         if ($type == 'total') {
             $portalData = QnA::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
-        } elseif ($type == 'upcoming') {
-            $portalData = Qna::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'running') {
+            $portalData = Qna::with(['star', 'category'])->where('status', 2)->where('category_id', auth()->user()->category_id)->get();
         } else {
             $portalData = Qna::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
         }
@@ -639,17 +727,31 @@ class DashboardController extends Controller
 
         // Registered User
 
-        $weeklyUser = GreetingsRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
-        $monthlyUser = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
-        $yearlyUser = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+        $weeklyUser = GreetingsRegistration::whereHas('greeting', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = GreetingsRegistration::whereHas('greeting', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = GreetingsRegistration::whereHas('greeting', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
         // Income Statement
 
-        $weeklyIncome = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
-        $monthlyIncome = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
-        $yearlyIncome = GreetingsRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+        $weeklyIncome = GreetingsRegistration::whereHas('greeting', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $monthlyIncome = GreetingsRegistration::whereHas('greeting', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $yearlyIncome = GreetingsRegistration::whereHas('greeting', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
-        $labels = GreetingsRegistration::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+        $labels = GreetingsRegistration::whereHas('greeting', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('M');
         });
 
@@ -715,7 +817,7 @@ class DashboardController extends Controller
         $categories = SubCategory::with(['subauction'])->where('category_id', auth()->user()->category_id)->get();
         // Total
         $total = Auction::where('category_id', auth()->user()->category_id)->count();
-        $upcoming = Auction::where('status', 1)->where('product_status', 0)->where('category_id', auth()->user()->category_id)->count();
+        $running = Auction::where('status', 1)->where('product_status', 0)->where('category_id', auth()->user()->category_id)->count();
         $complete = Auction::where('product_status', 1)->where('category_id', auth()->user()->category_id)->count();
         $admin = Auction::distinct('admin_id')->where('category_id', auth()->user()->category_id)->count();
         $superstar = Auction::distinct('star_id')->where('category_id', auth()->user()->category_id)->count();
@@ -723,17 +825,31 @@ class DashboardController extends Controller
 
         // Registered User
 
-        $weeklyUser = Bidding::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
-        $monthlyUser = Bidding::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
-        $yearlyUser = Bidding::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+        $weeklyUser = Bidding::whereHas('auction', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = Bidding::whereHas('auction', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = Bidding::whereHas('auction', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
         // Income Statement
 
-        $weeklyIncome = Bidding::where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->distinct()->get('amount')->sum('amount');
-        $monthlyIncome = Bidding::where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->distinct()->get('amount')->sum('amount');
-        $yearlyIncome = Bidding::where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->distinct()->get('amount')->sum('amount');
+        $weeklyIncome = Bidding::whereHas('auction', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->distinct()->get('amount')->sum('amount');
+        $monthlyIncome = Bidding::whereHas('auction', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->distinct()->get('amount')->sum('amount');
+        $yearlyIncome = Bidding::whereHas('auction', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('win_status', 1)->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->distinct()->get('amount')->sum('amount');
 
-        $labels = Bidding::where('win_status', 1)->get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+        $labels = Bidding::whereHas('auction', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('win_status', 1)->get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('M');
         });
 
@@ -744,16 +860,16 @@ class DashboardController extends Controller
             $amountCount[] = $values->sum('amount');
         }
 
-        return view('ManagerAdmin.Auction.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+        return view('ManagerAdmin.Auction.dashboard', compact(['total', 'running', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
     }
     public function auctionData($type)
     {
         if ($type == 'total') {
             $portalData = Auction::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
-        } elseif ($type == 'upcoming') {
-            $portalData = Auction::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+        } elseif ($type == 'running') {
+            $portalData = Auction::with(['star', 'category'])->where('status', 1)->where('product_status', 0)->where('category_id', auth()->user()->category_id)->get();
         } else {
-            $portalData = Auction::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
+            $portalData = Auction::with(['star', 'category'])->where('product_status', 1)->where('category_id', auth()->user()->category_id)->get();
         }
         return view('ManagerAdmin.Auction.auctionData', compact('portalData'));
     }
@@ -801,17 +917,31 @@ class DashboardController extends Controller
 
         // Registered User
 
-        $weeklyUser = MarketplaceOrder::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
-        $monthlyUser = MarketplaceOrder::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
-        $yearlyUser = MarketplaceOrder::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+        $weeklyUser = MarketplaceOrder::whereHas('marketplace', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = MarketplaceOrder::whereHas('marketplace', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = MarketplaceOrder::whereHas('marketplace', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
         // Income Statement
 
-        $weeklyIncome = MarketplaceOrder::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_price');
-        $monthlyIncome = MarketplaceOrder::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_price');
-        $yearlyIncome = MarketplaceOrder::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_price');
+        $weeklyIncome = MarketplaceOrder::whereHas('marketplace', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_price');
+        $monthlyIncome = MarketplaceOrder::whereHas('marketplace', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_price');
+        $yearlyIncome = MarketplaceOrder::whereHas('marketplace', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_price');
 
-        $labels = MarketplaceOrder::get(['id', 'created_at', 'total_price'])->groupBy(function ($date) {
+        $labels = MarketplaceOrder::whereHas('marketplace', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->get(['id', 'created_at', 'total_price'])->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('M');
         });
 
@@ -881,17 +1011,31 @@ class DashboardController extends Controller
 
         // Registered User
 
-        $weeklyUser = SouvenirApply::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
-        $monthlyUser = SouvenirApply::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
-        $yearlyUser = SouvenirApply::distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+        $weeklyUser = SouvenirApply::whereHas('souvenir', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->distinct('user_id')->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = SouvenirApply::whereHas('souvenir', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->distinct('user_id')->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = SouvenirApply::whereHas('souvenir', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->distinct('user_id')->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
         // Income Statement
 
-        $weeklyIncome = SouvenirApply::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_amount');
-        $monthlyIncome = SouvenirApply::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_amount');
-        $yearlyIncome = SouvenirApply::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_amount');
+        $weeklyIncome = SouvenirApply::whereHas('souvenir', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_amount');
+        $monthlyIncome = SouvenirApply::whereHas('souvenir', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_amount');
+        $yearlyIncome = SouvenirApply::whereHas('souvenir', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_amount');
 
-        $labels = SouvenirApply::get(['id', 'created_at', 'total_amount'])->groupBy(function ($date) {
+        $labels = SouvenirApply::whereHas('souvenir', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->get(['id', 'created_at', 'total_amount'])->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('M');
         });
 

@@ -107,8 +107,8 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">Running</span>
-                            <span class="info-box-number">{{ $upcoming }}</span>
-                            <a href="{{ route('managerAdmin.dashboard.auctionData', 'upcoming') }}">
+                            <span class="info-box-number">{{ $running }}</span>
+                            <a href="{{ route('managerAdmin.dashboard.auctionData', 'running') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>

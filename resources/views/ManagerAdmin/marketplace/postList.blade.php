@@ -1,7 +1,7 @@
-@extends('Layouts.SuperAdmin.master')
+@extends('Layouts.ManagerAdmin.master')
 
 @push('title')
-    Super Admin
+    Manager Admin
 @endpush
 
 
@@ -12,12 +12,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Souvenir Events</h1>
+                    <h1 class="m-0">Marketplace List</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Souvenir Events</li>
+                        <li class="breadcrumb-item active">Marketplace List</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -32,9 +32,9 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Souvenir Events</h3>
+                    <h3 class="card-title">Marketplace List</h3>
                     <a class="btn btn-success btn-sm" style="float: right;"
-                        href="{{ route('superAdmin.souvenirEvents.dashboard') }}"><i class=" fa fa-arrow"></i>&nbsp;Go
+                        href="{{ route('managerAdmin.dashboard.marketplace') }}"><i class=" fa fa-arrow"></i>&nbsp;Go
                         Back</a>
                 </div>
                 <!-- /.card-header -->
@@ -42,8 +42,8 @@
                     <div class="category-filter mb-3">
                         <select id="categoryFilter" class="form-control">
                             <option value="">Show All</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Published">Published</option>
+                            <option value="In Stock">In Stock</option>
+                            <option value="Out of Stock">Out of Stock</option>
                         </select>
                     </div>
                     <table id="myTable" class="table table-bordered table-striped ">
@@ -72,24 +72,24 @@
                                         @endif
                                     </td>
                                     <td>{{ $post->title }}</td>
-                                    <td>{{ $post->admin->first_name }} {{ $post->admin->last_name }}</td>
-                                    <td>{{ $post->star->first_name }} {{ $post->star->last_name }}</td>
+                                    <td>{{ $post->starAdmin->first_name }} {{ $post->starAdmin->last_name }}</td>
+                                    <td>{{ $post->superstar->first_name }} {{ $post->superstar->last_name }}</td>
                                     <td>
-                                        @if ($post->status == 1)
-                                            <span class="badge badge-success">Published<span>
+                                        @if ($post->total_items >= 1)
+                                            <span class="badge badge-success">In Stock<span>
                                                 @else
-                                                    <span class="badge badge-warning">Pending<span>
+                                                    <span class="badge badge-warning">Out of Stock<span>
                                         @endif
                                     </td>
                                     <td style="width: 150px">
-                                        <a href="{{ route('superAdmin.souvenir.details', [$post->id]) }}"
+                                        <a href="{{ route('managerAdmin.marketplace.details', [$post->id]) }}"
                                             class="btn btn-sm btn-success"> <i class="fa fa-eye"></i></a>
                                         <a class="btn btn-sm btn-info"
-                                            onclick="Show('Edit Post','{{ route('superAdmin.souvenir.edit', $post->id) }}')"><i
+                                            onclick="Show('Edit Post','{{ route('managerAdmin.marketplace.edit', $post->id) }}')"><i
                                                 class="fa fa-edit text-white"></i></a>
-                                        <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
-                                            value="{{ route('superAdmin.souvenir.destroy', $post->id) }}"><i
-                                                class="fa fa-trash"></i> </button>
+                                        {{-- <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
+                                            value="{{ route('managerAdmin.marketplace.destroy', $post->id) }}"><i
+                                                class="fa fa-trash"></i> </button> --}}
                                     </td>
                                 </tr>
                             @endforeach

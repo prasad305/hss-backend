@@ -38,10 +38,10 @@
                                 <td>{{ $data->category->name }}</td>
                                 <td>{!! date('d-m-y', strtotime($data->created_at)) !!}</td>
                                 <td>
-                                    @if ($data->status === 10)
-                                        <span class="badge badge-success">Completed</span>
+                                    @if ($data->status == 1)
+                                        <span class="badge badge-success">Published</span>
                                     @else
-                                        <span class="badge badge-warning">Upcoming</span>
+                                        <span class="badge badge-warning">Pending</span>
                                     @endif
                                 </td>
                                 <td>

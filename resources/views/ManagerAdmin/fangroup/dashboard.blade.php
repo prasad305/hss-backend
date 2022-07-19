@@ -72,7 +72,7 @@
                             <span class="info-box-number">
                                 {{ $total }}
                             </span>
-                            <a href="{{ route('managerAdmin.dashboard.fanGroupData') }}">
+                            <a href="{{ route('managerAdmin.dashboard.fanGroupData', 'total') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
@@ -88,7 +88,7 @@
                         <div class="info-box-content">
                             <span class="info-box-text">Total User</span>
                             <span class="info-box-number">{{ $totalUser }}</span>
-                            <a href="{{ route('managerAdmin.dashboard.fanGroupData') }}">
+                            <a href="{{ route('managerAdmin.dashboard.fanGroupData', 'user') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
@@ -108,9 +108,9 @@
                         <div class="info-box-content">
                             <span class="info-box-text">Total Fan Post</span>
                             <span class="info-box-number">{{ $totalFanPost }}</span>
-                            <a href="{{ route('managerAdmin.dashboard.fanGroupsPost') }}">
+                            {{-- <a href="{{ route('managerAdmin.dashboard.fanGroupsPost') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
-                            </a>
+                            </a> --}}
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -172,11 +172,13 @@
                                 class="fa-solid fa-square-poll-vertical"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Weekly Income</span>
+                            <span class="info-box-text">Pending</span>
                             <span class="info-box-number">
-                                10
-                                <small>%</small>
+                                {{ $pending }}
                             </span>
+                            <a href="{{ route('managerAdmin.dashboard.fanGroupData', 'pending') }}">
+                                <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
+                            </a>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -189,8 +191,11 @@
                                 class="fa-solid fa-square-poll-vertical"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Monthly Income</span>
-                            <span class="info-box-number">41,410</span>
+                            <span class="info-box-text">Published</span>
+                            <span class="info-box-number">{{ $published }}</span>
+                            <a href="{{ route('managerAdmin.dashboard.fanGroupData', 'published') }}">
+                                <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
+                            </a>
                         </div>
                         <!-- /.info-box-content -->
                     </div>

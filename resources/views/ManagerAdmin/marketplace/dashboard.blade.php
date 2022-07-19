@@ -7,12 +7,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Q&A Dashboard</h1>
+                    <h1 class="m-0">Marketplace Dashboard</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Q&A Dashboard</li>
+                        <li class="breadcrumb-item active">Marketplace Dashboard</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -46,10 +46,10 @@
                                     aria-hidden="true"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">{{ $category->name }}</span>
-                                <span class="info-box-number">{{ $category->subqna->count() }}</span>
+                                <span class="info-box-number">{{ $category->submarketplace->count() }}</span>
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
-                                            href="{{ route('managerAdmin.subqna.list', $category->id) }}">See
+                                            href="{{ route('managerAdmin.submarketplace.list', $category->id) }}">See
                                             All</a></small>
                                 </span>
                             </div>
@@ -72,7 +72,7 @@
                             <span class="info-box-number">
                                 {{ $total }}
                             </span>
-                            <a href="{{ route('managerAdmin.dashboard.qnaData', 'total') }}">
+                            <a href="{{ route('managerAdmin.dashboard.marketplaceData', 'total') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
@@ -86,9 +86,9 @@
                         <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-users"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Completed</span>
-                            <span class="info-box-number">{{ $complete }}</span>
-                            <a href="{{ route('managerAdmin.dashboard.qnaData', 'complete') }}">
+                            <span class="info-box-text">Sold</span>
+                            <span class="info-box-number">{{ $soldItem }}</span>
+                            <a href="{{ route('managerAdmin.dashboard.marketplaceData', 'sold') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
@@ -106,9 +106,9 @@
                         <span class="info-box-icon bg-success elevation-1"><i class="fas fa-users"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Running</span>
-                            <span class="info-box-number">{{ $running }}</span>
-                            <a href="{{ route('managerAdmin.dashboard.qnaData', 'running') }}">
+                            <span class="info-box-text">InStock</span>
+                            <span class="info-box-number">{{ $total - $soldItem }}</span>
+                            <a href="{{ route('managerAdmin.dashboard.marketplaceData', 'instock') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
@@ -242,7 +242,7 @@
                             <span class="info-box-number">
                                 {{ $admin }}
                             </span>
-                            <a href="{{ route('managerAdmin.qnaEvents.adminList') }}">
+                            <a href="{{ route('managerAdmin.marketplaceEvents.adminList') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
@@ -258,7 +258,7 @@
                         <div class="info-box-content text-center">
                             <span class="info-box-text">Superstar</span>
                             <span class="info-box-number">{{ $superstar }}</span>
-                            <a href="{{ route('managerAdmin.qnaEvents.superstarList') }}">
+                            <a href="{{ route('managerAdmin.marketplaceEvents.superstarList') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>

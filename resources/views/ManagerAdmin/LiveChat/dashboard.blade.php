@@ -106,9 +106,9 @@
                         <span class="info-box-icon bg-success elevation-1"><i class="fas fa-users"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Upcoming</span>
-                            <span class="info-box-number">{{ $upcoming }}</span>
-                            <a href="{{ route('managerAdmin.dashboard.liveChatData', 'upcoming') }}">
+                            <span class="info-box-text">Running</span>
+                            <span class="info-box-number">{{ $running }}</span>
+                            <a href="{{ route('managerAdmin.dashboard.liveChatData', 'running') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
