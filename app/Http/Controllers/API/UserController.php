@@ -1406,6 +1406,7 @@ class UserController extends Controller
             'status' => 200,
         ]);
     }
+
     public function videoDetails($id)
     {
         $participateAudition = Audition::with(['judge.user', 'participant' => function ($query) {
@@ -1577,6 +1578,8 @@ class UserController extends Controller
             'message' => "Cover Photo updated"
         ]);
     }
+
+    
     public function updateProfile(Request $request, $id)
     {
 

@@ -10,6 +10,7 @@ use App\Models\Audition\AuditionAssignJury;
 use App\Models\Audition\AuditionInfo;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionRoundInfo;
+use App\Models\Audition\AuditionRoundMarkTracking;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionRules;
 use App\Models\Audition\AuditionUploadVideo;
@@ -191,9 +192,66 @@ class AuditionController extends Controller
     }
 
     public function getResultByRound($audition_id,$round_info_id){
+
         $audition = Audition::find($audition_id);
-        $round_result =  AuditionRoundInfo::where([['id',$round_info_id],['audition_id',$audition_id]])->get();
-        return view('ManagerAdmin.audition.view_round_result',compact('round_result','audition'));
+
+        $round_result =  AuditionRoundInfo::with(['videos' => function($query) use($round_info_id){
+                                                return $query->where([['round_info_id',$round_info_id],['approval_status',1]])->get();
+                                            }])
+                                            ->where([['id',$round_info_id],['audition_id',$audition_id]])
+                                            ->first();
+
+        $wining_users = AuditionRoundMarkTracking::where([
+                                                        ['audition_id',$audition_id],
+                                                        ['round_info_id',$round_info_id],
+                                                        ['wining_status',1]
+                                                        ])
+                                                        ->get();
+
+        $failed_users = AuditionRoundMarkTracking::where([
+                                                        ['audition_id',$audition_id],
+                                                        ['round_info_id',$round_info_id],
+                                                        ['wining_status',0]
+                                                        ])
+                                                        ->get();
+
+        $data = [
+            'audition' => $audition,
+            'round_result' => $round_result,
+            'wining_users' => $wining_users,
+            'failed_users' => $failed_users,
+        ];
+
+        return view('ManagerAdmin.audition.view_round_result',$data);
+    }
+
+    public function roundResultPublish(Request $request){
+        $audition_id = $request->audition_id;
+        $round_info_id = $request->round_info_id;
+
+        AuditionRoundMarkTracking::where([
+            ['audition_id',$audition_id],
+            ['round_info_id',$round_info_id],
+            ['wining_status',1]
+            ])
+            ->update([
+                'result_message' => $request->selected_comments,
+            ]);
+        AuditionRoundMarkTracking::where([
+                    ['audition_id',$audition_id],
+                    ['round_info_id',$round_info_id],
+                    ['wining_status',0]
+                    ])
+                    ->update([
+                        'result_message' => $request->rejected_comments,
+                    ]);
+
+        AuditionRoundInfo::find($round_info_id)->update([
+                'manager_status' => 2,
+        ]);           
+
+        session()->flash('success','Result Publish Done!');
+        return redirect()->back();            
     }
 
     public function getRoundInstruction($audition_id,$round_info_id){

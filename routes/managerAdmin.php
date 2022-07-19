@@ -213,6 +213,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
         Route::get('round-result/{audition_id}/{round_info_id}', [AuditionController::class, 'getResultByRound']);
         
+        Route::post('round-result-publish', [AuditionController::class, 'roundResultPublish'])->name('roundResultPublish');
+        
         Route::get('registerUser/{audition_id}', [AuditionController::class, 'registerUser'])->name('registerUser');
         
         // Jury Audition Routes

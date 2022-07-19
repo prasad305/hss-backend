@@ -20,10 +20,10 @@
 
                <div class="divClass my-3">
                    <img class='w-100 img-fluid'
-                       src="{{ asset('/assets/manager-admin/auditionBanner.png') }}" alt="">
+                       src="{{ asset($audition->banner) }}" alt="">
 
                    <div class='banner__overlay'>
-                       <h4 class='boldOverlay'>1st round time duration JUNE 25 - july 30</h4>
+                       <h4 class='boldOverlay'>{{$round_result->round_num}} round time duration {{ date('d F Y',strtotime($round_result->round_start_date)) }} - {{ date('d F Y',strtotime($round_result->round_end_date)) }}</h4>
                    </div>
                </div>
            </section>
@@ -31,145 +31,76 @@
 
            <section>
                <div class="owl-carousel owl-theme home-demo">
-                   <div class="item">
-                       <video width="300" controls>
-                           <source src="mov_bbb.mp4" type="video/mp4">
-                           <source src="mov_bbb.ogg" type="video/ogg">
-                           Your browser does not support HTML video.
-                       </video>
-                   </div>
-                   <div class="item">
-                       <video width="300" controls>
-                           <source src="mov_bbb.mp4" type="video/mp4">
-                           <source src="mov_bbb.ogg" type="video/ogg">
-                           Your browser does not support HTML video.
-                       </video>
-                   </div>
-                   <div class="item">
-                       <video width="300" controls>
-                           <source src="mov_bbb.mp4" type="video/mp4">
-                           <source src="mov_bbb.ogg" type="video/ogg">
-                           Your browser does not support HTML video.
-                       </video>
-                   </div>
-                   <div class="item">
-                       <video width="300" controls>
-                           <source src="mov_bbb.mp4" type="video/mp4">
-                           <source src="mov_bbb.ogg" type="video/ogg">
-                           Your browser does not support HTML video.
-                       </video>
-                   </div>
-                   <div class="item">
-                       <video width="300" controls>
-                           <source src="mov_bbb.mp4" type="video/mp4">
-                           <source src="mov_bbb.ogg" type="video/ogg">
-                           Your browser does not support HTML video.
-                       </video>
-                   </div>
-                   <div class="item">
-                       <video width="300" controls>
-                           <source src="mov_bbb.mp4" type="video/mp4">
-                           <source src="mov_bbb.ogg" type="video/ogg">
-                           Your browser does not support HTML video.
-                       </video>
-                   </div>
-                   <div class="item">
-                       <video width="300" controls>
-                           <source src="mov_bbb.mp4" type="video/mp4">
-                           <source src="mov_bbb.ogg" type="video/ogg">
-                           Your browser does not support HTML video.
-                       </video>
-                   </div>
-                   <div class="item">
-                       <video width="300" controls>
-                           <source src="mov_bbb.mp4" type="video/mp4">
-                           <source src="mov_bbb.ogg" type="video/ogg">
-                           Your browser does not support HTML video.
-                       </video>
-                   </div>
-                   <div class="item">
-                       <video width="300" controls>
-                           <source src="mov_bbb.mp4" type="video/mp4">
-                           <source src="mov_bbb.ogg" type="video/ogg">
-                           Your browser does not support HTML video.
-                       </video>
-                   </div>
-                   <div class="item">
-                       <video width="300" controls>
-                           <source src="mov_bbb.mp4" type="video/mp4">
-                           <source src="mov_bbb.ogg" type="video/ogg">
-                           Your browser does not support HTML video.
-                       </video>
-                   </div>
-                   <div class="item">
-                       <video width="300" controls>
-                           <source src="mov_bbb.mp4" type="video/mp4">
-                           <source src="mov_bbb.ogg" type="video/ogg">
-                           Your browser does not support HTML video.
-                       </video>
-                   </div>
+                 @foreach ($round_result->videos as $video)
+                    <div class="item">
+                        <video width="300" controls>
+                            <source src="{{ asset($video->video)}}" type="video/mp4">
+                        </video>
+                    </div>   
+                 @endforeach
                </div>
            </section>
 
-           <section>
-               <div class="title">
-                   <div class="text-light d-flex align-item-center p-2 my-3">
-                       <h4 class='roundTitle'>Round Status</h4>
-                   </div>
-               </div>
+           <form action="{{ route('managerAdmin.audition.roundResultPublish') }}" method="POST">
+            @csrf
+            <input type="hidden" name="audition_id" value="{{ $audition->id }}">
+            <input type="hidden" name="round_info_id" value="{{ $round_result->id }}">
+            <section>
+                <div class="title">
+                    <div class="text-light d-flex align-item-center p-2 my-3">
+                        <h4 class='roundTitle'>Round Result</h4>
+                    </div>
+                </div>
 
 
-               <div class="row my-2">
-                   <div class="col-md-4 d-flex justify-content-center">
-                       <div class="cardT">
-                           <div class="card__title">30<br /> Videos</div>
-                           <div class="card__footer">selected user from jury result</div>
-                       </div>
+                <div class="row my-2">
+                    <div class="col-md-4 d-flex justify-content-center">
+                        <div class="cardT">
+                            <div class="card__title">{{count($wining_users)}}<br /> Users</div>
+                            <div class="card__footer">selected user from jury result</div>
+                        </div>
 
-                   </div>
-                   <div class="col-md-4 d-flex justify-content-center">
-                       <div class="cardT">
-                           <div class="card__title">30<br /> Videos</div>
-                           <div class="card__footer">selected user from jury result</div>
-                       </div>
-                   </div>
-                   <div class="col-md-4 d-flex justify-content-center">
-                       <div class="cardT">
-                           <div class="card__title">30<br /> Videos</div>
-                           <div class="card__footer">selected user from jury result</div>
-                       </div>
-                   </div>
-               </div>
-               <div class="row my-2">
-                   <div class="col-md-4 d-flex justify-content-center">
+                    </div>
+                    <div class="col-md-4 d-flex justify-content-center">
+                        <div class="cardT">
+                            <div class="card__title">{{count($failed_users)}}<br /> Users</div>
+                            <div class="card__footer">Unselected user from jury result</div>
+                        </div>
+                    </div>
+                    {{-- <div class="col-md-4 d-flex justify-content-center">
+                        <div class="cardT">
+                            <div class="card__title">30<br /> Videos</div>
+                            <div class="card__footer">selected user from jury result</div>
+                        </div>
+                    </div> --}}
+                </div>
 
-                   </div>
-                   <div class="col-md-4 d-flex justify-content-center">
-                       <div class="comment">
-                           <p>Comment: Congratulations you are selected for the next round</p>
-                           <span class="comment__icon"><i class="fa-solid fa-edit"></i></span>
-                       </div>
-                   </div>
-                   <div class="col-md-4 d-flex justify-content-center">
-                       <div class="comment">
-                           <p>Comment: Congratulations you are selected for the next round</p>
-                           <span class="omment__icon"><i class="fa-solid fa-edit"></i></span>
-                       </div>
-                   </div>
-               </div>
+                <div class="row my-2">
+                    <div class="col-md-4 d-flex justify-content-center">
+                        <div class="comment">
+                            <textarea name="selected_comments" id="" cols="50" rows="10"></textarea>
+                            <span class="comment__icon"><i class="fa-solid fa-edit"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 d-flex justify-content-center">
+                        <div class="comment">
+                            <textarea name="rejected_comments" id="" cols="50" rows="10"></textarea>
+                            <span class="omment__icon"><i class="fa-solid fa-edit"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
+            <section>
+                <div class="d-flex justify-content-center my-4">
+                    <button class="btn btnGradient w-50" type="submit">
+                        Publish For User
+                    </button>
+                </div>
 
+            </section>
+           </form>
 
-           </section>
-
-           <section>
-               <div class="d-flex justify-content-center my-4">
-                   <button class="btn btnGradient w-50">
-                       Publish fro web
-                   </button>
-               </div>
-
-           </section>
 
        </div>
 
