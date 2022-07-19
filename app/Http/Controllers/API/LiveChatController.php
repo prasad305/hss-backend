@@ -37,13 +37,15 @@ class LiveChatController extends Controller
     {
         $id = auth('sanctum')->user()->id;
 
-        if($type == 'pending')
+        if ($type == 'all')
+            $events = LiveChat::where([['star_id', $id], ['status', '>', 0]]);
+        if ($type == 'pending')
             $events = LiveChat::where([['star_id', $id], ['status', '<', 1]]);
-        if($type == 'approved')
+        if ($type == 'approved')
             $events = LiveChat::where([['star_id', $id], ['status', '>', 0], ['status', '<', 10]]);
-        if($type == 'completed')
+        if ($type == 'completed')
             $events = LiveChat::where([['star_id', $id], ['status', 9]]);
-        if($type == 'rejected')
+        if ($type == 'rejected')
             $events = LiveChat::where([['star_id', $id], ['status', 11]]);
 
         return response()->json([
@@ -462,9 +464,14 @@ class LiveChatController extends Controller
     // Star Controlling Method
     public function add_by_star(Request $request)
     {
+        // return response()->json([
+        //     'status' => 200,
+        //     'message' => auth('sanctum')->user()->id,
+        // ]);
+
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:live_chats',
-            'image' => 'required',
+            // 'image' => 'required',
             'description' => 'required|min:6',
             'instruction' => 'required|min:6',
             'date' => 'required',
@@ -493,11 +500,11 @@ class LiveChatController extends Controller
             $liveChat->created_by_id = auth('sanctum')->user()->id;
             $liveChat->instruction = $request->input('instruction');
             $liveChat->description = $request->input('description');
-            $liveChat->event_date = $request->input('date');
-            $liveChat->start_time = $request->input('start_time');
-            $liveChat->end_time = $request->input('end_time');
-            $liveChat->registration_start_date = $request->input('registration_start_date');
-            $liveChat->registration_end_date = $request->input('registration_end_date');
+            $liveChat->event_date = Carbon::parse($request->input('date'));
+            $liveChat->start_time = Carbon::parse($request->input('start_time'));
+            $liveChat->end_time = Carbon::parse($request->input('end_time'));
+            $liveChat->registration_start_date = Carbon::parse($request->input('registration_start_date'));
+            $liveChat->registration_end_date = Carbon::parse($request->input('registration_end_date'));
             $liveChat->fee = $request->input('fee');
             $liveChat->max_time = $request->input('max_time');
             $liveChat->interval = $request->input('interval');
@@ -514,6 +521,9 @@ class LiveChatController extends Controller
 
                 Image::make($file)->resize(900, 400)->save($filename, 100);
                 $liveChat->banner = $filename;
+            }
+            if ($request->image_path) {
+                $liveChat->banner = $request->image_path;
             }
 
             $liveChat->save();
@@ -584,7 +594,6 @@ class LiveChatController extends Controller
                 'message' => 'Live Session Updated',
             ]);
         }
-
     }
 
     public function set_reject_by_star($id)

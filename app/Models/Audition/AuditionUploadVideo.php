@@ -15,11 +15,21 @@ class AuditionUploadVideo extends Model
         'audition_id',
         'user_id',
         'round_info_id',
-        'judge_id',
+        'jury_or_judge_id',
+        'audition_admin_id',
+        'group_a_per_jury_id',
+        'group_a_ran_jury_id',
+        'group_b_jury_id',
+        'group_c_jury_id',
         'video',
         'approval_status',
-        'comments',
-        'status',
+        'audition_admin_comment',
+        'group_a_jury_mark',
+        'group_b_jury_mark',
+        'group_c_jury_mark',
+        'jury_or_judge_avg_mark',
+        'user_vote_avg_mark',
+        'comment'
     ];
 
     protected $with = ['user'];
@@ -38,7 +48,7 @@ class AuditionUploadVideo extends Model
     // {
     //     return $this->belongsTo(User::class, 'round_id');
     // }
-   
+
     public function judge()
     {
         return $this->belongsTo(User::class, 'judge_id');

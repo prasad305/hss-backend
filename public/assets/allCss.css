@@ -1,0 +1,167 @@
+.title {
+    border-radius: 10px;
+    background-color: #343434;
+}
+
+.divClass {
+    position: relative;
+}
+
+.banner__overlay {
+    position: absolute;
+    top: 80%;
+    left: 24%;
+    /* display: flex;
+    justify-content: center; */
+    /* align-items: end; */
+    /* height: 100%; */
+}
+
+.boldOverlay {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 32px;
+    text-align: center;
+}
+
+.underLineWhite {
+    border-bottom: 2px solid white;
+}
+
+.videoIcon {
+    font-size: 50px;
+    color: #ff0;
+    margin: 20px;
+}
+.showMessage {
+    font-size: 25px;
+    font-weight: bold;
+    color: #000;
+    margin: 20px;
+}
+
+.home-demo .item {
+    margin: 20px;
+    padding: 20px;
+}
+.home-demo h2 {
+    color: #fff;
+    text-align: center;
+    padding: 5rem 0;
+    margin: 0;
+    font-style: italic;
+    font-weight: 300;
+}
+
+.roundTitle {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.videoText {
+    font-size: 45px;
+    font-weight: bold;
+}
+
+.cardT {
+    background: #2d2d2d;
+    width: 300px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.card__title {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 65px;
+    line-height: 83px;
+}
+
+.card__footer {
+    color: #000;
+    font-size: 20px;
+    font-weight: bold;
+    background: linear-gradient(
+        270deg,
+        #ffad00 0%,
+        #ffd273 18.7%,
+        #e19a04 42.13%,
+        #facf75 68.82%,
+        #e7a725 85.94%,
+        #ffad00 100%
+    );
+    border-radius: 5px;
+    padding: 20px;
+    text-transform: capitalize;
+    margin-top: 15px;
+    min-height: 100px;
+}
+
+.comment__section {
+    display: flex;
+    flex-direction: row;
+    margin: 20px;
+    justify-content: end;
+    gap: 40px;
+}
+
+.comment {
+    background: #2d2d2d;
+    width: 300px;
+    border-radius: 5px;
+    color: #fff;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 50px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+.comment__icon {
+    font-size: 18px;
+    color: #45d1ca;
+    padding: 5px 0px;
+}
+.completeRoundMsg {
+    height: 160px;
+    background-color: #ffd910;
+}
+.bgWarning {
+    background: linear-gradient(
+        102.45deg,
+        #f5ea45 28.52%,
+        #dda336 52.38%,
+        #e7a725 72.31%
+    );
+    font-weight: bold;
+    color: #000;
+    font-size: 20px;
+}
+
+.borderWarning {
+    border: 1px solid #ff0;
+    border-radius: 10px;
+}
+
+.roundOneText {
+    color: #000;
+}
+
+.btnGradient {
+    background: linear-gradient(
+        270deg,
+        #ffad00 0%,
+        #ffd273 18.7%,
+        #e19a04 42.13%,
+        #facf75 68.82%,
+        #e7a725 85.94%,
+        #ffad00 100%
+    );
+    font-size: 20px;
+    color: #000;
+    border-radius: 15px;
+}

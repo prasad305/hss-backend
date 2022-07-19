@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Audition\AuditionUploadVideo;
 use App\Models\JuryGroup;
 use App\Models\StaticOption;
 use App\Models\User;
@@ -94,16 +95,16 @@ if (!function_exists('random_code')) {
     {
         $curl = curl_init();
 
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://api.sms.net.bd/sendsms',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => array(
-                    'api_key' => 'l2Phx0d2M8Pd8OLKuuM1K3XZVY3Ln78jUWzoz7xO',
-                    'msg' => $message,
-                    'to' => $phone
-                ),
-            ));
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.sms.net.bd/sendsms',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => array(
+                'api_key' => 'l2Phx0d2M8Pd8OLKuuM1K3XZVY3Ln78jUWzoz7xO',
+                'msg' => $message,
+                'to' => $phone
+            ),
+        ));
         $response = curl_exec($curl);
 
         curl_close($curl);
@@ -133,57 +134,62 @@ if (!function_exists('random_code')) {
         return redirect()->back();
     }
 
-    function fileInfo($file){
-        if(isset($file)){
+    function fileInfo($file)
+    {
+        if (isset($file)) {
             return $image = array(
-                'name' => $file->getClientOriginalName(), 
-                'type' => $file->getClientMimeType(), 
-                'size' => $file->getClientSize(), 
-                'width' => getimagesize($file)[0], 
-                'height' => getimagesize($file)[1], 
-                'extension' => $file->getClientOriginalExtension(), 
+                'name' => $file->getClientOriginalName(),
+                'type' => $file->getClientMimeType(),
+                'size' => $file->getClientSize(),
+                'width' => getimagesize($file)[0],
+                'height' => getimagesize($file)[1],
+                'extension' => $file->getClientOriginalExtension(),
             );
-        }else{
+        } else {
             return $image = array(
-                'name' => '0', 
-                'type' => '0', 
-                'size' => '0', 
-                'width' => '0', 
-                'height' => '0', 
-                'extension' => '0', 
+                'name' => '0',
+                'type' => '0',
+                'size' => '0',
+                'width' => '0',
+                'height' => '0',
+                'extension' => '0',
             );
         }
-        
     }
-    
-    function fileUpload($file,$destination,$name){
-        $upload=$file->move(public_path('/'.$destination), $name);
+
+    function fileUpload($file, $destination, $name)
+    {
+        $upload = $file->move(public_path('/' . $destination), $name);
         return $upload;
     }
-    
-    function fileMove($oldPath,$newPath){
+
+    function fileMove($oldPath, $newPath)
+    {
         $move = File::move($oldPath, $newPath);
         return $move;
     }
-    
-    function fileDelete($path){
-        if(!empty($path) && file_exists(public_path('/'.$path))){
-            $delete=unlink(public_path('/'.$path));
+
+    function fileDelete($path)
+    {
+        if (!empty($path) && file_exists(public_path('/' . $path))) {
+            $delete = unlink(public_path('/' . $path));
             return $delete;
         }
         return false;
     }
 
-    function createdBy(){
+    function createdBy()
+    {
         return auth()->user()->id;
     }
 
-    function updatedBy(){
+    function updatedBy()
+    {
         return auth()->user()->id;
     }
 
-    function juryGroup($id){
+    function juryGroup($id)
+    {
         return JuryGroup::find($id)->name;
     }
-
 }
