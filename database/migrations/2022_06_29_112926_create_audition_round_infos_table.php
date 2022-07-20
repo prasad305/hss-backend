@@ -46,6 +46,7 @@ class CreateAuditionRoundInfosTable extends Migration
             $table->date('appeal_result_publish_start_date')->nullable();
             $table->date('appeal_result_publish_end_date')->nullable();
 
+            $table->integer('manager_status')->default(0)->comment('0 = not send, 1 = send to manager, 2 = send to user');
             $table->integer('status')->default(0)->comment('0 = inactive, 1= active');
             $table->timestamps();
         });

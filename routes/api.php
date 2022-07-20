@@ -698,6 +698,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/singleAuditionRoundAssessmentResult/{audition_id}/{audition_round_info_id}', [AuditionController::class, 'singleAuditionRoundAssessmentResult']);
     Route::get('/audition-admin/audition/singleAuditionRoundVideoMerge/{audition_id}/{audition_round_info_id}', [AuditionController::class, 'singleAuditionRoundVideoMerge']);
     Route::get('/audition-admin/audition/singleAuditionRoundVideoResultByPercentage/{audition_id}/{audition_round_info_id}/{precentage}', [AuditionController::class, 'singleAuditionRoundVideoResultByPercentage']);
+    Route::get('/audition-admin/audition/singleAuditionRoundVideoResultByFilterNumber/{audition_id}/{audition_round_info_id}/{filter_number}', [AuditionController::class, 'singleAuditionRoundVideoResultByFilterNumber']);
     Route::get('/audition-admin/audition/videoReportBasedOnSingleJury/{audition_id}/{audition_round_info_id}/{jury_id}', [AuditionController::class, 'videoReportBasedOnSingleJury']);
     Route::get('/audition-admin/audition/singleAuditionVideoWithRoundId/{audition_id}/{audition_round_id}', [AuditionController::class, 'singleAuditionVideoWithRoundId']);
 
