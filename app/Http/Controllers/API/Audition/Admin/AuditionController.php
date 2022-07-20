@@ -1813,4 +1813,23 @@ class AuditionController extends Controller
             ]);
         }
     }
+
+    public function roundResultSendToManager(Request $request){
+
+        AuditionRoundInfo::where('id',$request->round_info_id)->update([
+            'manager_status' => 1,
+        ]);
+
+        AuditionRoundMarkTracking::where([
+                                            ['round_info_id', $request->round_info_id],
+                                            ['audition_id', $request->audition_id],
+                                            ['avg_mark', '>=', $request->percentage_range ]
+                                         ])
+                                         ->update(['wining_status' => 1,]);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Audition Round Result Send To Manager Successfull',
+        ]);
+
+    }
 }
