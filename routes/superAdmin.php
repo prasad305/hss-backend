@@ -30,6 +30,7 @@ use App\Http\Controllers\SuperAdmin\LearningSessionController;
 use App\Http\Controllers\SuperAdmin\LiveChatController;
 use App\Http\Controllers\SuperAdmin\MeetupEventController;
 use App\Http\Controllers\SuperAdmin\QnAController;
+use App\Http\Controllers\SuperAdmin\ReportController;
 use App\Http\Controllers\SuperAdmin\SimplePostController;
 use App\Http\Controllers\SuperAdmin\SouvenirController;
 use App\Http\Controllers\SuperAdmin\SubCategoryController;
@@ -559,7 +560,22 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/auditionAdmin-list', [DashboardController::class, 'auditionAdminList'])->name('auditionEvents.auditionAdminList');
     Route::get('/audition-Admin-events', [DashboardController::class, 'auditionAdminEvents'])->name('auditionEvents.auditionAdminEvents');
 
-
-
     // <================================= End All Module Dashboard ======================================>
+
+    // <================================= All Report ======================================>
+
+    Route::get('/all-report', [ReportController::class, 'allReport'])->name('report.all');
+    Route::get('/learningSession-report', [ReportController::class, 'learningSessionReport'])->name('report.learningSession');
+    Route::get('/liveChat-report', [ReportController::class, 'liveChatReport'])->name('report.liveChat');
+    Route::get('/qna-report', [ReportController::class, 'qnaReport'])->name('report.qna');
+    Route::get('/meetup-report', [ReportController::class, 'meetupReport'])->name('report.meetup');
+    Route::get('/greeting-report', [ReportController::class, 'greetingReport'])->name('report.greeting');
+    Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
+    Route::get('/marketplace-report', [ReportController::class, 'marketplaceReport'])->name('report.marketplace');
+    Route::get('/auction-report', [ReportController::class, 'auctionReport'])->name('report.auction');
+    Route::get('/souvenir-report', [ReportController::class, 'souvenirReport'])->name('report.souvenir');
+    Route::get('/simplePost-report', [ReportController::class, 'simplePostReport'])->name('report.simplePost');
+    Route::get('/fanGroup-report', [ReportController::class, 'fanGroupReport'])->name('report.fanGroup');
+
+    // <=================================End All Report ======================================>
 });
