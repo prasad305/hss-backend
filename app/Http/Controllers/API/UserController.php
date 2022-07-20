@@ -1355,7 +1355,7 @@ class UserController extends Controller
 
     public function uploaded_round_videos($audition_id, $round_info_id)
     {
-        $videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
+        $videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id],['user_id',auth()->user()->id]])->get();
 
         return response()->json([
             'status' => 200,
