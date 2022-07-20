@@ -3,123 +3,100 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
 use App\Models\Marketplace;
+use App\Models\Post;
+use Illuminate\Http\Request;
+use Intervention\Image\ImageManagerStatic as Image;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class MarketplaceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function marketplaceList($categoryId)
     {
-        $marketplace = Marketplace::orderBy('id', 'DESC')->where('post_status', 1)->get();
-        return view('SuperAdmin.marketplace.index')->with('marketplace', $marketplace);
+        $postList = Marketplace::where('category_id', $categoryId)->latest()->get();
+        return view('SuperAdmin.Marketplace.postList', compact('postList'));
+    }
+    public function marketplaceDetails($id)
+    {
+        $post = Marketplace::find($id);
+
+        return view('SuperAdmin.Marketplace.details', compact('post'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function marketplaceEdit($id)
     {
-        //
+        $event = Marketplace::find($id);
+
+        return view('SuperAdmin.Marketplace.edit', compact('event'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function marketplaceUpdate(Request $request, $id)
     {
-        //
-    }
+        $request->validate([
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+            'title' => 'required',
+            'description' => 'required',
+            'keywords' => 'required',
+            'terms_conditions' => 'required',
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function activeNow($id)
-    {
         $marketplace = Marketplace::findOrFail($id);
-        $marketplace->status = 1;
+        $marketplace->fill($request->except('_token', 'image'));
+
+        $marketplace->title = $request->input('title');
+        $marketplace->slug = Str::slug($request->input('title') . '-' . rand(9999, 99999));
+        $marketplace->description = $request->input('description');
+        $marketplace->keywords = $request->input('keywords');
+        $marketplace->terms_conditions = $request->input('terms_conditions');
+
+        if ($request->hasfile('image')) {
+            $destination = $marketplace->image;
+            if ($destination != null && file_exists($destination)) {
+                unlink($destination);
+            }
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'uploads/images/marketplace/' . time() . '.' . $extension;
+
+            Image::make($file)->resize(400, 400)->save($filename, 50);
+            $marketplace->image = $filename;
+        }
+
+
         try {
-            $marketplace->save();
+
+            $marketplace->update();
+
             return response()->json([
-                'type' => 'success',
-                'message' => 'Successfully Updated'
+                'success' => true,
+                'message' => 'Description Updated Successfully'
             ]);
         } catch (\Exception $exception) {
             return response()->json([
                 'type' => 'error',
-                'message' => $exception->getMessage()
+                'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
             ]);
         }
     }
-
-    public function inactiveNow($id)
+    public function marketplaceDestroy($id)
     {
-        $marketplace = Marketplace::findOrFail($id);
-        $marketplace->status = 0;
+        $post = Post::where('event_id', $id)->first();
+        $postDelete = Marketplace::findOrfail($id);
         try {
-            $marketplace->save();
+            $post->delete();
+            $postDelete->delete();
             return response()->json([
                 'type' => 'success',
-                'message' => 'Successfully Updated'
+                'message' => 'Successfully Deleted !!',
             ]);
         } catch (\Exception $exception) {
             return response()->json([
                 'type' => 'error',
-                'message' => $exception->getMessage()
+                'message' => 'error' . $exception->getMessage(),
             ]);
         }
     }
-
 }
