@@ -541,6 +541,17 @@ class AuditionAdminController extends Controller
         return view('ManagerAdmin.Audition.round_instruction',compact('event'));
     }
 
+    
+    public function getRoundResult(){
+        $auditions = Audition::where([['status','>=',2],['category_id', auth()->user()->category_id]])->get();
+        return view('ManagerAdmin.Audition.round_result',compact('auditions'));
+    }
+    
+    public function showRoundResult($audition_id){
+         $event = Audition::find($audition_id);
+        return view('ManagerAdmin.Audition.show_round_result',compact('event'));
+    }
+
     public function registrationRules()
     {
         $data = [

@@ -125,7 +125,7 @@ class QnaController extends Controller
 
             $superStar = SuperStar::where('star_id', $request->input('star_id'))->first();
 
-            $qna = QnA::where('slug',$request->slug)->first();
+            $qna = QnA::where('slug', $request->slug)->first();
             $qna->title = $request->input('title');
             $qna->slug = Str::slug($request->input('title'));
             $qna->star_id = $request->star_id;
@@ -259,7 +259,7 @@ class QnaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:live_chats,title',
-            'image' => 'required',
+            // 'image' => 'required',
             'event_date' => 'required',
             'instruction' => 'required|min:5',
             'description' => 'required|min:5',
@@ -291,11 +291,11 @@ class QnaController extends Controller
             $qna->created_by_id = auth('sanctum')->user()->id;
             $qna->description = $request->input('description');
             $qna->instruction = $request->input('instruction');
-            $qna->event_date = $request->input('event_date');
+            $qna->event_date = Carbon::parse($request->input('event_date'));
             $qna->start_time = Carbon::parse($request->input('start_time'));
             $qna->end_time = Carbon::parse($request->input('end_time'));
-            $qna->registration_start_date = $request->input('registration_start_date');
-            $qna->registration_end_date = $request->input('registration_end_date');
+            $qna->registration_start_date = Carbon::parse($request->input('registration_start_date'));
+            $qna->registration_end_date = Carbon::parse($request->input('registration_end_date'));
             $qna->fee = $request->input('fee');
             $qna->star_approval = 1;
             // $qna->question_quantity = $request->input('question_quantity');
@@ -326,6 +326,10 @@ class QnaController extends Controller
                 $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
                 $file->move($path, $file_name);
                 $qna->video = $path . '/' . $file_name;
+            }
+
+            if ($request->image_path) {
+                $qna->banner = $request->image_path;
             }
 
             $qna->save();
