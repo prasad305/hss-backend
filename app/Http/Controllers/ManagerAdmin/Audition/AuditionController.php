@@ -15,6 +15,7 @@ use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionRules;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\AuditionRoundInstruction;
+use App\Models\JuryGroup;
 use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -28,12 +29,110 @@ class AuditionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'audition_admin_id' => 'required',
             'title' => 'required',
             'description' => 'required',
             'start_date' => 'required',
+        ]);
+        $auditionRule = AuditionRules::find($request->audition_rule_id);
+        if ($auditionRule) {
+            if ($auditionRule->roundRules->count() == 0) {
+                session()->flash('error', 'Opps.. There is no round rules. Please add some round rules first');
+                return back();
+            }
+
+            $audition                       = new Audition();
+            $audition->category_id          =  Auth::user()->category_id;
+            $audition->audition_round_rules_id  = $auditionRule->roundRules->first()->id;
+            $audition->creater_id           =  Auth::user()->id;
+            $audition->audition_admin_id    =  $request->audition_admin_id;
+            $audition->manager_admin_id     =  Auth::user()->id;
+            $audition->title                =  $request->title;
+            $audition->slug                 =  Str::slug($request->title);
+            $audition->description          =  $request->description;
+            $audition->round_status         =  0;
+            $audition->start_time           =  Carbon::parse($request->start_date);
+            $audition->end_time             =  Carbon::parse($request->start_date)->addDays($auditionRule->day)->addMonths($auditionRule->month);
+            $audition->status               =  0;
+            $audition->save();
+
+            //setup audition info from general audition rule
+            $auditionRule = AuditionRules::where('category_id', Auth::user()->category_id)->first();
+
+            $audition_info = new AuditionInfo();
+            $audition_info->audition_id = $audition->id;
+            $audition_info->category_id = Auth::user()->category_id;
+            $audition_info->round_num = $auditionRule->round_num;
+            $audition_info->judge_num = $auditionRule->judge_num;
+            $audition_info->jury_groups = $auditionRule->jury_groups;
+            $audition_info->event_start_date = Carbon::parse($request->stat_date);
+            $audition_info->event_end_date = Carbon::parse($request->stat_date)->addDays($auditionRule->event_period);
+            $audition_info->instruction_prepare_start_date = Carbon::parse($request->stat_date);
+            $audition_info->instruction_prepare_end_date = Carbon::parse($request->stat_date)->addDays($auditionRule->instruction_prepare_period);
+            $audition_info->registration_start_date = Carbon::parse($audition_info->instruction_prepare_end_date)->addDays(1);
+            $audition_info->registration_end_date = Carbon::parse($audition_info->registration_start_date)->addDays($auditionRule->registration_period);
+            $audition_info->save();
+
+            $auditionRoundRules = AuditionRoundRule::where('audition_rules_id', $auditionRule->id)->orderBy('round_num', 'ASC')->get();
+
+            $roundStartDate = Carbon::parse($audition_info->registration_end_date)->addDays(1);
+            foreach ($auditionRoundRules as $key => $auditionRoundRule) {
+                $auditionRoundInfo = new AuditionRoundInfo();
+                $auditionRoundInfo->audition_info_id = $audition_info->id;
+                $auditionRoundInfo->audition_id = $audition->id;
+                $auditionRoundInfo->round_num = $auditionRoundRule->round_num;
+                $auditionRoundInfo->has_jury_or_judge_mark =  $auditionRoundRule->has_jury_or_judge_mark;
+                $auditionRoundInfo->jury_or_judge_mark =  $auditionRoundRule->jury_or_judge_mark;
+                $auditionRoundInfo->has_user_vote_mark =  $auditionRoundRule->has_user_vote_mark;
+                $auditionRoundInfo->user_vote_mark =  $auditionRoundRule->user_vote_mark;
+                $auditionRoundInfo->mark_live_or_offline =  $auditionRoundRule->mark_live_or_offline;
+                $auditionRoundInfo->wildcard =  $auditionRoundRule->wildcard;
+                $auditionRoundInfo->wildcard_round =  $auditionRoundRule->wildcard_round;
+                $auditionRoundInfo->appeal =  $auditionRoundRule->appeal;
+                $auditionRoundInfo->video_feed =  $auditionRoundRule->video_feed;
+                $auditionRoundInfo->video_duration =  $auditionRoundRule->video_duration;
+                $auditionRoundInfo->video_slot_num =  $auditionRoundRule->video_slot_num;
+
+                $auditionRoundInfo->round_start_date =  $roundStartDate;
+                $auditionRoundInfo->round_end_date = Carbon::parse($roundStartDate)->addDays($auditionRoundRule->round_period);
+
+                $auditionRoundInfo->instruction_prepare_start_date = $auditionRoundInfo->round_start_date;
+                $auditionRoundInfo->instruction_prepare_end_date = Carbon::parse($auditionRoundInfo->instruction_prepare_start_date)->addDays($auditionRoundRule->instruction_prepare_period);
+
+                $auditionRoundInfo->video_upload_start_date = Carbon::parse($auditionRoundInfo->instruction_prepare_end_date)->addDays(1);
+                $auditionRoundInfo->video_upload_end_date = Carbon::parse($auditionRoundInfo->video_upload_start_date)->addDays($auditionRoundRule->video_upload_period);
+
+                $auditionRoundInfo->jury_or_judge_mark_start_date = Carbon::parse($auditionRoundInfo->video_upload_end_date)->addDays(1);
+                $auditionRoundInfo->jury_or_judge_mark_end_date = Carbon::parse($auditionRoundInfo->jury_or_judge_mark_start_date)->addDays($auditionRoundRule->jury_or_judge_mark_period);
+
+                $auditionRoundInfo->result_publish_start_date = Carbon::parse($auditionRoundInfo->jury_or_judge_mark_end_date)->addDays(1);
+                $auditionRoundInfo->result_publish_end_date = Carbon::parse($auditionRoundInfo->result_publish_start_date)->addDays($auditionRoundRule->result_publish_period);
+
+                $auditionRoundInfo->appeal_start_date = Carbon::parse($auditionRoundInfo->result_publish_end_date)->addDays(1);
+                $auditionRoundInfo->appeal_end_date = Carbon::parse($auditionRoundInfo->appeal_start_date)->addDays($auditionRoundRule->appeal_period);
+
+                $auditionRoundInfo->appeal_result_publish_start_date = Carbon::parse($auditionRoundInfo->appeal_end_date)->addDays(1);
+                $auditionRoundInfo->appeal_result_publish_end_date = Carbon::parse($auditionRoundInfo->appeal_result_publish_start_date)->addDays($auditionRoundRule->appeal_result_publish_period);
+
+                $auditionRoundInfo->save();
+
+                $roundStartDate = Carbon::parse($auditionRoundInfo->round_end_date)->addDays(1);
+            }
+            session()->flash('success', 'Audition added successfully !');
+        } else {
+            session()->flash('error', 'Opps.. No audition rules found !');
+        }
+        return back();
+    }
+
+
+    public function assignManpowerStore(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'audition_admin' => 'required|exists:users,id',
             'jury' => 'required|array',
         ]);
+
         $auditionRule = AuditionRules::find($request->audition_rule_id);
 
         if ($auditionRule) {
@@ -43,6 +142,10 @@ class AuditionController extends Controller
             }
             if (isset($group_data)) {
                 $jury_errors = '';
+                if(count($request->jury) != count($request->group_ids)){
+                    session()->flash('error', 'You have to select jury for '.count($request->group_ids). ' group');
+                    return back();
+                }
                 foreach ($request->group_ids as $key => $group_id) {
                     if (count($request->jury[$key]) != $group_data[$key]) {
                         $jury_errors = $jury_errors . "Opps.. You have to select " . $group_data[$key] . " jury for Group " . strtoupper(juryGroup($group_id)) . " !";
@@ -62,88 +165,10 @@ class AuditionController extends Controller
                     session()->flash('error', 'Opps.. There is no round rules. Please add some round rules first');
                     return back();
                 }
-                $audition                       = new Audition();
-                $audition->category_id          =  Auth::user()->category_id;
-                $audition->audition_round_rules_id  = $auditionRule->roundRules->first()->id;
-                $audition->creater_id           =  Auth::user()->id;
-                $audition->audition_admin_id    =  $request->audition_admin_id;
-                $audition->manager_admin_id     =  Auth::user()->id;
-                $audition->title                =  $request->title;
-                $audition->slug                 =  Str::slug($request->title);
-                $audition->description          =  $request->description;
-                $audition->round_status         =  0;
-                $audition->start_time           =  Carbon::parse($request->start_date);
-                $audition->end_time             =  Carbon::parse($request->start_date)->addDays($auditionRule->day)->addMonths($auditionRule->month);
-                $audition->status               =  0;
+
+                $audition                       = Audition::find($request->audition_id);
+                $audition->audition_admin_id    =  $request->audition_admin;
                 $audition->save();
-
-
-                //setup audition info from general audition rule
-                $auditionRule = AuditionRules::where('category_id', Auth::user()->category_id)->first();
-
-                $audition_info = new AuditionInfo();
-                $audition_info->audition_id = $audition->id;
-                $audition_info->category_id = Auth::user()->category_id;
-                $audition_info->round_num = $auditionRule->round_num;
-                $audition_info->judge_num = $auditionRule->judge_num;
-                $audition_info->jury_groups = $auditionRule->jury_groups;
-
-                $audition_info->event_start_date = Carbon::parse($request->stat_date);
-                $audition_info->event_end_date = Carbon::parse($request->stat_date)->addDays($auditionRule->event_period);
-
-                $audition_info->instruction_prepare_start_date = Carbon::parse($request->stat_date);
-                $audition_info->instruction_prepare_end_date = Carbon::parse($request->stat_date)->addDays($auditionRule->instruction_prepare_period);
-                $audition_info->registration_start_date = Carbon::parse($audition_info->instruction_prepare_end_date)->addDays(1);
-                $audition_info->registration_end_date = Carbon::parse($audition_info->registration_start_date)->addDays($auditionRule->registration_period);
-                $audition_info->save();
-
-
-                $auditionRoundRules = AuditionRoundRule::where('audition_rules_id', $auditionRule->id)->orderBy('round_num', 'ASC')->get();
-
-                $roundStartDate = Carbon::parse($audition_info->registration_end_date)->addDays(1);
-                foreach ($auditionRoundRules as $key => $auditionRoundRule) {
-                    $auditionRoundInfo = new AuditionRoundInfo();
-                    $auditionRoundInfo->audition_info_id = $audition_info->id;
-                    $auditionRoundInfo->audition_id = $audition->id;
-                    $auditionRoundInfo->round_num = $auditionRoundRule->round_num;
-                    $auditionRoundInfo->has_jury_or_judge_mark =  $auditionRoundRule->has_jury_or_judge_mark;
-                    $auditionRoundInfo->jury_or_judge_mark =  $auditionRoundRule->jury_or_judge_mark;
-                    $auditionRoundInfo->has_user_vote_mark =  $auditionRoundRule->has_user_vote_mark;
-                    $auditionRoundInfo->user_vote_mark =  $auditionRoundRule->user_vote_mark;
-                    $auditionRoundInfo->mark_live_or_offline =  $auditionRoundRule->mark_live_or_offline;
-                    $auditionRoundInfo->wildcard =  $auditionRoundRule->wildcard;
-                    $auditionRoundInfo->wildcard_round =  $auditionRoundRule->wildcard_round;
-                    $auditionRoundInfo->appeal =  $auditionRoundRule->appeal;
-                    $auditionRoundInfo->video_feed =  $auditionRoundRule->video_feed;
-                    $auditionRoundInfo->video_duration =  $auditionRoundRule->video_duration;
-                    $auditionRoundInfo->video_slot_num =  $auditionRoundRule->video_slot_num;
-
-
-                    $auditionRoundInfo->round_start_date =  $roundStartDate;
-                    $auditionRoundInfo->round_end_date = Carbon::parse($roundStartDate)->addDays($auditionRoundRule->round_period);
-
-                    $auditionRoundInfo->instruction_prepare_start_date = $auditionRoundInfo->round_start_date;
-                    $auditionRoundInfo->instruction_prepare_end_date = Carbon::parse($auditionRoundInfo->instruction_prepare_start_date)->addDays($auditionRoundRule->instruction_prepare_period);
-
-                    $auditionRoundInfo->video_upload_start_date = Carbon::parse($auditionRoundInfo->instruction_prepare_end_date)->addDays(1);
-                    $auditionRoundInfo->video_upload_end_date = Carbon::parse($auditionRoundInfo->video_upload_start_date)->addDays($auditionRoundRule->video_upload_period);
-
-                    $auditionRoundInfo->jury_or_judge_mark_start_date = Carbon::parse($auditionRoundInfo->video_upload_end_date)->addDays(1);
-                    $auditionRoundInfo->jury_or_judge_mark_end_date = Carbon::parse($auditionRoundInfo->jury_or_judge_mark_start_date)->addDays($auditionRoundRule->jury_or_judge_mark_period);
-
-                    $auditionRoundInfo->result_publish_start_date = Carbon::parse($auditionRoundInfo->jury_or_judge_mark_end_date)->addDays(1);
-                    $auditionRoundInfo->result_publish_end_date = Carbon::parse($auditionRoundInfo->result_publish_start_date)->addDays($auditionRoundRule->result_publish_period);
-
-                    $auditionRoundInfo->appeal_start_date = Carbon::parse($auditionRoundInfo->result_publish_end_date)->addDays(1);
-                    $auditionRoundInfo->appeal_end_date = Carbon::parse($auditionRoundInfo->appeal_start_date)->addDays($auditionRoundRule->appeal_period);
-
-                    $auditionRoundInfo->appeal_result_publish_start_date = Carbon::parse($auditionRoundInfo->appeal_end_date)->addDays(1);
-                    $auditionRoundInfo->appeal_result_publish_end_date = Carbon::parse($auditionRoundInfo->appeal_result_publish_start_date)->addDays($auditionRoundRule->appeal_result_publish_period);
-
-                    $auditionRoundInfo->save();
-
-                    $roundStartDate = Carbon::parse($auditionRoundInfo->round_end_date)->addDays(1);
-                }
 
                 foreach ($request->judge as $key => $value) {
                     $auditionAssignJudge = new AuditionAssignJudge();
@@ -164,56 +189,93 @@ class AuditionController extends Controller
                         $auditionAssignJury->save();
                     }
                 }
-                session()->flash('success', 'Audition added successfully !');
+                session()->flash('success', 'Man power assigned successfully !');
             }
         } else {
             session()->flash('error', 'Opps.. No audition rules found !');
         }
-        return back();
+        return redirect()->route('managerAdmin.audition.events');
     }
-
-
     public function create()
     {
         $auditionAdmins = User::whereNotIn('id', Audition::pluck('audition_admin_id'))->where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
         $subCategories = SubCategory::where([['category_id', auth()->user()->category_id], ['status', 1]])->orderBY('id', 'desc')->get();
+        $auditionRule = AuditionRules::where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->first();
+        return view('ManagerAdmin.audition.create', compact('auditionAdmins', 'subCategories', 'auditionRule'));
+    }
 
-        return view('ManagerAdmin.auditionAdmin.create', compact('auditionAdmins', 'subCategories'));
+    public function assignManpower($audition_id)
+    {
+        $audition = Audition::find($audition_id);
+
+        $auditionAdmins = User::whereDoesntHave('assignedAudition')->where([['user_type', 'audition-admin'],['category_id', Auth::user()->category_id]])->orderBy('id', 'DESC')->get();
+        $auditionRule = AuditionRules::where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->first();
+        if ($auditionRule->jury_groups !== null) {
+            $jurry_group = json_decode($auditionRule->jury_groups);
+            $group_data = $jurry_group->{'group_members'};
+        }
+
+        $auditionAssignJudges = AuditionAssignJudge::pluck('judge_id');
+        // for not assigned judge
+        $judges = User::whereNotIn('id', $auditionAssignJudges)->where('user_type', 'star')->where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->get();
+
+        $groups = JuryGroup::where([['status',1],['category_id', Auth::user()->category_id]])->orderBy('name','asc')->get();
+
+        $auditionAssignJurys = AuditionAssignJury::pluck('jury_id');
+        // for not assigned juries
+        $juries = User::whereNotIn('id', $auditionAssignJurys)
+                          ->where('user_type', 'jury')
+                          ->where('category_id', Auth::user()->category_id)
+                          ->orderBy('id', 'DESC')
+                          ->get();
+
+        $data = [
+            'auditionAdmins' => $auditionAdmins,
+            'audition' => $audition,
+            'juries' => $juries,
+            'judges' => $judges,
+            'auditionRule' => $auditionRule,
+            'groups' => $groups,
+            'group_data' => isset($group_data) && count($group_data) > 0 ? $group_data : null,
+        ];
+
+        return view('ManagerAdmin.Audition.assign-manpower',$data);
     }
 
 
-    public function registerUser($audition_id){
+    public function registerUser($audition_id)
+    {
         $audition = Audition::find($audition_id);
 
-        $users = AuditionParticipant::where([['audition_id',$audition_id]])->get();
+        $users = AuditionParticipant::where([['audition_id', $audition_id]])->get();
 
-        return view('ManagerAdmin.audition.register_users',compact('audition','users'));
-
+        return view('ManagerAdmin.audition.register_users', compact('audition', 'users'));
     }
 
-    public function getResultByRound($audition_id,$round_info_id){
+    public function getResultByRound($audition_id, $round_info_id)
+    {
 
         $audition = Audition::find($audition_id);
 
-        $round_result =  AuditionRoundInfo::with(['videos' => function($query) use($round_info_id){
-                                                return $query->where([['round_info_id',$round_info_id],['approval_status',1]])->get();
-                                            }])
-                                            ->where([['id',$round_info_id],['audition_id',$audition_id]])
-                                            ->first();
+        $round_result =  AuditionRoundInfo::with(['videos' => function ($query) use ($round_info_id) {
+            return $query->where([['round_info_id', $round_info_id], ['approval_status', 1]])->get();
+        }])
+            ->where([['id', $round_info_id], ['audition_id', $audition_id]])
+            ->first();
 
         $wining_users = AuditionRoundMarkTracking::where([
-                                                        ['audition_id',$audition_id],
-                                                        ['round_info_id',$round_info_id],
-                                                        ['wining_status',1]
-                                                        ])
-                                                        ->get();
+            ['audition_id', $audition_id],
+            ['round_info_id', $round_info_id],
+            ['wining_status', 1]
+        ])
+            ->get();
 
         $failed_users = AuditionRoundMarkTracking::where([
-                                                        ['audition_id',$audition_id],
-                                                        ['round_info_id',$round_info_id],
-                                                        ['wining_status',0]
-                                                        ])
-                                                        ->get();
+            ['audition_id', $audition_id],
+            ['round_info_id', $round_info_id],
+            ['wining_status', 0]
+        ])
+            ->get();
 
         $data = [
             'audition' => $audition,
@@ -222,44 +284,47 @@ class AuditionController extends Controller
             'failed_users' => $failed_users,
         ];
 
-        return view('ManagerAdmin.audition.view_round_result',$data);
+        return view('ManagerAdmin.audition.view_round_result', $data);
     }
 
-    public function roundResultPublish(Request $request){
+    public function roundResultPublish(Request $request)
+    {
         $audition_id = $request->audition_id;
         $round_info_id = $request->round_info_id;
 
         AuditionRoundMarkTracking::where([
-            ['audition_id',$audition_id],
-            ['round_info_id',$round_info_id],
-            ['wining_status',1]
-            ])
+            ['audition_id', $audition_id],
+            ['round_info_id', $round_info_id],
+            ['wining_status', 1]
+        ])
             ->update([
                 'result_message' => $request->selected_comments,
             ]);
         AuditionRoundMarkTracking::where([
-                    ['audition_id',$audition_id],
-                    ['round_info_id',$round_info_id],
-                    ['wining_status',0]
-                    ])
-                    ->update([
-                        'result_message' => $request->rejected_comments,
-                    ]);
+            ['audition_id', $audition_id],
+            ['round_info_id', $round_info_id],
+            ['wining_status', 0]
+        ])
+            ->update([
+                'result_message' => $request->rejected_comments,
+            ]);
 
         AuditionRoundInfo::find($round_info_id)->update([
-                'manager_status' => 2,
-        ]);           
+            'manager_status' => 2,
+        ]);
 
-        session()->flash('success','Result Publish Done!');
-        return redirect()->back();            
+        session()->flash('success', 'Result Publish Done!');
+        return redirect()->back();
     }
 
-    public function getRoundInstruction($audition_id,$round_info_id){
-        $round_instruction =  AuditionRoundInstruction::where([['audition_id',$audition_id],['round_info_id',$round_info_id]])->first();
-        return view('ManagerAdmin.audition.round_based_instruction',compact('round_instruction'));
+    public function getRoundInstruction($audition_id, $round_info_id)
+    {
+        $round_instruction =  AuditionRoundInstruction::where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->first();
+        return view('ManagerAdmin.audition.round_based_instruction', compact('round_instruction'));
     }
 
-    public function roundInstructionPublished($instruction_id){
+    public function roundInstructionPublished($instruction_id)
+    {
         $info = AuditionRoundInstruction::find($instruction_id);
         $info->send_to_user = 1;
         $info->save();

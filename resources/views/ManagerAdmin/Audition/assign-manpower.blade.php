@@ -67,14 +67,14 @@
         <div class="container-fluid">
             <div class="row ">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Create</h1>
+                    <h1 class="m-0">Assign Manpower</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         {{-- <a href="{{ route('superAdmin.events.edit',1) }}"> <li class="breadcrumb-item active">Events
                         List</li></a> --}}
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active"> Create</li>
+                        <li class="breadcrumb-item active"> Assign Manpower</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -82,76 +82,70 @@
     </div>
     @include('ManagerAdmin.Audition.includes.audition-sub-nav')
 
-    <div class="row">
-        <div class="col-md-12 mx-2 mt-3">
-            <div class="row">
-                <h4>Create Audition</h4>
-                <a class="btn btn-success btn-sm mr-4 " style="margin-bottom: 10px; margin-left: auto;"
-                    href="{{ route('managerAdmin.audition.events') }}">
-                    <i class=" fa fa-list"></i>&nbsp;Audition list
-                </a>
-            </div>
-            <div class='bottomBlackLine'></div>
-        </div>
-    </div>
-
     <div class="container">
-        <form action="{{ route('managerAdmin.audition.store') }}" method="POST">
+        <form action="{{ route('managerAdmin.audition.assignManpowerStore') }}" method="POST">
             @csrf
             <div class="card-body">
                 <div class="form-group row">
                     <div class="col-2">
-                        <label>Title</label>
+                        <label>Select Audition Admin {{ $audition->id }}</label> <br>
                     </div>
                     <div class="col-10">
                         <input type="hidden" name="audition_rule_id" value="{{ $auditionRule->id ?? '' }}">
-                        <textarea name="title" class="form-control" rows="3">{{ old('title') }}</textarea>
-                        @error('title')
+                        <input type="hidden" name="audition_id" value="{{ $audition->id ?? '' }}">
+                        <select name="audition_admin" class="form-control" style="width: 100%;">
+
+                            @foreach ($auditionAdmins as $auditionAdmin)
+                                <option value="{{ $auditionAdmin->id }}">
+                                    {{ $auditionAdmin->first_name . ' ' . $auditionAdmin->last_name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('audition_admin')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
+
                 <div class="form-group row">
                     <div class="col-2">
-                        <label>Description</label>
+                        <label>Select Jury By Group</label> <br>
+                    </div>
+                    @foreach ($groups as $key => $group)
+                        <div class="col-3">
+                            <input type="hidden" name="group_ids[]" value="{{ $group->id }}">
+                            <label for="">Group {{ $group->name }} <span class="text-danger">You have to select {{ $group_data[$key] }} jury !</span></label>
+                            <select name="jury[{{ $key }}][]" class="select2" multiple="multiple"
+                                style="width: 100%;">
+                                @foreach ($juries as $jury)
+                                    @if ($jury->jury->group_id == $group->id)
+                                        <option value="{{ $jury->id }}">
+                                            {{ $jury->first_name . ' ' . $jury->last_name }}
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
+                            @error('jury')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    @endforeach
+                </div>
+                <div class="form-group row">
+                    <div class="col-2">
+                        <label>Select Judges</label> <br>
+                        <span class="text-danger">You have to select
+                            {{ $auditionRule->judge_num ?? '' }} judge !</span>
                     </div>
                     <div class="col-10">
-                        <textarea name="description" class="form-control" rows="6">{{ old('description') }}</textarea>
-                        @error('description')
-                            <p class="text-danger">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-
-                <div class="form-group row">
-                    <div class="col-2">
-                    </div>
-                    <div class="col-10">
-                        <h6 class="text-warning">The audition will have to complete within
-                            {{ $auditionRule->event_period ?? 0 }} day(s)</h6>
-                    </div>
-                    <hr>
-                </div>
-
-
-                <div class="form-group row">
-                    <div class="col-2">
-                        <label>Event Start</label>
-                    </div>
-                    <div class="col-4">
-                        <input type="date" onchange="setEndDate()" name="start_date" id="start_date"
-                            class="form-control">
-                        @error('start_date')
-                            <p class="text-danger">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div class="col-2">
-                        <label>Event End</label>
-                    </div>
-                    <div class="col-4">
-                        <input type="text" readonly name="end_date" id="end_date" class="form-control">
-                        @error('end_date')
+                        <select name="judge[]" class="select2" multiple="multiple" style="width: 100%;">
+                            @foreach ($judges as $judge)
+                                <option value="{{ $judge->id }}">
+                                    {{ $judge->first_name . ' ' . $judge->last_name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('judge')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
