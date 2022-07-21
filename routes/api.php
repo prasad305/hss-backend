@@ -721,6 +721,10 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 
     Route::post('/audition-admin/audition/promo-instruction/update', [AuditionController::class, 'updatePromoInstruction']);
 
+    Route::post('/audition-admin/audition/assign-main-juries-for-percentage', [AuditionController::class, 'assignMainJuriesForPercentage']);
+
+    Route::post('/audition-admin/audition/assign-main-juries', [AuditionController::class, 'assignMainJuries']);
+
 
     Route::get('/audition-admin/audition/videos/{round_info_id}', [AuditionController::class, 'round_videos']);
     Route::post('/audition-admin/audition/videos/set_approved/{id}', [AuditionController::class, 'round_videos_set_approved']);

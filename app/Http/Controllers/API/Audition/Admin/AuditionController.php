@@ -496,6 +496,7 @@ class AuditionController extends Controller
     }
     public function updatePromoInstruction(Request $request)
     {
+        // return $request->all();
         $validator = Validator::make($request->all(), [
             'instruction' => 'required|min:5',
             'image' => 'required|mimes:jpg,jpeg,png',
@@ -529,7 +530,13 @@ class AuditionController extends Controller
                 $request->video->move($folder_path, $file_new_name);
                 $instruction->video = $folder_path . '/' . $file_new_name;
             }
+            $instruction->send_to_manager = 1;
             $instruction->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Promo Instruction Updated!',
+            ]);
         }
     }
     public function storeRoundInstruction(Request $request)
