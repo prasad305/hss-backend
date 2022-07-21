@@ -309,8 +309,8 @@ class AuditionController extends Controller
                 'result_message' => $request->rejected_comments,
             ]);
 
-        AuditionRoundInfo::find($round_info_id)->update([
-            'manager_status' => 2,
+        AuditionRoundInfo::where('id',$round_info_id)->update([
+                'manager_status' => 2,
         ]);
 
         session()->flash('success', 'Result Publish Done!');
