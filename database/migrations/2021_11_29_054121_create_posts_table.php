@@ -17,7 +17,7 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->string('type')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->text('star_id')->default([]);
+            $table->text('star_id')->default('[]');
             $table->unsignedBigInteger('event_id')->nullable();
             $table->unsignedBigInteger('category_id')->default(0);
             $table->unsignedBigInteger('sub_category_id')->default(0);
@@ -26,10 +26,10 @@ class CreatePostsTable extends Migration
             $table->integer('share_number')->default(0);
             $table->string('title')->nullable();
             $table->longText('details')->nullable();
-            $table->longText('user_like_id')->nullable();
+            $table->longText('user_like_id')->default('[]');
             $table->string('share_link')->nullable();
             $table->integer('share_count')->default(0);
-            $table->longText('react_provider')->nullable();
+            $table->longText('react_provider')->default('[]');
             $table->timestamp('post_start_date')->nullable();
             $table->timestamp('post_end_date')->nullable();
             $table->integer('status')->nullable();
