@@ -4,7 +4,8 @@
     <div class="row form-group">
         <div class="col-md-12">
             <label for="first_name">Title</label>
-            <input type="text" class="form-control" id="title" name="title" placeholder="Enter Admin First Name" value="{{$product->title }}">
+            <input type="text" class="form-control" id="title" name="title" placeholder="Enter Admin First Name"
+                value="{{ $product->title }}">
             <span class="text-danger" id="title_error"></span>
         </div>
     </div>
@@ -13,9 +14,9 @@
         <div class="col-md-12">
             <label for="phone">Description</label>
             <textarea id="summernote" name="details">
-            {!! $product->details!!}
+            {!! $product->details !!}
           </textarea>
-          <span class="text-danger" id="details_error"></span>
+            <span class="text-danger" id="details_error"></span>
         </div>
     </div>
 
@@ -23,13 +24,18 @@
     <span class="row">
         <div class="form-group col-md-12">
             <label for="image">Banner</label>
-            <br><img id="image1" onchange="validateMultipleImage('image1')" alt="icon" src="{{ asset($product->product_image) }}" height="300px" width="100%" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required />
+            <br><img id="image1" onchange="validateMultipleImage('image1')" alt="icon"
+                src="{{ asset($product->product_image) }}" height="300px" width="100%"
+                onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required />
             <br><br>
-            <input type="file" class="mt-2" id="image" name="product_image" onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)" accept=".jfif,.jpg,.jpeg,.png,.gif" required>
+            <input type="file" class="mt-2" id="image" name="product_image"
+                onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)"
+                accept=".jfif,.jpg,.jpeg,.png,.gif" required>
         </div>
     </span>
 
-    <button type="submit" class="btn btn-primary" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update Auction</button>
+    <button type="submit" class="btn btn-primary" id="btnUpdateData"><i class="fa fa-save"></i>&nbsp; Update
+        Auction</button>
 
 </form>
 
@@ -47,7 +53,7 @@
         });
 
         $.ajax({
-            url: "{{ route('managerAdmin.auctionProduct.update',$product->id) }}", // your request url
+            url: "{{ route('managerAdmin.auctionProduct.update', $product->id) }}", // your request url
             data: formData,
             processData: false,
             contentType: false,

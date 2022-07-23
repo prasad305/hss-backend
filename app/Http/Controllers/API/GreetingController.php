@@ -17,7 +17,8 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class GreetingController extends Controller
 {
-    public function forwardToUser(Request $request){
+    public function forwardToUser(Request $request)
+    {
         $greeting_registration_id_array = explode(',', $request->greeting_registration_ids);
         $validator = Validator::make($request->all(), [
             'greeting_registration_ids' => 'required',
@@ -28,7 +29,7 @@ class GreetingController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $greetingsRegistration = GreetingsRegistration::whereIn('id',$greeting_registration_id_array)->update(['status' => 3]);
+            $greetingsRegistration = GreetingsRegistration::whereIn('id', $greeting_registration_id_array)->update(['status' => 3]);
             return response()->json([
                 'status' => 200,
                 'message' => 'Greeting video forwarded successfully !',
@@ -65,6 +66,7 @@ class GreetingController extends Controller
             $greeting->created_by_id = auth('sanctum')->user()->id;
             $greeting->admin_id = auth('sanctum')->user()->id;
             $greeting->category_id = auth('sanctum')->user()->category_id;
+            $greeting->sub_category_id = auth('sanctum')->user()->sub_category_id;
 
             $greeting->title = $request->title;
             $greeting->instruction = $request->instruction;
