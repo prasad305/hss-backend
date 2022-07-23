@@ -32,8 +32,8 @@ class CreateMeetupEventsTable extends Migration
             $table->integer('total_seat')->nullable();
             $table->string('banner')->nullable();
             $table->string('video')->nullable();
-            $table->time('reg_start_date')->nullable();
-            $table->time('reg_end_date')->nullable();
+            $table->date('reg_start_date')->nullable();
+            $table->date('reg_end_date')->nullable();
             $table->float('fee')->nullable();
             $table->integer('status')->default(0)->comment('0 = pending, 1 = star_approval, 2 = posted by Manager Admin, 9 = completed, 10 = remove/delete, 11 = rejeced by Star, 22 = rejected by Manager Admin');
             $table->timestamps();
