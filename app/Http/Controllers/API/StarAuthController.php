@@ -342,36 +342,35 @@ class StarAuthController extends Controller
 
     public function qr_verify(Request $request)
     {
-
+        // return $request->qr_code;
         $superStar = SuperStar::all();
 
         $juryBoard = JuryBoard::all();
 
-        $merged = $superStar->merge($juryBoard);
+        $merged = $superStar->concat($juryBoard);
 
-        $user = $merged->where('qr_code', $request->qr_code)->first();
+        $user = $merged->where('qr_code',$request->qr_code)->first();
 
-
-
-        if ($user) {
-            if (User::find($user->star_id)->email && User::find($user->star_id)->phone) {
+            if ($user) {
+                if (User::find($user->star_id)->email && User::find($user->star_id)->phone) {
+                    return response()->json([
+                        'status'=>409,
+                        'message'=>'This Star Already Registered!',
+                    ]);
+                }else{
+                    return response()->json([
+                        'status'=>200,
+                        'star_id' => $user->star_id,
+                        'auth_type' => User::find($user->star_id)->user_type,
+                        'message'=>'QR Code Matched!',
+                    ]);
+                }
+               
+            }else{
                 return response()->json([
-                    'status' => 409,
-                    'message' => 'This Star Already Registered!',
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 200,
-                    'star_id' => $user->star_id,
-                    'auth_type' => User::find($user->star_id)->user_type,
-                    'message' => 'QR Code Matched!',
+                    'status'=>401,
+                    'message'=>'Invalid QR Code!',
                 ]);
             }
-        } else {
-            return response()->json([
-                'status' => 401,
-                'message' => 'Invalid QR Code!',
-            ]);
-        }
     }
 }

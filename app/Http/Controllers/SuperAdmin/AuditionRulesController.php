@@ -64,14 +64,17 @@ class AuditionRulesController extends Controller
         $audition_rules->jury_groups = json_encode($jury_group_array); 
 
         $audition_rules->save();
-
+           $inc = $audition_rules->roundRules->last() ? $audition_rules->roundRules->last()->round_num : 0;
 
             if ($diff > 0) {
                 for ($i = 0; $i < $diff; $i++) {
                     AuditionRoundRule::create([
-                        'round_num' => $i+1,
+                        'round_num' => $inc > 0 ? $inc+1 : $i+1,
                         'audition_rules_id' => $audition_rules->id,
                     ]);
+                    if ($inc > 0) {
+                       $inc++;
+                    }
                 }
             }
 
@@ -112,7 +115,7 @@ class AuditionRulesController extends Controller
 
         if ($rule->jury_groups !== null) {
             $jurry_group = json_decode($rule->jury_groups);
-             $group_data = $jurry_group->{'group_members'};
+            $group_data = $jurry_group->{'group_members'};
         }
 
         $data = [
@@ -120,7 +123,7 @@ class AuditionRulesController extends Controller
             'rules' =>  AuditionRules::where('status', 1)->latest()->get(),
             'categories' => Category::orderBy('id', 'DESC')->get(),
             'groups' => JuryGroup::where([['status', 1],['category_id',$rule->category_id]])->orderBy('name', 'asc')->get(),
-            'group_data' =>  isset($group_data) && count($group_data) > 0 ? $group_data : null ,  
+            'group_data' =>  isset($group_data) && count($group_data) > 0 ? $group_data : null,  
         ];
         return view('SuperAdmin.AuditionRules.edit', $data);
     }
