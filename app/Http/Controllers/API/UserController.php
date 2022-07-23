@@ -70,6 +70,16 @@ class UserController extends Controller
         ]);
     }
 
+    public function star_list()
+    {
+        $stars = User::where('user_type','star')->get();
+
+        return response()->json([
+            'status' => 200,
+            'stars' => $stars,
+        ]);
+    }
+
     public function postShare($postId){
         $post = Post::find($postId);
         return response()->json([
