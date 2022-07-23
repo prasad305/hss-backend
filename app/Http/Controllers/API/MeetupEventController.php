@@ -585,7 +585,7 @@ class MeetupEventController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'star_id' => 'required',
+            // 'star_id' => 'required',
             'title' => 'required',
             'description' => 'required|min:6',
             'instruction' => 'required|min:6',
@@ -595,7 +595,7 @@ class MeetupEventController extends Controller
             'reg_start_date' => 'required',
             'reg_end_date' => 'required',
             'fee' => 'required',
-            'total_seat' => 'required',
+            'slots' => 'required',
             'venue' => 'required_if:meetup_type,"Offline"',
         ]);
 
@@ -606,21 +606,21 @@ class MeetupEventController extends Controller
         } else {
             $meetup = MeetupEvent::find($id);
 
-            $meetup->star_id = $request->input('star_id');
-            $meetup->title = $request->input('title');
-            $meetup->slug = Str::slug($request->input('title'));
-            $meetup->event_link = $request->input('event_link');
-            $meetup->venue = $request->input('venue');
-            $meetup->meetup_type = $request->input('meetup_type');
-            $meetup->event_date = $request->input('event_date');
-            $meetup->start_time = $request->input('start_time');
-            $meetup->end_time = $request->input('end_time');
-            $meetup->description = $request->input('description');
-            $meetup->instruction = $request->input('instruction');
-            $meetup->total_seat = $request->input('total_seat');
-            $meetup->reg_start_date = $request->input('reg_start_date');
-            $meetup->reg_end_date = $request->input('reg_end_date');
-            $meetup->fee = $request->input('fee');
+            // $meetup->star_id = $request->star_id;
+            $meetup->title = $request->title;
+            $meetup->slug = Str::slug($request->title);
+            $meetup->event_link = $request->event_link;
+            $meetup->venue = $request->venue;
+            $meetup->meetup_type = $request->meetup_type;
+            $meetup->event_date = Carbon::parse($request->event_date);
+            $meetup->start_time = Carbon::parse($request->start_time);
+            $meetup->end_time = Carbon::parse($request->end_time);
+            $meetup->description = $request->description;
+            $meetup->instruction = $request->instruction;
+            $meetup->total_seat = $request->slots;
+            $meetup->reg_start_date = Carbon::parse($request->reg_start_date);
+            $meetup->reg_end_date = Carbon::parse($request->reg_end_date);
+            $meetup->fee = $request->fee;
 
             if ($request->hasfile('banner')) {
                 $destination = $meetup->banner;
