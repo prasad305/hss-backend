@@ -17,27 +17,28 @@ use Illuminate\Support\Str;
 class GreetingController extends Controller
 {
 
-    public function dashboard()
+    // public function dashboard()
+    // {
+    //     // all of those are dummy for greeting dashboard
+    //     $subcategory = SubCategory::where('category_id', Auth::user()->category_id)->latest()->get();
+    //     // $subcategory = Category::with(subCategories)
+    //     // dd($subcategory);
+    //     $totalUser = User::where('user_type', 'user')->count();
+    //     $totalAdmin = User::where('user_type', 'admin')->where('parent_user', auth()->user()->id)->count();
+    //     $totalStar = User::where('user_type', 'star')->where('parent_user', auth()->user()->id)->count();
+    //     $totalAuctionProduct = Auction::where('category_id', auth()->user()->category_id)->count();
+    //     $totalMarketPlaceProduct = Marketplace::where('category_id', auth()->user()->category_id)->count();
+    //     return view('ManagerAdmin.greeting.dashboard', compact(['totalUser', 'subcategory', 'totalAdmin', 'totalStar', 'totalAuctionProduct', 'totalMarketPlaceProduct']));
+    // }
+    public function subcategory($id)
     {
-        // all of those are dummy for greeting dashboard
-        $subcategory = SubCategory::where('category_id', Auth::user()->category_id)->latest()->get();
-        // $subcategory = Category::with(subCategories)
-        // dd($subcategory);
-        $totalUser = User::where('user_type', 'user')->count();
-        $totalAdmin = User::where('user_type', 'admin')->where('parent_user', auth()->user()->id)->count();
-        $totalStar = User::where('user_type', 'star')->where('parent_user', auth()->user()->id)->count();
-        $totalAuctionProduct = Auction::where('category_id', auth()->user()->category_id)->count();
-        $totalMarketPlaceProduct = Marketplace::where('category_id', auth()->user()->category_id)->count();
-        return view('ManagerAdmin.greeting.dashboard', compact(['totalUser', 'subcategory', 'totalAdmin', 'totalStar', 'totalAuctionProduct', 'totalMarketPlaceProduct']));
-    }
-     public function subcategory($id){
         $greetings = Greeting::where('category_id', $id)->get();
         return view('ManagerAdmin.greeting.subcategory', compact(['greetings']));
-     }
+    }
 
     public function request()
     {
-        $greetings = Greeting::where([['category_id', Auth::user()->category_id], ['status', 1]])->get();
+        $greetings = Greeting::where([['category_id', Auth::user()->category_id], ['status', '>=', 1]])->get();
         return view('ManagerAdmin.greeting.request', compact('greetings'));
     }
     public function published()
