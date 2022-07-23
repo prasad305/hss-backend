@@ -1,76 +1,92 @@
 @extends('Layouts.SuperAdmin.master')
 
 @push('title')
-    Super Admin
+    Manager Admin
 @endpush
 
 
 
-@section('content')
 
-<!-- Content Header (Page header) -->
-<div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0">Auction</h1>
-        </div><!-- /.col -->
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Auction</li>
-          </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-</div>
-  <!-- /.content-header -->
+@section('content')
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Auction</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Auction</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
 
 
 
     <div class="content">
-
         <div class="container-fluid">
 
 
+            <div class="row">
+                @foreach ($product as $val)
+                    <!--card-->
 
-            <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">Auction Instruction</h3>
-                  <a class="btn btn-success btn-sm" style="float: right;" onclick="Show('Add Terms and Conditions','{{ route('superAdmin.auctionTerms.create') }}')"><i class=" fa fa-plus"></i>&nbsp;New Terms And Conditions</a>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                  <table id="example1" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Instructions</th>
-                            <th style="width: 150px">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card">
+                            <div class="panel panel-primary text-center">
+                                <div class="">
+                                    <img width="50%" src="{{ asset($val->product_image) }}" alt="">
+                                </div>
+                                <div class="panel-body py-3">
+                                    <h3 class="text-ellipsis-line-1">{{ $val->name }}</h3>
 
-                        @foreach ($instruction as $data)
-                            <tr>
-                                <td>{!! $data->acquired_instruction !!}</td>
-                                <td style="width: 150px">
-                                    <a class="btn btn-sm btn-info"
-                                        onclick="Show('Edit Instruction','{{ route('superAdmin.auctionTerms.edit', $data->id) }}')"><i
-                                            class="fa fa-edit text-white"></i></a>
-                                    <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
-                                        value="{{ route('superAdmin.auctionTerms.destroy', $data->id) }}"><i
-                                            class="fa fa-trash"></i> </button>
-                                </td>
-                            </tr>
-                        @endforeach
+                                    @if ($val->status == 0)
+                                        <a type="button" class="btn btn-warning waves-effect waves-light"><i
+                                                class="icon-record"></i>
+                                            Pending</a>
+                                    @else
+                                        <button type="button" class="btn btn-success waves-effect waves-light"><i
+                                                class="icon-checkmark-round"></i> Published</button>
+                                    @endif
 
-                    </tbody>
-                  </table>
-                </div>
-                <!-- /.card-body -->
+                                    <a href="{{ route('managerAdmin.auctionProduct.details', [$val->id]) }}"
+                                        type="button" class="btn btn-info waves-effect waves-light">Details <i
+                                            class="fa fa-angle-double-right"></i></a>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--card end-->
+                @endforeach
             </div>
+
 
         </div> <!-- container -->
     </div> <!-- content -->
-
+    @if (session()->has('success'))
+        <script type="text/javascript">
+            $(document).ready(function() {
+                // notify('{{ session()->get('success') }}','success');
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: '{{ Session::get('success') }}',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            });
+        </script>
+    @endif
 @endsection
+
+@push('script')
+    {{-- <script src="{{ asset('assets/manager-admin/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script> --}}
+    <script src="{{ asset('assets/manager-admin/pages/dashborad.js') }}"></script>
+@endpush

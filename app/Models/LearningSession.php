@@ -33,7 +33,7 @@ class LearningSession extends Model
         'total_amount',
         'assignment',
     ];
-    protected $with = ['star','learningSessionAssignment'];
+    protected $with = ['star', 'learningSessionAssignment'];
 
     public function admin()
     {
@@ -41,6 +41,14 @@ class LearningSession extends Model
     }
 
     public function star()
+    {
+        return $this->belongsTo(User::class, 'star_id');
+    }
+    public function starAdmin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
+    }
+    public function starSession()
     {
         return $this->belongsTo(User::class, 'star_id');
     }

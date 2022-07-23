@@ -319,7 +319,7 @@ class AuditionController extends Controller
 
         if (AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['jury_final_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->count() > 0) {
             $isAbleToMerge = true;
-        }else{
+        } else {
             $isAbleToMerge = false;
         }
 
@@ -361,7 +361,7 @@ class AuditionController extends Controller
         foreach ($participants as $key => $auditionParticipant) {
             $sum_of_final_mark = 0;
             foreach ($auditionParticipant->videos as $key => $video) {
-              $sum_of_final_mark += $video->jury_final_mark == null ? 0 : $video->jury_final_mark;
+                $sum_of_final_mark += $video->jury_final_mark == null ? 0 : $video->jury_final_mark;
             }
             $average = number_format(($sum_of_final_mark / $auditionRoundInfo->video_slot_num), 2);
 
@@ -380,11 +380,20 @@ class AuditionController extends Controller
 
     public function singleAuditionRoundVideoResultByPercentage($audition_id, $audition_round_info_id, $percentage_range)
     {
-        $percentageBaseRoundMarkTrackings = AuditionRoundMarkTracking::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id], ['avg_mark', '>=', $percentage_range ]])->get();
+        $percentageBaseRoundMarkTrackings = AuditionRoundMarkTracking::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id], ['avg_mark', '>=', $percentage_range]])->get();
         return response()->json([
             'status' => 200,
             'message' => 'OK',
             'percentageBaseRoundMarkTrackings' => $percentageBaseRoundMarkTrackings,
+        ]);
+    }
+    public function singleAuditionRoundVideoResultByFilterNumber($audition_id, $audition_round_info_id, $filter_number)
+    {
+        $filterNumberBaseRoundMarkTrackings = AuditionRoundMarkTracking::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->orderBy('avg_mark', 'DESC')->take($filter_number)->get();
+        return response()->json([
+            'status' => 200,
+            'message' => 'OK',
+            'filterNumberBaseRoundMarkTrackings' => $filterNumberBaseRoundMarkTrackings,
         ]);
     }
 
@@ -487,6 +496,7 @@ class AuditionController extends Controller
     }
     public function updatePromoInstruction(Request $request)
     {
+        // return $request->all();
         $validator = Validator::make($request->all(), [
             'instruction' => 'required|min:5',
             'image' => 'required|mimes:jpg,jpeg,png',
@@ -520,7 +530,13 @@ class AuditionController extends Controller
                 $request->video->move($folder_path, $file_new_name);
                 $instruction->video = $folder_path . '/' . $file_new_name;
             }
+            $instruction->send_to_manager = 1;
             $instruction->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Promo Instruction Updated!',
+            ]);
         }
     }
     public function storeRoundInstruction(Request $request)
@@ -1807,22 +1823,28 @@ class AuditionController extends Controller
         }
     }
 
-    public function roundResultSendToManager(Request $request){
+    public function roundResultSendToManager(Request $request)
+    {
+        if ($request->filter_type == 'number') {
+            AuditionRoundMarkTracking::where([
+                ['round_info_id', $request->round_info_id],
+                ['audition_id', $request->audition_id]
+            ])->orderBy('avg_mark', 'DESC')->take($request->filter_number)->update(['wining_status' => 1,]);
+        } else if ($request->filter_type == 'percentage') {
+            AuditionRoundMarkTracking::where([
+                ['round_info_id', $request->round_info_id],
+                ['audition_id', $request->audition_id],
+                ['avg_mark', '>=', $request->percentage_range]
+            ])->update(['wining_status' => 1,]);
+        }
 
-        AuditionRoundInfo::where('id',$request->round_info_id)->update([
+        AuditionRoundInfo::where('id', $request->round_info_id)->update([
             'manager_status' => 1,
         ]);
 
-        AuditionRoundMarkTracking::where([
-                                            ['round_info_id', $request->round_info_id],
-                                            ['audition_id', $request->audition_id],
-                                            ['avg_mark', '>=', $request->percentage_range ]
-                                         ])
-                                         ->update(['wining_status' => 1,]);
         return response()->json([
             'status' => 200,
             'message' => 'Audition Round Result Send To Manager Successfull',
         ]);
-
     }
 }
