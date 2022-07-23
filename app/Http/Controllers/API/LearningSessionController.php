@@ -39,7 +39,7 @@ class LearningSessionController extends Controller
                 'title.unique' => 'This title already exist',
                 'star_id.required' => 'Please Select One Star',
             ]);
-        }else{
+        } else {
             $validator = Validator::make($request->all(), [
                 'title' => 'required|unique:learning_sessions',
                 'description' => 'required|min:5',
@@ -74,6 +74,7 @@ class LearningSessionController extends Controller
             $learningSession->title = $request->input('title');
             $learningSession->slug = Str::slug($request->input('title'));
             $learningSession->category_id = auth('sanctum')->user()->category_id;
+            $learningSession->sub_category_id = auth('sanctum')->user()->sub_category_id;
             $learningSession->admin_id = auth('sanctum')->user()->id;
             $learningSession->created_by_id = auth('sanctum')->user()->id;
             $learningSession->star_id = $request->input('star_id');
@@ -128,12 +129,12 @@ class LearningSessionController extends Controller
         }
     }
 
-    public function adminUpdateLearning(Request $request,$event_id)
+    public function adminUpdateLearning(Request $request, $event_id)
     {
 
         if ($request->banner_or_video == 0) {
             $validator = Validator::make($request->all(), [
-                'title' => 'required|unique:learning_sessions,title,'.$event_id,
+                'title' => 'required|unique:learning_sessions,title,' . $event_id,
                 'description' => 'required|min:5',
                 'star_id' => 'required',
                 'instruction' => 'required|min:5',
@@ -150,9 +151,9 @@ class LearningSessionController extends Controller
                 'title.unique' => 'This title already exist',
                 'star_id.required' => 'Please Select One Star',
             ]);
-        }else{
+        } else {
             $validator = Validator::make($request->all(), [
-                'title' => 'required|unique:learning_sessions,title,'.$event_id,
+                'title' => 'required|unique:learning_sessions,title,' . $event_id,
                 'description' => 'required|min:5',
                 'star_id' => 'required',
                 'instruction' => 'required|min:5',
@@ -243,8 +244,6 @@ class LearningSessionController extends Controller
                     'message' => $exception->getMessage(),
                 ]);
             }
-
-
         }
     }
 
@@ -469,11 +468,11 @@ class LearningSessionController extends Controller
 
     public function rejected_list()
     {
-        $events = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status',11]]);
+        $events = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', 11]]);
 
         return response()->json([
             'status' => 200,
-            'events' => $events->orderBy('updated_at','desc')->get(),
+            'events' => $events->orderBy('updated_at', 'desc')->get(),
             'count' => $events->count(),
         ]);
     }
@@ -606,7 +605,7 @@ class LearningSessionController extends Controller
                 'title.unique' => 'This title already exist',
                 'star_id.required' => 'Please Select One Star',
             ]);
-        }else{
+        } else {
             $validator = Validator::make($request->all(), [
                 'title' => 'required|unique:learning_sessions',
                 'description' => 'required|min:5',
@@ -640,6 +639,7 @@ class LearningSessionController extends Controller
             $learningSession->title = $request->input('title');
             $learningSession->slug = Str::slug($request->input('title'));
             $learningSession->category_id = auth('sanctum')->user()->category_id;
+            $learningSession->sub_category_id = auth('sanctum')->user()->sub_category_id;
             $learningSession->created_by_id = auth('sanctum')->user()->id;
             $learningSession->admin_id = auth('sanctum')->user()->parent_user;
             $learningSession->star_id = auth('sanctum')->user()->id;
@@ -712,7 +712,7 @@ class LearningSessionController extends Controller
                 'title.unique' => 'This title already exist',
                 'star_id.required' => 'Please Select One Star',
             ]);
-        }else{
+        } else {
             $validator = Validator::make($request->all(), [
                 'title' => 'required|unique:learning_sessions,title,' . $id,
                 'description' => 'required|min:5',
@@ -841,11 +841,11 @@ class LearningSessionController extends Controller
 
     public function star_reject_list()
     {
-        $events = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status',11]]);
+        $events = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 11]]);
 
         return response()->json([
             'status' => 200,
-            'events' => $events->orderBY('updated_at','desc')->get(),
+            'events' => $events->orderBY('updated_at', 'desc')->get(),
             'count' => $events->count(),
         ]);
     }

@@ -26,6 +26,48 @@ class SubCategory extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+    public function simplePosts()
+    {
+        return $this->hasMany(SimplePost::class, 'category_id');
+    }
+    public function subSimplePosts()
+    {
+        return $this->hasMany(SimplePost::class, 'subcategory_id');
+    }
+    public function subLearningSession()
+    {
+        return $this->hasMany(LearningSession::class, 'sub_category_id');
+    }
+    public function subliveChat()
+    {
+        return $this->hasMany(LiveChat::class, 'sub_category_id');
+    }
+    public function subqna()
+    {
+        return $this->hasMany(QnA::class, 'sub_category_id');
+    }
+    public function submeetup()
+    {
+        return $this->hasMany(MeetupEvent::class, 'sub_category_id');
+    }
+    public function subfangroup()
+    {
+        return $this->hasMany(FanGroup::class, 'sub_category_id');
+    }
+    public function subgreeting()
+    {
+        return $this->hasMany(Greeting::class, 'sub_category_id');
+    }
+    public function subauction()
+    {
+        return $this->hasMany(Auction::class, 'subcategory_id');
+    }
+    public function submarketplace()
+    {
+        return $this->hasMany(Marketplace::class, 'subcategory_id');
+    }
+    public function subsouvenir()
+    {
+        return $this->hasMany(SouvenirCreate::class, 'sub_category_id');
+    }
 }
-
-

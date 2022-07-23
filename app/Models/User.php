@@ -9,6 +9,7 @@ use App\Models\Audition\AuditionMark;
 use App\Models\Category;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPromoInstructionSendInfo;
+use App\Models\Audition\AuditionUploadVideo;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -69,7 +70,7 @@ class User extends Authenticatable
 
 
     //Relation For API
-    protected $with = ['assignedToMePromoInstructionSendInfo','userInfo', 'admin','star.starDetails','category','subCategory'];
+    protected $with = ['assignedToMePromoInstructionSendInfo', 'userInfo', 'admin', 'star.starDetails', 'category', 'subCategory'];
 
 
     public function admin()
@@ -259,11 +260,16 @@ class User extends Authenticatable
     }
 
 
-    public function participant_jury(){
+    public function participant_jury()
+    {
         return $this->hasMany(AuditionParticipant::class, 'jury_id');
     }
+    // public function assignedJuryVideos(){
+    //     return $this->hasMany(AuditionUploadVideo::class, 'jury_id');
+    // }
 
-    public function markingVideo(){
+    public function markingVideo()
+    {
         return $this->hasMany(AuditionMark::class, 'jury_id');
     }
 
@@ -278,11 +284,9 @@ class User extends Authenticatable
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-      // all of this below relation is for jury user
-      public function assignedAuditionsJury()
-      {
-          return $this->hasMany(AuditionAssignJury::class, 'jury_id');
-      }
-
-
+    // all of this below relation is for jury user
+    public function assignedAuditionsJury()
+    {
+        return $this->hasMany(AuditionAssignJury::class, 'jury_id');
+    }
 }

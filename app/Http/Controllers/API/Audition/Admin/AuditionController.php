@@ -19,6 +19,7 @@ use App\Models\Audition\AuditionPromoInstruction;
 use App\Models\Audition\AuditionPromoInstructionSendInfo;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundInstructionSendInfo;
+use App\Models\Audition\AuditionRoundMarkTracking;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\Audition\AuditionVideoMark;
@@ -221,12 +222,6 @@ class AuditionController extends Controller
         }
     }
 
-
-
-
-
-
-
     public function singleAuditionApprovedVideoWithRoundId($audition_id, $audition_round_info_id)
     {
         $audition = Audition::find($audition_id);
@@ -239,7 +234,7 @@ class AuditionController extends Controller
         $assignJuriesOrderByGroup = $assignJuries->groupBy('group_id');
 
         $auditionParticipantWithVideos = AuditionParticipant::with(['videos' => function ($query) use ($audition_round_info_id) {
-            return $query->where([['round_info_id', $audition_round_info_id], ['approval_status', 1]])->get();
+            return $query->where([['round_info_id', $audition_round_info_id]])->get();
         }, 'participant'])->where([['audition_id', $audition_id], ['round_info_id', $audition_round_info_id]])->get();
 
         $totalNumberOfVideos = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id], ['approval_status', 1]])->count();
@@ -257,6 +252,151 @@ class AuditionController extends Controller
             'isVideoAlreadyAssigned' => $isVideoAlreadyAssigned,
         ]);
     }
+    public function videoReportBasedOnSingleJury($audition_id, $audition_round_info_id, $jury_id)
+    {
+        // return $audition_id."-------".$audition_round_info_id."-------".$jury_id;
+        $audition = Audition::find($audition_id);
+        $auditionRoundInfo  = AuditionRoundInfo::find($audition_round_info_id);
+
+
+        if (AuditionUploadVideo::where([['group_b_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count() > 0) {
+            $videos =  AuditionUploadVideo::where([['group_b_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+            $video_number = AuditionUploadVideo::where([['group_b_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count();
+            $marked_video_number = AuditionUploadVideo::where([['group_b_jury_mark', '!=', null], ['group_b_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count();
+            $non_marked_video_number = AuditionUploadVideo::where([['group_b_jury_mark', null], ['group_b_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count();
+        } else if (AuditionUploadVideo::where([['group_c_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count() > 0) {
+            $videos = AuditionUploadVideo::where([['group_c_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+            $video_number =  AuditionUploadVideo::where([['group_c_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count();
+            $marked_video_number = AuditionUploadVideo::where([['group_c_jury_mark', '!=', null], ['group_c_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count();
+            $non_marked_video_number = AuditionUploadVideo::where([['group_c_jury_mark', null], ['group_c_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count();
+        } else if (AuditionUploadVideo::where([['group_a_ran_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count() > 0 || AuditionUploadVideo::where([['group_a_per_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->count() > 0) {
+
+            $auditionUploadVideoARan = AuditionUploadVideo::where([['group_a_ran_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+            $auditionUploadVideoAPer = AuditionUploadVideo::where([['group_a_per_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+            $markedauditionUploadVideoARan = AuditionUploadVideo::where([['group_a_ran_jury_id', '!=', null], ['group_a_ran_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+            $markedauditionUploadVideoAPer = AuditionUploadVideo::where([['group_a_per_jury_id', '!=', null], ['group_a_per_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+            $nonMarkedauditionUploadVideoARan = AuditionUploadVideo::where([['group_a_ran_jury_id', null], ['group_a_ran_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+            $nonMarkedauditionUploadVideoAPer = AuditionUploadVideo::where([['group_a_per_jury_id', null], ['group_a_per_jury_id', $jury_id], ['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->get();
+
+
+            $videos =  $auditionUploadVideoARan->concat($auditionUploadVideoAPer);
+            $video_number =  $videos->count();
+
+            $marked_video =  $markedauditionUploadVideoARan->concat($markedauditionUploadVideoAPer);
+            $non_marked_video = $nonMarkedauditionUploadVideoARan->concat($nonMarkedauditionUploadVideoAPer);
+
+            $marked_video_number =  $marked_video->count();
+            $non_marked_video_number = $non_marked_video->count();
+        } else {
+            $video_number  = 0;
+            $videos = [];
+            $marked_video_number = 0;
+            $non_marked_video_number = 0;
+        }
+
+
+
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
+            'auditionRoundInfo' => $auditionRoundInfo,
+            'video_number' => $video_number,
+            'videos' => $videos,
+            'marked_video_number' => $marked_video_number,
+            'non_marked_video_number' => $non_marked_video_number,
+        ]);
+    }
+
+
+    public function singleAuditionRoundAssessmentResult($audition_id, $audition_round_info_id)
+    {
+        $audition = Audition::find($audition_id);
+        $auditionRoundInfo  = AuditionRoundInfo::find($audition_round_info_id);
+
+        $assignJuries = AuditionAssignJury::with('juryGroup')->where([['audition_id', $audition->id]])->get();
+        $assignJuriesOrderByGroup = $assignJuries->groupBy('group_id');
+        $roundBasedAuditionUploadVideos = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id], ['approval_status', 1]])->get();
+
+        if (AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['jury_final_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->count() > 0) {
+            $isAbleToMerge = true;
+        } else {
+            $isAbleToMerge = false;
+        }
+
+        $participants = AuditionParticipant::with(['videos' => function ($query) use ($audition_round_info_id) {
+            return $query->where([['round_info_id', $audition_round_info_id]])->get();
+        }, 'participant'])->where([['audition_id', $audition_id]])->get();
+
+
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
+            'auditionRoundInfo' => $auditionRoundInfo,
+            'assignJuriesOrderByGroup' => $assignJuriesOrderByGroup,
+            'roundBasedAuditionUploadVideos' => $roundBasedAuditionUploadVideos,
+            'participants' => $participants,
+            'isAbleToMerge' => $isAbleToMerge,
+        ]);
+    }
+    public function singleAuditionRoundVideoMerge($audition_id, $audition_round_info_id)
+    {
+        $auditionRoundInfo = AuditionRoundInfo::find($audition_round_info_id);
+        $roundBasedAuditionUploadVideos = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['jury_final_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->get();
+        foreach ($roundBasedAuditionUploadVideos as $key => $roundBasedAuditionUploadVideo) {
+            if ($roundBasedAuditionUploadVideo->group_a_jury_mark != null) {
+                $roundBasedAuditionUploadVideo->jury_final_mark =  $roundBasedAuditionUploadVideo->group_a_jury_mark;
+            } else {
+                $max_mark =   max($roundBasedAuditionUploadVideo->group_b_jury_mark, $roundBasedAuditionUploadVideo->group_c_jury_mark);
+                $roundBasedAuditionUploadVideo->jury_final_mark =  $max_mark;
+            }
+            $roundBasedAuditionUploadVideo->save();
+        }
+        // set average mark for specific round
+
+        $participants = AuditionParticipant::with(['videos' => function ($query) use ($audition_round_info_id) {
+            return $query->where([['round_info_id', $audition_round_info_id]])->get();
+        }, 'participant'])->where([['audition_id', $audition_id]])->get();
+
+
+        foreach ($participants as $key => $auditionParticipant) {
+            $sum_of_final_mark = 0;
+            foreach ($auditionParticipant->videos as $key => $video) {
+                $sum_of_final_mark += $video->jury_final_mark == null ? 0 : $video->jury_final_mark;
+            }
+            $average = number_format(($sum_of_final_mark / $auditionRoundInfo->video_slot_num), 2);
+
+            $auditionRoundMarkTracking  = new AuditionRoundMarkTracking();
+            $auditionRoundMarkTracking->user_id = $auditionParticipant->user_id;
+            $auditionRoundMarkTracking->round_info_id = $audition_round_info_id;
+            $auditionRoundMarkTracking->audition_id = $audition_id;
+            $auditionRoundMarkTracking->avg_mark = $average;
+            $auditionRoundMarkTracking->save();
+        }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Video mark merged Successfully',
+        ]);
+    }
+
+    public function singleAuditionRoundVideoResultByPercentage($audition_id, $audition_round_info_id, $percentage_range)
+    {
+        $percentageBaseRoundMarkTrackings = AuditionRoundMarkTracking::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id], ['avg_mark', '>=', $percentage_range]])->get();
+        return response()->json([
+            'status' => 200,
+            'message' => 'OK',
+            'percentageBaseRoundMarkTrackings' => $percentageBaseRoundMarkTrackings,
+        ]);
+    }
+    public function singleAuditionRoundVideoResultByFilterNumber($audition_id, $audition_round_info_id, $filter_number)
+    {
+        $filterNumberBaseRoundMarkTrackings = AuditionRoundMarkTracking::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->orderBy('avg_mark', 'DESC')->take($filter_number)->get();
+        return response()->json([
+            'status' => 200,
+            'message' => 'OK',
+            'filterNumberBaseRoundMarkTrackings' => $filterNumberBaseRoundMarkTrackings,
+        ]);
+    }
+
     public function singleAuditionInstruction($id)
     {
         $auditionJudgeInstruction = AuditionJudgeInstruction::find($id);
@@ -356,6 +496,7 @@ class AuditionController extends Controller
     }
     public function updatePromoInstruction(Request $request)
     {
+        // return $request->all();
         $validator = Validator::make($request->all(), [
             'instruction' => 'required|min:5',
             'image' => 'required|mimes:jpg,jpeg,png',
@@ -389,7 +530,13 @@ class AuditionController extends Controller
                 $request->video->move($folder_path, $file_new_name);
                 $instruction->video = $folder_path . '/' . $file_new_name;
             }
+            $instruction->send_to_manager = 1;
             $instruction->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Promo Instruction Updated!',
+            ]);
         }
     }
     public function storeRoundInstruction(Request $request)
@@ -1581,7 +1728,7 @@ class AuditionController extends Controller
     public function getRandomForJury($audition_id, $round_info_id, $value)
     {
 
-        $random_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['group_b_jury_mark', '!=', null], ['group_c_jury_mark', '!=', null],['group_a_per_jury_id',null]])->inRandomOrder()->limit($value)->get();
+        $random_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['group_b_jury_mark', '!=', null], ['group_c_jury_mark', '!=', null], ['group_a_per_jury_id', null]])->inRandomOrder()->limit($value)->get();
 
         return response()->json([
             'status' => 200,
@@ -1598,21 +1745,20 @@ class AuditionController extends Controller
         $videoIds = [];
         foreach ($B_C_videos as $key => $video) {
             if (
-                $video->group_b_jury_mark > $video->group_c_jury_mark && 
+                $video->group_b_jury_mark > $video->group_c_jury_mark &&
                 ($video->group_b_jury_mark - $video->group_c_jury_mark >= $value)
-            )
-            {
+            ) {
                 array_push($videoIds, $video->id);
             }
-            if(
-                $video->group_c_jury_mark > $video->group_b_jury_mark && 
+            if (
+                $video->group_c_jury_mark > $video->group_b_jury_mark &&
                 ($video->group_c_jury_mark - $video->group_b_jury_mark >= $value)
             ) {
                 array_push($videoIds, $video->id);
             }
         }
 
-        $percentage_videos = AuditionUploadVideo::whereIn('id', $videoIds)->where('group_a_ran_jury_id',null)->get();
+        $percentage_videos = AuditionUploadVideo::whereIn('id', $videoIds)->where('group_a_ran_jury_id', null)->get();
 
         return response()->json([
             'status' => 200,
@@ -1626,7 +1772,7 @@ class AuditionController extends Controller
         // return $request->all();
         try {
             foreach ($request->juries as $key => $jury_id) {
-                AuditionUploadVideo::where([['group_a_ran_jury_id', null], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id],['group_a_per_jury_id',null]])->inRandomOrder()->take($request->random_videos[$key])->update([
+                AuditionUploadVideo::where([['group_a_ran_jury_id', null], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id], ['group_a_per_jury_id', null]])->inRandomOrder()->take($request->random_videos[$key])->update([
                     'group_a_ran_jury_id' => $jury_id,
                 ]);
             }
@@ -1660,7 +1806,7 @@ class AuditionController extends Controller
             }
 
             foreach ($request->juries as $key => $jury_id) {
-                AuditionUploadVideo::whereIn('id', $videoIds)->where([['group_a_per_jury_id', null],['group_a_ran_jury_id',null], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->take($request->random_videos[$key])->update([
+                AuditionUploadVideo::whereIn('id', $videoIds)->where([['group_a_per_jury_id', null], ['group_a_ran_jury_id', null], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->take($request->random_videos[$key])->update([
                     'group_a_per_jury_id' => $jury_id,
                 ]);
             }
@@ -1675,5 +1821,30 @@ class AuditionController extends Controller
                 'message' => 'Opps... Something went wrong ! ' . $exception->getMessage(),
             ]);
         }
+    }
+
+    public function roundResultSendToManager(Request $request)
+    {
+        if ($request->filter_type == 'number') {
+            AuditionRoundMarkTracking::where([
+                ['round_info_id', $request->round_info_id],
+                ['audition_id', $request->audition_id]
+            ])->orderBy('avg_mark', 'DESC')->take($request->filter_number)->update(['wining_status' => 1,]);
+        } else if ($request->filter_type == 'percentage') {
+            AuditionRoundMarkTracking::where([
+                ['round_info_id', $request->round_info_id],
+                ['audition_id', $request->audition_id],
+                ['avg_mark', '>=', $request->percentage_range]
+            ])->update(['wining_status' => 1,]);
+        }
+
+        AuditionRoundInfo::where('id', $request->round_info_id)->update([
+            'manager_status' => 1,
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Audition Round Result Send To Manager Successfull',
+        ]);
     }
 }

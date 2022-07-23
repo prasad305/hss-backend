@@ -23,6 +23,42 @@
         <a href="{{ route('managerAdmin.dashboard') }}" class="btn btn-sm btn-warning float-right">Go Back</a>
     </div>
     <!-- Main content -->
+    <div class="content">
+
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-12">
+                    <div class="info-box text-center">
+                        <div class="info-box-content">
+                            <span class="info-box-text text-warning">
+                                {{ auth()->user()->category->name }}</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                @foreach ($categories as $category)
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3 text-center border border-warning">
+                            <span class="info-box-icon bg-success elevation-1"><i class="fa fa-list-alt"
+                                    aria-hidden="true"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">{{ $category->name }}</span>
+                                <span class="info-box-number">{{ $category->subLearningSession->count() }}</span>
+                                <span class="info-box-number">
+                                    <small><a class="text-warning"
+                                            href="{{ route('managerAdmin.sublearningSession.list', $category->id) }}">See
+                                            All</a></small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
     <section class="content">
         <div class="container-fluid">
             <!-- Info boxes -->
@@ -70,9 +106,9 @@
                         <span class="info-box-icon bg-success elevation-1"><i class="fas fa-users"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Upcoming</span>
-                            <span class="info-box-number">{{ $upcoming }}</span>
-                            <a href="{{ route('managerAdmin.dashboard.learningSessionData', 'upcoming') }}">
+                            <span class="info-box-text">Running</span>
+                            <span class="info-box-number">{{ $running }}</span>
+                            <a href="{{ route('managerAdmin.dashboard.learningSessionData', 'running') }}">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
@@ -184,7 +220,60 @@
     </section>
     <!-- /.content -->
 
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-12">
+            <div class="info-box text-center">
+                <div class="info-box-content">
+                    <span class="info-box-text text-warning">Admin and Stars</span>
+                </div>
+            </div>
 
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Info boxes -->
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-6">
+                    <div class="info-box border border-warning">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+
+                        <div class="info-box-content text-center">
+                            <span class="info-box-text">Admin</span>
+                            <span class="info-box-number">
+                                {{ $admin }}
+                            </span>
+                            <a href="{{ route('managerAdmin.learningSessionEvents.adminList') }}">
+                                <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
+                            </a>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12 col-sm-6 col-md-6">
+                    <div class="info-box mb-3 border border-warning">
+                        <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-users"></i></span>
+
+                        <div class="info-box-content text-center">
+                            <span class="info-box-text">Superstar</span>
+                            <span class="info-box-number">{{ $superstar }}</span>
+                            <a href="{{ route('managerAdmin.learningSessionEvents.superstarList') }}">
+                                <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
+                            </a>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!--/. container-fluid -->
+    </section>
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -236,13 +325,16 @@
             //--------------
 
             // Get context with jQuery - using jQuery's .get() method.
-            var labels = <?php echo $labels; ?>;
-            var data = <?php echo $data; ?>;
+            var labels = <?php echo $months; ?>;
+            var data = <?php echo $amountCount; ?>;
+
+            // var labels = JSON.parse(JSON.encode($months));
+            // var data = JSON.parse(JSON.encode($monthCount));
 
             var areaChartData = {
                 labels: labels,
                 datasets: [{
-                    label: 'Learning Session',
+                    label: 'Revenue',
                     backgroundColor: 'rgba(60,141,188,0.9)',
                     borderColor: 'rgba(60,141,188,0.8)',
                     pointRadius: false,

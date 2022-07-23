@@ -16,4 +16,8 @@ class Fan_Group_Join extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function fanGroup()
+    {
+        return $this->belongsTo(FanGroup::class, 'fan_group_id');
+    }
 }

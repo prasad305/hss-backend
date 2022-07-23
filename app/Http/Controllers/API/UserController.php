@@ -11,6 +11,7 @@ use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPayment;
 use App\Models\Audition\AuditionRoundInfo;
+use App\Models\Audition\AuditionRoundMarkTracking;
 use App\Models\Audition\AuditionRoundRegistration;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
@@ -32,6 +33,7 @@ use App\Models\FanPost;
 use App\Models\React;
 use App\Models\SimplePost;
 use App\Models\ChoiceList;
+use App\Models\GeneralPostPayment;
 use App\Models\GreetingType;
 use App\Models\InterestType;
 use App\Models\LearningSessionAssignment;
@@ -70,6 +72,7 @@ class UserController extends Controller
         ]);
     }
 
+
     public function star_list()
     {
         $stars = User::where('user_type','star')->get();
@@ -88,7 +91,8 @@ class UserController extends Controller
             'message' => 'Success',
         ]);
     }
-    public function postShareStore($postId){
+    public function postShareStore($postId)
+    {
         $post = Post::find($postId);
         $post->share_count += 1;
         $post->save();
@@ -99,7 +103,8 @@ class UserController extends Controller
         ]);
     }
 
-    public function fanPostShare($postId){
+    public function fanPostShare($postId)
+    {
         $post = FanPost::find($postId);
         return response()->json([
             'status' => 200,
@@ -107,7 +112,8 @@ class UserController extends Controller
             'message' => 'Success',
         ]);
     }
-    public function fanPostShareStore($postId){
+    public function fanPostShareStore($postId)
+    {
         $post = FanPost::find($postId);
         $post->share_count += 1;
         $post->save();
@@ -120,7 +126,7 @@ class UserController extends Controller
 
     public function total_notification_count()
     {
-        $notification = Notification::where([['user_id', auth('sanctum')->user()->id],['view_status',0]])->count();
+        $notification = Notification::where([['user_id', auth('sanctum')->user()->id], ['view_status', 0]])->count();
 
         return response()->json([
             'status' => 200,
@@ -134,7 +140,7 @@ class UserController extends Controller
         $notification->view_status = 1;
         $notification->update();
 
-        $total_notification = Notification::where([['user_id', auth('sanctum')->user()->id],['view_status',0]])->count();
+        $total_notification = Notification::where([['user_id', auth('sanctum')->user()->id], ['view_status', 0]])->count();
 
         return response()->json([
             'status' => 200,
@@ -195,12 +201,12 @@ class UserController extends Controller
 
         $cat_post = Post::select("*")
             ->whereIn('category_id', $selectedCat)
-            ->orderBy('id','DESC')->paginate($limit);
+            ->orderBy('id', 'DESC')->paginate($limit);
 
         if (isset($sub_cat_post)) {
             $sub_cat_post = Post::select("*")
                 ->whereIn('sub_category_id', $selectedSubCat)
-                ->orderBy('id','DESC')->paginate($limit);
+                ->orderBy('id', 'DESC')->paginate($limit);
         } else {
             $sub_cat_post = [];
         }
@@ -208,7 +214,7 @@ class UserController extends Controller
         if (isset($sub_sub_cat_post)) {
             $sub_sub_cat_post = Post::select("*")
                 ->whereIn('user_id', $selectedSubSubCat)
-                ->orderBy('id','DESC')->paginate($limit);
+                ->orderBy('id', 'DESC')->paginate($limit);
         } else {
             $sub_sub_cat_post = [];
         }
@@ -263,6 +269,73 @@ class UserController extends Controller
             'post' => $post,
         ]);
     }
+    public function generalPostPayment(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+
+            'name' => 'required',
+            'amount' => 'required',
+            'card_number' => 'required',
+            'expiry_date' => 'required',
+            'ccv' => 'required',
+
+
+        ], [
+            'name.required' => 'This Field Is Required',
+            'amount.required' => 'This Field Is Required',
+            'card_number.required' => 'This Field Is Required',
+            'ccv.required' => 'This Field Is Required',
+            'expiry_date.required' => 'This Field Is Required',
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
+
+        $postPayment = GeneralPostPayment::create([
+
+            'post_id' => $request->post_id,
+            'user_id' => auth('sanctum')->user()->id,
+            'name' => $request->name,
+            'amount' => $request->amount,
+            'card_number' => $request->card_number,
+            'ccv' => $request->ccv,
+            'expiry_date' => $request->expiry_date,
+            'status' => 1,
+        ]);
+
+
+        return response()->json([
+            'status' => 200,
+            'postPayment' => $postPayment,
+            'message' => "Payment success"
+        ]);
+    }
+    public function generalPostPaymentCheck($post_id)
+    {
+
+        $payment_status = GeneralPostPayment::where('user_id', auth('sanctum')->user()->id)->where('post_id', $post_id)->where('status', 1)->first();
+
+        return response()->json([
+            'status' => 200,
+            'payment_status' => $payment_status,
+        ]);
+    }
+    public function simplePostPaymentCheck()
+    {
+
+        $lockStatus = GeneralPostPayment::where('user_id', auth('sanctum')->user()->id)->where('status', 1)->pluck('post_id');
+
+        return response()->json([
+            'status' => 200,
+            'lockStatus' => $lockStatus,
+        ]);
+    }
 
     public function paginate_single_type_post($type, $limit)
     {
@@ -290,7 +363,6 @@ class UserController extends Controller
             $sub_sub_cat_post = Post::select("*")
                 ->whereIn('user_id', $selectedSubSubCat)
                 ->latest()->paginate($limit);
-
         } else {
             $sub_sub_cat_post = [];
         }
@@ -460,25 +532,26 @@ class UserController extends Controller
 
 
         if ($type == 'livechat') {
-            $post = Post::where([['type', 'livechat']])->whereJsonContains('star_id',$star_id)->latest()->paginate($limit);
+            $post = Post::select("*")->where([['user_id', $id], ['type', 'livechat']])->latest()->paginate($limit);
         }
         if ($type == 'meetup') {
-            $post = Post::where([['type', 'meetup']])->whereJsonContains('star_id',$star_id)->latest()->paginate($limit);
+            $post = Post::select("*")->where([['user_id', $id], ['type', 'meetup']])->latest()->paginate($limit);
         }
         if ($type == 'learning') {
-            $post = Post::where([['type', 'learningSession']])->whereJsonContains('star_id',$star_id)->latest()->paginate($limit);
+            $post = Post::select("*")->where([['user_id', $id], ['type', 'learningSession']])->latest()->paginate($limit);
         }
         if ($type == 'all') {
-            $post = Post::whereJsonContains('star_id',$star_id)->latest()->paginate($limit);
+            $post = Post::select("*")->where('user_id', $id)->latest()->paginate($limit);
         }
 
-        // $post2 = Post::where('id',26)->first();
 
+        $demo = [];
+        $starpost = $post->concat($demo);
 
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
-            'posts' => $post,
+            'posts' => $starpost,
         ]);
     }
 
@@ -974,7 +1047,8 @@ class UserController extends Controller
     }
 
     // Store Fan Post Like count
-    public function submit_react(Request $request, $id){
+    public function submit_react(Request $request, $id)
+    {
         $post = Post::find($id);
         $post->user_like_id = $request->showlike;
         $post->save();
@@ -1005,7 +1079,7 @@ class UserController extends Controller
      */
     public function checkUserNotifiaction()
     {
-        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->orderBy('updated_at','ASC')->get();
+        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->orderBy('updated_at', 'ASC')->get();
         $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
 
         if ($greeting_reg)
@@ -1161,16 +1235,8 @@ class UserController extends Controller
             'maxBid' => $maxBid,
         ]);
     }
-    public function auction_instruction()
-    {
 
-        $instruction = AuctionTerms::first();
 
-        return response()->json([
-            'status' => 200,
-            'instruction' => $instruction,
-        ]);
-    }
 
     public function aquiredProduct(Request $request)
     {
@@ -1365,11 +1431,14 @@ class UserController extends Controller
 
     public function uploaded_round_videos($audition_id, $round_info_id)
     {
-        $videos = AuditionUploadVideo::where([['audition_id', $audition_id],['round_info_id', $round_info_id]])->get();
+        $videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id],['user_id',auth()->user()->id]])->get();
+
+        $round_status = AuditionRoundMarkTracking::where([['user_id',auth()->user()->id],['audition_id',$audition_id],['round_info_id',$round_info_id]])->first();
 
         return response()->json([
             'status' => 200,
             'videos' => $videos,
+            'round_status' => $round_status,
             'message' => 'Success!',
         ]);
     }
@@ -1412,6 +1481,7 @@ class UserController extends Controller
             'status' => 200,
         ]);
     }
+
     public function videoDetails($id)
     {
         $participateAudition = Audition::with(['judge.user', 'participant' => function ($query) {
@@ -1583,6 +1653,8 @@ class UserController extends Controller
             'message' => "Cover Photo updated"
         ]);
     }
+
+    
     public function updateProfile(Request $request, $id)
     {
 
@@ -1679,11 +1751,11 @@ class UserController extends Controller
 
     public function current_round_info($event_slug)
     {
-        $audition = Audition::where('slug',$event_slug)->first();
-        $current_round = AuditionParticipant::where([['user_id', Auth::user()->id],['audition_id',$audition->id]])->first();
+        $audition = Audition::where('slug', $event_slug)->first();
+        $current_round = AuditionParticipant::where([['user_id', Auth::user()->id], ['audition_id', $audition->id]])->first();
 
         $round_info = AuditionRoundInfo::find($current_round->round_info_id);
-        $round_instruction = AuditionRoundInstruction::where('round_info_id',$round_info->id)->first();
+        $round_instruction = AuditionRoundInstruction::where('round_info_id', $round_info->id)->first();
 
         return response()->json([
             'status' => 200,
@@ -1695,8 +1767,8 @@ class UserController extends Controller
 
     public function roundInstruction($audition_id, $round_num)
     {
-        $roundInfo = AuditionRoundInfo::where([['audition_id', $audition_id],['round_num',$round_num]])->first();
-        $roundInstruction = AuditionRoundInstruction::where('round_info_id',$roundInfo->id)->first();
+        $roundInfo = AuditionRoundInfo::where([['audition_id', $audition_id], ['round_num', $round_num]])->first();
+        $roundInstruction = AuditionRoundInstruction::where('round_info_id', $roundInfo->id)->first();
 
         $is_video_uploaded = false;
         // if ($roundInfo->uploadedVideos->where('round_id', $roundInfo->audition_round_rules_id)->where('user_id', auth()->user()->id)->count() > 0) {

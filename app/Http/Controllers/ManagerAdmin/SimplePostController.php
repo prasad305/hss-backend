@@ -15,21 +15,21 @@ class SimplePostController extends Controller
     //
     public function all()
     {
-        $post = SimplePost::where('category_id',auth()->user()->category_id)->where('status',1)->orWhere('star_approval',1)->latest()->get();
+        $post = SimplePost::where('category_id', auth()->user()->category_id)->where('status', 1)->orWhere('star_approval', 1)->latest()->get();
 
         return view('ManagerAdmin.SimplePost.index', compact('post'));
     }
 
     public function pending()
     {
-        $post = SimplePost::where('category_id',auth()->user()->category_id)->where([['status',0],['star_approval',1]])->latest()->get();
+        $post = SimplePost::where('category_id', auth()->user()->category_id)->where([['status', 0], ['star_approval', 1]])->latest()->get();
 
         return view('ManagerAdmin.SimplePost.index', compact('post'));
     }
 
     public function published()
     {
-        $post = SimplePost::where('category_id',auth()->user()->category_id)->where('status',1)->latest()->get();
+        $post = SimplePost::where('category_id', auth()->user()->category_id)->where('status', 1)->latest()->get();
 
         return view('ManagerAdmin.SimplePost.index', compact('post'));
     }
@@ -59,7 +59,7 @@ class SimplePostController extends Controller
 
 
 
-        ],[
+        ], [
             'title.required' => 'Title Field Is Required',
             'description.required' => 'Description Field Is Required',
 
@@ -68,14 +68,14 @@ class SimplePostController extends Controller
         $meetup = SimplePost::findOrFail($id);
         $meetup->fill($request->except('_token'));
 
-        $meetup->title = $request->input('title');
+        $meetup->title = $request->input('title', 'image', 'video');
         $meetup->description = $request->input('description');
 
         if ($request->hasfile('image')) {
 
             $destination = $meetup->image;
-            if (File::exists($destination)) {
-                File::delete($destination);
+            if (File::exists(public_path($destination))) {
+                File::delete(public_path($destination));
             }
 
             $file = $request->file('image');
@@ -84,15 +84,13 @@ class SimplePostController extends Controller
 
             Image::make($file)->resize(900, 400)->save($filename, 50);
             $meetup->image = $filename;
-
-
         }
 
         if ($request->hasfile('video')) {
 
             $destination = $meetup->image;
-            if (File::exists($destination)) {
-                File::delete($destination);
+            if (File::exists(public_path($destination))) {
+                File::delete(public_path($destination));
             }
             if ($request->hasFile('video')) {
 
@@ -102,33 +100,30 @@ class SimplePostController extends Controller
                 $file->move($path, $file_name);
                 $meetup->video = $path . '/' . $file_name;
             }
-
-
         }
 
 
-            try {
-                $meetup->update();
-                if($meetup){
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Post Updated Successfully'
-                    ]);
-                }
-            } catch (\Exception $exception) {
+        try {
+            $meetup->update();
+            if ($meetup) {
                 return response()->json([
-                    'type' => 'error',
-                    'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+                    'success' => true,
+                    'message' => 'Post Updated Successfully'
                 ]);
             }
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+            ]);
+        }
     }
 
     public function set_publish($id)
     {
         $spost = SimplePost::find($id);
 
-        if($spost->status != 1)
-        {
+        if ($spost->status != 1) {
             $spost->status = 1;
             $spost->update();
 
@@ -139,25 +134,21 @@ class SimplePostController extends Controller
             $post->user_id=$spost->star_id;
             $post->star_id = json_decode($spost->star_id);
             $post->event_id = $spost->id;
-            $post->category_id=$spost->category_id;
-            $post->title=$spost->title;
-            $post->details=$spost->description;
-            $post->status=1;
-            $post->sub_category_id=$spost->subcategory_id;
+            $post->category_id = $spost->category_id;
+            $post->title = $spost->title;
+            $post->details = $spost->description;
+            $post->status = 1;
+            $post->sub_category_id = $spost->subcategory_id;
             $post->save();
-        }
-        else
-        {
+        } else {
             $spost->status = 0;
             $spost->update();
 
             //Remove post //
-            $post = Post::where('event_id',$id)->first();
+            $post = Post::where('event_id', $id)->first();
             $post->delete();
         }
 
         return redirect()->back()->with('success', 'Published');
-
-
     }
 }
