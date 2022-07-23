@@ -130,8 +130,9 @@ class SimplePostController extends Controller
             $starCat = SuperStar::find($spost->star_id);
             // Create New post //
             $post = new Post();
-            $post->type = 'general';
-            $post->user_id = $spost->star_id;
+            $post->type='general';
+            $post->user_id=$spost->star_id;
+            $post->star_id = json_decode($spost->star_id);
             $post->event_id = $spost->id;
             $post->category_id = $spost->category_id;
             $post->title = $spost->title;

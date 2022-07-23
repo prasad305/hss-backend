@@ -352,6 +352,7 @@ class MeetupEventController extends Controller
             $post = new Post();
             $post->type = 'meetup';
             $post->user_id = $meetup->star_id;
+            $post->star_id = json_decode($meetup->star_id);
             $post->event_id = $meetup->id;
             $post->category_id = $starCat->category_id;
             $post->sub_category_id = $starCat->sub_category_id;

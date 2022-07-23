@@ -72,8 +72,18 @@ class UserController extends Controller
         ]);
     }
 
-    public function postShare($postId)
+
+    public function star_list()
     {
+        $stars = User::where('user_type','star')->get();
+
+        return response()->json([
+            'status' => 200,
+            'stars' => $stars,
+        ]);
+    }
+
+    public function postShare($postId){
         $post = Post::find($postId);
         return response()->json([
             'status' => 200,
@@ -210,6 +220,7 @@ class UserController extends Controller
         }
 
         $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
+        // $post = $cat_post;
 
         return response()->json([
             'status' => 200,
@@ -516,6 +527,10 @@ class UserController extends Controller
 
     public function paginate_getStarPost($id, $type, $limit)
     {
+        // $star_ids = '['.$id.']';
+        $star_id = json_decode($id);
+
+
         if ($type == 'livechat') {
             $post = Post::select("*")->where([['user_id', $id], ['type', 'livechat']])->latest()->paginate($limit);
         }
@@ -1682,6 +1697,16 @@ class UserController extends Controller
     public function paginate_userActivites($limit)
     {
         $userActivites = Activity::orderBy('id', 'DESC')->where('user_id', auth()->user()->id)->paginate($limit);
+
+        return response()->json([
+            'status' => 200,
+            'userActivites' => $userActivites
+        ]);
+    }
+
+    public function paginate_userActivites_by_id($id, $limit)
+    {
+        $userActivites = Activity::orderBy('id', 'DESC')->where('user_id', $id)->paginate($limit);
 
         return response()->json([
             'status' => 200,

@@ -312,6 +312,7 @@ class StarAuthController extends Controller
                     'token' => $token,
                     'role' => $role,
                     'phone' => $user->phone,
+                    'id' => $user->id,
                     'message' => 'Verify Your Phone Number',
                 ]);
             }
