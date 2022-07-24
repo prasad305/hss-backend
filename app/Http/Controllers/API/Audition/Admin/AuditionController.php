@@ -33,6 +33,111 @@ use Illuminate\Support\Str;
 
 class AuditionController extends Controller
 {
+
+
+    public function events()
+    {
+        $events = Audition::where([['audition_admin_id', auth('sanctum')->user()->id],['status','>',0]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events,
+        ]);
+    }
+
+
+    public function statusUpdate(Request $request)
+    {
+        $audition = Audition::find($request->audition_id);
+        $message = "";
+
+        try {
+
+            if ($request->status == 1) {
+                $audition->update([
+                    'status' => 1,
+                ]);
+                $message="Audition Accepted Successfully!";
+            } else {
+                $audition->update([
+                    'status' => 11,
+                ]);
+                $message="Audition Reject Successfully!";
+            }
+            return response()->json([
+                'status' => 200,
+                'message' => $message,
+            ]);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Opps... Something went wrong ! ' . $exception->getMessage(),
+            ]);
+        }
+    }
+
+    public function storePostContent(Request $request){
+        $validator = Validator::make($request->all(), [
+            'instruction' => 'required|min:5',
+            'description' => 'required|min:5',
+            'image' => 'required|mimes:jpg,jpeg,png,gif',
+            'video' => 'required|mimes:mp4,mkv',
+            'fees' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $audition = Audition::find($request->audition_id);
+            $audition->instruction = $request->instruction;
+            $audition->description = $request->description;
+            $audition->fees = $request->fees;
+            $audition->status = 3;
+            if ($request->hasfile('image')) {
+                $image             = $request->image;
+                $image_folder_path       = 'uploads/images/auditions/post/';
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                // save to server
+                $request->image->move($image_folder_path, $image_new_name);
+                $audition->banner = $image_folder_path . '/' . $image_new_name;
+            }
+
+            if ($request->hasfile('video')) {
+                $file             = $request->video;
+                $folder_path       = 'uploads/videos/auditions/post/';
+                $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
+                // save to server
+                $request->video->move($folder_path, $file_new_name);
+                $audition->video = $folder_path . '/' . $file_new_name;
+            }
+
+            if ($request->hasfile('pdf')) {
+                $image             = $request->pdf;
+                $pdf_folder_path       = 'uploads/pdf/auditions/post/';
+                $pdf_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                // save to server
+                $request->pdf->move($pdf_folder_path, $pdf_new_name);
+                $audition->pdf = $pdf_folder_path . '/' . $pdf_new_name;
+            }
+
+            try {
+               $audition->save();
+               return response()->json([
+                'status' => 200,
+                'message' => 'Audition Post Content Updated Successfully!',
+            ]);
+            }catch (\Exception $exception) {
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Opps... Something went wrong ! ' . $exception->getMessage(),
+                ]);
+            }
+        }
+    }
+
     public function videoStatusChange(Request $request)
     {
 
@@ -414,7 +519,7 @@ class AuditionController extends Controller
             'instruction' => 'required|min:5',
             'image' => 'required|mimes:jpg,jpeg,png',
             'video' => 'required|mimes:mp4,mkv',
-        ],[
+        ], [
             'audition_id.required' => 'Select a audition'
         ]);
 
@@ -455,7 +560,7 @@ class AuditionController extends Controller
                     $request->pdf->move($pdf_folder_path, $pdf_new_name);
                     $instruction->document = $pdf_folder_path . '/' . $pdf_new_name;
                 }
-        
+
                 $instruction->save();
 
                 // if ($request->star_ids) {
@@ -476,7 +581,7 @@ class AuditionController extends Controller
                 //         }
                 //     }
                 // }
-                
+
 
                 return response()->json([
                     'status' => 200,
@@ -492,7 +597,7 @@ class AuditionController extends Controller
         }
     }
 
-   
+
 
     public function superStarStorePromo(Request $request)
     {
@@ -504,7 +609,7 @@ class AuditionController extends Controller
             'image' => 'required|mimes:jpg,jpeg,png',
             'video' => 'required|mimes:mp4,mkv',
             'star_ids' => 'required',
-        ],[
+        ], [
             'star_ids.*' => 'Select at least one Star',
             'audition_id.required' => 'Select a audition'
         ]);
@@ -546,7 +651,7 @@ class AuditionController extends Controller
                     // save to server
                     $request->pdf->move($pdf_folder_path, $pdf_new_name);
                     $instruction->document = $pdf_folder_path . '/' . $pdf_new_name;
-                }   
+                }
 
                 if ($request->star_ids) {
                     if (count($request->star_ids) > 0) {
@@ -566,7 +671,7 @@ class AuditionController extends Controller
                         }
                     }
                 }
-                
+
                 return response()->json([
                     'status' => 200,
                     'message' => 'Audition Promo instruction submitted successfully !!',
@@ -582,9 +687,10 @@ class AuditionController extends Controller
     }
 
 
-    public function promoInstrucction($audition_id){
+    public function promoInstrucction($audition_id)
+    {
         $event = Audition::find($audition_id);
-        $promo_instruction = AuditionPromoInstruction::where([['audition_id',$audition_id],['send_to_manager',1]])->last();
+        $promo_instruction = AuditionPromoInstruction::where([['audition_id', $audition_id], ['send_to_manager', 1]])->last();
         return response()->json([
             'status' => 200,
             'event' => $event,
@@ -955,15 +1061,7 @@ class AuditionController extends Controller
         }
     }
 
-    public function events()
-    {
-        $events = Audition::where([['audition_admin_id', auth('sanctum')->user()->id]])->get();
-       
-        return response()->json([
-            'status' => 200,
-            'events' => $events,
-        ]);
-    }
+
 
     public function count()
     {

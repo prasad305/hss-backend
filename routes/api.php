@@ -694,6 +694,12 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 
     // Audition Route For Audition Admin
     Route::get('/audition-admin/audition/events', [AuditionController::class, 'events']);
+    Route::post('/audition-admin/audition/status/update', [AuditionController::class, 'statusUpdate']);
+    Route::post('/audition-admin/audition/post-content/store', [AuditionController::class, 'storePostContent']);
+
+
+
+
     Route::get('/audition-admin/audition/count', [AuditionController::class, 'count']);
     Route::post('/audition-admin/audition/assign-juries', [AuditionController::class, 'assignJuries']);
     Route::get('/audition-admin/audition/singleAuditionRounds/{audition_id}', [AuditionController::class, 'singleAuditionRounds']);
