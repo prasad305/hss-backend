@@ -531,7 +531,7 @@ class AuditionAdminController extends Controller
     }
 
     public function getPromoInstruction($audition_id){
-        $event = Audition::find($audition_id);
+        $event = Audition::where([['id',$audition_id]])->first();
         $instruction = AuditionPromoInstruction::where([['audition_id',$audition_id],['send_to_manager',1]])->first();
         return view('ManagerAdmin.Audition.promo_instruction',compact('instruction','event'));
     }

@@ -706,6 +706,13 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     });
 
     // Audition Route For Audition Admin
+    Route::get('/audition-admin/audition/events', [AuditionController::class, 'events']);
+    Route::post('/audition-admin/audition/status/update', [AuditionController::class, 'statusUpdate']);
+    Route::post('/audition-admin/audition/post-content/store', [AuditionController::class, 'storePostContent']);
+
+
+
+
     Route::get('/audition-admin/audition/count', [AuditionController::class, 'count']);
     Route::post('/audition-admin/audition/assign-juries', [AuditionController::class, 'assignJuries']);
     Route::get('/audition-admin/audition/singleAuditionRounds/{audition_id}', [AuditionController::class, 'singleAuditionRounds']);
@@ -723,7 +730,12 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 
     Route::get('/audition-admin/get-promo-instruction/{audition_id}', [AuditionController::class, 'auditionPromoInstruction']);
 
+    
     Route::post('/audition-admin/audition/promo-instruction/store', [AuditionController::class, 'storePromoInstruction']);
+    
+    Route::get('/audition-admin/audition/promo-instruction/{audition_id}', [AuditionController::class, 'promoInstrucction']);
+    
+    Route::post('/audition-admin/audition/super-star-promo/store', [AuditionController::class, 'superStarStorePromo']);
 
     Route::post('/audition-admin/audition/round-instruction/store', [AuditionController::class, 'storeRoundInstruction']);
     Route::post('/audition-admin/audition/round-instruction/update', [AuditionController::class, 'updateRoundInstruction']);
@@ -757,6 +769,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/request', [AuditionController::class, 'request']);
     Route::get('/audition-admin/audition/lives', [AuditionController::class, 'live']);
     Route::get('/audition-admin/audition_single/{slug}', [AuditionController::class, 'getAudition']);
+    Route::get('/audition-admin/audition_single_by_id/{audition_id}', [AuditionController::class, 'getAuditionById']);
     Route::get('/audition-admin/audition/assigned-judge/{slug}', [AuditionController::class, 'getAssignedJudge']);
 
     Route::get('/audition-admin/audition/round-instruction-judges/{audition_id}/{round_id}', [AuditionController::class, 'getRoundInstructionJudges']);
