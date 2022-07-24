@@ -97,6 +97,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user_otherInfo_update', [AuthController::class, 'user_OtherInfo_update']);
     Route::get('/user_data/{id}', [AuthController::class, 'user_data']);
 
+    Route::post('user/image-upload', [UserController::class, 'MobileImageUpUser']);
+
     //User post share
     Route::get('/user/post/share/{postId}', [UserController::class, 'postShare']);
     Route::post('/user/post/share/store/{postId}', [UserController::class, 'postShareStore']);
@@ -104,6 +106,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //fan post share
     Route::get('/user/fan/post/share/{postId}', [UserController::class, 'fanPostShare']);
     Route::post('/user/fan/post/share/store/{postId}', [UserController::class, 'fanPostShareStore']);
+    Route::post('/user/mobile/fan/group/post/store', [FanGroupController::class, 'getMobileFanPostStore']);
 
     Route::get('/user/total_notification_count', [UserController::class, 'total_notification_count']);
     Route::get('/user/notification/view_status/update/{id}', [UserController::class, 'notification_view_status_update']);
