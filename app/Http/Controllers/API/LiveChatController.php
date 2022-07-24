@@ -465,7 +465,7 @@ class LiveChatController extends Controller
     // Star Controlling Method
     public function add_by_star(Request $request)
     {
-        return $request->all();
+        // return $request->all();
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:live_chats',

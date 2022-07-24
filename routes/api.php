@@ -20,6 +20,7 @@ use App\Http\Controllers\API\LearningSessionController;
 use App\Http\Controllers\API\Audition\Admin\AuditionController;
 use App\Http\Controllers\API\Audition\Jury\JuryAuditionController;
 use App\Http\Controllers\API\Audition\Judge\JudgeAuditionController;
+use App\Http\Controllers\API\GuestController;
 use App\Http\Controllers\API\PromoVideoController;
 use App\Http\Controllers\API\QnaController;
 use App\Http\Controllers\API\StarGreetingController;
@@ -43,6 +44,10 @@ Route::post('verify_user', [AuthController::class, 'verify_user']);
 Route::post('verify_to_register_event', [AuthController::class, 'VerifyToRegisterEvent']);
 Route::get('resend_otp', [AuthController::class, 'resend_otp']);
 Route::get('reset_otp', [AuthController::class, 'reset_otp']);
+
+
+Route::get('/guest/all_post/with-paginate/{limit}', [GuestController::class, 'paginate_all_post']);
+
 
 // Home Page All Post
 Route::get('/user/all_post', [UserController::class, 'all_post']);
@@ -74,6 +79,10 @@ Route::post('/chatting/message', [UserController::class, 'message']);
 Route::get('/chatting/message/{id}', [UserController::class, 'get_message']);
 Route::post('/group/message', [UserController::class, 'group_message']);
 Route::get('/group/message/{id}', [UserController::class, 'get_group_message']);
+
+Route::get('/guest/PromoVideos', [GuestController::class, 'getPromoVideo']);
+
+Route::get('/user/star_list', [UserController::class, 'star_list']);
 
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
@@ -164,6 +173,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
     Route::get('/user/meetup-event/{star_id}/{event_id}', [MeetupEventController::class, 'meetup_event_booking']);
+
+
+
 
 
     Route::get('/star_info/{star_id}', [UserController::class, 'star_info']);
@@ -263,6 +275,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     // User Photos
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
     Route::get('/user/activitiesData/with-paginate/{limit}', [UserController::class, 'paginate_userActivites']);
+    Route::get('/user/{id}/activitiesData/with-paginate/{limit}', [UserController::class, 'paginate_userActivites_by_id']);
 
     //Registration Checker
     Route::get('/user/registration_checker/{type}/{slug}', [UserController::class, 'registration_checker']);

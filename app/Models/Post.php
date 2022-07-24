@@ -14,6 +14,8 @@ class Post extends Model
         'id',
         'type',
         'event_id',
+        'user_id',
+        'star_id',
         'category_id',
         'user_id',
         'comment_number',
