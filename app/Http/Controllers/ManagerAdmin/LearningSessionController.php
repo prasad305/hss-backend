@@ -187,7 +187,7 @@ class LearningSessionController extends Controller
     {
         $event = LearningSession::findOrFail($id);
 
-        
+
          $results = LearningSessionEvaluation::where('event_id', $id)
                                             ->with(['assignments' => function($q){
                                                 return $q->where([['mark','>',0],['send_to_manager',1]]);
@@ -200,7 +200,7 @@ class LearningSessionController extends Controller
                                             }])
                                             ->get();
 
-       
+
 
         return view('ManagerAdmin.LearningSession.evaluationResult', compact('event', 'results','rejected_videos'));
     }
@@ -233,7 +233,7 @@ class LearningSessionController extends Controller
         $assignment = LearningSessionAssignment::where([['event_id',$id],['send_to_manager',1]])->update([
             'send_to_user' => 1,
         ]);
-    
+
        session()->flash('success','Result Published Successfully');
        return redirect()->back();
     }
@@ -304,6 +304,7 @@ class LearningSessionController extends Controller
             $post = new Post();
             $post->type = 'learningSession';
             $post->user_id = $learningSession->star_id;
+            $post->star_id = json_decode($learningSession->star_id);
             $post->event_id = $learningSession->id;
             $post->category_id = $learningSession->star->category_id;
             $post->sub_category_id = $learningSession->star->sub_category_id;
@@ -324,7 +325,7 @@ class LearningSessionController extends Controller
     }
 
 
-   
+
 
     // User Part
 
@@ -415,7 +416,7 @@ class LearningSessionController extends Controller
                 'video' => 'nullable|mimes:mp4,mkv',
             ]);
         }
-        
+
         $learningSession = LearningSession::findOrFail($id);
          $learningSession->title = $request->input('title');
         $learningSession->slug = Str::slug($request->input('title'));

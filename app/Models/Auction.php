@@ -15,13 +15,17 @@ class Auction extends Model
     {
         return $this->belongsTo(User::class, 'star_id');
     }
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
     public function user()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function admin()
     {
-        return $this->belongsTo(User::class, 'created_by_id');
+        return $this->belongsTo(User::class, 'admin_id');
     }
 
     public function buyer()

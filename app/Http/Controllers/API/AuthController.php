@@ -334,8 +334,8 @@ class AuthController extends Controller
     public function user_data($id)
     {
         $user = User::find($id);
+
         $user_info = UserInfo::where('user_id', $user->id)->first();
-    
         $star_details = SuperStar::where('star_id', $user->id)->first();
 
         if (empty($user_info)) {

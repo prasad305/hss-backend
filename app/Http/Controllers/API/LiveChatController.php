@@ -168,6 +168,7 @@ class LiveChatController extends Controller
             $liveChat->slug = Str::slug($request->input('title'));
             $liveChat->star_id = $request->input('star_id');
             $liveChat->category_id = $superStar->category_id;
+            $liveChat->sub_category_id = $superStar->sub_category_id;
             $liveChat->admin_id = $superStar->admin_id;
             $liveChat->created_by_id = auth('sanctum')->user()->id;
             $liveChat->instruction = $request->input('instruction');
@@ -464,7 +465,7 @@ class LiveChatController extends Controller
     // Star Controlling Method
     public function add_by_star(Request $request)
     {
-        return $request->all();
+        // return $request->all();
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:live_chats',
@@ -493,6 +494,7 @@ class LiveChatController extends Controller
             $liveChat->slug = Str::slug($request->input('title'));
             $liveChat->star_id = auth('sanctum')->user()->id;
             $liveChat->category_id = $superStar->category_id;
+            $liveChat->sub_category_id = $superStar->sub_category_id;
             $liveChat->admin_id = $superStar->admin_id;
             $liveChat->created_by_id = auth('sanctum')->user()->id;
             $liveChat->instruction = $request->input('instruction');

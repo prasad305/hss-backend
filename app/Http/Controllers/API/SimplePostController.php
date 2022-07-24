@@ -36,9 +36,9 @@ class SimplePostController extends Controller
             'participant_number' => 'required',
             'room_id' => 'required',
             'image' => 'required|mimes:jpg,jpeg,png,gif,webp',
-        ],[
-           'title.unique' => 'This title already exist' ,
-           'star_id.required' => 'Please Select One Star' ,
+        ], [
+            'title.unique' => 'This title already exist',
+            'star_id.required' => 'Please Select One Star',
         ]);
 
 
@@ -108,7 +108,7 @@ class SimplePostController extends Controller
             'post_type' => 'required',
 
 
-        ],[
+        ], [
             'title.required' => 'Title Field Is Required',
             'description.required' => 'Description Field Is Required',
             'star_id.required' => "Star Field Is Required",
@@ -157,6 +157,14 @@ class SimplePostController extends Controller
             $file->move($path, $file_name);
             $post->video = $path . '/' . $file_name;
         }
+        if ($request->hasFile('thumbnail')) {
+
+            $file        = $request->file('thumbnail');
+            $path        = 'uploads/videos/post';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $post->thumbnail = $path . '/' . $file_name;
+        }
         $post->save();
 
         return response()->json([
@@ -164,7 +172,7 @@ class SimplePostController extends Controller
             'message' => 'Post Added',
         ]);
     }
-    public function simplePostUpdate(Request $request,$id)
+    public function simplePostUpdate(Request $request, $id)
     {
 
         $validator = Validator::make($request->all(), [
@@ -176,7 +184,7 @@ class SimplePostController extends Controller
             'post_type' => 'required',
 
 
-        ],[
+        ], [
             'title.required' => 'Title Field Is Required',
             'description.required' => 'Description Field Is Required',
             'star_id.required' => "Star Field Is Required",
@@ -230,6 +238,21 @@ class SimplePostController extends Controller
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
             $post->video = $path . '/' . $file_name;
+            $post->image = null;
+        }
+        if ($request->hasFile('thumbnail')) {
+            if (File::exists($post->image)) {
+                File::delete($post->image);
+            }
+            if (File::exists($post->thumbnail)) {
+                File::delete($post->thumbnail);
+            }
+
+            $file        = $request->file('thumbnail');
+            $path        = 'uploads/videos/post';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $post->thumbnail = $path . '/' . $file_name;
             $post->image = null;
         }
         $post->save();
@@ -405,11 +428,13 @@ class SimplePostController extends Controller
                 $post = new Post();
                 $post->type = 'general';
                 $post->user_id = $spost->star_id;
+                $post->star_id = json_decode($spost->star_id);
                 $post->event_id = $spost->id;
                 $post->category_id = auth('sanctum')->user()->category_id;
                 $post->sub_category_id = auth('sanctum')->user()->sub_category_id;
                 $post->title = $spost->title;
-                $post->details = $spost->details;
+                $post->status = 1;
+                $post->details = $spost->description;
                 $post->save();
             } else {
                 $spost->status = 0;
@@ -428,8 +453,9 @@ class SimplePostController extends Controller
         ]);
     }
 
-    public function decline_post($id){
-        $declinePost = SimplePost::findOrFail($id)->update(['star_approval'=>2]);
+    public function decline_post($id)
+    {
+        $declinePost = SimplePost::findOrFail($id)->update(['star_approval' => 2]);
 
         return response()->json([
             'status' => 200,
@@ -447,7 +473,7 @@ class SimplePostController extends Controller
             'type' => 'required',
 
 
-        ],[
+        ], [
             'title.required' => 'Title Field Is Required',
             'description.required' => 'Description Field Is Required',
             'type.required' => "This  Field Is Required",
@@ -497,6 +523,14 @@ class SimplePostController extends Controller
             $file->move($path, $file_name);
             $post->video = $path . '/' . $file_name;
         }
+        if ($request->hasFile('thumbnail')) {
+
+            $file        = $request->file('thumbnail');
+            $path        = 'uploads/videos/post';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $post->thumbnail = $path . '/' . $file_name;
+        }
 
         $post->save();
 
@@ -510,8 +544,8 @@ class SimplePostController extends Controller
             $npost->sub_category_id = auth('sanctum')->user()->sub_category_id;
             $npost->event_id = $post->id;
             $npost->title = $post->title;
-            $npost->details = $post->details;
             $npost->status = 1;
+            $npost->details = $post->description;
             $npost->save();
         }
 
@@ -520,7 +554,7 @@ class SimplePostController extends Controller
             'message' => 'Post Added',
         ]);
     }
-    public function star_post_update(Request $request,$id)
+    public function star_post_update(Request $request, $id)
     {
 
         $validator = Validator::make($request->all(), [
@@ -531,7 +565,7 @@ class SimplePostController extends Controller
             'post_type' => 'required',
 
 
-        ],[
+        ], [
             'title.required' => 'Title Field Is Required',
             'description.required' => 'Description Field Is Required',
             'type.required' => "This  Field Is Required",
@@ -583,6 +617,20 @@ class SimplePostController extends Controller
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
             $post->video = $path . '/' . $file_name;
+            $post->image = null;
+        }
+        if ($request->hasFile('thumbnail')) {
+            if (File::exists($post->image)) {
+                File::delete($post->image);
+            }
+            if (File::exists($post->thumbnail)) {
+                File::delete($post->thumbnail);
+            }
+            $file        = $request->file('video');
+            $path        = 'uploads/videos/post';
+            $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+            $file->move($path, $file_name);
+            $post->thumbnail = $path . '/' . $file_name;
             $post->image = null;
         }
         $post->save();
