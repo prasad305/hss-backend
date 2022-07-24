@@ -55,7 +55,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManagerStatic as Image;
-
+use Illuminate\Support\Str;
 
 
 class UserController extends Controller
@@ -187,6 +187,51 @@ class UserController extends Controller
             'posts' => $post,
         ]);
     }
+
+    
+    /**
+     * mobile media upload
+     */
+
+    public function MobileImageUpUser(Request $request)
+    {
+            //      return response()->json([
+            //     "message" => "uload successfully",
+            //     "status" => "200",
+            //     "path" =>   $request->img['data']
+            // ]);
+
+     
+        try {
+            if ($request->img['data']) {
+
+                $originalExtension = str_ireplace("image/", "", $request->img['type']);
+
+                $folder_path       = 'uploads/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->img['data'];
+            }
+            
+    
+            Image::make($decodedBase64)->save($folder_path . $image_new_name);
+
+            $filePath = $folder_path . $image_new_name;
+
+            return response()->json([
+                "message" => "Upload successfully",
+                "status" => "200",
+                "path" =>   $filePath
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                "message" => "Image field required, invalid image !",
+                "error" => $exception->getMessage(),
+                "path" => "",
+            ]);
+        }
+    }
+
 
     /**
      * post with pagination
