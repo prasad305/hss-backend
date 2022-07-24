@@ -10,7 +10,7 @@ class Fan_Group_Join extends Model
     use HasFactory;
 
     //Relation For API
-    protected $with = ['user'];
+    protected $with = ['user', 'fangroup'];
 
     public function user()
     {
@@ -20,4 +20,5 @@ class Fan_Group_Join extends Model
     {
         return $this->belongsTo(FanGroup::class, 'fan_group_id');
     }
+
 }

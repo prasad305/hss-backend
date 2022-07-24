@@ -55,7 +55,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManagerStatic as Image;
-
+use Illuminate\Support\Str;
 
 
 class UserController extends Controller
@@ -75,7 +75,7 @@ class UserController extends Controller
 
     public function star_list()
     {
-        $stars = User::where('user_type','star')->get();
+        $stars = User::where('user_type', 'star')->get();
 
         return response()->json([
             'status' => 200,
@@ -83,7 +83,8 @@ class UserController extends Controller
         ]);
     }
 
-    public function postShare($postId){
+    public function postShare($postId)
+    {
         $post = Post::find($postId);
         return response()->json([
             'status' => 200,
@@ -186,6 +187,51 @@ class UserController extends Controller
             'posts' => $post,
         ]);
     }
+
+    
+    /**
+     * mobile media upload
+     */
+
+    public function MobileImageUpUser(Request $request)
+    {
+            //      return response()->json([
+            //     "message" => "uload successfully",
+            //     "status" => "200",
+            //     "path" =>   $request->img['data']
+            // ]);
+
+     
+        try {
+            if ($request->img['data']) {
+
+                $originalExtension = str_ireplace("image/", "", $request->img['type']);
+
+                $folder_path       = 'uploads/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->img['data'];
+            }
+            
+    
+            Image::make($decodedBase64)->save($folder_path . $image_new_name);
+
+            $filePath = $folder_path . $image_new_name;
+
+            return response()->json([
+                "message" => "Upload successfully",
+                "status" => "200",
+                "path" =>   $filePath
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                "message" => "Image field required, invalid image !",
+                "error" => $exception->getMessage(),
+                "path" => "",
+            ]);
+        }
+    }
+
 
     /**
      * post with pagination
@@ -1188,11 +1234,12 @@ class UserController extends Controller
             ]);
 
 
-            if (!Activity::where([['user_id', auth()->user()->id], ['event_id', $bidding->auction_id]])->exists()) {
+            if (!Activity::where([['user_id', auth()->user()->id], ['event_id', $bidding->auction_id], ['type', 'auction']])->exists()) {
                 Activity::Create([
                     'type'    => 'auction',
                     'user_id'    => $bidding->user_id,
                     'event_id'    => $bidding->auction_id,
+                    'event_registration_id'    => $bidding->auction_id,
                 ]);
             }
 
@@ -1431,9 +1478,9 @@ class UserController extends Controller
 
     public function uploaded_round_videos($audition_id, $round_info_id)
     {
-        $videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id],['user_id',auth()->user()->id]])->get();
+        $videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id]])->get();
 
-        $round_status = AuditionRoundMarkTracking::where([['user_id',auth()->user()->id],['audition_id',$audition_id],['round_info_id',$round_info_id]])->first();
+        $round_status = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id], ['round_info_id', $round_info_id]])->first();
 
         return response()->json([
             'status' => 200,

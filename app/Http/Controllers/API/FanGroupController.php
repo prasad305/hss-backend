@@ -338,8 +338,8 @@ class FanGroupController extends Controller
                 $query->where('my_star', $id)
                     ->orWhere('another_star', $id);
             })
-            ->whereDate('start_date', '<=', $today)
-            ->whereDate('end_date', '>=', $today)
+            // ->whereDate('start_date', '<=', $today)
+            // ->whereDate('end_date', '>=', $today)
             ->where('status', 1)
             ->orderBy('id', 'DESC')
             ->get();
@@ -412,8 +412,8 @@ class FanGroupController extends Controller
             ->where('my_star_status', 1)
             ->where('status', 1)
             ->where('another_star_status', 1)
-            ->whereDate('start_date', '<=', $today)
-            ->whereDate('end_date', '>=', $today)
+            // ->whereDate('start_date', '<=', $today)
+            // ->whereDate('end_date', '>=', $today)
             ->orderBy('id', 'DESC')
             ->get();
 

@@ -70,21 +70,6 @@ class SouvenirController extends Controller
         $souvenir->description = $request->input('description');
         $souvenir->instruction = $request->input('instruction');
 
-
-        // if ($request->hasfile('image')) {
-        //     $destination = $marketplace->image;
-        //     if ($destination != null && file_exists($destination)) {
-        //         unlink($destination);
-        //     }
-        //     $file = $request->file('image');
-        //     $extension = $file->getClientOriginalExtension();
-        //     $filename = 'uploads/images/marketplace/' . time() . '.' . $extension;
-
-        //     Image::make($file)->resize(400, 400)->save($filename, 50);
-        //     $marketplace->image = $filename;
-
-        // }
-
         if ($request->hasfile('banner')) {
             $destination = $souvenir->banner;
             if (File::exists($destination)) {
