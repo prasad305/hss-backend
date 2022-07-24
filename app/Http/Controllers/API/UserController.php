@@ -33,6 +33,7 @@ use App\Models\FanPost;
 use App\Models\React;
 use App\Models\SimplePost;
 use App\Models\ChoiceList;
+use App\Models\GeneralPostPayment;
 use App\Models\GreetingType;
 use App\Models\InterestType;
 use App\Models\LearningSessionAssignment;
@@ -71,8 +72,18 @@ class UserController extends Controller
         ]);
     }
 
-    public function postShare($postId)
+
+    public function star_list()
     {
+        $stars = User::where('user_type','star')->get();
+
+        return response()->json([
+            'status' => 200,
+            'stars' => $stars,
+        ]);
+    }
+
+    public function postShare($postId){
         $post = Post::find($postId);
         return response()->json([
             'status' => 200,
@@ -209,6 +220,7 @@ class UserController extends Controller
         }
 
         $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
+        // $post = $cat_post;
 
         return response()->json([
             'status' => 200,
@@ -255,6 +267,73 @@ class UserController extends Controller
             'status' => 200,
             'message' => 'Ok',
             'post' => $post,
+        ]);
+    }
+    public function generalPostPayment(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+
+            'name' => 'required',
+            'amount' => 'required',
+            'card_number' => 'required',
+            'expiry_date' => 'required',
+            'ccv' => 'required',
+
+
+        ], [
+            'name.required' => 'This Field Is Required',
+            'amount.required' => 'This Field Is Required',
+            'card_number.required' => 'This Field Is Required',
+            'ccv.required' => 'This Field Is Required',
+            'expiry_date.required' => 'This Field Is Required',
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
+
+        $postPayment = GeneralPostPayment::create([
+
+            'post_id' => $request->post_id,
+            'user_id' => auth('sanctum')->user()->id,
+            'name' => $request->name,
+            'amount' => $request->amount,
+            'card_number' => $request->card_number,
+            'ccv' => $request->ccv,
+            'expiry_date' => $request->expiry_date,
+            'status' => 1,
+        ]);
+
+
+        return response()->json([
+            'status' => 200,
+            'postPayment' => $postPayment,
+            'message' => "Payment success"
+        ]);
+    }
+    public function generalPostPaymentCheck($post_id)
+    {
+
+        $payment_status = GeneralPostPayment::where('user_id', auth('sanctum')->user()->id)->where('post_id', $post_id)->where('status', 1)->first();
+
+        return response()->json([
+            'status' => 200,
+            'payment_status' => $payment_status,
+        ]);
+    }
+    public function simplePostPaymentCheck()
+    {
+
+        $lockStatus = GeneralPostPayment::where('user_id', auth('sanctum')->user()->id)->where('status', 1)->pluck('post_id');
+
+        return response()->json([
+            'status' => 200,
+            'lockStatus' => $lockStatus,
         ]);
     }
 
@@ -448,6 +527,10 @@ class UserController extends Controller
 
     public function paginate_getStarPost($id, $type, $limit)
     {
+        // $star_ids = '['.$id.']';
+        $star_id = json_decode($id);
+
+
         if ($type == 'livechat') {
             $post = Post::select("*")->where([['user_id', $id], ['type', 'livechat']])->latest()->paginate($limit);
         }
@@ -1152,16 +1235,8 @@ class UserController extends Controller
             'maxBid' => $maxBid,
         ]);
     }
-    public function auction_instruction()
-    {
 
-        $instruction = AuctionTerms::first();
 
-        return response()->json([
-            'status' => 200,
-            'instruction' => $instruction,
-        ]);
-    }
 
     public function aquiredProduct(Request $request)
     {
@@ -1579,7 +1654,7 @@ class UserController extends Controller
         ]);
     }
 
-    
+
     public function updateProfile(Request $request, $id)
     {
 
@@ -1622,6 +1697,16 @@ class UserController extends Controller
     public function paginate_userActivites($limit)
     {
         $userActivites = Activity::orderBy('id', 'DESC')->where('user_id', auth()->user()->id)->paginate($limit);
+
+        return response()->json([
+            'status' => 200,
+            'userActivites' => $userActivites
+        ]);
+    }
+
+    public function paginate_userActivites_by_id($id, $limit)
+    {
+        $userActivites = Activity::orderBy('id', 'DESC')->where('user_id', $id)->paginate($limit);
 
         return response()->json([
             'status' => 200,

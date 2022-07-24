@@ -372,11 +372,11 @@ class QnaController extends Controller
             $qna->admin_id = auth()->user()->parent_user;
             $qna->description = $request->input('description');
             $qna->instruction = $request->input('instruction');
-            $qna->event_date = $request->input('event_date');
-            $qna->start_time = Carbon::parse($request->input('start_time'));
-            $qna->end_time = Carbon::parse($request->input('end_time'));
-            $qna->registration_start_date = $request->input('registration_start_date');
-            $qna->registration_end_date = $request->input('registration_end_date');
+            $qna->event_date = Carbon::parse($request->event_date);
+            $qna->start_time = Carbon::parse($request->start_time);
+            $qna->end_time = Carbon::parse($request->end_time);
+            $qna->registration_start_date = Carbon::parse($request->registration_start_date);
+            $qna->registration_end_date = Carbon::parse($request->registration_end_date);
             $qna->fee = $request->input('fee');
             // $qna->question_quantity = $request->input('question_quantity');
             $qna->min_time = $request->input('min_time');

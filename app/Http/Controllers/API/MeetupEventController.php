@@ -46,6 +46,7 @@ class MeetupEventController extends Controller
             $meetup->created_by_id = auth('sanctum')->user()->id;
             $meetup->star_id = $request->input('star_id');
             $meetup->category_id = $star->category_id;
+            $meetup->sub_category_id = $star->sub_category_id;
             $meetup->admin_id = $star->admin_id;
             $meetup->title = $request->input('title');
             $meetup->slug = Str::slug($request->input('title'));
@@ -244,6 +245,7 @@ class MeetupEventController extends Controller
     {
         if ($type == 'all')
             $events = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0]]);
+
         if ($type == 'pending')
             $events = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '<', 1]]);
         if ($type == 'approved')
@@ -308,43 +310,6 @@ class MeetupEventController extends Controller
 
     /// Manager Part ////
 
-    public function manager_all()
-    {
-        $upcommingEvent = MeetupEvent::where([['status', '>', 0], ['category_id', auth()->user()->category_id]])->latest()->get();
-
-        return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
-    }
-
-
-    public function manager_pending()
-    {
-        $upcommingEvent = MeetupEvent::where([['status', 1], ['category_id', auth()->user()->category_id]])->latest()->get();
-
-        return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
-    }
-
-    public function manager_published()
-    {
-        $upcommingEvent = MeetupEvent::where([['status', 2], ['category_id', auth()->user()->category_id]])->latest()->get();
-
-        return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
-    }
-
-
-
-    public function set_approve_by_manager($id)
-    {
-        $meetup = MeetupEvent::find($id);
-        $meetup->star_approval = 1;
-        $meetup->update();
-
-        return response()->json([
-            'status' => 200,
-            'meetup' => $meetup,
-            'message' => 'Approved',
-        ]);
-    }
-
     public function event_info($id)
     {
 
@@ -356,6 +321,7 @@ class MeetupEventController extends Controller
             'message' => 'Approved',
         ]);
     }
+
 
 
 
@@ -386,6 +352,7 @@ class MeetupEventController extends Controller
             $post = new Post();
             $post->type = 'meetup';
             $post->user_id = $meetup->star_id;
+            $post->star_id = json_decode($meetup->star_id);
             $post->event_id = $meetup->id;
             $post->category_id = $starCat->category_id;
             $post->sub_category_id = $starCat->sub_category_id;
@@ -407,6 +374,7 @@ class MeetupEventController extends Controller
 
         return redirect()->back()->with('success', 'Published');
     }
+
 
 
     // User Part
@@ -553,20 +521,21 @@ class MeetupEventController extends Controller
             $meetup->star_id = auth('sanctum')->user()->id;
             $meetup->admin_id = $superStar->admin_id;
             $meetup->category_id = $superStar->category_id;
-            $meetup->title = $request->title;
-            $meetup->slug = Str::slug($request->title);
-            $meetup->event_link = $request->event_link;
-            $meetup->venue = $request->venue;
-            $meetup->meetup_type = $request->meetup_type;
-            $meetup->event_date = Carbon::parse($request->event_date);
-            $meetup->start_time = Carbon::parse($request->start_time);
-            $meetup->end_time = Carbon::parse($request->end_time);
-            $meetup->description = $request->description;
-            $meetup->instruction = $request->instruction;
-            $meetup->total_seat = $request->slots;
-            $meetup->reg_start_date = Carbon::parse($request->reg_start_date);
-            $meetup->reg_end_date = Carbon::parse($request->reg_end_date);
-            $meetup->fee = $request->fee;
+            $meetup->sub_category_id = $superStar->sub_category_id;
+            $meetup->title = $request->input('title');
+            $meetup->slug = Str::slug($request->input('title'));
+            $meetup->event_link = $request->input('event_link');
+            $meetup->venue = $request->input('venue');
+            $meetup->meetup_type = $request->input('meetup_type');
+            $meetup->event_date = $request->input('event_date');
+            $meetup->start_time = $request->input('start_time');
+            $meetup->end_time = $request->input('end_time');
+            $meetup->description = $request->input('description');
+            $meetup->instruction = $request->input('instruction');
+            $meetup->total_seat = $request->input('slots');
+            $meetup->reg_start_date = $request->input('reg_start_date');
+            $meetup->reg_end_date = $request->input('reg_end_date');
+            $meetup->fee = $request->input('fee');
             $meetup->status = 1;
 
             if ($request->hasfile('banner')) {
@@ -617,7 +586,7 @@ class MeetupEventController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'star_id' => 'required',
+            // 'star_id' => 'required',
             'title' => 'required',
             'description' => 'required|min:6',
             'instruction' => 'required|min:6',
@@ -627,7 +596,7 @@ class MeetupEventController extends Controller
             'reg_start_date' => 'required',
             'reg_end_date' => 'required',
             'fee' => 'required',
-            'total_seat' => 'required',
+            'slots' => 'required',
             'venue' => 'required_if:meetup_type,"Offline"',
         ]);
 
@@ -638,21 +607,21 @@ class MeetupEventController extends Controller
         } else {
             $meetup = MeetupEvent::find($id);
 
-            $meetup->star_id = $request->input('star_id');
-            $meetup->title = $request->input('title');
-            $meetup->slug = Str::slug($request->input('title'));
-            $meetup->event_link = $request->input('event_link');
-            $meetup->venue = $request->input('venue');
-            $meetup->meetup_type = $request->input('meetup_type');
-            $meetup->event_date = $request->input('event_date');
-            $meetup->start_time = $request->input('start_time');
-            $meetup->end_time = $request->input('end_time');
-            $meetup->description = $request->input('description');
-            $meetup->instruction = $request->input('instruction');
-            $meetup->total_seat = $request->input('total_seat');
-            $meetup->reg_start_date = $request->input('reg_start_date');
-            $meetup->reg_end_date = $request->input('reg_end_date');
-            $meetup->fee = $request->input('fee');
+            // $meetup->star_id = $request->star_id;
+            $meetup->title = $request->title;
+            $meetup->slug = Str::slug($request->title);
+            $meetup->event_link = $request->event_link;
+            $meetup->venue = $request->venue;
+            $meetup->meetup_type = $request->meetup_type;
+            $meetup->event_date = Carbon::parse($request->event_date);
+            $meetup->start_time = Carbon::parse($request->start_time);
+            $meetup->end_time = Carbon::parse($request->end_time);
+            $meetup->description = $request->description;
+            $meetup->instruction = $request->instruction;
+            $meetup->total_seat = $request->slots;
+            $meetup->reg_start_date = Carbon::parse($request->reg_start_date);
+            $meetup->reg_end_date = Carbon::parse($request->reg_end_date);
+            $meetup->fee = $request->fee;
 
             if ($request->hasfile('banner')) {
                 $destination = $meetup->banner;

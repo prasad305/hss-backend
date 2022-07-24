@@ -20,6 +20,7 @@ use App\Http\Controllers\API\LearningSessionController;
 use App\Http\Controllers\API\Audition\Admin\AuditionController;
 use App\Http\Controllers\API\Audition\Jury\JuryAuditionController;
 use App\Http\Controllers\API\Audition\Judge\JudgeAuditionController;
+use App\Http\Controllers\API\GuestController;
 use App\Http\Controllers\API\PromoVideoController;
 use App\Http\Controllers\API\QnaController;
 use App\Http\Controllers\API\StarGreetingController;
@@ -44,10 +45,18 @@ Route::post('verify_to_register_event', [AuthController::class, 'VerifyToRegiste
 Route::get('resend_otp', [AuthController::class, 'resend_otp']);
 Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 
+
+Route::get('/guest/all_post/with-paginate/{limit}', [GuestController::class, 'paginate_all_post']);
+
+
 // Home Page All Post
 Route::get('/user/all_post', [UserController::class, 'all_post']);
 Route::get('/user/all_post/with-paginate/{limit}', [UserController::class, 'paginate_all_post']);
 Route::get('/user/post/{type}', [UserController::class, 'single_type_post']);
+Route::post('/user/general-post/payment', [UserController::class, 'generalPostPayment']);
+Route::get('/user/generalPost/payment/check/{post_id}', [UserController::class, 'generalPostPaymentCheck']);
+Route::get('/user/generalPost/payment/check', [UserController::class, 'simplePostPaymentCheck']);
+
 Route::get('/user/post/{type}/with-paginate/{limit}', [UserController::class, 'paginate_single_type_post']);
 
 
@@ -70,6 +79,10 @@ Route::post('/chatting/message', [UserController::class, 'message']);
 Route::get('/chatting/message/{id}', [UserController::class, 'get_message']);
 Route::post('/group/message', [UserController::class, 'group_message']);
 Route::get('/group/message/{id}', [UserController::class, 'get_group_message']);
+
+Route::get('/guest/PromoVideos', [GuestController::class, 'getPromoVideo']);
+
+Route::get('/user/star_list', [UserController::class, 'star_list']);
 
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
@@ -162,6 +175,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/meetup-event/{star_id}/{event_id}', [MeetupEventController::class, 'meetup_event_booking']);
 
 
+
+
+
     Route::get('/star_info/{star_id}', [UserController::class, 'star_info']);
 
     Route::get('/meetup_event_info/{id}', [MeetupEventController::class, 'event_info']);
@@ -204,7 +220,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('user/aquired/auction', [UserController::class, 'aquiredProduct']);
     Route::get('user/maxbid/auction/{id}', [UserController::class, 'maxBid']);
     Route::get('/user/auction_activites', [UserController::class, 'auction_activites']);
-    Route::get('/user/auction_instruction', [UserController::class, 'auction_instruction']);
+
 
     //Event Registaion By User (Learning Session + Live Chat + Greeting + Meetup Event)
     Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
@@ -259,6 +275,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     // User Photos
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
     Route::get('/user/activitiesData/with-paginate/{limit}', [UserController::class, 'paginate_userActivites']);
+    Route::get('/user/{id}/activitiesData/with-paginate/{limit}', [UserController::class, 'paginate_userActivites_by_id']);
 
     //Registration Checker
     Route::get('/user/registration_checker/{type}/{slug}', [UserController::class, 'registration_checker']);
@@ -698,6 +715,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/singleAuditionRoundAssessmentResult/{audition_id}/{audition_round_info_id}', [AuditionController::class, 'singleAuditionRoundAssessmentResult']);
     Route::get('/audition-admin/audition/singleAuditionRoundVideoMerge/{audition_id}/{audition_round_info_id}', [AuditionController::class, 'singleAuditionRoundVideoMerge']);
     Route::get('/audition-admin/audition/singleAuditionRoundVideoResultByPercentage/{audition_id}/{audition_round_info_id}/{precentage}', [AuditionController::class, 'singleAuditionRoundVideoResultByPercentage']);
+    Route::get('/audition-admin/audition/singleAuditionRoundVideoResultByFilterNumber/{audition_id}/{audition_round_info_id}/{filter_number}', [AuditionController::class, 'singleAuditionRoundVideoResultByFilterNumber']);
     Route::get('/audition-admin/audition/videoReportBasedOnSingleJury/{audition_id}/{audition_round_info_id}/{jury_id}', [AuditionController::class, 'videoReportBasedOnSingleJury']);
     Route::get('/audition-admin/audition/singleAuditionVideoWithRoundId/{audition_id}/{audition_round_id}', [AuditionController::class, 'singleAuditionVideoWithRoundId']);
 
@@ -719,6 +737,10 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('audition-admin/audition/get-jury-random-videos/{audition_id}/{round_info_id}/{value}', [AuditionController::class, 'getRandomForJury']);
 
     Route::post('/audition-admin/audition/promo-instruction/update', [AuditionController::class, 'updatePromoInstruction']);
+
+    Route::post('/audition-admin/audition/assign-main-juries-for-percentage', [AuditionController::class, 'assignMainJuriesForPercentage']);
+
+    Route::post('/audition-admin/audition/assign-main-juries', [AuditionController::class, 'assignMainJuries']);
 
 
     Route::get('/audition-admin/audition/videos/{round_info_id}', [AuditionController::class, 'round_videos']);
