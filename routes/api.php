@@ -80,6 +80,10 @@ Route::get('/chatting/message/{id}', [UserController::class, 'get_message']);
 Route::post('/group/message', [UserController::class, 'group_message']);
 Route::get('/group/message/{id}', [UserController::class, 'get_group_message']);
 
+Route::get('/guest/PromoVideos', [GuestController::class, 'getPromoVideo']);
+
+Route::get('/user/star_list', [UserController::class, 'star_list']);
+
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/checkingAuthenticated', function () {
@@ -171,7 +175,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/meetup-event/{star_id}/{event_id}', [MeetupEventController::class, 'meetup_event_booking']);
 
 
-    Route::get('/user/star_list', [UserController::class, 'star_list']);
+
 
 
     Route::get('/star_info/{star_id}', [UserController::class, 'star_info']);
