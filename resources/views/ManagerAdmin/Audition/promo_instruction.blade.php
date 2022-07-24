@@ -38,14 +38,14 @@ Manager Admin
     <div class="container-fluid">
 
         <div class="row">
-            @if ($instruction->image != null)
-            <img src="{{ asset($instruction->image) }}" style="width: 100%" class="banner-image" />
-            @endif
+            {{-- @if ($event->banner != null) --}}
+            <img src="{{ asset($event->banner) }}" style="width: 100%" class="banner-image" />
+            {{-- @endif --}}
         </div>
 
         <div class="row">
          <video controls>
-            <source src="{{asset($instruction->video)}}" />
+            <source src="{{asset($event->video)}}" />
         </video>
         </div>
 
@@ -55,7 +55,7 @@ Manager Admin
                 <div class="row card p-5">
                     <u>Instruction</u>
                     <p>
-                        {!! $instruction->instruction !!}
+                        {!! $event->instruction !!}
                     </p>
                 </div>
 
