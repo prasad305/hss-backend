@@ -149,9 +149,12 @@ class FanGroupController extends Controller
             $post->category_id=$spost->category_id;
             $post->sub_category_id=$spost->sub_category_id;
             $post->title = $spost->group_name;
+            $post->star_id = '['.$spost->my_star.', '.$spost->another_star.']';
             $post->post_start_date = Carbon::parse($request->post_start_date)->format('Y-m-d');
             $post->post_end_date = Carbon::parse($request->post_end_date)->format('Y-m-d');
             $post->details = $spost->description;
+            $post->user_id = $spost->created_by;
+            $post->share_link = 'https://hellosuperstars.com/group/'.$spost->slug;
             $post->status = 1;
 
             $post->save();

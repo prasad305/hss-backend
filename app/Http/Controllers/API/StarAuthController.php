@@ -200,7 +200,7 @@ class StarAuthController extends Controller
             $filePath = $folder_path . $image_new_name;
 
             return response()->json([
-                "message" => "uload successfully",
+                "message" => "Upload successfully",
                 "status" => "200",
                 "path" =>   $filePath
             ]);
