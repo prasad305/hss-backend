@@ -154,18 +154,8 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.published') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Published</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.pending') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Pending</p>
-                    </a>
-                </li>
+                
+                
                 <li class="nav-item">
                     <a href="{{ route('managerAdmin.audition.all') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
@@ -251,14 +241,6 @@
                                 <p>Order List</p>
                             </a>
                         </li>
-
-                        {{-- </li>
-                  <li class="nav-item">
-                    <a href="" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Order</p>
-                    </a>
-                  </li> --}}
                     </ul>
                 </li>
 
@@ -537,6 +519,22 @@
                         <p>Events</p>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.audition.pending') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Pending</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.audition.published') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Published</p>
+                    </a>
+                </li>
+
+                
 
                 <li class="nav-item">
                     <a href="{{ route('managerAdmin.audition.registration.rules') }}" class="nav-link">

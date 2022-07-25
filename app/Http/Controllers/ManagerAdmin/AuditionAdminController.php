@@ -353,24 +353,10 @@ class AuditionAdminController extends Controller
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
 
-    public function pending()
-    {
-        $audition = Audition::where('status', 2)->latest()->get();
-        return view('ManagerAdmin.Audition.index', compact('audition'));
-    }
+   
 
-    public function published()
-    {
-        $audition = Audition::where('status', 3)->latest()->get();
-        return view('ManagerAdmin.Audition.index', compact('audition'));
-    }
+   
 
-    public function details($id)
-    {
-        $audition = Audition::find($id);
-        $judges = AuditionAssignJudge::where('audition_id', $audition->id)->get();
-        return view('ManagerAdmin.Audition.details')->with('audition', $audition)->with('judges', $judges);
-    }
 
 
     public function auditionEdit($id)
@@ -461,43 +447,7 @@ class AuditionAdminController extends Controller
         return redirect()->back()->with('success', 'Published');
     }
 
-    public function manager_audition_set_publish(Request $request,$audition_id)
-    {
-        $audition = Audition::find($audition_id);
-
-        if ($audition->status != 2) {
-            $request->validate([
-                'post_start_date' => 'required',
-                'post_end_date' => 'required',
-            ]);
-            $audition->status = 2;
-            $audition->update();
-
-        //    return $audition->star;
-
-            // Create New post //
-            $post = new Post();
-            $post->type = 'audition';
-            $post->event_id = $audition->id;
-            $post->category_id = $audition->category_id;
-            // $post->sub_category_id = $audition->sub_category_id;
-            $post->post_start_date = Carbon::parse($request->post_start_date);
-            $post->post_end_date = Carbon::parse($request->post_end_date);
-            $post->save();
-            return redirect()->back()->with('success', 'Published');
-        } else {
-            //$audition->manager_approval = 0;
-            $audition->status = 10;
-            $audition->update();
-
-            //Remove post //
-            $post = Post::where([['event_id', $audition->id],['type','audition']])->first();
-            $post->delete();
-            return redirect()->back()->with('error', 'Unpublished');
-        }
-
-      
-    }
+    
 
 
 

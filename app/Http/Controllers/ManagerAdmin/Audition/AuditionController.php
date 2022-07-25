@@ -15,6 +15,7 @@ use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionRules;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\AuditionRoundInstruction;
+use App\Models\Post;
 use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -179,6 +180,75 @@ class AuditionController extends Controller
         $subCategories = SubCategory::where([['category_id', auth()->user()->category_id], ['status', 1]])->orderBY('id', 'desc')->get();
 
         return view('ManagerAdmin.auditionAdmin.create', compact('auditionAdmins', 'subCategories'));
+    }
+
+
+    public function pending()
+    {
+        $audition = Audition::where('status', 2)->orderBy('updated_at','desc')->get();
+        return view('ManagerAdmin.Audition.index', compact('audition'));
+    }
+
+    
+    public function details($id)
+    {
+        $audition = Audition::find($id);
+        $judges = AuditionAssignJudge::where('audition_id', $audition->id)->get();
+        return view('ManagerAdmin.Audition.details')->with('audition', $audition)->with('judges', $judges);
+    }
+
+    public function manager_audition_set_publish(Request $request,$audition_id)
+    {
+        $audition = Audition::find($audition_id);
+
+        if ($audition->status != 3) {
+            $request->validate([
+                'post_start_date' => 'required',
+                'post_end_date' => 'required',
+            ]);
+            $audition->status = 3;
+            $audition->update();
+
+            $judges = [];
+
+            foreach ($audition->assignedJudges as $key => $judge) {
+                array_push($judges,$judge->id);
+            }
+
+        //    return $audition->star;
+
+            // Create New post //
+            $post = new Post();
+            $post->type = 'audition';
+            $post->event_id = $audition->id;
+            $post->star_id = json_encode($judges);
+            $post->category_id = $audition->category_id;
+            // $post->sub_category_id = $audition->sub_category_id;
+            $post->post_start_date = Carbon::parse($request->post_start_date);
+            $post->post_end_date = Carbon::parse($request->post_end_date);
+            $post->user_like_id = '[]';
+            $post->react_provider = '[]';
+            $post->save();
+            return redirect()->back()->with('success', 'Published');
+        } else {
+            //$audition->manager_approval = 0;
+            $audition->status = 2;
+            $audition->update();
+
+            //Remove post //
+            $post = Post::where([['event_id', $audition->id],['type','audition']])->first();
+            $post->delete();
+            return redirect()->back()->with('error', 'Unpublished');
+        }
+
+      
+    }
+
+
+    public function published()
+    {
+        $audition = Audition::where('status', 3)->latest()->get();
+        return view('ManagerAdmin.Audition.index', compact('audition'));
     }
 
 

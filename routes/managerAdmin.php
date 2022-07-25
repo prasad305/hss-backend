@@ -228,8 +228,17 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
         Route::post('store', [AuditionController::class, 'store'])->name('store');
         // audition admin
         Route::resource('auditionAdmin', App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class);
+        
         Route::get('assinged', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'assinged'])->name('auditionAdmin.assinged');
         Route::get('free', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin.notAssinged');
+
+        Route::get('pending', [AuditionController::class, 'pending'])->name('pending');
+        Route::get('details/{id}', [AuditionController::class, 'details'])->name('details');
+        Route::post('set_publish/{audition_id}', [AuditionController::class, 'manager_audition_set_publish'])->name('set_publish');
+        Route::get('published', [AuditionController::class, 'published'])->name('published');
+        Route::get('all', [AuditionAdminController::class, 'all'])->name('all');
+
+
 
         Route::get('instruction/{audition_id}', [AuditionAdminController::class, 'instruction'])->name('instruction');
         Route::get('send-instruction/{audition_id}', [AuditionAdminController::class, 'sendInstructionToParticipant'])->name('sendInstruction');
@@ -242,16 +251,14 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
 
 
-        Route::get('pending', [AuditionAdminController::class, 'pending'])->name('pending');
-        Route::get('published', [AuditionAdminController::class, 'published'])->name('published');
-        Route::get('all', [AuditionAdminController::class, 'all'])->name('all');
+       
 
-        Route::get('details/{id}', [AuditionAdminController::class, 'details'])->name('details');
+       
         Route::get('edit/{id}', [AuditionAdminController::class, 'auditionEdit'])->name('edit');
         Route::put('update/{id}', [AuditionAdminController::class, 'auditionUpdate'])->name('update');
         // Route::get('set_publish/{id}', [AuditionAdminController::class, 'set_publish'])->name('set_publish');
 
-        Route::post('set_publish/{audition_id}', [AuditionAdminController::class, 'manager_audition_set_publish'])->name('set_publish');
+      
 
         //admins
         Route::get('admin-assign', [AuditionAdminController::class, 'adminAssign'])->name('adminAssign');

@@ -44,20 +44,29 @@ Manager Admin
             <div class="col-md-8 ">
                 <div class="row card p-5">
                     <h3>{{ $audition->name }}</h3>
+                    <h4>Description</h4>
                     <p>
                         {!! $audition->description !!}
                     </p>
+                    <h4>Instruction</h4>
+                    <p>
+                        {!! $audition->instruction !!}
+                    </p>
                 </div>
                 <div class="row">
-                    <div class="col-md-3 card py-3 mr-1">
-                        Date
-                        <h4 class="text-warning">{{ \Carbon\Carbon::parse($audition->created_at)->format('d F,Y')}}</h4>
-                    </div>
-                    <div class="col-md-3 card py-3 mr-1">
-                        Time
-                        <h4 class="text-warning"> {{ \Carbon\Carbon::parse($audition->start_time)->format('d F,Y')}} <span class="text-success">-</span><span class="text-danger"> End {{ \Carbon\Carbon::parse($audition->end_time)->format('d F,Y')}}</span></h4>
+                    <div class="col-md-6 card py-3 mr-1">
+                        Audition Start
+                        <h4 class="text-warning"> {{ \Carbon\Carbon::parse($audition->start_date)->format('d F,Y')}} <span class="text-success">-</span><span class="text-danger"> End {{ \Carbon\Carbon::parse($audition->end_date)->format('d F,Y')}}</span></h4>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-6 card py-3 mr-1">
+                        Audition Registration Start
+                        <h4 class="text-warning"> {{ \Carbon\Carbon::parse($audition->user_reg_start_date)->format('d F,Y')}} <span class="text-success">-</span><span class="text-danger"> End {{ \Carbon\Carbon::parse($audition->user_reg_end_date)->format('d F,Y')}}</span></h4>
+                    </div>
+                </div>
+
             </div>
 
             <div class="col-md-4">
@@ -79,16 +88,55 @@ Manager Admin
 
         </div>
 
+        @if ($audition->status == 2)
+        <div class="card row">
+            <div class="card-header"
+                style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
+                Publish Post in News Feed
+            </div>
+            <div class="card-body">
+                <form action="{{ route('managerAdmin.audition.set_publish', [$audition->id]) }}" method="post">
+                    @csrf
+                    <div class="row">
+                        <div class="mb-3 col-md-6 col-6">
+                            <label for="start_date" class="form-label">Post Start Date</label>
+                            <input type="calender" class="form-control" id="datepicker"
+                                style="background: coral; position: relative; padding-left: 33px;"
+                                name="post_start_date" readonly="readonly" value="{{ old('post_start_date') }}" />
+                            <i class="fa fa-calendar"
+                                style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
+                                aria-hidden="true"></i>
+                            @if ($errors->has('post_start_date'))
+                            <span class="text-danger">{{ $errors->first('post_start_date') }}</span>
+                            @endif
+                        </div>
+                        <div class="mb-3 col-md-6 col-6">
+                            <label for="end_date" class="form-label">Post End Date</label>
+                            <input type="text" class="form-control" id="datepicker1"
+                                style="background: coral; position: relative; padding-left: 33px;"
+                                name="post_end_date" readonly="readonly" value="{{ old('post_end_date') }}">
+                            <i class="fa fa-calendar"
+                                style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
+                                aria-hidden="true"></i>
+                            @if ($errors->has('post_end_date'))
+                            <span class="text-danger">{{ $errors->first('post_end_date') }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-success mr-2">Publish Now</button>
+                </form>
 
-        <div class="container row">
-            @if($audition->status < 3)
-            <a type="button" class="btn btn-outline-success mr-2" href="{{ route('managerAdmin.audition.set_publish', $audition->id) }}">Publish Now</a>
-            @elseif($audition->status == 3)
-            <a type="button" class="btn btn-outline-danger mr-2" href="{{ route('managerAdmin.audition.set_publish', [$audition->id]) }}">Remove From Publish</a>
-            @endif
-            <a type="button" class="btn btn-outline-warning px-5" onclick="Show('Edit Post','{{ route('managerAdmin.audition.edit', $audition->id) }}')">Edit</a>
+            </div>
+
         </div>
+        @endif
 
+        @if ($audition->status == 3)
+        <form action="{{ route('managerAdmin.audition.set_publish', [$audition->id]) }}" method="post">
+            @csrf
+            <button type="submit" class="btn btn-outline-danger mr-2">Remove From Publish</button>
+        </form>
+        @endif
 
     </div> <!-- container -->
 </div> <!-- content -->
@@ -114,7 +162,37 @@ Manager Admin
 
 @endsection
 
+
+@push('js')
+{{-- <script src="{{ asset('assets/manager-admin/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script> --}}
+<script src="{{ asset('assets/manager-admin/pages/dashborad.js') }}"></script>
+
+
+<script>
+    $(function() {
+            $("#datepicker").datepicker({
+                minDate: "{{\Carbon\Carbon::now()->format('m/d/Y')}}",
+                maxDate: "<?php echo \Carbon\Carbon::parse($audition->end_date)->format('m/d/Y'); ?>"
+            });
+        });
+
+        $(function() {
+            $("#datepicker1").datepicker({
+                minDate: "<?php echo \Carbon\Carbon::parse($audition->end_date)
+                    ->addDays(1)
+                    ->format('m/d/Y'); ?>",
+                maxDate: "+100000D"
+            });
+        });
+</script>
+@endpush
+
 @push('script')
 {{-- <script src="{{ asset('assets/manager-admin/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script> --}}
 <script src="{{ asset('assets/manager-admin/pages/dashborad.js') }}"></script>
+@endpush
+
+@push('jsstyle')
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 @endpush
