@@ -124,7 +124,6 @@ class AuditionController extends Controller
         return back();
     }
 
-
     public function assignManpowerStore(Request $request)
     {
         // dd($request->all());
@@ -196,6 +195,7 @@ class AuditionController extends Controller
         }
         return redirect()->route('managerAdmin.audition.events');
     }
+
     public function create()
     {
         $auditionAdmins = User::whereNotIn('id', Audition::pluck('audition_admin_id'))->where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
