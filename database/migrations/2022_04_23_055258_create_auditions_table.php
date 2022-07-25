@@ -23,9 +23,11 @@ class CreateAuditionsTable extends Migration
             $table->unsignedBigInteger('manager_admin_id')->nullable();
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
+            $table->longText('instruction')->nullable();
             $table->longText('description')->nullable();
             $table->string('banner')->nullable();
             $table->string('video')->nullable();
+            $table->string('pdf')->nullable();
             $table->integer('round_status')->nullable();
             $table->string('template_id')->nullable();
             $table->timestamp('user_reg_start_date')->nullable();
@@ -34,6 +36,7 @@ class CreateAuditionsTable extends Migration
             $table->time('end_time')->nullable();
             $table->timestamp('final_result_published_date')->nullable();
             $table->double('fees')->nullable();
+            $table->integer('participant')->nullable();
             $table->integer('status')->default(0)->comment('default/pending 0, 3 = live');
             $table->timestamps();
         });
