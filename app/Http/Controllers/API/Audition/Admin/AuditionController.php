@@ -745,18 +745,27 @@ class AuditionController extends Controller
     }
     public function storeRoundInstruction(Request $request)
     {
+        // return $request->all();
         $old_instruction = AuditionRoundInstruction::where([['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->first();
 
         if (isset($old_instruction->id)) {
             $validator = Validator::make($request->all(), [
-                'round_info_id' => 'required',
+                'round_info_id' => 'required|exists:audition_round_infos,id',
+                'video_time_duration' => 'required',
+                'video_slot' => 'required',
+                'appeal_video_time_duration' => 'required',
+                'appeal_video_slot' => 'required',
                 'instruction' => 'required|min:10',
             ], [
                 'round_info_id.required' => 'Please Select Round Number',
             ]);
         } else {
             $validator = Validator::make($request->all(), [
-                'round_info_id' => 'required',
+                'round_info_id' => 'required|exists:audition_round_infos,id',
+                'video_time_duration' => 'required',
+                'video_slot' => 'required',
+                'appeal_video_time_duration' => 'required',
+                'appeal_video_slot' => 'required',
                 'instruction' => 'required|min:10',
                 'image' => 'required|mimes:jpg,jpeg,png',
                 'video' => 'required|mimes:mp4,mkv',
@@ -765,13 +774,19 @@ class AuditionController extends Controller
             ]);
         }
 
-
         if ($validator->fails()) {
             return response()->json([
                 'status' => 422,
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
+
+            $auditionRoundInfo                         = AuditionRoundInfo::find($request->round_info_id);
+            $auditionRoundInfo->video_duration         = $request->video_time_duration;
+            $auditionRoundInfo->video_slot_num         = $request->video_slot;
+            $auditionRoundInfo->appeal_video_duration  = $request->appeal_video_time_duration;
+            $auditionRoundInfo->appeal_video_slot_num  = $request->appeal_video_slot;
+            $auditionRoundInfo->save();
 
             if (isset($old_instruction->id)) {
                 $instruction = $old_instruction;
