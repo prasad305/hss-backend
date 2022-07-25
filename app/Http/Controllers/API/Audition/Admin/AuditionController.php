@@ -745,31 +745,23 @@ class AuditionController extends Controller
     }
     public function storeRoundInstruction(Request $request)
     {
-        // return $request->star_ids;
-        // return $request->all();
         $old_instruction = AuditionRoundInstruction::where([['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->first();
 
         if (isset($old_instruction->id)) {
             $validator = Validator::make($request->all(), [
                 'round_info_id' => 'required',
                 'instruction' => 'required|min:5',
-                'submission_date' => 'required',
-                'star_ids' => 'required',
             ], [
                 'round_info_id.required' => 'Please Select Round Number',
-                'star_ids.required' => 'Select At Least One Star'
             ]);
         } else {
             $validator = Validator::make($request->all(), [
                 'round_info_id' => 'required',
                 'instruction' => 'required|min:5',
-                'submission_date' => 'required',
                 'image' => 'required|mimes:jpg,jpeg,png',
                 'video' => 'required|mimes:mp4,mkv',
-                'star_ids' => 'required',
             ], [
                 'round_info_id.required' => 'Please Select Round Number',
-                'star_ids.required' => 'Select At Least One Star'
             ]);
         }
 
@@ -781,8 +773,6 @@ class AuditionController extends Controller
             ]);
         } else {
 
-
-
             if (isset($old_instruction->id)) {
                 $instruction = $old_instruction;
             } else {
@@ -792,7 +782,6 @@ class AuditionController extends Controller
             $instruction->round_info_id = $request->round_info_id;
             $instruction->audition_id = $request->audition_id;
             $instruction->instruction = $request->instruction;
-            $instruction->submission_end_date = Carbon::parse($request->submission_date);
 
             try {
                 if ($request->hasfile('image')) {
@@ -823,32 +812,9 @@ class AuditionController extends Controller
                     $instruction->document = $pdf_folder_path . '/' . $pdf_new_name;
                 }
 
-                $instruction->send_to_judge = 1;
+                $instruction->send_to_manager = 1;
                 $instruction->save();
 
-                if ($instruction) {
-
-                    if ($request->star_ids) {
-                        AuditionRoundInstructionSendInfo::where([['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->delete();
-
-                        foreach ($request->star_ids as $key => $star) {
-                            // new round instruction for star create
-
-                            $instruction_info = new AuditionRoundInstructionSendInfo();
-                            $instruction_info->audition_id = $request->audition_id;
-                            $instruction_info->round_info_id = $instruction->round_info_id;
-                            $instruction_info->audition_round_ins_id = $instruction->id;
-                            $instruction_info->judge_id = $star;
-                            $instruction_info->instruction = $request->instruction;
-
-                            $instruction_info->image = $instruction->image;
-                            $instruction_info->video = $instruction->video;
-                            $instruction_info->document = $instruction->document;
-                            $instruction_info->submission_end_date = $instruction->submission_end_date;
-                            $instruction_info->save();
-                        }
-                    }
-                }
                 return response()->json([
                     'status' => 200,
                     'message' => 'Audition Round Instruction submitted successfully !!',
@@ -1091,6 +1057,16 @@ class AuditionController extends Controller
     public function request()
     {
         $event = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 1]])->get();
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+        ]);
+    }
+
+    // assigned Audition
+    public function assignedAudition()
+    {
+        $event = Audition::where([['audition_admin_id', auth('sanctum')->user()->id]])->get();
         return response()->json([
             'status' => 200,
             'event' => $event,
