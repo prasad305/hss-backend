@@ -465,7 +465,7 @@ class LiveChatController extends Controller
     // Star Controlling Method
     public function add_by_star(Request $request)
     {
-        // return $request->all();
+
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:live_chats',
@@ -490,24 +490,28 @@ class LiveChatController extends Controller
             $superStar = SuperStar::where('star_id', auth('sanctum')->user()->id)->first();
 
             $liveChat = new LiveChat();
-            $liveChat->title = $request->input('title');
-            $liveChat->slug = Str::slug($request->input('title'));
+            $liveChat->title = $request->title;
+            $liveChat->slug = Str::slug($request->title);
             $liveChat->star_id = auth('sanctum')->user()->id;
             $liveChat->category_id = $superStar->category_id;
             $liveChat->sub_category_id = $superStar->sub_category_id;
+
             $liveChat->admin_id = $superStar->admin_id;
+
             $liveChat->created_by_id = auth('sanctum')->user()->id;
-            $liveChat->instruction = $request->input('instruction');
-            $liveChat->description = $request->input('description');
-            $liveChat->event_date = Carbon::parse($request->input('date'));
-            $liveChat->start_time = Carbon::parse($request->input('start_time'));
-            $liveChat->end_time = Carbon::parse($request->input('end_time'));
-            $liveChat->registration_start_date = Carbon::parse($request->input('registration_start_date'));
-            $liveChat->registration_end_date = Carbon::parse($request->input('registration_end_date'));
-            $liveChat->fee = $request->input('fee');
-            $liveChat->max_time = $request->input('max_time');
-            $liveChat->interval = $request->input('interval');
+            $liveChat->instruction = $request->instruction;
+            $liveChat->description = $request->description;
+
+            $liveChat->event_date = Carbon::parse($request->date);
+            $liveChat->start_time = Carbon::parse($request->start_time);
+            $liveChat->end_time = Carbon::parse($request->end_time);
+            $liveChat->registration_start_date = Carbon::parse($request->registration_start_date);
+            $liveChat->registration_end_date = Carbon::parse($request->registration_end_date);
+            $liveChat->fee = $request->fee;
+            $liveChat->max_time = $request->max_time;
+            $liveChat->interval = $request->interval;
             $liveChat->status = 1;
+
 
             if ($request->hasfile('image')) {
                 $destination = $liveChat->banner;
