@@ -750,14 +750,14 @@ class AuditionController extends Controller
         if (isset($old_instruction->id)) {
             $validator = Validator::make($request->all(), [
                 'round_info_id' => 'required',
-                'instruction' => 'required|min:5',
+                'instruction' => 'required|min:10',
             ], [
                 'round_info_id.required' => 'Please Select Round Number',
             ]);
         } else {
             $validator = Validator::make($request->all(), [
                 'round_info_id' => 'required',
-                'instruction' => 'required|min:5',
+                'instruction' => 'required|min:10',
                 'image' => 'required|mimes:jpg,jpeg,png',
                 'video' => 'required|mimes:mp4,mkv',
             ], [
