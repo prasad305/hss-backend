@@ -11,11 +11,12 @@ use Illuminate\Database\Eloquent\Model;
 class AuditionRoundInstructionSendInfo extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
     protected $with = ['star'];
 
     public function star()
     {
-        return $this->belongsTo(User::class,'judge_id');
+        return $this->belongsTo(User::class, 'judge_id');
     }
 }
-

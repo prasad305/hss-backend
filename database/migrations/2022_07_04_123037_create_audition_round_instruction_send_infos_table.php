@@ -26,7 +26,8 @@ class CreateAuditionRoundInstructionSendInfosTable extends Migration
             $table->string('video')->nullable();
             $table->string('image')->nullable();
             $table->string('document')->nullable();
-            $table->date('submission_end_date')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->integer('status')->default(0)->comment('0 = default, 1 = judge updated instruction ');
 
             $table->timestamps();

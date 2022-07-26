@@ -37,7 +37,7 @@ class AuditionController extends Controller
 
     public function events()
     {
-        $events = Audition::where([['audition_admin_id', auth('sanctum')->user()->id],['status','>',0]])->get();
+        $events = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', '>', 0]])->get();
 
         return response()->json([
             'status' => 200,
@@ -57,18 +57,17 @@ class AuditionController extends Controller
                 $audition->update([
                     'status' => 1,
                 ]);
-                $message="Audition Accepted Successfully!";
+                $message = "Audition Accepted Successfully!";
             } else {
                 $audition->update([
                     'status' => 11,
                 ]);
-                $message="Audition Reject Successfully!";
+                $message = "Audition Reject Successfully!";
             }
             return response()->json([
                 'status' => 200,
                 'message' => $message,
             ]);
-
         } catch (\Exception $exception) {
             return response()->json([
                 'status' => 500,
@@ -77,7 +76,8 @@ class AuditionController extends Controller
         }
     }
 
-    public function storePostContent(Request $request){
+    public function storePostContent(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'instruction' => 'required|min:5',
             'description' => 'required|min:5',
@@ -124,12 +124,12 @@ class AuditionController extends Controller
             }
 
             try {
-               $audition->save();
-               return response()->json([
-                'status' => 200,
-                'message' => 'Audition Post Content Updated Successfully!',
-            ]);
-            }catch (\Exception $exception) {
+                $audition->save();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Audition Post Content Updated Successfully!',
+                ]);
+            } catch (\Exception $exception) {
                 return response()->json([
                     'status' => 500,
                     'message' => 'Opps... Something went wrong ! ' . $exception->getMessage(),
@@ -2054,5 +2054,91 @@ class AuditionController extends Controller
             'status' => 200,
             'message' => 'Audition Round Result Send To Manager Successfull',
         ]);
+    }
+
+    // By Srabon
+
+    public function storeRoundInstructionVideo(Request $request)
+    {
+
+
+        // return $request->judge_id;
+
+
+        // $old_instruction = AuditionRoundInstruction::where([['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->first();
+
+        {
+            $validator = Validator::make($request->all(), [
+                'round_info_id' => 'required|exists:audition_round_infos,id',
+                'instruction' => 'required|min:10',
+                'description' => 'required|min:10',
+                'image' => 'required|mimes:jpg,jpeg,png',
+                'video' => 'required|mimes:mp4,mkv',
+            ], [
+                'round_info_id.required' => 'Please Select Round Number',
+            ]);
+        }
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            foreach ($request->judge_id as $judge => $id) {
+
+                $instruction = new AuditionRoundInstructionSendInfo();
+
+                $instruction->round_info_id = $request->round_info_id;
+                $instruction->audition_id = $request->audition_id;
+                $instruction->instruction = $request->instruction;
+                $instruction->description = $request->description;
+                $instruction->start_date = $request->start_date;
+                $instruction->end_date = $request->end_date;
+                $instruction->judge_id =  $id;
+
+                try {
+                    if ($request->hasfile('image')) {
+                        $image             = $request->image;
+                        $image_folder_path       = 'uploads/images/auditions/round/instructions/';
+                        $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                        // save to server
+                        $request->image->move($image_folder_path, $image_new_name);
+                        $instruction->image = $image_folder_path . '/' . $image_new_name;
+                    }
+
+                    if ($request->hasfile('video')) {
+                        $file             = $request->video;
+                        $folder_path       = 'uploads/videos/auditions/round/instructions/';
+                        $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
+                        // save to server
+                        $request->video->move($folder_path, $file_new_name);
+                        $instruction->video = $folder_path . '/' . $file_new_name;
+                    }
+
+                    if ($request->hasfile('pdf')) {
+                        $image             = $request->pdf;
+                        $pdf_folder_path       = 'uploads/pdf/auditions/round/instructions/';
+
+                        $pdf_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                        // save to server
+                        $request->pdf->move($pdf_folder_path, $pdf_new_name);
+                        $instruction->document = $pdf_folder_path . '/' . $pdf_new_name;
+                    }
+                    $instruction->save();
+
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Audition Round Instruction video submitted successfully !!',
+
+                    ]);
+                } catch (\Exception $exception) {
+                    return response()->json([
+                        'status' => 200,
+                        'message' =>  $exception->getMessage(),
+                    ]);
+                }
+            }
+        }
     }
 }
