@@ -29,6 +29,8 @@ class AuditionController extends Controller
 {
     public function store(Request $request)
     {
+
+        // return date('Y-m-d',strtotime($request->end_date));
         $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -51,8 +53,8 @@ class AuditionController extends Controller
             $audition->slug                 =  Str::slug($request->title);
             $audition->description          =  $request->description;
             $audition->round_status         =  0;
-            $audition->start_time           =  Carbon::parse($request->start_date);
-            $audition->end_time             =  Carbon::parse($request->start_date)->addDays($auditionRule->day)->addMonths($auditionRule->month);
+            $audition->start_date           =  Carbon::parse($request->start_date);
+            $audition->end_date            =  date('Y-m-d',strtotime($request->end_date));
             $audition->status               =  0;
             $audition->save();
 
@@ -65,10 +67,10 @@ class AuditionController extends Controller
             $audition_info->round_num = $auditionRule->round_num;
             $audition_info->judge_num = $auditionRule->judge_num;
             $audition_info->jury_groups = $auditionRule->jury_groups;
-            $audition_info->event_start_date = Carbon::parse($request->stat_date);
-            $audition_info->event_end_date = Carbon::parse($request->stat_date)->addDays($auditionRule->event_period);
-            $audition_info->instruction_prepare_start_date = Carbon::parse($request->stat_date);
-            $audition_info->instruction_prepare_end_date = Carbon::parse($request->stat_date)->addDays($auditionRule->instruction_prepare_period);
+            $audition_info->event_start_date = Carbon::parse($request->start_date);
+            $audition_info->event_end_date = date('Y-m-d',strtotime($request->end_date));
+            $audition_info->instruction_prepare_start_date = Carbon::parse($request->start_date);
+            $audition_info->instruction_prepare_end_date = Carbon::parse($request->start_date)->addDays($auditionRule->instruction_prepare_period);
             $audition_info->registration_start_date = Carbon::parse($audition_info->instruction_prepare_end_date)->addDays(1);
             $audition_info->registration_end_date = Carbon::parse($audition_info->registration_start_date)->addDays($auditionRule->registration_period);
             $audition_info->save();

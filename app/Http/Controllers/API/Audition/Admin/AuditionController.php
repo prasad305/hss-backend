@@ -78,6 +78,7 @@ class AuditionController extends Controller
     }
 
     public function storePostContent(Request $request){
+        // return $request->all();
         $validator = Validator::make($request->all(), [
             'instruction' => 'required|min:5',
             'description' => 'required|min:5',

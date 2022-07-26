@@ -19,6 +19,17 @@
         <span id="name_error" class="text-danger"></span>
     </div>
 
+    <div class="form-group">
+        <label for="name">Is Primary Group</label>
+        <input type="radio" id="is_primary" name="is_primary" value="1">
+        <span>Yes</span>
+        <input type="radio" id="is_primary" name="is_primary" value="0">
+        <span>No</span>
+        <span id="name_error" class="text-danger"></span>
+    </div>
+
+    
+
     <button type="submit" id="addSubCategoryBtn" class="btn btn-primary"><i class="fa fa-save"></i>&nbsp; Add Group
         Name</button>
 
