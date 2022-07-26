@@ -14,8 +14,6 @@ class Audition extends Model
     protected $guarded = [];
 
     protected $with = ['assignedJudges','info', 'category', 'participant', 'auditionRules', 'assignedJuries', 'uploadedVideos','admin', 'auditionAdmin', 'auditionRound'];
-    // protected $with = ['assignedJudges','info', 'category', 'participant', 'auditionRules', 'assignedJuries', 'uploadedVideos', 'admin', 'auditionAdmin', 'auditionRound'];
-
 
     public function category()
     {

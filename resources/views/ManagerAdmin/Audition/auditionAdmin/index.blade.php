@@ -15,8 +15,7 @@
                 <div class="search-container mx-2">
                     <form action="/search" method="get">
                         <input class="search expandright" id="searchright" type="search" name="q" placeholder="Search">
-                        <label class="button searchbutton" for="searchright"><span
-                                class="mglass">&#9906;</span></label>
+                        <label class="button searchbutton" for="searchright"><span class="mglass">&#9906;</span></label>
                     </form>
                 </div>
 
@@ -26,16 +25,19 @@
                     <button data-toggle="dropdown" class='btn filterBtn'><i class="fa-solid fa-arrow-down-short-wide"></i>
                         Filter</button>
                     <div class="dropdown-menu" style="background-color: #3c506f;">
-                        <a class="dropdown-item" href="{{ route('managerAdmin.audition.auditionAdmin.assinged') }}">Show assigned audition
+                        <a class="dropdown-item" href="{{ route('managerAdmin.audition.auditionAdmin.assinged') }}">Show
+                            assigned audition
                             admins</a>
-                        <a class="dropdown-item" href="{{ route('managerAdmin.audition.auditionAdmin.notAssinged') }}">Show available
+                        <a class="dropdown-item"
+                            href="{{ route('managerAdmin.audition.auditionAdmin.notAssinged') }}">Show available
                             audition admins</a>
-                        <a class="dropdown-item" href="{{ route('managerAdmin.audition.auditionAdmin.index') }}">All Admins</a>
+                        <a class="dropdown-item" href="{{ route('managerAdmin.audition.auditionAdmin.index') }}">All
+                            Admins</a>
                     </div>
                 </div>
                 <div class='mx-2'>
                     <a class='btn filterBtn'
-                    onclick="Show('New Audition Admin','{{ route('managerAdmin.audition.auditionAdmin.create') }}')"><i
+                        onclick="Show('New Audition Admin','{{ route('managerAdmin.audition.auditionAdmin.create') }}')"><i
                             class="fa-solid fa-circle-plus"></i> New</a>
                 </div>
             </div>
@@ -51,15 +53,15 @@
                         <img src="{{ asset($auditionAdmin->image ?? get_static_option('user')) }}" alt="Admin Admin image"
                             class="img-fluid AdminImg mr-3 mt-4">
                         <div class="px-2 mt-3" style="border-left: 1px solid gray">
-                            <a href="{{ route('managerAdmin.audition.auditionAdmin.show', $auditionAdmin->id) }}">
-                                <span class="info-box-text AdminName">
-                                    <h5 class="text-light">{{ $auditionAdmin->first_name }}
-                                        {{ $auditionAdmin->last_name }}</h5>
-                                </span>
-                                <b class="AdminMusic">{{ $auditionAdmin->auditionCategory->name ?? '' }}</b> <br />
-                                <p class="{{ $auditionAdmin->status == 0 ? 'text-danger' : 'text-success' }}">
-                                    {{ $auditionAdmin->status == 0 ? 'Pending For Approval' : 'Approved' }}</p>
-                            </a>
+                            {{-- <a href="{{ route('managerAdmin.audition.auditionAdmin.show', $auditionAdmin->id) }}"> --}}
+                            <span class="info-box-text AdminName">
+                                <h5 class="text-light">{{ $auditionAdmin->first_name }}
+                                    {{ $auditionAdmin->last_name }}</h5>
+                            </span>
+                            <b class="AdminMusic">{{ $auditionAdmin->auditionCategory->name ?? '' }}</b> <br />
+                            <p class="{{ $auditionAdmin->status == 0 ? 'text-danger' : 'text-success' }}">
+                                {{ $auditionAdmin->status == 0 ? 'Pending For Approval' : 'Approved' }}</p>
+                            {{-- </a> --}}
                             @if ($auditionAdmin->assignedAudition)
                                 <span class="right badge bg-danger my-2">Assigned</span>
                             @else
@@ -73,17 +75,19 @@
                                 onclick="Show('Edit Audition Admin','{{ route('managerAdmin.audition.auditionAdmin.edit', $auditionAdmin->id) }}')"><i
                                     class="fa fa-edit text-white"></i></a>
 
-                            <button class="btn btn-sm btn-warning" onclick="delete_function(this)"
-                                value="{{ route('managerAdmin.auditionAdmin.destroy', $auditionAdmin->id) }}"><i
-                                    class="fa fa-trash"></i>
-                            </button>
-
-
-
+                            @if ($auditionAdmin->assignedAudition)
+                                <button class="btn btn-sm btn-warning"
+                                    onclick="show_warning_message('This Admin alreay assigned to an audition.')"><i
+                                        class="fa fa-trash"></i>
+                                </button>
+                            @else
+                                <button class="btn btn-sm btn-warning" onclick="delete_function(this)"
+                                    value="{{ route('managerAdmin.auditionAdmin.destroy', $auditionAdmin->id) }}"><i
+                                        class="fa fa-trash"></i>
+                                </button>
+                            @endif
                         </div>
                     </div>
-
-
                 </div>
             @endforeach
         </div>
@@ -244,6 +248,5 @@
                 font-size: 15px;
             }
         }
-
     </style>
 @endsection

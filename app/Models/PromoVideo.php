@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PromoVideo extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'admin_id',
         'video_url',
@@ -20,7 +22,7 @@ class PromoVideo extends Model
         'title',
         'status'
     ];
-    use HasFactory;
+    protected $with =['star'];
 
     public function star()
     {

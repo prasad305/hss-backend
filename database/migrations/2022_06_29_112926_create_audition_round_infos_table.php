@@ -41,8 +41,18 @@ class CreateAuditionRoundInfosTable extends Migration
             $table->date('jury_or_judge_mark_end_date')->nullable();
             $table->date('result_publish_start_date')->nullable();
             $table->date('result_publish_end_date')->nullable();
+
+            $table->integer('appeal_video_duration')->nullable();
+            $table->integer('appeal_video_slot_num')->nullable();
+
             $table->date('appeal_start_date')->nullable();
             $table->date('appeal_end_date')->nullable();
+
+            $table->date('appeal_video_upload_start_date')->nullable();
+            $table->date('appeal_video_upload_end_date')->nullable();
+            $table->date('appeal_jury_or_judge_mark_start_date')->nullable();
+            $table->date('appeal_jury_or_judge_mark_end_date')->nullable();
+
             $table->date('appeal_result_publish_start_date')->nullable();
             $table->date('appeal_result_publish_end_date')->nullable();
 
