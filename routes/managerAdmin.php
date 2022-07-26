@@ -162,13 +162,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::post('star/active/{id}', [AdminController::class, 'activeNow'])->name('star.activeNow');
     Route::post('star/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('star.inactiveNow');
 
-
-
-    // Route::get('admin-assinged', [AdminController::class, 'assinged'])->name('admin_assinged');
-    // Route::get('admin-free', [AdminController::class, 'notAssinged'])->name('admin_notAssinged');
-
-
-
     // Audition Admin route
     Route::resource('auditionAdmin', AuditionAdminController::class);
     // Route::get('auditionAdmin/{search_text}/', [AuditionAdminController::class, 'customSearch']);
@@ -185,6 +178,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('audition/registration-rules/{round_id}', [AuditionAdminController::class, 'getRoundInfo']);
 
     Route::post('audition/registration/round/update/{round_id}', [AuditionAdminController::class, 'updateRegistrationRound'])->name('audition.registration.round.update');
+
+
     // Jury Board route
     Route::resource('jury', JuryBoardController::class);
 
@@ -225,6 +220,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::group(['prefix' => 'audition/', 'as' => 'audition.'], function () {
         // audition
         Route::get('create', [AuditionController::class, 'create'])->name('create');
+        Route::get('assign-manpower/{audition_id}', [AuditionController::class, 'assignManpower'])->name('assignManpower');
+        Route::post('assign-manpower-store', [AuditionController::class, 'assignManpowerStore'])->name('assignManpowerStore');
         Route::post('store', [AuditionController::class, 'store'])->name('store');
         // audition admin
         Route::resource('auditionAdmin', App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class);

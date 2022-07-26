@@ -447,7 +447,43 @@ class AuditionAdminController extends Controller
         return redirect()->back()->with('success', 'Published');
     }
 
-    
+    public function manager_audition_set_publish(Request $request,$audition_id)
+    {
+        $audition = Audition::find($audition_id);
+
+        if ($audition->status != 2) {
+            $request->validate([
+                'post_start_date' => 'required',
+                'post_end_date' => 'required',
+            ]);
+            $audition->status = 2;
+            $audition->update();
+
+        //    return $audition->star;
+
+            // Create New post //
+            $post = new Post();
+            $post->type = 'audition';
+            $post->event_id = $audition->id;
+            $post->category_id = $audition->category_id;
+            // $post->sub_category_id = $audition->sub_category_id;
+            $post->post_start_date = Carbon::parse($request->post_start_date);
+            $post->post_end_date = Carbon::parse($request->post_end_date);
+            $post->save();
+            return redirect()->back()->with('success', 'Published');
+        } else {
+            //$audition->manager_approval = 0;
+            $audition->status = 10;
+            $audition->update();
+
+            //Remove post //
+            $post = Post::where([['event_id', $audition->id],['type','audition']])->first();
+            $post->delete();
+            return redirect()->back()->with('error', 'Unpublished');
+        }
+
+
+    }
 
 
 
@@ -491,12 +527,12 @@ class AuditionAdminController extends Controller
         return view('ManagerAdmin.Audition.round_instruction',compact('event'));
     }
 
-    
+
     public function getRoundResult(){
         $auditions = Audition::where([['status','>=',2],['category_id', auth()->user()->category_id]])->get();
         return view('ManagerAdmin.Audition.round_result',compact('auditions'));
     }
-    
+
     public function showRoundResult($audition_id){
          $event = Audition::find($audition_id);
         return view('ManagerAdmin.Audition.show_round_result',compact('event'));

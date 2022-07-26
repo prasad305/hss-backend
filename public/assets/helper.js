@@ -182,4 +182,10 @@ function delete_function(objButton) {
 
 
 }
-
+function show_warning_message(message) {
+    Swal.fire(
+        'Wrong !',
+        message,
+        'warning'
+    );
+}

@@ -4,7 +4,7 @@ namespace App\Models\Audition;
 
 
 use App\Models\Audition\Audition;
-
+use App\Models\AuditionRoundInstruction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +12,7 @@ class AuditionRoundInfo extends Model
 {
     use HasFactory;
 
-    protected $with = ['videos'];
+    protected $with = ['videos', 'roundInstruction'];
 
     protected $fillable = [
         'id',
@@ -51,7 +51,8 @@ class AuditionRoundInfo extends Model
         return $this->hasMany(AuditionUploadVideo::class,'round_info_id');
     }
 
-   
-  
+    public function roundInstruction(){
+        return $this->hasOne(AuditionRoundInstruction::class,'round_info_id');
+    }
 
 }
