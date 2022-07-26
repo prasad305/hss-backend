@@ -149,13 +149,13 @@ class LearningSessionController extends Controller
     /// Manager Part ////
     public function manager_pending()
     {
-        $learningSessions = LearningSession::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('updated_at','desc')->get();
+        $learningSessions = LearningSession::where([['status', 1], ['category_id', auth()->user()->category_id]])->orderBy('updated_at', 'desc')->get();
 
         return view('ManagerAdmin.LearningSession.index', compact('learningSessions'));
     }
     public function manager_rejected()
     {
-        $learningSessions = LearningSession::where([['status', 11],['category_id',auth()->user()->category_id]])->orderBy('updated_at','desc')->get();
+        $learningSessions = LearningSession::where([['status', 11], ['category_id', auth()->user()->category_id]])->orderBy('updated_at', 'desc')->get();
 
         return view('ManagerAdmin.LearningSession.index', compact('learningSessions'));
     }
@@ -171,7 +171,7 @@ class LearningSessionController extends Controller
 
     public function learningEvaluation()
     {
-        $events = LearningSession::where([['status', '>', 3], ['status', '<', 9],['category_id',auth()->user()->category_id]])->orderBy('updated_at', 'desc')->get();
+        $events = LearningSession::where([['status', '>', 3], ['status', '<', 9], ['category_id', auth()->user()->category_id]])->orderBy('updated_at', 'desc')->get();
 
         return view('ManagerAdmin.LearningSession.evaluation', compact('events'));
     }
@@ -188,21 +188,21 @@ class LearningSessionController extends Controller
         $event = LearningSession::findOrFail($id);
 
 
-         $results = LearningSessionEvaluation::where('event_id', $id)
-                                            ->with(['assignments' => function($q){
-                                                return $q->where([['mark','>',0],['send_to_manager',1]]);
-                                            }])
-                                            ->orderBy('total_mark', 'desc')->get();
+        $results = LearningSessionEvaluation::where('event_id', $id)
+            ->with(['assignments' => function ($q) {
+                return $q->where([['mark', '>', 0], ['send_to_manager', 1]]);
+            }])
+            ->orderBy('total_mark', 'desc')->get();
 
         $rejected_videos = LearningSessionEvaluation::where('event_id', $id)
-                                            ->with(['assignments' => function($q){
-                                                return $q->where([['status',2],['send_to_manager',1]]);
-                                            }])
-                                            ->get();
+            ->with(['assignments' => function ($q) {
+                return $q->where([['status', 2], ['send_to_manager', 1]]);
+            }])
+            ->get();
 
 
 
-        return view('ManagerAdmin.LearningSession.evaluationResult', compact('event', 'results','rejected_videos'));
+        return view('ManagerAdmin.LearningSession.evaluationResult', compact('event', 'results', 'rejected_videos'));
     }
 
     public function evaluationAccept($id)
@@ -230,12 +230,12 @@ class LearningSessionController extends Controller
     public function evaluationResultPublished($id)
     {
         $event = LearningSession::findOrFail($id);
-        $assignment = LearningSessionAssignment::where([['event_id',$id],['send_to_manager',1]])->update([
+        $assignment = LearningSessionAssignment::where([['event_id', $id], ['send_to_manager', 1]])->update([
             'send_to_user' => 1,
         ]);
 
-       session()->flash('success','Result Published Successfully');
-       return redirect()->back();
+        session()->flash('success', 'Result Published Successfully');
+        return redirect()->back();
     }
 
 
@@ -245,7 +245,7 @@ class LearningSessionController extends Controller
 
     public function manager_all()
     {
-        $learningSessions = LearningSession::where([['status', '>', 0],['category_id',auth()->user()->category_id]])->orderBy('updated_at','desc')->get();
+        $learningSessions = LearningSession::where([['status', '>', 0], ['category_id', auth()->user()->category_id]])->orderBy('updated_at', 'desc')->get();
 
         return view('ManagerAdmin.LearningSession.index', compact('learningSessions'));
     }
@@ -286,7 +286,7 @@ class LearningSessionController extends Controller
     }
 
 
-    public function manager_event_set_publish(Request $request,$id)
+    public function manager_event_set_publish(Request $request, $id)
     {
         $learningSession = LearningSession::find($id);
 
@@ -298,7 +298,7 @@ class LearningSessionController extends Controller
             $learningSession->status = 2;
             $learningSession->update();
 
-        //    return $learningSession->star;
+            //    return $learningSession->star;
 
             // Create New post //
             $post = new Post();
@@ -315,11 +315,11 @@ class LearningSessionController extends Controller
             $post->save();
         } else {
             //$learningSession->manager_approval = 0;
-            $learningSession->status = 10;
+            $learningSession->status = 1;
             $learningSession->update();
 
             //Remove post //
-            $post = Post::where('event_id', $learningSession->id)->first();
+            $post = Post::where([['event_id', $learningSession->id], ['type', 'learningSession']])->first();
             $post->delete();
         }
 
@@ -389,7 +389,7 @@ class LearningSessionController extends Controller
     {
         if ($request->banner_or_video == 0) {
             $request->validate([
-                'title' => 'required|unique:learning_sessions,title,'.$id,
+                'title' => 'required|unique:learning_sessions,title,' . $id,
                 'description' => 'required',
                 'instruction' => 'required',
                 // 'event_date' => 'required',
@@ -402,9 +402,9 @@ class LearningSessionController extends Controller
                 // 'participant_number' => 'required',
                 'image' => 'nullable|mimes:jpg,jpeg,png',
             ]);
-        }else{
+        } else {
             $request->validate([
-                'title' => 'required|unique:learning_sessions,title,'.$id,
+                'title' => 'required|unique:learning_sessions,title,' . $id,
                 'description' => 'required',
                 'instruction' => 'required',
                 // 'event_date' => 'required',
@@ -420,7 +420,7 @@ class LearningSessionController extends Controller
         }
 
         $learningSession = LearningSession::findOrFail($id);
-         $learningSession->title = $request->input('title');
+        $learningSession->title = $request->input('title');
         $learningSession->slug = Str::slug($request->input('title'));
         $learningSession->description = $request->input('description');
         $learningSession->instruction = $request->input('instruction');
