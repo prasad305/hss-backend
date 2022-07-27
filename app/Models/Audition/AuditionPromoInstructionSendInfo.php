@@ -6,11 +6,12 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class AuditionPromoInstructionSendInfo extends Model
 {
     use HasFactory;
 
-    // protected $with = ['audition'];
+    
 
     protected $fillable = [
         'id',
@@ -28,14 +29,20 @@ class AuditionPromoInstructionSendInfo extends Model
         'status',
     ];
 
-    public function audition()
-    {
-        return $this->belongsTo(Audition::class, 'audition_id');
+    // protected $with = ['audition'];
+
+    public function audition(){
+        return $this->belongsTo(Audition::class,'audition_id');
     }
-    public function judge()
-    {
-        return $this->belongsTo(User::class, 'judge_id');
-    }
+
+    // public function audition()
+    // {
+    //     return $this->belongsTo(Audition::class, 'audition_id');
+    // }
+    // public function judge()
+    // {
+    //     return $this->belongsTo(User::class, 'judge_id');
+    // }
 
 
 

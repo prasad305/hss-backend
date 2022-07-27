@@ -716,28 +716,6 @@ class AuditionController extends Controller
         } else {
             try {
 
-                // if ($request->hasfile('image')) {
-                //     $image             = $request->image;
-                //     $image_folder_path       = 'uploads/images/auditions/promotional/';
-                //     $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
-                //     // save to server
-                //     $request->image->move($image_folder_path, $image_new_name);
-                // }
-                // if ($request->hasfile('video')) {
-                //     $file             = $request->video;
-                //     $video_folder_path       = 'uploads/videos/auditions/promotional/';
-                //     $video_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
-                //     // save to server
-                //     $request->video->move($video_folder_path, $video_new_name);
-                // }
-                // if ($request->hasfile('pdf')) {
-                //     $file             = $request->pdf;
-                //     $pdf_folder_path       = 'uploads/videos/auditions/promotional/';
-                //     $pdf_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
-                //     // save to server
-                //     $request->video->move($pdf_folder_path, $pdf_new_name);
-                // }
-
                 if ($request->hasfile('image')) {
                     $image             = $request->image;
                     $image_folder_path       = 'uploads/images/auditions/promotional/';
@@ -792,6 +770,7 @@ class AuditionController extends Controller
                             $instruction_info->video = $folder_path . '/' . $file_new_name;
                             $instruction_info->document = $pdf_folder_path . '/' . $pdf_new_name;
 
+                            $instruction_info->status = 0;
                             $instruction_info->save();
                         }
                     }
@@ -809,14 +788,123 @@ class AuditionController extends Controller
             }
         }
     }
+    public function superstarPromotionalVideoStore(Request $request)
+    {
+        
+        $validator = Validator::make($request->all(), [
+            'instruction' => 'required|min:5',
+            'image' => 'required|mimes:jpg,jpeg,png',
+            'video' => 'required|mimes:mp4,mkv',
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            try {
+
+                if ($request->hasfile('image')) {
+                    $image             = $request->image;
+                    $image_folder_path       = 'uploads/images/auditions/promotional/';
+                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                    // save to server
+                    $request->image->move($image_folder_path, $image_new_name);
+                    // $instruction_info->image = $image_folder_path . '/' . $image_new_name;
+                }
+                
+                if ($request->hasfile('video')) {
+                    $file             = $request->video;
+                    $folder_path       = 'uploads/videos/auditions/promotional/';
+                    $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
+                    // save to server
+                    $request->video->move($folder_path, $file_new_name);
+                    // $instruction_info->video = $folder_path . '/' . $file_new_name;
+                }
+
+                if ($request->hasfile('pdf')) {
+                    $image             = $request->pdf;
+                    $pdf_folder_path       = 'uploads/pdf/auditions/promotional/';
+                    $pdf_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                    // save to server
+                    $request->pdf->move($pdf_folder_path, $pdf_new_name);
+                    // $instruction_info->document = $pdf_folder_path . '/' . $pdf_new_name;
+                }
+                
+
+
+
+
+                $instruction_info = new AuditionPromoInstructionSendInfo();
+                $instruction_info->judge_id = auth('sanctum')->user()->id;
+                $instruction_info->instruction = $request->instruction;
+
+                $instruction_info->image = $image_folder_path . '/' . $image_new_name;
+                $instruction_info->video = $folder_path . '/' . $file_new_name;
+                $instruction_info->document = $pdf_folder_path . '/' . $pdf_new_name;
+                $instruction_info->status = 3;
+
+                $instruction_info->save();
+
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Superstar Audition Promotional submitted successfully !!',
+                ]);
+            } catch (\Exception $exception) {
+                return response()->json([
+                    'status' => 200,
+                    'message' =>  $exception->getMessage(),
+                ]);
+            }
+        }
+    }
 
      // Pending Auditions
      public function promotionalList()
      {
-         $event = AuditionPromoInstructionSendInfo::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 0]])->get();
+         $event = AuditionPromoInstructionSendInfo::with('audition')->where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 0]])->latest()->get();
          return response()->json([
              'status' => 200,
              'event' => $event,
+         ]);
+     }
+
+     public function judgePromotionalList()
+     {
+         $event = AuditionPromoInstructionSendInfo::where([['judge_id', auth('sanctum')->user()->id], ['status', 3]])->latest()->get();
+         return response()->json([
+             'status' => 200,
+             'event' => $event,
+         ]);
+     }
+     public function acceptedPromotionalList()
+     {
+         $event = AuditionPromoInstructionSendInfo::where('status', 3)->latest()->get();
+         return response()->json([
+             'status' => 200,
+             'event' => $event,
+         ]);
+     }
+
+     public function judgePromotionalView($id)
+     {
+         $event = AuditionPromoInstructionSendInfo::find($id);
+
+         return response()->json([
+             'status' => 200,
+             'eventView' => $event,
+         ]);
+     }
+
+     public function auditionJudgePromotionalView($id)
+     {
+         $event = AuditionPromoInstructionSendInfo::find($id);
+
+         return response()->json([
+             'status' => 200,
+             'eventView' => $event,
          ]);
      }
 

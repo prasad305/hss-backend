@@ -685,6 +685,11 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('superstar/audition/liveEditInstructions/{audition_id}', [JudgeAuditionController::class, 'liveEditInstructions']);
     Route::post('superstar/audition/updateAuditionInstruction/{audition_instruction_id}', [JudgeAuditionController::class, 'updateAuditionInstruction']);
 
+    // Partha ghose
+    Route::get('/superstar/promotional/video/list', [AuditionController::class, 'judgePromotionalList']);
+    Route::post('/superstar/audition/promotional/video/store', [AuditionController::class, 'superstarPromotionalVideoStore']);
+    Route::get('/superstar/audition/promotional/video/view/{id}', [AuditionController::class, 'judgePromotionalView']);
+
     // Promo Vidoes
     Route::get('/star/promoVideo/all', [PromoVideoController::class, 'starPromovideoAll']);
     Route::post('/star/promoVideo/store', [PromoVideoController::class, 'starPromovideoStore']);
@@ -742,6 +747,8 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     // Partha Ghose
     Route::post('/audition-admin/audition/promotional/video/store', [AuditionController::class, 'promotionalVideoStore']);
     Route::get('/audition-admin/promotional/video', [AuditionController::class, 'promotionalList']);
+    Route::get('/audition-admin/promotional/video/view/{id}', [AuditionController::class, 'auditionJudgePromotionalView']);
+    Route::get('/audition-admin/promotional/accepted-video', [AuditionController::class, 'acceptedPromotionalList']);
 
     Route::post('/audition-admin/audition/round-instruction/store', [AuditionController::class, 'storeRoundInstruction']);
     Route::post('/audition-admin/audition/round-instruction/update', [AuditionController::class, 'updateRoundInstruction']);
