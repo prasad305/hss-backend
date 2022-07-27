@@ -19,4 +19,8 @@ class AuditionRoundInstructionSendInfo extends Model
     {
         return $this->belongsTo(User::class, 'judge_id');
     }
+    public function audition()
+    {
+        return $this->belongsTo(Audition::class, 'audition_id');
+    }
 }

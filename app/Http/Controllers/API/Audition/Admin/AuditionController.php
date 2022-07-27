@@ -2085,11 +2085,18 @@ class AuditionController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
+
+            $image_path = NULL;
+            $video_path = NULL;
+            $pdf_path = NULL;
+
+
             foreach ($request->judge_id as $judge => $id) {
 
                 $instruction = new AuditionRoundInstructionSendInfo();
 
                 $instruction->round_info_id = $request->round_info_id;
+                $instruction->audition_admin_id = auth()->user()->id;
                 $instruction->audition_id = $request->audition_id;
                 $instruction->instruction = $request->instruction;
                 $instruction->description = $request->description;
@@ -2097,48 +2104,94 @@ class AuditionController extends Controller
                 $instruction->end_date = $request->end_date;
                 $instruction->judge_id =  $id;
 
-                try {
+                if ($judge == 0) {
+
+                    // try {
                     if ($request->hasfile('image')) {
                         $image             = $request->image;
                         $image_folder_path       = 'uploads/images/auditions/round/instructions/';
-                        $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                        $image_new_name    = Str::random(4) . $id . now()->timestamp . '.' . $image->getClientOriginalExtension();
                         // save to server
                         $request->image->move($image_folder_path, $image_new_name);
-                        $instruction->image = $image_folder_path . '/' . $image_new_name;
+                        $instruction->image = $image_folder_path . $image_new_name;
+                        $image_path = $instruction->image;
                     }
 
                     if ($request->hasfile('video')) {
                         $file             = $request->video;
                         $folder_path       = 'uploads/videos/auditions/round/instructions/';
-                        $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
+                        $file_new_name    = Str::random(20) . $id . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
                         // save to server
                         $request->video->move($folder_path, $file_new_name);
-                        $instruction->video = $folder_path . '/' . $file_new_name;
+                        $instruction->video = $folder_path . $file_new_name;
+                        $video_path = $instruction->video;
                     }
 
                     if ($request->hasfile('pdf')) {
                         $image             = $request->pdf;
                         $pdf_folder_path       = 'uploads/pdf/auditions/round/instructions/';
 
-                        $pdf_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                        $pdf_new_name    = Str::random(20) . $id . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
                         // save to server
                         $request->pdf->move($pdf_folder_path, $pdf_new_name);
-                        $instruction->document = $pdf_folder_path . '/' . $pdf_new_name;
+                        $instruction->document = $pdf_folder_path . $pdf_new_name;
+                        $pdf_path = $instruction->document;
                     }
-                    $instruction->save();
+                } else {
 
-                    return response()->json([
-                        'status' => 200,
-                        'message' => 'Audition Round Instruction video submitted successfully !!',
-
-                    ]);
-                } catch (\Exception $exception) {
-                    return response()->json([
-                        'status' => 200,
-                        'message' =>  $exception->getMessage(),
-                    ]);
+                    $instruction->image = $image_path;
+                    $instruction->video = $video_path;
+                    $instruction->document = $pdf_path;
                 }
+
+
+                $instruction->save();
+
+
+
+                // return response()->json([
+                //     'status' => 200,
+                //     'message' =>  'something...',
+                // ]);
+                // } catch (\Exception $exception) {
+                //     return response()->json([
+                //         'status' => 200,
+                //         'message' =>  $exception->getMessage(),
+                //     ]);
+                // }
             }
+            return response()->json([
+                'status' => 200,
+                'message' => 'Audition Round Instruction video submitted successfully !!',
+
+            ]);
         }
+    }
+    public function storeRoundInstructionVideoList()
+    {
+
+        $event = AuditionRoundInstructionSendInfo::with(['audition', 'star'])->where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 0]])->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+        ]);
+    }
+    public function acceptRoundInstructionVideoList()
+    {
+
+        $event = AuditionRoundInstructionSendInfo::with(['audition', 'star'])->where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 1]])->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+        ]);
+    }
+    public function getVideoDetails($id)
+    {
+
+        $event = AuditionRoundInstructionSendInfo::with('audition')->where('id', $id)->first();
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+        ]);
     }
 }

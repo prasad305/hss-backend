@@ -16,7 +16,7 @@ class CreateAuditionRoundInstructionSendInfosTable extends Migration
         Schema::create('audition_round_instruction_send_infos', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('audition_round_ins_id')->nullable()->comment('audition promo instruction id');
+            $table->unsignedBigInteger('audition_admin_id')->nullable();
             $table->unsignedBigInteger('round_info_id')->nullable();
             $table->unsignedBigInteger('audition_id')->nullable();
             $table->unsignedBigInteger('judge_id')->nullable();

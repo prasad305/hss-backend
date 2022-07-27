@@ -667,7 +667,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/allBidderList/auction/{id}', [AuctionController::class, 'allBidderList']);
 
 
-    // Super Star Audtion Routes
+    // Super Star Audition Routes
     Route::get('superstar/audition/promo-instruction-pending', [JudgeAuditionController::class, 'starPromoInstructionPending']);
     Route::get('superstar/audition/by-promo-instruction-pending/{id}', [JudgeAuditionController::class, 'starAuditionByPromoInstructionPending']);
     Route::get('superstar/audition/get-round-instruction-by-judge/{audition_id}/{round_id}', [JudgeAuditionController::class, 'getRoundInstructionByJudge']);
@@ -684,6 +684,10 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/starMarkingDone/videos/{id}', [AuditionController::class, 'starMarkingDone']);
     Route::get('superstar/audition/liveEditInstructions/{audition_id}', [JudgeAuditionController::class, 'liveEditInstructions']);
     Route::post('superstar/audition/updateAuditionInstruction/{audition_instruction_id}', [JudgeAuditionController::class, 'updateAuditionInstruction']);
+    //srabon
+    Route::get('superstar/audition/pending/roundInstructionVideos', [JudgeAuditionController::class, 'pendingRoundInstructionVideo']);
+    Route::get('superstar/audition/round-instruction-video/details/{id}', [JudgeAuditionController::class, 'roundInstructionVideoDetails']);
+    Route::post('superstar/audition/round-instruction-video/update/{id}', [JudgeAuditionController::class, 'roundInstructionVideoUpdate']);
 
     // Promo Vidoes
     Route::get('/star/promoVideo/all', [PromoVideoController::class, 'starPromovideoAll']);
@@ -762,10 +766,25 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::post('/audition-admin/audition/videos/set_approved/{id}', [AuditionController::class, 'round_videos_set_approved']);
     Route::post('/audition-admin/audition/videos/set_reject/{id}', [AuditionController::class, 'round_videos_set_reject']);
 
+
+
+
+
     //By Srabon
 
 
     Route::post('/audition-admin/audition/round-instruction-video/store', [AuditionController::class, 'storeRoundInstructionVideo']);
+    Route::get('/audition-admin/audition/round-instruction-video/list', [AuditionController::class, 'storeRoundInstructionVideoList']);
+    Route::get('/audition-admin/audition/round-instruction-video/accept-list', [AuditionController::class, 'acceptRoundInstructionVideoList']);
+    Route::get('/audition-admin/audition/round-instruction-video/details/{id}', [AuditionController::class, 'getVideoDetails']);
+
+
+
+
+
+
+
+
 
 
 
