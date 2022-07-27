@@ -95,6 +95,9 @@ class AuditionController extends Controller
                 $auditionRoundInfo->video_duration =  $auditionRoundRule->video_duration;
                 $auditionRoundInfo->video_slot_num =  $auditionRoundRule->video_slot_num;
 
+                // $auditionRoundInfo->video_duration =  $auditionRoundRule->video_duration;
+                $auditionRoundInfo->appeal_video_slot_num =  $auditionRoundRule->appeal_video_slot_num;
+
                 $auditionRoundInfo->round_start_date =  $roundStartDate;
                 $auditionRoundInfo->round_end_date = Carbon::parse($roundStartDate)->addDays($auditionRoundRule->round_period);
 
@@ -113,18 +116,27 @@ class AuditionController extends Controller
                 $auditionRoundInfo->appeal_start_date = Carbon::parse($auditionRoundInfo->result_publish_end_date)->addDays(1);
                 $auditionRoundInfo->appeal_end_date = Carbon::parse($auditionRoundInfo->appeal_start_date)->addDays($auditionRoundRule->appeal_period);
 
+                $auditionRoundInfo->appeal_video_upload_start_date = Carbon::parse($auditionRoundInfo->appeal_end_date)->addDays(1);
+                $auditionRoundInfo->appeal_video_upload_end_date = Carbon::parse($auditionRoundInfo->appeal_video_upload_start_date)->addDays($auditionRoundRule->appeal_video_upload_period);
+
+
+                $auditionRoundInfo->appeal_jury_or_judge_mark_start_date = Carbon::parse($auditionRoundInfo->appeal_video_upload_end_date)->addDays(1);
+                $auditionRoundInfo->appeal_jury_or_judge_mark_end_date = Carbon::parse($auditionRoundInfo->appeal_jury_or_judge_mark_start_date)->addDays($auditionRoundRule->appeal_jury_or_judge_mark_period);
+
                 $auditionRoundInfo->appeal_result_publish_start_date = Carbon::parse($auditionRoundInfo->appeal_end_date)->addDays(1);
                 $auditionRoundInfo->appeal_result_publish_end_date = Carbon::parse($auditionRoundInfo->appeal_result_publish_start_date)->addDays($auditionRoundRule->appeal_result_publish_period);
+
 
                 $auditionRoundInfo->save();
 
                 $roundStartDate = Carbon::parse($auditionRoundInfo->round_end_date)->addDays(1);
             }
             session()->flash('success', 'Audition added successfully !');
+            return redirect()->route('managerAdmin.audition.events');
         } else {
             session()->flash('error', 'Opps.. No audition rules found !');
+            return back();
         }
-        return back();
     }
 
     public function assignManpowerStore(Request $request)
