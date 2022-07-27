@@ -355,11 +355,41 @@ class AuditionController extends Controller
         $assignJuriesOrderByGroup = $assignJuries->groupBy('group_id');
 
         $auditionParticipantWithVideos = AuditionParticipant::with(['videos' => function ($query) use ($audition_round_info_id) {
-            return $query->where([['round_info_id', $audition_round_info_id]])->get();
+            return $query->where([['round_info_id', $audition_round_info_id], ['type', 'general']])->get();
         }, 'participant'])->where([['audition_id', $audition_id], ['round_info_id', $audition_round_info_id]])->get();
 
-        $totalNumberOfVideos = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id], ['approval_status', 1]])->count();
-        $alreadyAssignedCount = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id], ['approval_status', 1], ['group_b_jury_id', '!=', null], ['group_c_jury_id', '!=', null]])->count();
+        $totalNumberOfVideos = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['type', 'general'], ['audition_id', $audition_id], ['approval_status', 1]])->count();
+        $alreadyAssignedCount = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['type', 'general'], ['audition_id', $audition_id], ['approval_status', 1], ['group_b_jury_id', '!=', null], ['group_c_jury_id', '!=', null]])->count();
+
+        $isVideoAlreadyAssigned = $alreadyAssignedCount > 0 ? true : false;
+
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
+            'auditionRoundInfo' => $auditionRoundInfo,
+            'assignJuriesOrderByGroup' => $assignJuriesOrderByGroup,
+            'auditionParticipantWithVideos' => $auditionParticipantWithVideos,
+            'totalNumberOfVideos' => $totalNumberOfVideos,
+            'isVideoAlreadyAssigned' => $isVideoAlreadyAssigned,
+        ]);
+    }
+    public function appealApprovedVideoWithRoundId($audition_id, $audition_round_info_id)
+    {
+        $audition = Audition::find($audition_id);
+        $auditionRoundInfo  = AuditionRoundInfo::find($audition_round_info_id);
+
+        $assignJuries = AuditionAssignJury::with('juryGroup')->whereHas('juryGroup', function ($q) {
+            $q->where('is_primary', false);
+        })->where([['audition_id', $audition->id]])->get();
+
+        $assignJuriesOrderByGroup = $assignJuries->groupBy('group_id');
+
+        $auditionParticipantWithVideos = AuditionParticipant::with(['videos' => function ($query) use ($audition_round_info_id) {
+            return $query->where([['round_info_id', $audition_round_info_id], ['type', 'appeal']])->get();
+        }, 'participant'])->where([['audition_id', $audition_id], ['round_info_id', $audition_round_info_id]])->get();
+
+        $totalNumberOfVideos = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['type', 'appeal'], ['audition_id', $audition_id], ['approval_status', 1]])->count();
+        $alreadyAssignedCount = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['type', 'appeal'], ['audition_id', $audition_id], ['approval_status', 1], ['group_b_jury_id', '!=', null], ['group_c_jury_id', '!=', null]])->count();
 
         $isVideoAlreadyAssigned = $alreadyAssignedCount > 0 ? true : false;
 
