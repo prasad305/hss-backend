@@ -140,7 +140,7 @@
                         <label>Event Start</label>
                     </div>
                     <div class="col-4">
-                        <input type="date" onchange="setEndDate()" name="start_date" id="start_date"
+                        <input type="date" onchange="setEndDate()" min='{{date('Y-m-d')}}' name="start_date" id="start_date"
                             class="form-control">
                         @error('start_date')
                             <p class="text-danger">{{ $message }}</p>

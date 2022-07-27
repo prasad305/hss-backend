@@ -41,9 +41,19 @@ class JuryGroupController extends Controller
             ]
         );
 
+        $groups = JuryGroup::where('category_id',$request->category_id)->get();
+
+        if (isset($groups) && count($groups) >= 3) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'This Category Has Already 3 Groups',
+            ]);
+        }
+
         $juryGroup = new JuryGroup();
         $juryGroup->name = $request->name;
         $juryGroup->category_id = $request->category_id;
+        $juryGroup->is_primary = $request->is_primary;
 
         try {
             $juryGroup->save();
@@ -91,9 +101,19 @@ class JuryGroupController extends Controller
             ]
         );
 
+        $groups = JuryGroup::where('category_id',$request->category_id)->get();
+
+        if (isset($groups) && count($groups) >= 3) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'This Category Has Already 3 Groups',
+            ]);
+        }
+
         $juryGroup = JuryGroup::find($id);
         $juryGroup->name = $request->name;
         $juryGroup->category_id = $request->category_id;
+        $juryGroup->is_primary = $request->is_primary;
 
         try {
             $juryGroup->update();

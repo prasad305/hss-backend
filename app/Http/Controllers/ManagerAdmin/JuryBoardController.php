@@ -200,6 +200,7 @@ class JuryBoardController extends Controller
         $user->last_name = $request->last_name;
         $user->category_id = auth()->user()->category_id;
         $user->sub_category_id = $request->sub_category_id;
+
         $user->created_by = updatedBy();
 
         if ($request->hasFile('image')) {
@@ -230,6 +231,7 @@ class JuryBoardController extends Controller
             $user->save();
 
             $jury = JuryBoard::where('star_id', $user->id)->first();
+            $jury->group_id = $request->group_id;
             $jury->terms_and_condition = $request->terms_and_condition;
             $jury->save();
 

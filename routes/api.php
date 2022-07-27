@@ -712,7 +712,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/events', [AuditionController::class, 'events']);
     Route::post('/audition-admin/audition/status/update', [AuditionController::class, 'statusUpdate']);
     Route::post('/audition-admin/audition/post-content/store', [AuditionController::class, 'storePostContent']);
-
+    Route::get('/audition-admin/audition/post_list', [AuditionController::class, 'postList']);
 
 
 

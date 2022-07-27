@@ -46,18 +46,22 @@ Manager Admin
                         <div class="panel-body py-3">
                             <h3 class="text-ellipsis-line-1">{{ $val->name }}</h3>
 
-                            @if ($val->star_approval == 1)
+                            {{-- @if ($val->star_approval == 1)
 
                             <a type="button" class="btn btn-warning waves-effect waves-light"><i class="icon-record"></i>
                                 Pending</a>
                             @else
 
                             <button type="button" class="btn btn-success waves-effect waves-light"><i class="icon-checkmark-round"></i> Published</button>
-                            @endif
+                            @endif --}}
 
                             <a href="{{ route('managerAdmin.audition.details', [$val->id]) }}" type="button" class="btn btn-info waves-effect waves-light">Details <i class="fa fa-angle-double-right"></i></a>
 
-                            <a href="{{ route('managerAdmin.audition.jury_published', [$val->id]) }}"  class="btn btn-info waves-effect waves-light">Filter Videos <i class="fa fa-angle-double-right"></i></a>
+                            @if ($val->status >= 3)
+                                <a href="{{route('managerAdmin.audition.registerUser',$val->id)}}" class="btn btn-warning">Register User</a>
+                            @endif
+
+                            {{-- <a href="{{ route('managerAdmin.audition.jury_published', [$val->id]) }}"  class="btn btn-info waves-effect waves-light">Filter Videos <i class="fa fa-angle-double-right"></i></a> --}}
 
                             
 
@@ -88,6 +92,8 @@ Manager Admin
 </script>
 @endif
 @endsection
+
+
 
 @push('script')
 {{-- <script src="{{ asset('assets/manager-admin/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script> --}}

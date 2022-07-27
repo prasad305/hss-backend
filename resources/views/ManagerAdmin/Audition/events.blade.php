@@ -101,6 +101,7 @@
                             <h5 class="text-center text-bold">{{ $audition->title }}</h5>
 
                             <center>
+
                                 {{-- <span class="text-center btn btn-info px-4 text-bold">Done</span> --}}
                                 <a href="{{ route('managerAdmin.audition.promoInstruction', $audition->id) }}"
                                     class="btn btn-warning">Promo Instruction</a><br>
@@ -114,7 +115,6 @@
                                     <a href="{{ route('managerAdmin.audition.assignManpower', $audition->id) }}"
                                         class="btn btn-warning m-2">Assign Manpower</a>
                                 @endif
-
                             </center>
 
                         </div>
