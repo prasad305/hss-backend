@@ -22,7 +22,6 @@ use App\Models\Audition\AuditionRoundInstructionSendInfo;
 use App\Models\Audition\AuditionRoundMarkTracking;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
-use App\Models\Audition\AuditionVideoMark;
 use App\Models\AuditionRoundInstruction;
 use App\Models\JudgeMarks;
 use App\Models\JuryGroup;
@@ -52,7 +51,6 @@ class AuditionController extends Controller
         $message = "";
 
         try {
-
             if ($request->status == 1) {
                 $audition->update([
                     'status' => 1,
@@ -78,7 +76,6 @@ class AuditionController extends Controller
     }
 
     public function storePostContent(Request $request){
-        // return $request->all();
         $validator = Validator::make($request->all(), [
             'instruction' => 'required|min:5',
             'description' => 'required|min:5',
@@ -150,7 +147,7 @@ class AuditionController extends Controller
 
     public function postList(){
         $events = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status','>',1]])->get();
-        
+
         return response()->json([
             'status' => 200,
             'events' => $events,
@@ -862,7 +859,6 @@ class AuditionController extends Controller
             }
         }
     }
-
 
     public function updateRoundInstruction(Request $request)
     {
@@ -1914,9 +1910,24 @@ class AuditionController extends Controller
     public function round_videos($round_info_id)
     {
 
-        $videos = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['approval_status', 0]])->get();
-        $selectedVideos = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['approval_status', 1]])->get();
-        $rejectedVideos = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['approval_status', 2]])->get();
+        $videos = AuditionUploadVideo::where([['type', 'general'],['round_info_id', $round_info_id], ['approval_status', 0]])->get();
+        $selectedVideos = AuditionUploadVideo::where([['type', 'general'],['round_info_id', $round_info_id], ['approval_status', 1]])->get();
+        $rejectedVideos = AuditionUploadVideo::where([['type', 'general'],['round_info_id', $round_info_id], ['approval_status', 2]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'videos' => $videos,
+            'selectedVideos' => $selectedVideos,
+            'rejectedVideos' => $rejectedVideos,
+        ]);
+    }
+
+    public function round_appeal_videos($round_info_id)
+    {
+
+        $videos = AuditionUploadVideo::where([['type', 'appeal'],['round_info_id', $round_info_id], ['approval_status', 0]])->get();
+        $selectedVideos = AuditionUploadVideo::where([['type', 'appeal'],['round_info_id', $round_info_id], ['approval_status', 1]])->get();
+        $rejectedVideos = AuditionUploadVideo::where([['type', 'appeal'],['round_info_id', $round_info_id], ['approval_status', 2]])->get();
 
         return response()->json([
             'status' => 200,

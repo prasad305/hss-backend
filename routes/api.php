@@ -741,6 +741,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::post('/audition-admin/audition/super-star-promo/store', [AuditionController::class, 'superStarStorePromo']);
 
     Route::post('/audition-admin/audition/round-instruction/store', [AuditionController::class, 'storeRoundInstruction']);
+
     Route::post('/audition-admin/audition/round-instruction/update', [AuditionController::class, 'updateRoundInstruction']);
 
     Route::get('/audition-admin/audition/get-round-instruction/{audition_id}/{round_info_id}', [AuditionController::class, 'getRoundInstruction']);
@@ -759,6 +760,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
 
 
     Route::get('/audition-admin/audition/videos/{round_info_id}', [AuditionController::class, 'round_videos']);
+    Route::get('/audition-admin/audition/appeal-videos/{round_info_id}', [AuditionController::class, 'round_appeal_videos']);
     Route::post('/audition-admin/audition/videos/set_approved/{id}', [AuditionController::class, 'round_videos_set_approved']);
     Route::post('/audition-admin/audition/videos/set_reject/{id}', [AuditionController::class, 'round_videos_set_reject']);
 
