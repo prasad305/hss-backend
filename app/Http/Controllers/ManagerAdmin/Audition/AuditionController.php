@@ -15,6 +15,7 @@ use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionRules;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\AuditionRoundInstruction;
+use App\Models\Post;
 use App\Models\JuryGroup;
 use App\Models\SubCategory;
 use App\Models\User;
@@ -28,6 +29,8 @@ class AuditionController extends Controller
 {
     public function store(Request $request)
     {
+
+        // return date('Y-m-d',strtotime($request->end_date));
         $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -50,8 +53,8 @@ class AuditionController extends Controller
             $audition->slug                 =  Str::slug($request->title);
             $audition->description          =  $request->description;
             $audition->round_status         =  0;
-            $audition->start_time           =  Carbon::parse($request->start_date);
-            $audition->end_time             =  Carbon::parse($request->start_date)->addDays($auditionRule->day)->addMonths($auditionRule->month);
+            $audition->start_date           =  Carbon::parse($request->start_date);
+            $audition->end_date            =  date('Y-m-d',strtotime($request->end_date));
             $audition->status               =  0;
             $audition->save();
 
@@ -64,10 +67,10 @@ class AuditionController extends Controller
             $audition_info->round_num = $auditionRule->round_num;
             $audition_info->judge_num = $auditionRule->judge_num;
             $audition_info->jury_groups = $auditionRule->jury_groups;
-            $audition_info->event_start_date = Carbon::parse($request->stat_date);
-            $audition_info->event_end_date = Carbon::parse($request->stat_date)->addDays($auditionRule->event_period);
-            $audition_info->instruction_prepare_start_date = Carbon::parse($request->stat_date);
-            $audition_info->instruction_prepare_end_date = Carbon::parse($request->stat_date)->addDays($auditionRule->instruction_prepare_period);
+            $audition_info->event_start_date = Carbon::parse($request->start_date);
+            $audition_info->event_end_date = date('Y-m-d',strtotime($request->end_date));
+            $audition_info->instruction_prepare_start_date = Carbon::parse($request->start_date);
+            $audition_info->instruction_prepare_end_date = Carbon::parse($request->start_date)->addDays($auditionRule->instruction_prepare_period);
             $audition_info->registration_start_date = Carbon::parse($audition_info->instruction_prepare_end_date)->addDays(1);
             $audition_info->registration_end_date = Carbon::parse($audition_info->registration_start_date)->addDays($auditionRule->registration_period);
             $audition_info->save();
@@ -255,8 +258,77 @@ class AuditionController extends Controller
     }
 
 
-    public function registerUser($audition_id)
+    public function pending()
     {
+        $audition = Audition::where('status', 2)->orderBy('updated_at','desc')->get();
+        return view('ManagerAdmin.Audition.index', compact('audition'));
+    }
+
+    
+    public function details($id)
+    {
+        $audition = Audition::find($id);
+        $judges = AuditionAssignJudge::where('audition_id', $audition->id)->get();
+        return view('ManagerAdmin.Audition.details')->with('audition', $audition)->with('judges', $judges);
+    }
+
+    public function manager_audition_set_publish(Request $request,$audition_id)
+    {
+        $audition = Audition::find($audition_id);
+
+        if ($audition->status != 3) {
+            $request->validate([
+                'post_start_date' => 'required',
+                'post_end_date' => 'required',
+            ]);
+            $audition->status = 3;
+            $audition->update();
+
+            $judges = [];
+
+            foreach ($audition->assignedJudges as $key => $judge) {
+                array_push($judges,$judge->id);
+            }
+
+        //    return $audition->star;
+
+            // Create New post //
+            $post = new Post();
+            $post->type = 'audition';
+            $post->event_id = $audition->id;
+            $post->star_id = json_encode($judges);
+            $post->category_id = $audition->category_id;
+            // $post->sub_category_id = $audition->sub_category_id;
+            $post->post_start_date = Carbon::parse($request->post_start_date);
+            $post->post_end_date = Carbon::parse($request->post_end_date);
+            $post->user_like_id = '[]';
+            $post->react_provider = '[]';
+            $post->save();
+            return redirect()->back()->with('success', 'Published');
+        } else {
+            //$audition->manager_approval = 0;
+            $audition->status = 2;
+            $audition->update();
+
+            //Remove post //
+            $post = Post::where([['event_id', $audition->id],['type','audition']])->first();
+            $post->delete();
+            return redirect()->back()->with('error', 'Unpublished');
+        }
+
+      
+    }
+
+
+    public function published()
+    {
+        $audition = Audition::where('status', 3)->latest()->get();
+        return view('ManagerAdmin.Audition.index', compact('audition'));
+    }
+
+
+    public function registerUser($audition_id){
+
         $audition = Audition::find($audition_id);
 
         $users = AuditionParticipant::where([['audition_id', $audition_id]])->get();

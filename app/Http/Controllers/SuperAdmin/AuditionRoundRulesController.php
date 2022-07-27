@@ -39,9 +39,9 @@ class AuditionRoundRulesController extends Controller
                 'mark_live_or_offline' => 'required_if:user_vote_mark,1',
                 'wildcard' => 'required',
                 'video_feed' => 'required',
-                'video_duration' => 'required',
+                // 'video_duration' => 'required',
                 'round_period' => 'required',
-                'instruction_prepare_period' => 'required',
+                // 'instruction_prepare_period' => 'required',
                 'video_upload_period' => 'required',
                 'jury_or_judge_mark_period' => 'required',
                 'result_publish_period' => 'required',
@@ -79,7 +79,7 @@ class AuditionRoundRulesController extends Controller
         }else{
             $round->wildcard_round = null;
         }
-        $round->appeal = $request->appeal;
+      
         $round->video_feed = $request->video_feed;
 
         $round->video_duration = $request->video_duration;
@@ -89,13 +89,26 @@ class AuditionRoundRulesController extends Controller
         $round->video_upload_period = $request->video_upload_period;
         $round->jury_or_judge_mark_period = $request->jury_or_judge_mark_period;
         $round->result_publish_period = $request->result_publish_period;
-        $round->appeal_period = $request->appeal_period;
-        $round->appeal_result_publish_period = $request->appeal_result_publish_period;
+
+        $round->appeal = $request->appeal;
+        if ($request->appeal == 1) {
+            $round->appeal_period = $request->appeal_period;
+            $round->appeal_video_upload_period = $request->appeal_video_upload_period;
+            $round->appeal_jury_or_judge_mark_period = $request->appeal_jury_or_judge_mark_period;
+            $round->appeal_result_publish_period = $request->appeal_result_publish_period;
+        }else{
+            $round->appeal_period = 0;
+            $round->appeal_result_publish_period = 0;
+            $round->appeal_video_upload_period = 0;
+            $round->appeal_jury_or_judge_mark_period = 0;
+        }
+        
+
         $round->save();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Round Rules Save Successfully'
-        ]);
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => 'Round Rules Save Successfully'
+        // ]);
     }
 
    

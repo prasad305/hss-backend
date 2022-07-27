@@ -187,13 +187,13 @@ Super Admin
                             <span class="text-danger" id="mark_live_or_offline_error"></span>
 
                             <div class="col-md-4">
-                                <input type="text" name="user_vote_mark" id="user_vote_mark" class="form-control"
+                                <input type="text" name="user_vote_mark" id="user_vote_mark" onkeyup="markCheck()"  class="form-control"
                                     placeholder="User Vote Mark">
                                 <span class="text-danger" id="user_vote_mark_error"></span>
                             </div>
                         </div>
                     </div>
-
+                   
 
                     <div class="d-flex flex-row my-3 w-100">
                         <div class="audition__mark">
@@ -206,13 +206,13 @@ Super Admin
                         <span class="text-danger" id="jury_or_judge_error"></span>
 
                         <div class="col-md-4">
-                            <input type="text" name="jury_or_judge_mark" id="jury_or_judge_mark" class="form-control"
+                            <input type="text" name="jury_or_judge_mark" id="jury_or_judge_mark" onkeyup="markCheck()" class="form-control"
                                 placeholder="Mark">
                             <span class="text-danger" id="jury_or_judge_mark_error"></span>
                         </div>
 
                     </div>
-
+                    <center><span id="mark_check_error" class="text-danger"></span></center>
 
 
 
@@ -239,21 +239,7 @@ Super Admin
 
                     </div>
 
-                    <div class="d-flex flex-column w-100 mt-2">
-                        <div class="wildcard__title">
-                            <p>Appeal</p>
-                            <hr>
-                        </div>
-                        <div class="d-flex flex-row">
-                            <div class="wild_card__one">
-                                <input type="radio" checked="checked" name="appeal" value="1"> <span>Yes</span>
-                            </div>
-                            <div class="wild_card__one ml-3">
-                                <input type="radio" name="appeal" value="0"> <span>No</span>
-                            </div>
-                            <span class="text-danger" id="appeal_error"></span>
-                        </div>
-                    </div>
+                 
 
                     <div class="d-flex flex-column w-100 mt-2">
                         <div class="wildcard__title">
@@ -273,7 +259,7 @@ Super Admin
                     </div>
 
                     <div class="d-flex flex-row col-md-12">
-                        <div class="d-flex flex-column w-100 mt-2">
+                        {{-- <div class="d-flex flex-column w-100 mt-2">
                             <div class="wildcard__title">
                                 <p>Video Duration</p>
                                 <hr>
@@ -293,7 +279,7 @@ Super Admin
                                 <input type="text" class="form-control" name="video_slot_num" id="video_slot_num"
                                     placeholder="ex: 4 videos">
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="d-flex flex-column w-100 mt-2">
                             <div class="wildcard__title">
@@ -309,7 +295,7 @@ Super Admin
                     </div>
 
                     <div class="d-flex flex-row col-md-12">
-                        <div class="d-flex flex-column w-100 mt-2">
+                        {{-- <div class="d-flex flex-column w-100 mt-2">
                             <div class="wildcard__title">
                                 <p>Instruction Prepare Period</p>
                                 <hr>
@@ -318,7 +304,7 @@ Super Admin
                                 <input type="text" class="form-control" name="instruction_prepare_period"
                                     id="instruction_prepare_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="d-flex flex-column w-100 mt-2">
                             <div class="wildcard__title">
@@ -356,31 +342,73 @@ Super Admin
                         </div>
                     </div>
 
-                    <div class="d-flex flex-row col-md-12">
-                        <div class="d-flex flex-column w-100 mt-2">
-                            <div class="wildcard__title">
-                                <p>Appeal Period</p>
-                                <hr>
-                            </div>
-                            <div class="d-flex flex-row col-md-6">
-                                <input type="text" class="form-control" onkeyup="periodCheck()" name="appeal_period" id="appeal_period"
-                                    placeholder="ex: 123 days">
-                            </div>
+                    <div class="d-flex flex-column w-100 mt-2">
+                        <div class="wildcard__title">
+                            <p>Appeal</p>
+                            <hr>
                         </div>
-
-                        <div class="d-flex flex-column w-100 mt-2">
-                            <div class="wildcard__title">
-                                <p>Appeal Result Publish Period</p>
-                                <hr>
+                        <div class="d-flex flex-row">
+                            <div class="wild_card__one">
+                                <input type="radio" checked="checked" name="appeal" value="1" onchange="IsAppeal(this.value)"> <span>Yes</span>
                             </div>
-                            <div class="d-flex flex-row col-md-6">
-                                <input type="text" class="form-control" name="appeal_result_publish_period"
-                                    id="appeal_result_publish_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
+                            <div class="wild_card__one ml-3">
+                                <input type="radio" name="appeal" value="0" onchange="IsAppeal(this.value)"> <span>No</span>
                             </div>
+                            <span class="text-danger" id="appeal_error"></span>
                         </div>
-
-                       
                     </div>
+
+                    <div id="appeal_section">
+                        <div class="d-flex flex-row col-md-12">
+
+                            <div class="d-flex flex-column w-100 mt-2">
+                                <div class="wildcard__title">
+                                    <p>Appeal Period</p>
+                                </div>
+                                <div class="d-flex flex-row col-md-6">
+                                    <input type="text" class="form-control" onkeyup="periodCheck()" name="appeal_period" id="appeal_period"
+                                        placeholder="ex: 123 days">
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-column w-100 mt-2">
+                                <div class="wildcard__title">
+                                    <p>Appeal Video Upload Preiod</p>
+                                </div>
+                                <div class="d-flex flex-row col-md-6">
+                                    <input type="text" class="form-control" onkeyup="periodCheck()" name="appeal_video_upload_period" id="appeal_video_upload_period"
+                                        placeholder="ex: 10 days">
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-column w-100 mt-2">
+                                <div class="wildcard__title">
+                                    <p>Appeal Jury Or Judge Mark Preiod</p>
+                                </div>
+                                <div class="d-flex flex-row col-md-6">
+                                    <input type="text" class="form-control" onkeyup="periodCheck()" name="appeal_jury_or_judge_mark_period" id="appeal_jury_or_judge_mark_period"
+                                        placeholder="ex: 10 days">
+                                </div>
+                            </div>
+
+                           
+
+                           
+    
+                            <div class="d-flex flex-column w-100 mt-2">
+                                <div class="wildcard__title">
+                                    <p>Result Publish Period</p>
+                                </div>
+                                <div class="d-flex flex-row col-md-6">
+                                    <input type="text" class="form-control" name="appeal_result_publish_period"
+                                        id="appeal_result_publish_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+
+                   
 
                     <center><span id="hole_round_peroid_error" class="text-danger"></span></center>
 
@@ -481,8 +509,10 @@ Super Admin
             }
         });
         var wild_card_true = $('input:radio[name=wildcard][value=1]').attr('checked', true) ? 1 : 0;
+        var appeal_true = $('input:radio[name=appeal][value=1]').attr('checked', true) ? 1 : 0;
   
         wilCardNo(wild_card_true);
+        IsAppeal(appeal_true);
         var url = "{{ url('super-admin/audition-round-rules/mark/') }}";
 
         $.ajax({
@@ -517,8 +547,10 @@ Super Admin
                 }
 
               
+                $('#user_vote_mark').val(data.mark.user_vote_mark);
                 $('#jury_or_judge_mark').val(data.mark.jury_or_judge_mark);
-           
+                $('#appeal_video_upload_period').val(data.mark.appeal_video_upload_period);
+                $('#appeal_jury_or_judge_mark_period').val(data.mark.appeal_jury_or_judge_mark_period);
 
                 if (data.mark.wildcard == 0) {
                     $('input:radio[name=wildcard][value=0]').attr('checked', true);
@@ -542,11 +574,14 @@ Super Admin
                 }
 
              
-                $('#video_duration').val(data.mark.video_duration);
-                $('#user_vote_mark').val(data.mark.user_vote_mark);
+                // $('#video_duration').val(data.mark.video_duration);
+                // $('#video_slot_num').val(data.mark.video_slot_num);
+
+      
+
+               
          
                 $('#round_period').val(data.mark.round_period);
-                $('#video_slot_num').val(data.mark.video_slot_num);
                 $('#instruction_prepare_period').val(data.mark.instruction_prepare_period);
                 $('#video_upload_period').val(data.mark.video_upload_period);
                 $('#jury_or_judge_mark_period').val(data.mark.jury_or_judge_mark_period);
@@ -611,8 +646,10 @@ Super Admin
         let result_publish_period = Number($('#result_publish_period').val());
         let appeal_period =Number($('#appeal_period').val());
         let appeal_result_publish_period = Number($('#appeal_result_publish_period').val());
+        let appeal_video_upload_period = Number($('#appeal_video_upload_period').val());
+        let appeal_jury_or_judge_mark_period = Number($('#appeal_jury_or_judge_mark_period').val());
 
-        let sum_of_round_period = prepare_period+video_upload_period+jury_or_judge_mark_period+result_publish_period+appeal_period+appeal_result_publish_period;
+        let sum_of_round_period = prepare_period+video_upload_period+jury_or_judge_mark_period+result_publish_period+appeal_period+appeal_result_publish_period+appeal_video_upload_period+appeal_jury_or_judge_mark_period;
 
         if (Number(round_period) < Number(sum_of_round_period)) {
             $("#SubmitRules").prop("disabled",true);
@@ -620,6 +657,20 @@ Super Admin
             
 
         }
+    }
+
+    function markCheck(){
+        $("#SubmitRules").prop("disabled",false);
+        $('#mark_check_error').html('');
+        var user_mark =  Number($('#user_vote_mark').val());
+        var jury_or_judge_mark =  Number($('#jury_or_judge_mark').val());
+        let sum = user_mark+jury_or_judge_mark;
+        if (sum > 100) {
+            $("#SubmitRules").prop("disabled",true);
+            $('#mark_check_error').html('User Vote Mark and Jury/Judge Mark Not More then 100!!');
+            
+        }
+
     }
 
     $(document).on('click', '#SubmitRules', function(event) {
@@ -654,7 +705,7 @@ Super Admin
                             title: data.message,
                             showConfirmButton: false,
                             // timer: 1500
-                        })
+                        });
                         setTimeout(function() {
                             location.reload();
                         }, 1000);
@@ -693,6 +744,7 @@ Super Admin
                 $('#textbox2').attr("style", "display:none");
             }
         });
+
         $('#checkbox3').change(function() {
             if ($(this).is(":checked")) {
                 $('#textbox3').attr("style", "display:block");
@@ -709,6 +761,14 @@ Super Admin
             $('.wild_card__two').css("display", "none");
         }else{
             $('.wild_card__two').css("display", "block");
+        }
+    }
+
+    function IsAppeal(value){
+        if (value == 0) {
+            $('#appeal_section').css("display", "none");
+        }else{
+            $('#appeal_section').css("display", "block");
         }
     }
 
