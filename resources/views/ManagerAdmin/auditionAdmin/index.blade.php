@@ -188,7 +188,7 @@ Audition Admin
     }
 
     function openLink(link,type='_parent') {
-        window.open(link,type); 
+        window.open(link,type);
     }
 </script>
 

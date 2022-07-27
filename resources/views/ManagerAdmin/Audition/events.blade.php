@@ -81,7 +81,7 @@
             <div class="row">
                 <h4>Events list</h4>
                 <a class="btn btn-success btn-sm mr-4 " style="margin-bottom: 10px; margin-left: auto;"
-                    onclick="Show('Create Audition','{{ route('managerAdmin.audition.create') }}')">
+                    href="{{ route('managerAdmin.audition.create') }}">
                     <i class=" fa fa-plus"></i>&nbsp;Add New
                 </a>
             </div>
@@ -93,22 +93,30 @@
         @foreach ($auditions as $audition)
             <div class="col-md-3 col-sm-6 col-12">
                 <div class="p-2 bg-dark shadow-none pb-4 m-3 BGaB">
-                    <img src="{{ asset($audition->banner ?? get_static_option('audition_demo_image')) }}" alt="Admin Image"
-                        class="img-fluid ImgBlue mr-3 mb-2 w-100">
+                    <img src="{{ asset($audition->banner ?? get_static_option('audition_demo_image')) }}"
+                        alt="Admin Image" class="img-fluid ImgBlue mr-3 mb-2 w-100">
 
                     <div className="">
                         <div>
                             <h5 class="text-center text-bold">{{ $audition->title }}</h5>
 
                             <center>
-                                <span class="text-center btn btn-info px-4 text-bold">Done</span>
-                                <a href="{{route('managerAdmin.audition.promoInstruction',$audition->id)}}" class="btn btn-warning">Promo Instruction</a><br>
+                                {{-- <span class="text-center btn btn-info px-4 text-bold">Done</span> --}}
+                                <a href="{{ route('managerAdmin.audition.promoInstruction', $audition->id) }}"
+                                    class="btn btn-warning">Promo Instruction</a><br>
 
-                                <a href="{{route('managerAdmin.audition.roundInstruction',$audition->id)}}" class="btn btn-warning">Round Instruction</a><br>
+                                <a href="{{ route('managerAdmin.audition.roundInstruction', $audition->id) }}"
+                                    class="btn btn-warning">Round Instruction</a><br>
 
-                                <a href="{{route('managerAdmin.audition.registerUser',$audition->id)}}" class="btn btn-warning">Register User</a>
+                                <a href="{{ route('managerAdmin.audition.registerUser', $audition->id) }}"
+                                    class="btn btn-warning">Register User</a>
+                                @if ($audition->audition_admin_id == null)
+                                    <a href="{{ route('managerAdmin.audition.assignManpower', $audition->id) }}"
+                                        class="btn btn-warning m-2">Assign Manpower</a>
+                                @endif
+
                             </center>
-                        
+
                         </div>
                     </div>
                 </div>
