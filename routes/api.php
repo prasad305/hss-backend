@@ -762,7 +762,10 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::post('/audition-admin/audition/videos/set_approved/{id}', [AuditionController::class, 'round_videos_set_approved']);
     Route::post('/audition-admin/audition/videos/set_reject/{id}', [AuditionController::class, 'round_videos_set_reject']);
 
+    //By Srabon
 
+
+    Route::post('/audition-admin/audition/round-instruction-video/store', [AuditionController::class, 'storeRoundInstructionVideo']);
 
 
 
