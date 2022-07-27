@@ -44,15 +44,18 @@ Audition Admin
 
             @foreach ($auditionAdmins as $auditionAdmin)
             <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box shadow-none bg-light pt-4 pb-4">
-                    <img src="{{ asset($auditionAdmin->image ?? get_static_option('user')) }}" alt="Admin Image"
-                        class="img-fluid AdminImg mr-3 mt-4">
+                <div class="info-box shadow-none py-4 d-flex align-items-center">
 
-                    <div class="px-2" style="border-left: 1px solid gray">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img src="{{ asset($auditionAdmin->image ?? get_static_option('user')) }}" alt="Admin Image"
+                            class="img-fluid AdminImg">
+                    </div>
+
+                    <div class="px-2 p-x-i" style="border-left: 1px solid gray">
 
                         <a href="{{ route('managerAdmin.auditionAdmin.show', $auditionAdmin->id) }}">
                             <span class="info-box-text AdminName">
-                                <h5>{{ $auditionAdmin->first_name }} {{ $auditionAdmin->last_name }}</h5>
+                                <h5 class="text-light fw-bold">{{ $auditionAdmin->first_name }} {{ $auditionAdmin->last_name }}</h5>
                             </span>
                             <b class="AdminMusic">{{$auditionAdmin->subCategory ? $auditionAdmin->subCategory->name : ''}}</b> <br />
                         </a>
@@ -66,10 +69,10 @@ Audition Admin
                         @endif
 
                         {{-- <p class="AtifAdmin">Atif Aslam</p> --}}
-                        <p class="{{ $auditionAdmin->status == 0 ? 'text-danger' : 'text-success' }}">
-                            {{ $auditionAdmin->status == 0 ? 'Pending For Approval' : 'Approved' }}</p>
+                        <p class="{{ $auditionAdmin->status == 0 ? 'bg-danger pending-text rounded-3 px-2 pb-1 mt-1' : 'text-success bg-success approved-text rounded-3 px-2 pb-1 mt-1' }}">
+                            {{ $auditionAdmin->status == 0 ? 'Pending ' : 'Approved' }}</p>
 
-                        <p class="{{ $auditionAdmin->active_status == 0 ? 'text-danger' : 'text-success' }}">
+                        <p class="{{ $auditionAdmin->active_status == 0 ? 'text-danger text-bold' : 'text-success text-bold' }}">
                             {{ $auditionAdmin->active_status == 0 ? 'Inactive' : 'Active' }}</p>
 
                         @if ($auditionAdmin->active_status == 0)

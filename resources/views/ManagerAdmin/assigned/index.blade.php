@@ -50,7 +50,7 @@ Assigned Asdmin
                             </span>
                             <b class="AdminMusic text-warning">{{$admin->subCategory ? $admin->subCategory->name : ''}}</b> <br />
                         {{-- </a> --}}
-                    
+
 
                         @if ($admin->assignAudition)
                         <span class="right badge bg-danger my-2">Assigned</span>
@@ -72,34 +72,37 @@ Assigned Asdmin
             </div>
             @endforeach
 
-         
+
 
         </div>
         <hr>
         <h4 class="mb-2">Assigned Asdmin List</h4>
 
-      
+
         <div class="row">
 
             @foreach ($assigned_admins as $admin)
             <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box shadow-none bg-light pt-4 pb-4">
-                    <img src="{{ asset($admin->image ?? get_static_option('user')) }}" alt="Admin Image"
-                        class="img-fluid AdminImg mr-3 mt-4">
+                <div class="info-box shadow-none py-4 d-flex align-items-center">
 
-                    <div class="px-2" style="border-left: 1px solid gray">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <img src="{{ asset($admin->image ?? get_static_option('user')) }}" alt="Admin Image"
+                                class="img-fluid AdminImg">
+                        </div>
+                    <div class="px-2 p-x-i" style="border-left: 1px solid gray">
 
                         {{-- <a href="{{ route('managerAdmin.auditionAdmin.show', $admin->id) }}"> --}}
                             <span class="info-box-text AdminName">
-                                <h5>{{ $admin->first_name }} {{ $admin->last_name }}</h5>
+                                <h5 class="text-light fw-bold">{{ $admin->first_name }} {{ $admin->last_name }}</h5>
                             </span>
                             <b class="AdminMusic text-warning">{{$admin->subCategory ? $admin->subCategory->name : ''}}</b> <br />
                         {{-- </a> --}}
-                    
+
 
                         @if ($admin->star)
                         <span class="right badge bg-danger my-2">Assigned</span>
-                        <i class="fa-solid fa-bahai px-2 text-danger"></i><b class="text-success">{{$admin->star ? $admin->star->first_name.' '.$admin->star->last_name : ''}}</b><br>
+                        <i class="fa-solid fa-bahai px-2 text-danger"></i>
+                        <p class="text-success text-bold">{{$admin->star ? $admin->star->first_name.' '.$admin->star->last_name : ''}}</p><br>
                         @else
                         {{-- <span class="right badge border border-success my-2">Free Now</span> 🏳️<br> --}}
                         @endif
@@ -113,12 +116,12 @@ Assigned Asdmin
             </div>
             @endforeach
 
-         
+
 
         </div>
 
-       
-        
+
+
     </div> <!-- container -->
 </div> <!-- content -->
 
@@ -209,7 +212,7 @@ Assigned Asdmin
     }
 
     function openLink(link,type='_parent') {
-        window.open(link,type); 
+        window.open(link,type);
     }
 </script>
 

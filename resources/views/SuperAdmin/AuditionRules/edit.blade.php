@@ -70,10 +70,25 @@ Super Admin
         background: white;
     }
 
+    .card-bg{
+        border-radius:10px;
+        background: #2D2D2D !important;
+    }
     .juryBord {
         background: #2D2D2D;
         border-radius: 6px;
         padding: 15px 0px;
+    }
+    .from-contro-day{
+        border: 1px solid #2D2D2D !important;
+       border-radius: 10px !important;
+    }
+
+    .jurys-group-name{
+        text-align: center;
+        width: 80px;
+        border-top-left-radius: 10px;
+        border-bottom-right-radius: 10px
     }
 
     .juryBord input {
@@ -123,7 +138,7 @@ Super Admin
                 {{-- <h3 class="card-title">Create New Audition Rules</h3> --}}
                 {{-- <a class="btn btn-success btn-sm" style="float: right;"
                     onclick="Show('New Audition','{{ route('superAdmin.events.create') }}')"><i
-                        class=" fa fa-plus"></i>&nbsp;New Audition</a> --}}
+                    class=" fa fa-plus"></i>&nbsp;New Audition</a> --}}
             </div>
             <form id="create-form">
                 @csrf
@@ -145,8 +160,7 @@ Super Admin
                             @foreach ($categories as $key => $category)
                             <label class="container"><span style="color:#F8EE00">{{ $category->name }}</span>
                                 <input type="radio" name="category_id" class="radioBtnClass" value="{{ $category->id }}"
-                                    {{ $category->id == $rule->category_id ? 'checked' : '' }}
-                                onchange="resetAll()">
+                                    {{ $category->id == $rule->category_id ? 'checked' : '' }} onchange="resetAll()">
                                 <span class="checkmark"></span>
                             </label>
                             @endforeach
@@ -173,8 +187,8 @@ Super Admin
                                 <span class="btn btn-sm minus NumAdd" data-increase>+</span>
                             </div>
 
-                            <div class="centeredSXS text-center">
-                                <b class="text-danger">#Note:</b><br>
+                            <div class="centeredSXS px-3 pt-2">
+                                <b class="text-danger">#Note :</b><br>
                                 <small>You can’t create more than 6 rounds</small>
                             </div>
                         </div>
@@ -185,7 +199,7 @@ Super Admin
                             <center>
                                 <img src="{{ asset('assets/super-admin/images/star.png') }}" class="mb-1" width="35"
                                     height="35" alt="">
-                                <p><b class="fw-bold pt-4" style="color:#F8EE00;font-size: 20px;">Select SuperStar</b>
+                                <p><b class="fw-bold pt-4" style="color:#F8EE00;font-size: 20px;">Select Judges</b>
                                 </p>
                             </center>
                         </div>
@@ -197,8 +211,8 @@ Super Admin
                                     type="text" value="{{isset($rule) ? $rule->judge_num : 0}}" />
                                 <span class="btn btn-sm minus NumAdd" data-increase>+</span>
                             </div>
-                            <div class="centeredSXS text-center">
-                                <b class="text-danger">#Note:</b><br>
+                            <div class="centeredSXS px-3 pt-2">
+                                <b class="text-danger">#Note :</b><br>
                                 <small> You can’t create more than 4 superstars</small>
                             </div>
                         </div>
@@ -216,21 +230,25 @@ Super Admin
                         <div class="border-warning m-3">
                             @if (isset($groups[0]))
                             @foreach ($groups as $key => $group)
-                            <div class="d-flex flex-column juryBord mb-3">
-                                <p>Group {{$group->name}}</p>
-                                <div class="d-flex flex-row justify-content-center">
-                                    <span data-decrease class="btn btn-sm minus NumAdd">-</span>
-                                    <input type="hidden" name="groups_id[]" value="{{$group->id}}" />
-                                    <input data-value id="jury-{{$group->id}}" name="group_members[]" type="text"
-                                        class="w-25" type="text"
-                                        value="{{$group_data != null ? $group_data[$key] : 0}}" />
-                                    <span class="btn btn-sm minus NumAdd" data-increase>+</span>
+                            <div class="card card-bg">
+                                <div class='bg-warning jurys-group-name'>Group {{$group->name}}</div>
+                                <div class="d-flex flex-column juryBord">
+
+                                    <div class="d-flex flex-row justify-content-center">
+                                        <span data-decrease class="btn btn-sm minus NumAdd">-</span>
+                                        <input type="hidden" name="groups_id[]" value="{{$group->id}}" />
+                                        <input data-value id="jury-{{$group->id}}" name="group_members[]" type="text"
+                                            class="w-25" type="text"
+                                            value="{{$group_data != null ? $group_data[$key] : 0}}" />
+                                        <span class="btn btn-sm minus NumAdd" data-increase>+</span>
+                                    </div>
                                 </div>
                             </div>
                             @endforeach
                             @endif
-                            <div class="centeredSXS text-center">
-                                <b class="text-danger">#Note:</b><br>
+
+                            <div class="centeredSXS px-3 pt-2">
+                                <b class="text-danger">#Note :</b><br>
                                 <small>You can’t create more than 12 jurys</small>
                             </div>
                         </div>
@@ -244,149 +262,138 @@ Super Admin
                                 <p><b class="fw-bold pt-4" style="color:#F8EE00;font-size: 20px;">Event Time</b></p>
                             </center>
                         </div>
-                        <center><small>Select Time : </small></center>
+
+                        <h6 class="text-center bg-dark p-2"> Select Time :</h6>
+                        {{-- <center><small>Select Time : </small></center> --}}
 
                         <div class=" border-warning mx-5 mt-5 mb-3">
 
                             <div class="sds">
-                                <div class="row justify-content-around mb-2">
-                                    <label for="">Event Preiod</label>
-                                    <input type="text" class="form-control" name="event_period" placeholder="120 days" value="{{ $rule->event_period > 0 ? $rule->event_period : '' }}">
+                                <div class="row  mb-3">
+                                    <label for="" class="text-warning">Event Preiod (Day)</label>
+                                    <input type="text" class="form-control from-contro-day" name="event_period" placeholder="120 days"
+                                        value="{{ $rule->event_period > 0 ? $rule->event_period : '' }}">
                                     <span id="event_preiod_error" class="text-danger"></span>
                                 </div>
-                                <div class="row justify-content-around mt-2">
-                                    <label for="">Registration Preiod</label>
-                                    <input type="text" class="form-control" name="registration_period" placeholder="2 days" value="{{ $rule->registration_period > 0 ? $rule->registration_period : '' }}">
+                                <div class="row  mt-2">
+                                    <label for="" class="text-warning">Registration Preiod (Day)</label>
+                                    <input type="text" class="form-control from-contro-day" name="registration_period"
+                                        placeholder="2 days"
+                                        value="{{ $rule->registration_period > 0 ? $rule->registration_period : '' }}">
                                     <span id="registration_preiod_error" class="text-danger"></span>
                                 </div>
-                                
+
                                 {{-- <div class="row justify-content-around mt-2">
                                     <label for="">Instruction Prepare Period</label>
-                                    <input type="text" class="form-control" name="instruction_prepare_period" placeholder="2 days" value="{{ $rule->instruction_prepare_period > 0 ? $rule->instruction_prepare_period : '' }}">
-                                    <span id="instruction_prepare_period_error" class="text-danger"></span>
-                                </div> --}}
-                            </div>
-
+                                    <input type="text" class="form-control from-contro-day" name="instruction_prepare_period" placeholder="2 days" value="{{ $rule->instruction_prepare_period > 0 ? $rule->instruction_prepare_period : '' }}">
+                                <span id="instruction_prepare_period_error" class="text-danger"></span>
+                            </div> --}}
                         </div>
 
                     </div>
+
                 </div>
-                <!-- /.card-body -->
-
-                <center>
-                    <div class="Footerbtn">
-                        <a href="{{ route('superAdmin.audition-rules.index') }}" class="btn Back">Back</a>
-                        <button class="btn Confirm" id="submitAuditionRules">Confirm</button>
-                    </div>
-                </center>
-
-            </form>
         </div>
+        <!-- /.card-body -->
 
+        <center>
+            <div class="Footerbtn">
+                <a href="{{ route('superAdmin.audition-rules.index') }}" class="btn Back">Back</a>
+                <button class="btn Confirm" id="submitAuditionRules">Confirm</button>
+            </div>
+        </center>
 
+        </form>
+    </div>
 
-    </div> <!-- container -->
+</div> <!-- container -->
 </div> <!-- content -->
 
 <script>
     // resetAll();
-        function resetAll() {
-         
-            if ($("input[type='radio'].radioBtnClass").is(':checked')) {
-                var category_id = $("input[type='radio'].radioBtnClass:checked").val();
-            }
-            
-            var url = "{{ url('super-admin/audition-rules') }}";
-            // var rule_id = "{{$rule->id}}";
-            // console.log('object............',category_id);
-            
-            
-            $.ajax({
-                url: url + "/" + category_id, // your request url
-                type: 'GET',
-                success: function(data) {
-                    window.open(url+'/'+data.rules.id+'/edit','_parent');
-                },
-                error: function(data) {
-                    var errorMessage = '<div class="card bg-danger">\n' +
-                        '<div class="card-body text-center p-5">\n' +
-                        '<span class="text-white">';
-                    $.each(data.responseJSON.errors, function(key, value) {
-                        errorMessage += ('' + value + '<br>');
-                    });
-                    errorMessage += '</span>\n' +
-                        '</div>\n' +
-                        '</div>';
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        footer: errorMessage
-                    });
-
-                    console.log(data);
-                }
-            });
-
+    function resetAll() {
+        if ($("input[type='radio'].radioBtnClass").is(':checked')) {
+            var category_id = $("input[type='radio'].radioBtnClass:checked").val();
         }
-
-        $(document).on('click', '#submitAuditionRules', function(event) {
-            event.preventDefault();
-            ErrorMessageClear();
-            var form = $('#create-form')[0];
-            // var category_id = "";
-            if ($("input[type='radio'].radioBtnClass").is(':checked')) {
-                var category_id = $("input[type='radio'].radioBtnClass:checked").val();
+        var url = "{{ url('super-admin/audition-rules') }}";
+        // var rule_id = "{{$rule->id}}";
+        // console.log('object............',category_id);
+        $.ajax({
+            url: url + "/" + category_id, // your request url
+            type: 'GET',
+            success: function(data) {
+                window.open(url + '/' + data.rules.id + '/edit', '_parent');
+            },
+            error: function(data) {
+                var errorMessage = '<div class="card bg-danger">\n' +
+                    '<div class="card-body text-center p-5">\n' +
+                    '<span class="text-white">';
+                $.each(data.responseJSON.errors, function(key, value) {
+                    errorMessage += ('' + value + '<br>');
+                });
+                errorMessage += '</span>\n' +
+                    '</div>\n' +
+                    '</div>';
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    footer: errorMessage
+                });
+                console.log(data);
             }
-            var category_id = category_id;
-            var round_num = $("#round").val();
-            var judge_num = $("#superstar").val();
-            var month = $("#root3").text();
-            var day = $("#root4").text();
-            console.log('Category_id', category_id);
-
-
-            var formData = new FormData(form);
-            formData.append('category_id', category_id);
-            formData.append('round_num', round_num);
-            formData.append('judge_num', judge_num);
-
-            // Set header if need any otherwise remove setup part
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
-                }
-            });
-
-            $.ajax({
-                url: "{{ route('superAdmin.audition-rules.store') }}", // your request url
-                data: formData,
-                processData: false,
-                contentType: false,
-                type: 'POST',
-                success: function(data) {
-                    console.log(data);
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: data.type,
-                        title: data.message,
-                        showConfirmButton: false,
-                        // timer: 1500
-                    })
-                    setTimeout(function() {
-                        location.reload();
-                    }, 1000);
-                    console.log('success')
-                },
-                error: function(data) {
-                   
-                    $.each(data.responseJSON.errors, function(key, value) {
-                        ErrorMessage(key,value);
-                    });
-                   
-
-                    console.log(data);
-                }
-            });
         });
+    }
+    $(document).on('click', '#submitAuditionRules', function(event) {
+        event.preventDefault();
+        ErrorMessageClear();
+        var form = $('#create-form')[0];
+        // var category_id = "";
+        if ($("input[type='radio'].radioBtnClass").is(':checked')) {
+            var category_id = $("input[type='radio'].radioBtnClass:checked").val();
+        }
+        var category_id = category_id;
+        var round_num = $("#round").val();
+        var judge_num = $("#superstar").val();
+        var month = $("#root3").text();
+        var day = $("#root4").text();
+        console.log('Category_id', category_id);
+        var formData = new FormData(form);
+        formData.append('category_id', category_id);
+        formData.append('round_num', round_num);
+        formData.append('judge_num', judge_num);
+        // Set header if need any otherwise remove setup part
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
+            }
+        });
+        $.ajax({
+            url: "{{ route('superAdmin.audition-rules.store') }}", // your request url
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function(data) {
+                console.log(data);
+                Swal.fire({
+                    position: 'top-end',
+                    icon: data.type,
+                    title: data.message,
+                    showConfirmButton: false,
+                    // timer: 1500
+                })
+                setTimeout(function() {
+                    location.reload();
+                }, 1000);
+                console.log('success')
+            },
+            error: function(data) {
+                $.each(data.responseJSON.errors, function(key, value) {
+                    ErrorMessage(key, value);
+                });
+                console.log(data);
+            }
+        });
+    });
 </script>
 @endsection
