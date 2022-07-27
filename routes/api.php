@@ -739,6 +739,9 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/promo-instruction/{audition_id}', [AuditionController::class, 'promoInstrucction']);
 
     Route::post('/audition-admin/audition/super-star-promo/store', [AuditionController::class, 'superStarStorePromo']);
+    // Partha Ghose
+    Route::post('/audition-admin/audition/promotional/video/store', [AuditionController::class, 'promotionalVideoStore']);
+    Route::get('/audition-admin/promotional/video', [AuditionController::class, 'promotionalList']);
 
     Route::post('/audition-admin/audition/round-instruction/store', [AuditionController::class, 'storeRoundInstruction']);
     Route::post('/audition-admin/audition/round-instruction/update', [AuditionController::class, 'updateRoundInstruction']);

@@ -10,7 +10,8 @@ class AuditionPromoInstructionSendInfo extends Model
 {
     use HasFactory;
 
-    // protected $with = ['judge'];
+    // protected $with = ['audition'];
+
     protected $fillable = [
         'id',
         'audition_promo_ins_id',
@@ -22,7 +23,8 @@ class AuditionPromoInstructionSendInfo extends Model
         'video',
         'image',
         'document',
-        'submission_end_date',
+        'start_date',
+        'end_date',
         'status',
     ];
 
