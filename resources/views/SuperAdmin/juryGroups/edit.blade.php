@@ -20,6 +20,15 @@
             <span id="name_error" class="text-danger"></span>
     </div>
 
+    <div class="form-group">
+        <label for="name">Is Primary Group</label>
+        <input type="radio"  id="is_primary" {{$group->is_primary == 1 ? 'checked' : ''}} name="is_primary" value="1">
+        <span>Yes</span>
+        <input type="radio" id="is_primary" {{$group->is_primary == 0 ? 'checked' : ''}} name="is_primary" value="0">
+        <span>No</span>
+        <span id="name_error" class="text-danger"></span>
+    </div>
+
 
     <button type="submit" id="updateJuryGroupBtn" class="btn btn-primary"><i class="fa fa-save"></i>&nbsp; Update Jury Group</button>
 </form>
