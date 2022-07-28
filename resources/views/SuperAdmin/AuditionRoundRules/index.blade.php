@@ -10,6 +10,37 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
+        /* .active,
+                                                                                                                                                                    .activeRound:hover {
+                                                                                                                                                                        background-color: #ffa000;
+                                                                                                                                                                        color: white;
+                                                                                                                                                                    } */
+
+        #icon-layout .active {
+            background-color: #ff4136;
+            color: white;
+        }
+
+        .btn {
+            /* border: none; */
+            outline: none;
+            /* padding: 10px 16px; */
+            width: 100%;
+            border: 1px solid #ff0;
+            color: #ffce00;
+            font-weight: bold;
+            background-color: #454d55;
+            cursor: pointer;
+            /* font-size: 18px; */
+        }
+
+        /* Style the active class, and buttons on mouse-over */
+        .active,
+        .btn:hover {
+            background-color: #ffce00;
+            color: #000;
+        }
+
         .displayNine {
             display: flex;
             justify-content: flex-end;
@@ -97,19 +128,6 @@
             margin: 0 10px;
         }
 
-        /* .wild_card__two {
-                                                                                                                                                    background: #242424;
-                                                                                                                                                    border: 1px solid #B7AEAE;
-                                                                                                                                                    border-radius: 10px;
-                                                                                                                                                    width: 125px;
-                                                                                                                                                    height: 36px;
-                                                                                                                                                    text-align: left;
-                                                                                                                                                    padding: 5px 10px px;
-                                                                                                                                                    margin: 0 10px;
-                                                                                                                                                    display: flex;
-                                                                                                                                                    justify-content: center;
-                                                                                                                                                    align-items: center;
-                                                                                                                                                } */
 
         .wild_card__two input {
             border: 2px solid #fdd700;
@@ -127,10 +145,6 @@
 
         .wild_card__two span {
             padding-left: 10px;
-        }
-
-        .btnTextColor {
-            color: #fdd700;
         }
 
         .availableBanner {
@@ -192,9 +206,20 @@
         .pbSetTime {
             margin-top: -20px;
         }
+
+        .roundIndex {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .roundText {
+            font-weight: bold;
+        }
     </style>
 
     <!-- Content Header (Page header) -->
+
+
     <div class="content-header BorderRpo">
         <div class="container-fluid">
             <div class="row ">
@@ -205,19 +230,46 @@
                     <ol class="breadcrumb float-sm-right">
 
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active"> Audition List</li>
+                        <li class="breadcrumb-item"> Audition List</li>
                     </ol>
                 </div>
             </div>
         </div>
     </div>
 
+    {{-- <li class="nav-item custom-nav-item border-warning m-2 mt-4 TextBH" onclick="showRules(round.id)">
+        <a class="nav-link border-warning text-warning font-weight-bold" data-toggle="tab" href="" role="tab">
+            <center class="mb-2">
+                <h2 class="roundText">Round</h2>
+                <span class="text-warning roundIndex p-1 btn"> 120
+                </span>
+            </center>
+            <div class="myDiv">
+                <a class="btn activeRound border-warning nav-link roundText text-muted" data-toggle="tab" href=""
+                    role="tab">Rolls</a>
+            </div>
+        </a>
+    </li>
+    <li class="nav-item custom-nav-item border-warning m-2 mt-4 TextBH" onclick="showRules(round.id)">
+        <a class="nav-link border-warning text-warning font-weight-bold" data-toggle="tab" href="" role="tab">
+            <center class="mb-2">
+                <h2 class="roundText">Round</h2>
+                <span class="text-warning roundIndex p-1 btn"> 120
+                </span>
+            </center>
+            <div class="myDiv">
+                <a class="btn activeRound border-warning nav-link roundText text-muted" data-toggle="tab" href=""
+                    role="tab">Rolls</a>
+            </div>
+        </a>
+    </li> --}}
+
     <!-- /.content-header -->
     <ul class="nav nav-tabs m-4" role="tablist">
 
         @foreach ($rules_categories as $key => $rules)
             @if ($rules->category)
-                <li class="nav-item custom-nav-item m-2 TextBH {{ $key == 0 ? 'active' : '' }}"
+                <li class="nav-item custom-nav-item m-2 TextBH" {{-- <li class="nav-item custom-nav-item m-2 TextBH {{ $key == 0 ? 'active' : '' }}" --}}
                     onclick="selectedCategory('{{ $rules->id }}')">
                     <a class="nav-link border-warning " data-toggle="tab"
                         href="#tabs-{{ $rules->category ? $rules->category->id : '' }}" role="tab">
@@ -225,7 +277,9 @@
                         <img src="{{ asset($rules->category ? $rules->category->icon : '') }}" class="imgWidth pt-2"
                             alt={{ $rules->category ? $rules->category->name : '' }} icon>
                         {{-- </center> --}}
-                        <a class="btn  border-warning btnTextColor nav-link  {{ $key == 0 ? 'active' : '' }}"
+                        <a class="btn  border-warning  
+                        {{-- {{ $key == 0 ? 'active' : '' }} --}}
+                        "
                             data-toggle="tab" href="#tabs-{{ $rules->category->id ?? '' }}"
                             role="tab">{{ $rules->category ? $rules->category->name : '' }}</a>
                     </a>
@@ -234,7 +288,7 @@
         @endforeach
     </ul>
 
-    <div class="d-flex justify-content-center">
+    {{-- <div class="d-flex justify-content-center">
         <div class="availableBanner">
             <div class='clockBg'>
                 <img src="{{ asset('assets/clock1.png') }}" width="120" alt="">
@@ -247,7 +301,7 @@
                 <p class='text-center textDark pbSetTime'>(Set Time Period be Carefully)</p>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="tab-content m-4">
         <h3>Audition List Edit</h3>
@@ -265,17 +319,17 @@
         <div class="tab-pane " id="tabs-90" role="tabpanel">
             <div class="container">
 
-                <p class="text-warning">Mark Distribution </p>
+                <h5 class="text-warning">Mark Distribution </h5>
                 <div class="bottomDiv">
 
                 </div>
 
-                <form id="create-form">
+                <form id="create-form mt-3">
                     @csrf
 
                     <div class="row">
                         <input type="hidden" name="round_id" id="round_id">
-                        <div class="d-flex  justify-content-between BorderInSA p-2 m-1 col-md-12">
+                        <div class="d-flex  justify-content-between BorderInSA p-2 m-1 mt-3 col-md-12">
                             <div class="text-light mt-1">
                                 <div class="custom-control">
                                     <input type="checkbox" id="checkbox1" class="mt-3" value="1" />
@@ -298,7 +352,7 @@
 
                         <div class="col-md-8 displayNine">
 
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <input type="text" name="user_vote_mark" id="user_vote_mark" onkeyup="markCheck()"
                                     class="form-control text-center" placeholder="User Vote Mark">
                                 <span class="text-danger" id="user_vote_mark_error"></span>
@@ -321,7 +375,7 @@
 
                         <div class='col-md-8 displayNine'>
 
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <input type="text" name="jury_or_judge_mark" id="jury_or_judge_mark"
                                     onkeyup="markCheck()" class="form-control text-center" placeholder="Mark">
                                 <span class="text-danger" id="jury_or_judge_mark_error"></span>
@@ -374,6 +428,7 @@
                         </div>
 
                     </div>
+
 
                     <div class="d-flex flex-row row">
                         {{-- <div class="d-flex flex-column w-100 mt-2">
@@ -566,16 +621,13 @@
 
                     </div>
 
-
-
                     <center><span id="hole_round_peroid_error" class="text-danger"></span></center>
-
-
 
                     <div class="d-flex col-md-12 justify-content-center mt-4 mb-4">
                         <button class="btn bg-info px-3 BTNback mr-3" id="back">Back</button>
                         <button class="btn bg-warning px-3 BTNdone" id="SubmitRules">Done</button>
                     </div>
+
 
             </div>
             </form>
@@ -610,27 +662,56 @@
 
                     data.round_rules.forEach((round, index) => {
                         single_round +=
-                            '<li class="nav-item custom-nav-item m-2 TextBH" onclick="showRules(' +
+                            '<li class=" nav-item custom-nav-item m-2 mt-4 TextBH" onclick="showRules(' +
                             round.id + ')">' +
                             '<a class="nav-link border-warning text-warning font-weight-bold" data-toggle="tab" href="" role="tab">' +
                             '<center class="mb-2">' +
-                            '<h4>Round</h4>' +
-                            '<span class="bg-gray p-1 btn " >' + `${index+1}` + '</span>' +
+                            '<h2 class="roundText">Round</h2>' +
+                            '<span class="text-warning roundIndex p-1" >' + `${index+1}` +
+                            '</span>' +
                             '</center>' +
-                            '<a class="btn border-warning nav-link " data-toggle="tab" href="" role="tab">Rolls</a>' +
+                            '<a class="btn border-warning roundText" data-toggle="tab" href="" role="tab">Rolls</a>' +
                             '</a>' +
-                            '</li>';
+                            '</li>'
+
+
+                        ;
                     });
 
                     $('#tab-content').append(
-                        '<center class="text-warning"><span style="font-size: 22px">Available Days :</span> <span id="round_available_days" style="font-size: 25px;color:white">' +
-                        data.round_available_days +
-                        '</span> <small>(Set Time Period be carefully)</small> </center>' +
+
+                        '<div class="my-5">' +
+                        '<div class="d-flex justify-content-center">' +
+                        '<div class="availableBanner">' +
+                        '<div class="clockBg">' +
+                        '<img src="{{ asset('assets/clock1.png') }}" width="120" alt="">' +
+                        '</div>' +
+                        '<div class="mx-4">' +
+                        '<div class="d-flex align-items-center">' +
+                        '<p class="textFontBold pt-3">Available Days:</p>' +
+                        '<p class="textFontBolder pt-3">' + data.round_available_days + '</p>' +
+                        '</div>' +
+                        '<p class="text-center textDark pbSetTime">(Set Time Period be Carefully)</p>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
 
                         '<div>' +
                         '<ul class="nav nav-tabs" role="tablist">' + single_round + '</ul>' +
+                        '</div>' +
                         '</div>'
+
+                        // '<center class="text-warning"><span style="font-size: 22px">Available Days :</span> <span id="round_available_days" style="font-size: 25px;color:white">' +
+                        // data.round_available_days +
+                        // '</span> <small>(Set Time Period be carefully)</small> </center>' +
+
+                        // '<div>' +
+                        // '<ul class="nav nav-tabs" role="tablist">' + single_round + '</ul>' +
+                        // '</div>'
                     );
+
+
+
 
                 },
                 error: function(data) {
@@ -937,6 +1018,43 @@
             } else {
                 $('#appeal_section').css("display", "block");
             }
+        }
+
+
+        // var header = document.getElementById("myDIV");
+        // var btns = header.getElementsByClassName("activeRound");
+        // for (var i = 0; i < btns.length; i++) {
+        //     btns[i].addEventListener("click", function() {
+        //         var current = document.getElementsByClassName("active");
+        //         if (current.length > 0) {
+        //             current[0].className = current[0].className.replace(" active", "");
+        //         }
+        //         this.className += " active";
+        //     });
+        // }
+
+        var header = document.getElementById("myDIV");
+        var btns = header.getElementsByClassName("btn");
+        for (var i = 0; i < btns.length; i++) {
+            btns[i].addEventListener("click", function() {
+                var current = document.getElementsByClassName("active");
+                if (current.length > 0) {
+                    current[0].className = current[0].className.replace(" active", "");
+                }
+                this.className += " active";
+            });
+        }
+
+        var activeclass = document.querySelectorAll("#icon-layout div");
+        for (var i = 0; i < activeclass.length; i++) {
+            activeclass[i].addEventListener("click", activateClass);
+        }
+
+        function activateClass(e) {
+            for (var i = 0; i < activeclass.length; i++) {
+                activeclass[i].classList.remove("active");
+            }
+            e.target.classList.add("active");
         }
     </script>
 @endsection
