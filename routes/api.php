@@ -20,6 +20,7 @@ use App\Http\Controllers\API\LearningSessionController;
 use App\Http\Controllers\API\Audition\Admin\AuditionController;
 use App\Http\Controllers\API\Audition\Jury\JuryAuditionController;
 use App\Http\Controllers\API\Audition\Judge\JudgeAuditionController;
+use App\Http\Controllers\API\DashboardController;
 use App\Http\Controllers\API\GuestController;
 use App\Http\Controllers\API\PromoVideoController;
 use App\Http\Controllers\API\QnaController;
@@ -301,6 +302,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
         return response()->json(['message' => 'You are in as Admin', 'status' => 200], 200);
     });
 
+    Route::get('admin/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('admin/star_list', [CategoryController::class, 'star_list']);
     Route::get('admin/agreement_paper/{star_id}', [CategoryController::class, 'agreement_paper']);
 
