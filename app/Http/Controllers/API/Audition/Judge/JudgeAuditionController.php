@@ -313,6 +313,15 @@ class JudgeAuditionController extends Controller
             'pending' => $event->count(),
         ]);
     }
+    public function acceptedRoundInstructionVideo()
+    {
+        $event = AuditionRoundInstructionSendInfo::with(['audition', 'star'])->where([['judge_id', auth('sanctum')->user()->id], ['status', 1]])->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+            'accepted' => $event->count(),
+        ]);
+    }
     public function roundInstructionVideoDetails($id)
     {
 
@@ -328,8 +337,8 @@ class JudgeAuditionController extends Controller
         // return $request->all();
 
         $validator = Validator::make($request->all(), [
-            'description' => 'required',
-            'instruction' => 'required',
+            'description' => 'required|min:10',
+            'instruction' => 'required|min:10',
             'image' => 'required',
             'video' => 'required',
         ]);

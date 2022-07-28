@@ -686,6 +686,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::post('superstar/audition/updateAuditionInstruction/{audition_instruction_id}', [JudgeAuditionController::class, 'updateAuditionInstruction']);
     //srabon
     Route::get('superstar/audition/pending/roundInstructionVideos', [JudgeAuditionController::class, 'pendingRoundInstructionVideo']);
+    Route::get('superstar/audition/pending/roundInstructionVideosAccepted', [JudgeAuditionController::class, 'acceptedRoundInstructionVideo']);
     Route::get('superstar/audition/round-instruction-video/details/{id}', [JudgeAuditionController::class, 'roundInstructionVideoDetails']);
     Route::post('superstar/audition/round-instruction-video/update/{id}', [JudgeAuditionController::class, 'roundInstructionVideoUpdate']);
 
