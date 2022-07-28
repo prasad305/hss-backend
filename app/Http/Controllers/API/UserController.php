@@ -10,6 +10,7 @@ use App\Models\AuctionTerms;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPayment;
+use App\Models\Audition\AuditionRoundAppealRegistration;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundMarkTracking;
 use App\Models\Audition\AuditionRoundRegistration;
@@ -1425,6 +1426,42 @@ class UserController extends Controller
         }
     }
 
+    public function roundAppealRegister(Request $request)
+    {
+        $user = User::find(auth()->user()->id);   
+
+        if (AuditionRoundAppealRegistration::where([['user_id', $user->id],['audition_id',$request->audition_id],['round_info_id',$request->round_info_id]])->exists()) {
+            return response()->json([
+                'status' => 201,
+                'message' => 'User already Registered for this round'
+            ]);
+        } else {
+
+            $participant = AuditionRoundAppealRegistration::create([
+                'audition_id' => $request->audition_id,
+                'round_info_id' => $request->round_info_id,
+                'user_id' => $user->id,
+            ]);
+            return response()->json([
+                'status' => 200,
+                'participant' => $participant,
+            ]);
+        }
+    }
+
+    public function isAppealForThisRound(Request $request)
+    {
+        $user = User::find(auth()->user()->id);   
+
+        $participant = AuditionRoundAppealRegistration::where([['user_id', $user->id],['audition_id',$request->audition_id],['round_info_id',$request->round_info_id]])->first();
+
+        return response()->json([
+            'status' => 200,
+            'participant' => $participant,
+        ]);
+    }
+
+
     public function auditionPayment(Request $request)
     {
 
@@ -1461,6 +1498,7 @@ class UserController extends Controller
                 $audition_video->audition_id = $request->audition_id;
                 $audition_video->round_info_id = $request->round_info_id;
                 $audition_video->user_id = auth('sanctum')->user()->id;
+                $audition_video->type = $request->type;
 
                 $file_name   = time() . rand('0000', '9999') . $key . '.' . $file->getClientOriginalName();
                 $file_path = 'uploads/videos/auditions/';
@@ -1478,7 +1516,9 @@ class UserController extends Controller
 
     public function uploaded_round_videos($audition_id, $round_info_id)
     {
-        $videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id]])->get();
+        $videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id],['type','general']])->get();
+
+        $appeal_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id],['type','appeal']])->get();
 
         $round_status = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id], ['round_info_id', $round_info_id]])->first();
 
@@ -1486,6 +1526,7 @@ class UserController extends Controller
             'status' => 200,
             'videos' => $videos,
             'round_status' => $round_status,
+            'appeal_videos' => $appeal_videos,
             'message' => 'Success!',
         ]);
     }
