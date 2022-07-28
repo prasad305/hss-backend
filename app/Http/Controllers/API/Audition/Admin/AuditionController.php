@@ -78,11 +78,14 @@ class AuditionController extends Controller
     }
 
     public function storePostContent(Request $request){
+        // return $request->all();
         $validator = Validator::make($request->all(), [
             'instruction' => 'required|min:5',
             'description' => 'required|min:5',
-            'image' => 'required|mimes:jpg,jpeg,png,gif',
-            'video' => 'required|mimes:mp4,mkv',
+            'image' => 'nullable|mimes:jpg,jpeg,png,gif',
+            'video' => 'nullable|mimes:mp4,mkv',
+            'reg_start_date' => 'required',
+            'reg_end_date' => 'required',
             'fees' => 'required',
         ]);
         if ($validator->fails()) {
@@ -92,11 +95,23 @@ class AuditionController extends Controller
             ]);
         } else {
             $audition = Audition::find($request->audition_id);
+            if ($audition->status >= 2) {
+                return response()->json([
+                    'status' => 410,
+                    'message' => 'This Audition Already Posted by Manager Admin!',
+                ]);
+            }
             $audition->instruction = $request->instruction;
             $audition->description = $request->description;
+            $audition->user_reg_start_date = $request->reg_start_date;
+            $audition->user_reg_end_date = $request->reg_end_date;
             $audition->fees = $request->fees;
-            $audition->status = 3;
+            $audition->status = 2;
             if ($request->hasfile('image')) {
+                $destination = $audition->banner;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
                 $image             = $request->image;
                 $image_folder_path       = 'uploads/images/auditions/post/';
                 $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
@@ -106,21 +121,16 @@ class AuditionController extends Controller
             }
 
             if ($request->hasfile('video')) {
+                $destination = $audition->video;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
                 $file             = $request->video;
                 $folder_path       = 'uploads/videos/auditions/post/';
                 $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
                 // save to server
                 $request->video->move($folder_path, $file_new_name);
                 $audition->video = $folder_path . '/' . $file_new_name;
-            }
-
-            if ($request->hasfile('pdf')) {
-                $image             = $request->pdf;
-                $pdf_folder_path       = 'uploads/pdf/auditions/post/';
-                $pdf_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
-                // save to server
-                $request->pdf->move($pdf_folder_path, $pdf_new_name);
-                $audition->pdf = $pdf_folder_path . '/' . $pdf_new_name;
             }
 
             try {
@@ -136,6 +146,15 @@ class AuditionController extends Controller
                 ]);
             }
         }
+    }
+
+    public function postList(){
+        $events = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status','>',1]])->get();
+        
+        return response()->json([
+            'status' => 200,
+            'events' => $events,
+        ]);
     }
 
     public function videoStatusChange(Request $request)
@@ -1315,7 +1334,7 @@ class AuditionController extends Controller
     {
         // return 'Audition::all()';
 
-        $lives = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 2]])->get();
+        $lives = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 3]])->get();
         return response()->json([
             'status' => 200,
             'lives' => $lives,

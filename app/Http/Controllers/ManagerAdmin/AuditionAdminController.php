@@ -353,24 +353,10 @@ class AuditionAdminController extends Controller
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
 
-    public function pending()
-    {
-        $audition = Audition::where('status', 2)->latest()->get();
-        return view('ManagerAdmin.Audition.index', compact('audition'));
-    }
+   
 
-    public function published()
-    {
-        $audition = Audition::where('status', 3)->latest()->get();
-        return view('ManagerAdmin.Audition.index', compact('audition'));
-    }
+   
 
-    public function details($id)
-    {
-        $audition = Audition::find($id);
-        $judges = AuditionAssignJudge::where('audition_id', $audition->id)->get();
-        return view('ManagerAdmin.Audition.details')->with('audition', $audition)->with('judges', $judges);
-    }
 
 
     public function auditionEdit($id)
