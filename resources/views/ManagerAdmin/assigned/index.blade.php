@@ -38,15 +38,16 @@ Assigned Asdmin
 
             @foreach ($unassigned_admins as $admin)
             <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box shadow-none bg-light pt-4 pb-4">
-                    <img src="{{ asset($admin->image ?? get_static_option('user')) }}" alt="Admin Image"
-                        class="img-fluid AdminImg mr-3 mt-4">
-
-                    <div class="px-2" style="border-left: 1px solid gray">
+                <div class="info-box shadow-none py-4 d-flex align-items-center">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <img src="{{ asset($admin->image ?? get_static_option('user')) }}" alt="Admin Image"
+                                class="img-fluid AdminImg">
+                        </div>
+                    <div class="px-2 p-x-i" style="border-left: 1px solid gray">
 
                         {{-- <a href="{{ route('managerAdmin.auditionAdmin.show', $admin->id) }}"> --}}
                             <span class="info-box-text AdminName">
-                                <h5>{{ $admin->first_name }} {{ $admin->last_name }}</h5>
+                                <h5 class="text-light fw-bold">{{ $admin->first_name }} {{ $admin->last_name }}</h5>
                             </span>
                             <b class="AdminMusic text-warning">{{$admin->subCategory ? $admin->subCategory->name : ''}}</b> <br />
                         {{-- </a> --}}
@@ -59,7 +60,7 @@ Assigned Asdmin
                         {{-- <span class="right badge border border-success my-2">Free Now</span> 🏳️<br> --}}
                         @endif
 
-                        <p class="{{ $admin->active_status == 0 ? 'text-danger' : 'text-success' }}">
+                        <p class="{{ $admin->active_status == 0 ? 'text-danger text-bold' : 'text-success text-bold' }}">
                             {{ $admin->active_status == 0 ? 'Inactive' : 'Active' }}</p>
 
                             <a class="btn btn-sm btn-info"
@@ -89,6 +90,7 @@ Assigned Asdmin
                             <img src="{{ asset($admin->image ?? get_static_option('user')) }}" alt="Admin Image"
                                 class="img-fluid AdminImg">
                         </div>
+
                     <div class="px-2 p-x-i" style="border-left: 1px solid gray">
 
                         {{-- <a href="{{ route('managerAdmin.auditionAdmin.show', $admin->id) }}"> --}}

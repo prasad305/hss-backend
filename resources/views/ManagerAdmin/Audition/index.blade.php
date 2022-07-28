@@ -9,6 +9,8 @@ Manager Admin
 
 @section('content')
 
+
+
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -23,6 +25,8 @@ Manager Admin
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
+
+<hr>
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
@@ -31,52 +35,44 @@ Manager Admin
 
 <div class="content">
     <div class="container-fluid">
-
-
         <div class="row">
             @foreach ($audition as $val)
-            <!--card-->
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="p-2 bg-dark shadow-none pb-4 m-3 BGaB">
+                    <img src="{{ asset($val->banner) }}" clss="img-fluid"style="max-height:200px" alt="Admin Image"
+                        class="img-fluid ImgBlue mr-3 mb-2 w-100">
 
-            <div class="col-sm-6 col-lg-4">
-                <div class="card">
-                    <div class="panel panel-primary text-center">
-                        <div class="">
-                            <img width="50%" src="{{ asset($val->banner) }}" alt="">
-                        </div>
-                        <div class="panel-body py-3">
-                            <h3 class="text-ellipsis-line-1">{{ $val->name }}</h3>
+                    <div className="">
+                        <div>
+                            <h5 class="text-center text-bold">{{ $val->name }}</h5>
 
-                            {{-- @if ($val->star_approval == 1)
+                            <center>
 
-                            <a type="button" class="btn btn-warning waves-effect waves-light"><i class="icon-record"></i>
+                                {{-- @if ($val->star_approval == 1)
+
+                            <a type="button" class="btn btn-warning waves-effect  waves-light"><i class="icon-record"></i>
                                 Pending</a>
                             @else
 
-                            <button type="button" class="btn btn-success waves-effect waves-light"><i class="icon-checkmark-round"></i> Published</button>
+                            <button type="button" class="btn btn-success waves-effect  waves-light"><i class="icon-checkmark-round"></i> Published</button>
                             @endif --}}
 
-                            <a href="{{ route('managerAdmin.audition.details', [$val->id]) }}" type="button" class="btn btn-info waves-effect waves-light">Details <i class="fa fa-angle-double-right"></i></a>
+                                <a href="{{ route('managerAdmin.audition.details', [$val->id]) }}" type="button" class="btn btn-info waves-effect  waves-light">Details <i class="fa fa-angle-double-right"></i></a>
 
                             @if ($val->status >= 3)
                                 <a href="{{route('managerAdmin.audition.registerUser',$val->id)}}" class="btn btn-warning">Register User</a>
                             @endif
-
-                            {{-- <a href="{{ route('managerAdmin.audition.jury_published', [$val->id]) }}"  class="btn btn-info waves-effect waves-light">Filter Videos <i class="fa fa-angle-double-right"></i></a> --}}
-
-                            
+                            </center>
 
                         </div>
                     </div>
-
                 </div>
             </div>
-            <!--card end-->
             @endforeach
         </div>
-
-
     </div> <!-- container -->
 </div> <!-- content -->
+
 @if (session()->has('success'))
 <script type="text/javascript">
     $(document).ready(function() {
