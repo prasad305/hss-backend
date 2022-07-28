@@ -18,6 +18,6 @@ class AuditionRoundAppealRegistration extends Model
     }
 
     public function round(){
-        return $this->belongsTo(AuditionRoundInfo::class, 'audition_round_info_id');
+        return $this->belongsTo(AuditionRoundInfo::class, 'round_info_id');
     }
 }

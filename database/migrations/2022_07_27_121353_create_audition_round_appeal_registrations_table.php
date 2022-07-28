@@ -17,7 +17,7 @@ class CreateAuditionRoundAppealRegistrationsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('audition_id')->nullable();
-            $table->unsignedBigInteger('audition_round_info_id')->nullable();
+            $table->unsignedBigInteger('round_info_id')->nullable();
 
             $table->integer('status')->default(0)->comment('0 = default');
 

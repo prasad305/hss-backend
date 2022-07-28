@@ -316,15 +316,14 @@ class AuditionController extends Controller
     {
         try {
             foreach ($request->juries as $parentKey => $juryGroup) {
-
                 foreach ($juryGroup as $key => $value) {
                     if ($parentKey == 0) {
-                        AuditionUploadVideo::where([['group_b_jury_id', null], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->take($request->distributed_videos[$parentKey][$key])->update([
+                        AuditionUploadVideo::where([['group_b_jury_id', null], ['audition_id', $request->audition_id], ['type', $request->type], ['round_info_id', $request->round_info_id]])->take($request->distributed_videos[$parentKey][$key])->update([
                             'group_b_jury_id' => $value,
                         ]);
                     }
                     if ($parentKey == 1) {
-                        AuditionUploadVideo::where([['group_c_jury_id', null], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->take($request->distributed_videos[$parentKey][$key])->update([
+                        AuditionUploadVideo::where([['group_c_jury_id', null], ['audition_id', $request->audition_id], ['type', $request->type], ['round_info_id', $request->round_info_id]])->take($request->distributed_videos[$parentKey][$key])->update([
                             'group_c_jury_id' => $value,
                         ]);
                     }
