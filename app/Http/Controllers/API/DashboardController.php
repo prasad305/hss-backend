@@ -3,8 +3,16 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bidding;
+use App\Models\GeneralPostPayment;
+use App\Models\GreetingsRegistration;
+use App\Models\LearningSessionRegistration;
+use App\Models\LiveChatRegistration;
+use App\Models\MarketplaceOrder;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
+use App\Models\QnaRegistration;
+use App\Models\SouvenirApply;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -13,29 +21,197 @@ class DashboardController extends Controller
     public function adminDashboard()
     {
 
-        // Income Statement meetup
+        // Income Statement simple post
 
-        $meetupTotalIncome = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+        $simplepost['simplePostTotalIncome'] = GeneralPostPayment::whereHas('simpleposts', function ($q) {
             $q->where([['admin_id', auth()->user()->id]]);
         })->sum('amount');
-        $meetupDailyIncome = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+        $simplepost['simplePostDailyIncome'] = GeneralPostPayment::whereHas('simpleposts', function ($q) {
             $q->where([['admin_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
-        $meetupWeeklyIncome = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+        $simplepost['simplePostWeeklyIncome'] = GeneralPostPayment::whereHas('simpleposts', function ($q) {
             $q->where([['admin_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
-        $meetupMonthlyIncome = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+        $simplepost['simplePostMonthlyIncome'] = GeneralPostPayment::whereHas('simpleposts', function ($q) {
             $q->where([['admin_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
-        $meetupYearlyIncome = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+        $simplepost['simplePostYearlyIncome'] = GeneralPostPayment::whereHas('simpleposts', function ($q) {
             $q->where([['admin_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
+        // Income Statement meetup
+
+        $meetup['meetupTotalIncome'] = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->sum('amount');
+        $meetup['meetupDailyIncome'] = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
+        $meetup['meetupWeeklyIncome'] = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $meetup['meetupMonthlyIncome'] = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $meetup['meetupYearlyIncome'] = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+        // Income Statement meetup
+
+        $learning['learningSessionTotalIncome'] = LearningSessionRegistration::whereHas('learningSession', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->sum('amount');
+        $learning['learningSessionDailyIncome'] = LearningSessionRegistration::whereHas('learningSession', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
+        $learning['learningSessionWeeklyIncome'] = LearningSessionRegistration::whereHas('learningSession', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $learning['learningSessionMonthlyIncome'] = LearningSessionRegistration::whereHas('learningSession', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $learning['learningSessionYearlyIncome'] = LearningSessionRegistration::whereHas('learningSession', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+        // Income Statement Live Chat
+
+        $liveChat['liveChatTotalIncome'] = LiveChatRegistration::whereHas('liveChat', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->sum('amount');
+        $liveChat['liveChatDailyIncome'] = LiveChatRegistration::whereHas('liveChat', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
+        $liveChat['liveChatWeeklyIncome'] = LiveChatRegistration::whereHas('liveChat', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $liveChat['liveChatMonthlyIncome'] = LiveChatRegistration::whereHas('liveChat', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $liveChat['liveChatYearlyIncome'] = LiveChatRegistration::whereHas('liveChat', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+        // Income Statement Q&A
+
+        $qna['qnaTotalIncome'] = QnaRegistration::whereHas('qna', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->sum('amount');
+        $qna['qnaDailyIncome'] = QnaRegistration::whereHas('qna', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
+        $qna['qnaWeeklyIncome'] = QnaRegistration::whereHas('qna', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $qna['qnaMonthlyIncome'] = QnaRegistration::whereHas('qna', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $qna['qnaYearlyIncome'] = QnaRegistration::whereHas('qna', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+        // Income Statement Greetings
+
+        $greeting['greetingTotalIncome'] = GreetingsRegistration::whereHas('greeting', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->sum('amount');
+        $greeting['greetingDailyIncome'] = GreetingsRegistration::whereHas('greeting', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
+        $greeting['greetingWeeklyIncome'] = GreetingsRegistration::whereHas('greeting', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $greeting['greetingMonthlyIncome'] = GreetingsRegistration::whereHas('greeting', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $greeting['greetingYearlyIncome'] = GreetingsRegistration::whereHas('greeting', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+        // Income Statement Auction
+
+        $auction['auctionTotalIncome'] = Bidding::whereHas('auction', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->sum('amount');
+        $auction['auctionDailyIncome'] = Bidding::whereHas('auction', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
+        $auction['auctionWeeklyIncome'] = Bidding::whereHas('auction', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $auction['auctionMonthlyIncome'] = Bidding::whereHas('auction', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $auction['auctionYearlyIncome'] = Bidding::whereHas('auction', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+        // Income Statement Marketplace
+
+        $marketplace['marketplaceTotalIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
+            $q->where([['superstar_admin_id', auth()->user()->id]]);
+        })->sum('total_price');
+        $marketplace['marketplaceDailyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
+            $q->where([['superstar_admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('total_price');
+        $marketplace['marketplaceWeeklyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
+            $q->where([['superstar_admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_price');
+        $marketplace['marketplaceMonthlyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
+            $q->where([['superstar_admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_price');
+        $marketplace['marketplaceYearlyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
+            $q->where([['superstar_admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_price');
+
+
+
+        // Income Statement Souvenir
+
+        $souvenir['souvenirTotalIncome'] = SouvenirApply::whereHas('souvenir', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->sum('total_amount');
+        $souvenir['souvenirDailyIncome'] = SouvenirApply::whereHas('souvenir', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('total_amount');
+        $souvenir['souvenirWeeklyIncome'] = SouvenirApply::whereHas('souvenir', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_amount');
+        $souvenir['souvenirMonthlyIncome'] = SouvenirApply::whereHas('souvenir', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_amount');
+        $souvenir['souvenirYearlyIncome'] = SouvenirApply::whereHas('souvenir', function ($q) {
+            $q->where([['admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_amount');
+
+        //Total Statement
+        $totalIncomeStatement['totalIncome'] = $meetup['meetupTotalIncome'] + $simplepost['simplePostTotalIncome'] + $learning['learningSessionTotalIncome'] + $liveChat['liveChatTotalIncome'] + $qna['qnaTotalIncome'] + $greeting['greetingTotalIncome'] + $auction['auctionTotalIncome'] + $marketplace['marketplaceTotalIncome'] + $souvenir['souvenirTotalIncome'];
+        $totalIncomeStatement['dailyTotalIncome'] = $meetup['meetupDailyIncome'] + $simplepost['simplePostDailyIncome'] + $learning['learningSessionDailyIncome'] + $liveChat['liveChatDailyIncome'] + $qna['qnaDailyIncome'] + $greeting['greetingDailyIncome'] + $auction['auctionDailyIncome'] + $marketplace['marketplaceDailyIncome'] + $souvenir['souvenirDailyIncome'];
+        $totalIncomeStatement['weeklyTotalIncome'] = $meetup['meetupWeeklyIncome'] + $simplepost['simplePostWeeklyIncome'] + $learning['learningSessionWeeklyIncome'] + $liveChat['liveChatWeeklyIncome'] + $qna['qnaWeeklyIncome'] + $greeting['greetingWeeklyIncome'] + $auction['auctionWeeklyIncome'] + $marketplace['marketplaceWeeklyIncome'] + $souvenir['souvenirWeeklyIncome'];
+        $totalIncomeStatement['monthlyTotalIncome'] = $meetup['meetupMonthlyIncome'] + $simplepost['simplePostMonthlyIncome'] + $learning['learningSessionMonthlyIncome'] + $liveChat['liveChatMonthlyIncome'] + $qna['qnaMonthlyIncome'] + $greeting['greetingMonthlyIncome'] + $auction['auctionMonthlyIncome'] + $marketplace['marketplaceMonthlyIncome'] + $souvenir['souvenirMonthlyIncome'];
+        $totalIncomeStatement['yearlyTotalIncome'] = $meetup['meetupYearlyIncome'] + $simplepost['simplePostYearlyIncome'] + $learning['learningSessionYearlyIncome'] + $liveChat['liveChatYearlyIncome'] + $qna['qnaYearlyIncome'] + $greeting['greetingYearlyIncome'] + $auction['auctionYearlyIncome'] + $marketplace['marketplaceYearlyIncome'] + $souvenir['souvenirYearlyIncome'];
+
+        //Star showcase
+
+
+        $totalIncomeStatementStarShowcase['totalIncome'] =  $auction['auctionTotalIncome'] + $marketplace['marketplaceTotalIncome'] + $souvenir['souvenirTotalIncome'];
+        $totalIncomeStatementStarShowcase['dailyTotalIncome'] = $auction['auctionDailyIncome'] + $marketplace['marketplaceDailyIncome'] + $souvenir['souvenirDailyIncome'];
+        $totalIncomeStatementStarShowcase['weeklyTotalIncome'] = $auction['auctionWeeklyIncome'] + $marketplace['marketplaceWeeklyIncome'] + $souvenir['souvenirWeeklyIncome'];
+        $totalIncomeStatementStarShowcase['monthlyTotalIncome'] = $auction['auctionMonthlyIncome'] + $marketplace['marketplaceMonthlyIncome'] + $souvenir['souvenirMonthlyIncome'];
+        $totalIncomeStatementStarShowcase['yearlyTotalIncome'] = $auction['auctionYearlyIncome'] + $marketplace['marketplaceYearlyIncome'] + $souvenir['souvenirYearlyIncome'];
 
 
         return response()->json([
             'status' => 200,
-            'meetupTotalIncome' => $meetupTotalIncome
+            'totalIncomeStatement' => $totalIncomeStatement,
+            'simplepost' => $simplepost,
+            'meetup' => $meetup,
+            'learning' => $learning,
+            'liveChat' => $liveChat,
+            'qna' => $qna,
+            'greeting' => $greeting,
+            'totalIncomeStatementStarShowcase' => $totalIncomeStatementStarShowcase
         ]);
     }
 }
