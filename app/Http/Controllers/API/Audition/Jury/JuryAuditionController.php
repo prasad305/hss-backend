@@ -73,16 +73,14 @@ class JuryAuditionController extends Controller
             'markedVideos' => $markedVideos,
         ]);
     }
-    public function VideoAssessmentAsMainGroupWithRound($audition_id, $audition_round_info_id)
+    public function VideoAssessmentAsMainGroupWithRound($audition_id, $audition_round_info_id, $type)
     {
         $audition = Audition::find($audition_id);
         $auditionRoundInfo  = AuditionRoundInfo::find($audition_round_info_id);
 
 
-        $percentageVideos =  AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id], ['group_a_per_jury_id', auth()->user()->id]])->orderBy('updated_at', 'DESC')->get();
-        $randomVideos =  AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id], ['group_a_ran_jury_id', auth()->user()->id]])->orderBy('updated_at', 'DESC')->get();
-
-        // $ranm =  AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['audition_id', $audition_id], ['group_c_jury_id', auth()->user()->id], ['group_c_jury_mark', '!=', null]])->orderBy('updated_at', 'DESC')->get();
+        $percentageVideos =  AuditionUploadVideo::where([['round_info_id', $audition_round_info_id],['type', $type], ['audition_id', $audition_id], ['group_a_per_jury_id', auth()->user()->id]])->orderBy('updated_at', 'DESC')->get();
+        $randomVideos =  AuditionUploadVideo::where([['round_info_id', $audition_round_info_id],['type', $type], ['audition_id', $audition_id], ['group_a_ran_jury_id', auth()->user()->id]])->orderBy('updated_at', 'DESC')->get();
 
         return response()->json([
             'status' => 200,

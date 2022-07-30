@@ -834,7 +834,7 @@ Route::middleware(['auth:sanctum', 'isAPIJuryBoard'])->group(function () {
     Route::get('/jury/audition/singleAuditionVideoWithRoundId/{audition_id}/{audition_round_id}', [JuryAuditionController::class, 'singleAuditionVideoWithRoundId']);
     Route::post('/jury/audition/videoStatusChange', [JuryAuditionController::class, 'videoStatusChange']);
     Route::get('/jury/audition/singleAuditionVideoAssessmentWithRound/{audition_id}/{audition_round_info_id}/{type}', [JuryAuditionController::class, 'singleAuditionVideoAssessmentWithRound']);
-    Route::get('/jury/audition/VideoAssessmentAsMainGroupWithRound/{audition_id}/{audition_round_info_id}', [JuryAuditionController::class, 'VideoAssessmentAsMainGroupWithRound']);
+    Route::get('/jury/audition/VideoAssessmentAsMainGroupWithRound/{audition_id}/{audition_round_info_id}/{type}', [JuryAuditionController::class, 'VideoAssessmentAsMainGroupWithRound']);
     Route::get('/jury/audition/{slug}', [JuryAuditionController::class, 'getAudition']);
 });
 
