@@ -1992,10 +1992,9 @@ class AuditionController extends Controller
         ]);
     }
 
-    public function getRandomForJury($audition_id, $round_info_id, $value)
+    public function getRandomForJury($audition_id, $round_info_id, $value, $type)
     {
-
-        $random_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['group_b_jury_mark', '!=', null], ['group_c_jury_mark', '!=', null], ['group_a_per_jury_id', null]])->inRandomOrder()->limit($value)->get();
+        $random_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['type', $type], ['group_b_jury_mark', '!=', null], ['group_c_jury_mark', '!=', null], ['group_a_per_jury_id', null]])->inRandomOrder()->limit($value)->get();
 
         return response()->json([
             'status' => 200,
@@ -2004,10 +2003,10 @@ class AuditionController extends Controller
         ]);
     }
 
-    public function getPercentageVideoForJury($audition_id, $round_info_id, $value)
+    public function getPercentageVideoForJury($audition_id, $round_info_id, $value, $type)
     {
 
-        $B_C_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['group_b_jury_mark', '!=', null], ['group_c_jury_mark', '!=', null]])->get();
+        $B_C_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id],  ['type', $type], ['group_b_jury_mark', '!=', null], ['group_c_jury_mark', '!=', null]])->get();
 
         $videoIds = [];
         foreach ($B_C_videos as $key => $video) {
@@ -2025,7 +2024,7 @@ class AuditionController extends Controller
             }
         }
 
-        $percentage_videos = AuditionUploadVideo::whereIn('id', $videoIds)->where('group_a_ran_jury_id', null)->get();
+        $percentage_videos = AuditionUploadVideo::whereIn('id', $videoIds)->where([['group_a_ran_jury_id', null],  ['type', $type], ])->get();
 
         return response()->json([
             'status' => 200,
@@ -2036,10 +2035,9 @@ class AuditionController extends Controller
 
     public function assignMainJuries(Request $request)
     {
-        // return $request->all();
         try {
             foreach ($request->juries as $key => $jury_id) {
-                AuditionUploadVideo::where([['group_a_ran_jury_id', null], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id], ['group_a_per_jury_id', null]])->inRandomOrder()->take($request->random_videos[$key])->update([
+                AuditionUploadVideo::where([['group_a_ran_jury_id', null], ['audition_id', $request->audition_id],['type', $request->type], ['round_info_id', $request->round_info_id], ['group_a_per_jury_id', null]])->inRandomOrder()->take($request->random_videos[$key])->update([
                     'group_a_ran_jury_id' => $jury_id,
                 ]);
             }
@@ -2058,9 +2056,8 @@ class AuditionController extends Controller
 
     public function assignMainJuriesForPercentage(Request $request)
     {
-        // return $request->all();
         try {
-            $percentage_videos = AuditionUploadVideo::where([['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id], ['group_b_jury_mark', '!=', null], ['group_c_jury_mark', '!=', null]])->get();
+            $percentage_videos = AuditionUploadVideo::where([['audition_id', $request->audition_id],['type', $request->type], ['round_info_id', $request->round_info_id], ['group_b_jury_mark', '!=', null], ['group_c_jury_mark', '!=', null]])->get();
 
             $videoIds = [];
             foreach ($percentage_videos as $key => $percentage_video) {
@@ -2073,7 +2070,7 @@ class AuditionController extends Controller
             }
 
             foreach ($request->juries as $key => $jury_id) {
-                AuditionUploadVideo::whereIn('id', $videoIds)->where([['group_a_per_jury_id', null], ['group_a_ran_jury_id', null], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->take($request->random_videos[$key])->update([
+                AuditionUploadVideo::whereIn('id', $videoIds)->where([['group_a_per_jury_id', null], ['group_a_ran_jury_id', null], ['audition_id', $request->audition_id],['type', $request->type], ['round_info_id', $request->round_info_id]])->take($request->random_videos[$key])->update([
                     'group_a_per_jury_id' => $jury_id,
                 ]);
             }
