@@ -1892,7 +1892,7 @@ class AuditionController extends Controller
 
 
 
-    public function getRoundInfo($audition_id, $round_info_id)
+    public function getRoundInfo($audition_id, $round_info_id, $type)
     {
 
         $round_info = AuditionRoundInfo::find($round_info_id);
@@ -1901,9 +1901,9 @@ class AuditionController extends Controller
             $q->where('is_primary', false);
         })->where('audition_id', $audition_id)->get();
 
-        $alreadyAssignedRanCount = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['audition_id', $audition_id], ['approval_status', 1], ['group_a_ran_jury_id', '!=', null]])->count();
+        $alreadyAssignedRanCount = AuditionUploadVideo::where([['round_info_id', $round_info_id],['type', $type], ['audition_id', $audition_id], ['approval_status', 1], ['group_a_ran_jury_id', '!=', null]])->count();
 
-        $alreadyAssignedPerCount = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['audition_id', $audition_id], ['approval_status', 1], ['group_a_per_jury_id', '!=', null]])->count();
+        $alreadyAssignedPerCount = AuditionUploadVideo::where([['round_info_id', $round_info_id],['type', $type], ['audition_id', $audition_id], ['approval_status', 1], ['group_a_per_jury_id', '!=', null]])->count();
 
         $isVideoAlreadyAssignedRan = $alreadyAssignedRanCount > 0 ? true : false;
         $isVideoAlreadyAssignedPer = $alreadyAssignedPerCount > 0 ? true : false;
@@ -1915,12 +1915,12 @@ class AuditionController extends Controller
             $q->where('is_primary', true);
         })->where('audition_id', $audition_id)->get();
 
-        $group_b_videos = AuditionParticipant::with(['videos' => function ($query) use ($round_info_id) {
-            return $query->where([['round_info_id', $round_info_id], ['group_b_jury_id', '!=', null]])->get();
+        $group_b_videos = AuditionParticipant::with(['videos' => function ($query) use ($round_info_id, $type) {
+            return $query->where([['round_info_id', $round_info_id], ['type', $type], ['group_b_jury_id', '!=', null]])->get();
         }, 'participant'])->where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
 
-        $group_c_videos = AuditionParticipant::with(['videos' => function ($query) use ($round_info_id) {
-            return $query->where([['round_info_id', $round_info_id], ['group_c_jury_id', '!=', null]])->get();
+        $group_c_videos = AuditionParticipant::with(['videos' => function ($query) use ($round_info_id, $type) {
+            return $query->where([['round_info_id', $round_info_id], ['type', $type], ['group_c_jury_id', '!=', null]])->get();
         }, 'participant'])->where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
 
 
