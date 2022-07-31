@@ -267,8 +267,9 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
         Route::get('roundInstruction/{audition_id}', [AuditionAdminController::class, 'getRoundInstruction'])->name('roundInstruction');
         Route::get('roundResult', [AuditionAdminController::class, 'getRoundResult'])->name('roundResult');
         Route::get('roundResult/{audition_id}', [AuditionAdminController::class, 'showRoundResult'])->name('showRoundResult');
+        Route::get('viewRoundAppealResult/{audition_id}', [AuditionAdminController::class, 'viewRoundAppealResult'])->name('viewRoundAppealResult');
 
-        Route::get('round-result/{audition_id}/{round_info_id}', [AuditionController::class, 'getResultByRound']);
+        Route::get('round-result/{audition_id}/{round_info_id}/{type}', [AuditionController::class, 'getResultByRound']);
 
         Route::post('round-result-publish', [AuditionController::class, 'roundResultPublish'])->name('roundResultPublish');
 

@@ -97,6 +97,7 @@
             </section>
 
             <section>
+                
                 <div class="d-flex justify-content-center my-4">
                     <button class="btn btnGradient w-50" {{$round_result->manager_status >= 2  ? 'disabled' : ''}}  type="submit">
                         {{$round_result->manager_status >= 2  ? 'Already Published' : 'Publish For User'}}  
