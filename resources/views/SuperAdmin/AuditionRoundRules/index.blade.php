@@ -232,32 +232,7 @@
         </div>
     </div>
 
-    {{-- <li class="nav-item custom-nav-item border-warning m-2 mt-4 TextBH" onclick="showRules(round.id)">
-        <a class="nav-link border-warning text-warning font-weight-bold" data-toggle="tab" href="" role="tab">
-            <center class="mb-2">
-                <h2 class="roundText">Round</h2>
-                <span class="text-warning roundIndex p-1 btn"> 120
-                </span>
-            </center>
-            <div class="myDiv">
-                <a class="btn activeRound border-warning nav-link roundText text-muted" data-toggle="tab" href=""
-                    role="tab">Rolls</a>
-            </div>
-        </a>
-    </li>
-    <li class="nav-item custom-nav-item border-warning m-2 mt-4 TextBH" onclick="showRules(round.id)">
-        <a class="nav-link border-warning text-warning font-weight-bold" data-toggle="tab" href="" role="tab">
-            <center class="mb-2">
-                <h2 class="roundText">Round</h2>
-                <span class="text-warning roundIndex p-1 btn"> 120
-                </span>
-            </center>
-            <div class="myDiv">
-                <a class="btn activeRound border-warning nav-link roundText text-muted" data-toggle="tab" href=""
-                    role="tab">Rolls</a>
-            </div>
-        </a>
-    </li> --}}
+
 
     <!-- /.content-header -->
     <ul class="nav nav-tabs m-4" role="tablist">
@@ -283,20 +258,7 @@
         @endforeach
     </ul>
 
-    {{-- <div class="d-flex justify-content-center">
-        <div class="availableBanner">
-            <div class='clockBg'>
-                <img src="{{ asset('assets/clock1.png') }}" width="120" alt="">
-            </div>
-            <div class="mx-4">
-                <div class='d-flex align-items-center'>
-                    <p class='textFontBold pt-3'>Available Days:</p>
-                    <p class='textFontBolder pt-3'>120 Days</p>
-                </div>
-                <p class='text-center textDark pbSetTime'>(Set Time Period be Carefully)</p>
-            </div>
-        </div>
-    </div> --}}
+
 
     <div class="tab-content m-4">
         <h3>Audition List Edit</h3>
@@ -479,26 +441,7 @@
                     </div>
 
                     <div class="d-flex flex-row col-md-12">
-                        {{-- <div class="d-flex flex-column w-100 mt-2">
-                            <div class="wildcard__title">
-                                <p>Instruction Prepare Period</p>
-                                <hr>
-                            </div>
-                            <div class="d-flex flex-row col-md-6">
-                                <input type="text" class="form-control" name="instruction_prepare_period"
-                                    id="instruction_prepare_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
-                            </div>
-                        </div> --}}
-                        {{-- <div class="d-flex flex-column w-100 mt-2">
-                            <div class="wildcard__title">
-                                <p>Video Upload Period</p>
-                                <hr>
-                            </div>
-                            <div class="d-flex flex-row col-md-6">
-                                <input type="text" class="form-control" name="video_upload_period"
-                                    id="video_upload_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
-                            </div>
-                        </div> --}}
+
                     </div>
 
                     <div class="d-flex flex-row col-md-12">
@@ -696,11 +639,8 @@
                         '</div>' +
                         '</div>'
 
-           
+
                     );
-
-
-
 
                 },
                 error: function(data) {
@@ -1010,17 +950,7 @@
         }
 
 
-        // var header = document.getElementById("myDIV");
-        // var btns = header.getElementsByClassName("activeRound");
-        // for (var i = 0; i < btns.length; i++) {
-        //     btns[i].addEventListener("click", function() {
-        //         var current = document.getElementsByClassName("active");
-        //         if (current.length > 0) {
-        //             current[0].className = current[0].className.replace(" active", "");
-        //         }
-        //         this.className += " active";
-        //     });
-        // }
+
 
         var header = document.getElementById("myDIV");
         var btns = header.getElementsByClassName("btn");
