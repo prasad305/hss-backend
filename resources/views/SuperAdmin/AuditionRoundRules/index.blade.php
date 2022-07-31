@@ -11,10 +11,10 @@
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
         /* .active,
-                                                                                                                                                                    .activeRound:hover {
-                                                                                                                                                                        background-color: #ffa000;
-                                                                                                                                                                        color: white;
-                                                                                                                                                                    } */
+                                                                                                                                                                                        .activeRound:hover {
+                                                                                                                                                                                            background-color: #ffa000;
+                                                                                                                                                                                            color: white;
+                                                                                                                                                                                        } */
 
         #icon-layout .active {
             background-color: #ff4136;
@@ -269,8 +269,7 @@
 
         @foreach ($rules_categories as $key => $rules)
             @if ($rules->category)
-                <li class="nav-item custom-nav-item m-2 TextBH" {{-- <li class="nav-item custom-nav-item m-2 TextBH {{ $key == 0 ? 'active' : '' }}" --}}
-                    onclick="selectedCategory('{{ $rules->id }}')">
+                <li class="nav-item custom-nav-item m-2 TextBH" {{-- <li class="nav-item custom-nav-item m-2 TextBH {{ $key == 0 ? 'active' : '' }}" --}}>
                     <a class="nav-link border-warning " data-toggle="tab"
                         href="#tabs-{{ $rules->category ? $rules->category->id : '' }}" role="tab">
                         {{-- <center> --}}
@@ -280,7 +279,8 @@
                         <a class="btn  border-warning  
                         {{-- {{ $key == 0 ? 'active' : '' }} --}}
                         "
-                            data-toggle="tab" href="#tabs-{{ $rules->category->id ?? '' }}"
+                            onclick="selectedCategory('{{ $rules->id }}')" data-toggle="tab"
+                            href="#tabs-{{ $rules->category->id ?? '' }}"
                             role="tab">{{ $rules->category ? $rules->category->name : '' }}</a>
                     </a>
                 </li>
@@ -662,15 +662,15 @@
 
                     data.round_rules.forEach((round, index) => {
                         single_round +=
-                            '<li class=" nav-item custom-nav-item m-2 mt-4 TextBH" onclick="showRules(' +
-                            round.id + ')">' +
-                            '<a class="nav-link border-warning text-warning font-weight-bold" data-toggle="tab" href="" role="tab">' +
-                            '<center class="mb-2">' +
-                            '<h2 class="roundText">Round</h2>' +
-                            '<span class="text-warning roundIndex p-1" >' + `${index+1}` +
-                            '</span>' +
-                            '</center>' +
-                            '<a class="btn border-warning roundText" data-toggle="tab" href="" role="tab">Rolls</a>' +
+                            '<li class=" nav-item custom-nav-item m-2 mt-4 TextBH">  +
+                        '<a class="nav-link border-warning text-warning font-weight-bold" data-toggle="tab" href="" role="tab">' +
+                        '<center class="mb-2">' +
+                        '<h2 class="roundText">Round</h2>' +
+                        '<span class="text-warning roundIndex p-1" >' + `${index+1}` +
+                        '</span>' +
+                        '</center>' +
+                        '<a onclick="showRules(' + round.id +
+                            ')" class="btn border-warning roundText" data-toggle="tab" href="" role="tab">Rolls</a>' +
                             '</a>' +
                             '</li>'
 
