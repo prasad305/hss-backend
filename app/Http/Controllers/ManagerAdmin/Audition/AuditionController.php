@@ -54,7 +54,7 @@ class AuditionController extends Controller
             $audition->description          =  $request->description;
             $audition->round_status         =  0;
             $audition->start_date           =  Carbon::parse($request->start_date);
-            $audition->end_date            =  date('Y-m-d',strtotime($request->end_date));
+            $audition->end_date            =  date('Y-m-d', strtotime($request->end_date));
             $audition->status               =  0;
             $audition->save();
 
@@ -68,7 +68,7 @@ class AuditionController extends Controller
             $audition_info->judge_num = $auditionRule->judge_num;
             $audition_info->jury_groups = $auditionRule->jury_groups;
             $audition_info->event_start_date = Carbon::parse($request->start_date);
-            $audition_info->event_end_date = date('Y-m-d',strtotime($request->end_date));
+            $audition_info->event_end_date = date('Y-m-d', strtotime($request->end_date));
             $audition_info->instruction_prepare_start_date = Carbon::parse($request->start_date);
             $audition_info->instruction_prepare_end_date = Carbon::parse($request->start_date)->addDays($auditionRule->instruction_prepare_period);
             $audition_info->registration_start_date = Carbon::parse($audition_info->instruction_prepare_end_date)->addDays(1);
@@ -79,6 +79,7 @@ class AuditionController extends Controller
 
             $roundStartDate = Carbon::parse($audition_info->registration_end_date)->addDays(1);
             foreach ($auditionRoundRules as $key => $auditionRoundRule) {
+
                 $auditionRoundInfo = new AuditionRoundInfo();
                 $auditionRoundInfo->audition_info_id = $audition_info->id;
                 $auditionRoundInfo->audition_id = $audition->id;
@@ -130,6 +131,12 @@ class AuditionController extends Controller
                 $auditionRoundInfo->save();
 
                 $roundStartDate = Carbon::parse($auditionRoundInfo->round_end_date)->addDays(1);
+
+                // set first round as active round , by set active_round_info_id in audition table
+                if ($key == 0) {
+                    $audition->active_round_info_id = $auditionRoundInfo->id;
+                    $audition->save();
+                }
             }
             session()->flash('success', 'Audition added successfully !');
             return redirect()->route('managerAdmin.audition.events');
@@ -156,8 +163,8 @@ class AuditionController extends Controller
             }
             if (isset($group_data)) {
                 $jury_errors = '';
-                if(count($request->jury) != count($request->group_ids)){
-                    session()->flash('error', 'You have to select jury for '.count($request->group_ids). ' group');
+                if (count($request->jury) != count($request->group_ids)) {
+                    session()->flash('error', 'You have to select jury for ' . count($request->group_ids) . ' group');
                     return back();
                 }
                 foreach ($request->group_ids as $key => $group_id) {
@@ -223,7 +230,7 @@ class AuditionController extends Controller
     {
         $audition = Audition::find($audition_id);
 
-        $auditionAdmins = User::whereDoesntHave('assignedAudition')->where([['user_type', 'audition-admin'],['category_id', Auth::user()->category_id]])->orderBy('id', 'DESC')->get();
+        $auditionAdmins = User::whereDoesntHave('assignedAudition')->where([['user_type', 'audition-admin'], ['category_id', Auth::user()->category_id]])->orderBy('id', 'DESC')->get();
         $auditionRule = AuditionRules::where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->first();
         if ($auditionRule->jury_groups !== null) {
             $jurry_group = json_decode($auditionRule->jury_groups);
@@ -234,15 +241,15 @@ class AuditionController extends Controller
         // for not assigned judge
         $judges = User::whereNotIn('id', $auditionAssignJudges)->where('user_type', 'star')->where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->get();
 
-        $groups = JuryGroup::where([['status',1],['category_id', Auth::user()->category_id]])->orderBy('name','asc')->get();
+        $groups = JuryGroup::where([['status', 1], ['category_id', Auth::user()->category_id]])->orderBy('name', 'asc')->get();
 
         $auditionAssignJurys = AuditionAssignJury::pluck('jury_id');
         // for not assigned juries
         $juries = User::whereNotIn('id', $auditionAssignJurys)
-                          ->where('user_type', 'jury')
-                          ->where('category_id', Auth::user()->category_id)
-                          ->orderBy('id', 'DESC')
-                          ->get();
+            ->where('user_type', 'jury')
+            ->where('category_id', Auth::user()->category_id)
+            ->orderBy('id', 'DESC')
+            ->get();
 
         $data = [
             'auditionAdmins' => $auditionAdmins,
@@ -254,17 +261,17 @@ class AuditionController extends Controller
             'group_data' => isset($group_data) && count($group_data) > 0 ? $group_data : null,
         ];
 
-        return view('ManagerAdmin.Audition.assign-manpower',$data);
+        return view('ManagerAdmin.Audition.assign-manpower', $data);
     }
 
 
     public function pending()
     {
-        $audition = Audition::where('status', 2)->orderBy('updated_at','desc')->get();
+        $audition = Audition::where('status', 2)->orderBy('updated_at', 'desc')->get();
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
 
-    
+
     public function details($id)
     {
         $audition = Audition::find($id);
@@ -272,7 +279,7 @@ class AuditionController extends Controller
         return view('ManagerAdmin.Audition.details')->with('audition', $audition)->with('judges', $judges);
     }
 
-    public function manager_audition_set_publish(Request $request,$audition_id)
+    public function manager_audition_set_publish(Request $request, $audition_id)
     {
         $audition = Audition::find($audition_id);
 
@@ -287,10 +294,10 @@ class AuditionController extends Controller
             $judges = [];
 
             foreach ($audition->assignedJudges as $key => $judge) {
-                array_push($judges,$judge->id);
+                array_push($judges, $judge->id);
             }
 
-        //    return $audition->star;
+            //    return $audition->star;
 
             // Create New post //
             $post = new Post();
@@ -311,12 +318,10 @@ class AuditionController extends Controller
             $audition->update();
 
             //Remove post //
-            $post = Post::where([['event_id', $audition->id],['type','audition']])->first();
+            $post = Post::where([['event_id', $audition->id], ['type', 'audition']])->first();
             $post->delete();
             return redirect()->back()->with('error', 'Unpublished');
         }
-
-      
     }
 
 
@@ -327,7 +332,8 @@ class AuditionController extends Controller
     }
 
 
-    public function registerUser($audition_id){
+    public function registerUser($audition_id)
+    {
 
         $audition = Audition::find($audition_id);
 
@@ -393,8 +399,8 @@ class AuditionController extends Controller
                 'result_message' => $request->rejected_comments,
             ]);
 
-        AuditionRoundInfo::where('id',$round_info_id)->update([
-                'manager_status' => 2,
+        AuditionRoundInfo::where('id', $round_info_id)->update([
+            'manager_status' => 2,
         ]);
 
         session()->flash('success', 'Result Publish Done!');
