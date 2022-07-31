@@ -10,11 +10,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
-        /* .active,
-                                                                                                                                                                                            .activeRound:hover {
-                                                                                                                                                                                                background-color: #ffa000;
-                                                                                                                                                                                                color: white;
-                                                                                                                                                                                            } */
 
         #icon-layout .active {
             background-color: #ff4136;
@@ -701,13 +696,7 @@
                         '</div>' +
                         '</div>'
 
-                        // '<center class="text-warning"><span style="font-size: 22px">Available Days :</span> <span id="round_available_days" style="font-size: 25px;color:white">' +
-                        // data.round_available_days +
-                        // '</span> <small>(Set Time Period be carefully)</small> </center>' +
-
-                        // '<div>' +
-                        // '<ul class="nav nav-tabs" role="tablist">' + single_round + '</ul>' +
-                        // '</div>'
+           
                     );
 
 
