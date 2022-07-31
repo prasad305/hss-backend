@@ -303,6 +303,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     });
 
     Route::get('admin/dashboard', [DashboardController::class, 'adminDashboard']);
+    Route::get('admin/dashboard/posts/{type}', [DashboardController::class, 'adminPost']);
+    Route::get('admin/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
     Route::get('admin/star_list', [CategoryController::class, 'star_list']);
     Route::get('admin/agreement_paper/{star_id}', [CategoryController::class, 'agreement_paper']);
 
