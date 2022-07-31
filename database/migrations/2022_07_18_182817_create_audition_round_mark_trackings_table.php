@@ -18,6 +18,7 @@ class CreateAuditionRoundMarkTrackingsTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('round_info_id')->nullable();
             $table->unsignedBigInteger('audition_id')->nullable();
+            $table->string('type')->default('general')->comment('normal video = general , appeal video = appeal');
             $table->double('avg_mark', 8,2)->nullable();
             $table->integer('wining_status')->default(0)->comment('default 0 , pass = 1');
             $table->timestamps();

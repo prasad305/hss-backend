@@ -723,11 +723,11 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/singleAuditionRoundWithRoundId/{audition_id}/{audition_round_id}', [AuditionController::class, 'singleAuditionRoundWithRoundId']);
     Route::get('/audition-admin/audition/singleAuditionApprovedVideoWithRoundId/{audition_id}/{audition_round_info_id}', [AuditionController::class, 'singleAuditionApprovedVideoWithRoundId']);
     Route::get('/audition-admin/audition/appealApprovedVideoWithRoundId/{audition_id}/{audition_round_info_id}', [AuditionController::class, 'appealApprovedVideoWithRoundId']);
-    Route::get('/audition-admin/audition/singleAuditionRoundAssessmentResult/{audition_id}/{audition_round_info_id}', [AuditionController::class, 'singleAuditionRoundAssessmentResult']);
-    Route::get('/audition-admin/audition/singleAuditionRoundVideoMerge/{audition_id}/{audition_round_info_id}', [AuditionController::class, 'singleAuditionRoundVideoMerge']);
-    Route::get('/audition-admin/audition/singleAuditionRoundVideoResultByPercentage/{audition_id}/{audition_round_info_id}/{precentage}', [AuditionController::class, 'singleAuditionRoundVideoResultByPercentage']);
-    Route::get('/audition-admin/audition/singleAuditionRoundVideoResultByFilterNumber/{audition_id}/{audition_round_info_id}/{filter_number}', [AuditionController::class, 'singleAuditionRoundVideoResultByFilterNumber']);
-    Route::get('/audition-admin/audition/videoReportBasedOnSingleJury/{audition_id}/{audition_round_info_id}/{jury_id}', [AuditionController::class, 'videoReportBasedOnSingleJury']);
+    Route::get('/audition-admin/audition/singleAuditionRoundAssessmentResult/{audition_id}/{audition_round_info_id}/{type}', [AuditionController::class, 'singleAuditionRoundAssessmentResult']);
+    Route::get('/audition-admin/audition/singleAuditionRoundVideoMerge/{audition_id}/{audition_round_info_id}/{type}', [AuditionController::class, 'singleAuditionRoundVideoMerge']);
+    Route::get('/audition-admin/audition/singleAuditionRoundVideoResultByPercentage/{audition_id}/{audition_round_info_id}/{precentage}/{type}', [AuditionController::class, 'singleAuditionRoundVideoResultByPercentage']);
+    Route::get('/audition-admin/audition/singleAuditionRoundVideoResultByFilterNumber/{audition_id}/{audition_round_info_id}/{filter_number}/{type}', [AuditionController::class, 'singleAuditionRoundVideoResultByFilterNumber']);
+    Route::get('/audition-admin/audition/videoReportBasedOnSingleJury/{audition_id}/{audition_round_info_id}/{jury_id}/{type}', [AuditionController::class, 'videoReportBasedOnSingleJury']);
     Route::get('/audition-admin/audition/singleAuditionVideoWithRoundId/{audition_id}/{audition_round_id}', [AuditionController::class, 'singleAuditionVideoWithRoundId']);
 
     Route::get('/audition-admin/audition/singleAuditionInstruction/{instruction_id}', [AuditionController::class, 'singleAuditionInstruction']);
