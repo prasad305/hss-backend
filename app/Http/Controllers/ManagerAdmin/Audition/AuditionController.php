@@ -342,13 +342,13 @@ class AuditionController extends Controller
         return view('ManagerAdmin.audition.register_users', compact('audition', 'users'));
     }
 
-    public function getResultByRound($audition_id, $round_info_id)
+    public function getResultByRound($audition_id, $round_info_id,$round_type)
     {
 
         $audition = Audition::find($audition_id);
-
-        $round_result =  AuditionRoundInfo::with(['videos' => function ($query) use ($round_info_id) {
-            return $query->where([['round_info_id', $round_info_id], ['approval_status', 1]])->get();
+        $type = $round_type;
+        $round_result =  AuditionRoundInfo::with(['videos' => function ($query) use ($round_info_id,$type) {
+            return $query->where([['round_info_id', $round_info_id], ['approval_status', 1],['type',$type]])->get();
         }])
             ->where([['id', $round_info_id], ['audition_id', $audition_id]])
             ->first();
@@ -356,6 +356,7 @@ class AuditionController extends Controller
         $wining_users = AuditionRoundMarkTracking::where([
             ['audition_id', $audition_id],
             ['round_info_id', $round_info_id],
+            ['type', $type],
             ['wining_status', 1]
         ])
             ->get();
@@ -363,6 +364,7 @@ class AuditionController extends Controller
         $failed_users = AuditionRoundMarkTracking::where([
             ['audition_id', $audition_id],
             ['round_info_id', $round_info_id],
+            ['type', $type],
             ['wining_status', 0]
         ])
             ->get();

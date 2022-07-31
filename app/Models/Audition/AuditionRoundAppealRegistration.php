@@ -21,3 +21,4 @@ class AuditionRoundAppealRegistration extends Model
         return $this->belongsTo(AuditionRoundInfo::class, 'round_info_id');
     }
 }
+    

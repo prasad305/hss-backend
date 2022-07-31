@@ -52,6 +52,8 @@
                     </div>
                 </div>
 
+               
+
 
                 <div class="row my-2">
                     <div class="col-md-4 d-flex justify-content-center">
@@ -75,6 +77,8 @@
                     </div> --}}
                 </div>
 
+                @if ($round_result->manager_status < 2)
+                    
                 <div class="row my-2">
                     <div class="col-md-4 d-flex justify-content-center">
                         <div class="comment">
@@ -89,12 +93,14 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </section>
 
             <section>
+                
                 <div class="d-flex justify-content-center my-4">
-                    <button class="btn btnGradient w-50" type="submit">
-                        Publish For User
+                    <button class="btn btnGradient w-50" {{$round_result->manager_status >= 2  ? 'disabled' : ''}}  type="submit">
+                        {{$round_result->manager_status >= 2  ? 'Already Published' : 'Publish For User'}}  
                     </button>
                 </div>
 
