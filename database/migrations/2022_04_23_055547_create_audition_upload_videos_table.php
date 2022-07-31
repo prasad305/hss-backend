@@ -25,6 +25,7 @@ class CreateAuditionUploadVideosTable extends Migration
             $table->unsignedBigInteger('group_b_jury_id')->nullable();
             $table->unsignedBigInteger('group_c_jury_id')->nullable();
             $table->string('video')->nullable();
+            $table->string('type')->default('general')->comment('general = normal videos , appeal = appeal videos');
             $table->integer('approval_status')->nullable()->default(0)->comment('0 = not reviewed , 1 = approved, 2 = rejected');
             $table->string('audition_admin_comment')->nullable();
             $table->double('group_a_jury_mark', 8, 2)->nullable();
