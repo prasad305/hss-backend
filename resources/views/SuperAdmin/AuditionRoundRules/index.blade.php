@@ -246,7 +246,7 @@
                         <img src="{{ asset($rules->category ? $rules->category->icon : '') }}" class="imgWidth pt-2"
                             alt={{ $rules->category ? $rules->category->name : '' }} icon>
                         {{-- </center> --}}
-                        <a class="btn  border-warning  
+                        <a class="btn  border-warning
                         {{-- {{ $key == 0 ? 'active' : '' }} --}}
                         "
                             onclick="selectedCategory('{{ $rules->id }}')" data-toggle="tab"
@@ -281,7 +281,7 @@
 
                 </div>
 
-                <form id="create-form mt-3">
+                <form id="create-form">
                     @csrf
 
                     <div class="row">
