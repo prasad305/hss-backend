@@ -863,6 +863,8 @@
             let appeal_video_upload_period = Number($('#appeal_video_upload_period').val());
             let appeal_jury_or_judge_mark_period = Number($('#appeal_jury_or_judge_mark_period').val());
 
+
+
             let sum_of_round_period = video_upload_period + jury_or_judge_mark_period +
                 result_publish_period + appeal_period + appeal_result_publish_period + appeal_video_upload_period +
                 appeal_jury_or_judge_mark_period;
@@ -916,10 +918,9 @@
                     }
                 });
                 showRules(round_id);
-            }else{
-                $('#hole_round_peroid_error').html('Total Video should '+round_period+' !');
+            } else {
+                $('#hole_round_peroid_error').html('Total Time Period Should ' + round_period + ' !');
             }
-
         });
 
         $(document).ready(function() {
