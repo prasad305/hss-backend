@@ -144,6 +144,7 @@ class AuditionRulesController extends Controller
         $audition_rules = AuditionRules::find($id);
         $audition_rules->fill($request->all());
         $audition_rules->save();
+
         return response()->json([
             'status' => 'success',
             'message' => 'Rules Updated Successfully!',

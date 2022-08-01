@@ -259,7 +259,7 @@ Super Admin
                                     <input type="text" class="form-control" name="registration_period" placeholder="2 days" value="{{ $rule->registration_period > 0 ? $rule->registration_period : '' }}">
                                     <span id="registration_preiod_error" class="text-danger"></span>
                                 </div>
-                                
+
                                 {{-- <div class="row justify-content-around mt-2">
                                     <label for="">Instruction Prepare Period</label>
                                     <input type="text" class="form-control" name="instruction_prepare_period" placeholder="2 days" value="{{ $rule->instruction_prepare_period > 0 ? $rule->instruction_prepare_period : '' }}">
@@ -291,16 +291,16 @@ Super Admin
 <script>
     // resetAll();
         function resetAll() {
-         
+
             if ($("input[type='radio'].radioBtnClass").is(':checked')) {
                 var category_id = $("input[type='radio'].radioBtnClass:checked").val();
             }
-            
+
             var url = "{{ url('super-admin/audition-rules') }}";
             // var rule_id = "{{$rule->id}}";
             // console.log('object............',category_id);
-            
-            
+
+
             $.ajax({
                 url: url + "/" + category_id, // your request url
                 type: 'GET',
@@ -373,16 +373,16 @@ Super Admin
                         // timer: 1500
                     })
                     setTimeout(function() {
-                        location.reload();
+                        location.replace("{{ route('superAdmin.audition-rules.store') }}");
                     }, 1000);
                     console.log('success')
                 },
                 error: function(data) {
-                   
+
                     $.each(data.responseJSON.errors, function(key, value) {
                         ErrorMessage(key,value);
                     });
-                   
+
 
                     console.log(data);
                 }
