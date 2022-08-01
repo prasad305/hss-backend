@@ -687,8 +687,13 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     // Partha ghose
     Route::get('/superstar/promotional/video/list', [AuditionController::class, 'judgePromotionalList']);
+    Route::get('/superstar/promotional/accepted/video/list', [AuditionController::class, 'acceptedJudgePromotionalList']);
     Route::post('/superstar/audition/promotional/video/store', [AuditionController::class, 'superstarPromotionalVideoStore']);
     Route::get('/superstar/audition/promotional/video/view/{id}', [AuditionController::class, 'judgePromotionalView']);
+
+    Route::get('/superstar/audition/promotional/video/accepted/{id}', [AuditionController::class, 'judgePromotionalViewAccepted']);
+    Route::get('/superstar/audition/promotional/video/declined/{id}', [AuditionController::class, 'judgePromotionalViewDecline']);
+    Route::get('/superstar/audition/promotional/video/check/{auditionId}', [AuditionController::class, 'judgePromotionalVideoCheck']);
 
     // Promo Vidoes
     Route::get('/star/promoVideo/all', [PromoVideoController::class, 'starPromovideoAll']);
@@ -892,11 +897,14 @@ Route::get('view-category-mobile', [CategoryController::class, 'ViewAllCategory'
 Route::get('/user/subcategory/{id}', [CategoryController::class, 'allSubcategoryList']);
 Route::get('/user/left/subcategory/{slug}', [CategoryController::class, 'allLeftSubcategoryList']);
 Route::get('/user/starcategory/{id}', [CategoryController::class, 'allStarCategoryList']);
+Route::get('/user/selected/some/category/{id}', [CategoryController::class, 'allSelectedCategoryList']);
 Route::get('/user/selected/starcategory', [CategoryController::class, 'starFollowingList']);
 Route::get('/user/selected/category', [CategoryController::class, 'selectedCategory']);
+Route::get('/user/sub/category', [CategoryController::class, 'allSubCategory']);
 Route::post('/user/selected/category/store', [CategoryController::class, 'selectedCategoryStore']);
 Route::post('/user/selected/subcategory/store', [CategoryController::class, 'selectedSubCategoryStore']);
 Route::post('/user/selected/starcategory/store', [CategoryController::class, 'selectedStarCategoryStore']);
+Route::get('/user/star/category/{slug}', [CategoryController::class, 'selectedStarCategoryList']);
 Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
 
 Route::get('/user/star-details/{id}', [StarAuthController::class, 'star_details']);

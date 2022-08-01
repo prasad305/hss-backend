@@ -853,10 +853,12 @@ class AuditionController extends Controller
                 
 
 
-
+                $audition_admin = Audition::find($request->audition_id);
 
                 $instruction_info = new AuditionPromoInstructionSendInfo();
                 $instruction_info->judge_id = auth('sanctum')->user()->id;
+                $instruction_info->audition_id = $request->audition_id;
+                $instruction_info->audition_admin_id = $audition_admin->audition_admin_id;
                 $instruction_info->instruction = $request->instruction;
 
                 $instruction_info->image = $image_folder_path . '/' . $image_new_name;
@@ -892,7 +894,15 @@ class AuditionController extends Controller
 
      public function judgePromotionalList()
      {
-         $event = AuditionPromoInstructionSendInfo::where([['judge_id', auth('sanctum')->user()->id], ['status', 3]])->latest()->get();
+         $event = AuditionPromoInstructionSendInfo::with('audition')->where([['judge_id', auth('sanctum')->user()->id], ['status', 3]])->latest()->get();
+         return response()->json([
+             'status' => 200,
+             'event' => $event,
+         ]);
+     }
+     public function acceptedJudgePromotionalList()
+     {
+         $event = AuditionPromoInstructionSendInfo::with('audition')->where([['judge_id', auth('sanctum')->user()->id], ['status', '!=', 3]])->latest()->get();
          return response()->json([
              'status' => 200,
              'event' => $event,
@@ -900,7 +910,7 @@ class AuditionController extends Controller
      }
      public function acceptedPromotionalList()
      {
-         $event = AuditionPromoInstructionSendInfo::where('status', 3)->latest()->get();
+         $event = AuditionPromoInstructionSendInfo::with('audition')->where(['audition_admin_id', auth('sanctum')->user()->id])->where('status', 3)->latest()->get();
          return response()->json([
              'status' => 200,
              'event' => $event,
@@ -914,6 +924,47 @@ class AuditionController extends Controller
          return response()->json([
              'status' => 200,
              'eventView' => $event,
+         ]);
+     }
+
+     public function judgePromotionalVideoCheck($auditionId)
+     {
+         $event = AuditionPromoInstructionSendInfo::where('audition_id', $auditionId)->where('judge_id', auth('sanctum')->user()->id)->where('status', 3)->get();
+        
+         if(count($event)){
+            return response()->json([
+                'status' => 200,
+            ]);
+         }
+         else{
+            return response()->json([
+                'status' => 600,
+            ]);
+         }
+         
+     }
+
+     public function judgePromotionalViewAccepted($id)
+     {
+         $event = AuditionPromoInstructionSendInfo::find($id);
+         $event->status = 1;
+         $event->save();
+
+         return response()->json([
+             'status' => 200,
+             'message' => 'Audition Promotional Video Accepted !!',
+         ]);
+     }
+
+     public function judgePromotionalViewDecline($id)
+     {
+         $event = AuditionPromoInstructionSendInfo::find($id);
+         $event->status = 2;
+         $event->save();
+
+         return response()->json([
+             'status' => 200,
+             'message' => 'Audition Promotional Video Declined !!',
          ]);
      }
 
