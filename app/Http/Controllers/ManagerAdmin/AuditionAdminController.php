@@ -538,6 +538,11 @@ class AuditionAdminController extends Controller
         return view('ManagerAdmin.Audition.show_round_result',compact('event'));
     }
 
+    public function viewRoundAppealResult($audition_id){
+         $event = Audition::find($audition_id);
+        return view('ManagerAdmin.Audition.view_round_appeal_result',compact('event'));
+    }
+
     public function registrationRules()
     {
         $data = [
