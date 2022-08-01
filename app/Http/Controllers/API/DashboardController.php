@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auction;
 use App\Models\Bidding;
 use App\Models\Fan_Group_Join;
 use App\Models\FanGroup;
@@ -13,6 +14,7 @@ use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChat;
 use App\Models\LiveChatRegistration;
+use App\Models\Marketplace;
 use App\Models\MarketplaceOrder;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
@@ -227,40 +229,24 @@ class DashboardController extends Controller
     {
         if ($type == "Simple-Post") {
             $post = SimplePost::where('admin_id', auth('sanctum')->user()->id)->latest()->get();
-            $participant = GeneralPostPayment::whereHas('simpleposts', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]]);
-            })->latest()->get();
         } elseif ($type == "Live-Chat") {
             $post = LiveChat::with('registeredLiveChats')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
-            $participant = LiveChatRegistration::whereHas('liveChat', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]]);
-            })->latest()->get();
         } elseif ($type == "Q&A") {
             $post = QnA::with('registeredQna')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
-            $participant = QnaRegistration::whereHas('qna', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]]);
-            })->latest()->get();
         } elseif ($type == "Meetup-Event") {
             $post = MeetupEvent::with('registeredMeetupEvents')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
-            $participant = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]]);
-            })->latest()->get();
         } elseif ($type == "Learning-Session") {
             $post = LearningSession::with('registeredLearningSessions')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
-            $participant = LearningSessionRegistration::whereHas('learningSession', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]]);
-            })->latest()->get();
         } elseif ($type == "Greeting") {
             $post = Greeting::with('registeredGreeting')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
-            $participant = GreetingsRegistration::whereHas('greeting', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]]);
-            })->latest()->get();
         } elseif ($type == "Fan-Group") {
             $post = FanGroup::where('created_by', auth('sanctum')->user()->id)->orWhere('another_star_admin_id', auth('sanctum')->user()->id)->latest()->get();
-            $participant = 0;
+
             // $participant = Fan_Group_Join::whereHas('greeting', function ($q) {
             //     $q->where([['admin_id', auth()->user()->id]]);
             // })->latest()->get();
+        } elseif ($type == "Auction") {
+            $post = Auction::with('bidding')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
         } else {
             return response()->json([
                 'status' => 403,
@@ -269,8 +255,8 @@ class DashboardController extends Controller
 
         return response()->json([
             'status' => 200,
-            'post' => $post,
-            'participant' => $participant
+            'post' => $post
+
         ]);
     }
     public function postDeatils($id, $type)
