@@ -74,6 +74,7 @@ class Kernel extends HttpKernel
 
         'superAdmin' => \App\Http\Middleware\SuperAdminMiddleware::class,
         'managerAdmin' => \App\Http\Middleware\ManagerAdminMiddleware::class,
-        
+        'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
+
     ];
 }

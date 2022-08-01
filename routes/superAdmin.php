@@ -40,7 +40,7 @@ use Illuminate\Support\Facades\Route;
 
 // Super Admin route
 
-Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin']], function () {
+Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin', 'prevent-back-history']], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/auditions', [DashboardController::class, 'auditions'])->name('auditions');
