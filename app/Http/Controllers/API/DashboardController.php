@@ -23,6 +23,7 @@ use App\Models\QnaRegistration;
 use App\Models\SimplePost;
 use App\Models\SouvenirApply;
 use App\Models\SouvenirCreate;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -242,11 +243,6 @@ class DashboardController extends Controller
             $post = Greeting::with('registeredGreeting')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Fan-Group") {
             $post = FanGroup::where('created_by', auth('sanctum')->user()->id)->orWhere('another_star_admin_id', auth('sanctum')->user()->id)->latest()->get();
-
-            // $participant = Fan_Group_Join::whereHas('greeting', function ($q) {
-            //     $q->where([['admin_id', auth()->user()->id]]);
-            // })->latest()->get();
-
         } elseif ($type == "Auction") {
             $post = Auction::with('bidding')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Marketplace") {
@@ -313,6 +309,11 @@ class DashboardController extends Controller
             $participant = SouvenirApply::whereHas('souvenir', function ($q) {
                 $q->where([['admin_id', auth()->user()->id]]);
             })->where('souvenir_id', $id)->get();
+        } elseif ($type == "Fan-Group") {
+            $post = FanGroup::where('created_by', auth('sanctum')->user()->id)->orWhere('another_star_admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
+
+            $participant = json_decode($post->my_user_join);
+            $another_user = json_decode($post->another_user_join);
         } else {
             return response()->json([
                 'status' => 403,
