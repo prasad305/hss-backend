@@ -80,9 +80,10 @@ Manager Admin
     function getRoundBasedResult(round_info_id) {
         $('#round_result_show').html("")
         var audition_id = '{{$event->id}}';
+        var type = 'general';
         var url = "{{ url('manager-admin/audition/round-result/') }}";
         $.ajax({
-            url: url + "/" + audition_id+ "/" + round_info_id, // your request url
+            url: url + "/" + audition_id+ "/" + round_info_id+"/"+type, // your request url
             type: 'GET',
             success: function(data) {
                 $('#round_result_show').append(data); 
