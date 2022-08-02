@@ -27,6 +27,10 @@ use function PHPUnit\Framework\isEmpty;
 
 class AuditionController extends Controller
 {
+    public function getParentUserIdById($id){
+        $user = User::find($id);
+        return $user->parent_user;
+    }
     public function store(Request $request)
     {
 
@@ -192,8 +196,9 @@ class AuditionController extends Controller
                 $audition->save();
 
                 foreach ($request->judge as $key => $value) {
-                    $auditionAssignJudge = new AuditionAssignJudge();
+                    $auditionAssignJudge                    = new AuditionAssignJudge();
                     $auditionAssignJudge->judge_id          =  $value;
+                    $auditionAssignJudge->judge_admin_id    =  $this->getParentUserIdById($value);
                     $auditionAssignJudge->audition_id       =    $audition->id;
                     $auditionAssignJudge->approved_by_judge = 0;
                     $auditionAssignJudge->save();
@@ -201,10 +206,10 @@ class AuditionController extends Controller
 
                 foreach ($request->group_ids as $key => $group_id) { // how many groups are allowed total_items
                     foreach ($request->jury[$key] as $jury) { // per groups jury assigne
-                        $auditionAssignJury = new AuditionAssignJury();
+                        $auditionAssignJury                        = new AuditionAssignJury();
                         $auditionAssignJury->audition_id           =  $audition->id;
                         $auditionAssignJury->jury_id               =  $jury;
-                        $auditionAssignJury->group_id               =  $group_id;
+                        $auditionAssignJury->group_id              =  $group_id;
                         $auditionAssignJury->approved_by_jury      =  0;
                         $auditionAssignJury->status                =   0;
                         $auditionAssignJury->save();

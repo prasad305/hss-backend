@@ -92,6 +92,7 @@ class AuditionController extends Controller
             ]);
         } else {
             $audition = Audition::find($request->audition_id);
+            $auditionInfo = $audition->info;
             if ($audition->status >= 2) {
                 return response()->json([
                     'status' => 410,
@@ -100,10 +101,11 @@ class AuditionController extends Controller
             }
             $audition->instruction = $request->instruction;
             $audition->description = $request->description;
-            $audition->user_reg_start_date = $request->reg_start_date;
-            $audition->user_reg_end_date = $request->reg_end_date;
+            $auditionInfo->registration_start_date = $request->registration_start_date;
+            $auditionInfo->registration_end_date = $request->registration_end_date;
             $audition->fees = $request->fees;
             $audition->status = 2;
+
             if ($request->hasfile('image')) {
                 $destination = $audition->banner;
                 if (File::exists($destination)) {
@@ -132,6 +134,7 @@ class AuditionController extends Controller
 
             try {
                 $audition->save();
+                $auditionInfo->save();
                 return response()->json([
                     'status' => 200,
                     'message' => 'Audition Post Content Updated Successfully!',

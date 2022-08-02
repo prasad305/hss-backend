@@ -353,9 +353,9 @@ class AuditionAdminController extends Controller
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
 
-   
 
-   
+
+
 
 
 
@@ -605,10 +605,6 @@ class AuditionAdminController extends Controller
                 'message' => $exception->getMessage(),
             ]);
         }
-
-
-
-        // return $request->all();
     }
 
 
