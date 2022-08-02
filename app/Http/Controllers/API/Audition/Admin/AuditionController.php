@@ -936,7 +936,8 @@ class AuditionController extends Controller
      }
      public function acceptedPromotionalList()
      {
-         $event = AuditionPromoInstructionSendInfo::with('audition')->where(['audition_admin_id', auth('sanctum')->user()->id])->where('status', 3)->latest()->get();
+         $event = AuditionPromoInstructionSendInfo::with('audition')->where('audition_admin_id', auth('sanctum')->user()->id)->where('status', 3)->latest()->get();
+        
          return response()->json([
              'status' => 200,
              'event' => $event,
