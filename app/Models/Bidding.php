@@ -9,7 +9,7 @@ class Bidding extends Model
 {
     protected $guarded = [];
     use HasFactory;
-
+    protected $with = ['user'];
     public function acquired_app()
     {
 
@@ -18,7 +18,7 @@ class Bidding extends Model
     public function user()
     {
 
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function auction()
     {

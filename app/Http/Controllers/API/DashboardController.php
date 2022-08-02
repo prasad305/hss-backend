@@ -22,6 +22,7 @@ use App\Models\QnA;
 use App\Models\QnaRegistration;
 use App\Models\SimplePost;
 use App\Models\SouvenirApply;
+use App\Models\SouvenirCreate;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -245,8 +246,13 @@ class DashboardController extends Controller
             // $participant = Fan_Group_Join::whereHas('greeting', function ($q) {
             //     $q->where([['admin_id', auth()->user()->id]]);
             // })->latest()->get();
+
         } elseif ($type == "Auction") {
             $post = Auction::with('bidding')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
+        } elseif ($type == "Marketplace") {
+            $post = Marketplace::with('marketplace_order')->where('superstar_admin_id', auth('sanctum')->user()->id)->latest()->get();
+        } elseif ($type == "Souvenir") {
+            $post = SouvenirCreate::with('souvenirApply')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
         } else {
             return response()->json([
                 'status' => 403,
@@ -292,6 +298,21 @@ class DashboardController extends Controller
             $participant = GreetingsRegistration::whereHas('greeting', function ($q) {
                 $q->where([['admin_id', auth()->user()->id]]);
             })->where('greeting_id', $id)->get();
+        } elseif ($type == "Auction") {
+            $post = Auction::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
+            $participant = Bidding::whereHas('auction', function ($q) {
+                $q->where([['admin_id', auth()->user()->id]]);
+            })->where('auction_id', $id)->get();
+        } elseif ($type == "Marketplace") {
+            $post = Marketplace::where('superstar_admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
+            $participant = MarketplaceOrder::whereHas('marketplace', function ($q) {
+                $q->where([['superstar_admin_id', auth()->user()->id]]);
+            })->where('marketplace_id', $id)->get();
+        } elseif ($type == "Souvenir") {
+            $post = SouvenirCreate::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
+            $participant = SouvenirApply::whereHas('souvenir', function ($q) {
+                $q->where([['admin_id', auth()->user()->id]]);
+            })->where('souvenir_id', $id)->get();
         } else {
             return response()->json([
                 'status' => 403,

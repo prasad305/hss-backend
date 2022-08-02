@@ -1091,7 +1091,7 @@ class AuditionController extends Controller
 
     public function count()
     {
-        $live = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 2]])->count();
+        $live = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', '>', 2]])->count();
         $pending = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 0]])->count();
         $request_approval_pending = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 1]])->count();
 
