@@ -20,14 +20,16 @@ class CreateAuditionPromoInstructionSendInfosTable extends Migration
             $table->unsignedBigInteger('audition_id')->nullable();
             $table->unsignedBigInteger('judge_id')->nullable()->comment('if round id is null it will use for audition instruction');
             $table->unsignedBigInteger('round_id')->nullable();
+            $table->integer('audition_admin_id')->nullable();
 
             $table->longText('instruction')->nullable();
             $table->longText('description')->nullable();
             $table->string('video')->nullable();
             $table->string('image')->nullable();
             $table->string('document')->nullable();
-            $table->date('submission_end_date')->nullable();
-            $table->integer('status')->default(0)->comment('0 = default, 1 = judge updated instruction ');
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->integer('status')->default(0)->comment('0 = inactive, 1 = active ');
 
             $table->timestamps();
         });
