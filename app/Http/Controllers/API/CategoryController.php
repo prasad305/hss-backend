@@ -22,12 +22,14 @@ class CategoryController extends Controller
     public function selectedStarCategoryList($slug)
     {
         $subCategory = SubCategory::where('slug', $slug)->first();
+        // $starCategory = SuperStar::where('slug', $slug)->first();
         $starCategory = SuperStar::where('sub_category_id', $subCategory->id)->get();
 
         return response()->json([
             'status' => 200,
             'starCategory' => $starCategory,
             'subCategory' => $subCategory,
+            // 'starCategory' => $starCategory,
         ]);
     }
     //
@@ -154,12 +156,28 @@ class CategoryController extends Controller
     }
 
     public function allSelectedCategoryList($id){
-        $allSelectedCategory = Superstar::where('category_id', $id)->latest()->get();
+
+        $userId = auth('sanctum')->user()->id;
+        $selectedCategory = ChoiceList::where('user_id', $userId)->first();
+
+        $selectedStarCategory = json_decode($selectedCategory->star_id);
+
+        // where('category_id', $id)->
+
+        $allSelectedFollowCategory = Superstar::where('category_id', $id)->whereIn('id', $selectedStarCategory)->latest()->get();
+
+        $allUnFollowCategory = Superstar::where('category_id', $id)->whereNotIn('id', $selectedStarCategory)->latest()->get();
+        $allsuggestionCategory = Superstar::where('category_id','!=', $id)->whereNotIn('id', $selectedStarCategory)->latest()->get();
+
+        // return $allUnFollowCategory;
+        
 
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
-            'allSelectedCategory' => $allSelectedCategory,
+            'allSelectedFollowCategory' => $allSelectedFollowCategory,
+            'allUnFollowCategory' => $allUnFollowCategory,
+            'allsuggestionCategory' => $allsuggestionCategory,
         ]);
     }
 
