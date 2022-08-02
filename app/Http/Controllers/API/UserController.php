@@ -189,7 +189,7 @@ class UserController extends Controller
         ]);
     }
 
-    
+
     /**
      * mobile media upload
      */
@@ -202,7 +202,7 @@ class UserController extends Controller
             //     "path" =>   $request->img['data']
             // ]);
 
-     
+
         try {
             if ($request->img['data']) {
 
@@ -213,8 +213,8 @@ class UserController extends Controller
                 $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                 $decodedBase64 = $request->img['data'];
             }
-            
-    
+
+
             Image::make($decodedBase64)->save($folder_path . $image_new_name);
 
             $filePath = $folder_path . $image_new_name;
@@ -1428,7 +1428,7 @@ class UserController extends Controller
 
     public function roundAppealRegister(Request $request)
     {
-        $user = User::find(auth()->user()->id);   
+        $user = User::find(auth()->user()->id);
 
         if (AuditionRoundAppealRegistration::where([['user_id', $user->id],['audition_id',$request->audition_id],['round_info_id',$request->round_info_id]])->exists()) {
             return response()->json([
@@ -1449,11 +1449,11 @@ class UserController extends Controller
         }
     }
 
-    public function isAppealForThisRound(Request $request)
+    public function isAppealForThisRound($audition_id , $round_info_id)
     {
-        $user = User::find(auth()->user()->id);   
-
-        $participant = AuditionRoundAppealRegistration::where([['user_id', $user->id],['audition_id',$request->audition_id],['round_info_id',$request->round_info_id]])->first();
+        // return $request->all();
+        $user = User::find(auth()->user()->id);
+        $participant = AuditionRoundAppealRegistration::where([['user_id', $user->id],['audition_id',$audition_id],['round_info_id',$round_info_id]])->first();
 
         return response()->json([
             'status' => 200,
