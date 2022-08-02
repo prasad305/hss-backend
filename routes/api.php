@@ -698,6 +698,16 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('superstar/audition/round-instruction-video/details/{id}', [JudgeAuditionController::class, 'roundInstructionVideoDetails']);
     Route::post('superstar/audition/round-instruction-video/update/{id}', [JudgeAuditionController::class, 'roundInstructionVideoUpdate']);
 
+    // Partha ghose
+    Route::get('/superstar/promotional/video/list', [AuditionController::class, 'judgePromotionalList']);
+    Route::get('/superstar/promotional/accepted/video/list', [AuditionController::class, 'acceptedJudgePromotionalList']);
+    Route::post('/superstar/audition/promotional/video/store', [AuditionController::class, 'superstarPromotionalVideoStore']);
+    Route::get('/superstar/audition/promotional/video/view/{id}', [AuditionController::class, 'judgePromotionalView']);
+
+    Route::get('/superstar/audition/promotional/video/accepted/{id}', [AuditionController::class, 'judgePromotionalViewAccepted']);
+    Route::get('/superstar/audition/promotional/video/declined/{id}', [AuditionController::class, 'judgePromotionalViewDecline']);
+    Route::get('/superstar/audition/promotional/video/check/{auditionId}', [AuditionController::class, 'judgePromotionalVideoCheck']);
+
     // Promo Vidoes
     Route::get('/star/promoVideo/all', [PromoVideoController::class, 'starPromovideoAll']);
     Route::post('/star/promoVideo/store', [PromoVideoController::class, 'starPromovideoStore']);
@@ -753,6 +763,11 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/promo-instruction/{audition_id}', [AuditionController::class, 'promoInstrucction']);
 
     Route::post('/audition-admin/audition/super-star-promo/store', [AuditionController::class, 'superStarStorePromo']);
+    // Partha Ghose
+    Route::post('/audition-admin/audition/promotional/video/store', [AuditionController::class, 'promotionalVideoStore']);
+    Route::get('/audition-admin/promotional/video', [AuditionController::class, 'promotionalList']);
+    Route::get('/audition-admin/promotional/video/view/{id}', [AuditionController::class, 'auditionJudgePromotionalView']);
+    Route::get('/audition-admin/promotional/accepted-video', [AuditionController::class, 'acceptedPromotionalList']);
 
     Route::post('/audition-admin/audition/round-instruction/store', [AuditionController::class, 'storeRoundInstruction']);
 
@@ -916,11 +931,14 @@ Route::get('view-category-mobile', [CategoryController::class, 'ViewAllCategory'
 Route::get('/user/subcategory/{id}', [CategoryController::class, 'allSubcategoryList']);
 Route::get('/user/left/subcategory/{slug}', [CategoryController::class, 'allLeftSubcategoryList']);
 Route::get('/user/starcategory/{id}', [CategoryController::class, 'allStarCategoryList']);
+Route::get('/user/selected/some/category/{id}', [CategoryController::class, 'allSelectedCategoryList']);
 Route::get('/user/selected/starcategory', [CategoryController::class, 'starFollowingList']);
 Route::get('/user/selected/category', [CategoryController::class, 'selectedCategory']);
+Route::get('/user/sub/category', [CategoryController::class, 'allSubCategory']);
 Route::post('/user/selected/category/store', [CategoryController::class, 'selectedCategoryStore']);
 Route::post('/user/selected/subcategory/store', [CategoryController::class, 'selectedSubCategoryStore']);
 Route::post('/user/selected/starcategory/store', [CategoryController::class, 'selectedStarCategoryStore']);
+Route::get('/user/star/category/{slug}', [CategoryController::class, 'selectedStarCategoryList']);
 Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
 
 Route::get('/user/star-details/{id}', [StarAuthController::class, 'star_details']);

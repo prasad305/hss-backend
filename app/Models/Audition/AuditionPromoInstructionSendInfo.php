@@ -6,11 +6,13 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class AuditionPromoInstructionSendInfo extends Model
 {
     use HasFactory;
 
-    // protected $with = ['judge'];
+    
+
     protected $fillable = [
         'id',
         'audition_promo_ins_id',
@@ -22,18 +24,25 @@ class AuditionPromoInstructionSendInfo extends Model
         'video',
         'image',
         'document',
-        'submission_end_date',
+        'start_date',
+        'end_date',
         'status',
     ];
 
-    public function audition()
-    {
-        return $this->belongsTo(Audition::class, 'audition_id');
+    // protected $with = ['audition'];
+
+    public function audition(){
+        return $this->belongsTo(Audition::class,'audition_id');
     }
-    public function judge()
-    {
-        return $this->belongsTo(User::class, 'judge_id');
-    }
+
+    // public function audition()
+    // {
+    //     return $this->belongsTo(Audition::class, 'audition_id');
+    // }
+    // public function judge()
+    // {
+    //     return $this->belongsTo(User::class, 'judge_id');
+    // }
 
 
 
