@@ -24,6 +24,7 @@ class SubCategoryController extends Controller
         return response()->json([
             'status' => 200,
             'subcategory' => $subcategory,
+            'category' => $category,
             'selectedCategory' => $selectedCategory,
         ]);
     }

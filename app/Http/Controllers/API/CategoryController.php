@@ -14,6 +14,24 @@ use App\Models\Wallet;
 
 class CategoryController extends Controller
 {
+    public function allSubCategory($slug)
+    {
+        $category = SuperStar::where('slug', $slug)->get();
+        return view('SuperAdmin.category.index')->with('category', $category);
+    }
+    public function selectedStarCategoryList($slug)
+    {
+        $subCategory = SubCategory::where('slug', $slug)->first();
+        // $starCategory = SuperStar::where('slug', $slug)->first();
+        $starCategory = SuperStar::where('sub_category_id', $subCategory->id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'starCategory' => $starCategory,
+            'subCategory' => $subCategory,
+            // 'starCategory' => $starCategory,
+        ]);
+    }
     //
     public function index()
     {
@@ -137,6 +155,32 @@ class CategoryController extends Controller
         ]);
     }
 
+    public function allSelectedCategoryList($id){
+
+        $userId = auth('sanctum')->user()->id;
+        $selectedCategory = ChoiceList::where('user_id', $userId)->first();
+
+        $selectedStarCategory = json_decode($selectedCategory->star_id);
+
+        // where('category_id', $id)->
+
+        $allSelectedFollowCategory = Superstar::where('category_id', $id)->whereIn('id', $selectedStarCategory)->latest()->get();
+
+        $allUnFollowCategory = Superstar::where('category_id', $id)->whereNotIn('id', $selectedStarCategory)->latest()->get();
+        $allsuggestionCategory = Superstar::where('category_id','!=', $id)->whereNotIn('id', $selectedStarCategory)->latest()->get();
+
+        // return $allUnFollowCategory;
+        
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'allSelectedFollowCategory' => $allSelectedFollowCategory,
+            'allUnFollowCategory' => $allUnFollowCategory,
+            'allsuggestionCategory' => $allsuggestionCategory,
+        ]);
+    }
+
     public function starFollowingList()
     {
 
@@ -144,6 +188,9 @@ class CategoryController extends Controller
         $selectedCategory = ChoiceList::where('user_id', $id)->first();
 
         $followStarCategory = json_decode($selectedCategory->star_id);
+
+        $allSuperstar = Superstar::latest()->get();
+        $allCategory = Category::latest()->get();
 
         $followingStarCategory = Superstar::select("*")
             ->whereIn('id', $followStarCategory)
@@ -164,6 +211,8 @@ class CategoryController extends Controller
             'followStarCategory' => $followStarCategory,
             'followingStarCategory' => $followingStarCategory,
             'suggFollowingStarCategory' => $suggFollowingStarCategory,
+            'allSuperstar' => $allSuperstar,
+            'allCategory' => $allCategory,
         ]);
     }
 
@@ -274,7 +323,44 @@ class CategoryController extends Controller
         $id = auth('sanctum')->user()->id;
         $cat = ChoiceList::where('user_id', $id)->first();
 
+        $all_star_id = json_decode($request->star_id);
+        $all_category_id = json_decode($cat->category);
+        $all_subcategory_id = json_decode($cat->subcategory);
+
+        $userStarCategory = Superstar::select("*")
+            ->whereIn('id', $all_star_id)
+            ->get();
+
+        // category unset
+        foreach ($userStarCategory as $key => $category){
+            if (($key = array_search($category->category_id, $all_category_id)) !== false) {
+                unset($all_category_id[$key]);
+                
+            }
+        }
+        $newCategory=array();
+
+        foreach($all_category_id as $obj=>$key) {
+            array_push($newCategory, $key);
+        }
+
+        // Sub category unset
+        foreach ($userStarCategory as $key => $subcategory){
+            if (($key = array_search($subcategory->sub_category_id, $all_subcategory_id)) !== false) {
+                unset($all_subcategory_id[$key]);
+                
+            }
+        }
+        $newSubCategory=array();
+
+        foreach($all_subcategory_id as $obj=>$key) {
+            array_push($newSubCategory, $key);
+        }
+
+
         $cat->star_id = $request->star_id;
+        $cat->category = $newCategory;
+        $cat->subcategory = $newSubCategory;
         $cat->save();
 
         return response()->json([

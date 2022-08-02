@@ -31,65 +31,152 @@ Manager Admin
 
         <div class="row">
             <div class="col-md-6">
-                @if($audition->banner)
-                <img src="{{ asset($audition->banner) }}" style="width: 40%" />
+                <div class="card p-2">
+                    @if($audition->banner)
+                <img src="{{ asset($audition->banner) }}" class="img-fulid" style="height: 41vh" />
                 @endif
+                </div>
+            </div>
+            <div class="col-md-6">
+                    <div class="mb-3">
+                        <div class="row mb-1">
+                            <div class="col-md-12 ">
+                                <div class="bg-dark p-2">
+                                    Judge Panel
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="row mt-1 mx-1">
+                            @foreach($judges as $star)
+                            <div class="col-md-6">
+                                <div class="row bg-dark px-2 pt-2">
+                                    <div class="col-md-12 mb-2">
+                                        <div class="bg-black  p-2">
+                                           <div class="d-flex">
+                                            <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                <img src="{{ asset( $star->user->image ?? get_static_option('no_image')) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"  />
+                                            </div>
+                                            <div class="col-md-8 justify-conent-cenet align-items-center pt-2 px-3">
+                                                <small>Jury Name</small>
+                                                <div>{{ $star->user ? $star->user->first_name : ''}} {{ $star->user ? $star->user->last_name : ''}}</div>
+                                            </div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="row mb-1">
+                            <div class="col-md-12 ">
+                                <div class="bg-dark p-2">
+                                    Date
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-1 mx-1">
+                            <div class="col-md-6">
+                                <div class="row bg-dark px-2 pt-2">
+                                    <div class="col-md-12 mb-2">
+                                        <div class="bg-black  p-2">
+                                           <div class="d-flex">
+                                            <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                <img src="{{ asset('/assets/manager-admin/calendar.jpg')}}" style="height: 50px; width: 50px; border-radius: 50%; border: 2px solid gray"  />
+                                            </div>
+                                            <div class="col-md-8 justify-conent-cenet align-items-center pt-2 px-3">
+                                                <small>Audition Start Date</small>
+                                                <div>{{ \Carbon\Carbon::parse($audition->start_date)->format('d F,Y')}} <span class="text-success"></div>
+                                            </div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row bg-dark px-2 pt-2">
+                                    <div class="col-md-12 mb-2">
+                                        <div class="bg-black  p-2">
+                                           <div class="d-flex">
+                                            <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                <img src="{{ asset('/assets/manager-admin/calendar.jpg')}}" style="height: 50px; width: 50px; border-radius: 50%; border: 2px solid gray"  />
+                                            </div>
+                                            <div class="col-md-8 justify-conent-cenet align-items-center pt-2 px-3">
+                                                <small>Audition Start Date</small>
+                                                <div>{{ \Carbon\Carbon::parse($audition->start_date)->format('d F,Y')}} <span class="text-success"></div>
+                                            </div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row bg-dark px-2 pt-2">
+                                    <div class="col-md-12 mb-2">
+                                        <div class="bg-black  p-2">
+                                           <div class="d-flex">
+                                            <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                <img src="{{ asset('/assets/manager-admin/calendar.jpg')}}" style="height: 50px; width: 50px; border-radius: 50%; border: 2px solid gray"  />
+                                            </div>
+                                            <div class="col-md-8 justify-conent-cenet align-items-center pt-2 px-3">
+                                                <small>Audition Start Registration Date</small>
+                                                <div>{{ \Carbon\Carbon::parse($audition->user_reg_start_date)->format('d F,Y')}} <span class="text-success"></div>
+                                            </div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row bg-dark px-2 pt-2">
+                                    <div class="col-md-12 mb-2">
+                                        <div class="bg-black  p-2">
+                                           <div class="d-flex">
+                                            <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                <img src="{{ asset('/assets/manager-admin/calendar.jpg')}}" style="height: 50px; width: 50px; border-radius: 50%; border: 2px solid gray"  />
+                                            </div>
+                                            <div class="col-md-8 justify-conent-cenet align-items-center pt-2 px-3">
+                                                <small>Audition End Registration Date</small>
+                                                <div>{{ \Carbon\Carbon::parse($audition->user_reg_end_date)->format('d F,Y')}} <span class="text-success"></div>
+                                            </div>
+                                           </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
             </div>
         </div>
 
-
-        <div class="row pt-5">
-
-            <div class="col-md-8 ">
-                <div class="row card p-5">
-                    <h3>{{ $audition->name }}</h3>
-                    <h4>Description</h4>
-                    <p>
-                        {!! $audition->description !!}
-                    </p>
-                    <h4>Instruction</h4>
-                    <p>
-                        {!! $audition->instruction !!}
-                    </p>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="bg-dark  mb-1">
+                    <h4 class="px-2 pb-2">{{ $audition->name }}</h4>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 card py-3 mr-1">
-                        Audition Start
-                        <h4 class="text-warning"> {{ \Carbon\Carbon::parse($audition->start_date)->format('d F,Y')}} <span class="text-success">-</span><span class="text-danger"> End {{ \Carbon\Carbon::parse($audition->end_date)->format('d F,Y')}}</span></h4>
-                    </div>
-                </div>
+                <div class="bg-dark  mb-1">
 
-                <div class="row">
-                    <div class="col-md-6 card py-3 mr-1">
-                        Audition Registration Start
-                        <h4 class="text-warning"> {{ \Carbon\Carbon::parse($audition->user_reg_start_date)->format('d F,Y')}} <span class="text-success">-</span><span class="text-danger"> End {{ \Carbon\Carbon::parse($audition->user_reg_end_date)->format('d F,Y')}}</span></h4>
-                    </div>
-                </div>
+                    <h4 class="px-2 pt-2">Description</h4>
+                    <div class="under-line-x"></div>
+                    <div class="p-2"> {!! $audition->description !!} </div>
 
-            </div>
-
-            <div class="col-md-4">
-                <div class="card px-5 py-3">
-                    <h3> Judge Panel</h3>
-                    @foreach($judges as $star)
-                    <div class="row">
-                        <div class="col-xs-6 content-center">
-                            <img src="{{ asset( $star->user->image ?? get_static_option('no_image')) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
-                        </div>
-                        <div class="col-xs-6">
-                            <h3>{{ $star->user ? $star->user->first_name : ''}} {{ $star->user ? $star->user->last_name : ''}}</h3>
-                        </div>
-                    </div>
-                    @endforeach
-
+                    <h4 class="px-2 pt-2 mt-3">Instructions</h4>
+                    <div class="under-line-x"></div>
+                    <div class="px-2 pb-2"> {!! $audition->instruction !!} </div>
                 </div>
             </div>
-
         </div>
 
         @if ($audition->status == 2)
-        <div class="card row">
+        <div class="card row mt-3 mx-1">
             <div class="card-header"
                 style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
                 Publish Post in News Feed
@@ -100,7 +187,7 @@ Manager Admin
                     <div class="row">
                         <div class="mb-3 col-md-6 col-6">
                             <label for="start_date" class="form-label">Post Start Date</label>
-                            <input type="calender" class="form-control" id="datepicker"
+                            <input type="calendar" class="form-control" id="datepicker"
                                 style="background: coral; position: relative; padding-left: 33px;"
                                 name="post_start_date" readonly="readonly" value="{{ old('post_start_date') }}" />
                             <i class="fa fa-calendar"
@@ -131,12 +218,14 @@ Manager Admin
         </div>
         @endif
 
-        @if ($audition->status == 3)
-        <form action="{{ route('managerAdmin.audition.set_publish', [$audition->id]) }}" method="post">
-            @csrf
-            <button type="submit" class="btn btn-outline-danger mr-2">Remove From Publish</button>
-        </form>
-        @endif
+        <center class="my-4">
+            @if ($audition->status == 3)
+                <form action="{{ route('managerAdmin.audition.set_publish', [$audition->id]) }}" method="post">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-danger mr-2">Remove From Publish</button>
+                </form>
+            @endif
+        </center>
 
     </div> <!-- container -->
 </div> <!-- content -->
