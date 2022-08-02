@@ -12,54 +12,8 @@
 @endpush
 @section('content')
     <style>
-        .completedMeetupBlack {
-            background-color: #151515 !important;
-            border-radius: 10px;
-        }
+    
 
-        .BGa {
-            border: 1px solid rgb(255, 217, 0);
-        }
-
-        .BGaB {
-            border: 1px solid rgb(0, 204, 255);
-        }
-
-        .GoldBtn {
-            background: linear-gradient(90deg, #FFCE00 0%, #DFA434 100%) !important;
-            border-radius: 25px;
-        }
-
-        .GoldBtn:hover {
-            background: rgb(16, 20, 29) !important;
-            color: white;
-            border: 1px solid #FFCE00 !important;
-        }
-
-        .BlueBtn {
-            background: linear-gradient(90deg, #22AADD 0%, #3A8FF2 100%);
-            border-radius: 25px;
-        }
-
-        .BlueBtn:hover {
-            background: rgb(16, 20, 29) !important;
-            color: white;
-            border: 1px solid rgb(0, 183, 255) !important;
-        }
-
-        .bottomBlackLine {
-            border-bottom: 2px solid white;
-        }
-
-        .displaySide {
-            display: flex;
-            justify-content: center
-        }
-
-        .fontBold {
-            font-size: 40px;
-            font-weight: 800;
-        }
     </style>
 
     <!-- Content Header (Page header) -->
@@ -80,31 +34,119 @@
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
+
     @include('ManagerAdmin.Audition.includes.audition-sub-nav')
 
+
+
     <div class="row">
-        <div class="col-md-12 mx-2 mt-3">
-            <div class="row">
-                <h4>Create Audition</h4>
+        <div class="col-md-12">
+            <div class="row bg-black-custom">
+                <h4 class="mx-3">Create Audition</h4>
                 <a class="btn btn-success btn-sm mr-4 " style="margin-bottom: 10px; margin-left: auto;"
                     href="{{ route('managerAdmin.audition.events') }}">
                     <i class=" fa fa-list"></i>&nbsp;Audition list
                 </a>
             </div>
-            <div class='bottomBlackLine'></div>
         </div>
     </div>
 
-    <div class="container">
+    <div class="container my-4">
+        <div class="p-5 bg-gray-custom ">
+                <form action="{{ route('managerAdmin.audition.store') }}" method="POST">
+                    @csrf
+
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label class="text-warning">Title</label>
+                        </div>
+                        <div class="col-10">
+                            <input type="hidden" name="audition_rule_id" class="form-control from-custom-i" value="{{ $auditionRule->id ?? '' }}">
+                            <input name="title" class="form-control from-custom-i" rows="3" value="{{ old('title') }}" />
+                            @error('title')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label class="text-warning">Description</label>
+                        </div>
+                        <div class="col-10 ">
+                            <textarea name="description" class=" bg-warning from-custom-i" id="summernote" rows="6"> {{ old('description') }}</textarea>
+                            @error('description')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <div class="col-2">
+                        </div>
+                        <div class="col-10 bh-bg-card p-3">
+                            The audition will have to complete within {{ $auditionRule->event_period ?? 0 }} day(s)
+                        </div>
+                        <hr>
+                    </div>
+
+                    <div class="row justify-content-between">
+                        <div class="col-md-5 d-flex">
+                            <div class="col-md-4">
+                                <label class="text-warning">Event Start</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="date" onchange="setEndDate()" min='{{date('Y-m-d')}}' name="start_date" id="start_date"
+                                    class="custom-control-i form-control">
+                                @error('start_date')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 d-flex">
+                            <div class="col-md-4">
+                                <label class="text-warning">Event End</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" readonly name="end_date" id="end_date" class="custom-control-i form-control">
+                                @error('end_date')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row mt-5">
+                        <div class="col-2">
+
+                        </div>
+                        <div class="col-md-8 d-flex justify-content-center">
+                            <button type="submit" class="btn text-bold btn-warning-custom px-5">Submit</button>
+                        </div>
+
+                    </div>
+
+
+
+                </form>
+
+
+        </div>
+    </div>
+
+    {{-- <div class="container">
         <form action="{{ route('managerAdmin.audition.store') }}" method="POST">
             @csrf
             <div class="card-body">
                 <div class="form-group row">
                     <div class="col-2">
-                        <label>Title</label>
+                        <label class="text-warning">Title</label>
                     </div>
                     <div class="col-10">
-                        <input type="hidden" name="audition_rule_id" value="{{ $auditionRule->id ?? '' }}">
+                        <input name="audition_rule_id" value="{{ $auditionRule->id ?? '' }}">
                         <textarea name="title" class="form-control" rows="3">{{ old('title') }}</textarea>
                         @error('title')
                             <p class="text-danger">{{ $message }}</p>
@@ -113,10 +155,10 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-2">
-                        <label>Description</label>
+                        <label class="text-warning">Description</label>
                     </div>
                     <div class="col-10">
-                        <textarea name="description" class="form-control" rows="6">{{ old('description') }}</textarea>
+                        <textarea name="description" class="form-control" rows="6"> {{ old('description') }}</textarea>
                         @error('description')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
@@ -137,7 +179,7 @@
 
                 <div class="form-group row">
                     <div class="col-2">
-                        <label>Event Start</label>
+                        <label class="text-warning">Event Start</label>
                     </div>
                     <div class="col-4">
                         <input type="date" onchange="setEndDate()" min='{{date('Y-m-d')}}' name="start_date" id="start_date"
@@ -147,7 +189,7 @@
                         @enderror
                     </div>
                     <div class="col-2">
-                        <label>Event End</label>
+                        <label class="text-warning">Event End</label>
                     </div>
                     <div class="col-4">
                         <input type="text" readonly name="end_date" id="end_date" class="form-control">
@@ -161,7 +203,7 @@
                 </div>
             </div>
         </form>
-    </div>
+    </div> --}}
     <style>
         .dark-mode .card {
             /* background-color: #343a40; */
@@ -291,4 +333,12 @@
             theme: 'bootstrap4'
         });
     </script>
+
+<script>
+    $('#summernote').summernote({
+height: 300,
+focus: true
+});
+
+</script>
 @endpush
