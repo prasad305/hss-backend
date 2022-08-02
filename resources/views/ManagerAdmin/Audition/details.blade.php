@@ -72,6 +72,9 @@
                         </div>
                     </div>
 
+                    <h4 class="px-2 pt-2 mt-3">Instructions</h4>
+                    <div class="under-line-x"></div>
+                    <div class="px-2 pb-2"> {!! $audition->instruction !!} </div>
                 </div>
 
                 <div class="col-md-4">
