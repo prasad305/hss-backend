@@ -45,7 +45,9 @@ Manager Admin
 
         <div class="row">
          <video controls>
-            <source src="{{asset($event->video)}}" />
+
+            <source src="{{asset($event->video)}}"
+                 />
         </video>
         </div>
 
@@ -59,8 +61,8 @@ Manager Admin
                     </p>
                 </div>
 
-               
-            </div>    
+
+            </div>
         </div>
 
         @if ($event->status != 2)
