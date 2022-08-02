@@ -53,7 +53,7 @@ class JudgeAuditionController extends Controller
     }
     public function getRoundInstructionByJudge($audition_id, $round_id)
     {
-        $auditionRoundInstructionSendInfo = AuditionRoundInstructionSendInfo::where([['audition_id',$audition_id],['round_info_id',$round_id],['judge_id',auth()->user()->id]])->first();
+        $auditionRoundInstructionSendInfo = AuditionRoundInstructionSendInfo::where([['audition_id', $audition_id], ['round_info_id', $round_id], ['judge_id', auth()->user()->id]])->first();
         $audition = Audition::find($audition_id);
         return response()->json([
             'status' => 200,
@@ -303,5 +303,90 @@ class JudgeAuditionController extends Controller
         return response()->json([
             'status' => 200,
         ]);
+    }
+    public function pendingRoundInstructionVideo()
+    {
+        $event = AuditionRoundInstructionSendInfo::with(['audition', 'star'])->where([['judge_id', auth('sanctum')->user()->id], ['status', 0]])->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+            'pending' => $event->count(),
+        ]);
+    }
+    public function acceptedRoundInstructionVideo()
+    {
+        $event = AuditionRoundInstructionSendInfo::with(['audition', 'star'])->where([['judge_id', auth('sanctum')->user()->id], ['status', 1]])->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+            'accepted' => $event->count(),
+        ]);
+    }
+    public function roundInstructionVideoDetails($id)
+    {
+
+        $event = AuditionRoundInstructionSendInfo::with('audition')->where('id', $id)->first();
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+        ]);
+    }
+
+    public function roundInstructionVideoUpdate(Request $request, $id)
+    {
+        // return $request->all();
+
+        $validator = Validator::make($request->all(), [
+            'description' => 'required|min:10',
+            'instruction' => 'required|min:10',
+            'image' => 'required',
+            'video' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $auditionJudgeInstruction               = AuditionRoundInstructionSendInfo::find($id);
+            $auditionJudgeInstruction->status       =  1;
+            $auditionJudgeInstruction->description  =  $request->description;
+            $auditionJudgeInstruction->instruction  =  $request->instruction;
+
+            if ($request->hasfile('image')) {
+                $image             = $request->image;
+                $image_folder_path       = 'uploads/images/auditions/round/instructions/';
+                $image_new_name    = Str::random(4) . $id . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                // save to server
+                $request->image->move($image_folder_path, $image_new_name);
+                $auditionJudgeInstruction->image = $image_folder_path . $image_new_name;
+            }
+
+            if ($request->hasfile('video')) {
+                $file             = $request->video;
+                $folder_path       = 'uploads/videos/auditions/round/instructions/';
+                $file_new_name    = Str::random(20) . $id . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
+                // save to server
+                $request->video->move($folder_path, $file_new_name);
+                $auditionJudgeInstruction->video = $folder_path . $file_new_name;
+            }
+
+            if ($request->hasfile('pdf')) {
+                $image             = $request->pdf;
+                $pdf_folder_path       = 'uploads/pdf/auditions/round/instructions/';
+
+                $pdf_new_name    = Str::random(20) . $id . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                // save to server
+                $request->pdf->move($pdf_folder_path, $pdf_new_name);
+                $auditionJudgeInstruction->document = $pdf_folder_path . $pdf_new_name;
+            }
+
+            $auditionJudgeInstruction->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => "Instruction updated sucessfully !",
+            ]);
+        }
     }
 }
