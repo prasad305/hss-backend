@@ -253,7 +253,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/registration_checker/audition/{slug}', [UserController::class, 'UserAuditionRegistrationChecker']);
     Route::post('/user/audition/round-video-upload', [UserController::class, 'userRoundVideoUpload']);
     Route::get('/user/audition/uploaded_round_videos/{audition_id}/{round_info_id}', [UserController::class, 'uploaded_round_videos']);
-    
+
     // Audition Appeal Route
     Route::post('/user/audition/round-appeal-registration', [UserController::class, 'roundAppealRegister']);
     Route::get('user/audition/is_appeal/round/{audition_id}/{round_info_id}', [UserController::class, 'isAppealForThisRound']);
