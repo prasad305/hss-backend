@@ -480,8 +480,8 @@ class AuditionController extends Controller
         $participants = AuditionParticipant::whereHas('videos', function ($query) use ($audition_round_info_id, $type) {
             $query->where([['round_info_id', $audition_round_info_id], ['type', $type]]);
         })->with(['videos', 'participant'])
-          ->where([['audition_id', $audition_id]])
-          ->get();
+            ->where([['audition_id', $audition_id]])
+            ->get();
 
         return response()->json([
             'status' => 200,
@@ -495,8 +495,10 @@ class AuditionController extends Controller
     }
     public function singleAuditionRoundVideoMerge($audition_id, $audition_round_info_id, $type)
     {
+
         $auditionRoundInfo = AuditionRoundInfo::find($audition_round_info_id);
         $roundBasedAuditionUploadVideos = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['type', $type], ['jury_final_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->get();
+
         foreach ($roundBasedAuditionUploadVideos as $key => $roundBasedAuditionUploadVideo) {
             if ($roundBasedAuditionUploadVideo->group_a_jury_mark != null) {
                 $roundBasedAuditionUploadVideo->jury_final_mark =  $roundBasedAuditionUploadVideo->group_a_jury_mark;
@@ -511,9 +513,9 @@ class AuditionController extends Controller
             return $query->where([['round_info_id', $audition_round_info_id], ['type', $type]])->get();
         }, 'participant'])->where([['audition_id', $audition_id]])->get();
 
-        foreach ($participants as $key => $auditionParticipant) {
+        foreach ($participants as $parentKey => $auditionParticipant) {
             $sum_of_final_mark = 0;
-            foreach ($auditionParticipant->videos->where([['type', $type]]) as $key => $video) {
+            foreach ($auditionParticipant->videos->where('type', $type) as $key => $video) {
                 $sum_of_final_mark += $video->jury_final_mark == null ? 0 : $video->jury_final_mark;
             }
             $average = number_format(($sum_of_final_mark / $auditionRoundInfo->video_slot_num), 2);
@@ -542,6 +544,7 @@ class AuditionController extends Controller
             'percentageBaseRoundMarkTrackings' => $percentageBaseRoundMarkTrackings,
         ]);
     }
+
     public function singleAuditionRoundVideoResultByFilterNumber($audition_id, $audition_round_info_id, $filter_number, $type)
     {
         $filterNumberBaseRoundMarkTrackings = AuditionRoundMarkTracking::where([['round_info_id', $audition_round_info_id], ['type', $type], ['audition_id', $audition_id]])->orderBy('avg_mark', 'DESC')->take($filter_number)->get();
@@ -739,11 +742,11 @@ class AuditionController extends Controller
 
 
 
-    
+
     // Promotional Video upload By Partha Ghose
     public function promotionalVideoStore(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'audition_id' => 'required',
             'start_date' => 'required',
@@ -757,7 +760,7 @@ class AuditionController extends Controller
             'star_ids.*' => 'Select at least one Star',
             'audition_id.required' => 'Select a audition'
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 422,
@@ -774,7 +777,7 @@ class AuditionController extends Controller
                     $request->image->move($image_folder_path, $image_new_name);
                     // $instruction_info->image = $image_folder_path . '/' . $image_new_name;
                 }
-                
+
                 if ($request->hasfile('video')) {
                     $file             = $request->video;
                     $folder_path       = 'uploads/videos/auditions/promotional/';
@@ -792,7 +795,7 @@ class AuditionController extends Controller
                     $request->pdf->move($pdf_folder_path, $pdf_new_name);
                     // $instruction_info->document = $pdf_folder_path . '/' . $pdf_new_name;
                 }
-                
+
 
 
 
@@ -814,7 +817,7 @@ class AuditionController extends Controller
                             // $instruction_info->video = $video_folder_path . $video_new_name;
                             // $instruction_info->document = $video_folder_path . $pdf_new_name;
 
-                           
+
 
                             $instruction_info->image = $image_folder_path . '/' . $image_new_name;
                             $instruction_info->video = $folder_path . '/' . $file_new_name;
@@ -840,13 +843,13 @@ class AuditionController extends Controller
     }
     public function superstarPromotionalVideoStore(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'instruction' => 'required|min:5',
             'image' => 'required|mimes:jpg,jpeg,png',
             'video' => 'required|mimes:mp4,mkv',
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 422,
@@ -863,7 +866,7 @@ class AuditionController extends Controller
                     $request->image->move($image_folder_path, $image_new_name);
                     // $instruction_info->image = $image_folder_path . '/' . $image_new_name;
                 }
-                
+
                 if ($request->hasfile('video')) {
                     $file             = $request->video;
                     $folder_path       = 'uploads/videos/auditions/promotional/';
@@ -881,7 +884,7 @@ class AuditionController extends Controller
                     $request->pdf->move($pdf_folder_path, $pdf_new_name);
                     // $instruction_info->document = $pdf_folder_path . '/' . $pdf_new_name;
                 }
-                
+
 
 
                 $audition_admin = Audition::find($request->audition_id);
@@ -913,102 +916,100 @@ class AuditionController extends Controller
         }
     }
 
-     // Pending Auditions
-     public function promotionalList()
-     {
-         $event = AuditionPromoInstructionSendInfo::with('audition')->where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 0]])->latest()->get();
-         return response()->json([
-             'status' => 200,
-             'event' => $event,
-         ]);
-     }
+    // Pending Auditions
+    public function promotionalList()
+    {
+        $event = AuditionPromoInstructionSendInfo::with('audition')->where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 0]])->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+        ]);
+    }
 
-     public function judgePromotionalList()
-     {
-         $event = AuditionPromoInstructionSendInfo::with('audition')->where([['judge_id', auth('sanctum')->user()->id], ['status', 3]])->latest()->get();
-         return response()->json([
-             'status' => 200,
-             'event' => $event,
-         ]);
-     }
-     public function acceptedJudgePromotionalList()
-     {
-         $event = AuditionPromoInstructionSendInfo::with('audition')->where([['judge_id', auth('sanctum')->user()->id], ['status', '!=', 3]])->latest()->get();
-         return response()->json([
-             'status' => 200,
-             'event' => $event,
-         ]);
-     }
-     public function acceptedPromotionalList()
-     {
-         $event = AuditionPromoInstructionSendInfo::with('audition')->where('audition_admin_id', auth('sanctum')->user()->id)->where('status', 3)->latest()->get();
-        
-         return response()->json([
-             'status' => 200,
-             'event' => $event,
-         ]);
-     }
+    public function judgePromotionalList()
+    {
+        $event = AuditionPromoInstructionSendInfo::with('audition')->where([['judge_id', auth('sanctum')->user()->id], ['status', 3]])->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+        ]);
+    }
+    public function acceptedJudgePromotionalList()
+    {
+        $event = AuditionPromoInstructionSendInfo::with('audition')->where([['judge_id', auth('sanctum')->user()->id], ['status', '!=', 3]])->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+        ]);
+    }
+    public function acceptedPromotionalList()
+    {
+        $event = AuditionPromoInstructionSendInfo::with('audition')->where('audition_admin_id', auth('sanctum')->user()->id)->where('status', 3)->latest()->get();
 
-     public function judgePromotionalView($id)
-     {
-         $event = AuditionPromoInstructionSendInfo::find($id);
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+        ]);
+    }
 
-         return response()->json([
-             'status' => 200,
-             'eventView' => $event,
-         ]);
-     }
+    public function judgePromotionalView($id)
+    {
+        $event = AuditionPromoInstructionSendInfo::find($id);
 
-     public function judgePromotionalVideoCheck($auditionId)
-     {
-         $event = AuditionPromoInstructionSendInfo::where('audition_id', $auditionId)->where('judge_id', auth('sanctum')->user()->id)->where('status', 3)->get();
-        
-         if(count($event)){
+        return response()->json([
+            'status' => 200,
+            'eventView' => $event,
+        ]);
+    }
+
+    public function judgePromotionalVideoCheck($auditionId)
+    {
+        $event = AuditionPromoInstructionSendInfo::where('audition_id', $auditionId)->where('judge_id', auth('sanctum')->user()->id)->where('status', 3)->get();
+
+        if (count($event)) {
             return response()->json([
                 'status' => 200,
             ]);
-         }
-         else{
+        } else {
             return response()->json([
                 'status' => 600,
             ]);
-         }
-         
-     }
+        }
+    }
 
-     public function judgePromotionalViewAccepted($id)
-     {
-         $event = AuditionPromoInstructionSendInfo::find($id);
-         $event->status = 1;
-         $event->save();
+    public function judgePromotionalViewAccepted($id)
+    {
+        $event = AuditionPromoInstructionSendInfo::find($id);
+        $event->status = 1;
+        $event->save();
 
-         return response()->json([
-             'status' => 200,
-             'message' => 'Audition Promotional Video Accepted !!',
-         ]);
-     }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Audition Promotional Video Accepted !!',
+        ]);
+    }
 
-     public function judgePromotionalViewDecline($id)
-     {
-         $event = AuditionPromoInstructionSendInfo::find($id);
-         $event->status = 2;
-         $event->save();
+    public function judgePromotionalViewDecline($id)
+    {
+        $event = AuditionPromoInstructionSendInfo::find($id);
+        $event->status = 2;
+        $event->save();
 
-         return response()->json([
-             'status' => 200,
-             'message' => 'Audition Promotional Video Declined !!',
-         ]);
-     }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Audition Promotional Video Declined !!',
+        ]);
+    }
 
-     public function auditionJudgePromotionalView($id)
-     {
-         $event = AuditionPromoInstructionSendInfo::find($id);
+    public function auditionJudgePromotionalView($id)
+    {
+        $event = AuditionPromoInstructionSendInfo::find($id);
 
-         return response()->json([
-             'status' => 200,
-             'eventView' => $event,
-         ]);
-     }
+        return response()->json([
+            'status' => 200,
+            'eventView' => $event,
+        ]);
+    }
 
 
     public function promoInstrucction($audition_id)
@@ -2383,11 +2384,11 @@ class AuditionController extends Controller
             ])->update(['wining_status' => 1,]);
         }
 
-        if($request->type == 'regular'){
+        if ($request->type == 'general') {
             AuditionRoundInfo::where('id', $request->round_info_id)->update([
                 'manager_status' => 1,
             ]);
-        }else{
+        } else {
             AuditionRoundInfo::where('id', $request->round_info_id)->update([
                 'appeal_manager_status' => 1,
             ]);
@@ -2395,7 +2396,7 @@ class AuditionController extends Controller
 
         return response()->json([
             'status' => 200,
-            'message' => 'Audition Round Result Send To Manager Successfull',
+            'message' => 'Audition Round Result Send To Manager Successfully',
         ]);
     }
 }

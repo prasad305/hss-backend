@@ -37,7 +37,7 @@ class CreateAuditionsTable extends Migration
             $table->timestamp('final_result_published_date')->nullable();
             $table->double('fees')->nullable();
             $table->integer('participant')->nullable();
-            $table->integer('status')->default(0)->comment('default/pending 0, 3 = live');
+            $table->integer('status')->default(0)->comment('default/pending 0, 1 = not sent to manager admin, 2 = sent to manager admin, 3 = live');
             $table->timestamps();
         });
     }
