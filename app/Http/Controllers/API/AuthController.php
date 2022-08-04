@@ -357,15 +357,111 @@ class AuthController extends Controller
     public function user_info_update(Request $request)
     {
 
+        // return $request->all();
+
+        $user = User::find(auth('sanctum')->user()->id);
+
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->password = Hash::make($request->new_password);
+
+        if ($request->hasFile('image')) {
+            if ($user->image != null)
+                File::delete(public_path($user->image)); //Old image delete
+            $image             = $request->file('image');
+            $folder_path       = 'uploads/images/users/';
+            $image_new_name    = Str::random(3) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+            //resize and save to server
+            Image::make($image->getRealPath())->resize(400, 400)->save($folder_path . $image_new_name, 100);
+            $user->image   = $folder_path . $image_new_name;
+        }
+
+        if ($request->hasFile('cover_photo')) {
+            if ($user->cover_photo != null)
+                File::delete(public_path($user->cover_photo)); //Old image delete
+            $image             = $request->file('cover_photo');
+            $folder_path       = 'uploads/images/users/';
+            $image_new_name    = Str::random(3) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+            //resize and save to server
+            Image::make($image->getRealPath())->resize(900, 300)->save($folder_path . $image_new_name, 100);
+            $user->cover_photo   = $folder_path . $image_new_name;
+        }
+
+
+        $user->update();
+
+        $user_info = UserInfo::where('user_id', $user->id)->first();
+
+        if (empty($user_info)) {
+            $user_info = new UserInfo;
+        }
+
+        $user_info->user_id = $user->id;
+        $user_info->dob = $request->dob;
+        $user_info->country = $request->country;
+        $user_info->save();
+
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Your Information Updated Successfully'
+        ]);
+    }
+
+    public function user_OtherInfo_update(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        $user_info = UserInfo::where('user_id', $user->id)->first();
+
+        if (empty($user_info)) {
+            $user_info = new UserInfo;
+        }
+
+        $user_info->occupation = $request->occupation;
+        $user_info->edu_level = $request->edu_level;
+        $user_info->institute = $request->institute;
+        $user_info->subject = $request->subject;
+        $user_info->position = $request->position;
+        $user_info->company = $request->company;
+        $user_info->salery_range = $request->salery_range;
+
+        $user_info->save();
+
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Your Other Information Updated Successfully'
+        ]);
+    }
+
+
+
+    public function star_admin_info_update(Request $request)
+    {
+
+        // return $request->all();
 
         $user = User::find(auth('sanctum')->user()->id);
         if (Hash::check($request->password, $user->password) || Hash::check($request->current_password, $user->password)) {
 
-            $user->first_name = $request->first_name;
-            $user->last_name = $request->last_name;
-            $user->email = $request->email;
-            $user->phone = $request->phone;
-            $user->password = $request->new_password;
+            if ($request->filled('first_name')) {
+                $user->first_name = $request->first_name;
+            }
+            if ($request->filled('last_name')) {
+                $user->last_name = $request->last_name;
+            }
+            if ($request->filled('email')) {
+                $user->email = $request->email;
+            }
+            if ($request->filled('new_password')) {
+                $user->password =  Hash::make($request->new_password);
+            }
+            if ($request->filled('phone')) {
+                $user->phone = $request->phone;
+            }
 
             if ($request->hasFile('image')) {
                 if ($user->image != null)
@@ -397,10 +493,14 @@ class AuthController extends Controller
             if (empty($user_info)) {
                 $user_info = new UserInfo;
             }
-
             $user_info->user_id = $user->id;
-            $user_info->dob = $request->dob;
-            $user_info->country = $request->country;
+            if ($request->filled('dob')) {
+                $user_info->dob = $request->dob;
+            }
+            if ($request->filled('country')) {
+
+                $user_info->country = $request->country;
+            }
             $user_info->save();
 
 
@@ -414,32 +514,5 @@ class AuthController extends Controller
                 'message' => 'Password Not Match'
             ]);
         }
-    }
-
-    public function user_OtherInfo_update(Request $request)
-    {
-        $user = auth('sanctum')->user();
-
-        $user_info = UserInfo::where('user_id', $user->id)->first();
-
-        if (empty($user_info)) {
-            $user_info = new UserInfo;
-        }
-
-        $user_info->occupation = $request->occupation;
-        $user_info->edu_level = $request->edu_level;
-        $user_info->institute = $request->institute;
-        $user_info->subject = $request->subject;
-        $user_info->position = $request->position;
-        $user_info->company = $request->company;
-        $user_info->salery_range = $request->salery_range;
-
-        $user_info->save();
-
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Your Other Information Updated Successfully'
-        ]);
     }
 }
