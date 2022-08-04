@@ -40,4 +40,8 @@ class SouvenirCreate extends Model
     {
         return $this->hasMany(SouvenirOrder::class, 'souvenir_id');
     }
+    public function souvenirApply()
+    {
+        return $this->hasMany(SouvenirApply::class, 'souvenir_id');
+    }
 }

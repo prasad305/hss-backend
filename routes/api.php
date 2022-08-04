@@ -20,6 +20,7 @@ use App\Http\Controllers\API\LearningSessionController;
 use App\Http\Controllers\API\Audition\Admin\AuditionController;
 use App\Http\Controllers\API\Audition\Jury\JuryAuditionController;
 use App\Http\Controllers\API\Audition\Judge\JudgeAuditionController;
+use App\Http\Controllers\API\DashboardController;
 use App\Http\Controllers\API\GuestController;
 use App\Http\Controllers\API\PromoVideoController;
 use App\Http\Controllers\API\QnaController;
@@ -94,6 +95,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/learning-assinment-upload', [UserController::class, 'lerningSessionAssinmentVideoUplad']);
     Route::get('/user_info', [AuthController::class, 'user_info']);
     Route::post('/user_info_update', [AuthController::class, 'user_info_update']);
+    Route::post('/user_info_update/star_admin', [AuthController::class, 'star_admin_info_update']);
     Route::post('/user_otherInfo_update', [AuthController::class, 'user_OtherInfo_update']);
     Route::get('/user_data/{id}', [AuthController::class, 'user_data']);
 
@@ -252,7 +254,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/registration_checker/audition/{slug}', [UserController::class, 'UserAuditionRegistrationChecker']);
     Route::post('/user/audition/round-video-upload', [UserController::class, 'userRoundVideoUpload']);
     Route::get('/user/audition/uploaded_round_videos/{audition_id}/{round_info_id}', [UserController::class, 'uploaded_round_videos']);
-    
+
     // Audition Appeal Route
     Route::post('/user/audition/round-appeal-registration', [UserController::class, 'roundAppealRegister']);
     Route::get('user/audition/is_appeal/round/{audition_id}/{round_info_id}', [UserController::class, 'isAppealForThisRound']);
@@ -305,6 +307,9 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
         return response()->json(['message' => 'You are in as Admin', 'status' => 200], 200);
     });
 
+    Route::get('admin/dashboard', [DashboardController::class, 'adminDashboard']);
+    Route::get('admin/dashboard/posts/{type}', [DashboardController::class, 'adminPost']);
+    Route::get('admin/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
     Route::get('admin/star_list', [CategoryController::class, 'star_list']);
     Route::get('admin/agreement_paper/{star_id}', [CategoryController::class, 'agreement_paper']);
 
@@ -671,7 +676,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/allBidderList/auction/{id}', [AuctionController::class, 'allBidderList']);
 
 
-    // Super Star Audtion Routes
+    // Super Star Audition Routes
     Route::get('superstar/audition/promo-instruction-pending', [JudgeAuditionController::class, 'starPromoInstructionPending']);
     Route::get('superstar/audition/by-promo-instruction-pending/{id}', [JudgeAuditionController::class, 'starAuditionByPromoInstructionPending']);
     Route::get('superstar/audition/get-round-instruction-by-judge/{audition_id}/{round_id}', [JudgeAuditionController::class, 'getRoundInstructionByJudge']);
@@ -688,6 +693,11 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/starMarkingDone/videos/{id}', [AuditionController::class, 'starMarkingDone']);
     Route::get('superstar/audition/liveEditInstructions/{audition_id}', [JudgeAuditionController::class, 'liveEditInstructions']);
     Route::post('superstar/audition/updateAuditionInstruction/{audition_instruction_id}', [JudgeAuditionController::class, 'updateAuditionInstruction']);
+    //srabon
+    Route::get('superstar/audition/pending/roundInstructionVideos', [JudgeAuditionController::class, 'pendingRoundInstructionVideo']);
+    Route::get('superstar/audition/pending/roundInstructionVideosAccepted', [JudgeAuditionController::class, 'acceptedRoundInstructionVideo']);
+    Route::get('superstar/audition/round-instruction-video/details/{id}', [JudgeAuditionController::class, 'roundInstructionVideoDetails']);
+    Route::post('superstar/audition/round-instruction-video/update/{id}', [JudgeAuditionController::class, 'roundInstructionVideoUpdate']);
 
     // Partha ghose
     Route::get('/superstar/promotional/video/list', [AuditionController::class, 'judgePromotionalList']);
@@ -783,6 +793,24 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/appeal-videos/{round_info_id}', [AuditionController::class, 'round_appeal_videos']);
     Route::post('/audition-admin/audition/videos/set_approved/{id}', [AuditionController::class, 'round_videos_set_approved']);
     Route::post('/audition-admin/audition/videos/set_reject/{id}', [AuditionController::class, 'round_videos_set_reject']);
+
+
+
+
+
+    //By Srabon
+
+
+    Route::post('/audition-admin/audition/round-instruction-video/store', [AuditionController::class, 'storeRoundInstructionVideo']);
+    Route::get('/audition-admin/audition/round-instruction-video/list', [AuditionController::class, 'storeRoundInstructionVideoList']);
+    Route::get('/audition-admin/audition/round-instruction-video/accept-list', [AuditionController::class, 'acceptRoundInstructionVideoList']);
+    Route::get('/audition-admin/audition/round-instruction-video/details/{id}', [AuditionController::class, 'getVideoDetails']);
+
+
+
+
+
+
 
 
 
