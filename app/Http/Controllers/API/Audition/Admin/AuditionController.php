@@ -479,7 +479,9 @@ class AuditionController extends Controller
 
         $participants = AuditionParticipant::whereHas('videos', function ($query) use ($audition_round_info_id, $type) {
             $query->where([['round_info_id', $audition_round_info_id], ['type', $type]]);
-        })->with(['videos', 'participant'])
+        })->with(['videos' => function ($query) use ($audition_round_info_id, $type) {
+            return $query->where([['round_info_id', $audition_round_info_id], ['type', $type]])->get();
+        }, 'participant'])
             ->where([['audition_id', $audition_id]])
             ->get();
 
@@ -509,7 +511,9 @@ class AuditionController extends Controller
             $roundBasedAuditionUploadVideo->save();
         }
 
-        $participants = AuditionParticipant::with(['videos' => function ($query) use ($audition_round_info_id, $type) {
+        $participants = AuditionParticipant::whereHas('videos', function ($query) use ($audition_round_info_id, $type) {
+            $query->where([['round_info_id', $audition_round_info_id], ['type', $type]]);
+        })->with(['videos' => function ($query) use ($audition_round_info_id, $type) {
             return $query->where([['round_info_id', $audition_round_info_id], ['type', $type]])->get();
         }, 'participant'])->where([['audition_id', $audition_id]])->get();
 
@@ -518,7 +522,11 @@ class AuditionController extends Controller
             foreach ($auditionParticipant->videos->where('type', $type) as $key => $video) {
                 $sum_of_final_mark += $video->jury_final_mark == null ? 0 : $video->jury_final_mark;
             }
-            $average = number_format(($sum_of_final_mark / $auditionRoundInfo->video_slot_num), 2);
+            if($type == 'appeal'){
+                $average = number_format(($sum_of_final_mark / $auditionRoundInfo->appeal_video_slot_num), 2);
+            }else{
+                $average = number_format(($sum_of_final_mark / $auditionRoundInfo->video_slot_num), 2);
+            }
 
             $auditionRoundMarkTracking  = new AuditionRoundMarkTracking();
             $auditionRoundMarkTracking->user_id = $auditionParticipant->user_id;
