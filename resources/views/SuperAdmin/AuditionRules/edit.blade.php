@@ -311,43 +311,9 @@ Super Admin
 
 <script>
     // resetAll();
-        function resetAll() {
-
-            if ($("input[type='radio'].radioBtnClass").is(':checked')) {
-                var category_id = $("input[type='radio'].radioBtnClass:checked").val();
-            }
-
-            var url = "{{ url('super-admin/audition-rules') }}";
-            // var rule_id = "{{$rule->id}}";
-            // console.log('object............',category_id);
-
-
-            $.ajax({
-                url: url + "/" + category_id, // your request url
-                type: 'GET',
-                success: function(data) {
-                    window.open(url+'/'+data.rules.id+'/edit','_parent');
-                },
-                error: function(data) {
-                    var errorMessage = '<div class="card bg-danger">\n' +
-                        '<div class="card-body text-center p-5">\n' +
-                        '<span class="text-white">';
-                    $.each(data.responseJSON.errors, function(key, value) {
-                        errorMessage += ('' + value + '<br>');
-                    });
-                    errorMessage += '</span>\n' +
-                        '</div>\n' +
-                        '</div>';
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        footer: errorMessage
-                    });
-
-                    console.log(data);
-                }
-            });
-
+    function resetAll() {
+        if ($("input[type='radio'].radioBtnClass").is(':checked')) {
+            var category_id = $("input[type='radio'].radioBtnClass:checked").val();
         }
         var url = "{{ url('super-admin/audition-rules') }}";
         // var rule_id = "{{$rule->id}}";
@@ -375,56 +341,6 @@ Super Admin
                 });
                 console.log(data);
             }
-            var category_id = category_id;
-            var round_num = $("#round").val();
-            var judge_num = $("#superstar").val();
-            var month = $("#root3").text();
-            var day = $("#root4").text();
-            console.log('Category_id', category_id);
-
-
-            var formData = new FormData(form);
-            formData.append('category_id', category_id);
-            formData.append('round_num', round_num);
-            formData.append('judge_num', judge_num);
-
-            // Set header if need any otherwise remove setup part
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
-                }
-            });
-
-            $.ajax({
-                url: "{{ route('superAdmin.audition-rules.store') }}", // your request url
-                data: formData,
-                processData: false,
-                contentType: false,
-                type: 'POST',
-                success: function(data) {
-                    console.log(data);
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: data.type,
-                        title: data.message,
-                        showConfirmButton: false,
-                        // timer: 1500
-                    })
-                    setTimeout(function() {
-                        location.replace("{{ route('superAdmin.audition-rules.store') }}");
-                    }, 1000);
-                    console.log('success')
-                },
-                error: function(data) {
-
-                    $.each(data.responseJSON.errors, function(key, value) {
-                        ErrorMessage(key,value);
-                    });
-
-
-                    console.log(data);
-                }
-            });
         });
     }
     $(document).on('click', '#submitAuditionRules', function(event) {

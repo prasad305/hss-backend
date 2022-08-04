@@ -608,7 +608,7 @@
                             '</span>' +
                             '</center>' +
                             '<a onclick="showRules(' + round.id +
-                            ')" class="btn border-warning roundText" data-toggle="tab" href="" role="tab">Rolls</a>' +
+                            ')" class="btn border-warning roundText" data-toggle="tab" href="" role="tab">Rules</a>' +
                             '</a>' +
                             '</li>'
 

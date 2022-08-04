@@ -265,7 +265,7 @@
 
             <div class="audition_type d-flex flex-column">
                 <img src="{{asset($audition->category ? $audition->category->icon : '')}}" class="img-fluid" alt="music">
-                <p>{{$audition->category ? $audition->category->name : ''}}</p> 
+                <p>{{$audition->category ? $audition->category->name : ''}}</p>
             </div>
 
             <div class="audition__rules d-flex flex-column my-4">
@@ -325,23 +325,23 @@
                         <div class="text-center round__wrap" onclick="changeRound('{{$round->id}}')">
                             <p class="font-weight-bold audition__round__text">Round</p>
                             <div class="audition__round__number">{{ $key+1 }}</div>
-                            <button class="w-100 audition__round__button_active">Rolls</button>
+                            <button class="w-100 audition__round__button_active">Rules</button>
                         </div>
                     @endforeach
                     @endif
-                   
+
 
                     {{-- <div class="text-center round__wrap">
                         <p class="font-weight-bold audition__round__text">Round</p>
                         <div class="audition__round__number">02</div>
-                        <button class="w-100 audition__round__button__inactive">Rolls</button>
+                        <button class="w-100 audition__round__button__inactive">Rules</button>
                         </div> --}}
 
 
                 </div>
 
                <div id="round_rules">
-                
+
                </div>
 
         </div>
@@ -351,7 +351,7 @@
         function changeRound(round_id) {
             // alert(round_id);
             $("#round_rules").html('');
-            
+
             var url = "{{ url('manager-admin/audition/registration-rules/') }}";
             console.log(url + "/" + round_id);
             $.ajax({
@@ -367,7 +367,7 @@
 
         }
 
-      
+
     </script>
 
 @endsection
