@@ -27,7 +27,8 @@ use function PHPUnit\Framework\isEmpty;
 
 class AuditionController extends Controller
 {
-    public function getParentUserIdById($id){
+    public function getParentUserIdById($id)
+    {
         $user = User::find($id);
         return $user->parent_user;
     }
@@ -347,12 +348,12 @@ class AuditionController extends Controller
         return view('ManagerAdmin.audition.register_users', compact('audition', 'users'));
     }
 
-    public function getResultByRound($audition_id, $round_info_id,$type)
+    public function getResultByRound($audition_id, $round_info_id, $type)
     {
-        return '---audition_id-'.$audition_id.'---round_info_id-'.$round_info_id.'-----type-'.$type;
+        // return '---audition_id-'.$audition_id.'---round_info_id-'.$round_info_id.'-----type-'.$type;
         $audition = Audition::find($audition_id);
-        $round_result =  AuditionRoundInfo::with(['videos' => function ($query) use ($round_info_id,$type) {
-            return $query->where([['round_info_id', $round_info_id], ['approval_status', 1],['type',$type]])->get();
+        $round_result =  AuditionRoundInfo::with(['videos' => function ($query) use ($round_info_id, $type) {
+            return $query->where([['round_info_id', $round_info_id], ['approval_status', 1], ['type', $type]])->get();
         }])->where([['id', $round_info_id], ['audition_id', $audition_id]])
             ->first();
 
@@ -385,27 +386,34 @@ class AuditionController extends Controller
     {
         $audition_id = $request->audition_id;
         $round_info_id = $request->round_info_id;
+        $type = $request->type;
 
         AuditionRoundMarkTracking::where([
             ['audition_id', $audition_id],
             ['round_info_id', $round_info_id],
+            ['type', $type],
             ['wining_status', 1]
-        ])
-            ->update([
-                'result_message' => $request->selected_comments,
-            ]);
+        ])->update([
+            'result_message' => $request->selected_comments,
+        ]);
         AuditionRoundMarkTracking::where([
             ['audition_id', $audition_id],
             ['round_info_id', $round_info_id],
+            ['type', $type],
             ['wining_status', 0]
-        ])
-            ->update([
-                'result_message' => $request->rejected_comments,
-            ]);
-
-        AuditionRoundInfo::where('id', $round_info_id)->update([
-            'manager_status' => 2,
+        ])->update([
+            'result_message' => $request->rejected_comments,
         ]);
+
+        if ($type == 'general') {
+            AuditionRoundInfo::where('id', $round_info_id)->update([
+                'manager_status' => 2,
+            ]);
+        } else {
+            AuditionRoundInfo::where('id', $round_info_id)->update([
+                'appeal_manager_status' => 2,
+            ]);
+        }
 
         session()->flash('success', 'Result Publish Done!');
         return redirect()->back();

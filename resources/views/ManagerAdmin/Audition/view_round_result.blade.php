@@ -37,6 +37,7 @@
                 @csrf
                 <input type="hidden" name="audition_id" value="{{ $audition->id }}">
                 <input type="hidden" name="round_info_id" value="{{ $round_result->id }}">
+                <input type="hidden" name="type" value="{{ $type }}">
                 <section>
                     <div class="title">
                         <div class="text-light d-flex align-item-center p-2 my-3">
@@ -59,7 +60,7 @@
                         </div>
                     </div>
 
-                    @if ($round_result->manager_status < 2)
+                    @if ( $type == 'general' ? $round_result->manager_status < 2 : $round_result->appeal_manager_status < 2)
                         <div class="row my-2">
                             <div class="col-md-4 d-flex justify-content-center">
                                 <div class="comment">
@@ -79,16 +80,16 @@
 
                 <section>
                     <div class="d-flex justify-content-center my-4">
-                        <button class="btn btnGradient w-50" {{ $round_result->manager_status >= 2 ? 'disabled' : '' }}
+                        <button class="btn btnGradient w-50" {{  $type == 'general' ?  $round_result->manager_status >= 2 : $round_result->appeal_manager_status >= 2  ? 'disabled' : '' }}
                             type="submit">
-                            {{ $round_result->manager_status >= 2 ? 'Already Published' : 'Publish For User' }}
+                            {{  $type == 'general' ?  $round_result->manager_status >= 2 : $round_result->appeal_manager_status >= 2 ? 'Already Published' : 'Publish For User' }}
                         </button>
                     </div>
                 </section>
             </form>
-            <button class="btn btnGradient w-50">
+            {{-- <button class="btn btnGradient w-50">
                 {{ $type }}
-            </button>
+            </button> --}}
         </div>
     </div>
 </div>
