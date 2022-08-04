@@ -1430,21 +1430,22 @@ class UserController extends Controller
     {
         $user = User::find(auth()->user()->id);
 
-        if (AuditionRoundAppealRegistration::where([['user_id', $user->id], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->exists()) {
+        if (AuditionRoundAppealRegistration::where([['user_id', $user->id], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->first()) {
             return response()->json([
-                'status' => 201,
+                'status' => 200,
+                'appealedRegistration' => AuditionRoundAppealRegistration::where([['user_id', $user->id], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->first(),
                 'message' => 'User already Registered for this round'
             ]);
         } else {
 
-            $participant = AuditionRoundAppealRegistration::create([
+            $appealedRegistration = AuditionRoundAppealRegistration::create([
                 'audition_id' => $request->audition_id,
                 'round_info_id' => $request->round_info_id,
                 'user_id' => $user->id,
             ]);
             return response()->json([
                 'status' => 200,
-                'participant' => $participant,
+                'appealedRegistration' => $appealedRegistration,
             ]);
         }
     }
@@ -1452,18 +1453,18 @@ class UserController extends Controller
     public function isAppealForThisRound($audition_id, $round_info_id)
     {
         $user = User::find(auth()->user()->id);
-        $appaealRegistration  = AuditionRoundAppealRegistration::where([['user_id', $user->id], ['audition_id', $audition_id], ['round_info_id', $round_info_id]])->first();
+        $appealedRegistration  = AuditionRoundAppealRegistration::where([['user_id', $user->id], ['audition_id', $audition_id], ['round_info_id', $round_info_id]])->first();
 
-        if ($appaealRegistration) {
+        if ($appealedRegistration) {
             $isAppealedForThisRound = true;
-        }else{
+        } else {
             $isAppealedForThisRound = false;
         }
 
         return response()->json([
             'status' => 200,
             'isAppealedForThisRound' => $isAppealedForThisRound,
-            'appaealRegistration' => $appaealRegistration,
+            'appealedRegistration' => $appealedRegistration,
         ]);
     }
 
