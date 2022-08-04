@@ -1527,12 +1527,14 @@ class UserController extends Controller
 
         $appeal_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id], ['type', 'appeal']])->get();
 
-        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id], ['round_info_id', $round_info_id]])->first();
+        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'general'], ['round_info_id', $round_info_id]])->first();
+        $appealAuditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],['type','appeal'],['round_info_id', $round_info_id]])->first();
 
         return response()->json([
             'status' => 200,
             'videos' => $videos,
             'auditionRoundMarkTracking' => $auditionRoundMarkTracking,
+            'appealAuditionRoundMarkTracking' => $appealAuditionRoundMarkTracking,
             'appeal_videos' => $appeal_videos,
             'message' => 'Success!',
         ]);
