@@ -23,6 +23,7 @@ use App\Http\Controllers\API\Audition\Judge\JudgeAuditionController;
 use App\Http\Controllers\API\GuestController;
 use App\Http\Controllers\API\PromoVideoController;
 use App\Http\Controllers\API\QnaController;
+use App\Http\Controllers\API\SdkController\SdkController;
 use App\Http\Controllers\API\StarGreetingController;
 use App\Http\Controllers\API\StarScheduleController;
 use App\Http\Controllers\HomeController;
@@ -83,6 +84,15 @@ Route::get('/group/message/{id}', [UserController::class, 'get_group_message']);
 Route::get('/guest/PromoVideos', [GuestController::class, 'getPromoVideo']);
 
 Route::get('/user/star_list', [UserController::class, 'star_list']);
+
+
+
+//video for SDK
+Route::get('/sdk/get-token', [SdkController::class, 'getToken']);
+Route::post('/sdk/create-meeting', [SdkController::class, 'createMeetingId']);
+Route::post('/sdk/validate-meeting/{roomId}', [SdkController::class, 'roomValidate']);
+
+
 
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
@@ -252,7 +262,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/registration_checker/audition/{slug}', [UserController::class, 'UserAuditionRegistrationChecker']);
     Route::post('/user/audition/round-video-upload', [UserController::class, 'userRoundVideoUpload']);
     Route::get('/user/audition/uploaded_round_videos/{audition_id}/{round_info_id}', [UserController::class, 'uploaded_round_videos']);
-    
+
     // Audition Appeal Route
     Route::post('/user/audition/round-appeal-registration', [UserController::class, 'roundAppealRegister']);
     Route::get('user/audition/is_appeal/round/{audition_id}/{round_info_id}', [UserController::class, 'isAppealForThisRound']);
