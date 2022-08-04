@@ -43,4 +43,8 @@ class Greeting extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+    public function registeredGreeting()
+    {
+        return $this->hasMany(GreetingsRegistration::class, 'greeting_id');
+    }
 }
