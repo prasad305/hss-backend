@@ -45,7 +45,7 @@ class AuthController extends Controller
             ]);
         } else {
             $user = User::create([
-                'username'=> $request->first_name.now()->timestamp,
+                'username' => $request->first_name . now()->timestamp,
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'email' => $request->email,
@@ -82,7 +82,7 @@ class AuthController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $user = User::where([['email', $request->email],['user_type','user']])->orWhere([['phone', $request->email],['user_type','user']])->first();
+            $user = User::where([['email', $request->email], ['user_type', 'user']])->orWhere([['phone', $request->email], ['user_type', 'user']])->first();
 
             if (!$user || !Hash::check($request->password, $user->password)) {
                 return response()->json([
@@ -220,7 +220,7 @@ class AuthController extends Controller
                 $countValue  = QnaRegistration::where('user_id', $user->id)->where('qna_id', $eventId)->count();
             }
             if ($modelName == 'GreetingsRegistration') {
-                $countValue  = GreetingsRegistration::where([['user_id', $user->id],['greeting_id', $eventId],['status', 0]])->count();
+                $countValue  = GreetingsRegistration::where([['user_id', $user->id], ['greeting_id', $eventId], ['status', 0]])->count();
             }
             // if( $modelName == 'AuditionParticipant'){
             //     $countValue  = AuditionParticipant::where('user_id',$user->id)->where('audition_id',$eventId)->count();
@@ -319,6 +319,7 @@ class AuthController extends Controller
         $user = User::find(auth('sanctum')->user()->id);
 
         $user_info = UserInfo::where('user_id', $user->id)->first();
+        $star_details = SuperStar::where('star_id', auth('sanctum')->user()->id)->first();
 
         if (empty($user_info)) {
             $user_info = new UserInfo;
@@ -327,7 +328,8 @@ class AuthController extends Controller
         return response()->json([
             'status' => 200,
             'users' => $user,
-            'info' => $user_info
+            'info' => $user_info,
+            'star_details' => $star_details
         ]);
     }
 
@@ -354,12 +356,16 @@ class AuthController extends Controller
 
     public function user_info_update(Request $request)
     {
+
+        // return $request->all();
+
         $user = User::find(auth('sanctum')->user()->id);
 
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
         $user->phone = $request->phone;
+        $user->password = Hash::make($request->new_password);
 
         if ($request->hasFile('image')) {
             if ($user->image != null)
@@ -429,5 +435,84 @@ class AuthController extends Controller
             'status' => 200,
             'message' => 'Your Other Information Updated Successfully'
         ]);
+    }
+
+
+
+    public function star_admin_info_update(Request $request)
+    {
+
+        // return $request->all();
+
+        $user = User::find(auth('sanctum')->user()->id);
+        if (Hash::check($request->password, $user->password) || Hash::check($request->current_password, $user->password)) {
+
+            if ($request->filled('first_name')) {
+                $user->first_name = $request->first_name;
+            }
+            if ($request->filled('last_name')) {
+                $user->last_name = $request->last_name;
+            }
+            if ($request->filled('email')) {
+                $user->email = $request->email;
+            }
+            if ($request->filled('new_password')) {
+                $user->password =  Hash::make($request->new_password);
+            }
+            if ($request->filled('phone')) {
+                $user->phone = $request->phone;
+            }
+
+            if ($request->hasFile('image')) {
+                if ($user->image != null)
+                    File::delete(public_path($user->image)); //Old image delete
+                $image             = $request->file('image');
+                $folder_path       = 'uploads/images/users/';
+                $image_new_name    = Str::random(3) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                //resize and save to server
+                Image::make($image->getRealPath())->resize(400, 400)->save($folder_path . $image_new_name, 100);
+                $user->image   = $folder_path . $image_new_name;
+            }
+
+            if ($request->hasFile('cover_photo')) {
+                if ($user->cover_photo != null)
+                    File::delete(public_path($user->cover_photo)); //Old image delete
+                $image             = $request->file('cover_photo');
+                $folder_path       = 'uploads/images/users/';
+                $image_new_name    = Str::random(3) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                //resize and save to server
+                Image::make($image->getRealPath())->resize(900, 300)->save($folder_path . $image_new_name, 100);
+                $user->cover_photo   = $folder_path . $image_new_name;
+            }
+
+
+            $user->update();
+
+            $user_info = UserInfo::where('user_id', $user->id)->first();
+
+            if (empty($user_info)) {
+                $user_info = new UserInfo;
+            }
+            $user_info->user_id = $user->id;
+            if ($request->filled('dob')) {
+                $user_info->dob = $request->dob;
+            }
+            if ($request->filled('country')) {
+
+                $user_info->country = $request->country;
+            }
+            $user_info->save();
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Your Information Updated Successfully'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 402,
+                'message' => 'Password Not Match'
+            ]);
+        }
     }
 }
