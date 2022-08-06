@@ -111,10 +111,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::resource('auditionAdmin', AuditionAdminController::class);
     Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');
     Route::post('auditionAdmin/inactive/{id}', [AuditionAdminController::class, 'inactiveNow'])->name('auditionAdmin.inactiveNow');
-
     Route::get('/audition-list', [AuditionController::class, 'auditionList'])->name('auditionList');
-
-
     Route::get('audition-admin-accounts', [AccountsController::class, 'auditionAdminList'])->name('accounts.auditionAdminList');
     Route::get('audition-admin-income', [AccountsController::class, 'auditionAdminIncome'])->name('auditionAdmin.income');
     Route::get('setMark/{id}', [AuditionController::class, 'setMark'])->name('audition.setMark');
@@ -124,7 +121,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/audition-manager-events', [DashboardController::class, 'auditionManagerAdminEvents'])->name('auditionEvents.managerAdminEvents');
     Route::get('/audition-admin-list', [DashboardController::class, 'adminList'])->name('auditionEvents.adminList');
     Route::get('/audition-admin-events', [DashboardController::class, 'adminEvents'])->name('auditionEvents.adminEvents');
-
     Route::get('/audition-superstar-list', [DashboardController::class, 'auditionSuperstarList'])->name('auditionEvents.superstarList');
     Route::get('/audition-superstar-events', [DashboardController::class, 'auditionSuperstarEvents'])->name('auditionEvents.superstarEvents');
     Route::get('/auditionAdmin-list', [DashboardController::class, 'auditionAdminList'])->name('auditionEvents.auditionAdminList');

@@ -100,14 +100,56 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('greeting-superstar-events/{starId}', [DashboardController::class, 'greetingSuperstarEvents'])->name('greetingEvents.superstarEvents');
 
 
-
-    // Auditions
+    // Audition routes starts here
     Route::get('auditions', [DashboardController::class, 'auditions'])->name('dashboard.audition');
     Route::get('auditions-data/{type}', [DashboardController::class, 'auditionsData'])->name('dashboard.auditionData');
     Route::get('auditions-details/{id}', [DashboardController::class, 'auditionsDetails'])->name('dashboard.auditionDetails');
     Route::get('auditions-judge', [DashboardController::class, 'auditionsJudgeData'])->name('dashboard.auditionsJudgeData');
     Route::get('auditions-jury', [DashboardController::class, 'auditionsJuryData'])->name('dashboard.auditionsJuryData');
     Route::get('auditions-manager-list', [DashboardController::class, 'auditionManagerList'])->name('dashboard.auditionManagerList');
+    Route::resource('auditionAdmin', AuditionAdminController::class);
+    Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');
+    Route::post('auditionAdmin/inactive/{id}', [AuditionAdminController::class, 'inactiveNow'])->name('auditionAdmin.inactiveNow');
+    Route::get('audition/registration/rules', [AuditionAdminController::class, 'registrationRules'])->name('audition.registration.rules');
+    Route::get('audition/registration/rules/create/{audition_id}', [AuditionAdminController::class, 'createRegistrationRules'])->name('audition.registration.rules.create');
+    Route::post('audition/registration/rules/store', [AuditionAdminController::class, 'storeRegistrationRules'])->name('audition.registration.rules.store');
+    Route::get('audition/registration/rules/{audition_id}/edit', [AuditionAdminController::class, 'editRegistrationRules'])->name('audition.registration.rules.edit');
+    Route::get('audition/registration-rules/{round_id}', [AuditionAdminController::class, 'getRoundInfo']);
+    Route::post('audition/registration/round/update/{round_id}', [AuditionAdminController::class, 'updateRegistrationRound'])->name('audition.registration.round.update');
+    Route::post('audition-assign/{admin_id}', [JobAssign::class, 'auditionStore'])->name('AuditionAssign');
+    Route::group(['prefix' => 'audition/', 'as' => 'audition.'], function () {
+        Route::get('create', [AuditionController::class, 'create'])->name('create');
+        Route::get('assign-manpower/{audition_id}', [AuditionController::class, 'assignManpower'])->name('assignManpower');
+        Route::post('assign-manpower-store', [AuditionController::class, 'assignManpowerStore'])->name('assignManpowerStore');
+        Route::post('store', [AuditionController::class, 'store'])->name('store');
+        Route::resource('auditionAdmin', App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class);
+        Route::get('assinged', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'assinged'])->name('auditionAdmin.assinged');
+        Route::get('free', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin.notAssinged');
+        Route::get('pending', [AuditionController::class, 'pending'])->name('pending');
+        Route::get('details/{id}', [AuditionController::class, 'details'])->name('details');
+        Route::post('set_publish/{audition_id}', [AuditionController::class, 'manager_audition_set_publish'])->name('set_publish');
+        Route::get('published', [AuditionController::class, 'published'])->name('published');
+        Route::get('all', [AuditionAdminController::class, 'all'])->name('all');
+        Route::get('instruction/{audition_id}', [AuditionAdminController::class, 'instruction'])->name('instruction');
+        Route::get('send-instruction/{audition_id}', [AuditionAdminController::class, 'sendInstructionToParticipant'])->name('sendInstruction');
+        Route::get('round-instruction/{audition_id}/{round_info_id}', [AuditionController::class, 'getRoundInstruction']);
+        Route::post('round-instruction/published/{instruction_id}', [AuditionController::class, 'roundInstructionPublished'])->name('roundInstruction.published');
+        Route::get('edit/{id}', [AuditionAdminController::class, 'auditionEdit'])->name('edit');
+        Route::put('update/{id}', [AuditionAdminController::class, 'auditionUpdate'])->name('update');
+        Route::get('admin-assign', [AuditionAdminController::class, 'adminAssign'])->name('adminAssign');
+        Route::get('admin-assign-submit', [AuditionAdminController::class, 'adminAssignSubmit'])->name('adminAssignSubmit');
+        Route::get('juries', [AuditionAdminController::class, 'auditionJuries'])->name('juries');
+        Route::get('events', [AuditionAdminController::class, 'auditionEvents'])->name('events');
+        Route::get('promoInstruction/{audition_id}', [AuditionAdminController::class, 'getPromoInstruction'])->name('promoInstruction');
+        Route::get('roundInstruction/{audition_id}', [AuditionAdminController::class, 'getRoundInstruction'])->name('roundInstruction');
+        Route::get('roundResult', [AuditionAdminController::class, 'getRoundResult'])->name('roundResult');
+        Route::get('roundResult/{audition_id}', [AuditionAdminController::class, 'showRoundResult'])->name('showRoundResult');
+        Route::get('viewRoundAppealResult/{audition_id}', [AuditionAdminController::class, 'viewRoundAppealResult'])->name('viewRoundAppealResult');
+        Route::get('round-result/{audition_id}/{round_info_id}/{type}', [AuditionController::class, 'getResultByRound']);
+        Route::post('round-result-publish', [AuditionController::class, 'roundResultPublish'])->name('roundResultPublish');
+        Route::get('registerUser/{audition_id}', [AuditionController::class, 'registerUser'])->name('registerUser');
+    });
+    // Audition routes ends here
 
     // fan Group
     Route::get('fan-group', [DashboardController::class, 'fanGroups'])->name('dashboard.fanGroup');
@@ -162,22 +204,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::post('star/active/{id}', [AdminController::class, 'activeNow'])->name('star.activeNow');
     Route::post('star/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('star.inactiveNow');
 
-    // Audition Admin route
-    Route::resource('auditionAdmin', AuditionAdminController::class);
-    // Route::get('auditionAdmin/{search_text}/', [AuditionAdminController::class, 'customSearch']);
-    Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');
-    Route::post('auditionAdmin/inactive/{id}', [AuditionAdminController::class, 'inactiveNow'])->name('auditionAdmin.inactiveNow');
 
-    Route::get('auditionAdmin-assinged', [AuditionAdminController::class, 'assinged'])->name('auditionAdmin_assinged');
-    Route::get('auditionAdmin-free', [AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin_notAssinged');
-
-    Route::get('audition/registration/rules', [AuditionAdminController::class, 'registrationRules'])->name('audition.registration.rules');
-    Route::get('audition/registration/rules/create/{audition_id}', [AuditionAdminController::class, 'createRegistrationRules'])->name('audition.registration.rules.create');
-    Route::post('audition/registration/rules/store', [AuditionAdminController::class, 'storeRegistrationRules'])->name('audition.registration.rules.store');
-    Route::get('audition/registration/rules/{audition_id}/edit', [AuditionAdminController::class, 'editRegistrationRules'])->name('audition.registration.rules.edit');
-    Route::get('audition/registration-rules/{round_id}', [AuditionAdminController::class, 'getRoundInfo']);
-
-    Route::post('audition/registration/round/update/{round_id}', [AuditionAdminController::class, 'updateRegistrationRound'])->name('audition.registration.round.update');
 
 
     // Jury Board route
@@ -216,69 +243,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::put('post/edit/{id}', [SimplePostController::class, 'update'])->name('simplePost.update');
     Route::get('post/set_publish/{id}', [SimplePostController::class, 'set_publish'])->name('simplePost.set_publish');
 
-    // Audition Routes
-    Route::group(['prefix' => 'audition/', 'as' => 'audition.'], function () {
-        // audition
-        Route::get('create', [AuditionController::class, 'create'])->name('create');
-        Route::get('assign-manpower/{audition_id}', [AuditionController::class, 'assignManpower'])->name('assignManpower');
-        Route::post('assign-manpower-store', [AuditionController::class, 'assignManpowerStore'])->name('assignManpowerStore');
-        Route::post('store', [AuditionController::class, 'store'])->name('store');
-        // audition admin
-        Route::resource('auditionAdmin', App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class);
-
-        Route::get('assinged', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'assinged'])->name('auditionAdmin.assinged');
-        Route::get('free', [App\Http\Controllers\ManagerAdmin\Audition\AuditionAdminController::class, 'notAssinged'])->name('auditionAdmin.notAssinged');
-
-        Route::get('pending', [AuditionController::class, 'pending'])->name('pending');
-        Route::get('details/{id}', [AuditionController::class, 'details'])->name('details');
-        Route::post('set_publish/{audition_id}', [AuditionController::class, 'manager_audition_set_publish'])->name('set_publish');
-        Route::get('published', [AuditionController::class, 'published'])->name('published');
-        Route::get('all', [AuditionAdminController::class, 'all'])->name('all');
-
-
-
-        Route::get('instruction/{audition_id}', [AuditionAdminController::class, 'instruction'])->name('instruction');
-        Route::get('send-instruction/{audition_id}', [AuditionAdminController::class, 'sendInstructionToParticipant'])->name('sendInstruction');
-
-
-        Route::get('round-instruction/{audition_id}/{round_info_id}', [AuditionController::class, 'getRoundInstruction']);
-
-
-        Route::post('round-instruction/published/{instruction_id}', [AuditionController::class, 'roundInstructionPublished'])->name('roundInstruction.published');
-
-
-
-
-
-
-        Route::get('edit/{id}', [AuditionAdminController::class, 'auditionEdit'])->name('edit');
-        Route::put('update/{id}', [AuditionAdminController::class, 'auditionUpdate'])->name('update');
-        // Route::get('set_publish/{id}', [AuditionAdminController::class, 'set_publish'])->name('set_publish');
-
-
-
-        //admins
-        Route::get('admin-assign', [AuditionAdminController::class, 'adminAssign'])->name('adminAssign');
-        Route::get('admin-assign-submit', [AuditionAdminController::class, 'adminAssignSubmit'])->name('adminAssignSubmit');
-        Route::get('dashboard', [AuditionAdminController::class, 'auditionDashboard'])->name('auditionDashboard');
-        Route::get('juries', [AuditionAdminController::class, 'auditionJuries'])->name('juries');
-        Route::get('events', [AuditionAdminController::class, 'auditionEvents'])->name('events');
-        Route::get('promoInstruction/{audition_id}', [AuditionAdminController::class, 'getPromoInstruction'])->name('promoInstruction');
-        Route::get('roundInstruction/{audition_id}', [AuditionAdminController::class, 'getRoundInstruction'])->name('roundInstruction');
-        Route::get('roundResult', [AuditionAdminController::class, 'getRoundResult'])->name('roundResult');
-        Route::get('roundResult/{audition_id}', [AuditionAdminController::class, 'showRoundResult'])->name('showRoundResult');
-        Route::get('viewRoundAppealResult/{audition_id}', [AuditionAdminController::class, 'viewRoundAppealResult'])->name('viewRoundAppealResult');
-
-        Route::get('round-result/{audition_id}/{round_info_id}/{type}', [AuditionController::class, 'getResultByRound']);
-
-        Route::post('round-result-publish', [AuditionController::class, 'roundResultPublish'])->name('roundResultPublish');
-
-        Route::get('registerUser/{audition_id}', [AuditionController::class, 'registerUser'])->name('registerUser');
-
-        // Jury Audition Routes
-        Route::get('jury-published/{id}', [AuditionAdminController::class, 'juryPublished'])->name('jury_published');
-        Route::get('jury-published/{id}', [AuditionAdminController::class, 'juryPublished'])->name('jury_published');
-    });
 
 
     // greeting
@@ -421,8 +385,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::put('learningSession/edit/{id}', [LearningSessionController::class, 'update'])->name('learningSession.update');
     Route::post('learningSession/set_publish/{id}', [LearningSessionController::class, 'manager_event_set_publish'])->name('learningSession.set_publish');
 
-    //audition create
-    Route::post('audition-assign/{admin_id}', [JobAssign::class, 'auditionStore'])->name('AuditionAssign');
+
 
     // Promo Video0
     Route::get('promoVideo/pending', [PromoVideoController::class, 'pending'])->name('promoVideo.pending');

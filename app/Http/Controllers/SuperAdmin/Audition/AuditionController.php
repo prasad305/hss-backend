@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 
 class AuditionController extends Controller
 {
-
     public function auditionList()
     {
         $auditions = Audition::orderBy('id', 'DESC')->get();
