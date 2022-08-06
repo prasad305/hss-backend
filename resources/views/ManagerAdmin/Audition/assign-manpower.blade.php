@@ -88,7 +88,7 @@
             <div class="card-body">
                 <div class="form-group row">
                     <div class="col-2">
-                        <label>Select Audition Admin {{ $audition->id }}</label> <br>
+                        <label>Select Audition Admin</label> <br>
                     </div>
                     <div class="col-10">
                         <input type="hidden" name="audition_rule_id" value="{{ $auditionRule->id ?? '' }}">

@@ -40,7 +40,7 @@ use Illuminate\Support\Facades\Route;
 
 // Super Admin route
 
-Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin']], function () {
+Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin', 'prevent-back-history']], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/auditions', [DashboardController::class, 'auditions'])->name('auditions');
@@ -130,28 +130,28 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::put('terms-update/{id}', [AuctionController::class, 'termsUpdate'])->name('auctionTerms.update');
     Route::delete('terms-destroy/{id}', [AuctionController::class, 'termsDestroy'])->name('auctionTerms.destroy');
 
-    // SimplePost 
+    // SimplePost
     Route::get('simplepost-index', [SimplePostController::class, 'index'])->name('simplePost.index');
     Route::get('simplepost-list/{id}', [SimplePostController::class, 'simplepostList'])->name('simplePost.list');
     Route::get('simplepost-details/{id}', [SimplePostController::class, 'simplepostDetails'])->name('simplePost.details');
     Route::get('simplepost-edit/{id}', [SimplePostController::class, 'simplepostEdit'])->name('simplePost.edit');
     Route::PUT('simplepost-update/{id}', [SimplePostController::class, 'simplepostUpdate'])->name('simplePost.update');
     Route::delete('simplepost-destroy/{id}', [SimplePostController::class, 'simplepostDestroy'])->name('simplePost.destroy');
-    // Auction 
+    // Auction
     Route::get('auction-dashboard', [AuctionController::class, 'dashboard'])->name('auction.dashboard');
     Route::get('auction-list/{id}', [AuctionController::class, 'auctionList'])->name('auction.list');
     Route::get('auction-details/{id}', [AuctionController::class, 'auctionDetails'])->name('auction.details');
     Route::get('auction-edit/{id}', [AuctionController::class, 'auctionEdit'])->name('auction.edit');
     Route::PUT('auction-update/{id}', [AuctionController::class, 'auctionUpdate'])->name('auction.update');
     Route::delete('auction-destroy/{id}', [AuctionController::class, 'auctionDestroy'])->name('auction.destroy');
-    // Marketplace 
+    // Marketplace
     Route::get('marketplace-dashboard', [MarketplaceController::class, 'dashboard'])->name('marketplace.dashboard');
     Route::get('marketplace-list/{id}', [MarketplaceController::class, 'marketplaceList'])->name('marketplace.list');
     Route::get('marketplace-details/{id}', [MarketplaceController::class, 'marketplaceDetails'])->name('marketplace.details');
     Route::get('marketplace-edit/{id}', [MarketplaceController::class, 'marketplaceEdit'])->name('marketplace.edit');
     Route::PUT('marketplace-update/{id}', [MarketplaceController::class, 'marketplaceUpdate'])->name('marketplace.update');
     Route::delete('marketplace-destroy/{id}', [MarketplaceController::class, 'marketplaceDestroy'])->name('marketplace.destroy');
-    // Souvenir 
+    // Souvenir
     Route::get('souvenir-dashboard', [SouvenirController::class, 'dashboard'])->name('souvenir.dashboard');
     Route::get('souvenir-list/{id}', [SouvenirController::class, 'souvenirList'])->name('souvenir.list');
     Route::get('souvenir-details/{id}', [SouvenirController::class, 'souvenirDetails'])->name('souvenir.details');

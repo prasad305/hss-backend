@@ -243,20 +243,20 @@ class UserController extends Controller
         ]);
     }
 
-    
+
     /**
      * mobile media upload
      */
 
     public function MobileImageUpUser(Request $request)
     {
-            //      return response()->json([
-            //     "message" => "uload successfully",
-            //     "status" => "200",
-            //     "path" =>   $request->img['data']
-            // ]);
+        //      return response()->json([
+        //     "message" => "uload successfully",
+        //     "status" => "200",
+        //     "path" =>   $request->img['data']
+        // ]);
 
-     
+
         try {
             if ($request->img['data']) {
 
@@ -267,8 +267,8 @@ class UserController extends Controller
                 $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                 $decodedBase64 = $request->img['data'];
             }
-            
-    
+
+
             Image::make($decodedBase64)->save($folder_path . $image_new_name);
 
             $filePath = $folder_path . $image_new_name;
@@ -1482,36 +1482,43 @@ class UserController extends Controller
 
     public function roundAppealRegister(Request $request)
     {
-        $user = User::find(auth()->user()->id);   
+        $user = User::find(auth()->user()->id);
 
-        if (AuditionRoundAppealRegistration::where([['user_id', $user->id],['audition_id',$request->audition_id],['round_info_id',$request->round_info_id]])->exists()) {
+        if (AuditionRoundAppealRegistration::where([['user_id', $user->id], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->first()) {
             return response()->json([
-                'status' => 201,
+                'status' => 200,
+                'appealedRegistration' => AuditionRoundAppealRegistration::where([['user_id', $user->id], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->first(),
                 'message' => 'User already Registered for this round'
             ]);
         } else {
 
-            $participant = AuditionRoundAppealRegistration::create([
+            $appealedRegistration = AuditionRoundAppealRegistration::create([
                 'audition_id' => $request->audition_id,
                 'round_info_id' => $request->round_info_id,
                 'user_id' => $user->id,
             ]);
             return response()->json([
                 'status' => 200,
-                'participant' => $participant,
+                'appealedRegistration' => $appealedRegistration,
             ]);
         }
     }
 
-    public function isAppealForThisRound(Request $request)
+    public function isAppealForThisRound($audition_id, $round_info_id)
     {
-        $user = User::find(auth()->user()->id);   
+        $user = User::find(auth()->user()->id);
+        $appealedRegistration  = AuditionRoundAppealRegistration::where([['user_id', $user->id], ['audition_id', $audition_id], ['round_info_id', $round_info_id]])->first();
 
-        $participant = AuditionRoundAppealRegistration::where([['user_id', $user->id],['audition_id',$request->audition_id],['round_info_id',$request->round_info_id]])->first();
+        if ($appealedRegistration) {
+            $isAppealedForThisRound = true;
+        } else {
+            $isAppealedForThisRound = false;
+        }
 
         return response()->json([
             'status' => 200,
-            'participant' => $participant,
+            'isAppealedForThisRound' => $isAppealedForThisRound,
+            'appealedRegistration' => $appealedRegistration,
         ]);
     }
 
@@ -1570,16 +1577,18 @@ class UserController extends Controller
 
     public function uploaded_round_videos($audition_id, $round_info_id)
     {
-        $videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id],['type','general']])->get();
+        $videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id], ['type', 'general']])->get();
 
-        $appeal_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id],['type','appeal']])->get();
+        $appeal_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id], ['type', 'appeal']])->get();
 
-        $round_status = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id], ['round_info_id', $round_info_id]])->first();
+        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'general'], ['round_info_id', $round_info_id]])->first();
+        $appealAuditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],['type','appeal'],['round_info_id', $round_info_id]])->first();
 
         return response()->json([
             'status' => 200,
             'videos' => $videos,
-            'round_status' => $round_status,
+            'auditionRoundMarkTracking' => $auditionRoundMarkTracking,
+            'appealAuditionRoundMarkTracking' => $appealAuditionRoundMarkTracking,
             'appeal_videos' => $appeal_videos,
             'message' => 'Success!',
         ]);

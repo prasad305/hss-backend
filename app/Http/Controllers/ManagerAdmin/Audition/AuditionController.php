@@ -27,6 +27,11 @@ use function PHPUnit\Framework\isEmpty;
 
 class AuditionController extends Controller
 {
+    public function getParentUserIdById($id)
+    {
+        $user = User::find($id);
+        return $user->parent_user;
+    }
     public function store(Request $request)
     {
 
@@ -70,7 +75,7 @@ class AuditionController extends Controller
             $audition_info->event_start_date = Carbon::parse($request->start_date);
             $audition_info->event_end_date = date('Y-m-d', strtotime($request->end_date));
             $audition_info->instruction_prepare_start_date = Carbon::parse($request->start_date);
-            $audition_info->instruction_prepare_end_date = Carbon::parse($request->start_date)->addDays($auditionRule->instruction_prepare_period);
+            $audition_info->instruction_prepare_end_date = Carbon::parse($request->instruction_prepare_start_date)->addDays($auditionRule->instruction_prepare_period);
             $audition_info->registration_start_date = Carbon::parse($audition_info->instruction_prepare_end_date)->addDays(1);
             $audition_info->registration_end_date = Carbon::parse($audition_info->registration_start_date)->addDays($auditionRule->registration_period);
             $audition_info->save();
@@ -192,8 +197,9 @@ class AuditionController extends Controller
                 $audition->save();
 
                 foreach ($request->judge as $key => $value) {
-                    $auditionAssignJudge = new AuditionAssignJudge();
+                    $auditionAssignJudge                    = new AuditionAssignJudge();
                     $auditionAssignJudge->judge_id          =  $value;
+                    $auditionAssignJudge->judge_admin_id    =  $this->getParentUserIdById($value);
                     $auditionAssignJudge->audition_id       =    $audition->id;
                     $auditionAssignJudge->approved_by_judge = 0;
                     $auditionAssignJudge->save();
@@ -201,10 +207,10 @@ class AuditionController extends Controller
 
                 foreach ($request->group_ids as $key => $group_id) { // how many groups are allowed total_items
                     foreach ($request->jury[$key] as $jury) { // per groups jury assigne
-                        $auditionAssignJury = new AuditionAssignJury();
+                        $auditionAssignJury                        = new AuditionAssignJury();
                         $auditionAssignJury->audition_id           =  $audition->id;
                         $auditionAssignJury->jury_id               =  $jury;
-                        $auditionAssignJury->group_id               =  $group_id;
+                        $auditionAssignJury->group_id              =  $group_id;
                         $auditionAssignJury->approved_by_jury      =  0;
                         $auditionAssignJury->status                =   0;
                         $auditionAssignJury->save();
@@ -342,15 +348,13 @@ class AuditionController extends Controller
         return view('ManagerAdmin.audition.register_users', compact('audition', 'users'));
     }
 
-    public function getResultByRound($audition_id, $round_info_id,$round_type)
+    public function getResultByRound($audition_id, $round_info_id, $type)
     {
-
+        // return '---audition_id-'.$audition_id.'---round_info_id-'.$round_info_id.'-----type-'.$type;
         $audition = Audition::find($audition_id);
-        $type = $round_type;
-        $round_result =  AuditionRoundInfo::with(['videos' => function ($query) use ($round_info_id,$type) {
-            return $query->where([['round_info_id', $round_info_id], ['approval_status', 1],['type',$type]])->get();
-        }])
-            ->where([['id', $round_info_id], ['audition_id', $audition_id]])
+        $round_result =  AuditionRoundInfo::with(['videos' => function ($query) use ($round_info_id, $type) {
+            return $query->where([['round_info_id', $round_info_id], ['approval_status', 1], ['type', $type]])->get();
+        }])->where([['id', $round_info_id], ['audition_id', $audition_id]])
             ->first();
 
         $wining_users = AuditionRoundMarkTracking::where([
@@ -358,22 +362,21 @@ class AuditionController extends Controller
             ['round_info_id', $round_info_id],
             ['type', $type],
             ['wining_status', 1]
-        ])
-            ->get();
+        ])->get();
 
         $failed_users = AuditionRoundMarkTracking::where([
             ['audition_id', $audition_id],
             ['round_info_id', $round_info_id],
             ['type', $type],
             ['wining_status', 0]
-        ])
-            ->get();
+        ])->get();
 
         $data = [
             'audition' => $audition,
             'round_result' => $round_result,
             'wining_users' => $wining_users,
             'failed_users' => $failed_users,
+            'type' => $type,
         ];
 
         return view('ManagerAdmin.audition.view_round_result', $data);
@@ -383,27 +386,34 @@ class AuditionController extends Controller
     {
         $audition_id = $request->audition_id;
         $round_info_id = $request->round_info_id;
+        $type = $request->type;
 
         AuditionRoundMarkTracking::where([
             ['audition_id', $audition_id],
             ['round_info_id', $round_info_id],
+            ['type', $type],
             ['wining_status', 1]
-        ])
-            ->update([
-                'result_message' => $request->selected_comments,
-            ]);
+        ])->update([
+            'result_message' => $request->selected_comments,
+        ]);
         AuditionRoundMarkTracking::where([
             ['audition_id', $audition_id],
             ['round_info_id', $round_info_id],
+            ['type', $type],
             ['wining_status', 0]
-        ])
-            ->update([
-                'result_message' => $request->rejected_comments,
-            ]);
-
-        AuditionRoundInfo::where('id', $round_info_id)->update([
-            'manager_status' => 2,
+        ])->update([
+            'result_message' => $request->rejected_comments,
         ]);
+
+        if ($type == 'general') {
+            AuditionRoundInfo::where('id', $round_info_id)->update([
+                'manager_status' => 2,
+            ]);
+        } else {
+            AuditionRoundInfo::where('id', $round_info_id)->update([
+                'appeal_manager_status' => 2,
+            ]);
+        }
 
         session()->flash('success', 'Result Publish Done!');
         return redirect()->back();

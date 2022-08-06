@@ -38,7 +38,7 @@ class AuditionRulesController extends Controller
 
     public function store(Request $request)
     {
-        // return $request->all();  
+        // return $request->all();
         $request->validate([
             'category_id' => 'required',
             'round_num' => 'required',
@@ -60,8 +60,8 @@ class AuditionRulesController extends Controller
             'groups_id' => $request->groups_id,
             'group_members' => $request->group_members,
         );
-       
-        $audition_rules->jury_groups = json_encode($jury_group_array); 
+
+        $audition_rules->jury_groups = json_encode($jury_group_array);
 
         $audition_rules->save();
            $inc = $audition_rules->roundRules->last() ? $audition_rules->roundRules->last()->round_num : 0;
@@ -100,10 +100,10 @@ class AuditionRulesController extends Controller
     public function show($id)
     {
         $rules = AuditionRules::where('category_id', $id)->first();
-  
+
         return response()->json([
             'status' => 'success',
-            'rules' => $rules, 
+            'rules' => $rules,
         ]);
     }
 
@@ -123,7 +123,7 @@ class AuditionRulesController extends Controller
             'rules' =>  AuditionRules::where('status', 1)->latest()->get(),
             'categories' => Category::orderBy('id', 'DESC')->get(),
             'groups' => JuryGroup::where([['status', 1],['category_id',$rule->category_id]])->orderBy('name', 'asc')->get(),
-            'group_data' =>  isset($group_data) && count($group_data) > 0 ? $group_data : null,  
+            'group_data' =>  isset($group_data) && count($group_data) > 0 ? $group_data : null,
         ];
         return view('SuperAdmin.AuditionRules.edit', $data);
     }
@@ -144,6 +144,7 @@ class AuditionRulesController extends Controller
         $audition_rules = AuditionRules::find($id);
         $audition_rules->fill($request->all());
         $audition_rules->save();
+
         return response()->json([
             'status' => 'success',
             'message' => 'Rules Updated Successfully!',
