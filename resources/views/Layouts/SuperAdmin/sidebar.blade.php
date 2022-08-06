@@ -164,16 +164,6 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('superAdmin.audition.index') }}"
-                class="nav-link {{ Request::routeIs('superAdmin.audition.index') ? 'active' : '' }}">
-                <i class="nav-icon fa fa-bullhorn"></i>
-                <p>
-                    Audtion
-                </p>
-            </a>
-        </li>
-
-        <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-bullhorn"></i>
                 <p>
@@ -183,9 +173,12 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.audition-dashboard.index') }}" class="nav-link ">
+                    <a href="{{ route('superAdmin.auditionList') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.auditionList') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Audition Dashboard</p>
+                        <p>
+                            Audtion List
+                        </p>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -201,49 +194,21 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.audition-admin.index') }}" class="nav-link ">
+                    <a href="{{ route('superAdmin.auditionAdmin.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.auditionAdmin.index') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Admins</p>
+                        <p>
+                            Audtion Admin
+                        </p>
                     </a>
                 </li>
-
-                <li class="nav-item">
-                    <a href="" class="nav-link ">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Manager</p>
-                    </a>
-                </li>
-
                 <li class="nav-item">
                     <a href="{{ route('superAdmin.jury_groups.index') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Jury Groups</p>
                     </a>
                 </li>
-
-                <li class="nav-item">
-                    <a href="{{ route('superAdmin.audition-jury.index') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Juries</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="pages/charts/flot.html" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Result</p>
-                    </a>
-                </li>
             </ul>
-        </li>
-
-        <li class="nav-item">
-            <a href="{{ route('superAdmin.auditionAdmin.index') }}"
-                class="nav-link {{ Request::routeIs('superAdmin.auditionAdmin.index') ? 'active' : '' }}">
-                <i class="nav-icon fa fa-bullhorn"></i>
-                <p>
-                    Audtion Admin
-                </p>
-            </a>
         </li>
 
         <li class="nav-item">

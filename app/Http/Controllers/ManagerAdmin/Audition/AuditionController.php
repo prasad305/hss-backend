@@ -55,7 +55,13 @@ class AuditionController extends Controller
             $audition->audition_admin_id    =  $request->audition_admin_id;
             $audition->manager_admin_id     =  Auth::user()->id;
             $audition->title                =  $request->title;
-            $audition->slug                 =  Str::slug($request->title);
+
+            if(Audition::where('slug', Str::slug($request->input('name')))->first()){
+                $audition->slug = Str::slug($request->input('name').'-n');
+            }else{
+                $audition->slug = Str::slug($request->input('name'));
+            }
+
             $audition->description          =  $request->description;
             $audition->round_status         =  0;
             $audition->start_date           =  Carbon::parse($request->start_date);

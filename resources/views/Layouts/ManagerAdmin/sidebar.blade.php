@@ -153,8 +153,8 @@
                     </a>
                 </li>
 
-                
-                
+
+
                 <li class="nav-item">
                     <a href="{{ route('managerAdmin.audition.all') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
@@ -363,15 +363,6 @@
                         <p>All</p>
                     </a>
                 </li>
-
-
-                {{-- </li>
-          <li class="nav-item">
-            <a href="" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Order</p>
-            </a>
-          </li> --}}
             </ul>
         </li>
 
@@ -533,7 +524,7 @@
                     </a>
                 </li>
 
-                
+
 
                 <li class="nav-item">
                     <a href="{{ route('managerAdmin.audition.registration.rules') }}" class="nav-link">
