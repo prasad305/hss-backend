@@ -38,7 +38,11 @@ class AuditionController extends Controller
 
         $audition->title = $request->input('name');
         $audition->category_id = $request->input('category');
-        $audition->slug = Str::slug($request->input('name'));
+        if(Audition::where('slug', Str::slug($request->input('name')))->first()){
+            $audition->slug = Str::slug($request->input('name').'-n');
+        }else{
+            $audition->slug = Str::slug($request->input('name'));
+        }
 
         try {
             $audition->save();

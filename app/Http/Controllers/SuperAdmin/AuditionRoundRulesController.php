@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class AuditionRoundRulesController extends Controller
 {
-  
+
     public function index()
     {
         $data = [
@@ -20,13 +20,13 @@ class AuditionRoundRulesController extends Controller
         return view('SuperAdmin.AuditionRoundRules.index', $data);
     }
 
-    
+
     public function create()
     {
         //
     }
 
-   
+
     public function store(Request $request)
     {
         // return $request->all();
@@ -39,9 +39,7 @@ class AuditionRoundRulesController extends Controller
                 'mark_live_or_offline' => 'required_if:user_vote_mark,1',
                 'wildcard' => 'required',
                 'video_feed' => 'required',
-                // 'video_duration' => 'required',
                 'round_period' => 'required',
-                // 'instruction_prepare_period' => 'required',
                 'video_upload_period' => 'required',
                 'jury_or_judge_mark_period' => 'required',
                 'result_publish_period' => 'required',
@@ -59,7 +57,7 @@ class AuditionRoundRulesController extends Controller
         );
 
         $round = AuditionRoundRule::find($request->round_id);
-       
+
         $round->has_user_vote_mark = $request->has_user_vote_mark;
 
         if ($request->has_user_vote_mark == 1) {
@@ -79,7 +77,7 @@ class AuditionRoundRulesController extends Controller
         }else{
             $round->wildcard_round = null;
         }
-      
+
         $round->video_feed = $request->video_feed;
 
         $round->video_duration = $request->video_duration;
@@ -102,7 +100,7 @@ class AuditionRoundRulesController extends Controller
             $round->appeal_video_upload_period = 0;
             $round->appeal_jury_or_judge_mark_period = 0;
         }
-        
+
 
         $round->save();
         // return response()->json([
@@ -111,7 +109,7 @@ class AuditionRoundRulesController extends Controller
         // ]);
     }
 
-   
+
     public function show($id)
     {
 
@@ -133,29 +131,29 @@ class AuditionRoundRulesController extends Controller
     {
         $mark = AuditionRoundRule::find($id);
         $rules = AuditionRoundRule::where('audition_rules_id', $mark->audition_rules_id)->get();
-        
+
 
         return response()->json([
             'status' => 'success',
             'mark' => $mark,
             'rules' => $rules,
-            
+
         ]);
     }
 
-    
+
     public function edit($id)
     {
         //
     }
 
- 
+
     public function update(Request $request, $id)
     {
         //
     }
 
-    
+
     public function destroy($id)
     {
         //

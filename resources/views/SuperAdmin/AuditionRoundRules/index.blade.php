@@ -246,7 +246,7 @@
                         <img src="{{ asset($rules->category ? $rules->category->icon : '') }}" class="imgWidth pt-2"
                             alt={{ $rules->category ? $rules->category->name : '' }} icon>
                         {{-- </center> --}}
-                        <a class="btn  border-warning  
+                        <a class="btn  border-warning
                         {{-- {{ $key == 0 ? 'active' : '' }} --}}
                         "
                             onclick="selectedCategory('{{ $rules->id }}')" data-toggle="tab"
@@ -281,7 +281,7 @@
 
                 </div>
 
-                <form id="create-form mt-3">
+                <form id="create-form">
                     @csrf
 
                     <div class="row">
@@ -410,7 +410,7 @@
                             </div>
                         </div> --}}
 
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="w-100 mt-2">
                                 <div class="wildcard__title">
                                     <p class='text-warning'>Round Period</p>
@@ -608,7 +608,7 @@
                             '</span>' +
                             '</center>' +
                             '<a onclick="showRules(' + round.id +
-                            ')" class="btn border-warning roundText" data-toggle="tab" href="" role="tab">Rolls</a>' +
+                            ')" class="btn border-warning roundText" data-toggle="tab" href="" role="tab">Rules</a>' +
                             '</a>' +
                             '</li>'
 
@@ -852,53 +852,75 @@
 
         $(document).on('click', '#SubmitRules', function(event) {
             event.preventDefault();
-            ErrorMessageClear();
-            $('.wild_card__two').css("display", "block");
-            var round_id = $('#round_id').val();
-            var form = $('#create-form')[0];
+
+            let round_period = Number($('#round_period').val());
+
+            let video_upload_period = Number($('#video_upload_period').val());
+            let jury_or_judge_mark_period = Number($('#jury_or_judge_mark_period').val());
+            let result_publish_period = Number($('#result_publish_period').val());
+            let appeal_period = Number($('#appeal_period').val());
+            let appeal_result_publish_period = Number($('#appeal_result_publish_period').val());
+            let appeal_video_upload_period = Number($('#appeal_video_upload_period').val());
+            let appeal_jury_or_judge_mark_period = Number($('#appeal_jury_or_judge_mark_period').val());
 
 
-            var formData = new FormData(form);
-            formData.append('round_id', round_id);
-            formData.append('has_user_vote_mark', $('#checkbox1').prop('checked') ? 1 : 0);
 
-            // Set header if need any otherwise remove setup part
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
-                }
-            });
+            let sum_of_round_period = video_upload_period + jury_or_judge_mark_period +
+                result_publish_period + appeal_period + appeal_result_publish_period + appeal_video_upload_period +
+                appeal_jury_or_judge_mark_period;
 
-            $.ajax({
-                url: "{{ route('superAdmin.audition-round-rules.store') }}", // your request url
-                data: formData,
-                processData: false,
-                contentType: false,
-                type: 'POST',
-                success: function(data) {
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: data.type,
-                        title: data.message,
-                        showConfirmButton: false,
-                        // timer: 1500
-                    });
-                    setTimeout(function() {
-                        location.reload();
-                    }, 1000);
-                    console.log(data)
-                },
-                error: function(data) {
+            if (round_period == sum_of_round_period) {
 
-                    $.each(data.responseJSON.errors, function(key, value) {
-                        ErrorMessage(key, value);
-                    });
+                ErrorMessageClear();
+                $('.wild_card__two').css("display", "block");
+                var round_id = $('#round_id').val();
+                var form = $('#create-form')[0];
 
 
-                    console.log(data);
-                }
-            });
-            showRules(round_id);
+                var formData = new FormData(form);
+                formData.append('round_id', round_id);
+                formData.append('has_user_vote_mark', $('#checkbox1').prop('checked') ? 1 : 0);
+
+                // Set header if need any otherwise remove setup part
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('superAdmin.audition-round-rules.store') }}", // your request url
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    success: function(data) {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: data.type,
+                            title: data.message,
+                            showConfirmButton: false,
+                            // timer: 1500
+                        });
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                        console.log(data)
+                    },
+                    error: function(data) {
+
+                        $.each(data.responseJSON.errors, function(key, value) {
+                            ErrorMessage(key, value);
+                        });
+
+
+                        console.log(data);
+                    }
+                });
+                showRules(round_id);
+            } else {
+                $('#hole_round_peroid_error').html('Total Time Period Should ' + round_period + ' !');
+            }
         });
 
         $(document).ready(function() {

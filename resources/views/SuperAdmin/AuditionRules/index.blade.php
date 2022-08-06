@@ -37,7 +37,7 @@ Super Admin
 </style>
 <div class="content">
     <div class="container-fluid">
-        <div class="col-md-2 ">
+        {{-- <div class="col-md-2 ">
             <div class="card cards AddC border-warning">
                 <center>
                     <img src="{{ asset('assets/super-admin/images/CreateNewAuditionsrules.png') }}"
@@ -47,11 +47,11 @@ Super Admin
                         class="" style="color:
                         #8CF9FF">Create New Audition Rules</a></button>
             </div>
-        </div>
+        </div> --}}
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Ongoing Events list</h3>
+                <h3 class="card-title">Audition Rules</h3>
                 {{-- <a class="btn btn-success btn-sm" style="float: right;"
                         onclick="Show('New Audition','{{ route('superAdmin.events.create') }}')"><i
                     class=" fa fa-plus"></i>&nbsp;New Audition</a> --}}

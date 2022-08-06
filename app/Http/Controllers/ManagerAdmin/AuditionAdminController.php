@@ -353,9 +353,9 @@ class AuditionAdminController extends Controller
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
 
-   
 
-   
+
+
 
 
 
@@ -447,7 +447,7 @@ class AuditionAdminController extends Controller
         return redirect()->back()->with('success', 'Published');
     }
 
-    public function manager_audition_set_publish(Request $request,$audition_id)
+    public function manager_audition_set_publish(Request $request, $audition_id)
     {
         $audition = Audition::find($audition_id);
 
@@ -459,7 +459,7 @@ class AuditionAdminController extends Controller
             $audition->status = 2;
             $audition->update();
 
-        //    return $audition->star;
+            //    return $audition->star;
 
             // Create New post //
             $post = new Post();
@@ -477,12 +477,10 @@ class AuditionAdminController extends Controller
             $audition->update();
 
             //Remove post //
-            $post = Post::where([['event_id', $audition->id],['type','audition']])->first();
+            $post = Post::where([['event_id', $audition->id], ['type', 'audition']])->first();
             $post->delete();
             return redirect()->back()->with('error', 'Unpublished');
         }
-
-
     }
 
 
@@ -512,35 +510,40 @@ class AuditionAdminController extends Controller
     }
     public function auditionEvents()
     {
-        $auditions =  Audition::where('category_id', auth()->user()->category_id )->get();
-        return view('ManagerAdmin.Audition.events',compact('auditions'));
+        $auditions =  Audition::where('category_id', auth()->user()->category_id)->get();
+        return view('ManagerAdmin.Audition.events', compact('auditions'));
     }
 
-    public function getPromoInstruction($audition_id){
-        $event = Audition::where([['id',$audition_id]])->first();
-        $instruction = AuditionPromoInstruction::where([['audition_id',$audition_id],['send_to_manager',1]])->first();
-        return view('ManagerAdmin.Audition.promo_instruction',compact('instruction','event'));
+    public function getPromoInstruction($audition_id)
+    {
+        $event = Audition::where([['id', $audition_id]])->first();
+        $instruction = AuditionPromoInstruction::where([['audition_id', $audition_id], ['send_to_manager', 1]])->first();
+        return view('ManagerAdmin.Audition.promo_instruction', compact('instruction', 'event'));
     }
 
-    public function getRoundInstruction($audition_id){
-         $event = Audition::find($audition_id);
-        return view('ManagerAdmin.Audition.round_instruction',compact('event'));
+    public function getRoundInstruction($audition_id)
+    {
+        $event = Audition::find($audition_id);
+        return view('ManagerAdmin.Audition.round_instruction', compact('event'));
     }
 
 
-    public function getRoundResult(){
-        $auditions = Audition::where([['status','>=',2],['category_id', auth()->user()->category_id]])->get();
-        return view('ManagerAdmin.Audition.round_result',compact('auditions'));
+    public function getRoundResult()
+    {
+        $auditions = Audition::where([['status', '>=', 2], ['category_id', auth()->user()->category_id]])->get();
+        return view('ManagerAdmin.Audition.round_result', compact('auditions'));
     }
 
-    public function showRoundResult($audition_id){
-         $event = Audition::find($audition_id);
-        return view('ManagerAdmin.Audition.show_round_result',compact('event'));
+    public function showRoundResult($audition_id)
+    {
+        $event = Audition::find($audition_id);
+        return view('ManagerAdmin.Audition.show_round_result', compact('event'));
     }
 
-    public function viewRoundAppealResult($audition_id){
-         $event = Audition::find($audition_id);
-        return view('ManagerAdmin.Audition.view_round_appeal_result',compact('event'));
+    public function viewRoundAppealResult($audition_id)
+    {
+        $event = Audition::find($audition_id);
+        return view('ManagerAdmin.Audition.view_round_appeal_result', compact('event'));
     }
 
     public function registrationRules()
@@ -556,7 +559,7 @@ class AuditionAdminController extends Controller
     {
         $audition = Audition::find($audition_id);
         $groups = json_decode($audition->auditionRules->jury_groups);
-         $round_rules = AuditionRoundRule::where('audition_rules_id', $audition->audition_rules_id)->get();
+        $round_rules = AuditionRoundRule::where('audition_rules_id', $audition->audition_rules_id)->get();
 
         $data = [
             'audition' => $audition,
@@ -580,8 +583,8 @@ class AuditionAdminController extends Controller
         ]);
 
         $audition = Audition::find($request->audition_id);
-        $audition->user_reg_start_date = date('Y-m-d',strtotime($request->registration_start_date));
-        $audition->user_reg_end_date = date('Y-m-d',strtotime($request->registration_end_date));
+        $audition->user_reg_start_date = date('Y-m-d', strtotime($request->registration_start_date));
+        $audition->user_reg_end_date = date('Y-m-d', strtotime($request->registration_end_date));
         $audition->final_result_published_date = $request->final_result_published_date;
         $audition->fees = $request->fees;
 
@@ -605,10 +608,6 @@ class AuditionAdminController extends Controller
                 'message' => $exception->getMessage(),
             ]);
         }
-
-
-
-        // return $request->all();
     }
 
 
@@ -626,21 +625,23 @@ class AuditionAdminController extends Controller
             'round_rules' => $round_rules,
         ];
 
-        return view('ManagerAdmin.registrationRule.edit',$data);
+        return view('ManagerAdmin.registrationRule.edit', $data);
     }
 
-    public function getRoundInfo($round_id){
-       $round = AuditionRoundRule::find($round_id);
+    public function getRoundInfo($round_id)
+    {
+        $round = AuditionRoundRule::find($round_id);
 
-       return view('ManagerAdmin.registrationRule.round_rules',compact('round'));
-    //    return response()->json([
-    //     'status' => 200,
-    //     'round' => $round,
-    //    ]);
+        return view('ManagerAdmin.registrationRule.round_rules', compact('round'));
+        //    return response()->json([
+        //     'status' => 200,
+        //     'round' => $round,
+        //    ]);
 
     }
 
-    public function updateRegistrationRound(Request $request,$round_id){
+    public function updateRegistrationRound(Request $request, $round_id)
+    {
         // return $request->all();
         $round = AuditionRoundRule::find($round_id);
 
@@ -655,7 +656,7 @@ class AuditionAdminController extends Controller
         $round->appeal_result_date       = $request->appeal_result_date;
 
         $round->save();
-        session()->flash('success','Updated Successfully');
+        session()->flash('success', 'Updated Successfully');
         return redirect()->back();
     }
 }

@@ -46,8 +46,8 @@
             color: #ffc107;
         }
 
-        .under-line-x{
-            height: 1px ;
+        .under-line-x {
+            height: 1px;
             width: 100%;
             background: rgb(36, 38, 43) !important;
         }
@@ -102,22 +102,25 @@
         }
 
 
-        .bg-gray-custom{
+        .bg-gray-custom {
             background-color: #343a40;
             border-radius: 20px !important;
         }
-        .custom-control-i{
+
+        .custom-control-i {
             border-radius: 30px !important;
             background-color: #151515 !important;
             color: white;
 
             border: .2px solid #ffad00 !important;
         }
-        .from-custom-i{
+
+        .from-custom-i {
             background-color: #151515 !important;
             border: .2px solid #ffad00 !important;
         }
-        .bh-bg-card{
+
+        .bh-bg-card {
             background: black;
             border-left: 3px solid gold;
             border-right: 3px solid gold;
@@ -135,23 +138,22 @@
         }
 
 
-        .btn-warning-custom{
+        .btn-warning-custom {
             border-radius: 30px;
             background: linear-gradient(102.45deg, #F5EA45 28.52%, #DDA336 52.38%, #E7A725 72.31%);
         }
 
-        .a-bg-color{
+        .a-bg-color {
             width: 100%;
             background: linear-gradient(102.45deg, #F5EA45 28.52%, #DDA336 52.38%, #E7A725 72.31%);
             border-radius: 30px;
         }
 
-        .a-bg-color:hover{
+        .a-bg-color:hover {
             width: 100%;
             background: linear-gradient(102.45deg, #F5EA45 28.52%, #F5EA45 52.38%, #F5EA45 72.31%);
             border-radius: 30px;
         }
-
     </style>
 
 
@@ -470,8 +472,10 @@
 
     <script>
         function Show(title, link, style = '') {
-
-            // alert();
+            // console.log(title);
+            // console.log(link);
+            // console.log(style);
+            // // alert();
             $('#modal').modal();
             $('#modal-title').html(title);
             $('#modal-body').html('<h1 class="text-center"><strong>Please Wait...</strong></h1>');
