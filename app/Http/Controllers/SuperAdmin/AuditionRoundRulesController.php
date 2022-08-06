@@ -63,7 +63,7 @@ class AuditionRoundRulesController extends Controller
         if ($request->has_user_vote_mark == 1) {
             $round->mark_live_or_offline = $request->mark_live_or_offline;
             $round->user_vote_mark = $request->user_vote_mark == null ? 0 : $request->user_vote_mark;
-        }else{
+        } else {
             $round->mark_live_or_offline = null;
             $round->user_vote_mark = null;
         }
@@ -74,7 +74,7 @@ class AuditionRoundRulesController extends Controller
         $round->wildcard = $request->wildcard;
         if ($request->wildcard == 1) {
             $round->wildcard_round = $request->wildcard_round;
-        }else{
+        } else {
             $round->wildcard_round = null;
         }
 
@@ -94,7 +94,7 @@ class AuditionRoundRulesController extends Controller
             $round->appeal_video_upload_period = $request->appeal_video_upload_period;
             $round->appeal_jury_or_judge_mark_period = $request->appeal_jury_or_judge_mark_period;
             $round->appeal_result_publish_period = $request->appeal_result_publish_period;
-        }else{
+        } else {
             $round->appeal_period = 0;
             $round->appeal_result_publish_period = 0;
             $round->appeal_video_upload_period = 0;
@@ -103,10 +103,10 @@ class AuditionRoundRulesController extends Controller
 
 
         $round->save();
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'Round Rules Save Successfully'
-        // ]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Round Rules Save Successfully'
+        ]);
     }
 
 
@@ -119,12 +119,12 @@ class AuditionRoundRulesController extends Controller
 
         $total_round_days = $round_rules->sum('round_period');
 
-        $round_available_days = $audition_rule->event_period -($audition_rule->registration_period+$audition_rule->instruction_prepare_period);
+        $round_available_days = $audition_rule->event_period - ($audition_rule->registration_period + $audition_rule->instruction_prepare_period);
 
         return response()->json([
             'status' => 'success',
             'round_rules' => $round_rules,
-            'round_available_days' => $round_available_days-$total_round_days,
+            'round_available_days' => $round_available_days - $total_round_days,
         ]);
     }
     public function getMark($id)
