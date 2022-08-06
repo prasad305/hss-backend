@@ -90,9 +90,17 @@ class UserController extends Controller
 
     public function allSearchData($query){
         // return gettype($query);
-        $superstar = SuperStar::where('terms_and_condition', 'LIKE', "%$query%")
-                                ->orWhere('description', 'LIKE', "%$query%")
-                                ->latest()->get();
+        $superstar = User::where('user_type', 'star')->where('first_name', 'LIKE', "%$query%")
+                                 ->orWhere('last_name', 'LIKE', "%$query%")
+                                 ->latest()->get();
+
+        // $superstar = SuperStar::whereHas('superStar', function ($q) use ($query) {
+        //     $q->where('first_name', 'LIKE', "%$query%")->orWhere('last_name', 'LIKE', "%$query%");
+        // })->where('terms_and_condition', 'LIKE', "%$query%")
+        //                         ->orWhere('description', 'LIKE', "%$query%")
+        //                         ->latest()->get();
+
+        // return $superstar;
 
         $posts = Post::where('title', 'LIKE', "%$query%")
                             ->orWhere('details', 'LIKE', "%$query%")
