@@ -1,4 +1,4 @@
-@extends('Layouts.ManagerAdmin.master')
+extends('Layouts.ManagerAdmin.master')
 
 @push('title')
     Manager Admin
@@ -60,7 +60,7 @@
                                     </video>
                                 </div>
                             @endforeach
-                         
+
 
                         </div>
 

@@ -206,7 +206,7 @@ class AuthController extends Controller
                 'message' => 'Invalid Credantials',
             ]);
         } else {
-            // AuditionEventRegistration
+            // MeetupEventRegistration
             if ($modelName == 'MeetupEventRegistration') {
                 $countValue  = MeetupEventRegistration::where('user_id', $user->id)->where('meetup_event_id', $eventId)->count();
             }

@@ -41,7 +41,16 @@ class JuryGroupController extends Controller
             ]
         );
 
-        $groups = JuryGroup::where('category_id',$request->category_id)->get();
+        $groups = JuryGroup::where('category_id', $request->category_id)->get();
+
+        foreach ($groups as $group) {
+            if ($group->is_primary == 1 && $request->is_primary == 1) {
+                return response()->json([
+                    'type' => 'error',
+                    'message' => 'Primary Group Already Exits',
+                ]);
+            }
+        }
 
         if (isset($groups) && count($groups) >= 3) {
             return response()->json([
@@ -101,7 +110,16 @@ class JuryGroupController extends Controller
             ]
         );
 
-        $groups = JuryGroup::where('category_id',$request->category_id)->get();
+        $groups = JuryGroup::where('category_id', $request->category_id)->get();
+
+        foreach ($groups as $group) {
+            if ($group->is_primary == 1 && $request->is_primary == 1) {
+                return response()->json([
+                    'type' => 'error',
+                    'message' => 'Primary Group Already Exits',
+                ]);
+            }
+        }
 
         if (isset($groups) && count($groups) >= 3) {
             return response()->json([

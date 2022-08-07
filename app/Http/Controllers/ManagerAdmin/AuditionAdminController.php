@@ -22,85 +22,6 @@ use Illuminate\Support\Facades\File;
 
 class AuditionAdminController extends Controller
 {
-    public function index()
-    {
-        $auditionAdmins = User::where([['category_id', auth()->user()->category_id], ['user_type', 'audition-admin']])->orderBy('id', 'DESC')->get();
-        return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins'));
-    }
-
-
-
-
-    public function juryPublished($audition_id)
-    {
-        $assignJuries = AuditionParticipant::select('jury_id')->get();
-
-        $userIds = [];
-        foreach ($assignJuries as $jury) {
-            if ($jury->jury_id != null) {
-                array_push($userIds, $jury->jury_id);
-            }
-        }
-
-        $avaiable_juries = User::whereNotIn('id', $userIds)->where('user_type', 'jury')->orderBy('id', 'DESC')->get();
-
-        $filter_videos = AuditionParticipant::where([['audition_id', $audition_id], ['accept_status', 1], ['filter_status', 1], ['send_manager_admin', 1], ['jury_id', null]])->get();
-
-        $total_jury = count($avaiable_juries);
-        $total_video = count($filter_videos);
-
-        $videoPackArray = [];
-        if ($total_jury > 0) {
-            $video_pack = floor($total_video / $total_jury);
-            for ($total_jury; $total_jury > 0; $total_jury--) {
-                if ($total_jury == 1) {
-                    array_push($videoPackArray, $total_video);
-                } else {
-                    array_push($videoPackArray, $video_pack);
-                    $total_video = $total_video - $video_pack;
-                }
-            }
-        }
-
-        $data = [
-            'filter_videos' => $filter_videos,
-            'avaiable_juries' => $avaiable_juries,
-            'video_pack' => $videoPackArray,
-            'audition_id' => $audition_id,
-        ];
-
-        return view('ManagerAdmin.Audition.jury_published', $data);
-    }
-
-
-
-
-    public function assinged()
-    {
-        $assignAdmins = AssignAdmin::select('assign_person')->get();
-
-        $userIds = [];
-        foreach ($assignAdmins as $assignAdmin) {
-            array_push($userIds, $assignAdmin->assign_person);
-        }
-        $auditionAdmins = User::whereIn('id', $userIds)->orderBy('id', 'DESC')->get();
-
-        return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins'));
-    }
-
-    public function notAssinged()
-    {
-        $assignAdmins = AssignAdmin::select('assign_person')->get();
-
-        $userIds = [];
-        foreach ($assignAdmins as $assignAdmin) {
-            array_push($userIds, $assignAdmin->assign_person);
-        }
-        $auditionAdmins = User::whereNotIn('id', $userIds)->where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
-        return view('ManagerAdmin.auditionAdmin.index', compact('auditionAdmins'));
-    }
-
-
     public function instruction($audition_id)
     {
         $audition = Audition::find($audition_id);
@@ -280,11 +201,6 @@ class AuditionAdminController extends Controller
         }
     }
 
-    public function customSearch($text)
-    {
-        return $text;
-    }
-
 
     public function destroy(User $auditionAdmin)
     {
@@ -344,19 +260,12 @@ class AuditionAdminController extends Controller
         }
     }
 
-    //<=================== Audition Logic by srabon =============================
-
     public function all()
     {
         $audition = Audition::where('status', '>', 1)->latest()->get();
 
         return view('ManagerAdmin.Audition.index', compact('audition'));
     }
-
-
-
-
-
 
 
     public function auditionEdit($id)
@@ -500,10 +409,6 @@ class AuditionAdminController extends Controller
     {
         return view('ManagerAdmin.Audition.adminAssignSubmit');
     }
-    public function auditionDashboard()
-    {
-        return view('ManagerAdmin.Audition.auditionAdminDashboard');
-    }
     public function auditionJuries()
     {
         return view('ManagerAdmin.Audition.juries');
@@ -631,18 +536,11 @@ class AuditionAdminController extends Controller
     public function getRoundInfo($round_id)
     {
         $round = AuditionRoundRule::find($round_id);
-
         return view('ManagerAdmin.registrationRule.round_rules', compact('round'));
-        //    return response()->json([
-        //     'status' => 200,
-        //     'round' => $round,
-        //    ]);
-
     }
 
     public function updateRegistrationRound(Request $request, $round_id)
     {
-        // return $request->all();
         $round = AuditionRoundRule::find($round_id);
 
         $round->video_duration           = $request->video_duration;

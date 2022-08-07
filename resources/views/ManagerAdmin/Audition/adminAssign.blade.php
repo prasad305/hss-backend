@@ -31,7 +31,6 @@
 
                 <div class="container mt-5">
                     <div class="row">
-
                         <div class="col-md-3">
                             <div class="card Cardnew">
                                 <div style="height:170px; width:100%;"
@@ -96,7 +95,7 @@
 
                         <li class="nav-item">
                             <a href="{{route('managerAdmin.audition.adminAssignSubmit')}}"><button class="nav-link btn  mx-2 bg-info">Assign
-                            </button></a> 
+                            </button></a>
                         </li>
                     </ul>
                 </div>
