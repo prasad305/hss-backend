@@ -22,6 +22,8 @@ class CreatePackagesTable extends Migration
             $table->integer('live_chats')->default(0);
             $table->integer('meetup')->default(0);
             $table->integer('greetings')->default(0);
+            $table->integer('qna')->default(0);
+            $table->string('color_code')->nullable();
             $table->integer('status')->default(0);
             $table->float('price')->nullable();
             $table->timestamps();
