@@ -200,15 +200,6 @@ class User extends Authenticatable
         return $this->hasMany(AuditionComment::class, 'user_id');
     }
 
-    public function createdAuditionEvents()
-    {
-        return $this->hasMany(AuditionEvent::class, 'created_by_id');
-    }
-
-    public function asStarAuditionEvents()
-    {
-        return $this->hasMany(AuditionEvent::class, 'star_id');
-    }
     public function asStarGreeting()
     {
         return $this->hasOne(Greeting::class, 'star_id');

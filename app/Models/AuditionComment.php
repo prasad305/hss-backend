@@ -19,11 +19,6 @@ class AuditionComment extends Model
         'status',
     ];
 
-    public function auditionEvent()
-    {
-        return $this->belongsTo(AuditionEvent::class, 'audition_event_id');
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

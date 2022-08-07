@@ -4,8 +4,6 @@ namespace Database\Seeders\Audition;
 
 use App\Models\Audition\AuditionJudgeInstruction;
 use Illuminate\Database\Seeder;
-use App\Models\AuditionEvent;
-use Carbon\Carbon;
 use Faker\Generator as Faker;
 
 class AuditionJudgeInstructionSeeder extends Seeder
