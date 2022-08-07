@@ -9,7 +9,6 @@ use App\Models\SuperStar;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
-use App\Models\Audition\AssignJudge;
 use App\Models\Audition\AuditionAssignJudge;
 use App\Models\Audition\AuditionAssignJury;
 use App\Models\Audition\AuditionJudgeInstruction;
@@ -32,8 +31,6 @@ use Illuminate\Support\Str;
 
 class AuditionController extends Controller
 {
-
-
     public function events()
     {
         $events = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', '>', 0]])->get();
@@ -43,7 +40,6 @@ class AuditionController extends Controller
             'events' => $events,
         ]);
     }
-
 
     public function statusUpdate(Request $request)
     {
@@ -1495,21 +1491,6 @@ class AuditionController extends Controller
         return response()->json([
             'status' => 200,
             'event' => $audition,
-        ]);
-    }
-
-
-
-
-    // Send to Manager Admin
-    public function sendManager($audition_id)
-    {
-        $total_audition = AssignJudge::where('audition_id', $audition_id)->count();
-        $sendManager = AssignJudge::where([['audition_id', $audition_id], ['approved_by_judge', 1]])->count();
-
-        return response()->json([
-            'status' => 200,
-            'sendManager' => $total_audition == $sendManager,
         ]);
     }
 

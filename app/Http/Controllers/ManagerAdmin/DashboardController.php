@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
-use App\Models\AssignJury;
 use App\Models\Auction;
-use App\Models\Audition\AssignJudge;
 use App\Models\Audition\Audition;
 use App\Models\Bidding;
 use App\Models\Category;
@@ -458,12 +456,13 @@ class DashboardController extends Controller
     public function auditions()
     {
         // Total
-        $total = Audition::where('category_id', auth()->user()->category_id)->count();
-        $upcoming = Audition::where('status', 0)->where('category_id', auth()->user()->category_id)->count();
-        $running = Audition::where('status', 1)->where('category_id', auth()->user()->category_id)->count();
-        $complete = Audition::where('status', 10)->where('category_id', auth()->user()->category_id)->count();
-        $totalJudge = AssignJudge::distinct('judge_id')->count();
-        $totalJury = AssignJury::distinct('jury_id')->count();
+        $total = 0;
+        $upcoming = 0;
+        $running = 0;
+        $complete = 0;
+        $totalJudge = 0;
+        $totalJury = 0;
+
 
         // Registered User
 
@@ -610,18 +609,6 @@ class DashboardController extends Controller
         return view('ManagerAdmin.fangroup.Superstar.superstar_events', compact('fanGroup'));
     }
 
-    public function auditionsJudgeData()
-    {
-        $judgeList = AssignJudge::with(['user', 'auditions'])->where('category_id', auth()->user()->category_id)->get();
-
-        // dd($judgeList);
-        return view('ManagerAdmin.Audition.auditionsJudges', compact('judgeList'));
-    }
-    public function auditionsJuryData()
-    {
-        $juryList = AssignJury::with(['user', 'auditions'])->where('category_id', auth()->user()->category_id)->get();
-        return view('ManagerAdmin.Audition.auditionsJuries', compact('juryList'));
-    }
     public function wildCardUser()
     {
         return view('ManagerAdmin.Audition.AuditionStatic.wildCardUser');
