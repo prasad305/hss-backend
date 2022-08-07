@@ -870,10 +870,6 @@ Route::middleware(['auth:sanctum', 'isAPIJuryBoard'])->group(function () {
         return response()->json(['message' => 'You are in as Jury Audition', 'status' => 200], 200);
     });
 
-    // Route::get('/jury/selectVideo', [AuditionController::class, 'getJuryVideos']);
-    // Route::post('/jury/juryMarking', [AuditionController::class, 'juryMarking']);
-    // Route::get('/jury/juryMarkingDone/videos', [AuditionController::class, 'markingDone']);
-
     Route::get('/jury/audition/lives', [JuryAuditionController::class, 'live']);
     Route::post('/jury/audition/mark-assessment', [JuryAuditionController::class, 'markAssessment']);
     Route::post('/jury/audition/mark-assessment-as-main-group', [JuryAuditionController::class, 'markAssessmentAsMainGroup']);

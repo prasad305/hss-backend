@@ -325,8 +325,7 @@
     <!-- Bootstrap -->
     <script src="{{ asset('assets/super-admin/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- overlayScrollbars -->
-    <script src="{{ asset('assets/super-admin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}">
-    </script>
+    <script src="{{ asset('assets/super-admin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('assets/super-admin/dist/js/adminlte.js') }}"></script>
 
@@ -334,10 +333,8 @@
     <!-- DataTables  & Plugins -->
     <script src="{{ asset('assets/super-admin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/super-admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/super-admin/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}">
-    </script>
-    <script src="{{ asset('assets/super-admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}">
-    </script>
+    <script src="{{ asset('assets/super-admin/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('assets/super-admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('assets/super-admin/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('assets/super-admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('assets/super-admin/plugins/jszip/jszip.min.js') }}"></script>
@@ -502,6 +499,15 @@
             if (key == 'video_feed') {
                 $('#video_feed_error').html(value);
             }
+            if (key == 'name') {
+                $('#name_error').html(value);
+            }
+            if (key == 'event_period') {
+                $('#event_preiod_error').html(value);
+            }
+            if (key == 'registration_period') {
+                $('#registration_preiod_error').html(value);
+            }
 
         }
 
@@ -530,6 +536,9 @@
             $('#mark_live_or_offline_error').html('');
             $('#wild_card_error').html('');
             $('#video_feed_error').html('');
+            $('#name_error').html('');
+            $('#event_period').html('');
+            $('#registration_period').html('');
         }
     </script>
 
