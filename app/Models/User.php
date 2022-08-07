@@ -189,17 +189,6 @@ class User extends Authenticatable
         return $this->hasMany(LearningSessionRegistration::class, 'user_id');
     }
 
-
-    public function auditionReacts()
-    {
-        return $this->hasMany(AuditionReact::class, 'user_id');
-    }
-
-    public function auditionComments()
-    {
-        return $this->hasMany(AuditionComment::class, 'user_id');
-    }
-
     public function asStarGreeting()
     {
         return $this->hasOne(Greeting::class, 'star_id');
