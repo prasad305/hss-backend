@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionAssignJury;
-use App\Models\Audition\AuditionMark;
 use App\Models\Category;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPromoInstructionSendInfo;
@@ -53,18 +52,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
-
-
-    //Relation For API
     protected $with = ['assignedToMePromoInstructionSendInfo', 'userInfo', 'admin', 'star.starDetails', 'category', 'subCategory'];
 
 
@@ -87,11 +78,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(User::class, 'parent_user');
     }
-    // public function starInfo()
-    // {
-    //     return $this->hasOne(SuperStar::class, 'star_id');
-    // }
-
 
     public function userInfo()
     {
@@ -228,32 +214,21 @@ class User extends Authenticatable
         return $this->hasOne(JuryBoard::class, 'star_id');
     }
 
-
     public function participant_jury()
     {
         return $this->hasMany(AuditionParticipant::class, 'jury_id');
     }
-    // public function assignedJuryVideos(){
-    //     return $this->hasMany(AuditionUploadVideo::class, 'jury_id');
-    // }
 
-    public function markingVideo()
-    {
-        return $this->hasMany(AuditionMark::class, 'jury_id');
-    }
-
-
-    // all of this below relation is for audition admin user
     public function assignedAudition()
     {
         return $this->hasOne(Audition::class, 'audition_admin_id');
     }
+
     public function auditionCategory()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    // all of this below relation is for jury user
     public function assignedAuditionsJury()
     {
         return $this->hasMany(AuditionAssignJury::class, 'jury_id');

@@ -13,7 +13,6 @@ use App\Models\Audition\AuditionAssignJudge;
 use App\Models\Audition\AuditionAssignJury;
 use App\Models\Audition\AuditionJudgeInstruction;
 use App\Models\Audition\AuditionParticipant;
-use App\Models\Audition\AuditionMark;
 use App\Models\Audition\AuditionPromoInstruction;
 use App\Models\Audition\AuditionPromoInstructionSendInfo;
 use App\Models\Audition\AuditionRoundInfo;
@@ -1735,160 +1734,6 @@ class AuditionController extends Controller
         ]);
     }
 
-    public function juryMarking(Request $request)
-    {
-
-
-        $validator = Validator::make($request->all(), [
-            'participant_id' => 'required',
-            'audition_id' => 'required',
-        ]);
-
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 422,
-                'validation_errors' => $validator->errors(),
-            ]);
-        } else {
-
-            $audition =  Audition::find($request->audition_id);
-            if ($audition->setJuryMark >= $request->marks) {
-
-                $auditionMark = AuditionMark::create([
-
-                    //'judge_id' => $request->judge_id,
-                    'participant_id' => $request->participant_id,
-                    'audition_id' => $request->audition_id,
-                    'jury_id' => Auth::user()->id,
-                    'comments' => $request->comments,
-                    'status' => 1
-
-                ]);
-
-                if ($auditionMark) {
-                    if ($request->selected == 1) {
-                        $auditionMark->participant_status = 1;
-                        $auditionMark->marks = $request->marks;
-                    }
-
-                    if ($request->rejected == 1) {
-                        $auditionMark->participant_status = 0;
-                    }
-                    $auditionMark->save();
-
-                    AuditionParticipant::find($request->participant_id)->update([
-                        'marks_id' => $auditionMark->id,
-                    ]);
-                }
-
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Marking Successfully',
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 202,
-                    'message' => $audition->setJuryMark,
-                ]);
-            }
-        }
-    }
-    public function markingDone()
-    {
-
-        $accepted_videos = AuditionMark::with('auditionsParticipant')->orderBy('id', 'DESC')->where([['jury_id', auth()->user()->id], ['marks', '!=', null]])->get();
-
-        return response()->json([
-            'status' => 200,
-            'accepted_videos' => $accepted_videos,
-        ]);
-    }
-
-
-    public function juryMarkingVideos($audition_id)
-    {
-
-        // $audition_juries = AuditionParticipant::where([['audition_id', $audition_id], ['accept_status', 1], ['filter_status', 1], ['jury_id', '!=', null]])->get();
-
-        $audition_participants = AuditionParticipant::where([['audition_id', $audition_id], ['accept_status', 1], ['filter_status', 1], ['jury_id', '!=', null]])->get();
-
-        $juryIds = [];
-        foreach ($audition_participants as $key => $jury) {
-            array_push($juryIds, $jury->jury_id);
-        }
-
-        $juries = User::whereIn('id', $juryIds)->with(['participant_jury', 'markingVideo'])->orderBy('id', 'desc')->get();
-
-
-        return response()->json([
-            'status' => 200,
-            'audition_participants' => $audition_participants,
-            'juries' => $juries,
-        ]);
-    }
-
-    public function getJuryMarkingVideos($jury_id)
-    {
-        $marking_videos = AuditionMark::where('jury_id', $jury_id)->count();
-        $passed_videos = AuditionMark::where([['jury_id', $jury_id], ['participant_status', 1]])->count();
-        $failed_videos = AuditionMark::where([['jury_id', $jury_id], ['participant_status', 0]])->count();
-
-        return response()->json([
-            'status' => 200,
-            'marking_videos' => $marking_videos,
-            'passed_videos' => $passed_videos,
-            'failed_videos' => $failed_videos,
-        ]);
-    }
-
-    public function getMarkWiseVideos($audition_id, $mark)
-    {
-        $marking_videos = AuditionMark::where('audition_id', $audition_id)->where('selected_status', 1)->where('marks', '>=', $mark)->count();
-
-        return response()->json([
-            'status' => 200,
-            'mark_wise_videos' => $marking_videos,
-        ]);
-    }
-
-
-
-    public function selectedTop(Request $request)
-    {
-
-
-        if ($request->mark_wise != null && $request->mark_wise == 'mark') {
-            AuditionMark::where('audition_id', $request->audition_id)->where('marks', '>=', $request->selected_top)->where('participant_status', 1)->update([
-                'selected_status' => 1,
-                'message' => $request->message,
-            ]);
-        }
-
-        if ($request->number_wise != null && $request->number_wise == 'number') {
-            AuditionMark::where('audition_id', $request->audition_id)->where('participant_status', 1)->take($request->selected_top)->update([
-                'selected_status' => 1,
-                'message' => $request->message,
-            ]);
-        }
-        return response()->json([
-            'status' => 200,
-            'message' => 'Selected Top Videos and Message Send Successfully',
-        ]);
-    }
-    public function rejectedMessage(Request $request)
-    {
-        AuditionMark::where('marks', null)->where('participant_status', 0)->update([
-            'selected_status' => 0,
-            'message' => $request->message,
-        ]);
-        return response()->json([
-            'status' => 200,
-            'message' => 'Rejected Videos and Message Send Successfully',
-        ]);
-    }
-
-
     public function participantList($id)
     {
         $participantList = AuditionParticipant::with(['audition', 'participant'])->where('audition_id', $id)->latest()->get();
@@ -2074,24 +1919,6 @@ class AuditionController extends Controller
             ]);
         }
     }
-
-    public function juryMarkOnVideosStatus($audition_id, $round_rules_id)
-    {
-        $audition = Audition::find($audition_id);
-        $juryIds = $audition->assignedJuries->pluck('jury_id');
-        $juryAssignVideos = $audition->uploadedVideos->whereIn('jury_id', $juryIds)->where('round_id', $round_rules_id);
-        $juryMarkingVideos = $juryAssignVideos->whereIn('jury_approval_status', [1, 2]);
-        $juryPassedVideos = $juryMarkingVideos->where([['jury_approval_status', 1], ['mark', '!=', null]]);
-        $juryFailedVideos = $juryMarkingVideos->where([['jury_approval_status', 2], ['mark', '!=', null]]);
-        return response()->json([
-            'status' => 200,
-            'juryAssignvideos' => $juryAssignVideos,
-            'juryMarkingVideos' => $juryMarkingVideos,
-            'juryPassedVideos' => $juryPassedVideos,
-            'juryFailedVideos' => $juryFailedVideos,
-        ]);
-    }
-
 
     public function group_juries($audition_id, $group_id)
     {

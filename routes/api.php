@@ -731,14 +731,10 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
         return response()->json(['message' => 'You are in as Audition Admin', 'status' => 200], 200);
     });
 
-    // Audition Route For Audition Admin
     Route::get('/audition-admin/audition/events', [AuditionController::class, 'events']);
     Route::post('/audition-admin/audition/status/update', [AuditionController::class, 'statusUpdate']);
     Route::post('/audition-admin/audition/post-content/store', [AuditionController::class, 'storePostContent']);
     Route::get('/audition-admin/audition/post_list', [AuditionController::class, 'postList']);
-
-
-
     Route::get('/audition-admin/audition/count', [AuditionController::class, 'count']);
     Route::post('/audition-admin/audition/assign-juries', [AuditionController::class, 'assignJuries']);
     Route::get('/audition-admin/audition/singleAuditionRounds/{audition_id}', [AuditionController::class, 'singleAuditionRounds']);
@@ -752,69 +748,32 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/singleAuditionRoundVideoResultByFilterNumber/{audition_id}/{audition_round_info_id}/{filter_number}/{type}', [AuditionController::class, 'singleAuditionRoundVideoResultByFilterNumber']);
     Route::get('/audition-admin/audition/videoReportBasedOnSingleJury/{audition_id}/{audition_round_info_id}/{jury_id}/{type}', [AuditionController::class, 'videoReportBasedOnSingleJury']);
     Route::get('/audition-admin/audition/singleAuditionVideoWithRoundId/{audition_id}/{audition_round_id}', [AuditionController::class, 'singleAuditionVideoWithRoundId']);
-
     Route::get('/audition-admin/audition/singleAuditionInstruction/{instruction_id}', [AuditionController::class, 'singleAuditionInstruction']);
-
     Route::get('/audition-admin/get-promo-instruction/{audition_id}', [AuditionController::class, 'auditionPromoInstruction']);
-
-
     Route::post('/audition-admin/audition/promo-instruction/store', [AuditionController::class, 'storePromoInstruction']);
-
     Route::get('/audition-admin/audition/promo-instruction/{audition_id}', [AuditionController::class, 'promoInstrucction']);
-
     Route::post('/audition-admin/audition/super-star-promo/store', [AuditionController::class, 'superStarStorePromo']);
-    // Partha Ghose
     Route::post('/audition-admin/audition/promotional/video/store', [AuditionController::class, 'promotionalVideoStore']);
     Route::get('/audition-admin/promotional/video', [AuditionController::class, 'promotionalList']);
     Route::get('/audition-admin/promotional/video/view/{id}', [AuditionController::class, 'auditionJudgePromotionalView']);
     Route::get('/audition-admin/promotional/accepted-video', [AuditionController::class, 'acceptedPromotionalList']);
-
     Route::post('/audition-admin/audition/round-instruction/store', [AuditionController::class, 'storeRoundInstruction']);
-
     Route::post('/audition-admin/audition/round-instruction/update', [AuditionController::class, 'updateRoundInstruction']);
-
     Route::get('/audition-admin/audition/get-round-instruction/{audition_id}/{round_info_id}', [AuditionController::class, 'getRoundInstruction']);
-
     Route::get('audition-admin/audition/get-round-info/{audition_id}/{round_info_id}/{type}', [AuditionController::class, 'getRoundInfo']);
-
     Route::get('audition-admin/audition/get-jury-percentage-videos/{audition_id}/{round_info_id}/{value}/{type}', [AuditionController::class, 'getPercentageVideoForJury']);
-
     Route::get('audition-admin/audition/get-jury-random-videos/{audition_id}/{round_info_id}/{value}/{type}', [AuditionController::class, 'getRandomForJury']);
-
     Route::post('/audition-admin/audition/promo-instruction/update', [AuditionController::class, 'updatePromoInstruction']);
-
     Route::post('/audition-admin/audition/assign-main-juries-for-percentage', [AuditionController::class, 'assignMainJuriesForPercentage']);
-
     Route::post('/audition-admin/audition/assign-main-juries', [AuditionController::class, 'assignMainJuries']);
-
-
     Route::get('/audition-admin/audition/videos/{round_info_id}', [AuditionController::class, 'round_videos']);
     Route::get('/audition-admin/audition/appeal-videos/{round_info_id}', [AuditionController::class, 'round_appeal_videos']);
     Route::post('/audition-admin/audition/videos/set_approved/{id}', [AuditionController::class, 'round_videos_set_approved']);
     Route::post('/audition-admin/audition/videos/set_reject/{id}', [AuditionController::class, 'round_videos_set_reject']);
-
-
-
-
-
-    //By Srabon
-
-
     Route::post('/audition-admin/audition/round-instruction-video/store', [AuditionController::class, 'storeRoundInstructionVideo']);
     Route::get('/audition-admin/audition/round-instruction-video/list', [AuditionController::class, 'storeRoundInstructionVideoList']);
     Route::get('/audition-admin/audition/round-instruction-video/accept-list', [AuditionController::class, 'acceptRoundInstructionVideoList']);
     Route::get('/audition-admin/audition/round-instruction-video/details/{id}', [AuditionController::class, 'getVideoDetails']);
-
-
-
-
-
-
-
-
-
-
-
     Route::post('/audition-admin/audition/sendDummyInstructionToJudges', [AuditionController::class, 'sendDummyInstructionToJudges']);
     Route::post('/audition-admin/videoStatusChange', [AuditionController::class, 'videoStatusChange']);
     Route::get('/audition-admin/audition/pendings', [AuditionController::class, 'pending']);
@@ -824,9 +783,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition_single/{slug}', [AuditionController::class, 'getAudition']);
     Route::get('/audition-admin/audition_single_by_id/{audition_id}', [AuditionController::class, 'getAuditionById']);
     Route::get('/audition-admin/audition/assigned-judge/{slug}', [AuditionController::class, 'getAssignedJudge']);
-
     Route::get('/audition-admin/audition/round-instruction-judges/{audition_id}/{round_id}', [AuditionController::class, 'getRoundInstructionJudges']);
-
     Route::get('/audition-admin/audition/total-judge-approval/{slug}', [AuditionController::class, 'totalJudgeApproval']);
     Route::get('/audition-admin/audition/approval-request-for-manager-admin/{slug}', [AuditionController::class, 'approvalRequestForManagerAdmin']);
     Route::get('/audition-admin/audition/stars/{category_id}', [AuditionController::class, 'stars']);
@@ -838,25 +795,13 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('audition-admin/accepted-videos/{audition_id}', [AuditionController::class, 'acceptedVideo']);
     Route::get('audition-admin/rejected-videos/{audition_id}', [AuditionController::class, 'rejectedVideo']);
     Route::post('audition-admin/send-manager-admin', [AuditionController::class, 'videoSendManagerAdmin']);
-
-    // Selected Jury Marking on Audition Video
-    Route::get('audition-admin/jury-selected-videos/{audition_id}', [AuditionController::class, 'juryMarkingVideos']);
-    Route::get('audition-admin/jury-marking-videos/{jury_id}', [AuditionController::class, 'getJuryMarkingVideos']);
-    Route::get('audition-admin/get-mark-wise-videos/{audition_id}/{mark}', [AuditionController::class, 'getMarkWiseVideos']);
-    Route::post('audition-admin/selected-top-videos', [AuditionController::class, 'selectedTop']);
-    Route::post('audition-admin/rejected-videos-message', [AuditionController::class, 'rejectedMessage']);
     Route::get('/audition-admin/participant/list/{id}', [AuditionController::class, 'participantList']);
     Route::get('audition-admin/participant/list', [AuditionController::class, 'participantList']);
     Route::post('audition-admin/audition-round-instruction', [AuditionController::class, 'saveRoundInstruction']);
     Route::get('audition-admin/jury-num-assinged-videos/{audition_id}/{round_rule_id}', [AuditionController::class, 'juryNumberOfVideosApply']);
     Route::post('audition-admin/submit-jury-assign-video', [AuditionController::class, 'updateJuryAssignVideo']);
     Route::post('audition-admin/submit-jury-auto-assign-video', [AuditionController::class, 'updateJuryAutoAssignVideo']);
-    Route::get('audition-admin/jury-mark-on-videos-status/{audition_id}/{round_rule_id}', [AuditionController::class, 'juryMarkOnVideosStatus']);
-
-
     Route::get('audition-admin/audition/group_juries/{audition_id}/{group_id}', [AuditionController::class, 'group_juries']);
-
-
     Route::post('audition-admin/audition/roundResultSendToManager', [AuditionController::class, 'roundResultSendToManager']);
 });
 
@@ -878,10 +823,6 @@ Route::middleware(['auth:sanctum', 'isAPIJuryBoard'])->group(function () {
     Route::get('/jury/audition/VideoAssessmentAsMainGroupWithRound/{audition_id}/{audition_round_info_id}/{type}', [JuryAuditionController::class, 'VideoAssessmentAsMainGroupWithRound']);
     Route::get('/jury/audition/{slug}', [JuryAuditionController::class, 'getAudition']);
 });
-
-
-
-
 
 
 Route::get('account_info', [AuthController::class, 'account_info']);
@@ -910,18 +851,12 @@ Route::post('star/image-upload', [StarAuthController::class, 'MobileImageUp']);
 
 // Route for Jury Board Panel
 Route::post('jury-register', [JuryAuthController::class, 'register']);
-
-
-
-
-
 Route::get('view-category', [CategoryController::class, 'index']);
 
 /**
  * all category show for moble user registation
  */
 Route::get('view-category-mobile', [CategoryController::class, 'ViewAllCategory']);
-
 
 Route::get('/user/subcategory/{id}', [CategoryController::class, 'allSubcategoryList']);
 Route::get('/user/left/subcategory/{slug}', [CategoryController::class, 'allLeftSubcategoryList']);
