@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\ManagerAdmin\Audition;
 
 use App\Http\Controllers\Controller;
-use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionRules;
 use App\Models\Audition\AuditionAssignJury;

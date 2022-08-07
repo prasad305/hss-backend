@@ -5,9 +5,7 @@ namespace App\Http\Controllers\ManagerAdmin;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\Audition;
-use App\Models\Audition\AuditionAssignJudge;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPromoInstruction;
 use App\Models\Audition\AuditionRoundRule;

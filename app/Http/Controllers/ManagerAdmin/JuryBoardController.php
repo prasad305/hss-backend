@@ -4,7 +4,6 @@ namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\JuryBoard;
 use App\Models\JuryGroup;
@@ -32,30 +31,6 @@ class JuryBoardController extends Controller
         return view('ManagerAdmin.jury.views', $data);
     }
 
-    public function assinged()
-    {
-        $assignAdmins = AssignAdmin::select('assign_person')->get();
-
-        $userIds = [];
-        foreach ($assignAdmins as $assignAdmin) {
-            array_push($userIds, $assignAdmin->assign_person);
-        }
-        $juries = User::whereIn('id', $userIds)->orderBy('id', 'DESC')->get();
-        return view('ManagerAdmin.jury.index', compact('auditionAdmins'));
-    }
-
-    public function notAssinged()
-    {
-        $assignAdmins = AssignAdmin::select('assign_person')->get();
-
-        $userIds = [];
-        foreach ($assignAdmins as $assignAdmin) {
-            array_push($userIds, $assignAdmin->assign_person);
-        }
-        $juries = User::whereNotIn('id', $userIds)->where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
-        return view('ManagerAdmin.jury.index', compact('auditionAdmins'));
-    }
-
     public function assignVideo(Request $request)
     {
 
@@ -75,7 +50,7 @@ class JuryBoardController extends Controller
        return redirect()->back();
     }
 
-    
+
     public function create()
     {
         $data = [
@@ -264,7 +239,7 @@ class JuryBoardController extends Controller
             if ($delete) {
                 JuryBoard::find($id)->delete();
             }
-            
+
             return response()->json([
                 'type' => 'success',
                 'message' => 'Successfully Deleted'

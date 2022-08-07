@@ -130,55 +130,6 @@ Audition Admin
                         <div class="card my-4">
                             @if ($auditionAdmin->assignAudition)
                             @else
-                            <form action="{{ route('managerAdmin.AuditionAssign', $auditionAdmin->id) }}" method="post">
-                                @csrf
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <div class="col-2">
-                                            <label>Assign To</label>
-                                        </div>
-                                        <div class="col-10">
-                                            <select class="custom-select" name="job_type" id="exampleSelectRounded0">
-                                                <option value="audition">Audition</option>
-
-                                            </select>
-                                            @error('job_type')
-                                            <p class="text-danger">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-2">
-                                            <label>Title</label>
-                                        </div>
-                                        <div class="col-10">
-                                            <input type="text" name="title" class="form-control" placeholder="Title"
-                                                autocomplete="off" value="{{ old('title') }}">
-                                            @error('title')
-                                            <p class="text-danger">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-2">
-                                            <label>Details</label>
-                                        </div>
-                                        <div class="col-10">
-                                            <textarea name="details" class="form-control"
-                                                rows="7">{{ old('details') }}</textarea>
-                                            @error('details')
-                                            <p class="text-danger">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class=" float-right">
-
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </div>
-
-                                </div>
-
-                            </form>
                             @endif
 
                         </div>
