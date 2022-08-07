@@ -40,8 +40,6 @@ class User extends Authenticatable
         'category_id'
     ];
 
-
-
     /**
      * The attributes that should be hidden for serialization.
      *
