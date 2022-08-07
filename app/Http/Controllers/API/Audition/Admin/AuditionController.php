@@ -22,7 +22,6 @@ use App\Models\Audition\AuditionRoundMarkTracking;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\AuditionRoundInstruction;
-use App\Models\JudgeMarks;
 use App\Models\JuryGroup;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -1919,60 +1918,6 @@ class AuditionController extends Controller
             'auditionInfo' => $auditionInfo,
         ]);
     }
-
-    public function StarMarking(Request $request)
-    {
-
-
-        $validator = Validator::make($request->all(), [
-            'participant_id' => 'required',
-            'audition_id' => 'required',
-        ]);
-
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 422,
-                'validation_errors' => $validator->errors(),
-            ]);
-        } else {
-
-
-            $audition =  Audition::find($request->audition_id);
-
-            if ($audition->setJudgeMark >= $request->marks) {
-
-                $auditionMark = JudgeMarks::create([
-                    'video_id' => $request->participant_id,
-                    'audition_id' => $request->audition_id,
-                    'marks' => $request->marks,
-                    'judge_id' => Auth::user()->id,
-                    'comments' => $request->comments,
-                    'selected_status' => $request->selected_status,
-                ]);
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Marking Done! Select Next',
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 202,
-                    'message' => $audition->setJudgeMark,
-                ]);
-            }
-        }
-    }
-    public function starMarkingDone($id)
-    {
-
-        $accepted_videos = JudgeMarks::with('auditionsParticipant')->where('audition_id', $id)->where('marks', '!=', null)->get();
-
-        return response()->json([
-            'status' => 200,
-            'accepted_videos' => $accepted_videos,
-        ]);
-    }
-
 
     public function saveRoundInstruction(Request $request)
     {
