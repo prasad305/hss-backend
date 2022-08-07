@@ -20,13 +20,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AuditionAdminController extends Controller
 {
-
-
-
-
-
-    
-
     public function index()
     {
         $auditionAdmins = User::where([['user_type', 'audition-admin'],['category_id', Auth::user()->category_id]])->orderBy('id', 'DESC')->get();

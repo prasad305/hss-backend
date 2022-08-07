@@ -26,12 +26,6 @@
     <div class="content">
         <div class="container-fluid">
             <div class="card">
-                <div class="card-header">
-                    {{-- <h3 class="card-title">DataTable with default features</h3> --}}
-                    <a class="btn btn-success btn-sm" style="float: right;"
-                        onclick="Show('New Audition','{{ route('superAdmin.audition.create') }}')"><i
-                            class=" fa fa-plus"></i>&nbsp;New Audition</a>
-                </div>
                 <!-- /.card-header -->
                 <div class="card-body">
                     <table id="example1" class="table table-bordered table-striped">

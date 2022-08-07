@@ -43,17 +43,6 @@
             </a>
         </li>
 
-
-        <li class="nav-item">
-            <a href="{{ route('managerAdmin.auditionAdmin.index') }}" class="nav-link">
-                <i
-                    class="nav-icon {{ Request::routeIs('managerAdmin.auditionAdmin.index') ? 'active' : '' }} fa fa-list-check"></i>
-                <p>
-                    Audition Admins
-                </p>
-            </a>
-        </li>
-
         <li class="nav-item">
             <a href="{{ route('managerAdmin.jury.index') }}" class="nav-link">
                 <i class="nav-icon {{ Request::routeIs('managerAdmin.jury.index') ? 'active' : '' }} fas fa-th"></i>
@@ -132,31 +121,6 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('managerAdmin.promoVideo.all') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>All</p>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-chart-pie"></i>
-                <p>Audition
-                    <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.dashboard.audition') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
-
-                
-                
-                <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.all') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>All</p>
                     </a>
@@ -363,15 +327,6 @@
                         <p>All</p>
                     </a>
                 </li>
-
-
-                {{-- </li>
-          <li class="nav-item">
-            <a href="" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Order</p>
-            </a>
-          </li> --}}
             </ul>
         </li>
 
@@ -506,7 +461,7 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.auditionDashboard') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.audition') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
@@ -527,13 +482,18 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ route('managerAdmin.audition.all') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>All</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('managerAdmin.audition.published') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Published</p>
                     </a>
                 </li>
-
-                
 
                 <li class="nav-item">
                     <a href="{{ route('managerAdmin.audition.registration.rules') }}" class="nav-link">
