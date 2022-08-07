@@ -40,6 +40,8 @@ class PackageController extends Controller
         $package->live_chats = $request->live_chats;
         $package->meetup = $request->meetup;
         $package->greetings = $request->greetings;
+        $package->qna = $request->qna;
+        $package->color_code = $request->color_code;
         $package->price = $request->price;
         $package->status = 1;
 
@@ -76,6 +78,8 @@ class PackageController extends Controller
         $package->live_chats = $request->live_chats;
         $package->meetup = $request->meetup;
         $package->greetings = $request->greetings;
+        $package->qna = $request->qna;
+        $package->color_code = $request->color_code;
         $package->price = $request->price;
 
         try {

@@ -47,6 +47,7 @@ use App\Models\QnA;
 use App\Models\QnaRegistration;
 use App\Models\User;
 use Carbon\Carbon;
+use App\Models\SuperStar;
 use CreateAuditionRoundInstructionsTable;
 use DateTime;
 use DateTimeZone;
@@ -57,6 +58,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
+use App\Models\SouvenirCreate;
+use App\Models\FanGroup;
+use App\Models\Marketplace;
 
 
 class UserController extends Controller
@@ -81,6 +85,64 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'stars' => $stars,
+        ]);
+    }
+
+    public function allSearchData($query){
+        // return gettype($query);
+
+        $superstar = User::where('user_type', 'star')->latest()->get();
+
+        $posts = Post::latest()->get(); 
+
+        $marketplace = Marketplace::where('status', 1)->latest()->get();
+                            
+        $auction = Auction::with('star')->where('status', 1)->latest()->get();
+                            
+        $souvenir = SouvenirCreate::with('star')->where('status', 1)->latest()->get();
+                                     
+        $fangroup = FanGroup::where('status', 1)->latest()->get();
+
+        // return $posts;
+
+
+        // $superstar = User::where('user_type', 'star')->where('first_name', 'LIKE', "%$query%")
+        //                          ->orWhere('last_name', 'LIKE', "%$query%")
+        //                          ->latest()->get();
+
+        // $posts = Post::where('title', 'LIKE', "%$query%")
+        //                     ->orWhere('details', 'LIKE', "%$query%")
+        //                     ->latest()->get(); 
+
+        // $marketplace = Marketplace::where('description', 'LIKE', "%$query%")
+        //                     ->orWhere('terms_conditions', 'LIKE', "%$query%")
+        //                     ->orWhere('title', 'LIKE', "%$query%")
+        //                     ->orWhere('keywords', 'LIKE', "%$query%")
+        //                     ->latest()->get();
+                            
+        // $auction = Auction::with('star')->where('details', 'LIKE', "%$query%")
+        //                     ->orWhere('title', 'LIKE', "%$query%")
+        //                     ->orWhere('keyword', 'LIKE', "%$query%")
+        //                     ->latest()->get();
+                            
+        // $souvenir = SouvenirCreate::with('star')->where('description', 'LIKE', "%$query%")
+        //                     ->orWhere('title', 'LIKE', "%$query%")
+        //                     ->orWhere('instruction', 'LIKE', "%$query%")
+        //                     ->latest()->get();
+                                     
+        // $fangroup = FanGroup::where('group_name', 'LIKE', "%$query%")
+        //                     ->orWhere('description', 'LIKE', "%$query%")
+        //                     ->latest()->get();
+        
+        return response()->json([
+            'status' => 200,
+            'superstar' => $superstar,
+            'posts' => $posts,
+            'marketplace' => $marketplace,
+            'auction' => $auction,
+            'souvenir' => $souvenir,
+            'fangroup' => $fangroup,
+            'message' => 'Success',
         ]);
     }
 
