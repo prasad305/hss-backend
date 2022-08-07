@@ -26,7 +26,6 @@ class DatabaseSeeder extends Seeder
         $this->call(LearningSessionSeeder::class);
         $this->call(LearningSessionRegSeeder::class);
         $this->call(AuditionEventSeeder::class);
-        $this->call(AuditionEventRegSeeder::class);
         $this->call(AuditionReactSeeder::class);
         $this->call(AuditionCommentSeeder::class);
         $this->call(LiveChatRegistrationSeeder::class);

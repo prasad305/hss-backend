@@ -39,12 +39,6 @@ class AuditionEvent extends Model
     {
         return $this->belongsTo(User::class, 'star_id');
     }
-
-    public function registeredAuditionEvents()
-    {
-        return $this->hasMany(AuditionEventRegistration::class, 'audition_event_id');
-    }
-
     public function comments()
     {
         return $this->hasMany(AuditionComment::class, 'audition_event_id');

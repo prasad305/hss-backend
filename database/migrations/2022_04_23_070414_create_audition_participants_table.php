@@ -22,6 +22,14 @@ class CreateAuditionParticipantsTable extends Migration
             $table->integer('wining_status')->nullable();
             $table->string('certificates')->nullable();
             $table->integer('status')->default(0)->comment('0 = inactive, 1= active');
+
+            $table->string('payment_method')->nullable();
+            $table->boolean('payment_status')->nullable();
+            $table->string('payment_date')->nullable();
+            $table->float('amount')->nullable();
+            $table->string('card_holder_name')->nullable();
+            $table->string('account_no')->nullable();
+
             $table->timestamps();
         });
     }

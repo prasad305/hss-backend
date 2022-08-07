@@ -2,21 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionAssignJury;
 use App\Models\Audition\AuditionMark;
 use App\Models\Category;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPromoInstructionSendInfo;
-use App\Models\Audition\AuditionUploadVideo;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-// use App\Models\SuperStar;
-
 
 class User extends Authenticatable
 {
@@ -218,12 +213,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(Greeting::class, 'star_id');
     }
-
-    public function registeredAuditionEvents()
-    {
-        return $this->hasMany(AuditionEventRegistration::class, 'user_id');
-    }
-
     public function liveChatReacts()
     {
         return $this->hasMany(LiveChatReact::class, 'user_id');
