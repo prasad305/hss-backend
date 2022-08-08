@@ -357,8 +357,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/souvenir/register/decline/{id}', [SouvinerController::class, 'registerSouvenirDecline']);
     Route::get('/admin/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
     Route::get('/admin/souvenir/order/view/{id}', [SouvinerController::class, 'orderDetailsSouvenir']);
-    // Route::get('/admin/souviner/product-list/approved', [SouvinerController::class, 'allProductList']);
-    // Route::get('/admin/souviner/product-list/pending', [SouvinerController::class, 'pendingProductList']);
 
     // Simple Post Section
     Route::post('admin/add_simple_post', [SimplePostController::class, 'add']);
