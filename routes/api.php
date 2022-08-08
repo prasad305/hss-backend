@@ -142,6 +142,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/qnaAll', [UserController::class, 'getQnaAll']);
     Route::get('/user/qnaStarAll/{id}', [UserController::class, 'getStarQna']);
     Route::get('/user/qna/reg_info/{id}', [UserController::class, 'qnaRegDetails']);
+    Route::post('/user/wallet/qna-register', [QnaController::class, 'qnaWalletStore']);
 
 
 

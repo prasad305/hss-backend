@@ -308,8 +308,8 @@ class LearningSessionController extends Controller
             $post->event_id = $learningSession->id;
             $post->category_id = $learningSession->star->category_id;
             $post->sub_category_id = $learningSession->star->sub_category_id;
-            $post->react_provider = [];
-            $post->user_like_id = [];
+            $post->react_provider = "[]";
+            $post->user_like_id = "[]";
             $post->post_start_date = Carbon::parse($request->post_start_date);
             $post->post_end_date = Carbon::parse($request->post_end_date);
             $post->save();
