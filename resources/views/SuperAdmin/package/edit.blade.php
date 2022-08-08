@@ -31,6 +31,14 @@
         <input type="text" class="form-control" id="greetings" value="{{ $package->greetings }}" name="greetings" placeholder="Greetings value">
       </div>
       <div class="form-group col-md-6">
+        <label for="" class="form-label">Q&A</label>
+        <input type="text" class="form-control" id="qna" value="{{ $package->qna }}" name="qna" placeholder="Q & A value">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="" class="form-label">Color Code</label>
+        <input type="text" class="form-control" id="color_code" value="{{ $package->color_code }}" name="color_code" placeholder="Color Code value">
+      </div>
+      <div class="form-group col-md-6">
         <label for="" class="form-label">Price</label>
         <input type="text" class="form-control" id="price" name="price" value="{{ $package->price }}" placeholder="Price value">
       </div>

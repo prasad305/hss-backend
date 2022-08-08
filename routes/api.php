@@ -52,6 +52,7 @@ Route::get('/guest/all_post/with-paginate/{limit}', [GuestController::class, 'pa
 
 // Home Page All Post
 Route::get('/user/all_post', [UserController::class, 'all_post']);
+Route::get('/user/search/{query}', [UserController::class, 'allSearchData']);
 Route::get('/user/all_post/with-paginate/{limit}', [UserController::class, 'paginate_all_post']);
 Route::get('/user/post/{type}', [UserController::class, 'single_type_post']);
 Route::post('/user/general-post/payment', [UserController::class, 'generalPostPayment']);
