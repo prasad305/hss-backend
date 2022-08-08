@@ -4,7 +4,6 @@ use App\Http\Controllers\ManagerAdmin\AccountsController;
 use App\Http\Controllers\ManagerAdmin\AuditionAdminController;
 use App\Http\Controllers\ManagerAdmin\JuryBoardController;
 use App\Http\Controllers\ManagerAdmin\AdminController;
-use App\Http\Controllers\ManagerAdmin\JobAssign;
 use App\Http\Controllers\ManagerAdmin\DashboardController;
 use App\Http\Controllers\ManagerAdmin\LiveChatController;
 use App\Http\Controllers\ManagerAdmin\LiveEventController;
@@ -75,8 +74,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('liveChat-superstar-list', [DashboardController::class, 'liveChatSuperstarList'])->name('liveChatEvents.superstarList');
     Route::get('liveChat-superstar-events/{starId}', [DashboardController::class, 'liveChatSuperstarEvents'])->name('liveChatEvents.superstarEvents');
 
-
-
     //Question And Answers
     Route::get('qna-dashboard', [DashboardController::class, 'qna'])->name('dashboard.qna');
     Route::get('qna-data/{type}', [DashboardController::class, 'qnaData'])->name('dashboard.qnaData');
@@ -104,8 +101,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('auditions', [DashboardController::class, 'auditions'])->name('dashboard.audition');
     Route::get('auditions-data/{type}', [DashboardController::class, 'auditionsData'])->name('dashboard.auditionData');
     Route::get('auditions-details/{id}', [DashboardController::class, 'auditionsDetails'])->name('dashboard.auditionDetails');
-    Route::get('auditions-judge', [DashboardController::class, 'auditionsJudgeData'])->name('dashboard.auditionsJudgeData');
-    Route::get('auditions-jury', [DashboardController::class, 'auditionsJuryData'])->name('dashboard.auditionsJuryData');
     Route::get('auditions-manager-list', [DashboardController::class, 'auditionManagerList'])->name('dashboard.auditionManagerList');
     Route::resource('auditionAdmin', AuditionAdminController::class);
     Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');
@@ -116,7 +111,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('audition/registration/rules/{audition_id}/edit', [AuditionAdminController::class, 'editRegistrationRules'])->name('audition.registration.rules.edit');
     Route::get('audition/registration-rules/{round_id}', [AuditionAdminController::class, 'getRoundInfo']);
     Route::post('audition/registration/round/update/{round_id}', [AuditionAdminController::class, 'updateRegistrationRound'])->name('audition.registration.round.update');
-    Route::post('audition-assign/{admin_id}', [JobAssign::class, 'auditionStore'])->name('AuditionAssign');
     Route::group(['prefix' => 'audition/', 'as' => 'audition.'], function () {
         Route::get('create', [AuditionController::class, 'create'])->name('create');
         Route::get('assign-manpower/{audition_id}', [AuditionController::class, 'assignManpower'])->name('assignManpower');
@@ -198,11 +192,11 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::resource('admin', AdminController::class);
     Route::post('admin/active/{id}', [AdminController::class, 'activeNow'])->name('admin.activeNow');
     Route::post('admin/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('admin.inactiveNow');
+    Route::post('star/active/{id}', [AdminController::class, 'activeNow'])->name('star.activeNow');
+    Route::post('star/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('star.inactiveNow');
 
     //For Super Star route
     Route::resource('star', SuperStarController::class);
-    Route::post('star/active/{id}', [AdminController::class, 'activeNow'])->name('star.activeNow');
-    Route::post('star/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('star.inactiveNow');
 
 
 
@@ -212,9 +206,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     Route::post('jury/active/{id}', [JuryBoardController::class, 'activeNow'])->name('jury.activeNow');
     Route::post('jury/inactive/{id}', [JuryBoardController::class, 'inactiveNow'])->name('jury.inactiveNow');
-
-    Route::get('jury-assinged', [JuryBoardController::class, 'assinged'])->name('juryBoard_assinged');
-    Route::get('jury-free', [JuryBoardController::class, 'notAssinged'])->name('juryBoard_notAssinged');
     Route::get('jury-view/{jury_id}', [JuryBoardController::class, 'views'])->name('jury.views');
 
 

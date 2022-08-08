@@ -4,7 +4,6 @@ namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Audition\AssignAdmin;
 use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -16,34 +15,9 @@ class AdminController extends Controller
     public function index()
     {
         $admins = User::where([['category_id',auth()->user()->category_id],['user_type', 'admin']])->orderBy('id', 'DESC')->get();
-        
+
         return view('ManagerAdmin.admins.index', compact('admins'));
     }
-
-    public function assinged()
-    {
-        $assignAdmins = AssignAdmin::select('assign_person')->get();
-
-        $userIds = [];
-        foreach ($assignAdmins as $assignAdmin) {
-            array_push($userIds, $assignAdmin->assign_person);
-        }
-        $admins = User::whereIn('id', $userIds)->orderBy('id', 'DESC')->get();
-        return view('ManagerAdmin.admins.index', compact('admins'));
-    }
-
-    public function notAssinged()
-    {
-        $assignAdmins = AssignAdmin::select('assign_person')->get();
-
-        $userIds = [];
-        foreach ($assignAdmins as $assignAdmin) {
-            array_push($userIds, $assignAdmin->assign_person);
-        }
-        $admins = User::whereNotIn('id', $userIds)->where('user_type', 'admin')->orderBy('id', 'DESC')->get();
-        return view('ManagerAdmin.admins.index', compact('admins'));
-    }
-
 
     public function create()
     {   $data = [
@@ -52,10 +26,10 @@ class AdminController extends Controller
         return view('ManagerAdmin.admins.create',$data);
     }
 
-   
+
     public function store(Request $request)
     {
-        
+
         $request->validate([
             'sub_category_id' => 'required',
             'first_name' => 'required',
@@ -66,7 +40,7 @@ class AdminController extends Controller
             'cover' => 'mimes:jpeg,jpg,png,gif|max:2000',
         ]);
 
-     
+
 
         $user = new User();
         $user->fill($request->except(['_token','image','cover']));
@@ -113,10 +87,10 @@ class AdminController extends Controller
         }
     }
 
-  
+
     public function show(User $admin)
     {
- 
+
         return view('ManagerAdmin.admins.details')->with('auditionAdmin', $admin);
     }
 
@@ -202,14 +176,14 @@ class AdminController extends Controller
     {
         try {
             if ($admin->cover_photo != null)
-                File::delete(public_path($admin->cover_photo)); 
+                File::delete(public_path($admin->cover_photo));
 
             if ($admin->image != null)
-                File::delete(public_path($admin->image)); 
+                File::delete(public_path($admin->image));
 
-            
+
             $admin->delete();
-            
+
             return response()->json([
                 'type' => 'success',
                 'message' => 'Successfully Deleted'

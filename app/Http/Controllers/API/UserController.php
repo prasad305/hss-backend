@@ -9,12 +9,9 @@ use App\Models\Auction;
 use App\Models\AuctionTerms;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
-use App\Models\Audition\AuditionPayment;
 use App\Models\Audition\AuditionRoundAppealRegistration;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundMarkTracking;
-use App\Models\Audition\AuditionRoundRegistration;
-use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\AuditionRoundInstruction;
 use App\Models\Bidding;
@@ -47,8 +44,6 @@ use App\Models\QnA;
 use App\Models\QnaRegistration;
 use App\Models\User;
 use Carbon\Carbon;
-use App\Models\SuperStar;
-use CreateAuditionRoundInstructionsTable;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Support\Facades\File;
@@ -93,14 +88,14 @@ class UserController extends Controller
 
         $superstar = User::where('user_type', 'star')->latest()->get();
 
-        $posts = Post::latest()->get(); 
+        $posts = Post::latest()->get();
 
         $marketplace = Marketplace::where('status', 1)->latest()->get();
-                            
+
         $auction = Auction::with('star')->where('status', 1)->latest()->get();
-                            
+
         $souvenir = SouvenirCreate::with('star')->where('status', 1)->latest()->get();
-                                     
+
         $fangroup = FanGroup::where('status', 1)->latest()->get();
 
         // return $posts;
@@ -112,28 +107,28 @@ class UserController extends Controller
 
         // $posts = Post::where('title', 'LIKE', "%$query%")
         //                     ->orWhere('details', 'LIKE', "%$query%")
-        //                     ->latest()->get(); 
+        //                     ->latest()->get();
 
         // $marketplace = Marketplace::where('description', 'LIKE', "%$query%")
         //                     ->orWhere('terms_conditions', 'LIKE', "%$query%")
         //                     ->orWhere('title', 'LIKE', "%$query%")
         //                     ->orWhere('keywords', 'LIKE', "%$query%")
         //                     ->latest()->get();
-                            
+
         // $auction = Auction::with('star')->where('details', 'LIKE', "%$query%")
         //                     ->orWhere('title', 'LIKE', "%$query%")
         //                     ->orWhere('keyword', 'LIKE', "%$query%")
         //                     ->latest()->get();
-                            
+
         // $souvenir = SouvenirCreate::with('star')->where('description', 'LIKE', "%$query%")
         //                     ->orWhere('title', 'LIKE', "%$query%")
         //                     ->orWhere('instruction', 'LIKE', "%$query%")
         //                     ->latest()->get();
-                                     
+
         // $fangroup = FanGroup::where('group_name', 'LIKE', "%$query%")
         //                     ->orWhere('description', 'LIKE', "%$query%")
         //                     ->latest()->get();
-        
+
         return response()->json([
             'status' => 200,
             'superstar' => $superstar,
@@ -1444,13 +1439,10 @@ class UserController extends Controller
     public function participateAudition($id)
     {
         $participateAudition = Audition::with('judge.user')->where('id', $id)->get();
-        $user = User::where('id', Auth()->user()->id)->get();
-        $payment = AuditionPayment::where('user_id', Auth()->user()->id)->where('audition_id', $id)->get();
+
         return response()->json([
             'status' => 200,
             'participateAudition' => $participateAudition,
-            'user' => $user,
-            'payment' => $payment
         ]);
     }
     public function participantRegister(Request $request)
@@ -1529,26 +1521,6 @@ class UserController extends Controller
             'appealedRegistration' => $appealedRegistration,
         ]);
     }
-
-
-    public function auditionPayment(Request $request)
-    {
-
-        $user = User::find(auth()->user()->id);
-        $payment = AuditionPayment::create([
-
-            'audition_id' => $request->audition_id,
-            'user_id' => $user->id,
-            'card_holder_name' => $request->card_holder_name,
-            'card_number' => $request->card_number,
-            'status' => 1,
-        ]);
-        return response()->json([
-            'status' => 200,
-        ]);
-    }
-
-
 
     public function userRoundVideoUpload(Request $request)
     {
