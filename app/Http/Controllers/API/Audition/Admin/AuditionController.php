@@ -152,56 +152,6 @@ class AuditionController extends Controller
         ]);
     }
 
-    public function videoStatusChange(Request $request)
-    {
-
-        $validator = Validator::make($request->all(), [
-            'video_id' => 'required',
-            // 'comment' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 422,
-                'validation_errors' => $validator->errors(),
-            ]);
-        } else {
-            $AuditionUploadVideo = AuditionUploadVideo::find($request->video_id);
-            if ($request->accepted == 1) {
-                $AuditionUploadVideo->approval_status = 1;
-            } elseif ($request->rejected == 1) {
-                $AuditionUploadVideo->approval_status = 2;
-            }
-            $AuditionUploadVideo->audition_admin_comment = $request->comment;
-            $AuditionUploadVideo->save();
-
-            return response()->json([
-                'status' => 200,
-                'message' => "Video filter completed successfully !",
-            ]);
-        }
-    }
-    public function singleAuditionVideos($audition_id)
-    {
-        $audition = Audition::find($audition_id);
-        $audition_rule = $audition->auditionRules;
-        $audition_round_rules = $audition_rule->roundRules;
-
-        return response()->json([
-            'status' => 200,
-            'audition' => $audition,
-            'audition_rule' => $audition_rule,
-            'audition_round_rules' => $audition_round_rules,
-            'pending_videos' => AuditionUploadVideo::where('audition_id', $audition_id)->where('round_id',  $audition->audition_round_rules_id)->where('approval_status', 0)->get(),
-            'reject_videos' => AuditionUploadVideo::where('audition_id', $audition_id)->where('round_id',  $audition->audition_round_rules_id)->where('approval_status', 2)->get(),
-            'approved_videos' => AuditionUploadVideo::where('audition_id', $audition_id)->where('round_id',  $audition->audition_round_rules_id)->where('approval_status', 1)->get(),
-            'check_videos' => AuditionUploadVideo::where('audition_id', $audition_id)->where('round_id',  $audition->audition_round_rules_id)->whereIn('approval_status', [1, 2])->get(),
-            'pending_videos_num' => $audition->uploadedVideos->where('round_id',  $audition->audition_round_rules_id)->where('approval_status', 0)->count(),
-            'approved_videos_num' => $audition->uploadedVideos->where('round_id',  $audition->audition_round_rules_id)->where('approval_status', 1)->count(),
-            'check_video_num' => $audition->uploadedVideos->where('round_id',  $audition->audition_round_rules_id)->whereIn('approval_status', [1, 2])->count(),
-            'reject_video_num' => $audition->uploadedVideos->where('round_id',  $audition->audition_round_rules_id)->where('approval_status', 2)->count(),
-            'first_audition_round_rule' =>  AuditionRoundRule::find($audition->audition_round_rules_id)
-        ]);
-    }
     public function singleAuditionVideoWithRoundId($audition_id, $audition_round_id)
     {
         $audition = Audition::find($audition_id);
@@ -1272,15 +1222,6 @@ class AuditionController extends Controller
         ]);
     }
 
-    public function auditionPromoInstruction($audition_id)
-    {
-        $instruction = AuditionPromoInstruction::where('audition_id', $audition_id)->first();
-        return response()->json([
-            'status' => 200,
-            'instruction' => $instruction,
-        ]);
-    }
-
     public function sendDummyInstructionToJudges(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -1426,32 +1367,6 @@ class AuditionController extends Controller
         ]);
     }
 
-    //Stars Under Audition Admin Category
-    public function stars($category_id)
-    {
-        $stars = SuperStar::where([['category_id', $category_id], ['status', 1]])->get();
-
-        return response()->json([
-            'status' => 200,
-            'stars' => $stars,
-        ]);
-    }
-
-
-    public function getAssignedJudge($slug)
-    {
-        $audition = Audition::where('slug', $slug)->first();
-
-        $judge = AuditionAssignJudge::where('audition_id', $audition->id)->get();
-        // return $audition;
-
-        return response()->json([
-            'status' => 200,
-            'judge' => $judge,
-        ]);
-    }
-
-
     public function getRoundInstructionJudges($audition_id, $round_info_id)
     {
 
@@ -1479,77 +1394,6 @@ class AuditionController extends Controller
             'approve_status' => $total_judge == $total_judge_approval,
         ]);
     }
-
-    public function approvalRequestForManagerAdmin($slug)
-    {
-        $audition = Audition::where('slug', $slug)->first();
-        $audition->status = 2;
-        $audition->save();
-
-        return response()->json([
-            'status' => 200,
-            'event' => $audition,
-        ]);
-    }
-
-    // Audition Modification by Audition Admin
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            // 'title' => 'required',
-            // 'description' => 'required',
-            // 'star_ids' => 'required',
-        ]);
-
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 422,
-                'validation_errors' => $validator->errors(),
-            ]);
-        } else {
-            $audition = Audition::find($request->audition_id);
-            $audition->title = $request->title;
-            $audition->description = $request->description;
-            $audition->status = 1;
-
-            if ($request->hasfile('banner')) {
-
-                $destination = $audition->banner;
-
-                if (File::exists($destination)) {
-                    File::delete($destination);
-                }
-                $file = $request->file('banner');
-                $extension = $file->getClientOriginalExtension();
-                $filename = 'uploads/images/auditions/' . time() . '.' . $extension;
-                Image::make($file)->resize(900, 400)->save($filename, 50);
-
-                $audition->banner = $filename;
-            }
-
-            if ($request->hasFile('video')) {
-                if ($audition->video != null && file_exists($audition->video)) {
-                    unlink($audition->video);
-                }
-                $file        = $request->file('video');
-                $path        = 'uploads/videos/auditions';
-                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
-                $file->move($path, $file_name);
-                $audition->video = $path . '/' . $file_name;
-            }
-
-            $audition->save();
-
-            return response()->json([
-                'status' => 200,
-                'message' => 'Audition Judge Added successfully'
-            ]);
-        }
-    }
-
-
-    // Audition Details
 
     public function getAuditionById($id)
     {
