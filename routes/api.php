@@ -62,9 +62,6 @@ Route::get('/user/generalPost/payment/check', [UserController::class, 'simplePos
 Route::get('/user/post/{type}/with-paginate/{limit}', [UserController::class, 'paginate_single_type_post']);
 
 
-
-Route::get('/user/getAllLearningSession', [UserController::class, 'getAllLearningSession']);
-
 //Star Photo and videos
 Route::get('/star_photos/{id}', [UserController::class, 'star_photo']);
 Route::get('/star_videos/{id}', [UserController::class, 'star_video']);
@@ -117,9 +114,12 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/user/activity_count', [AuthController::class, 'activity_count']);
 
+    //not use
     Route::get('/user/getAllLiveChatEvent', [UserController::class, 'getAllLiveChatEvent']);
     Route::get('/user/getAllLiveChatEventByStar/{id}', [UserController::class, 'getAllLiveChatEventByStar']);
     Route::get('/user/getAllPostWithForSingleStar/{star_id}', [UserController::class, 'getAllPostWithForSingleStar']);
+
+
     Route::get('/user/registerMeestup', [UserController::class, 'registeredMeetup']);
     Route::get('/user/registerLivechat', [UserController::class, 'registeredLivechat']);
     Route::get('/user/registerLearningSession', [UserController::class, 'registeredLearningSession']);
@@ -150,7 +150,11 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/meetup/{slug}', [UserController::class, 'meetupDetails']);
     Route::get('view-country', [CategoryController::class, 'index']);
     Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
+
+    //not use
     Route::get('/user/registeredLivechat', [UserController::class, 'registeredLivechat']);
+
+
     Route::get('/user/interest/type', [UserController::class, 'interestType']);
 
     // Marketplace Section
@@ -186,7 +190,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/star_info/{star_id}', [UserController::class, 'star_info']);
 
-    Route::get('/meetup_event_info/{id}', [MeetupEventController::class, 'event_info']);
 
 
     //greetings registation update
@@ -202,7 +205,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //greetings reg delete
     Route::get('/user/greetings_reg_delete/{id}', [GreetingController::class, 'greetingsRegDelete']);
 
-    Route::get('/meetup_event_info/{id}', [MeetupEventController::class, 'event_info']);
 
     //check user notification
     Route::get('/user/check_notification', [UserController::class, 'checkUserNotifiaction']);
@@ -244,7 +246,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     // Audition
     Route::get('/user/audition/all', [UserController::class, 'audition_list']);
     Route::get('/user/audition/participate/{id}', [UserController::class, 'participateAudition']);
-    Route::post('/user/register/participate', [UserController::class, 'participantRegister']);
+
+
     Route::post('/user/video/participate', [UserController::class, 'videoUpload']);
     Route::get('/user/audition/participate/video/{id}', [UserController::class, 'videoDetails']);
     Route::get('/user/audition/enrolled', [UserController::class, 'enrolledAuditions']);
