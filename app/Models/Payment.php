@@ -33,9 +33,4 @@ class Payment extends Model
             return $this->belongsTo(Audition::class, 'event_id');
         }
     }
-
-    // public function round()
-    // {
-    //     return $this->belongsTo(User::class, 'round_id');
-    // }
 }

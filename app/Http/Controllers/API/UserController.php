@@ -9,7 +9,6 @@ use App\Models\Auction;
 use App\Models\AuctionTerms;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
-use App\Models\Audition\AuditionPayment;
 use App\Models\Audition\AuditionRoundAppealRegistration;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundMarkTracking;
@@ -1379,13 +1378,10 @@ class UserController extends Controller
     public function participateAudition($id)
     {
         $participateAudition = Audition::with('judge.user')->where('id', $id)->get();
-        $user = User::where('id', Auth()->user()->id)->get();
-        $payment = AuditionPayment::where('user_id', Auth()->user()->id)->where('audition_id', $id)->get();
+
         return response()->json([
             'status' => 200,
             'participateAudition' => $participateAudition,
-            'user' => $user,
-            'payment' => $payment
         ]);
     }
     public function participantRegister(Request $request)
@@ -1464,26 +1460,6 @@ class UserController extends Controller
             'appealedRegistration' => $appealedRegistration,
         ]);
     }
-
-
-    public function auditionPayment(Request $request)
-    {
-
-        $user = User::find(auth()->user()->id);
-        $payment = AuditionPayment::create([
-
-            'audition_id' => $request->audition_id,
-            'user_id' => $user->id,
-            'card_holder_name' => $request->card_holder_name,
-            'card_number' => $request->card_number,
-            'status' => 1,
-        ]);
-        return response()->json([
-            'status' => 200,
-        ]);
-    }
-
-
 
     public function userRoundVideoUpload(Request $request)
     {
