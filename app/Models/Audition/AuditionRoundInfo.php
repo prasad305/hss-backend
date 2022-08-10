@@ -12,7 +12,7 @@ class AuditionRoundInfo extends Model
 {
     use HasFactory;
 
-    protected $with = ['videos', 'roundInstruction'];
+    protected $with = ['videos', 'roundInstruction', 'markTrackings'];
 
     protected $fillable = [
         'id',
@@ -48,12 +48,17 @@ class AuditionRoundInfo extends Model
         'status',
     ];
 
-    public function videos(){
-        return $this->hasMany(AuditionUploadVideo::class,'round_info_id');
+    public function videos()
+    {
+        return $this->hasMany(AuditionUploadVideo::class, 'round_info_id');
+    }
+    public function markTrackings()
+    {
+        return $this->hasMany(AuditionRoundMarkTracking::class, 'round_info_id');
     }
 
-    public function roundInstruction(){
-        return $this->hasOne(AuditionRoundInstruction::class,'round_info_id');
+    public function roundInstruction()
+    {
+        return $this->hasOne(AuditionRoundInstruction::class, 'round_info_id');
     }
-
 }

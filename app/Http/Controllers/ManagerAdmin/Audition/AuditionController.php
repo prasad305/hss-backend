@@ -56,9 +56,9 @@ class AuditionController extends Controller
             $audition->manager_admin_id     =  Auth::user()->id;
             $audition->title                =  $request->title;
 
-            if(Audition::where('slug', Str::slug($request->input('title')))->exists()){
-                $audition->slug = Str::slug($request->input('title').'-n');
-            }else{
+            if (Audition::where('slug', Str::slug($request->input('title')))->exists()) {
+                $audition->slug = Str::slug($request->input('title') . '-n');
+            } else {
                 $audition->slug = Str::slug($request->input('title'));
             }
 
@@ -439,5 +439,43 @@ class AuditionController extends Controller
 
         session()->flash('success', 'Round Instruction Published Successfully!');
         return redirect()->back();
+    }
+
+    public function videoFeed()
+    {
+        $auditions = Audition::where('category_id', auth()->user()->category_id)->get();
+        return view('ManagerAdmin.Audition.videoFeed', compact('auditions'));
+    }
+    public function videoFeedList($round_info_id)
+    {
+        //      Work in progress 
+
+        // $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
+        // $userIds = $auditionRoundInfo->markTrackings->where('wining_status', 0)->pluck('user_id');
+        // $roundInfoIds = $auditionRoundInfo->markTrackings->where('wining_status', 0)->pluck('round_info_id');
+        // $failedUsersVideos = AuditionUploadVideo::where('approval_status', 1)->whereIn('round_info_id', $roundInfoIds)->whereIn('user_id', $userIds)->get();
+        // dd($failedUsersVideos);
+
+
+        // $failedUsersVideos =  AuditionUploadVideo::whereHas('roundInfo', function ($query) {
+        //     $query->whereHas('markTrackings', function ($secondQuery) {
+        //         return $secondQuery->where('wining_status', 0)->get();
+        //     });
+        // })->where('approval_status', 1)->get();
+
+
+        // $failedUsersVideos = AuditionUploadVideo::whereHas('roundInfo', function ($query) {
+        //     $query->whereHas('markTrackings', function ($secondQuery) {
+        //         return $secondQuery->where('wining_status', 0)->get();
+        //     });
+        // })->where('approval_status', 1)->get();
+
+        // dd($failedUsersVideos);
+
+        // $wildcardVideos = AuditionRoundInfo::with('videos', function ($q) {
+        //     return $q->where('approval_status', 1)->get();
+        // })->where([['id', $round_info_id], ['wildcard', 1], ['wildcard_status', 0]])->get();
+        // dd($wildcardVideos);
+        return view('ManagerAdmin.Audition.videoFeedList');
     }
 }

@@ -44,10 +44,10 @@ class AuditionUploadVideo extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // public function round()
-    // {
-    //     return $this->belongsTo(User::class, 'round_id');
-    // }
+    public function roundInfo()
+    {
+        return $this->belongsTo(AuditionRoundInfo::class, 'round_info_id');
+    }
 
     public function judge()
     {
