@@ -25,6 +25,7 @@ class AuditionRoundInfo extends Model
         'user_vote_mark',
         'mark_live_or_offline',
         'wildcard',
+        'wildcard_status',
         'wildcard_round',
         'appeal',
         'video_feed',
