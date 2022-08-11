@@ -145,8 +145,6 @@ class QnaController extends Controller
             $walletData->greetings = $walletData->greetings - 1;
             $walletData->save();
 
-            // $eventRegistration->greeting_id = $event->id;
-            // $eventRegistration->user_id = Auth::user()->id;
             $eventRegistration->card_holder_name = Auth::user()->first_name ." ". Auth::user()->last_name;
             $eventRegistration->amount = $event->cost;
             $eventRegistration->payment_status = 1;
