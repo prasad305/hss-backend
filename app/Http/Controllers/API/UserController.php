@@ -83,7 +83,8 @@ class UserController extends Controller
         ]);
     }
 
-    public function allSearchData($query){
+    public function allSearchData($query)
+    {
         // return gettype($query);
 
         $superstar = User::where('user_type', 'star')->latest()->get();
@@ -1562,7 +1563,7 @@ class UserController extends Controller
         $appeal_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id], ['type', 'appeal']])->get();
 
         $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'general'], ['round_info_id', $round_info_id]])->first();
-        $appealAuditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],['type','appeal'],['round_info_id', $round_info_id]])->first();
+        $appealAuditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id], ['type', 'appeal'], ['round_info_id', $round_info_id]])->first();
 
         return response()->json([
             'status' => 200,
@@ -2058,6 +2059,30 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'certificateData' => $certificate,
+        ]);
+    }
+
+    public function videoFeedVidoes()
+    {
+
+
+        $generalMarkTraking = AuditionRoundMarkTracking::where([['wining_status', 0], ['type', 'general']])->pluck('user_id')->toArray();
+        $appealMarkTraking = AuditionRoundMarkTracking::where([['wining_status', 0], ['type', 'appeal']])->pluck('user_id')->toArray();
+
+        $notAppealedGeneralVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($generalMarkTraking, $appealMarkTraking) {
+            return $q->where([['approval_status', 1], ['type', 'general']])->whereNotIn('user_id', $appealMarkTraking)->whereIn('user_id', $generalMarkTraking)->get();
+        }])->where([['wildcard', 1], ['wildcard_status', 0], ['mark_live_or_offline', 0]])->latest()->get()->toArray();
+
+
+        $appealedGeneralVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($appealMarkTraking) {
+            return $q->where([['approval_status', 1], ['type', 'appeal']])->whereIn('user_id', $appealMarkTraking)->get();
+        }])->where([['wildcard', 1], ['wildcard_status', 0], ['mark_live_or_offline', 0]])->latest()->get()->toArray();
+
+        $roundVideos = array_merge($notAppealedGeneralVideos, $appealedGeneralVideos);
+
+        return response()->json([
+            'status' => 200,
+            'roundVideos' => $roundVideos,
         ]);
     }
 }

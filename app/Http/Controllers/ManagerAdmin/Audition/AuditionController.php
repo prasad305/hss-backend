@@ -450,32 +450,28 @@ class AuditionController extends Controller
     {
         //      Work in progress 
 
-        // $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
-        // $userIds = $auditionRoundInfo->markTrackings->where('wining_status', 0)->pluck('user_id');
-        // $roundInfoIds = $auditionRoundInfo->markTrackings->where('wining_status', 0)->pluck('round_info_id');
-        // $failedUsersVideos = AuditionUploadVideo::where('approval_status', 1)->whereIn('round_info_id', $roundInfoIds)->whereIn('user_id', $userIds)->get();
-        // dd($failedUsersVideos);
+        $generalMarkTraking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 0], ['type', 'general']])->pluck('user_id')->toArray();
+        $appealMarkTraking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 0], ['type', 'appeal']])->pluck('user_id')->toArray();
+
+        $notAppealedGeneralVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($generalMarkTraking, $appealMarkTraking, $round_info_id) {
+            return $q->where([['approval_status', 1], ['round_info_id', $round_info_id], ['type', 'general']])->whereNotIn('user_id', $appealMarkTraking)->whereIn('user_id', $generalMarkTraking)->get();
+        }])->where([['id', $round_info_id], ['wildcard', 1], ['wildcard_status', 0], ['mark_live_or_offline', 0]])->first();
 
 
-        // $failedUsersVideos =  AuditionUploadVideo::whereHas('roundInfo', function ($query) {
-        //     $query->whereHas('markTrackings', function ($secondQuery) {
-        //         return $secondQuery->where('wining_status', 0)->get();
-        //     });
-        // })->where('approval_status', 1)->get();
+        $appealedGeneralVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($appealMarkTraking, $round_info_id) {
+            return $q->where([['approval_status', 1], ['round_info_id', $round_info_id], ['type', 'appeal']])->whereIn('user_id', $appealMarkTraking)->get();
+        }])->where([['id', $round_info_id], ['wildcard', 1], ['wildcard_status', 0], ['mark_live_or_offline', 0]])->first();
 
-
-        // $failedUsersVideos = AuditionUploadVideo::whereHas('roundInfo', function ($query) {
-        //     $query->whereHas('markTrackings', function ($secondQuery) {
-        //         return $secondQuery->where('wining_status', 0)->get();
-        //     });
-        // })->where('approval_status', 1)->get();
-
-        // dd($failedUsersVideos);
-
-        // $wildcardVideos = AuditionRoundInfo::with('videos', function ($q) {
-        //     return $q->where('approval_status', 1)->get();
-        // })->where([['id', $round_info_id], ['wildcard', 1], ['wildcard_status', 0]])->get();
-        // dd($wildcardVideos);
-        return view('ManagerAdmin.Audition.videoFeedList');
+        return view('ManagerAdmin.Audition.videoFeedList', compact('notAppealedGeneralVideos', 'appealedGeneralVideos'));
+    }
+    public function videoPublishedToVideofeed($round_info_id)
+    {
+        $published = AuditionRoundInfo::findOrFail($round_info_id)->update([
+            'wildcard_status' => 1
+        ]);
+        if ($published) {
+            session()->flash('success', 'Video Published To Video Feed!');
+            return redirect()->back();
+        }
     }
 }

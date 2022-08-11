@@ -266,6 +266,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/user/audition/current_round_info/{event_slug}', [UserController::class, 'current_round_info']);
 
+    // Video Feed
+
+    Route::get('/user/audition/videofeed/videos', [UserController::class, 'videoFeedVidoes']);
 
     // Promo Videos
     Route::get('/user/PromoVideos', [UserController::class, 'getPromoVideo']);
