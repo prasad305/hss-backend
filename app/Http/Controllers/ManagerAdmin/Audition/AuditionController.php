@@ -56,10 +56,10 @@ class AuditionController extends Controller
             $audition->manager_admin_id     =  Auth::user()->id;
             $audition->title                =  $request->title;
 
-            if(Audition::where('slug', Str::slug($request->input('name')))->first()){
-                $audition->slug = Str::slug($request->input('name').'-n');
+            if(Audition::where('slug', Str::slug($request->input('title')))->exists()){
+                $audition->slug = Str::slug($request->input('title').'-n');
             }else{
-                $audition->slug = Str::slug($request->input('name'));
+                $audition->slug = Str::slug($request->input('title'));
             }
 
             $audition->description          =  $request->description;

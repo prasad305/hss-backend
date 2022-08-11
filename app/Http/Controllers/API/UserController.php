@@ -1574,16 +1574,6 @@ class UserController extends Controller
         ]);
     }
 
-    // public function checkAuditionVideoUpload($audition_id){
-
-    //         $is_video_uploaded = false;
-    //         if(AuditionUploadVideo::where('audition_id',$audition_id)->where('user_id',auth()->user()->id)->count() > 0){
-    //             $is_video_uploaded  = true;
-    //         }else{
-    //             $is_video_uploaded  = false;
-    //         }
-
-    // }
 
 
 
