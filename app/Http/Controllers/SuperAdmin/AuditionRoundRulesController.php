@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class AuditionRoundRulesController extends Controller
 {
-  
+
     public function index()
     {
         $data = [
@@ -20,13 +20,13 @@ class AuditionRoundRulesController extends Controller
         return view('SuperAdmin.AuditionRoundRules.index', $data);
     }
 
-    
+
     public function create()
     {
         //
     }
 
-   
+
     public function store(Request $request)
     {
         // return $request->all();
@@ -39,9 +39,7 @@ class AuditionRoundRulesController extends Controller
                 'mark_live_or_offline' => 'required_if:user_vote_mark,1',
                 'wildcard' => 'required',
                 'video_feed' => 'required',
-                // 'video_duration' => 'required',
                 'round_period' => 'required',
-                // 'instruction_prepare_period' => 'required',
                 'video_upload_period' => 'required',
                 'jury_or_judge_mark_period' => 'required',
                 'result_publish_period' => 'required',
@@ -59,13 +57,13 @@ class AuditionRoundRulesController extends Controller
         );
 
         $round = AuditionRoundRule::find($request->round_id);
-       
+
         $round->has_user_vote_mark = $request->has_user_vote_mark;
 
         if ($request->has_user_vote_mark == 1) {
             $round->mark_live_or_offline = $request->mark_live_or_offline;
             $round->user_vote_mark = $request->user_vote_mark == null ? 0 : $request->user_vote_mark;
-        }else{
+        } else {
             $round->mark_live_or_offline = null;
             $round->user_vote_mark = null;
         }
@@ -76,10 +74,10 @@ class AuditionRoundRulesController extends Controller
         $round->wildcard = $request->wildcard;
         if ($request->wildcard == 1) {
             $round->wildcard_round = $request->wildcard_round;
-        }else{
+        } else {
             $round->wildcard_round = null;
         }
-      
+
         $round->video_feed = $request->video_feed;
 
         $round->video_duration = $request->video_duration;
@@ -96,22 +94,22 @@ class AuditionRoundRulesController extends Controller
             $round->appeal_video_upload_period = $request->appeal_video_upload_period;
             $round->appeal_jury_or_judge_mark_period = $request->appeal_jury_or_judge_mark_period;
             $round->appeal_result_publish_period = $request->appeal_result_publish_period;
-        }else{
+        } else {
             $round->appeal_period = 0;
             $round->appeal_result_publish_period = 0;
             $round->appeal_video_upload_period = 0;
             $round->appeal_jury_or_judge_mark_period = 0;
         }
-        
+
 
         $round->save();
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'Round Rules Save Successfully'
-        // ]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Round Rules Save Successfully'
+        ]);
     }
 
-   
+
     public function show($id)
     {
 
@@ -121,41 +119,41 @@ class AuditionRoundRulesController extends Controller
 
         $total_round_days = $round_rules->sum('round_period');
 
-        $round_available_days = $audition_rule->event_period -($audition_rule->registration_period+$audition_rule->instruction_prepare_period);
+        $round_available_days = $audition_rule->event_period - ($audition_rule->registration_period + $audition_rule->instruction_prepare_period);
 
         return response()->json([
             'status' => 'success',
             'round_rules' => $round_rules,
-            'round_available_days' => $round_available_days-$total_round_days,
+            'round_available_days' => $round_available_days - $total_round_days,
         ]);
     }
     public function getMark($id)
     {
         $mark = AuditionRoundRule::find($id);
         $rules = AuditionRoundRule::where('audition_rules_id', $mark->audition_rules_id)->get();
-        
+
 
         return response()->json([
             'status' => 'success',
             'mark' => $mark,
             'rules' => $rules,
-            
+
         ]);
     }
 
-    
+
     public function edit($id)
     {
         //
     }
 
- 
+
     public function update(Request $request, $id)
     {
         //
     }
 
-    
+
     public function destroy($id)
     {
         //

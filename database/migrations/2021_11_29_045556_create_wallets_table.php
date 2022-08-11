@@ -23,6 +23,7 @@ class CreateWalletsTable extends Migration
             $table->integer('live_chats')->default(0);
             $table->integer('meetup')->default(0);
             $table->integer('greetings')->default(0);
+            $table->integer('qna')->default(0);
             $table->float('price')->default(0);
             $table->integer('status')->nullable();
             $table->timestamps();

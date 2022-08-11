@@ -25,10 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MeetupEventRegistaionSeeder::class);
         $this->call(LearningSessionSeeder::class);
         $this->call(LearningSessionRegSeeder::class);
-        $this->call(AuditionEventSeeder::class);
-        $this->call(AuditionEventRegSeeder::class);
-        $this->call(AuditionReactSeeder::class);
-        $this->call(AuditionCommentSeeder::class);
         $this->call(LiveChatRegistrationSeeder::class);
         $this->call(SuperStartSeeder::class);
         $this->call(PaymentSeeder::class);
@@ -38,10 +34,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(Audition\AuditionSeeder::class);
         // $this->call(Audition\AuditionJudgeInstructionSeeder::class);
         // $this->call(Audition\AuditionUploadVideoSeeder::class);
-        // $this->call(Audition\AuditionUserVotingSeeder::class);
-        // $this->call(Audition\AuditionJudgeMarkSeeder::class);
         // $this->call(Audition\AuditionAssignJurySeeder::class);
-
         // $this->call(Audition\AuditionRulesSeeder::class);
         // $this->call(Audition\AuditionRoundRulesSeeder::class);
         // $this->call(Audition\AuditionAssignJudgeSeeder::class);

@@ -34,7 +34,7 @@ Jury Board
                 onclick="openLink('{{ url('manager-admin/jury') }}/'+$('#search_text').val())"><i class="fa fa-search"
                     aria-hidden="true"></i>&nbsp;Search</a>
             <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;"
-                onclick="Show('New Jury Board','{{ route('managerAdmin.jury.create') }}')"><i
+                onclick="Show('New Jury','{{ route('managerAdmin.jury.create') }}')"><i
                     class=" fa fa-plus"></i>&nbsp;Add New</a>
         </div>
 

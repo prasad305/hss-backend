@@ -38,7 +38,7 @@ class AuditionRulesController extends Controller
 
     public function store(Request $request)
     {
-        // return $request->all();  
+        // return $request->all();
         $request->validate([
             'category_id' => 'required',
             'round_num' => 'required',
@@ -54,35 +54,34 @@ class AuditionRulesController extends Controller
         $diff = $new_round_num - $previous_round_num;
 
 
-        $audition_rules->fill($request->except(['groups_id','group_members']));
+        $audition_rules->fill($request->except(['groups_id', 'group_members']));
 
-        $jury_group_array=array(
+        $jury_group_array = array(
             'groups_id' => $request->groups_id,
             'group_members' => $request->group_members,
         );
-       
-        $audition_rules->jury_groups = json_encode($jury_group_array); 
+
+        $audition_rules->jury_groups = json_encode($jury_group_array);
 
         $audition_rules->save();
-           $inc = $audition_rules->roundRules->last() ? $audition_rules->roundRules->last()->round_num : 0;
+        $inc = $audition_rules->roundRules->last() ? $audition_rules->roundRules->last()->round_num : 0;
 
-            if ($diff > 0) {
-                for ($i = 0; $i < $diff; $i++) {
-                    AuditionRoundRule::create([
-                        'round_num' => $inc > 0 ? $inc+1 : $i+1,
-                        'audition_rules_id' => $audition_rules->id,
-                    ]);
-                    if ($inc > 0) {
-                       $inc++;
-                    }
+        if ($diff > 0) {
+            for ($i = 0; $i < $diff; $i++) {
+                AuditionRoundRule::create([
+                    'round_num' => $inc > 0 ? $inc + 1 : $i + 1,
+                    'audition_rules_id' => $audition_rules->id,
+                ]);
+                if ($inc > 0) {
+                    $inc++;
                 }
             }
+        }
 
-            if ($diff < 0) {
+        if ($diff < 0) {
 
-              AuditionRoundRule::where('audition_rules_id',$audition_rules->id)->orderBy('id', 'desc')->take(abs($diff))->delete();
-
-            }
+            AuditionRoundRule::where('audition_rules_id', $audition_rules->id)->orderBy('id', 'desc')->take(abs($diff))->delete();
+        }
 
 
 
@@ -100,10 +99,10 @@ class AuditionRulesController extends Controller
     public function show($id)
     {
         $rules = AuditionRules::where('category_id', $id)->first();
-  
+
         return response()->json([
             'status' => 'success',
-            'rules' => $rules, 
+            'rules' => $rules,
         ]);
     }
 
@@ -122,8 +121,8 @@ class AuditionRulesController extends Controller
             'rule' => $rule,
             'rules' =>  AuditionRules::where('status', 1)->latest()->get(),
             'categories' => Category::orderBy('id', 'DESC')->get(),
-            'groups' => JuryGroup::where([['status', 1],['category_id',$rule->category_id]])->orderBy('name', 'asc')->get(),
-            'group_data' =>  isset($group_data) && count($group_data) > 0 ? $group_data : null,  
+            'groups' => JuryGroup::where([['status', 1], ['category_id', $rule->category_id]])->orderBy('name', 'asc')->get(),
+            'group_data' =>  isset($group_data) && count($group_data) > 0 ? $group_data : null,
         ];
         return view('SuperAdmin.AuditionRules.edit', $data);
     }
@@ -139,11 +138,14 @@ class AuditionRulesController extends Controller
             'jury_num' => 'required',
             'month' => 'required',
             'day' => 'required',
+            'event_period' => 'required',
+            'registration_period' => 'required',
         ]);
 
         $audition_rules = AuditionRules::find($id);
         $audition_rules->fill($request->all());
         $audition_rules->save();
+
         return response()->json([
             'status' => 'success',
             'message' => 'Rules Updated Successfully!',

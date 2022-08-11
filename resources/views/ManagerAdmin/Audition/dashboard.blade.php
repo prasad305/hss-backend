@@ -108,7 +108,7 @@
                         <div class="info-box-content">
                             <span class="info-box-text">Total Judge</span>
                             <span class="info-box-number">{{ $totalJudge }}</span>
-                            <a href="{{ route('managerAdmin.dashboard.auditionsJudgeData') }}">
+                            <a href="#">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>
@@ -128,7 +128,7 @@
                         <div class="info-box-content">
                             <span class="info-box-text">Total Jury</span>
                             <span class="info-box-number">{{ $totalJury }}</span>
-                            <a href="{{ route('managerAdmin.dashboard.auditionsJuryData') }}">
+                            <a href="#">
                                 <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
                             </a>
                         </div>

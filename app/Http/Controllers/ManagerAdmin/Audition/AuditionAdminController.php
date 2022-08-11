@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\ManagerAdmin\Audition;
 
 use App\Http\Controllers\Controller;
-use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionRules;
 use App\Models\Audition\AuditionAssignJury;
@@ -20,7 +19,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AuditionAdminController extends Controller
 {
-
     public function index()
     {
         $auditionAdmins = User::where([['user_type', 'audition-admin'],['category_id', Auth::user()->category_id]])->orderBy('id', 'DESC')->get();

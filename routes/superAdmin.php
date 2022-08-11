@@ -40,10 +40,10 @@ use Illuminate\Support\Facades\Route;
 
 // Super Admin route
 
-Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin']], function () {
+Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin', 'prevent-back-history']], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
-    Route::get('/auditions', [DashboardController::class, 'auditions'])->name('auditions');
+
     Route::get('/meetup-events', [DashboardController::class, 'meetupEvents'])->name('meetupEvents');
     Route::get('/learning-session', [DashboardController::class, 'learningSessions'])->name('learningSessions');
     Route::get('/live-chats', [DashboardController::class, 'liveChats'])->name('liveChats');
@@ -102,25 +102,30 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // category
     Route::resource('category', CategoryController::class);
 
-
-
-
-    // Audition Dashboard
-    Route::resource('audition-dashboard', AuditionDashboardController::class);
-
-    // Audition Rules
+    // Audition Routes starts here
+    Route::get('/auditions', [DashboardController::class, 'auditions'])->name('auditions');
     Route::resource('audition-rules', AuditionRulesController::class);
-
-    // Audition Round Rules
     Route::resource('audition-round-rules', AuditionRoundRulesController::class);
     Route::get('audition-round-rules/mark/{rules_id}', [AuditionRoundRulesController::class, 'getMark']);
-
-    // Audition Round Rules
-    Route::resource('audition-admin', AdminAuditionController::class);
-
-    // Audition Round Rules
-    Route::resource('audition-jury', JurysAuditionController::class);
-
+    Route::resource('jury_groups', JuryGroupController::class);
+    Route::resource('auditionAdmin', AuditionAdminController::class);
+    Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');
+    Route::post('auditionAdmin/inactive/{id}', [AuditionAdminController::class, 'inactiveNow'])->name('auditionAdmin.inactiveNow');
+    Route::get('/audition-list', [AuditionController::class, 'auditionList'])->name('auditionList');
+    Route::get('audition-admin-accounts', [AccountsController::class, 'auditionAdminList'])->name('accounts.auditionAdminList');
+    Route::get('audition-admin-income', [AccountsController::class, 'auditionAdminIncome'])->name('auditionAdmin.income');
+    Route::get('setMark/{id}', [AuditionController::class, 'setMark'])->name('audition.setMark');
+    Route::put('setMark/{id}', [AuditionController::class, 'setMarkUpdate'])->name('audition.setMarkUpdate');
+    Route::get('/audition-events-dashboard', [DashboardController::class, 'auditionEventsDashboard'])->name('auditionEvents.dashboard');
+    Route::get('/audition-manager-list', [DashboardController::class, 'auditionManagerAdminList'])->name('auditionEvents.managerAdminList');
+    Route::get('/audition-manager-events', [DashboardController::class, 'auditionManagerAdminEvents'])->name('auditionEvents.managerAdminEvents');
+    Route::get('/audition-admin-list', [DashboardController::class, 'adminList'])->name('auditionEvents.adminList');
+    Route::get('/audition-admin-events', [DashboardController::class, 'adminEvents'])->name('auditionEvents.adminEvents');
+    Route::get('/audition-superstar-list', [DashboardController::class, 'auditionSuperstarList'])->name('auditionEvents.superstarList');
+    Route::get('/audition-superstar-events', [DashboardController::class, 'auditionSuperstarEvents'])->name('auditionEvents.superstarEvents');
+    Route::get('/auditionAdmin-list', [DashboardController::class, 'auditionAdminList'])->name('auditionEvents.auditionAdminList');
+    Route::get('/audition-Admin-events', [DashboardController::class, 'auditionAdminEvents'])->name('auditionEvents.auditionAdminEvents');
+    // Audition Routes ends here
 
     // Auction Routes
     Route::get('auction-index', [AuctionController::class, 'index'])->name('auction.index');
@@ -130,28 +135,28 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::put('terms-update/{id}', [AuctionController::class, 'termsUpdate'])->name('auctionTerms.update');
     Route::delete('terms-destroy/{id}', [AuctionController::class, 'termsDestroy'])->name('auctionTerms.destroy');
 
-    // SimplePost 
+    // SimplePost
     Route::get('simplepost-index', [SimplePostController::class, 'index'])->name('simplePost.index');
     Route::get('simplepost-list/{id}', [SimplePostController::class, 'simplepostList'])->name('simplePost.list');
     Route::get('simplepost-details/{id}', [SimplePostController::class, 'simplepostDetails'])->name('simplePost.details');
     Route::get('simplepost-edit/{id}', [SimplePostController::class, 'simplepostEdit'])->name('simplePost.edit');
     Route::PUT('simplepost-update/{id}', [SimplePostController::class, 'simplepostUpdate'])->name('simplePost.update');
     Route::delete('simplepost-destroy/{id}', [SimplePostController::class, 'simplepostDestroy'])->name('simplePost.destroy');
-    // Auction 
+    // Auction
     Route::get('auction-dashboard', [AuctionController::class, 'dashboard'])->name('auction.dashboard');
     Route::get('auction-list/{id}', [AuctionController::class, 'auctionList'])->name('auction.list');
     Route::get('auction-details/{id}', [AuctionController::class, 'auctionDetails'])->name('auction.details');
     Route::get('auction-edit/{id}', [AuctionController::class, 'auctionEdit'])->name('auction.edit');
     Route::PUT('auction-update/{id}', [AuctionController::class, 'auctionUpdate'])->name('auction.update');
     Route::delete('auction-destroy/{id}', [AuctionController::class, 'auctionDestroy'])->name('auction.destroy');
-    // Marketplace 
+    // Marketplace
     Route::get('marketplace-dashboard', [MarketplaceController::class, 'dashboard'])->name('marketplace.dashboard');
     Route::get('marketplace-list/{id}', [MarketplaceController::class, 'marketplaceList'])->name('marketplace.list');
     Route::get('marketplace-details/{id}', [MarketplaceController::class, 'marketplaceDetails'])->name('marketplace.details');
     Route::get('marketplace-edit/{id}', [MarketplaceController::class, 'marketplaceEdit'])->name('marketplace.edit');
     Route::PUT('marketplace-update/{id}', [MarketplaceController::class, 'marketplaceUpdate'])->name('marketplace.update');
     Route::delete('marketplace-destroy/{id}', [MarketplaceController::class, 'marketplaceDestroy'])->name('marketplace.destroy');
-    // Souvenir 
+    // Souvenir
     Route::get('souvenir-dashboard', [SouvenirController::class, 'dashboard'])->name('souvenir.dashboard');
     Route::get('souvenir-list/{id}', [SouvenirController::class, 'souvenirList'])->name('souvenir.list');
     Route::get('souvenir-details/{id}', [SouvenirController::class, 'souvenirDetails'])->name('souvenir.details');
@@ -281,44 +286,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('jury/active/{id}', [JuryBoardController::class, 'activeNow'])->name('jury.activeNow');
     Route::post('jury/inactive/{id}', [JuryBoardController::class, 'inactiveNow'])->name('jury.inactiveNow');
 
-    //<===========================Audition Releated Route Star=====================================>
-
-    // Adudition Admin Create by Monir
-
-    Route::resource('jury_groups', JuryGroupController::class);
-
-    Route::resource('auditionAdmin', AuditionAdminController::class);
-
-    Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');
-    Route::post('auditionAdmin/inactive/{id}', [AuditionAdminController::class, 'inactiveNow'])->name('auditionAdmin.inactiveNow');
-
-    //audtion
-    Route::resource('audition', AuditionController::class);
-    Route::get('setMark/{id}', [AuditionController::class, 'setMark'])->name('audition.setMark');
-    Route::put('setMark/{id}', [AuditionController::class, 'setMarkUpdate'])->name('audition.setMarkUpdate');
-
-    // Audition Dashboard
-    Route::resource('audition-dashboard', AuditionDashboardController::class);
-
-    // Audition Rules
-    Route::resource('audition-rules', AuditionRulesController::class);
-
-    // Audition Round Rules
-    Route::resource('audition-round-rules', AuditionRoundRulesController::class);
-    Route::get('audition-round-rules/mark/{rules_id}', [AuditionRoundRulesController::class, 'getMark']);
-
-    // Audition Round Rules
-    Route::resource('audition-admin', AdminAuditionController::class);
-
-    // Audition Round Rules
-    Route::resource('audition-jury', JurysAuditionController::class);
-
-    //<===========================Audition Releated Route End=====================================>
-
-
-
-    //<=========================== Accounts Releated Route Start =====================================>
-
     // all events
     Route::get('accounts-index', [AccountsController::class, 'index'])->name('accounts.index');
     Route::get('accounts-total-events', [AccountsController::class, 'totalEvents'])->name('accounts.totalEvents');
@@ -409,11 +376,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('superstar-accounts', [AccountsController::class, 'superstarList'])->name('accounts.superstarList');
     Route::get('superstar-income', [AccountsController::class, 'superstarIncome'])->name('superstar.income');
 
-    // audition Admin
-
-    Route::get('audition-admin-accounts', [AccountsController::class, 'auditionAdminList'])->name('accounts.auditionAdminList');
-    Route::get('audition-admin-income', [AccountsController::class, 'auditionAdminIncome'])->name('auditionAdmin.income');
-
 
 
     //<=========================== Accounts Releated Route End =====================================>
@@ -448,10 +410,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/greeting-data-list/{type}', [DashboardController::class, 'greetingDataList'])->name('greetingEvents.greetingDataList');
     Route::get('/greeting-manager-list', [DashboardController::class, 'greetingManagerAdminList'])->name('greetingEvents.managerAdminList');
     Route::get('/greeting-manager-events/{id}', [DashboardController::class, 'greetingManagerAdminEvents'])->name('greetingEvents.managerAdminEvents');
-    // audition dashboard
-    Route::get('/audition-events-dashboard', [DashboardController::class, 'auditionEventsDashboard'])->name('auditionEvents.dashboard');
-    Route::get('/audition-manager-list', [DashboardController::class, 'auditionManagerAdminList'])->name('auditionEvents.managerAdminList');
-    Route::get('/audition-manager-events', [DashboardController::class, 'auditionManagerAdminEvents'])->name('auditionEvents.managerAdminEvents');
+
     // fanGroup dashboard
     Route::get('/fanGroup-events-dashboard', [DashboardController::class, 'fanGroupEventsDashboard'])->name('fanGroupEvents.dashboard');
     Route::get('/fanGroup-data-list/{type}', [DashboardController::class, 'fanGroupDataList'])->name('fanGroupEvents.fanGroupDataList');
@@ -496,9 +455,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // greeting dashboard
     Route::get('/greeting-admin-list', [DashboardController::class, 'greetingAdminList'])->name('greetingEvents.adminList');
     Route::get('/greeting-admin-events/{id}', [DashboardController::class, 'greetingAdminEvents'])->name('greetingEvents.adminEvents');
-    // audition dashboard
-    Route::get('/audition-admin-list', [DashboardController::class, 'adminList'])->name('auditionEvents.adminList');
-    Route::get('/audition-admin-events', [DashboardController::class, 'adminEvents'])->name('auditionEvents.adminEvents');
     // fanGroup dashboard
     Route::get('/fanGroup-admin-list', [DashboardController::class, 'fanGroupAdminList'])->name('fanGroupEvents.adminList');
     Route::get('/fanGroup-admin-events/{id}', [DashboardController::class, 'fanGroupAdminEvents'])->name('fanGroupEvents.adminEvents');
@@ -532,10 +488,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // greeting dashboard
     Route::get('/greeting-superstar-list', [DashboardController::class, 'greetingSuperstarList'])->name('greetingEvents.superstarList');
     Route::get('/greeting-superstar-events/{id}', [DashboardController::class, 'greetingSuperstarEvents'])->name('greetingEvents.superstarEvents');
-    // audition dashboard
-    Route::get('/audition-events-dashboard', [DashboardController::class, 'auditionEventsDashboard'])->name('auditionEvents.dashboard');
-    Route::get('/audition-superstar-list', [DashboardController::class, 'auditionSuperstarList'])->name('auditionEvents.superstarList');
-    Route::get('/audition-superstar-events', [DashboardController::class, 'auditionSuperstarEvents'])->name('auditionEvents.superstarEvents');
+
     // fanGroup dashboard
     Route::get('/fanGroup-superstar-list', [DashboardController::class, 'fanGroupSuperstarList'])->name('fanGroupEvents.superstarList');
     Route::get('/fanGroup-superstar-events/{id}', [DashboardController::class, 'fanGroupSuperstarEvents'])->name('fanGroupEvents.superstarEvents');
@@ -555,10 +508,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/souvenir-superstar-list', [DashboardController::class, 'souvenirSuperstarList'])->name('souvenirEvents.superstarList');
     Route::get('/souvenir-superstar-events/{id}', [DashboardController::class, 'souvenirSuperstarEvents'])->name('souvenirEvents.superstarEvents');
 
-    //                          Audition Admin
-    Route::get('/auditionAdmin-events-dashboard', [DashboardController::class, 'auditionAdminEventsDashboard'])->name('auditionAdminEvents.dashboard');
-    Route::get('/auditionAdmin-list', [DashboardController::class, 'auditionAdminList'])->name('auditionEvents.auditionAdminList');
-    Route::get('/audition-Admin-events', [DashboardController::class, 'auditionAdminEvents'])->name('auditionEvents.auditionAdminEvents');
+
 
     // <================================= End All Module Dashboard ======================================>
 

@@ -38,7 +38,6 @@ Route::get('/chat', function () {
 Route::get('/test-view', function () {
 
     return "Please add a view !";
-    // return view('SuperAdmin.JurysAuditoin.index');
 });
 
 

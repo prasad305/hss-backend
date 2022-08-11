@@ -24,6 +24,7 @@ class CreateAuditionRoundInfosTable extends Migration
             $table->integer('user_vote_mark')->default(0)->comment('mark in percentage');
             $table->integer('mark_live_or_offline')->nullable()->comment('0 = offline,1= live');
             $table->integer('wildcard')->nullable()->comment('0 = no , 1= yes');
+            $table->integer('wildcard_status')->nullable()->comment('0 = unpublished , 1 = published from manager admin');
             $table->integer('wildcard_round')->nullable();
             $table->integer('appeal')->nullable()->comment('0 = no, 1= yes');
             $table->integer('video_feed')->nullable()->comment('0 = no, 1= yes');
@@ -57,6 +58,7 @@ class CreateAuditionRoundInfosTable extends Migration
             $table->date('appeal_result_publish_end_date')->nullable();
 
             $table->integer('manager_status')->default(0)->comment('0 = not send, 1 = send to manager, 2 = send to user');
+            $table->integer('appeal_manager_status')->default(0)->comment('0 = not send, 1 = send to manager, 2 = send to user');
             $table->integer('status')->default(0)->comment('0 = inactive, 1= active');
             $table->timestamps();
         });

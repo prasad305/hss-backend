@@ -2,21 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Audition\AssignAdmin;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionAssignJury;
-use App\Models\Audition\AuditionMark;
 use App\Models\Category;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionPromoInstructionSendInfo;
-use App\Models\Audition\AuditionUploadVideo;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-// use App\Models\SuperStar;
-
 
 class User extends Authenticatable
 {
@@ -46,8 +40,6 @@ class User extends Authenticatable
         'category_id'
     ];
 
-
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -58,18 +50,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
-
-
-    //Relation For API
     protected $with = ['assignedToMePromoInstructionSendInfo', 'userInfo', 'admin', 'star.starDetails', 'category', 'subCategory'];
 
 
@@ -92,11 +76,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(User::class, 'parent_user');
     }
-    // public function starInfo()
-    // {
-    //     return $this->hasOne(SuperStar::class, 'star_id');
-    // }
-
 
     public function userInfo()
     {
@@ -194,36 +173,10 @@ class User extends Authenticatable
         return $this->hasMany(LearningSessionRegistration::class, 'user_id');
     }
 
-
-    public function auditionReacts()
-    {
-        return $this->hasMany(AuditionReact::class, 'user_id');
-    }
-
-    public function auditionComments()
-    {
-        return $this->hasMany(AuditionComment::class, 'user_id');
-    }
-
-    public function createdAuditionEvents()
-    {
-        return $this->hasMany(AuditionEvent::class, 'created_by_id');
-    }
-
-    public function asStarAuditionEvents()
-    {
-        return $this->hasMany(AuditionEvent::class, 'star_id');
-    }
     public function asStarGreeting()
     {
         return $this->hasOne(Greeting::class, 'star_id');
     }
-
-    public function registeredAuditionEvents()
-    {
-        return $this->hasMany(AuditionEventRegistration::class, 'user_id');
-    }
-
     public function liveChatReacts()
     {
         return $this->hasMany(LiveChatReact::class, 'user_id');
@@ -259,32 +212,21 @@ class User extends Authenticatable
         return $this->hasOne(JuryBoard::class, 'star_id');
     }
 
-
     public function participant_jury()
     {
         return $this->hasMany(AuditionParticipant::class, 'jury_id');
     }
-    // public function assignedJuryVideos(){
-    //     return $this->hasMany(AuditionUploadVideo::class, 'jury_id');
-    // }
 
-    public function markingVideo()
-    {
-        return $this->hasMany(AuditionMark::class, 'jury_id');
-    }
-
-
-    // all of this below relation is for audition admin user
     public function assignedAudition()
     {
         return $this->hasOne(Audition::class, 'audition_admin_id');
     }
+
     public function auditionCategory()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    // all of this below relation is for jury user
     public function assignedAuditionsJury()
     {
         return $this->hasMany(AuditionAssignJury::class, 'jury_id');

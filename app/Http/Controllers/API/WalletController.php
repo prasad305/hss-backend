@@ -80,6 +80,7 @@ class WalletController extends Controller
                 $userWallet->live_chats += $addPackages->live_chats;
                 $userWallet->meetup += $addPackages->meetup;
                 $userWallet->greetings += $addPackages->greetings;
+                $userWallet->qna += $addPackages->qna;
                 $userWallet->save();
     
                 return response()->json([
@@ -96,6 +97,7 @@ class WalletController extends Controller
                 $wallet->live_chats += $addPackages->live_chats;
                 $wallet->meetup += $addPackages->meetup;
                 $wallet->greetings += $addPackages->greetings;
+                $wallet->qna += $addPackages->qna;
                 $wallet->status = 0;
                 $wallet->save();
     
@@ -143,6 +145,7 @@ class WalletController extends Controller
             $userWallet->live_chats += $addPackages->live_chats;
             $userWallet->meetup += $addPackages->meetup;
             $userWallet->greetings += $addPackages->greetings;
+            $userWallet->qna += $addPackages->qna;
             $userWallet->save();
 
             return response()->json([
@@ -159,6 +162,7 @@ class WalletController extends Controller
             $wallet->live_chats += $addPackages->live_chats;
             $wallet->meetup += $addPackages->meetup;
             $wallet->greetings += $addPackages->greetings;
+            $wallet->qna += $addPackages->qna;
             $wallet->status = 0;
             $wallet->save();
 

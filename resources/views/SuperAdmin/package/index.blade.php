@@ -53,7 +53,7 @@
                     
                       <div class="col-md-3">
                         <div class="card text-center">
-                            <div class="card-header" style=" background-color: #ffad00; height: 50px; margin-bottom: 20px; font-weight: 600; font-size: 20px; ">
+                            <div class="card-header" style=" background: {{ $data->color_code }}; height: 50px; margin-bottom: 20px; font-weight: 600; font-size: 20px; ">
                               {{ $data->title }}
 
                                 @if ($data->status == 0)
@@ -77,6 +77,7 @@
                               <p class=""><i class="fa {{ $data->live_chats ? 'fa-check check' : 'fa-xmark xmark' }}"></i> Live Chats :: {{ $data->live_chats }} </p>
                               <p class=""><i class="fa {{ $data->meetup ? 'fa-check check' : 'fa-xmark xmark' }}" style=""></i> Meetup Events :: {{ $data->meetup }} </p>
                               <p class=""><i class="fa {{ $data->greetings ? 'fa-check check' : 'fa-xmark xmark' }}" style=""></i> Greetings :: {{ $data->greetings }} </p>
+                              <p class=""><i class="fa {{ $data->qna ? 'fa-check check' : 'fa-xmark xmark' }}" style=""></i> Q & A :: {{ $data->qna }} </p>
                             </div>
                             <div class="card-footer text-muted" style="color: #f0e25e !important; font-size: 30px; font-weight: 600;">
                               Price :: {{ $data->price }} Tk
@@ -184,51 +185,3 @@
   </script>
 @endsection
 
-
-
-
-{{-- 
-
-
-<table id="example1" class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>SL</th>
-            <th>Country Name</th>
-            <th>Status</th>
-            <th style="width: 150px">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-
-        @foreach ($package as $key => $data)
-            <tr>
-                <td>{{ ++$key }}</td>
-                <td>{{ $data->title }}</td>
-                <td>
-                  @if($data->status)
-                  <span class="badge badge-info" style="width: 70px;">Active</span>
-                  @else
-                  <span class="badge badge-danger" style="width: 70px;">InActive</span>
-                  @endif
-                </td>
-                
-                <td style="width: 150px">
-                    <a class="btn btn-sm btn-info"
-                        onclick="Show('Edit Package','{{ route('superAdmin.package.edit', $data->id) }}')"><i
-                            class="fa fa-edit text-white"></i></a>
-                        @if ($data->status == 0)
-                            <button class="btn btn-success" onclick="activeNow(this)" value="{{ route('superAdmin.package.activeNow', $data->id) }}">
-                                <i class="fa fa-check" aria-hidden="true"></i>
-                            </button>
-                        @elseif($data->status == 1)
-                            <button class="btn btn-danger" onclick="inactiveNow(this)" value="{{ route('superAdmin.package.inactiveNow', $data->id) }}">
-                                <i class="fa fa-close"></i>
-                            </button>
-                        @endif
-                </td>
-            </tr>
-        @endforeach
-
-    </tbody>
-  </table> --}}

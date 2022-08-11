@@ -9,8 +9,6 @@ use App\Models\Auction;
 use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionRoundInfo;
-use App\Models\Audition\AuditionRoundRegistration;
-use App\Models\AuditionEventRegistration;
 use App\Models\Bidding;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
@@ -19,7 +17,6 @@ use App\Models\LiveChat;
 use App\Models\LearningSession;
 use App\Models\LearningSessionEvaluation;
 use App\Models\LearningSessionRegistration;
-use App\Models\LiveChatRoom;
 use App\Models\Marketplace;
 use App\Models\MarketplaceOrder;
 use App\Models\MeetupEvent;
@@ -31,8 +28,7 @@ use App\Models\User;
 use App\Models\UserInfo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use File;
-
+use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
 
@@ -157,26 +153,16 @@ class UserMobileAppController extends Controller
             $activity->type = 'marketplace';
         }
         if ($modelName == 'AuditionParticipant') {
-            $eventRegistration = new AuditionEventRegistration();
+            $eventRegistration = new AuditionParticipant();
             $event = Audition::find($eventId);
-            $eventRegistration->audition_event_id = $eventId;
-            $eventRegistration->amount = $event->fee;
             $activity->type = 'audition';
-
             $first_round_info = AuditionRoundInfo::where([['audition_id', $eventId]])->first();
 
-            // $round = new AuditionRoundRegistration();
-            // $round->user_id = $user->id;
-            // $round->audition_id = $eventId;
-            // $round->audition_round_info_id = $first_round->id;
-            // $round->save();
-
-            $participant = new AuditionParticipant();
-            $participant->user_id = $user->id;
-            $participant->audition_id = $eventId;
-            $participant->round_info_id = $first_round_info->id;
-            $eventRegistration->amount = $event->fee;
-            $participant->save();
+            $eventRegistration->user_id = $user->id;
+            $eventRegistration->audition_id = $eventId;
+            $eventRegistration->round_info_id = $first_round_info->id;
+            $eventRegistration->amount = $event->fees;
+            $eventRegistration->save();
         }
 
         $eventRegistration->user_id = $user->id;

@@ -32,7 +32,7 @@ Audition Admin
             <a class="btn btn-success btn-md mr-4" style="float: right; margin-bottom: 10px;" onclick="openLink('{{ url('manager-admin/auditionAdmin') }}/'+$('#search_text').val())" ><i
                     class="fa fa-search" aria-hidden="true"></i>&nbsp;Search</a>
             <a class="btn btn-success btn-sm mr-4" style="float: right; margin-bottom: 10px;"
-                onclick="Show('New Audition Admin','{{ route('managerAdmin.auditionAdmin.create') }}')"><i
+                onclick="Show('New Audition Admin','{{ route('managerAdmin.audition.auditionAdmin.create') }}')"><i
                     class=" fa fa-plus"></i>&nbsp;Add New</a>
         </div>
 

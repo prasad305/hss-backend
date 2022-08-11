@@ -37,20 +37,20 @@ Manager Admin
         <div class="row">
            @foreach ($event->info->auditionRounds as $key => $round)
             <div>
-                <ul class="nav nav-tabs" role="tablist" onclick="getRoundBasedResult('{{$round->id}}')"> 
+                <ul class="nav nav-tabs" role="tablist" onclick="getRoundBasedResult('{{$round->id}}')">
                 <li class="nav-item custom-nav-item m-2 TextBH" >
                     <a class="nav-link border-warning text-warning font-weight-bold" data-toggle="tab" href="" role="tab">
-                        <center class="mb-2"> 
-                            <h4>Round</h4> 
-                            <span class="bg-gray p-1 btn " > {{$round->round_num}} </span> 
-                        </center> 
-                        <a class="btn border-warning nav-link " data-toggle="tab" href="" role="tab">Rolls</a> 
-                    </a> 
+                        <center class="mb-2">
+                            <h4>Round</h4>
+                            <span class="bg-gray p-1 btn " > {{$round->round_num}} </span>
+                        </center>
+                        <a class="btn border-warning nav-link " data-toggle="tab" href="" role="tab">Rules</a>
+                    </a>
                     </li>
                 </ul>
             </div>
            @endforeach
-           
+
         </div>
         <div class="row">
             <div class="col-md-12" id="round_result_show">
@@ -86,11 +86,11 @@ Manager Admin
             url: url + "/" + audition_id+ "/" + round_info_id+"/"+type, // your request url
             type: 'GET',
             success: function(data) {
-                $('#round_result_show').append(data); 
+                $('#round_result_show').append(data);
 
             },
             error: function(data) {
-               
+
             }
         });
     }
