@@ -19,6 +19,10 @@ use App\Models\LiveChatRegistration;
 use App\Models\LiveChat;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
+use App\Models\Greeting;
+use App\Models\GreetingsRegistration;
+use App\Models\MeetupEvent;
+use App\Models\MeetupEventRegistration;
 
 class QnaController extends Controller
 {
@@ -128,6 +132,72 @@ class QnaController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Learning Session Successfully Registered ',
+            ]);
+        }
+        
+
+        if($request->event_type == 'greeting'){
+            $event = Greeting::find($request->eventId);
+
+            $eventRegistration = GreetingsRegistration::where('user_id', Auth::user()->id)->where('greeting_id', $request->eventId)->first();
+
+            $walletData = Wallet::where('user_id', Auth::user()->id)->first();
+            $walletData->greetings = $walletData->greetings - 1;
+            $walletData->save();
+
+            // $eventRegistration->greeting_id = $event->id;
+            // $eventRegistration->user_id = Auth::user()->id;
+            $eventRegistration->card_holder_name = Auth::user()->first_name ." ". Auth::user()->last_name;
+            $eventRegistration->amount = $event->cost;
+            $eventRegistration->payment_status = 1;
+            $eventRegistration->status = 1;
+            $eventRegistration->payment_method = 'wallet';
+            $eventRegistration->payment_date = Carbon::now();
+            $eventRegistration->save();
+
+            $activity = new Activity();
+            $activity->type = 'greeting';
+            $activity->user_id = Auth::user()->id;
+            $activity->event_id = $event->id;
+            $activity->event_registration_id = $eventRegistration->id;
+            $activity->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Greeting Successfully Registered',
+            ]);
+        }
+        
+
+        if($request->event_type == 'meetup'){
+            $event = MeetupEvent::find($request->eventId);
+
+            $eventRegistration = new MeetupEventRegistration();
+
+            $walletData = Wallet::where('user_id', Auth::user()->id)->first();
+            $walletData->meetup = $walletData->meetup - 1;
+            $walletData->save();
+
+            $eventRegistration->meetup_event_id = $event->id;
+            $eventRegistration->user_id = Auth::user()->id;
+            $eventRegistration->card_holder_name = Auth::user()->first_name ." ". Auth::user()->last_name;
+            $eventRegistration->amount = $event->fee;
+            $eventRegistration->payment_status = 1;
+            // $eventRegistration->status = 1;
+            $eventRegistration->payment_method = 'wallet';
+            $eventRegistration->payment_date = Carbon::now();
+            $eventRegistration->save();
+
+            $activity = new Activity();
+            $activity->type = 'meetup';
+            $activity->user_id = Auth::user()->id;
+            $activity->event_id = $event->id;
+            $activity->event_registration_id = $eventRegistration->id;
+            $activity->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Meetup Events Successfully Registered',
             ]);
         }
         
