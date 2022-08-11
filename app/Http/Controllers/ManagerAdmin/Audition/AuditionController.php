@@ -101,6 +101,7 @@ class AuditionController extends Controller
                 $auditionRoundInfo->user_vote_mark =  $auditionRoundRule->user_vote_mark;
                 $auditionRoundInfo->mark_live_or_offline =  $auditionRoundRule->mark_live_or_offline;
                 $auditionRoundInfo->wildcard =  $auditionRoundRule->wildcard;
+                $auditionRoundInfo->round_type =  $auditionRoundRule->round_type;
                 $auditionRoundInfo->wildcard_round =  $auditionRoundRule->wildcard_round;
                 $auditionRoundInfo->appeal =  $auditionRoundRule->appeal;
                 $auditionRoundInfo->video_feed =  $auditionRoundRule->video_feed;
