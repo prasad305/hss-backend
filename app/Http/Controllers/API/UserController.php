@@ -2066,19 +2066,14 @@ class UserController extends Controller
     {
 
 
-        $generalMarkTraking = AuditionRoundMarkTracking::where([['wining_status', 0], ['type', 'general']])->pluck('user_id')->toArray();
-        $appealMarkTraking = AuditionRoundMarkTracking::where([['wining_status', 0], ['type', 'appeal']])->pluck('user_id')->toArray();
-
-        $notAppealedGeneralVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($generalMarkTraking, $appealMarkTraking) {
-            return $q->where([['approval_status', 1], ['type', 'general']])->whereNotIn('user_id', $appealMarkTraking)->whereIn('user_id', $generalMarkTraking)->get();
-        }])->where([['wildcard', 1], ['wildcard_status', 0], ['mark_live_or_offline', 0]])->latest()->get()->toArray();
+        $videofeed = AuditionRoundMarkTracking::whereHas('roundInfo', function ($q) {
+            $q->where('wildcard_status', 1);
+        })->where([['wining_status', 0]])->pluck('user_id')->toArray();
 
 
-        $appealedGeneralVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($appealMarkTraking) {
-            return $q->where([['approval_status', 1], ['type', 'appeal']])->whereIn('user_id', $appealMarkTraking)->get();
-        }])->where([['wildcard', 1], ['wildcard_status', 0], ['mark_live_or_offline', 0]])->latest()->get()->toArray();
-
-        $roundVideos = array_merge($notAppealedGeneralVideos, $appealedGeneralVideos);
+        $roundVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($videofeed) {
+            return $q->where([['approval_status', 1]])->whereIn('user_id', $videofeed)->get();
+        }])->where([['wildcard', 1], ['wildcard_status', 1], ['mark_live_or_offline', 0]])->latest()->get()->toArray();
 
         return response()->json([
             'status' => 200,

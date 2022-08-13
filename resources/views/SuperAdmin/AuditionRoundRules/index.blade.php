@@ -294,27 +294,29 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- <div id="hid_show_live_or_offile" style="display: none!important">
-                        </div> --}}
                     </div>
-                    <div class="d-flex flex-row flexRow mx-2 my-3 w-100">
-                        <div class="audition__mark">
-                            <input type="radio" name="mark_live_or_offline" value="1"> <span>Live Mark</span>
-                        </div>
-                        <div class="audition__mark ml-3">
-                            <input type="radio" name="mark_live_or_offline" value="0"> <span>Offline
-                                Mark</span>
-                        </div>
-                        <span class="text-danger" id="mark_live_or_offline_error"></span>
+                    <div id="hid_show_live_or_offile" style="display: none!important">
 
-                        <div class="col-md-8 displayNine">
+                        <div class="d-flex flex-row flexRow mx-2 my-3 w-100">
+                            <div class="audition__mark">
+                                <input type="radio" name="mark_live_or_offline" value="1"> <span>Live Mark</span>
+                            </div>
+                            <div class="audition__mark ml-3">
+                                <input type="radio" name="mark_live_or_offline" value="0"> <span>Offline
+                                    Mark</span>
+                            </div>
+                            <span class="text-danger" id="mark_live_or_offline_error"></span>
 
-                            <div class="col-md-3">
-                                <input type="text" name="user_vote_mark" id="user_vote_mark" onkeyup="markCheck()"
-                                    class="form-control text-center" placeholder="User Vote Mark">
-                                <span class="text-danger" id="user_vote_mark_error"></span>
+                            <div class="col-md-8 displayNine">
+
+                                <div class="col-md-3">
+                                    <input type="text" name="user_vote_mark" id="user_vote_mark" onkeyup="markCheck()"
+                                        class="form-control text-center" placeholder="User Vote Mark">
+                                    <span class="text-danger" id="user_vote_mark_error"></span>
+                                </div>
                             </div>
                         </div>
+
                     </div>
 
 
@@ -864,12 +866,14 @@
             let appeal_jury_or_judge_mark_period = Number($('#appeal_jury_or_judge_mark_period').val());
 
 
+            let sum_of_round_period_no_appeal = video_upload_period + jury_or_judge_mark_period +
+                result_publish_period;
 
             let sum_of_round_period = video_upload_period + jury_or_judge_mark_period +
                 result_publish_period + appeal_period + appeal_result_publish_period + appeal_video_upload_period +
                 appeal_jury_or_judge_mark_period;
 
-            if (round_period == sum_of_round_period) {
+            if (round_period == sum_of_round_period || round_period == sum_of_round_period_no_appeal) {
 
                 ErrorMessageClear();
                 $('.wild_card__two').css("display", "block");
