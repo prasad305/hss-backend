@@ -456,19 +456,19 @@ class AuditionController extends Controller
 
         $notAppealedGeneralVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($generalMarkTraking, $appealMarkTraking, $round_info_id) {
             return $q->where([['approval_status', 1], ['round_info_id', $round_info_id], ['type', 'general']])->whereNotIn('user_id', $appealMarkTraking)->whereIn('user_id', $generalMarkTraking)->get();
-        }])->where([['id', $round_info_id], ['wildcard', 1], ['wildcard_status', 0], ['mark_live_or_offline', 0]])->first();
+        }])->where([['id', $round_info_id], ['wildcard', 1], ['videofeed_status', 0], ['round_type', 0]])->first();
 
 
         $appealedGeneralVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($appealMarkTraking, $round_info_id) {
             return $q->where([['approval_status', 1], ['round_info_id', $round_info_id], ['type', 'appeal']])->whereIn('user_id', $appealMarkTraking)->get();
-        }])->where([['id', $round_info_id], ['wildcard', 1], ['wildcard_status', 0], ['mark_live_or_offline', 0]])->first();
+        }])->where([['id', $round_info_id], ['wildcard', 1], ['videofeed_status', 0], ['round_type', 0]])->first();
 
         return view('ManagerAdmin.Audition.videoFeedList', compact('notAppealedGeneralVideos', 'appealedGeneralVideos'));
     }
     public function videoPublishedToVideofeed($round_info_id)
     {
         $published = AuditionRoundInfo::findOrFail($round_info_id)->update([
-            'wildcard_status' => 1
+            'videofeed_status' => 1
         ]);
         if ($published) {
             session()->flash('success', 'Video Published To Video Feed!');

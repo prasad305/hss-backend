@@ -2065,13 +2065,13 @@ class UserController extends Controller
 
 
         $videofeed = AuditionRoundMarkTracking::whereHas('roundInfo', function ($q) {
-            $q->where('wildcard_status', 1);
+            $q->where('videofeed_status', 1);
         })->where([['wining_status', 0]])->pluck('user_id')->toArray();
 
 
         $roundVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($videofeed) {
             return $q->where([['approval_status', 1]])->whereIn('user_id', $videofeed)->get();
-        }])->where([['wildcard', 1], ['wildcard_status', 1], ['mark_live_or_offline', 0]])->latest()->get()->toArray();
+        }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get()->toArray();
 
         return response()->json([
             'status' => 200,
