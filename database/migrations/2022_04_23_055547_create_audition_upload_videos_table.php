@@ -18,7 +18,7 @@ class CreateAuditionUploadVideosTable extends Migration
             $table->unsignedBigInteger('audition_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('round_info_id')->nullable();
-            $table->unsignedBigInteger('jury_or_judge_id')->nullable();
+            $table->string('judge_id')->default([]);
             $table->unsignedBigInteger('audition_admin_id')->nullable();
             $table->unsignedBigInteger('group_a_per_jury_id')->nullable();
             $table->unsignedBigInteger('group_a_ran_jury_id')->nullable();

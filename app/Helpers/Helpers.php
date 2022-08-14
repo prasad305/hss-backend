@@ -4,8 +4,10 @@ use App\Models\Audition\AuditionUploadVideo;
 use App\Models\JuryGroup;
 use App\Models\StaticOption;
 use App\Models\User;
+use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 
 // use Illuminate\Support\Facades\Cache;
 // use Illuminate\Support\Facades\Mail;
@@ -191,5 +193,48 @@ if (!function_exists('random_code')) {
     function juryGroup($id)
     {
         return JuryGroup::find($id)->name;
+    }
+
+
+
+    /**
+     * video sdk create room id
+     */
+
+
+    /**
+     * get sdk token
+     */
+    function createRoomID()
+    {
+        return 'a3en-kih1-ls2r'; //for local
+        $VIDEOSDK_API_KEY = "9af32487-b9c6-4679-a9f1-c5239c35410b";
+        $VIDEOSDK_SECRET_KEY = "aaf9ba47bc165fdcd5a0f57638efd822cee41261a389c6ce438c314c4b3ef429";
+
+        header("Content-type: application/json; charset=utf-8");
+
+        $issuedAt   = new DateTimeImmutable();
+        $expire     = $issuedAt->modify('+24 hours')->getTimestamp();
+
+        $payload = [
+            'apikey' => $VIDEOSDK_API_KEY,
+            'permissions' => array(
+                "allow_join", "allow_mod"
+            ),
+            'iat' => $issuedAt->getTimestamp(),
+            'exp' => $expire
+        ];
+
+
+        $jwt = JWT::encode($payload, $VIDEOSDK_SECRET_KEY, 'HS256');
+
+        $request = Http::withHeaders([
+            'Authorization' =>  $jwt,
+            'Content-Type' => ' application/json'
+        ])->post('https://api.videosdk.live/v2/rooms');
+
+
+        //return $request['roomId']; //for live
+
     }
 }

@@ -29,7 +29,7 @@ class AuditionRoundRulesController extends Controller
 
     public function store(Request $request)
     {
-        // return $request->all();
+        // return '---wildcard-----'.$request->wildcard.'-----round_type-----'.$request->round_type;;
 
         $request->validate(
             [
@@ -72,6 +72,7 @@ class AuditionRoundRulesController extends Controller
         $round->jury_or_judge_mark = $request->jury_or_judge_mark;
 
         $round->wildcard = $request->wildcard;
+        $round->round_type = $request->round_type;
         if ($request->wildcard == 1) {
             $round->wildcard_round = $request->wildcard_round;
         } else {

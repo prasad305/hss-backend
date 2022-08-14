@@ -1873,9 +1873,7 @@ class UserController extends Controller
     public function current_round_info($event_slug)
     {
         $audition = Audition::where('slug', $event_slug)->first();
-        $current_round = AuditionParticipant::where([['user_id', Auth::user()->id], ['audition_id', $audition->id]])->first();
-
-        $round_info = AuditionRoundInfo::find($current_round->round_info_id);
+        $round_info = AuditionRoundInfo::find($audition->active_round_info_id);
         $round_instruction = AuditionRoundInstruction::where('round_info_id', $round_info->id)->first();
 
         return response()->json([
