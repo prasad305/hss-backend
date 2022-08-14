@@ -366,7 +366,7 @@ class StarAuthController extends Controller
                         'message'=>'QR Code Matched!',
                     ]);
                 }
-               
+
             }else{
                 return response()->json([
                     'status'=>401,
