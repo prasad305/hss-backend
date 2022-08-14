@@ -17,6 +17,7 @@ use App\Http\Controllers\SuperAdmin\DashboardInfoController;
 use App\Http\Controllers\SuperAdmin\CategoryController;
 use App\Http\Controllers\SuperAdmin\CountryController;
 use App\Http\Controllers\SuperAdmin\PackageController;
+use App\Http\Controllers\SuperAdmin\CurrencyController;
 use App\Http\Controllers\SuperAdmin\StateController;
 use App\Http\Controllers\SuperAdmin\MarketplaceController;
 use App\Http\Controllers\SuperAdmin\CityController;
@@ -266,6 +267,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // managerAdmin
     Route::resource('managerAdmin', ManagerAdminController::class);
+
+    // Currency route
+    Route::resource('currency', CurrencyController::class);
+    Route::post('currency/active/{id}', [CurrencyController::class, 'activeNow'])->name('currency.activeNow');
+    Route::post('currency/inactive/{id}', [CurrencyController::class, 'inactiveNow'])->name('currency.inactiveNow');
 
     // Admin route
     Route::resource('admin', AdminController::class);
