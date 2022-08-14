@@ -83,7 +83,8 @@ class UserController extends Controller
         ]);
     }
 
-    public function allSearchData($query){
+    public function allSearchData($query)
+    {
         // return gettype($query);
 
         $superstar = User::where('user_type', 'star')->latest()->get();
@@ -985,7 +986,7 @@ class UserController extends Controller
         $liveChatRoom->live_chat_id = $request->event_id;
         $liveChatRoom->star_id = $request->star_id;
         $liveChatRoom->user_id = auth('sanctum')->user()->id;
-        $liveChatRoom->room_id = $request->room_id;
+        $liveChatRoom->room_id = createRoomID();
         $liveChatRoom->status = 0;
         $liveChatRoom->save();
 
@@ -1562,7 +1563,7 @@ class UserController extends Controller
         $appeal_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id], ['type', 'appeal']])->get();
 
         $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'general'], ['round_info_id', $round_info_id]])->first();
-        $appealAuditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],['type','appeal'],['round_info_id', $round_info_id]])->first();
+        $appealAuditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id], ['type', 'appeal'], ['round_info_id', $round_info_id]])->first();
 
         return response()->json([
             'status' => 200,
