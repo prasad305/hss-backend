@@ -311,13 +311,14 @@ class LearningSessionController extends Controller
             $post->sub_category_id = $learningSession->star->sub_category_id;
             $post->react_provider = "[]";
             $post->user_like_id = "[]";
-            $post->room_id = createRoomID();
+            // $post->room_id = createRoomID();
             $post->post_start_date = Carbon::parse($request->post_start_date);
             $post->post_end_date = Carbon::parse($request->post_end_date);
             $post->save();
         } else {
             //$learningSession->manager_approval = 0;
             $learningSession->status = 1;
+            $learningSession->room_id = createRoomID();
             $learningSession->update();
 
             //Remove post //
