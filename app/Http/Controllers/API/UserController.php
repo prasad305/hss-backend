@@ -83,7 +83,8 @@ class UserController extends Controller
         ]);
     }
 
-    public function allSearchData($query){
+    public function allSearchData($query)
+    {
         // return gettype($query);
 
         $superstar = User::where('user_type', 'star')->latest()->get();
@@ -1562,7 +1563,7 @@ class UserController extends Controller
         $appeal_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id], ['type', 'appeal']])->get();
 
         $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'general'], ['round_info_id', $round_info_id]])->first();
-        $appealAuditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],['type','appeal'],['round_info_id', $round_info_id]])->first();
+        $appealAuditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id], ['type', 'appeal'], ['round_info_id', $round_info_id]])->first();
 
         return response()->json([
             'status' => 200,
@@ -2056,6 +2057,25 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'certificateData' => $certificate,
+        ]);
+    }
+
+    public function videoFeedVidoes()
+    {
+
+
+        $videofeed = AuditionRoundMarkTracking::whereHas('roundInfo', function ($q) {
+            $q->where('wildcard_status', 1);
+        })->where([['wining_status', 0]])->pluck('user_id')->toArray();
+
+
+        $roundVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($videofeed) {
+            return $q->where([['approval_status', 1]])->whereIn('user_id', $videofeed)->get();
+        }])->where([['wildcard', 1], ['wildcard_status', 1], ['mark_live_or_offline', 0]])->latest()->get()->toArray();
+
+        return response()->json([
+            'status' => 200,
+            'roundVideos' => $roundVideos,
         ]);
     }
 }

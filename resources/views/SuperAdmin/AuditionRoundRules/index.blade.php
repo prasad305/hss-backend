@@ -310,235 +310,247 @@
                         </div>
                     </div>
                     <div class="d-flex flex-row flexRow mx-2 my-3 w-100">
-                        <div class="audition__mark">
-                            <input type="radio" name="mark_live_or_offline" value="1"> <span>Live Mark</span>
-                        </div>
-                        <div class="audition__mark ml-3">
-                            <input type="radio" name="mark_live_or_offline" value="0"> <span>Offline Mark</span>
-                        </div>
-                        <span class="text-danger" id="mark_live_or_offline_error"></span>
 
-                        <div class="col-md-8 displayNine">
-
-                            <div class="col-md-3">
-                                <input type="text" name="user_vote_mark" id="user_vote_mark" onkeyup="markCheck()"
-                                    class="form-control text-center" placeholder="User Vote Mark">
-                                <span class="text-danger" id="user_vote_mark_error"></span>
-                            </div>
-                        </div>
-                    </div>
+                        <div id="hid_show_live_or_offile" style="display: none!important">
 
 
-                    <div class="d-flex flex-row flexRow my-3 mx-2 w-100">
-                        <div class="audition__mark">
-                            <input type="radio" name="has_jury_or_judge_mark" value="0"> <span>Jury
-                                Mark</span>
-                        </div>
-                        <div class="audition__mark ml-3">
-                            <input type="radio" name="has_jury_or_judge_mark" value="1"> <span>Judge
-                                Mark</span>
-                        </div>
-
-                        <span class="text-danger" id="jury_or_judge_error"></span>
-
-                        <div class='col-md-8 displayNine'>
-
-                            <div class="col-md-3">
-                                <input type="text" name="jury_or_judge_mark" id="jury_or_judge_mark"
-                                    onkeyup="markCheck()" class="form-control text-center" placeholder="Mark">
-                                <span class="text-danger" id="jury_or_judge_mark_error"></span>
-                            </div>
-                        </div>
-
-                    </div>
-                    <center><span id="mark_check_error" class="text-danger"></span></center>
-
-
-
-                    <div class="d-flex flex-column w-100 mt-2">
-                        <div class="wildcard__title">
-                            <p class="text-warning">WildCard</p>
-                            <hr>
-                        </div>
-                        <div class="d-flex flex-row">
-                            <div class="wild_card__one roundedYesNo p-3">
-                                <input type="radio" name="wildcard" value="1" onchange="wilCardNo(this.value)">
-                                <span>Yes</span>
-                            </div>
-                            <div class="wild_card__one ml-3 roundedYesNo p-3">
-                                <input type="radio" name="wildcard" value="0" onchange="wilCardNo(this.value)">
-                                <span>No</span>
-                            </div>
-                            <span class="text-danger" id="wildcard_error"></span>
-                        </div>
-                        <div class="d-flex flex-wrap my-4" id="wildcard_rounds">
-                        </div>
-                    </div>
-
-                    <div class="d-flex flex-column w-100 mt-2">
-                        <div class="wildcard__title">
-                            <p class='text-warning'>Video Feed</p>
-                            <hr>
-                        </div>
-                        <div class="d-flex flex-row">
-                            <div class="wild_card__one roundedYesNo p-3">
-                                <input type="radio" name="video_feed" value="1"> <span>Yes</span>
-                            </div>
-                            <div class="wild_card__one ml-3 roundedYesNo p-3">
-                                <input type="radio" name="video_feed" value="0"> <span>No</span>
-                            </div>
-                            <span class="text-danger" id="video_feed_error"></span>
-                        </div>
-                    </div>
-
-                    <div class="d-flex flex-row row">
-                        <div class="col-md-12">
-                            <div class="w-100 mt-2">
-                                <div class="wildcard__title">
-                                    <p class='text-warning'>Round Period</p>
-                                    <hr>
-
+                            <div class="d-flex flex-row flexRow mx-2 my-3 w-100">
+                                <div class="audition__mark">
+                                    <input type="radio" name="mark_live_or_offline" value="1"> <span>Live Mark</span>
                                 </div>
-                                <div class="d-flex flex-row">
-                                    <input type="text" class="form-control" name="round_period" id="round_period"
-                                        onkeyup="checkAvaibaleDays()" placeholder="ex: 123 days">
+                                <div class="audition__mark ml-3">
+                                    <input type="radio" name="mark_live_or_offline" value="0"> <span>Offline
+                                        Mark</span>
                                 </div>
-                                <span id="round_peroid_days_error" class="text-danger"></span>
+                                <span class="text-danger" id="mark_live_or_offline_error"></span>
+
+                                <div class="col-md-8 displayNine">
+
+                                    <div class="col-md-3">
+                                        <input type="text" name="user_vote_mark" id="user_vote_mark"
+                                            onkeyup="markCheck()" class="form-control text-center"
+                                            placeholder="User Vote Mark">
+                                        <span class="text-danger" id="user_vote_mark_error"></span>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
-                        <div class="col-md-6">
+
+
+                        <div class="d-flex flex-row flexRow my-3 mx-2 w-100">
+                            <div class="audition__mark">
+                                <input type="radio" name="has_jury_or_judge_mark" value="0"> <span>Jury
+                                    Mark</span>
+                            </div>
+                            <div class="audition__mark ml-3">
+                                <input type="radio" name="has_jury_or_judge_mark" value="1"> <span>Judge
+                                    Mark</span>
+                            </div>
+
+                            <span class="text-danger" id="jury_or_judge_error"></span>
+
+                            <div class='col-md-8 displayNine'>
+
+                                <div class="col-md-3">
+                                    <input type="text" name="jury_or_judge_mark" id="jury_or_judge_mark"
+                                        onkeyup="markCheck()" class="form-control text-center" placeholder="Mark">
+                                    <span class="text-danger" id="jury_or_judge_mark_error"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <center><span id="mark_check_error" class="text-danger"></span></center>
+
+
+
+                        <div class="d-flex flex-column w-100 mt-2">
+                            <div class="wildcard__title">
+                                <p class="text-warning">WildCard</p>
+                                <hr>
+                            </div>
+                            <div class="d-flex flex-row">
+                                <div class="wild_card__one roundedYesNo p-3">
+                                    <input type="radio" name="wildcard" value="1"
+                                        onchange="wilCardNo(this.value)">
+                                    <span>Yes</span>
+                                </div>
+                                <div class="wild_card__one ml-3 roundedYesNo p-3">
+                                    <input type="radio" name="wildcard" value="0"
+                                        onchange="wilCardNo(this.value)">
+                                    <span>No</span>
+                                </div>
+                                <span class="text-danger" id="wildcard_error"></span>
+                            </div>
+                            <div class="d-flex flex-wrap my-4" id="wildcard_rounds">
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column w-100 mt-2">
+                            <div class="wildcard__title">
+                                <p class='text-warning'>Video Feed</p>
+                                <hr>
+                            </div>
+                            <div class="d-flex flex-row">
+                                <div class="wild_card__one roundedYesNo p-3">
+                                    <input type="radio" name="video_feed" value="1"> <span>Yes</span>
+                                </div>
+                                <div class="wild_card__one ml-3 roundedYesNo p-3">
+                                    <input type="radio" name="video_feed" value="0"> <span>No</span>
+                                </div>
+                                <span class="text-danger" id="video_feed_error"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-row row">
+                            <div class="col-md-12">
+                                <div class="w-100 mt-2">
+                                    <div class="wildcard__title">
+                                        <p class='text-warning'>Round Period</p>
+                                        <hr>
+
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <input type="text" class="form-control" name="round_period" id="round_period"
+                                            onkeyup="checkAvaibaleDays()" placeholder="ex: 123 days">
+                                    </div>
+                                    <span id="round_peroid_days_error" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex flex-column w-100 mt-2">
+                                    <div class="wildcard__title">
+                                        <p class='text-warning'>Video Upload Period</p>
+                                        <hr>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <input type="text" class="form-control" name="video_upload_period"
+                                            id="video_upload_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-row col-md-12">
+
+                        </div>
+
+                        <div class="d-flex flex-row col-md-12">
                             <div class="d-flex flex-column w-100 mt-2">
                                 <div class="wildcard__title">
-                                    <p class='text-warning'>Video Upload Period</p>
+                                    <p class='text-warning'>Jury / Judge Mark Period</p>
                                     <hr>
                                 </div>
                                 <div class="d-flex flex-row">
-                                    <input type="text" class="form-control" name="video_upload_period"
-                                        id="video_upload_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
+                                    <input type="text" class="form-control" name="jury_or_judge_mark_period"
+                                        id="jury_or_judge_mark_period" onkeyup="periodCheck()"
+                                        placeholder="ex: 123 days">
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="d-flex flex-row col-md-12">
-
-                    </div>
-
-                    <div class="d-flex flex-row col-md-12">
-                        <div class="d-flex flex-column w-100 mt-2">
-                            <div class="wildcard__title">
-                                <p class='text-warning'>Jury / Judge Mark Period</p>
-                                <hr>
-                            </div>
-                            <div class="d-flex flex-row">
-                                <input type="text" class="form-control" name="jury_or_judge_mark_period"
-                                    id="jury_or_judge_mark_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
+                            <div class="d-flex flex-column w-100 mt-2">
+                                <div class="wildcard__title">
+                                    <p class='text-warning'>Result Publish Period</p>
+                                    <hr>
+                                </div>
+                                <div class="d-flex flex-row">
+                                    <input type="text" class="form-control" name="result_publish_period"
+                                        id="result_publish_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
+                                </div>
                             </div>
                         </div>
 
                         <div class="d-flex flex-column w-100 mt-2">
                             <div class="wildcard__title">
-                                <p class='text-warning'>Result Publish Period</p>
+                                <p class='text-warning'>Appeal</p>
                                 <hr>
                             </div>
                             <div class="d-flex flex-row">
-                                <input type="text" class="form-control" name="result_publish_period"
-                                    id="result_publish_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="d-flex flex-column w-100 mt-2">
-                        <div class="wildcard__title">
-                            <p class='text-warning'>Appeal</p>
-                            <hr>
-                        </div>
-                        <div class="d-flex flex-row">
-                            <div class="wild_card__one roundedYesNo p-3">
-                                <input type="radio" checked="checked" name="appeal" value="1"
-                                    onchange="IsAppeal(this.value)"> <span>Yes</span>
-                            </div>
-                            <div class="wild_card__one ml-3 roundedYesNo p-3">
-                                <input type="radio" name="appeal" value="0" onchange="IsAppeal(this.value)">
-                                <span>No</span>
-                            </div>
-                            <span class="text-danger" id="appeal_error"></span>
-                        </div>
-                    </div>
-
-                    <div id="appeal_section">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="w-100 mt-2">
-                                    <div class="wildcard__title">
-                                        <p class='text-warning'>Appeal Period</p>
-                                        <hr>
-                                    </div>
-                                    <div class="d-flex flex-row">
-                                        <input type="text" class="form-control" onkeyup="periodCheck()"
-                                            name="appeal_period" id="appeal_period" placeholder="ex: 123 days">
-                                    </div>
+                                <div class="wild_card__one roundedYesNo p-3">
+                                    <input type="radio" checked="checked" name="appeal" value="1"
+                                        onchange="IsAppeal(this.value)"> <span>Yes</span>
                                 </div>
-
+                                <div class="wild_card__one ml-3 roundedYesNo p-3">
+                                    <input type="radio" name="appeal" value="0" onchange="IsAppeal(this.value)">
+                                    <span>No</span>
+                                </div>
+                                <span class="text-danger" id="appeal_error"></span>
                             </div>
-                            <div class="col-md-6">
-                                <div class="w-100 mt-2">
-                                    <div class="wildcard__title">
-                                        <p class='text-warning'>Appeal Video Upload Preiod</p>
-                                        <hr>
+                        </div>
+
+                        <div id="appeal_section">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="w-100 mt-2">
+                                        <div class="wildcard__title">
+                                            <p class='text-warning'>Appeal Period</p>
+                                            <hr>
+                                        </div>
+                                        <div class="d-flex flex-row">
+                                            <input type="text" class="form-control" onkeyup="periodCheck()"
+                                                name="appeal_period" id="appeal_period" placeholder="ex: 123 days">
+                                        </div>
                                     </div>
-                                    <div class="d-flex flex-row">
-                                        <input type="text" class="form-control" onkeyup="periodCheck()"
-                                            name="appeal_video_upload_period" id="appeal_video_upload_period"
-                                            placeholder="ex: 10 days">
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="w-100 mt-2">
+                                        <div class="wildcard__title">
+                                            <p class='text-warning'>Appeal Video Upload Preiod</p>
+                                            <hr>
+                                        </div>
+                                        <div class="d-flex flex-row">
+                                            <input type="text" class="form-control" onkeyup="periodCheck()"
+                                                name="appeal_video_upload_period" id="appeal_video_upload_period"
+                                                placeholder="ex: 10 days">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="w-100 mt-2">
-                                    <div class="wildcard__title">
-                                        <p class='text-warning'>Appeal Jury Or Judge Mark Preiod</p>
-                                        <hr>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="w-100 mt-2">
+                                        <div class="wildcard__title">
+                                            <p class='text-warning'>Appeal Jury Or Judge Mark Preiod</p>
+                                            <hr>
+                                        </div>
+                                        <div class="d-flex flex-row">
+                                            <input type="text" class="form-control" onkeyup="periodCheck()"
+                                                name="appeal_jury_or_judge_mark_period"
+                                                id="appeal_jury_or_judge_mark_period" placeholder="ex: 10 days">
+                                        </div>
                                     </div>
-                                    <div class="d-flex flex-row">
-                                        <input type="text" class="form-control" onkeyup="periodCheck()"
-                                            name="appeal_jury_or_judge_mark_period" id="appeal_jury_or_judge_mark_period"
-                                            placeholder="ex: 10 days">
-                                    </div>
+
                                 </div>
+                                <div class="col-md-6">
 
-                            </div>
-                            <div class="col-md-6">
-
-                                <div class="w-100 mt-2">
-                                    <div class="wildcard__title">
-                                        <p class='text-warning'>Result Publish Period</p>
-                                        <hr>
-                                    </div>
-                                    <div class="d-flex flex-row ">
-                                        <input type="text" class="form-control" name="appeal_result_publish_period"
-                                            id="appeal_result_publish_period" onkeyup="periodCheck()"
-                                            placeholder="ex: 123 days">
+                                    <div class="w-100 mt-2">
+                                        <div class="wildcard__title">
+                                            <p class='text-warning'>Result Publish Period</p>
+                                            <hr>
+                                        </div>
+                                        <div class="d-flex flex-row ">
+                                            <input type="text" class="form-control"
+                                                name="appeal_result_publish_period" id="appeal_result_publish_period"
+                                                onkeyup="periodCheck()" placeholder="ex: 123 days">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <center><span id="hole_round_peroid_error" class="text-danger"></span></center>
+                        <center><span id="hole_round_peroid_error" class="text-danger"></span></center>
 
-                    <div class="d-flex col-md-12 justify-content-center mt-4 mb-4">
-                        <button class="btn bg-info px-3 BTNback mr-3" id="back">Back</button>
-                        <button class="btn bg-warning px-3 BTNdone" id="SubmitRules">Done</button>
+                        <div class="d-flex col-md-12 justify-content-center mt-4 mb-4">
+                            <button class="btn bg-info px-3 BTNback mr-3" id="back">Back</button>
+                            <button class="btn bg-warning px-3 BTNdone" id="SubmitRules">Done</button>
+                        </div>
                     </div>
+                </form>
             </div>
-            </form>
         </div>
-    </div>
 
     </div>
 
@@ -823,11 +835,15 @@
             let appeal_video_upload_period = Number($('#appeal_video_upload_period').val());
             let appeal_jury_or_judge_mark_period = Number($('#appeal_jury_or_judge_mark_period').val());
 
+
+            let sum_of_round_period_no_appeal = video_upload_period + jury_or_judge_mark_period +
+                result_publish_period;
+
             let sum_of_round_period = video_upload_period + jury_or_judge_mark_period +
                 result_publish_period + appeal_period + appeal_result_publish_period + appeal_video_upload_period +
                 appeal_jury_or_judge_mark_period;
 
-            if (round_period == sum_of_round_period) {
+            if (round_period == sum_of_round_period || round_period == sum_of_round_period_no_appeal) {
 
                 ErrorMessageClear();
                 $('.wild_card__two').css("display", "block");
