@@ -272,6 +272,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::resource('currency', CurrencyController::class);
     Route::post('currency/active/{id}', [CurrencyController::class, 'activeNow'])->name('currency.activeNow');
     Route::post('currency/inactive/{id}', [CurrencyController::class, 'inactiveNow'])->name('currency.inactiveNow');
+    Route::post('currency/changes', [CurrencyController::class, 'currencyChanges'])->name('currency.currencyChanges');
 
     // Admin route
     Route::resource('admin', AdminController::class);

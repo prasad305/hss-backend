@@ -14,33 +14,33 @@ class CurrencyController extends Controller
 {
     public function index(Request $request)
     {
-        if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
-            $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
-            $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
-        }
-        $client  = @$_SERVER['HTTP_CLIENT_IP'];
-        $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
-        $remote  = $_SERVER['REMOTE_ADDR'];
+        // if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
+        //     $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+        //     $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+        // }
+        // $client  = @$_SERVER['HTTP_CLIENT_IP'];
+        // $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+        // $remote  = $_SERVER['REMOTE_ADDR'];
     
-        if(filter_var($client, FILTER_VALIDATE_IP)){
-            $clientIp = $client;
-        }
-        elseif(filter_var($forward, FILTER_VALIDATE_IP)){
-            $clientIp = $forward;
-        }
-        else{
-            $clientIp = $remote;
-        }
+        // if(filter_var($client, FILTER_VALIDATE_IP)){
+        //     $clientIp = $client;
+        // }
+        // elseif(filter_var($forward, FILTER_VALIDATE_IP)){
+        //     $clientIp = $forward;
+        // }
+        // else{
+        //     $clientIp = $remote;
+        // }
     
-        $clientIp = '103.91.229.182';
-        // $clientIp = '46.235.208.0';
-        $locationData = \Location::get($clientIp );
-        dd($locationData);
+        // $clientIp = '103.91.229.182';
+        // // $clientIp = '46.235.208.0';
+        // $locationData = \Location::get($clientIp );
+        // dd($locationData);
 
         
-        $data = $request->getIp();
-        // $position = Location::get();
-        dd($data);
+        // $data = $request->getIp();
+        // // $position = Location::get();
+        // dd($data);
         $currencies = Currency::latest()->get();
         return view('SuperAdmin.currency.index', compact('currencies'));
     }
@@ -74,6 +74,9 @@ class CurrencyController extends Controller
         $currency->currency_code = $request->currency_code;
         $currency->symbol = $request->symbol;
         $currency->currency = $request->currency;
+        $currency->currency_value = $request->currency_value;
+        $currency->country_code = $request->country_code;
+        $currency->currency_value = $request->currency_value;
 
 
         try {
@@ -119,10 +122,14 @@ class CurrencyController extends Controller
         // return $request->sub_category_id;
 
         $currency = Currency::findOrFail($id);
+        
         $currency->country = $request->country;
         $currency->currency_code = $request->currency_code;
         $currency->symbol = $request->symbol;
         $currency->currency = $request->currency;
+        $currency->currency_value = $request->currency_value;
+        $currency->country_code = $request->country_code;
+        $currency->currency_value = $request->currency_value;
 
         // $currency->fill($request->except('_token'));
 
@@ -196,5 +203,43 @@ class CurrencyController extends Controller
                 'message' => $exception->getMessage()
             ]);
         }
+    }
+    public function currencyChanges()
+    {
+        $currencyValue = Currency::where('currency_code', '!=', 'USD')->latest()->get();
+
+        foreach($currencyValue as $key=> $currency){
+            // return $currency->currency_value;
+            
+
+            $amount= 1;
+            $from= "USD";
+            $to= $currency->currency_code;
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.apilayer.com/fixer/convert?to={$to}&from={$from}&amount={$amount}",
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: text/plain",
+                "apikey: K4yuAxX9TMxd7sSM0ZswVx7jUjJw3Zum"
+            ),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET"
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            $currency->currency_value = json_decode($response)->result;
+            $currency->save();
+
+        }
+
     }
 }

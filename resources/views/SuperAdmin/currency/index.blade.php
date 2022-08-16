@@ -39,7 +39,10 @@ Super Admin
             <div class="card-header">
               <h3 class="card-title">All Currencies List</h3>
               <a class="btn btn-success btn-sm" style="float: right;" onclick="Show('New Currency','{{ route('superAdmin.currency.create') }}')"><i class=" fa fa-plus"></i>&nbsp;New Currency</a>
-
+              <!-- <a class="btn btn-info btn-sm mr-3" style="float: right;" onclick="currencyChanges(this)" value="{{ route('superAdmin.currency.currencyChanges') }}"><i class=" fa fa-check"></i>&nbsp;Update Value</a> -->
+              <button class="btn btn-info btn-sm mr-3" style="float: right;" onclick="currencyChanges(this)" value="{{ route('superAdmin.currency.currencyChanges') }}">
+                <i class=" fa fa-check"></i>&nbsp;Update Value
+              </button>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -175,6 +178,48 @@ Super Admin
                             Swal.fire(
                                 'Inactivated !',
                                 'Currency has been Inactivated. ' + data.message,
+                                'success'
+                            )
+                            setTimeout(function() {
+                                location.reload();
+                            }, 800);
+                        } else {
+                            Swal.fire(
+                                'Wrong !',
+                                'Something going wrong. ' + data.message,
+                                'warning'
+                            )
+                        }
+                    },
+                })
+            }
+        })
+    }
+
+    function currencyChanges(objButton) {
+        var url = objButton.value;
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to change the currencies value!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Changes !'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    }
+                    ,success: function(data) {
+                        if (data.type == 'success') {
+                            Swal.fire(
+                                'Inactivated !',
+                                'Currency has been Changes. ' + data.message,
                                 'success'
                             )
                             setTimeout(function() {

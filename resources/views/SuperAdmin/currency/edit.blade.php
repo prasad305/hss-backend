@@ -4,13 +4,13 @@
     <div class="row form-group">
         <div class="col-md-6">
               <label for="first_name">Country Name</label>
-              <input type="text" class="form-control" id="country" name="country" placeholder="Enter Admin First Name" value="{{$currency->country}}">
+              <input type="text" class="form-control" id="country" name="country" placeholder="United States...." value="{{$currency->country}}">
               <span class="text-danger" id="currency_country_error"></span>
          </div> 
          
          <div class="col-md-6">
               <label for="currency">Currency</label>
-              <input type="text" class="form-control" id="currency" name="currency" placeholder="Enter currency" value="{{$currency->currency}}">
+              <input type="text" class="form-control" id="currency" name="currency" placeholder="Dollars...." value="{{$currency->currency}}">
               <span class="text-danger" id="currency_error"></span>
         </div>
      </div>
@@ -18,14 +18,25 @@
     <div class="form-group row">
         <div class="col-md-6">
           <label for="currency_code">Currency Code</label>
-          <input type="text" class="form-control" id="currency_code" name="currency_code" placeholder="Enter currency code" value="{{$currency->currency_code}}">
+          <input type="text" class="form-control" id="currency_code" name="currency_code" placeholder="USD..." value="{{$currency->currency_code}}">
           <span class="text-danger" id="currency_code_error"></span>
         </div>
         <div class="col-md-6">
              <label for="symbol">Currency Symbol</label>
-             <input type="text" class="form-control" id="symbol" name="symbol" placeholder="Enter currency symbol" value="{{$currency->symbol}}">
+             <input type="text" class="form-control" id="symbol" name="symbol" placeholder="$...." value="{{$currency->symbol}}">
              <span class="text-danger" id="currency_symbol_error"></span>
         </div>  
+    </div>
+    
+    <div class="form-group row">
+        <div class="col-md-6">
+          <label for="country_code">Country Code</label>
+          <input type="text" class="form-control" id="country_code" name="country_code" value="{{$currency->country_code}}" placeholder="US...">
+        </div>
+        <div class="col-md-6">
+             <label for="currency_value">Country Value</label>
+             <input type="text" class="form-control" id="currency_value" name="currency_value" value="{{$currency->currency_value}}" placeholder="1.000...">
+        </div>
     </div>
   
 
