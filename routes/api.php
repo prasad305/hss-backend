@@ -26,6 +26,7 @@ use App\Http\Controllers\API\PromoVideoController;
 use App\Http\Controllers\API\QnaController;
 use App\Http\Controllers\API\StarGreetingController;
 use App\Http\Controllers\API\StarScheduleController;
+use App\Http\Controllers\API\CurrencyController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,12 @@ Route::get('reset_otp', [AuthController::class, 'reset_otp']);
 
 
 Route::get('/guest/all_post/with-paginate/{limit}', [GuestController::class, 'paginate_all_post']);
+
+// Currency
+
+
+Route::get('all/currency', [CurrencyController::class , 'allCurrency']);
+Route::get('user/location', [CurrencyController::class , 'getLocation']);
 
 
 // Home Page All Post
@@ -142,6 +149,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/qnaAll', [UserController::class, 'getQnaAll']);
     Route::get('/user/qnaStarAll/{id}', [UserController::class, 'getStarQna']);
     Route::get('/user/qna/reg_info/{id}', [UserController::class, 'qnaRegDetails']);
+    Route::post('/user/wallet/qna-register', [QnaController::class, 'qnaWalletStore']);
 
 
 
