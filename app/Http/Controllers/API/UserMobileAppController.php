@@ -92,7 +92,7 @@ class UserMobileAppController extends Controller
             $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->interval)->format('H:i:s');
             $eventRegistration->live_chat_id = $eventId;
             $eventRegistration->amount = $request->fee;
-            $eventRegistration->room_id = '-' . Str::random(19);
+            $eventRegistration->room_id = createRoomID();
             $eventRegistration->live_chat_start_time = Carbon::parse($request->start_time)->format('H:i:s');
             $eventRegistration->live_chat_end_time = Carbon::parse($request->end_time)->format('H:i:s');
             $activity->type = 'livechat';

@@ -33,7 +33,7 @@ class LearningSessionController extends Controller
                 'assignment' => 'required',
                 'fee' => 'required',
                 'participant_number' => 'required',
-                'room_id' => 'required',
+                // 'room_id' => 'required',
                 'image' => 'required|mimes:jpg,jpeg,png,gif,webp',
             ], [
                 'title.unique' => 'This title already exist',
@@ -53,7 +53,7 @@ class LearningSessionController extends Controller
                 'assignment' => 'required',
                 'fee' => 'required',
                 'participant_number' => 'required',
-                'room_id' => 'required',
+                // 'room_id' => 'required',
                 'video' => "required|mimes:mp4,mkv",
             ], [
                 'title.unique' => 'This title already exist',
@@ -90,7 +90,7 @@ class LearningSessionController extends Controller
             $learningSession->assignment = $request->input('assignment');
             $learningSession->fee = $request->input('fee');
             $learningSession->participant_number = $request->input('participant_number');
-            $learningSession->room_id = $request->input('room_id');
+            // $learningSession->room_id = $request->input('room_id');
 
             //$learningSession->video = $request->input('video');
             //$learningSession->type = $request->input('type');
@@ -599,7 +599,7 @@ class LearningSessionController extends Controller
                 'assignment' => 'required',
                 'fee' => 'required',
                 'participant_number' => 'required',
-                'room_id' => 'required',
+                // 'room_id' => 'required',
                 'image' => 'required|mimes:jpg,jpeg,png,gif,webp',
             ], [
                 'title.unique' => 'This title already exist',
@@ -618,7 +618,7 @@ class LearningSessionController extends Controller
                 'assignment' => 'required',
                 'fee' => 'required',
                 'participant_number' => 'required',
-                'room_id' => 'required',
+                // 'room_id' => 'required',
                 'video' => "required|mimes:mp4,mkv",
             ], [
                 'title.unique' => 'This title already exist',
@@ -655,7 +655,7 @@ class LearningSessionController extends Controller
             $learningSession->assignment = $request->input('assignment');
             $learningSession->fee = $request->input('fee');
             $learningSession->participant_number = $request->input('participant_number');
-            $learningSession->room_id = $request->input('room_id');
+            // $learningSession->room_id = $request->input('room_id');
             $learningSession->status = 1;
 
 
