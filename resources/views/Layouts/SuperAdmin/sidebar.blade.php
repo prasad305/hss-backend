@@ -222,6 +222,16 @@
         </li>
 
         <li class="nav-item">
+            <a href="{{ route('superAdmin.currency.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.currency.index') ? 'active' : '' }}">
+                <i class="nav-icon fa fa-users"></i>
+                <p>
+                    Currency
+                </p>
+            </a>
+        </li>
+
+        <li class="nav-item">
             <a href="{{ route('superAdmin.star.index') }}"
                 class="nav-link {{ Request::routeIs('superAdmin.star.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-television"></i>

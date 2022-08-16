@@ -18,6 +18,7 @@
         "pusher/pusher-php-server": "~3.0",
         "realrashid/sweet-alert": "^4.1",
         "simplesoftwareio/simple-qrcode": "^4.2",
+        "stevebauman/location": "^6.5",
         "vonage/client": "^2.4"
     },
     "require-dev": {
