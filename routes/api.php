@@ -780,6 +780,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('/audition-admin/audition/request', [AuditionController::class, 'request']);
     Route::get('/audition-admin/assigned-audition', [AuditionController::class, 'assignedAudition']);
     Route::get('/audition-admin/audition/lives', [AuditionController::class, 'live']);
+    Route::get('/audition-admin/audition/online-round', [AuditionController::class, 'onlineRound']);
     Route::get('/audition-admin/audition_single/{slug}', [AuditionController::class, 'getAudition']);
     Route::get('/audition-admin/audition_single_by_id/{audition_id}', [AuditionController::class, 'getAuditionById']);
     Route::get('/audition-admin/audition/round-instruction-judges/{audition_id}/{round_id}', [AuditionController::class, 'getRoundInstructionJudges']);
