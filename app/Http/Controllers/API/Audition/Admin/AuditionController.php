@@ -1404,6 +1404,22 @@ class AuditionController extends Controller
             'lives' => $lives,
         ]);
     }
+    // Live Auditions
+    public function onlineRound()
+    {
+        $audition = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 3]])->first();
+        $activeRoundInfoId = $audition->active_round_info_id;
+
+        $lives = Audition::with('activeRoundInfo')->whereHas('activeRoundInfo', function ($q) use ($activeRoundInfoId) {
+            $q->where('round_type', 1)->with('markTrackings', function ($q) use ($activeRoundInfoId) {
+                $q->with('user')->where([['round_info_id', $activeRoundInfoId], ['winning_status', 1]]);
+            });
+        })->where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 3]])->first();
+        return response()->json([
+            'status' => 200,
+            'lives' => $lives,
+        ]);
+    }
 
     public function getRoundInstructionJudges($audition_id, $round_info_id)
     {
