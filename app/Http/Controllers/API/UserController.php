@@ -2059,4 +2059,23 @@ class UserController extends Controller
             'certificateData' => $certificate,
         ]);
     }
+
+    public function videoFeedVidoes()
+    {
+
+
+        $videofeed = AuditionRoundMarkTracking::whereHas('roundInfo', function ($q) {
+            $q->where('videofeed_status', 1);
+        })->where([['wining_status', 0]])->pluck('user_id')->toArray();
+
+
+        $roundVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($videofeed) {
+            return $q->where([['approval_status', 1]])->whereIn('user_id', $videofeed)->get();
+        }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get()->toArray();
+
+        return response()->json([
+            'status' => 200,
+            'roundVideos' => $roundVideos,
+        ]);
+    }
 }
