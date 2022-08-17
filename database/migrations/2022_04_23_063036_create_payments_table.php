@@ -23,7 +23,7 @@ class CreatePaymentsTable extends Migration
             $table->string('card_holder_name')->nullable();
             $table->string('card_number')->nullable();
             $table->timestamp('date')->nullable();
-            $table->string('status')->nullable()->default(0);
+            $table->string('status')->default(0);
             $table->timestamps();
         });
     }

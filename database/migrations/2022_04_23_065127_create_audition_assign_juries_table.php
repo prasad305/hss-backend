@@ -18,8 +18,8 @@ class CreateAuditionAssignJuriesTable extends Migration
             $table->unsignedBigInteger('audition_id')->nullable();
             $table->unsignedBigInteger('jury_id')->nullable();
             $table->unsignedBigInteger('group_id')->nullable();
-            $table->integer('approved_by_jury')->nullable()->default(0);
-            $table->integer('status')->nullable()->default(0);
+            $table->integer('approved_by_jury')->default(0);
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

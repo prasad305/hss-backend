@@ -275,28 +275,14 @@
     <div class="m-4" id="show-rules" style="display:none">
         <div class="tab-pane " id="tabs-90" role="tabpanel">
             <div class="container">
+
+                <h5 class="text-warning">Mark Distribution </h5>
+                <div class="bottomDiv">
+
+                </div>
+
                 <form id="create-form">
                     @csrf
-                    <div class="d-flex flex-column w-100 mt-2">
-                        <div class="wildcard__title">
-                            <p class="text-warning">Round Type</p>
-                            <hr>
-                        </div>
-                        <div class="d-flex flex-row">
-                            <div class="wild_card__one roundedYesNo p-3">
-                                <input type="radio" name="round_type" value="0">
-                                <span>Offline</span>
-                            </div>
-                            <div class="wild_card__one ml-3 roundedYesNo p-3">
-                                <input type="radio" name="round_type" value="1">
-                                <span>Online</span>
-                            </div>
-                        </div>
-                    </div>
-                    <h5 class="text-warning">Mark Distribution </h5>
-                    <div class="bottomDiv">
-
-                    </div>
 
                     <div class="row">
                         <input type="hidden" name="round_id" id="round_id">
@@ -309,23 +295,28 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex flex-row flexRow mx-2 my-3 w-100">
-                        <div class="audition__mark">
-                            <input type="radio" name="mark_live_or_offline" value="1"> <span>Live Mark</span>
-                        </div>
-                        <div class="audition__mark ml-3">
-                            <input type="radio" name="mark_live_or_offline" value="0"> <span>Offline Mark</span>
-                        </div>
-                        <span class="text-danger" id="mark_live_or_offline_error"></span>
+                    <div id="hid_show_live_or_offile" style="display: none!important">
 
-                        <div class="col-md-8 displayNine">
+                        <div class="d-flex flex-row flexRow mx-2 my-3 w-100">
+                            <div class="audition__mark">
+                                <input type="radio" name="mark_live_or_offline" value="1"> <span>Live Mark</span>
+                            </div>
+                            <div class="audition__mark ml-3">
+                                <input type="radio" name="mark_live_or_offline" value="0"> <span>Offline
+                                    Mark</span>
+                            </div>
+                            <span class="text-danger" id="mark_live_or_offline_error"></span>
 
-                            <div class="col-md-3">
-                                <input type="text" name="user_vote_mark" id="user_vote_mark" onkeyup="markCheck()"
-                                    class="form-control text-center" placeholder="User Vote Mark">
-                                <span class="text-danger" id="user_vote_mark_error"></span>
+                            <div class="col-md-8 displayNine">
+
+                                <div class="col-md-3">
+                                    <input type="text" name="user_vote_mark" id="user_vote_mark" onkeyup="markCheck()"
+                                        class="form-control text-center" placeholder="User Vote Mark">
+                                    <span class="text-danger" id="user_vote_mark_error"></span>
+                                </div>
                             </div>
                         </div>
+
                     </div>
 
 
@@ -371,9 +362,14 @@
                             </div>
                             <span class="text-danger" id="wildcard_error"></span>
                         </div>
+
                         <div class="d-flex flex-wrap my-4" id="wildcard_rounds">
+
                         </div>
+
                     </div>
+
+
 
                     <div class="d-flex flex-column w-100 mt-2">
                         <div class="wildcard__title">
@@ -389,9 +385,33 @@
                             </div>
                             <span class="text-danger" id="video_feed_error"></span>
                         </div>
+
                     </div>
 
+
                     <div class="d-flex flex-row row">
+                        {{-- <div class="d-flex flex-column w-100 mt-2">
+                            <div class="wildcard__title">
+                                <p>Video Duration</p>
+                                <hr>
+                            </div>
+                            <div class="d-flex flex-row col-md-4">
+                                <input type="text" class="form-control" name="video_duration" id="video_duration"
+                                    placeholder="ex: 3min">
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column w-100 mt-2">
+                            <div class="wildcard__title">
+                                <p>Video Slot Num</p>
+                                <hr>
+                            </div>
+                            <div class="d-flex flex-row col-md-4">
+                                <input type="text" class="form-control" name="video_slot_num" id="video_slot_num"
+                                    placeholder="ex: 4 videos">
+                            </div>
+                        </div> --}}
+
                         <div class="col-md-12">
                             <div class="w-100 mt-2">
                                 <div class="wildcard__title">
@@ -408,6 +428,7 @@
 
                         </div>
                         <div class="col-md-6">
+
                             <div class="d-flex flex-column w-100 mt-2">
                                 <div class="wildcard__title">
                                     <p class='text-warning'>Video Upload Period</p>
@@ -494,7 +515,12 @@
                                             placeholder="ex: 10 days">
                                     </div>
                                 </div>
+
                             </div>
+
+
+
+
                         </div>
 
                         <div class="row">
@@ -525,8 +551,14 @@
                                             placeholder="ex: 123 days">
                                     </div>
                                 </div>
+
                             </div>
                         </div>
+
+
+
+
+
                     </div>
 
                     <center><span id="hole_round_peroid_error" class="text-danger"></span></center>
@@ -535,6 +567,8 @@
                         <button class="btn bg-info px-3 BTNback mr-3" id="back">Back</button>
                         <button class="btn bg-warning px-3 BTNdone" id="SubmitRules">Done</button>
                     </div>
+
+
             </div>
             </form>
         </div>
@@ -547,12 +581,14 @@
         var round_available_days = 0;
 
         function selectedCategory(rules_id) {
+            console.log('category', rules_id);
             var url = "{{ url('super-admin/audition-round-rules/') }}";
 
             $.ajax({
                 url: url + "/" + rules_id, // your request url
                 type: 'GET',
                 success: function(data) {
+                    console.log('get data', data);
                     $('#tab-content').html("");
                     $('#round_available_days').html(data.round_available_days);
                     round_available_days += data.round_available_days;
@@ -604,6 +640,8 @@
                         '<ul class="nav nav-tabs" role="tablist">' + single_round + '</ul>' +
                         '</div>' +
                         '</div>'
+
+
                     );
 
                 },
@@ -622,8 +660,11 @@
                         title: 'Oops...',
                         footer: errorMessage
                     });
+
+                    console.log(data);
                 }
             });
+
         };
 
 
@@ -631,6 +672,7 @@
         function showRules(round_id) {
             $('#wildcard_rounds').html('');
             $('#jury_or_judge_mark').val('');
+
             $("#checkbox1").click(function() {
                 var checked = $(this).is(':checked');
                 if (checked) {
@@ -647,19 +689,15 @@
             wilCardNo(wild_card_true);
             IsAppeal(appeal_true);
             var url = "{{ url('super-admin/audition-round-rules/mark/') }}";
+
             $.ajax({
                 url: url + "/" + round_id, // your request url
                 type: 'GET',
                 success: function(data) {
 
-
                     $('#round_id').val(round_id);
 
-                    if (data.mark.round_type == 0) {
-                        $('input:radio[name=round_type][value=0]').attr('checked', true);
-                    } else {
-                        $('input:radio[name=round_type][value=1]').attr('checked', true);
-                    }
+
 
                     if (data.mark.has_user_vote_mark == 1) {
                         $('#checkbox1').attr('checked', true);
@@ -756,6 +794,8 @@
                         title: 'Oops...',
                         footer: errorMessage
                     });
+
+                    console.log(data);
                 }
             });
 
@@ -807,7 +847,9 @@
             if (sum > 100) {
                 $("#SubmitRules").prop("disabled", true);
                 $('#mark_check_error').html('User Vote Mark and Jury/Judge Mark Not More then 100!!');
+
             }
+
         }
 
         $(document).on('click', '#SubmitRules', function(event) {
@@ -823,16 +865,21 @@
             let appeal_video_upload_period = Number($('#appeal_video_upload_period').val());
             let appeal_jury_or_judge_mark_period = Number($('#appeal_jury_or_judge_mark_period').val());
 
+
+            let sum_of_round_period_no_appeal = video_upload_period + jury_or_judge_mark_period +
+                result_publish_period;
+
             let sum_of_round_period = video_upload_period + jury_or_judge_mark_period +
                 result_publish_period + appeal_period + appeal_result_publish_period + appeal_video_upload_period +
                 appeal_jury_or_judge_mark_period;
 
-            if (round_period == sum_of_round_period) {
+            if (round_period == sum_of_round_period || round_period == sum_of_round_period_no_appeal) {
 
                 ErrorMessageClear();
                 $('.wild_card__two').css("display", "block");
                 var round_id = $('#round_id').val();
                 var form = $('#create-form')[0];
+
 
                 var formData = new FormData(form);
                 formData.append('round_id', round_id);
@@ -862,12 +909,16 @@
                         setTimeout(function() {
                             location.reload();
                         }, 1000);
+                        console.log(data)
                     },
                     error: function(data) {
 
                         $.each(data.responseJSON.errors, function(key, value) {
                             ErrorMessage(key, value);
                         });
+
+
+                        console.log(data);
                     }
                 });
                 showRules(round_id);
@@ -906,6 +957,8 @@
             });
         });
 
+
+
         function wilCardNo(value) {
             if (value == 0) {
                 $('.wild_card__two').css("display", "none");
@@ -921,6 +974,9 @@
                 $('#appeal_section').css("display", "block");
             }
         }
+
+
+
 
         var header = document.getElementById("myDIV");
         var btns = header.getElementsByClassName("btn");
