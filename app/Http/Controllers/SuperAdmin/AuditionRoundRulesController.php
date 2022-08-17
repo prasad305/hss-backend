@@ -43,8 +43,8 @@ class AuditionRoundRulesController extends Controller
                 'video_upload_period' => 'required',
                 'jury_or_judge_mark_period' => 'required',
                 'result_publish_period' => 'required',
-                'appeal_period' => 'required',
-                'appeal_result_publish_period' => 'required',
+                // 'appeal_period' => 'required',
+                // 'appeal_result_publish_period' => 'required',
             ],
             [
                 'has_jury_or_judge_mark.required' => 'Select Jury Or Judge',

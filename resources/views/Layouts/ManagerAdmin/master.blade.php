@@ -46,6 +46,27 @@
             color: #ffc107;
         }
 
+        .Link {
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600 !important;
+            color: #ffffff;
+        }
+
+        .Link:hover {
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600 !important;
+            color: #000000 !important;
+        }
+
+        .my-link:hover {
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700 !important;
+            color: #ffc107;
+        }
+
         .under-line-x {
             height: 1px;
             width: 100%;

@@ -142,6 +142,9 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
         Route::get('round-result/{audition_id}/{round_info_id}/{type}', [AuditionController::class, 'getResultByRound']);
         Route::post('round-result-publish', [AuditionController::class, 'roundResultPublish'])->name('roundResultPublish');
         Route::get('registerUser/{audition_id}', [AuditionController::class, 'registerUser'])->name('registerUser');
+        Route::get('video-feed', [AuditionController::class, 'videoFeed'])->name('videoFeed');
+        Route::get('video-feed-list/{round_id}', [AuditionController::class, 'videoFeedList'])->name('videoFeedList');
+        Route::get('published-video-feed-list/{round_info_id}', [AuditionController::class, 'videoPublishedToVideofeed'])->name('videoPublishedToVideofeed');
     });
     // Audition routes ends here
 
