@@ -10,7 +10,7 @@
          
          <div class="col-md-6">
               <label for="currency">Currency</label>
-              <input type="text" class="form-control" id="currency" name="currency" placeholder="Dollars...." value="{{$currency->currency}}">
+              <input type="text" class="form-control" id="currency" name="currency" placeholder="Dollars..." value="{{$currency->currency}}">
               <span class="text-danger" id="currency_error"></span>
         </div>
      </div>
@@ -39,7 +39,6 @@
         </div>
     </div>
   
-
     <button type="submit" class="btn btn-primary" id="btnUpdateAdmin"><i class="fa fa-save"></i>&nbsp; Update Currency</button>
 
 </form> 
