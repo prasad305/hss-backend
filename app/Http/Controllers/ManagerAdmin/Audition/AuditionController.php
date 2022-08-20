@@ -80,9 +80,9 @@ class AuditionController extends Controller
             $audition_info->jury_groups = $auditionRule->jury_groups;
             $audition_info->event_start_date = Carbon::parse($request->start_date);
             $audition_info->event_end_date = date('Y-m-d', strtotime($request->end_date));
-            $audition_info->instruction_prepare_start_date = Carbon::parse($request->start_date);
-            $audition_info->instruction_prepare_end_date = Carbon::parse($request->instruction_prepare_start_date)->addDays($auditionRule->instruction_prepare_period);
-            $audition_info->registration_start_date = Carbon::parse($audition_info->instruction_prepare_end_date)->addDays(1);
+            // $audition_info->instruction_prepare_start_date = Carbon::parse($request->start_date);
+            // $audition_info->instruction_prepare_end_date = Carbon::parse($request->instruction_prepare_start_date)->addDays($auditionRule->instruction_prepare_period);
+            $audition_info->registration_start_date = Carbon::parse($audition_info->event_start_date);
             $audition_info->registration_end_date = Carbon::parse($audition_info->registration_start_date)->addDays($auditionRule->registration_period);
             $audition_info->save();
 

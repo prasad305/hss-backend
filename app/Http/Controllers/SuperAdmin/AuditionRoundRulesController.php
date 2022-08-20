@@ -65,7 +65,7 @@ class AuditionRoundRulesController extends Controller
             $round->user_vote_mark = $request->user_vote_mark == null ? 0 : $request->user_vote_mark;
         } else {
             $round->mark_live_or_offline = null;
-            $round->user_vote_mark = null;
+            $round->user_vote_mark = 0;
         }
 
         $round->has_jury_or_judge_mark = $request->has_jury_or_judge_mark;

@@ -53,8 +53,8 @@ Route::get('/guest/all_post/with-paginate/{limit}', [GuestController::class, 'pa
 // Currency
 
 
-Route::get('all/currency', [CurrencyController::class , 'allCurrency']);
-Route::get('user/location', [CurrencyController::class , 'getLocation']);
+Route::get('all/currency', [CurrencyController::class, 'allCurrency']);
+Route::get('user/location', [CurrencyController::class, 'getLocation']);
 
 
 // Home Page All Post
