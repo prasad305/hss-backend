@@ -14,33 +14,6 @@ class CurrencyController extends Controller
 {
     public function index(Request $request)
     {
-        // if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
-        //     $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
-        //     $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
-        // }
-        // $client  = @$_SERVER['HTTP_CLIENT_IP'];
-        // $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
-        // $remote  = $_SERVER['REMOTE_ADDR'];
-    
-        // if(filter_var($client, FILTER_VALIDATE_IP)){
-        //     $clientIp = $client;
-        // }
-        // elseif(filter_var($forward, FILTER_VALIDATE_IP)){
-        //     $clientIp = $forward;
-        // }
-        // else{
-        //     $clientIp = $remote;
-        // }
-    
-        // $clientIp = '103.91.229.182';
-        // // $clientIp = '46.235.208.0';
-        // $locationData = \Location::get($clientIp );
-        // dd($locationData);
-
-        
-        // $data = $request->getIp();
-        // // $position = Location::get();
-        // dd($data);
         $currencies = Currency::latest()->get();
         return view('SuperAdmin.currency.index', compact('currencies'));
     }

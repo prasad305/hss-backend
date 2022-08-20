@@ -72,7 +72,6 @@ class LiveChatController extends Controller
             $post->post_start_date = Carbon::parse($request->post_start_date);
             $post->post_end_date = Carbon::parse($request->post_end_date);
             $post->save();
-
         } else {
             $event->status = 10;
             $event->update();

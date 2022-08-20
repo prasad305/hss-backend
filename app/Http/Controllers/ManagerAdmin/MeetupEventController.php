@@ -137,12 +137,18 @@ class MeetupEventController extends Controller
     {
         $meetup = MeetupEvent::find($id);
 
+
+
         if ($meetup->status != 2) {
 
             $request->validate([
                 'post_start_date' => 'required',
                 'post_end_date' => 'required',
             ]);
+
+            if ($meetup->meetup_type = "Online") {
+                $meetup->event_link = createRoomID();
+            }
 
             $meetup->status = 2;
             $meetup->update();
@@ -158,6 +164,9 @@ class MeetupEventController extends Controller
             $post->sub_category_id = $starCat->sub_category_id;
             $post->post_start_date = Carbon::parse($request->post_start_date);
             $post->post_end_date = Carbon::parse($request->post_end_date);
+            // $post->user_like_id = '[]';
+            // $post->react_provider = '[]';
+
             $post->save();
 
             return redirect()->back()->with('success', 'Published');

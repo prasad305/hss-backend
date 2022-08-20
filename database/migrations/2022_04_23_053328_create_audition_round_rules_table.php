@@ -23,7 +23,7 @@ class CreateAuditionRoundRulesTable extends Migration
             $table->integer('user_vote_mark')->default(0)->comment('mark in percentage');
             $table->integer('mark_live_or_offline')->nullable()->comment('0 = offline,1= live');
             $table->integer('wildcard')->nullable()->comment('0 = no , 1= yes');
-            $table->integer('round_type')->nullable()->comment('0 = offline , 1= online')->default(0);
+            $table->integer('round_type')->nullable()->comment('0 = offline , 1= online');
             $table->integer('wildcard_round')->nullable();
             $table->integer('appeal')->nullable()->comment('0 = no, 1= yes');
             $table->integer('video_feed')->nullable()->comment('0 = no, 1= yes');
