@@ -11,7 +11,7 @@ class AuditionRoundInstruction extends Model
 {
     use HasFactory;
 
-    protected $with = ['instructionSendInfos'];
+    // protected $with = ['instructionSendInfos'];
 
     protected $fillable = [
         'id',
@@ -30,9 +30,6 @@ class AuditionRoundInstruction extends Model
 
     public function instructionSendInfos()
     {
-        return $this->hasMany(AuditionRoundInstructionSendInfo::class,'audition_round_ins_id');
+        return $this->hasMany(AuditionRoundInstructionSendInfo::class, 'audition_round_ins_id');
     }
-
-
 }
-

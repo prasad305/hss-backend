@@ -453,6 +453,8 @@ class AuditionController extends Controller
 
         $generalMarkTraking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 0], ['type', 'general']])->pluck('user_id')->toArray();
         $appealMarkTraking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 0], ['type', 'appeal']])->pluck('user_id')->toArray();
+        // $generalWiningTracking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 1], ['type', 'general']])->pluck('user_id')->toArray();
+        // $appealWinningTracking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 1], ['type', 'appeal']])->pluck('user_id')->toArray();
 
         $notAppealedGeneralVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($generalMarkTraking, $appealMarkTraking, $round_info_id) {
             return $q->where([['approval_status', 1], ['round_info_id', $round_info_id], ['type', 'general']])->whereNotIn('user_id', $appealMarkTraking)->whereIn('user_id', $generalMarkTraking)->get();
@@ -467,7 +469,7 @@ class AuditionController extends Controller
     }
     public function videoPublishedToVideofeed($round_info_id)
     {
-        $published = AuditionRoundInfo::findOrFail($round_info_id)->update([
+        $published = AuditionRoundInfo::where('id', $round_info_id)->update([
             'videofeed_status' => 1
         ]);
         if ($published) {
