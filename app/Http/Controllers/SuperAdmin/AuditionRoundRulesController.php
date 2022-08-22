@@ -43,6 +43,7 @@ class AuditionRoundRulesController extends Controller
                 'video_upload_period' => 'required',
                 'jury_or_judge_mark_period' => 'required',
                 'result_publish_period' => 'required',
+                'round_type' => 'required',
                 // 'appeal_period' => 'required',
                 // 'appeal_result_publish_period' => 'required',
             ],
@@ -53,6 +54,7 @@ class AuditionRoundRulesController extends Controller
                 'mark_live_or_offline.required_if' => 'Select Mark Offline or Live',
                 'wildcard.required' => 'Select Wild Card Options Yes or No',
                 'video_feed.required' => 'Select Video Feed Options Yes or No',
+                'round_type.required' => 'Select Round Options Yes or No',
             ]
         );
 

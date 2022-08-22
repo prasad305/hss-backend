@@ -12,7 +12,7 @@
 @endpush
 @section('content')
     <style>
-    
+
 
     </style>
 
@@ -53,85 +53,88 @@
 
     <div class="container my-4">
         <div class="p-5 bg-gray-custom ">
-                <form action="{{ route('managerAdmin.audition.store') }}" method="POST">
-                    @csrf
+            <form action="{{ route('managerAdmin.audition.store') }}" method="POST">
+                @csrf
 
-                    <div class="form-group row">
-                        <div class="col-2">
-                            <label class="text-warning">Title</label>
+                <div class="form-group row">
+                    <div class="col-2">
+                        <label class="text-warning">Title</label>
+                    </div>
+                    <div class="col-10">
+                        <input type="hidden" name="audition_rule_id" class="form-control from-custom-i"
+                            value="{{ $auditionRule->id ?? '' }}">
+                        <input name="title" class="form-control from-custom-i" rows="3"
+                            value="{{ old('title') }}" />
+                        @error('title')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-2">
+                        <label class="text-warning">Description</label>
+                    </div>
+                    <div class="col-10 ">
+                        <textarea name="description" class=" bg-warning from-custom-i" id="summernote" rows="6"> {{ old('description') }}</textarea>
+                        @error('description')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <div class="col-2">
+                    </div>
+                    <div class="col-10 bh-bg-card p-3">
+                        The audition will have to complete within {{ $auditionRule->event_period ?? 0 }} day(s)
+                    </div>
+                    <hr>
+                </div>
+
+                <div class="row justify-content-between">
+                    <div class="col-md-5 d-flex">
+                        <div class="col-md-4">
+                            <label class="text-warning">Event Start</label>
                         </div>
-                        <div class="col-10">
-                            <input type="hidden" name="audition_rule_id" class="form-control from-custom-i" value="{{ $auditionRule->id ?? '' }}">
-                            <input name="title" class="form-control from-custom-i" rows="3" value="{{ old('title') }}" />
-                            @error('title')
+                        <div class="col-md-8">
+                            <input type="date" onchange="setEndDate()" min='{{ date('Y-m-d') }}' name="start_date"
+                                id="start_date" class="custom-control-i form-control">
+                            @error('start_date')
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <div class="col-2">
-                            <label class="text-warning">Description</label>
+                    <div class="col-md-5 d-flex">
+                        <div class="col-md-4">
+                            <label class="text-warning">Event End</label>
                         </div>
-                        <div class="col-10 ">
-                            <textarea name="description" class=" bg-warning from-custom-i" id="summernote" rows="6"> {{ old('description') }}</textarea>
-                            @error('description')
+                        <div class="col-md-8">
+                            <input type="text" readonly name="end_date" id="end_date"
+                                class="custom-control-i form-control">
+                            @error('end_date')
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
 
+                </div>
 
-                    <div class="form-group row">
-                        <div class="col-2">
-                        </div>
-                        <div class="col-10 bh-bg-card p-3">
-                            The audition will have to complete within {{ $auditionRule->event_period ?? 0 }} day(s)
-                        </div>
-                        <hr>
-                    </div>
-
-                    <div class="row justify-content-between">
-                        <div class="col-md-5 d-flex">
-                            <div class="col-md-4">
-                                <label class="text-warning">Event Start</label>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="date" onchange="setEndDate()" min='{{date('Y-m-d')}}' name="start_date" id="start_date"
-                                    class="custom-control-i form-control">
-                                @error('start_date')
-                                    <p class="text-danger">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-md-5 d-flex">
-                            <div class="col-md-4">
-                                <label class="text-warning">Event End</label>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" readonly name="end_date" id="end_date" class="custom-control-i form-control">
-                                @error('end_date')
-                                    <p class="text-danger">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
+                <div class="form-group row mt-5">
+                    <div class="col-2">
 
                     </div>
-
-                    <div class="form-group row mt-5">
-                        <div class="col-2">
-
-                        </div>
-                        <div class="col-md-8 d-flex justify-content-center">
-                            <button type="submit" class="btn text-bold btn-warning-custom px-5">Submit</button>
-                        </div>
-
+                    <div class="col-md-8 d-flex justify-content-center">
+                        <button type="submit" class="btn text-bold btn-warning-custom px-5">Submit</button>
                     </div>
 
+                </div>
 
 
-                </form>
+
+            </form>
 
 
         </div>
@@ -334,11 +337,10 @@
         });
     </script>
 
-<script>
-    $('#summernote').summernote({
-height: 300,
-focus: true
-});
-
-</script>
+    <script>
+        $('#summernote').summernote({
+            height: 300,
+            focus: true
+        });
+    </script>
 @endpush

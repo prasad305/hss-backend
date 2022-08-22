@@ -25,6 +25,7 @@ class AuditionRoundInstruction extends Model
         'submission_end_date',
         'send_to_judge',
         'send_to_manager',
+        'send_to_user',
         'status',
     ];
 
