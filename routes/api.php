@@ -53,8 +53,8 @@ Route::get('/guest/all_post/with-paginate/{limit}', [GuestController::class, 'pa
 // Currency
 
 
-Route::get('all/currency', [CurrencyController::class , 'allCurrency']);
-Route::get('user/location', [CurrencyController::class , 'getLocation']);
+Route::get('all/currency', [CurrencyController::class, 'allCurrency']);
+Route::get('user/location', [CurrencyController::class, 'getLocation']);
 
 
 // Home Page All Post
@@ -518,7 +518,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/view-category', [CategoryController::class, 'index']);
 });
 
-Route::get('/star/registeredUserList/{live_chat_id}', [LiveChatController::class, 'registeredUserList']);
+Route::get('/star/registeredUserList/{live_chat_slug}', [LiveChatController::class, 'registeredUserList']);
 
 
 
