@@ -61,6 +61,7 @@ class AuditionRoundRulesController extends Controller
         $round = AuditionRoundRule::find($request->round_id);
 
         $round->has_user_vote_mark = $request->has_user_vote_mark;
+        $round->status = 1;
 
         if ($request->has_user_vote_mark == 1) {
             $round->mark_live_or_offline = $request->mark_live_or_offline;

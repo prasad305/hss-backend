@@ -236,7 +236,11 @@ class AuditionController extends Controller
         $auditionAdmins = User::whereNotIn('id', Audition::pluck('audition_admin_id'))->where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
         $subCategories = SubCategory::where([['category_id', auth()->user()->category_id], ['status', 1]])->orderBY('id', 'desc')->get();
         $auditionRule = AuditionRules::where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->first();
-        return view('ManagerAdmin.audition.create', compact('auditionAdmins', 'subCategories', 'auditionRule'));
+
+        $auditionRoundRule = AuditionRoundRule::where([['audition_rules_id',   $auditionRule->id], ['status', 1]])->count();
+
+
+        return view('ManagerAdmin.audition.create', compact('auditionAdmins', 'subCategories', 'auditionRule', 'auditionRoundRule'));
     }
 
     public function assignManpower($audition_id)

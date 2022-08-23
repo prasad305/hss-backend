@@ -127,7 +127,13 @@
 
                     </div>
                     <div class="col-md-8 d-flex justify-content-center">
-                        <button type="submit" class="btn text-bold btn-warning-custom px-5">Submit</button>
+
+                        @if ($auditionRule->round_num == $auditionRoundRule)
+                            <button type="submit" class="btn text-bold btn-warning-custom px-5">Submit</button>
+                        @else
+                            <div class="btn text-bold btn-warning-custom px-5">Wait Until All Round Rule
+                                Completed</div>
+                        @endif
                     </div>
 
                 </div>
