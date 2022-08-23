@@ -16,6 +16,7 @@ class CreateActivitiesTable extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->string('type')->nullable();
+            $table->string('room_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('event_id')->nullable();
             $table->unsignedBigInteger('event_registration_id')->nullable();

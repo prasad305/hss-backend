@@ -87,15 +87,20 @@ class UserMobileAppController extends Controller
         }
 
         if ($modelName == 'livechat') {
+
+            $create_room_id =  createRoomID();
             $eventRegistration = new LiveChatRegistration();
             $event = LiveChat::find($eventId);
             $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->interval)->format('H:i:s');
             $eventRegistration->live_chat_id = $eventId;
             $eventRegistration->amount = $request->fee;
-            $eventRegistration->room_id = createRoomID();
+            $eventRegistration->room_id = $create_room_id;
             $eventRegistration->live_chat_start_time = Carbon::parse($request->start_time)->format('H:i:s');
             $eventRegistration->live_chat_end_time = Carbon::parse($request->end_time)->format('H:i:s');
+            $activity->room_id = $create_room_id;
             $activity->type = 'livechat';
+
+
             $event->update();
         }
         if ($modelName == 'qna') {

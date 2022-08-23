@@ -297,6 +297,7 @@ class LearningSessionController extends Controller
                 'post_end_date' => 'required',
             ]);
             $learningSession->status = 2;
+            $learningSession->room_id = createRoomID();
             $learningSession->update();
 
             //    return $learningSession->star;
@@ -309,10 +310,10 @@ class LearningSessionController extends Controller
             $post->event_id = $learningSession->id;
             $post->category_id = $learningSession->star->category_id;
             $post->sub_category_id = $learningSession->star->sub_category_id;
-            $post->react_provider = "[]";
-            $post->user_like_id = "[]";
+            // $post->react_provider = "[]";
+            // $post->user_like_id = "[]";
 
-            // $post->room_id = createRoomID();
+
 
             $post->post_start_date = Carbon::parse($request->post_start_date);
             $post->post_end_date = Carbon::parse($request->post_end_date);

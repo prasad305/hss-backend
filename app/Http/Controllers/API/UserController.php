@@ -948,6 +948,7 @@ class UserController extends Controller
 
     public function liveChatRigister(Request $request)
     {
+        $create_room_id =  createRoomID();
 
         $liveChat = LiveChat::find($request->event_id);
         $liveChat->slot_counter = $liveChat->slot_counter + $request->minute;
@@ -978,7 +979,9 @@ class UserController extends Controller
         $activity->user_id = auth('sanctum')->user()->id;
         $activity->event_id = $request->event_id;
         $activity->event_registration_id = $liveChatReg->id;
-        $activity->type = 'liveChat';
+
+        $activity->room_id = $create_room_id;
+        $activity->type = 'livechat';
         $activity->save();
 
         //live chat room create
@@ -986,7 +989,7 @@ class UserController extends Controller
         $liveChatRoom->live_chat_id = $request->event_id;
         $liveChatRoom->star_id = $request->star_id;
         $liveChatRoom->user_id = auth('sanctum')->user()->id;
-        $liveChatRoom->room_id = createRoomID();
+        $liveChatRoom->room_id = $create_room_id;
         $liveChatRoom->status = 0;
         $liveChatRoom->save();
 
