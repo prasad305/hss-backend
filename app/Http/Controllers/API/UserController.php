@@ -2072,14 +2072,29 @@ class UserController extends Controller
     {
 
 
-        $videofeed = AuditionRoundMarkTracking::whereHas('roundInfo', function ($q) {
+        $generalFailedUsers = AuditionRoundMarkTracking::whereHas('roundInfo', function ($q) {
             $q->where('videofeed_status', 1);
-        })->where([['wining_status', 0]])->pluck('user_id')->toArray();
+        })->where([['wining_status', 0], ['type', 'general']])->pluck('user_id')->toArray();
+
+        $appealFailedUsers = AuditionRoundMarkTracking::whereHas('roundInfo', function ($q) {
+            $q->where('videofeed_status', 1);
+        })->where([['wining_status', 0], ['type', 'appeal']])->pluck('user_id')->toArray();
+
+        $appealWinnerUsers = AuditionRoundMarkTracking::whereHas('roundInfo', function ($q) {
+            $q->where('videofeed_status', 1);
+        })->where([['wining_status', 1], ['type', 'appeal']])->pluck('user_id')->toArray();
 
 
-        $roundVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($videofeed) {
-            return $q->where([['approval_status', 1]])->whereIn('user_id', $videofeed)->get();
+        $generalFailedVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
+            return $q->where([['approval_status', 1], ['type', 'general']])->whereIn('user_id', $generalFailedUsers)->whereNotIn('user_id', $appealWinnerUsers)->whereNotIn('user_id', $appealFailedUsers)->get();
         }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get()->toArray();
+
+        $appealFailedVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($appealFailedUsers) {
+            return $q->where([['approval_status', 1], ['type', 'appeal']])->whereIn('user_id', $appealFailedUsers)->get();
+        }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get()->toArray();
+
+
+        $roundVideos = array_merge($generalFailedVideos, $appealFailedVideos);
 
         return response()->json([
             'status' => 200,

@@ -1761,11 +1761,11 @@ class AuditionController extends Controller
 
         $group_b_videos = AuditionParticipant::with(['videos' => function ($query) use ($round_info_id, $type) {
             return $query->where([['round_info_id', $round_info_id], ['type', $type], ['group_b_jury_id', '!=', null]])->get();
-        }, 'participant'])->where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
+        }, 'participant'])->where([['audition_id', $audition_id]])->get();
 
         $group_c_videos = AuditionParticipant::with(['videos' => function ($query) use ($round_info_id, $type) {
             return $query->where([['round_info_id', $round_info_id], ['type', $type], ['group_c_jury_id', '!=', null]])->get();
-        }, 'participant'])->where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
+        }, 'participant'])->where([['audition_id', $audition_id]])->get();
 
 
         return response()->json([
