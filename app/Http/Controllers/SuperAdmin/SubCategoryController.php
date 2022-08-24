@@ -59,6 +59,7 @@ class SubCategoryController extends Controller
         $url = $request->input('name');
         $subCategory->slug = str::slug($url, '-');
         $subCategory->category_id = $request->input('category_id');
+        $subCategory->status = 1;
 
         if ($request->hasFile('icon')) {
             if ($subCategory->category != null)
@@ -182,10 +183,10 @@ class SubCategoryController extends Controller
     public function destroy($id)
     {
         $subCategory = SubCategory::findOrfail($id);
-        if ($subCategory->image != null){
+        if ($subCategory->image != null) {
             File::delete(public_path($subCategory->image)); //Old image delete
         }
-        if ($subCategory->icon != null){
+        if ($subCategory->icon != null) {
             File::delete(public_path($subCategory->icon)); //Old icon delete
         }
         try {

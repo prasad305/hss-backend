@@ -93,6 +93,8 @@ class AuditionController extends Controller
             }
             $audition->instruction = $request->instruction;
             $audition->description = $request->description;
+            $audition->user_reg_start_date = $request->user_reg_start_date;
+            $audition->user_reg_end_date = $request->user_reg_end_date;
             $audition->fees = $request->fees;
             $audition->status = 2;
 

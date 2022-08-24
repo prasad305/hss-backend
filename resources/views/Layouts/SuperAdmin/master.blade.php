@@ -508,6 +508,9 @@
             if (key == 'registration_period') {
                 $('#registration_preiod_error').html(value);
             }
+            if (key == 'round_type') {
+                $('#round_type_error').html(value);
+            }
 
         }
 
@@ -539,6 +542,7 @@
             $('#name_error').html('');
             $('#event_period').html('');
             $('#registration_period').html('');
+            $('#round_type_error').html('');
         }
     </script>
 
