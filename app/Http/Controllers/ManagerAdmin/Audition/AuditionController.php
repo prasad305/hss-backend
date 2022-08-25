@@ -458,10 +458,10 @@ class AuditionController extends Controller
         $generalMarkTraking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 0], ['type', 'general']])->pluck('user_id')->toArray();
         $appealMarkTraking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 0], ['type', 'appeal']])->pluck('user_id')->toArray();
         // $generalWiningTracking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 1], ['type', 'general']])->pluck('user_id')->toArray();
-        // $appealWinningTracking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 1], ['type', 'appeal']])->pluck('user_id')->toArray();
+        $appealWinningTracking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 1], ['type', 'appeal']])->pluck('user_id')->toArray();
 
-        $notAppealedGeneralVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($generalMarkTraking, $appealMarkTraking, $round_info_id) {
-            return $q->where([['approval_status', 1], ['round_info_id', $round_info_id], ['type', 'general']])->whereNotIn('user_id', $appealMarkTraking)->whereIn('user_id', $generalMarkTraking)->get();
+        $notAppealedGeneralVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($generalMarkTraking, $appealMarkTraking, $round_info_id, $appealWinningTracking) {
+            return $q->where([['approval_status', 1], ['round_info_id', $round_info_id], ['type', 'general']])->whereNotIn('user_id', $appealMarkTraking)->whereNotIn('user_id', $appealWinningTracking)->whereIn('user_id', $generalMarkTraking)->get();
         }])->where([['id', $round_info_id], ['wildcard', 1], ['videofeed_status', 0], ['round_type', 0]])->first();
 
 
