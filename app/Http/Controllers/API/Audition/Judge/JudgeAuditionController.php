@@ -9,6 +9,7 @@ use App\Models\Audition\AuditionAssignJury;
 use App\Models\Audition\AuditionJudgeInstruction;
 use App\Models\Audition\AuditionPromoInstructionSendInfo;
 use App\Models\Audition\AuditionRoundInstructionSendInfo;
+use App\Models\Audition\AuditionUploadVideo;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -191,7 +192,7 @@ class JudgeAuditionController extends Controller
         $liveAuditions = Audition::with('judge')
             ->whereHas('judge', function ($q) {
                 $q->where([['judge_id', auth('sanctum')->user()->id]]);
-            })->where('status', 2)->get();
+            })->where('status', 3)->get();
 
         return response()->json([
             'status' => 200,
@@ -388,5 +389,20 @@ class JudgeAuditionController extends Controller
                 'message' => "Instruction updated sucessfully !",
             ]);
         }
+    }
+    public function round_judges_videos($round_info_id)
+    {
+        $videos = AuditionUploadVideo::where([['type', 'general'], ['round_info_id', $round_info_id], ['approval_status', 1]])->get();
+
+        // $videos = AuditionUploadVideo::where([['type', 'general'], ['round_info_id', $round_info_id], ['approval_status', 1]])->get();
+        $selectedVideos = AuditionUploadVideo::where([['type', 'general'], ['round_info_id', $round_info_id], ['approval_status', 1]])->get();
+        $rejectedVideos = AuditionUploadVideo::where([['type', 'general'], ['round_info_id', $round_info_id], ['approval_status', 2]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'videos' => $videos,
+            'selectedVideos' => $selectedVideos,
+            'rejectedVideos' => $rejectedVideos,
+        ]);
     }
 }

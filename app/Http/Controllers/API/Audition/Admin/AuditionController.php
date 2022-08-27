@@ -1070,8 +1070,6 @@ class AuditionController extends Controller
                 'round_info_id' => 'required|exists:audition_round_infos,id',
                 'video_time_duration' => 'required',
                 'video_slot' => 'required',
-                'appeal_video_time_duration' => 'required',
-                'appeal_video_slot' => 'required',
                 'instruction' => 'required|min:10',
             ], [
                 'round_info_id.required' => 'Please Select Round Number',
@@ -1081,8 +1079,6 @@ class AuditionController extends Controller
                 'round_info_id' => 'required|exists:audition_round_infos,id',
                 'video_time_duration' => 'required',
                 'video_slot' => 'required',
-                'appeal_video_time_duration' => 'required',
-                'appeal_video_slot' => 'required',
                 'instruction' => 'required|min:10',
                 'image' => 'required|mimes:jpg,jpeg,png',
                 'video' => 'required|mimes:mp4,mkv',
