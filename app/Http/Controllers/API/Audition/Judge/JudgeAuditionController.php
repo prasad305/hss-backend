@@ -392,9 +392,7 @@ class JudgeAuditionController extends Controller
     }
     public function round_judges_videos($round_info_id)
     {
-        $videos = AuditionUploadVideo::where([['type', 'general'], ['round_info_id', $round_info_id], ['approval_status', 1]])->get();
-
-        // $videos = AuditionUploadVideo::where([['type', 'general'], ['round_info_id', $round_info_id], ['approval_status', 1]])->get();
+        $videos = AuditionUploadVideo::whereJsonContains('judge_id', auth()->user()->id)->where([['type', 'general'], ['round_info_id', $round_info_id], ['approval_status', 1]])->get();
         $selectedVideos = AuditionUploadVideo::where([['type', 'general'], ['round_info_id', $round_info_id], ['approval_status', 1]])->get();
         $rejectedVideos = AuditionUploadVideo::where([['type', 'general'], ['round_info_id', $round_info_id], ['approval_status', 2]])->get();
 
@@ -403,6 +401,32 @@ class JudgeAuditionController extends Controller
             'videos' => $videos,
             'selectedVideos' => $selectedVideos,
             'rejectedVideos' => $rejectedVideos,
+        ]);
+    }
+    public function judgeVideoMarking(Request $request)
+    {
+
+
+        $auditionUploadVideo =  AuditionUploadVideo::find($request->video_id);
+        if ($auditionUploadVideo->judge_mark != null) {
+            $arr = json_decode($auditionUploadVideo->judge_mark);
+
+            $data = array_merge($arr, [array(auth()->user()->id => $request->mark)]);
+            $auditionUploadVideo->judge_mark =  json_encode($data);
+            $auditionUploadVideo->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Mark added successfully !',
+            ]);
+        }
+        $data = array(auth()->user()->id => $request->mark);
+        $auditionUploadVideo->judge_mark = json_encode(array($data));
+        $auditionUploadVideo->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Mark added successfully !',
         ]);
     }
 }
