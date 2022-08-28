@@ -16,7 +16,7 @@ class CreateUserInterestsTable extends Migration
         Schema::create('user_interests', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('interest_topic_id')->nullable();
+            $table->longText('interest_topic_id')->nullable();
             $table->timestamps();
         });
     }

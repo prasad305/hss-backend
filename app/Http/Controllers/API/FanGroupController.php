@@ -8,6 +8,7 @@ use Auth;
 use App\Models\FanGroup;
 use App\Models\FanPost;
 use App\Models\User;
+use App\Models\UserInfo;
 use App\Models\NotificationText;
 use App\Models\Notification;
 use App\Models\Wallet;
@@ -574,9 +575,15 @@ class FanGroupController extends Controller
 
         $id = auth('sanctum')->user()->id;
 
-        $useFan = User::where('id', $id)->first();
+        $useFan = UserInfo::where('user_id', $id)->first();
 
-        $fanUser = json_decode($useFan->fan_group ? $useFan->fan_group : '[]');
+
+        if($useFan){
+            $fanUser = json_decode($useFan->user_fan_group_id);
+        }else{
+            $fanUser = json_decode('[]');
+        }
+        // $fanUser = json_decode($useFan->user_fan_group_id ? $useFan->user_fan_group_id : '[]');
 
         $fanCount = FanGroup::select("*")
             ->whereIn('id', $fanUser)
@@ -626,6 +633,7 @@ class FanGroupController extends Controller
         $my_star = User::find($fanDetails->my_star);
         $another_star = User::find($fanDetails->another_star);
 
+        $participant = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->get();
 
         return response()->json([
             'status' => 200,
@@ -636,6 +644,7 @@ class FanGroupController extends Controller
             'another_user_join' => $another_user_join,
             'my_star' => $my_star,
             'another_star' => $another_star,
+            'participant' => $participant,
         ]);
     }
 
@@ -1050,17 +1059,37 @@ class FanGroupController extends Controller
 
         Fan_Group_Join::where('fan_group_id', $fan_group_id)->where('user_id', $id)->where('id', '!=', $fanStore->id)->delete();
 
-        // Add ID(json) in User table
-        $user = User::find($id);
-        $fan_group_idd = (int) $fan_group_id;
+        // Add ID(json) in User Info table
+        $user = UserInfo::where('user_id', $id)->first();
+        // return $user;
+        if($user){
+            $fan_group_idd = (int) $fan_group_id;
 
-        $array =  $user->fan_group ? json_decode($user->fan_group) : [];
+            $array =  $user->user_fan_group_id ? json_decode($user->user_fan_group_id) : [];
 
-        if (!in_array($fan_group_idd, $array)) {
-            array_push($array,  $fan_group_idd);
+            if (!in_array($fan_group_idd, $array)) {
+                array_push($array,  $fan_group_idd);
+            }
+            $user->user_fan_group_id = json_encode($array);
+            $user->save();
+        }else{
+            // return 'partha';
+            $user = new UserInfo();
+            $fan_group_idd = (int) $fan_group_id;
+
+            $array = [];
+
+            if (!in_array($fan_group_idd, $array)) {
+                array_push($array,  $fan_group_idd);
+            }
+            
+            $user->user_id = $id;
+            $user->user_fan_group_id = json_encode($array);
+            $user->save();
+
+            // return gettype($user->user_fan_group_id);
         }
-        $user->fan_group = $array;
-        $user->save();
+        
 
 
         $fan_group = FanGroup::find($fan_group_id);
@@ -1196,6 +1225,7 @@ class FanGroupController extends Controller
 
         return response()->json([
             'status' => 200,
+            'fanDetails' =>$fanImage,
             'message' => 'Fan Group Image updated Successfully',
         ]);
     }

@@ -11,7 +11,7 @@ class AuditionRoundInstruction extends Model
 {
     use HasFactory;
 
-    protected $with = ['instructionSendInfos'];
+    // protected $with = ['instructionSendInfos'];
 
     protected $fillable = [
         'id',

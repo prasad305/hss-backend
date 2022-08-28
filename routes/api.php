@@ -68,6 +68,16 @@ Route::get('/user/generalPost/payment/check', [UserController::class, 'simplePos
 
 Route::get('/user/post/{type}/with-paginate/{limit}', [UserController::class, 'paginate_single_type_post']);
 
+//User Settings
+Route::post('/user/interest/store', [UserController::class, 'interestStore']);
+Route::post('/user/educational/store', [UserController::class, 'educationalStore']);
+Route::post('/user/employment/store', [UserController::class, 'employmentStore']);
+Route::post('/user/personal-data/store', [UserController::class, 'personalDataStore']);
+Route::get('/user/educational/list/check', [UserController::class, 'userEducationCheck']);
+Route::get('/user/employment/list/check', [UserController::class, 'userEmploymentCheck']);
+Route::get('/user/personal/list/check', [UserController::class, 'userPersonalList']);
+Route::post('/user/password/changes', [UserController::class, 'userPasswordChanges']);
+
 
 //Star Photo and videos
 Route::get('/star_photos/{id}', [UserController::class, 'star_photo']);
@@ -713,6 +723,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/superstar/promotional/accepted/video/list', [AuditionController::class, 'acceptedJudgePromotionalList']);
     Route::post('/superstar/audition/promotional/video/store', [AuditionController::class, 'superstarPromotionalVideoStore']);
     Route::get('/superstar/audition/promotional/video/view/{id}', [AuditionController::class, 'judgePromotionalView']);
+
+    Route::get('/superstar/audition/view', [AuditionController::class, 'getAllAudition']);
 
     Route::get('/superstar/audition/promotional/video/accepted/{id}', [AuditionController::class, 'judgePromotionalViewAccepted']);
     Route::get('/superstar/audition/promotional/video/declined/{id}', [AuditionController::class, 'judgePromotionalViewDecline']);
