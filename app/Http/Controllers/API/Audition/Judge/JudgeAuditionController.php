@@ -396,6 +396,11 @@ class JudgeAuditionController extends Controller
         $selectedVideos = AuditionUploadVideo::where([['type', 'general'], ['round_info_id', $round_info_id], ['approval_status', 1]])->get();
         $rejectedVideos = AuditionUploadVideo::where([['type', 'general'], ['round_info_id', $round_info_id], ['approval_status', 2]])->get();
 
+        // $arr = [];
+        // foreach ($selectedVideos as  $video) {
+        //     array_push($arr, json_decode($video->judge_mark));
+        // }
+
         return response()->json([
             'status' => 200,
             'videos' => $videos,
