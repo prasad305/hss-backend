@@ -541,12 +541,16 @@ class SouvinerController extends Controller
     public function registerSouvenirApprove($id)
     {
 
+        
         $registerSouvenir = SouvenirApply::find($id);
         $registerSouvenir->status = 1;
         $registerSouvenir->save();
 
+        $allRegisterSouvenir = SouvenirApply::where('status', 0)->where('is_delete', 0)->latest()->get();
+
         return response()->json([
             'status' => 200,
+            'allRegisterSouvenir' => $allRegisterSouvenir,
             'message' => 'Souvenir Approve Successfully'
         ]);
     }
@@ -557,8 +561,11 @@ class SouvinerController extends Controller
         $registerSouvenir->is_delete = 1;
         $registerSouvenir->save();
 
+        $allRegisterSouvenir = SouvenirApply::where('status', 0)->where('is_delete', 0)->latest()->get();
+
         return response()->json([
             'status' => 200,
+            'allRegisterSouvenir' => $allRegisterSouvenir,
             'message' => 'Souvenir Declined Successfully'
         ]);
     }
