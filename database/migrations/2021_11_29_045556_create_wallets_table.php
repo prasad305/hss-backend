@@ -17,6 +17,7 @@ class CreateWalletsTable extends Migration
             $table->id();
             $table->integer('user_id')->nullable();
             $table->string('title')->nullable();
+            $table->string('type')->nullable();
             $table->integer('club_points')->default(0);
             $table->integer('auditions')->default(0);
             $table->integer('learning_session')->default(0);

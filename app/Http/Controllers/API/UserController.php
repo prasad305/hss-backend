@@ -1378,7 +1378,7 @@ class UserController extends Controller
         ]);
     }
 
-    // Store Fan Post Like count
+    // Store Fan Post Like count for user
     public function submit_react(Request $request, $id)
     {
         $post = Post::find($id);
