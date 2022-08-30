@@ -319,6 +319,75 @@ class UserMobileAppController extends Controller
         }
     }
 
+    /**
+     * fan group post image upload
+     */
+    public function uploadPostMedia(Request $request)
+    {
+        try {
+            if ($request->base64) {
+
+                $originalExtension = str_ireplace("image/", "", $request->type);
+
+                $folder_path       = 'uploads/images/fanpost/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->base64;
+            }
+
+
+            Image::make($decodedBase64)->save($folder_path . $image_new_name);
+
+
+
+            $imagePath = $folder_path . $image_new_name;
+
+            return response()->json([
+                "message" => "uploaded successfully",
+                "status" => "200",
+                "path" => $imagePath
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                "message" => "Image field required, invalid image !",
+                "error" => $exception->getMessage(),
+                "status" => "0",
+            ]);
+        }
+    }
+
+    public function uploadPostVideo(Request $request)
+    {
+        try {
+            if ($request->base64) {
+
+                $originalExtension = str_ireplace("video/", "", $request->type);
+
+                $folder_path       = 'uploads/images/fanpost/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->base64;
+            }
+            $videoPath = $folder_path . $image_new_name;
+
+
+            file_put_contents($videoPath, base64_decode($decodedBase64, true));
+
+
+            return response()->json([
+                "message" => "uploaded successfully",
+                "status" => "200",
+                "path" => $videoPath
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                "message" => "Image field required, invalid image !",
+                "error" => $exception->getMessage(),
+                "status" => "0",
+            ]);
+        }
+    }
+
 
 
     /**

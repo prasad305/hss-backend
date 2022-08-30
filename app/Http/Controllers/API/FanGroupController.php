@@ -308,27 +308,27 @@ class FanGroupController extends Controller
             $query->where('my_star_status', 0)
                 ->where('my_star', $id);
         })->orWhere(function ($query) use ($id) {
-                $query->where('another_star_status', 0)
-                    ->where('another_star', $id);
-            })->orderBy('id', 'DESC')->get();
+            $query->where('another_star_status', 0)
+                ->where('another_star', $id);
+        })->orderBy('id', 'DESC')->get();
 
         $starApproved = FanGroup::where(function ($query) use ($id) {
             $query->where('my_star_status', 1)
                 ->where('my_star', $id)
                 ->where('status', 0);
         })->orWhere(function ($query) use ($id) {
-                $query->where('another_star_status', 1)
-                    ->where('another_star', $id)
-                    ->where('status', 0);
-            })->orderBy('id', 'DESC')->get();
+            $query->where('another_star_status', 1)
+                ->where('another_star', $id)
+                ->where('status', 0);
+        })->orderBy('id', 'DESC')->get();
 
         $starRejected = FanGroup::where(function ($query) use ($id) {
             $query->where('my_star_status', 2)
                 ->where('my_star', $id);
         })->orWhere(function ($query) use ($id) {
-                $query->where('another_star_status', 2)
-                    ->where('another_star', $id);
-            })->orderBy('id', 'DESC')->get();
+            $query->where('another_star_status', 2)
+                ->where('another_star', $id);
+        })->orderBy('id', 'DESC')->get();
 
         $today = Carbon::now();
 
@@ -384,23 +384,23 @@ class FanGroupController extends Controller
             $query->where('my_star_status', 0)
                 ->where('created_by', $id);
         })->orWhere(function ($query) use ($id) {
-                $query->where('another_star_status', 0)
-                    ->where('another_star_admin_id', $id);
-            })->orWhere(function ($query) use ($id) {
-                $query->where('status', 0)
-                    ->orWhere('status', 2);
-            })->orderBy('id', 'DESC')->get();
+            $query->where('another_star_status', 0)
+                ->where('another_star_admin_id', $id);
+        })->orWhere(function ($query) use ($id) {
+            $query->where('status', 0)
+                ->orWhere('status', 2);
+        })->orderBy('id', 'DESC')->get();
 
         $fanPendingCount = FanGroup::where(function ($query) use ($id) {
             $query->where('my_star_status', 0)
                 ->where('created_by', $id);
         })->orWhere(function ($query) use ($id) {
-                $query->where('another_star_status', 0)
-                    ->where('another_star_admin_id', $id);
-            })->orWhere(function ($query) use ($id) {
-                $query->where('status', 0)
-                    ->orWhere('status', 2);
-            })->count();
+            $query->where('another_star_status', 0)
+                ->where('another_star_admin_id', $id);
+        })->orWhere(function ($query) use ($id) {
+            $query->where('status', 0)
+                ->orWhere('status', 2);
+        })->count();
 
 
         $today = Carbon::now();
@@ -514,9 +514,14 @@ class FanGroupController extends Controller
         $fanDetails = FanGroup::where('slug', $slug)->first();
         $userId = auth('sanctum')->user()->id;
 
+        $fanGroupMemebers = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->get();
+
         $fanPost = FanPost::where('fan_group_id', $fanDetails->id)->latest()->where('status', 1)->orderBy('id', 'DESC')->get();
         $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
         $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
+
+        $userJoinInfo = Fan_Group_Join::where('user_id', auth('sanctum')->user()->id)->where('approveStatus', 1)->get()->first();
+
 
         return response()->json([
             'status' => 200,
@@ -524,6 +529,11 @@ class FanGroupController extends Controller
             'fanMedia' => $fanMedia,
             'fanVideo' => $fanVideo,
             'userId' => $userId,
+            'member' => $fanGroupMemebers,
+            'myJoinStaus' => $userJoinInfo ? true : false,
+            'myJoinData' => $userJoinInfo
+
+
         ]);
     }
 
@@ -1009,6 +1019,7 @@ class FanGroupController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Fan Group Joined Successfully',
+            'myJoinData' => $fanStore
         ]);
     }
 
@@ -1039,6 +1050,14 @@ class FanGroupController extends Controller
         } else {
             $fanPost->status = 0;
         }
+        if (isset($request->path)) {
+            $fanPost->image = $request->path;
+        }
+        if (isset($request->video_url)) {
+            $fanPost->video = $request->video_url;
+        }
+
+
 
 
         if ($request->hasfile('image')) {
