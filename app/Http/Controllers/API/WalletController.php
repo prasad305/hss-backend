@@ -8,11 +8,13 @@ use App\Models\Package;
 use App\Models\WalletHistory;
 use App\Models\WalletPayment;
 use App\Models\Wallet;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class WalletController extends Controller
 {
-    public function package_list(){
+    public function package_list()
+    {
         $id = auth('sanctum')->user()->id;
         $allPackages = Package::where('status', 1)->latest()->get();
 
@@ -22,37 +24,39 @@ class WalletController extends Controller
             'userId' => $id,
         ]);
     }
-    public function getUserWallet(){
+
+    public function getUserWallet()
+    {
         $id = auth('sanctum')->user()->id;
 
         $userWallet = Wallet::where('user_id', $id)->first();
 
-  
-            return response()->json([
-                'status' => 200,
-                'userWallet' => $userWallet,
-                'userWalletId' => $id,
-            ]);
 
+        return response()->json([
+            'status' => 200,
+            'userWallet' => $userWallet,
+            'userWalletId' => $id,
+        ]);
     }
 
-    public function userWalletStore(Request $request){
+    public function userWalletStore(Request $request)
+    {
+        // return $request->all();
         //Add walet Payment
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'card_holder_name' => 'required',
             'card_no' => 'required',
             'card_expire_date' => 'required',
             'card_cvv' => 'required',
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'validation_errors' => $validator->errors(),
             ]);
-        }else{
+        } else {
             $walletPayment = new WalletPayment();
-            $walletPayment->user_id = $request->user_id;
+            $walletPayment->user_id = auth('sanctum')->user()->id;
             $walletPayment->packages_id = $request->packages_id;
             $walletPayment->card_holder_name = $request->holder_name;
             $walletPayment->card_no = $request->card_no;
@@ -60,20 +64,20 @@ class WalletController extends Controller
             $walletPayment->card_cvv = $request->cvv;
             $walletPayment->status = 0;
             $walletPayment->save();
-    
+
             $walletHistory = new WalletHistory();
             $walletHistory->packages_id = $request->packages_id;
             $walletHistory->user_id = $request->user_id;
             $walletHistory->wallet_payment_id = $walletPayment->id;
             $walletHistory->status = 0;
             $walletHistory->save();
-    
-            $userWallet = Wallet::where('user_id', $request->user_id)->first();
-    
+
+            $userWallet = Wallet::where('user_id', auth('sanctum')->user()->id)->first();
+
             $addPackages = Package::where('id', $request->packages_id)->first();
-            
-            if($userWallet){
-                
+
+            if ($userWallet) {
+
                 $userWallet->club_points += $addPackages->club_points;
                 $userWallet->auditions += $addPackages->auditions;
                 $userWallet->learning_session += $addPackages->learning_session;
@@ -81,16 +85,19 @@ class WalletController extends Controller
                 $userWallet->meetup += $addPackages->meetup;
                 $userWallet->greetings += $addPackages->greetings;
                 $userWallet->qna += $addPackages->qna;
+                $userWallet->type = $addPackages->title;
                 $userWallet->save();
-    
+
                 return response()->json([
                     'status' => 200,
-                    'message' => 'Payment Added Successfully',
+                    'message' => 'Payment Added Successfully ',
+                    'waletInfo' => $userWallet
+
                 ]);
-            }else{
-    
+            } else {
+
                 $wallet = new Wallet();
-                $wallet->user_id = $request->user_id;
+                $wallet->user_id = auth('sanctum')->user()->id;
                 $wallet->club_points += $addPackages->club_points;
                 $wallet->auditions += $addPackages->auditions;
                 $wallet->learning_session += $addPackages->learning_session;
@@ -98,33 +105,36 @@ class WalletController extends Controller
                 $wallet->meetup += $addPackages->meetup;
                 $wallet->greetings += $addPackages->greetings;
                 $wallet->qna += $addPackages->qna;
+                $wallet->type = $addPackages->title;
                 $wallet->status = 0;
                 $wallet->save();
-    
+
                 return response()->json([
                     'status' => 200,
-                    'message' => 'Payment Added Successfully',
+                    'message' => 'Payment Added Successfully ',
+                    'waletInfo' => $wallet
                 ]);
-            } 
-        }  
+            }
+        }
     }
 
-    public function userWalletHistory(){
+    public function userWalletHistory()
+    {
         $id = auth('sanctum')->user()->id;
 
         $userWalletHistory = WalletHistory::where('user_id', $id)->latest()->get();
         $userLastWalletHistory = WalletHistory::where('user_id', $id)->latest()->first();
 
-  
-            return response()->json([
-                'status' => 200,
-                'userWalletHistory' => $userWalletHistory,
-                'userLastWalletHistory' => $userLastWalletHistory,
-            ]);
 
+        return response()->json([
+            'status' => 200,
+            'userWalletHistory' => $userWalletHistory,
+            'userLastWalletHistory' => $userLastWalletHistory,
+        ]);
     }
 
-    public function userFreeWalletStore($packageid, $userId){
+    public function userFreeWalletStore($packageid, $userId)
+    {
 
         $walletHistory = new WalletHistory();
         $walletHistory->packages_id = $packageid;
@@ -136,9 +146,9 @@ class WalletController extends Controller
         $userWallet = Wallet::where('user_id', $userId)->first();
 
         $addPackages = Package::where('id', $packageid)->first();
-        
-        if($userWallet){
-            
+
+        if ($userWallet) {
+
             $userWallet->club_points += $addPackages->club_points;
             $userWallet->auditions += $addPackages->auditions;
             $userWallet->learning_session += $addPackages->learning_session;
@@ -152,7 +162,7 @@ class WalletController extends Controller
                 'status' => 200,
                 'message' => 'Payment Added Successfully',
             ]);
-        }else{
+        } else {
 
             $wallet = new Wallet();
             $wallet->user_id = $userId;
@@ -170,7 +180,6 @@ class WalletController extends Controller
                 'status' => 200,
                 'message' => 'Payment Added Successfully',
             ]);
-        }   
+        }
     }
-
 }

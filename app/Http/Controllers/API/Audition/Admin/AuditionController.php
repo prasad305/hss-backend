@@ -38,6 +38,16 @@ class AuditionController extends Controller
             'events' => $events,
         ]);
     }
+    
+    public function getAllAudition()
+    {
+        $auditions = Audition::where('status', '>', 0)->get();
+
+        return response()->json([
+            'status' => 200,
+            'auditions' => $auditions,
+        ]);
+    }
 
     public function statusUpdate(Request $request)
     {

@@ -119,9 +119,9 @@
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu" role="menu">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                            <a class="dropdown-item" href="{{route('superAdmin.settings')}}">Settings</a>
+                            {{-- <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a> --}}
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item logout-btn">Logout</a>
                         </div>

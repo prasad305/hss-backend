@@ -24,6 +24,13 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('mobile/user-photo-upload', [UserMobileAppController::class, 'userMediaUpload']);
 
     /**
+     * post media upload
+     */
+    Route::post('mobile/post-media-upload', [UserMobileAppController::class, 'uploadPostMedia']);
+    Route::post('mobile/post-video-upload', [UserMobileAppController::class, 'uploadPostVideo']);
+
+
+    /**
      * all upcomming events get
      */
     Route::get('/mobile/all-upcomming-event', [UserMobileAppController::class, 'allUpcommingEvent']);
