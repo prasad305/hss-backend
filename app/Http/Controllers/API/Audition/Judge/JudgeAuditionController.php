@@ -10,6 +10,7 @@ use App\Models\Audition\AuditionJudgeInstruction;
 use App\Models\Audition\AuditionPromoInstructionSendInfo;
 use App\Models\Audition\AuditionRoundInstructionSendInfo;
 use App\Models\Audition\AuditionUploadVideo;
+use App\Models\auditionJudgeMark;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -392,14 +393,10 @@ class JudgeAuditionController extends Controller
     }
     public function round_judges_videos($round_info_id)
     {
-        $videos = AuditionUploadVideo::whereJsonContains('judge_id', auth()->user()->id)->where([['type', 'general'], ['round_info_id', $round_info_id], ['approval_status', 1]])->get();
-        $selectedVideos = AuditionUploadVideo::where([['type', 'general'], ['round_info_id', $round_info_id], ['approval_status', 1]])->get();
-
-        // $arr = [];
-        // foreach ($selectedVideos as  $video) {
-        //     array_push($arr, json_decode($video->judge_mark));
-        // }
-        // return $arr;
+        $videos = AuditionUploadVideo::whereDoesntHave('judge_video_mark', function ($q) {
+            return $q->where('judge_id', auth()->user()->id);
+        })->whereJsonContains('judge_id', auth()->user()->id)->where([['type', 'general'], ['round_info_id', $round_info_id], ['approval_status', 1]])->latest()->get();
+        $selectedVideos = auditionJudgeMark::with('judge_videos')->where([['round_info_id', $round_info_id], ['judge_id', auth()->user()->id]])->latest()->get();
 
         return response()->json([
             'status' => 200,
@@ -410,24 +407,27 @@ class JudgeAuditionController extends Controller
     public function judgeVideoMarking(Request $request)
     {
 
-
-        $auditionUploadVideo =  AuditionUploadVideo::find($request->video_id);
-        if ($auditionUploadVideo->judge_mark != null) {
-            $arr = json_decode($auditionUploadVideo->judge_mark);
-
-            $data = array_merge($arr, [array(auth()->user()->id => $request->mark)]);
-            $auditionUploadVideo->judge_mark =  json_encode($data);
-            $auditionUploadVideo->save();
-
+        $validator = Validator::make($request->all(), [
+            'audition_id' => 'required',
+            'audition_uploads_video_id' => 'required',
+            'round_info_id' => 'required',
+            'judge_mark' => 'required',
+        ]);
+        if ($validator->fails()) {
             return response()->json([
-                'status' => 200,
-                'message' => 'Mark added successfully !',
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            auditionJudgeMark::create([
+                'audition_id' => $request->audition_id,
+                'judge_id' => auth()->user()->id,
+                'audition_uploads_video_id' => $request->audition_uploads_video_id,
+                'round_info_id' => $request->round_info_id,
+                'judge_mark' => $request->judge_mark,
+                'judge_comment' => $request->judge_comment,
             ]);
         }
-        $data = array(auth()->user()->id => $request->mark);
-        $auditionUploadVideo->judge_mark = json_encode(array($data));
-        $auditionUploadVideo->save();
-
         return response()->json([
             'status' => 200,
             'message' => 'Mark added successfully !',
