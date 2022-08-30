@@ -8,16 +8,19 @@ use Auth;
 use App\Models\FanGroup;
 use App\Models\FanPost;
 use App\Models\User;
+use App\Models\UserInfo;
 use App\Models\NotificationText;
 use App\Models\Notification;
 use App\Models\Wallet;
 use App\Models\Fan_Group_Join;
+use App\Models\FanGroupMessage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use DateTime;
 
 class FanGroupController extends Controller
 {
@@ -572,9 +575,15 @@ class FanGroupController extends Controller
 
         $id = auth('sanctum')->user()->id;
 
-        $useFan = User::where('id', $id)->first();
+        $useFan = UserInfo::where('user_id', $id)->first();
 
-        $fanUser = json_decode($useFan->fan_group ? $useFan->fan_group : '[]');
+
+        if($useFan){
+            $fanUser = json_decode($useFan->user_fan_group_id);
+        }else{
+            $fanUser = json_decode('[]');
+        }
+        // $fanUser = json_decode($useFan->user_fan_group_id ? $useFan->user_fan_group_id : '[]');
 
         $fanCount = FanGroup::select("*")
             ->whereIn('id', $fanUser)
@@ -624,6 +633,7 @@ class FanGroupController extends Controller
         $my_star = User::find($fanDetails->my_star);
         $another_star = User::find($fanDetails->another_star);
 
+        $participant = Fan_Group_Join::where('fan_group_id', $fanDetails->id)->get();
 
         return response()->json([
             'status' => 200,
@@ -634,6 +644,7 @@ class FanGroupController extends Controller
             'another_user_join' => $another_user_join,
             'my_star' => $my_star,
             'another_star' => $another_star,
+            'participant' => $participant,
         ]);
     }
 
@@ -702,17 +713,91 @@ class FanGroupController extends Controller
 
         $fanDetails = FanGroup::where('slug', $slug)->first();
 
-        $myStarPostsAll = FanPost::where([['fan_group_id', $fanDetails->id], ['star_id', $fanDetails->my_star]])->get();
-        $myStarPosts = $myStarPostsAll->groupBy(function ($date) {
-            return Carbon::parse($date->created_at)->ceilWeek()->format('d, M')
-                . ' - ' . Carbon::parse($date->created_at)->floorWeek()->format('d, M');
-        });
 
-        $anotherStarPostsAll = FanPost::where([['fan_group_id', $fanDetails->id], ['star_id', $fanDetails->another_star]])->get();
-        $anotherStarPosts = $anotherStarPostsAll->groupBy(function ($date) {
-            return Carbon::parse($date->created_at)->ceilWeek()->format('d, M')
-                . ' - ' . Carbon::parse($date->created_at)->floorWeek()->format('d, M');
-        });
+        // $fdate = $fanDetails->start_date;
+        // $tdate = $fanDetails->end_date;
+        // $datetime1 = new DateTime($fdate);
+        // $datetime2 = new DateTime($tdate);
+        // $interval = $datetime1->diff($datetime2);
+
+
+        // $interval = $fanDetails->start_date->diff($fanDetails->end_date);
+
+        
+        $current = Carbon::parse($fanDetails->start_date);
+        $newCurrent = Carbon::parse($fanDetails->start_date);
+        $end = Carbon::parse($fanDetails->end_date);
+
+        $length = $end->diffInDays($current);
+        
+        
+        $week = (int)( $length / 7);
+        if($week * 7 == $length){
+            $week = $week;
+        }else{
+            $week = $week + 1;
+        }
+
+        
+        // $current_timestamp = Carbon::parse($fanDetails->start_date)->format('Y-m-d H:i:s');
+        // $end_timestamp = Carbon::parse($current_timestamp->addDays(7))->format('Y-m-d H:i:s');
+        
+        
+        $anotherStarArray = array();
+        $anotherStarWeek = array();
+        
+        for($i = 1; $i <= $week; $i++){
+            $current_timestamp =(string) $current;
+            $end_timestamp =(string) ($current->addDays(7));
+
+            $firstStarPost = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id) ->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
+            $fan_Group_Join = Fan_Group_Join::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id) ->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
+            $fanGroupMessage = FanGroupMessage::where('position', 2)->where('group_id', $fanDetails->id) ->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
+
+            array_push($anotherStarArray, ($firstStarPost+$fanGroupMessage+$fan_Group_Join));
+            array_push($anotherStarWeek, $i);
+        }
+
+        // return $anotherStarArray;
+        
+        
+        $myStarArray = array();
+        $myStarWeek = array();
+        
+        for($i = 1; $i <= $week; $i++){
+            $current_timestamp =(string) $newCurrent;
+            $end_timestamp =(string) ($newCurrent->addDays(7));
+
+            $secondStarPost = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id) ->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
+            $fan_Group_Join = Fan_Group_Join::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id) ->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
+            $fanGroupMessage = FanGroupMessage::where('position', 1)->where('group_id', $fanDetails->id) ->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
+
+            array_push($myStarArray, ($secondStarPost+$fanGroupMessage+$fan_Group_Join));
+            array_push($myStarWeek, $i);
+        }
+
+        // return $myStarArray;
+
+        $myStarAnalytics = $myStarArray;
+        $myStarWeek = $myStarWeek;
+        
+        $anotherStarAnalytics = $anotherStarArray;
+        $anotherStarWeek = $anotherStarWeek;
+        
+
+
+
+        // $myStarPostsAll = FanPost::where([['fan_group_id', $fanDetails->id], ['star_id', $fanDetails->my_star]])->get();
+        // $myStarPosts = $myStarPostsAll->groupBy(function ($date) {
+        //     return Carbon::parse($date->created_at)->ceilWeek()->format('d, M')
+        //         . ' - ' . Carbon::parse($date->created_at)->floorWeek()->format('d, M');
+        // });
+
+        // $anotherStarPostsAll = FanPost::where([['fan_group_id', $fanDetails->id], ['star_id', $fanDetails->another_star]])->get();
+        // $anotherStarPosts = $anotherStarPostsAll->groupBy(function ($date) {
+        //     return Carbon::parse($date->created_at)->ceilWeek()->format('d, M')
+        //         . ' - ' . Carbon::parse($date->created_at)->floorWeek()->format('d, M');
+        // });
 
         // Total Fan Post under first star
         $myStarPost = FanPost::where('fan_group_id', $fanDetails->id)
@@ -743,70 +828,70 @@ class FanGroupController extends Controller
         //   }
         // return $myStarCount;
 
-        $currentdate = Carbon::now();
-        $current_timestamp = Carbon::now()->format('Y-m-d H:i:s');
+        // $currentdate = Carbon::now();
+        // $current_timestamp = Carbon::now()->format('Y-m-d H:i:s');
         // return $current_timestamp;
 
-        $data12 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
-        // return $data12;
+        // $data12 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
+        // // return $data12;
 
-        $data11 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
+        // $data11 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
 
-        $data10 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
+        // $data10 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
 
-        $data9 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
+        // $data9 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
 
-        $data8 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
+        // $data8 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
 
-        $data7 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
+        // $data7 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
 
-        $data6 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
+        // $data6 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
 
-        $data5 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
+        // $data5 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
 
-        $data4 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
+        // $data4 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
 
-        $data3 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
+        // $data3 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
 
-        $data2 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
+        // $data2 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
 
-        $data1 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
-
-
-        $firstStar12 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $current_timestamp)->whereDate('created_at', '>=', $data12)->count();
-        $firstStar11 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data12)->whereDate('created_at', '>=', $data11)->count();
-        $firstStar10 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data11)->whereDate('created_at', '>=', $data10)->count();
-        $firstStar9 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data10)->whereDate('created_at', '>=', $data9)->count();
-        $firstStar8 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data9)->whereDate('created_at', '>=', $data8)->count();
-        $firstStar7 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data8)->whereDate('created_at', '>=', $data7)->count();
-        $firstStar6 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data7)->whereDate('created_at', '>=', $data6)->count();
-        $firstStar5 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data6)->whereDate('created_at', '>=', $data5)->count();
-        $firstStar4 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data5)->whereDate('created_at', '>=', $data4)->count();
-        $firstStar3 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data4)->whereDate('created_at', '>=', $data3)->count();
-        $firstStar2 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data3)->whereDate('created_at', '>=', $data2)->count();
-        $firstStar1 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data2)->whereDate('created_at', '>=', $data1)->count();
-
-        $secondStar12 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $current_timestamp)->whereDate('created_at', '>=', $data12)->count();
-        $secondStar11 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data12)->whereDate('created_at', '>=', $data11)->count();
-        $secondStar10 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data11)->whereDate('created_at', '>=', $data10)->count();
-        $secondStar9 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data10)->whereDate('created_at', '>=', $data9)->count();
-        $secondStar8 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data9)->whereDate('created_at', '>=', $data8)->count();
-        $secondStar7 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data8)->whereDate('created_at', '>=', $data7)->count();
-        $secondStar6 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data7)->whereDate('created_at', '>=', $data6)->count();
-        $secondStar5 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data6)->whereDate('created_at', '>=', $data5)->count();
-        $secondStar4 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data5)->whereDate('created_at', '>=', $data4)->count();
-        $secondStar3 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data4)->whereDate('created_at', '>=', $data3)->count();
-        $secondStar2 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data3)->whereDate('created_at', '>=', $data2)->count();
-        $secondStar1 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data2)->whereDate('created_at', '>=', $data1)->count();
+        // $data1 = $currentdate->addDays(-7)->format('Y-m-d H:i:s');
 
 
-        $myStarAna = array();
-        array_push($myStarAna, $firstStar1, $firstStar2, $firstStar3, $firstStar4, $firstStar5, $firstStar6, $firstStar7, $firstStar8, $firstStar9, $firstStar10, $firstStar11, $firstStar12);
-        $myStarAnalytics = $myStarAna;
+        // $firstStar12 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $current_timestamp)->whereDate('created_at', '>=', $data12)->count();
+        // $firstStar11 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data12)->whereDate('created_at', '>=', $data11)->count();
+        // $firstStar10 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data11)->whereDate('created_at', '>=', $data10)->count();
+        // $firstStar9 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data10)->whereDate('created_at', '>=', $data9)->count();
+        // $firstStar8 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data9)->whereDate('created_at', '>=', $data8)->count();
+        // $firstStar7 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data8)->whereDate('created_at', '>=', $data7)->count();
+        // $firstStar6 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data7)->whereDate('created_at', '>=', $data6)->count();
+        // $firstStar5 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data6)->whereDate('created_at', '>=', $data5)->count();
+        // $firstStar4 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data5)->whereDate('created_at', '>=', $data4)->count();
+        // $firstStar3 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data4)->whereDate('created_at', '>=', $data3)->count();
+        // $firstStar2 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data3)->whereDate('created_at', '>=', $data2)->count();
+        // $firstStar1 = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data2)->whereDate('created_at', '>=', $data1)->count();
 
-        $anotherStarAna = array();
-        array_push($anotherStarAna, $secondStar1, $secondStar2, $secondStar3, $secondStar4, $secondStar5, $secondStar6, $secondStar7, $secondStar8, $secondStar9, $secondStar10, $secondStar11, $secondStar12);
-        $anotherStarAnalytics = $anotherStarAna;
+        // $secondStar12 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $current_timestamp)->whereDate('created_at', '>=', $data12)->count();
+        // $secondStar11 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data12)->whereDate('created_at', '>=', $data11)->count();
+        // $secondStar10 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data11)->whereDate('created_at', '>=', $data10)->count();
+        // $secondStar9 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data10)->whereDate('created_at', '>=', $data9)->count();
+        // $secondStar8 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data9)->whereDate('created_at', '>=', $data8)->count();
+        // $secondStar7 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data8)->whereDate('created_at', '>=', $data7)->count();
+        // $secondStar6 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data7)->whereDate('created_at', '>=', $data6)->count();
+        // $secondStar5 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data6)->whereDate('created_at', '>=', $data5)->count();
+        // $secondStar4 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data5)->whereDate('created_at', '>=', $data4)->count();
+        // $secondStar3 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data4)->whereDate('created_at', '>=', $data3)->count();
+        // $secondStar2 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data3)->whereDate('created_at', '>=', $data2)->count();
+        // $secondStar1 = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereDate('created_at', '<=', $data2)->whereDate('created_at', '>=', $data1)->count();
+
+
+        // $myStarAna = array();
+        // array_push($myStarAna, $firstStar1, $firstStar2, $firstStar3, $firstStar4, $firstStar5, $firstStar6, $firstStar7, $firstStar8, $firstStar9, $firstStar10, $firstStar11, $firstStar12);
+        // $myStarAnalytics = $myStarAna;
+
+        // $anotherStarAna = array();
+        // array_push($anotherStarAna, $secondStar1, $secondStar2, $secondStar3, $secondStar4, $secondStar5, $secondStar6, $secondStar7, $secondStar8, $secondStar9, $secondStar10, $secondStar11, $secondStar12);
+        // $anotherStarAnalytics = $anotherStarAna;
 
 
         return response()->json([
@@ -816,8 +901,10 @@ class FanGroupController extends Controller
             'anotherStarPost' => $anotherStarPost,
             'myStarAnalytics' => $myStarAnalytics,
             'anotherStarAnalytics' => $anotherStarAnalytics,
-            'sonet' => $myStarPosts,
-            'anotherStarPosts' => $anotherStarPosts,
+            'myStarWeek' => $myStarWeek,
+            'anotherStarWeek' => $anotherStarWeek,
+            // 'sonet' => $myStarPosts,
+            // 'anotherStarPosts' => $anotherStarPosts,
         ]);
     }
 
@@ -972,17 +1059,37 @@ class FanGroupController extends Controller
 
         Fan_Group_Join::where('fan_group_id', $fan_group_id)->where('user_id', $id)->where('id', '!=', $fanStore->id)->delete();
 
-        // Add ID(json) in User table
-        $user = User::find($id);
-        $fan_group_idd = (int) $fan_group_id;
+        // Add ID(json) in User Info table
+        $user = UserInfo::where('user_id', $id)->first();
+        // return $user;
+        if($user){
+            $fan_group_idd = (int) $fan_group_id;
 
-        $array =  $user->fan_group ? json_decode($user->fan_group) : [];
+            $array =  $user->user_fan_group_id ? json_decode($user->user_fan_group_id) : [];
 
-        if (!in_array($fan_group_idd, $array)) {
-            array_push($array,  $fan_group_idd);
+            if (!in_array($fan_group_idd, $array)) {
+                array_push($array,  $fan_group_idd);
+            }
+            $user->user_fan_group_id = json_encode($array);
+            $user->save();
+        }else{
+            // return 'partha';
+            $user = new UserInfo();
+            $fan_group_idd = (int) $fan_group_id;
+
+            $array = [];
+
+            if (!in_array($fan_group_idd, $array)) {
+                array_push($array,  $fan_group_idd);
+            }
+            
+            $user->user_id = $id;
+            $user->user_fan_group_id = json_encode($array);
+            $user->save();
+
+            // return gettype($user->user_fan_group_id);
         }
-        $user->fan_group = $array;
-        $user->save();
+        
 
 
         $fan_group = FanGroup::find($fan_group_id);
@@ -1118,6 +1225,7 @@ class FanGroupController extends Controller
 
         return response()->json([
             'status' => 200,
+            'fanDetails' =>$fanImage,
             'message' => 'Fan Group Image updated Successfully',
         ]);
     }

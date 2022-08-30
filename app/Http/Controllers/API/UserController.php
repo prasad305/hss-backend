@@ -20,6 +20,7 @@ use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
 use App\Models\LearningSession;
 use App\Models\SubCategory;
+use App\Models\UserEmployment;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChat;
 use App\Models\LiveChatRegistration;
@@ -43,6 +44,8 @@ use App\Models\PromoVideo;
 use App\Models\QnA;
 use App\Models\QnaRegistration;
 use App\Models\User;
+use App\Models\UserInterest;
+use App\Models\UserEducation;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
@@ -55,6 +58,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
 use App\Models\SouvenirCreate;
 use App\Models\FanGroup;
+use App\Models\UserInfo;
 use App\Models\Marketplace;
 
 
@@ -665,12 +669,232 @@ class UserController extends Controller
     {
         $interestTypes = InterestType::where('status', 1)->latest()->get();
 
+        $userId = auth('sanctum')->user()->id;
+        
+        $interest_topic_id = UserInterest::where('user_id', $userId)->first();
+
+        if($interest_topic_id){
+            $interest_topic_id = json_decode($interest_topic_id->interest_topic_id);
+        }else{
+            $interest_topic_id = [];
+        }
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
             'allinteresttypes' => $interestTypes,
+            'interest_topic_id' => $interest_topic_id,
         ]);
     }
+    
+
+    public function interestStore(Request $request)
+    {
+        $userId = auth('sanctum')->user()->id;
+        // return gettype($userId);
+        
+        $interestTypes = UserInterest::where('user_id', $userId)->first();
+
+        if($interestTypes){
+            $interestTypes->interest_topic_id = $request->interest_topic_id;
+            $interestTypes->save();
+            
+            return response()->json([
+                'status' => 200,
+                'message' => 'Interest Updated Successfully'
+            ]);
+        }else{
+            $newInterest = new UserInterest();
+            $newInterest->user_id = $userId;
+            $newInterest->interest_topic_id = $request->interest_topic_id;
+            $newInterest->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Interest Added Successfully'
+            ]);
+        }
+    }
+
+    public function userEducationCheck()
+    {
+        $userId = auth('sanctum')->user()->id;
+        
+        $educationList = UserEducation::where('user_id', $userId)->first();
+
+        // return $educationList;
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'educationList' => $educationList,
+        ]);
+    }
+
+    public function educationalStore(Request $request)
+    {
+        // return $request->all();
+        $userId = auth('sanctum')->user()->id;
+        // return gettype($userId);
+
+        $educationTypes = UserEducation::where('user_id', $userId)->first();
+
+        if($educationTypes){
+            
+            $educationTypes->subject = $request->subject;
+            $educationTypes->institute = $request->institute;
+            $educationTypes->grade = $request->degree;
+            $educationTypes->save();
+            
+            return response()->json([
+                'status' => 200,
+                'message' => 'Education Updated Successfully'
+            ]);
+        }else{
+            $newEducation = new UserEducation();
+            $newEducation->user_id = $userId;
+            $newEducation->subject = $request->subject;
+            $newEducation->institute = $request->institute;
+            $newEducation->grade = $request->degree;
+            $newEducation->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Education Added Successfully'
+            ]);
+        }
+    }
+
+    public function userEmploymentCheck()
+    {
+        $userId = auth('sanctum')->user()->id;
+        
+        $employmentList = UserEmployment::where('user_id', $userId)->first();
+
+        // return $employmentList;
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'employmentList' => $employmentList,
+        ]);
+    }
+    
+
+    public function employmentStore(Request $request)
+    {
+        // return $request->all();
+        $userId = auth('sanctum')->user()->id;
+        // return gettype($userId);
+
+        $educationTypes = UserEmployment::where('user_id', $userId)->first();
+
+        if($educationTypes){
+            
+            $educationTypes->occupation = $request->position;
+            $educationTypes->company = $request->company;
+            $educationTypes->salary = $request->salary;
+            $educationTypes->save();
+            
+            return response()->json([
+                'status' => 200,
+                'message' => 'Employment Updated Successfully'
+            ]);
+        }else{
+            $newEducation = new UserEmployment();
+            $newEducation->user_id = $userId;
+            $newEducation->occupation = $request->position;
+            $newEducation->company = $request->company;
+            $newEducation->salary = $request->salary;
+            $newEducation->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Employment Added Successfully'
+            ]);
+        }
+    }
+    
+    public function userPersonalList()
+    {
+        $userId = auth('sanctum')->user()->id;
+        
+        $employmentList = UserInfo::where('user_id', $userId)->first();
+        $userList = User::find($userId);
+
+        // return $employmentList;
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'employmentList' => $employmentList,
+            'userList' => $userList,
+        ]);
+    }
+
+    public function personalDataStore(Request $request)
+    {
+        // return $request->all();
+        $userId = auth('sanctum')->user()->id;
+
+        $userInfoTypes = UserInfo::where('user_id', $userId)->first();
+        $userList = User::find($userId);
+        if($userInfoTypes){
+            $userList->first_name = $request->first_name;
+            $userList->last_name = $request->last_name;
+            $userList->save();
+            
+            $userInfoTypes->country = $request->country;
+            $userInfoTypes->dob = $request->birthday;
+            $userInfoTypes->save();
+            
+            return response()->json([
+                'status' => 200,
+                'message' => 'UserInfo Updated Successfully'
+            ]);
+        }else{
+            $userList->first_name = $request->first_name;
+            $userList->last_name = $request->last_name;
+            $userList->save();
+
+            $newPersonalInfo = new UserInfo();
+            $newPersonalInfo->user_id = $userId;
+            $newPersonalInfo->country = $request->country;
+            $newPersonalInfo->dob = $request->birthday;
+            $newPersonalInfo->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'UserInfo Added Successfully'
+            ]);
+        }
+    }
+
+    public function userPasswordChanges(Request $request){
+        // $hashedPassword = Auth::user()->password;
+        $userId = auth('sanctum')->user()->id;
+        $users =User::find($userId);
+
+        // oldPassword);
+        // formData.append("newPassword", newPassword);
+
+        if (\Hash::check($request->oldPassword , $users->password )){
+
+            
+            $users->password = bcrypt($request->newPassword);
+            $users->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'User Updated Password'
+            ]);
+        }else{
+            return response()->json([
+                'status' => 204,
+                'message' => 'Not Updated Password'
+            ]);
+        }
+    }
+    
 
     public function registeredLivechat()
     {

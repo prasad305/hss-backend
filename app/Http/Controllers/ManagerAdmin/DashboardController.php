@@ -30,6 +30,8 @@ use App\Models\SubCategory;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 
 class DashboardController extends Controller
@@ -54,6 +56,38 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         return view('ManagerAdmin.profile.index', compact('user'));
+    }
+    public function settings()
+    {
+        $user = User::find(Auth::user()->id);
+        // dd($user);
+        return view('ManagerAdmin.profile.settings', compact('user'));
+    }
+    public function changePassword(Request $request){
+        // return $request->all();
+        $request->validate([
+            'oldPassword' => 'required',
+            'password' => 'required',
+            'confirmPassword' => ['same:password'],
+        ]);
+
+        $userId = auth('sanctum')->user()->id;
+        $users =User::find($userId);
+
+        // oldPassword);
+        // formData.append("newPassword", newPassword);
+
+        if (\Hash::check($request->oldPassword , $users->password )){
+
+            
+            $users->password = bcrypt($request->password);
+            $users->save();
+            Auth::logout();
+
+            return redirect()->back()->with('success', 'Changed Successfully');
+        }else{
+            return redirect()->back()->with('success', 'Not Changed');
+        }
     }
 
     public function learningSessions()

@@ -31,7 +31,6 @@ class CreateUsersTable extends Migration
             $table->string('otp')->nullable();
             $table->timestamp('otp_verified_at')->nullable();
             $table->string('image')->nullable();
-            $table->string('fan_group')->nullable();
             $table->string('cover_photo')->nullable();
             $table->string('email_send_status')->nullable();
             $table->string('user_type')->nullable();

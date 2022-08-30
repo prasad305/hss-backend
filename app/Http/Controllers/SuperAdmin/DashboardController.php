@@ -40,6 +40,7 @@ use App\Models\Vaccination;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
 {
@@ -83,6 +84,40 @@ class DashboardController extends Controller
 
     return view('SuperAdmin.dashboard.index', $data);
   }
+
+  public function settings()
+    {
+        $user = User::find(Auth::user()->id);
+        // dd($user);
+        return view('SuperAdmin.profile.settings', compact('user'));
+    }
+    public function changePassword(Request $request){
+        // return $request->all();
+        $request->validate([
+            'oldPassword' => 'required',
+            'password' => 'required',
+            'confirmPassword' => ['same:password'],
+        ]);
+
+        $userId = auth('sanctum')->user()->id;
+        $users =User::find($userId);
+
+        // oldPassword);
+        // formData.append("newPassword", newPassword);
+
+        if (\Hash::check($request->oldPassword , $users->password )){
+
+            
+            $users->password = bcrypt($request->password);
+            $users->save();
+            Auth::logout();
+
+            return redirect()->back()->with('success', 'Changed Successfully');
+        }else{
+            return redirect()->back()->with('success', 'Not Changed');
+        }
+    }
+
 
   public function auditions()
   {

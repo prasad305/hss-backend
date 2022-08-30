@@ -29,7 +29,10 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('category', [DashboardController::class, 'category'])->name('category');
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
+    Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
+    Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
 
+    
     // Dashboard Routes By Srabon
 
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');

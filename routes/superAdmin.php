@@ -44,6 +44,9 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin', 'prevent-back-history']], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    
+    Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
+    Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
 
     Route::get('/meetup-events', [DashboardController::class, 'meetupEvents'])->name('meetupEvents');
     Route::get('/learning-session', [DashboardController::class, 'learningSessions'])->name('learningSessions');
