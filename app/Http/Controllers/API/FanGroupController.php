@@ -520,7 +520,8 @@ class FanGroupController extends Controller
         $fanMedia = FanPost::where('fan_group_id', $fanDetails->id)->where('image', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
         $fanVideo = FanPost::where('fan_group_id', $fanDetails->id)->where('video', '!=', Null)->orderBy('id', 'DESC')->where('status', 1)->get();
 
-        $userJoinInfo = Fan_Group_Join::where('user_id', auth('sanctum')->user()->id)->where('approveStatus', 1)->get()->first();
+        $userJoinInfo = Fan_Group_Join::where('user_id', auth('sanctum')->user()->id)->get()->first();
+        $userStatus = Fan_Group_Join::where('user_id', auth('sanctum')->user()->id)->where('approveStatus', 1)->get()->first();
 
 
         return response()->json([
@@ -530,7 +531,7 @@ class FanGroupController extends Controller
             'fanVideo' => $fanVideo,
             'userId' => $userId,
             'member' => $fanGroupMemebers,
-            'myJoinStaus' => $userJoinInfo ? true : false,
+            'myJoinStaus' => $userStatus ? true : false,
             'myJoinData' => $userJoinInfo
 
 
