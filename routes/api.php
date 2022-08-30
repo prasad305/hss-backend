@@ -708,8 +708,12 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/pending-audition/{id}', [JudgeAuditionController::class, 'starSingleAudition']);
     Route::put('/star/approved/audition/{id}', [JudgeAuditionController::class, 'starApprovedAudition']);
     Route::put('/star/decline/audition/{id}', [JudgeAuditionController::class, 'starDeclineAudition']);
+    Route::post('/star/audition/video/marking', [JudgeAuditionController::class, 'judgeVideoMarking']);
+
     Route::get('/star/selectVideo/{id}', [AuditionController::class, 'getStarVideos']);
     Route::post('/star/starMarking', [AuditionController::class, 'starMarking']);
+
+    Route::get('/superstar/audition/videos/{round_info_id}', [JudgeAuditionController::class, 'round_judges_videos']);
     Route::get('superstar/audition/liveEditInstructions/{audition_id}', [JudgeAuditionController::class, 'liveEditInstructions']);
     Route::post('superstar/audition/updateAuditionInstruction/{audition_instruction_id}', [JudgeAuditionController::class, 'updateAuditionInstruction']);
     //srabon

@@ -350,28 +350,27 @@ class StarAuthController extends Controller
 
         $merged = $superStar->concat($juryBoard);
 
-        $user = $merged->where('qr_code',$request->qr_code)->first();
+        $user = $merged->where('qr_code', $request->qr_code)->first();
 
-            if ($user) {
-                if (User::find($user->star_id)->email && User::find($user->star_id)->phone) {
-                    return response()->json([
-                        'status'=>409,
-                        'message'=>'This Star Already Registered!',
-                    ]);
-                }else{
-                    return response()->json([
-                        'status'=>200,
-                        'star_id' => $user->star_id,
-                        'auth_type' => User::find($user->star_id)->user_type,
-                        'message'=>'QR Code Matched!',
-                    ]);
-                }
-
-            }else{
+        if ($user) {
+            if (User::find($user->star_id)->email && User::find($user->star_id)->phone) {
                 return response()->json([
-                    'status'=>401,
-                    'message'=>'Invalid QR Code!',
+                    'status' => 409,
+                    'message' => 'This Star Already Registered!',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 200,
+                    'star_id' => $user->star_id,
+                    'auth_type' => User::find($user->star_id)->user_type,
+                    'message' => 'QR Code Matched!',
                 ]);
             }
+        } else {
+            return response()->json([
+                'status' => 401,
+                'message' => 'Invalid QR Code!',
+            ]);
+        }
     }
 }

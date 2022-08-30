@@ -103,6 +103,8 @@ class AuditionController extends Controller
             }
             $audition->instruction = $request->instruction;
             $audition->description = $request->description;
+            $audition->user_reg_start_date = $request->user_reg_start_date;
+            $audition->user_reg_end_date = $request->user_reg_end_date;
             $audition->fees = $request->fees;
             $audition->status = 2;
 
@@ -1078,8 +1080,6 @@ class AuditionController extends Controller
                 'round_info_id' => 'required|exists:audition_round_infos,id',
                 'video_time_duration' => 'required',
                 'video_slot' => 'required',
-                'appeal_video_time_duration' => 'required',
-                'appeal_video_slot' => 'required',
                 'instruction' => 'required|min:10',
             ], [
                 'round_info_id.required' => 'Please Select Round Number',
@@ -1089,8 +1089,6 @@ class AuditionController extends Controller
                 'round_info_id' => 'required|exists:audition_round_infos,id',
                 'video_time_duration' => 'required',
                 'video_slot' => 'required',
-                'appeal_video_time_duration' => 'required',
-                'appeal_video_slot' => 'required',
                 'instruction' => 'required|min:10',
                 'image' => 'required|mimes:jpg,jpeg,png',
                 'video' => 'required|mimes:mp4,mkv',
@@ -1769,11 +1767,11 @@ class AuditionController extends Controller
 
         $group_b_videos = AuditionParticipant::with(['videos' => function ($query) use ($round_info_id, $type) {
             return $query->where([['round_info_id', $round_info_id], ['type', $type], ['group_b_jury_id', '!=', null]])->get();
-        }, 'participant'])->where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
+        }, 'participant'])->where([['audition_id', $audition_id]])->get();
 
         $group_c_videos = AuditionParticipant::with(['videos' => function ($query) use ($round_info_id, $type) {
             return $query->where([['round_info_id', $round_info_id], ['type', $type], ['group_c_jury_id', '!=', null]])->get();
-        }, 'participant'])->where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
+        }, 'participant'])->where([['audition_id', $audition_id]])->get();
 
 
         return response()->json([
