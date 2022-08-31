@@ -20,6 +20,7 @@ use App\Models\Audition\AuditionRoundInstructionSendInfo;
 use App\Models\Audition\AuditionRoundMarkTracking;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
+use App\Models\auditionJudgeMark;
 use App\Models\AuditionRoundInstruction;
 use App\Models\JuryGroup;
 use Carbon\Carbon;
@@ -38,7 +39,7 @@ class AuditionController extends Controller
             'events' => $events,
         ]);
     }
-    
+
     public function getAllAudition()
     {
         $auditions = Audition::where('status', '>', 0)->get();
@@ -2106,6 +2107,23 @@ class AuditionController extends Controller
         return response()->json([
             'status' => 200,
             'event' => $event,
+        ]);
+    }
+    public function getJudgeMark($audition_id, $round_info_id)
+    {
+
+        $participants = AuditionParticipant::whereHas('videos', function ($query) use ($round_info_id) {
+            $query->where([['round_info_id', $round_info_id]]);
+        })->with(['videos' => function ($query) use ($round_info_id) {
+            return $query->with(['judge_video_mark' => function ($q) {
+                return $q->sum('judge_mark');
+            }])->where([['round_info_id', $round_info_id]])->get();
+        }, 'participant'])
+            ->where([['audition_id', $audition_id]])
+            ->get();
+        return response()->json([
+            'status' => 200,
+            'participants' => $participants,
         ]);
     }
 }
