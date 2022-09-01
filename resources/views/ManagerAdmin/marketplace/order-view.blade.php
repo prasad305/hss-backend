@@ -57,12 +57,14 @@
                       <b>Invoice #{{$order->invoice_no}}</b><br>
                       <br>
                       <b>Order ID:</b> #{{$order->order_no}}<br>
-                      @if($order->status === '0')
-                      <b>Order Status:</b> <span class="badge badge-danger">Pending </span><br>
-                      @elseif($order->status === '1')
+                      @if($order->status == 1)
+                      <b>Order Status:</b> <span class="badge badge-danger">Ordered </span><br>
+                      @elseif($order->status == 2)
                       <b>Order Status:</b> <span class="badge badge-info">Received</span><br>
+                      @elseif($order->status == 3)
+                      <b>Order Status:</b> <span class="badge badge-info">Out for Delivery</span><br>
                       @else
-                      <b>Order Status:</b> <span class="badge badge-success"> Delivery </span><br>
+                      <b>Order Status:</b> <span class="badge badge-success"> Delivered </span><br>
                       @endif
                       <b>Total Price: </b>  {{ $order->total_price }} Tk
                    </div>
