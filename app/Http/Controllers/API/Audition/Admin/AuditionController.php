@@ -2115,15 +2115,16 @@ class AuditionController extends Controller
         $participants = AuditionParticipant::whereHas('videos', function ($query) use ($round_info_id) {
             $query->where([['round_info_id', $round_info_id]]);
         })->with(['videos' => function ($query) use ($round_info_id) {
-            return $query->with(['judge_video_mark' => function ($q) {
-                return $q->sum('judge_mark');
-            }])->where([['round_info_id', $round_info_id]])->get();
+            $query->with('judge_video_mark')->where([['round_info_id', $round_info_id]])->get();
         }, 'participant'])
             ->where([['audition_id', $audition_id]])
             ->get();
+
+        $auditionRoundInfo  = AuditionRoundInfo::find($round_info_id);
         return response()->json([
             'status' => 200,
             'participants' => $participants,
+            'auditionRoundInfo' => $auditionRoundInfo
         ]);
     }
 }
