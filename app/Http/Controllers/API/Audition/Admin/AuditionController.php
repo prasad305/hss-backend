@@ -2121,10 +2121,57 @@ class AuditionController extends Controller
             ->get();
 
         $auditionRoundInfo  = AuditionRoundInfo::find($round_info_id);
+        $roundBasedAuditionUploadVideos = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['audition_id', $audition_id], ['approval_status', 1]])->get();
+        $ableToMargeVideos = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['user_judge_total_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->get();
+
         return response()->json([
             'status' => 200,
             'participants' => $participants,
-            'auditionRoundInfo' => $auditionRoundInfo
+            'auditionRoundInfo' => $auditionRoundInfo,
+            'roundBasedAuditionUploadVideos' => $roundBasedAuditionUploadVideos,
+            'ableToMargeVideos' => $ableToMargeVideos,
+        ]);
+    }
+    public function makeRoundResultMerge($audition_id, $round_info_id)
+    {
+        $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
+
+        $ableToMargeVideos = AuditionUploadVideo::with('judge_video_mark')->where([['round_info_id', $round_info_id], ['user_judge_total_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->get();
+
+        foreach ($ableToMargeVideos as $videos) {
+            foreach ($videos->judge_video_mark->groupBy('audition_uploads_video_id') as $mark) {
+                $videos->user_judge_total_mark = $mark->sum('judge_mark') / $mark->count();
+                $videos->save();
+            }
+        }
+
+        $participants = AuditionParticipant::whereHas('videos', function ($query) use ($round_info_id) {
+            $query->where([['round_info_id', $round_info_id]]);
+        })->with(['videos' => function ($query) use ($round_info_id) {
+            return $query->where([['round_info_id', $round_info_id]])->get();
+        }, 'participant'])->where([['audition_id', $audition_id]])->get();
+
+        foreach ($participants as $parentKey => $auditionParticipant) {
+            $sum_of_final_mark = 0;
+            foreach ($auditionParticipant->videos as $key => $video) {
+                $sum_of_final_mark += $video->user_judge_total_mark == null ? 0 : $video->user_judge_total_mark;
+            }
+
+            $average = number_format(($sum_of_final_mark / $auditionRoundInfo->video_slot_num), 2);
+
+
+            $auditionRoundMarkTracking  = new AuditionRoundMarkTracking();
+            $auditionRoundMarkTracking->user_id = $auditionParticipant->user_id;
+            $auditionRoundMarkTracking->type = "general";
+            $auditionRoundMarkTracking->round_info_id = $round_info_id;
+            $auditionRoundMarkTracking->audition_id = $audition_id;
+            $auditionRoundMarkTracking->avg_mark = $average;
+            $auditionRoundMarkTracking->save();
+        }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Result Merged successfully !!',
+
         ]);
     }
 }

@@ -820,6 +820,7 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::post('audition-admin/audition/roundResultSendToManager', [AuditionController::class, 'roundResultSendToManager']);
 
     Route::get('audition-admin/audition/judgeMark/{audition_id}/{round_info_id}', [AuditionController::class, 'getJudgeMark']);
+    Route::get('audition-admin/audition/auditionRoundVideoMerge/{audition_id}/{round_info_id}', [AuditionController::class, 'makeRoundResultMerge']);
 });
 
 
