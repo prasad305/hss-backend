@@ -46,9 +46,22 @@ class StarAuthController extends Controller
                 $file = $request->file('image');
                 $extension = $file->getClientOriginalExtension();
                 $filename = 'uploads/images/users/stars' . time() . '.' . $extension;
-                Image::make($file)->resize(900, 400)->save($filename, 50);
+                Image::make($file)->resize(400, 400)->save($filename, 50);
 
                 $user->image = $filename;
+            }
+            if ($request->hasfile('cover_photo')) {
+                // return $request->image;
+                $destination = $user->cover_photo;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('cover_photo');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/users/stars' . time() . '.' . $extension;
+                Image::make($file)->resize(900, 400)->save($filename, 50);
+
+                $user->cover_photo = $filename;
             }
 
             $user->save();

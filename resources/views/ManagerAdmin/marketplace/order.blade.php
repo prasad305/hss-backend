@@ -69,12 +69,14 @@
                                 <td>{{ $data->total_price }}</td>
                                 <td>{{ $data->phone }}</td>
                                 <td>
-                                  @if($data->status == 0)
-                                  <span class="badge badge-danger" style="width: 70px;">Pending</span>
-                                  @elseif($data->status == 1)
-                                  <span class="badge badge-primary" style="width: 70px;">Received</span>
+                                  @if($data->status == 1)
+                                  <span class="badge badge-danger" style="width: 100px;">Ordered</span>
+                                  @elseif($data->status == 2)
+                                  <span class="badge badge-primary" style="width: 100px;">Received</span>
+                                  @elseif($data->status == 3)
+                                  <span class="badge badge-info" style="width: 100px;">Out for Delivery</span>
                                   @else
-                                  <span class="badge badge-success" style="width: 70px;">Delivery</span>
+                                  <span class="badge badge-success" style="width: 100px;">Delivered</span>
                                   @endif
                                 </td>
                                 
