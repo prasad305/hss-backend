@@ -54,6 +54,7 @@ Route::get('/guest/all_post/with-paginate/{limit}', [GuestController::class, 'pa
 
 
 Route::get('all/currency', [CurrencyController::class, 'allCurrency']);
+Route::get('all/sidebar/list', [CategoryController::class, 'allDataList']);
 Route::get('user/location', [CurrencyController::class, 'getLocation']);
 
 
