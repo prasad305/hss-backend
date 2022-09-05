@@ -19,4 +19,8 @@ class AuditionRoundMarkTracking extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function userUploadedVideo()
+    {
+        return $this->hasMany(AuditionUploadVideo::class, 'user_id', 'user_id');
+    }
 }

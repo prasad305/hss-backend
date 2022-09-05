@@ -1079,8 +1079,6 @@ class AuditionController extends Controller
         if (isset($old_instruction->id)) {
             $validator = Validator::make($request->all(), [
                 'round_info_id' => 'required|exists:audition_round_infos,id',
-                'video_time_duration' => 'required',
-                'video_slot' => 'required',
                 'instruction' => 'required|min:10',
             ], [
                 'round_info_id.required' => 'Please Select Round Number',
@@ -1088,8 +1086,6 @@ class AuditionController extends Controller
         } else {
             $validator = Validator::make($request->all(), [
                 'round_info_id' => 'required|exists:audition_round_infos,id',
-                'video_time_duration' => 'required',
-                'video_slot' => 'required',
                 'instruction' => 'required|min:10',
                 'image' => 'required|mimes:jpg,jpeg,png',
                 'video' => 'required|mimes:mp4,mkv',
@@ -2171,6 +2167,35 @@ class AuditionController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Result Merged successfully !!',
+
+        ]);
+    }
+
+    public function getEligibleParticipant($audition_id, $round_info_id)
+    {
+        $prevRound = $round_info_id - 1;
+
+        $participants = AuditionRoundMarkTracking::with(['userUploadedVideo' => function ($q) use ($audition_id, $round_info_id) {
+            $q->where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
+        }])->where([['audition_id', $audition_id], ['round_info_id',   $prevRound], ['wining_status', 1]])->get();
+
+        $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
+        return response()->json([
+            'status' => 200,
+            'participants' => $participants,
+            'auditionRoundInfo' => $auditionRoundInfo,
+
+        ]);
+    }
+    public function getAssignJudges($audition_id)
+
+    {
+        $assignedJudges = AuditionAssignJudge::where('audition_id', $audition_id)->get();
+
+        return response()->json([
+
+            'status' => 200,
+            'assignedJudges ' => $assignedJudges,
 
         ]);
     }
