@@ -67,13 +67,24 @@
                       <b>Invoice #{{$order->invoice_no}}</b><br>
                       <br>
                       <b>Order ID:</b> #{{$order->order_no}}<br>
-                      @if($order->status === '0')
-                      <b>Order Status:</b> <span class="badge badge-danger">Pending </span><br>
-                      @elseif($order->status === '1')
-                      <b>Order Status:</b> <span class="badge badge-info">Received</span><br>
+                      @if($order->status == 0)
+                      Status : <span class="badge badge-danger" style="width: 140px;">Pending</span>
+                      @elseif($order->status == 1)
+                      Status : <span class="badge badge-primary" style="width: 140px;">Approved for Payment</span>
+                      @elseif($order->status == 2)
+                      Status : <span class="badge badge-success" style="width: 140px;">Payment Complete</span>
+                      @elseif($order->status == 3)
+                      Status : <span class="badge badge-success" style="width: 140px;">Processing</span>
+                      @elseif($order->status == 4)
+                      Status : <span class="badge badge-success" style="width: 140px;">Product Received</span>
+                      @elseif($order->status == 5)
+                      Status : <span class="badge badge-success" style="width: 140px;">Processing</span>
+                      @elseif($order->status == 6)
+                      Status : <span class="badge badge-success" style="width: 140px;">Out for Delivery</span>
                       @else
-                      <b>Order Status:</b> <span class="badge badge-success"> Delivery </span><br>
+                      Status : <span class="badge badge-success" style="width: 140px;">Delivered</span>
                       @endif
+                      <br>
                       <b>Total Price: </b>  {{ $order->total_price }} Tk
                    </div>
                 </div>
