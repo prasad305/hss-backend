@@ -11,6 +11,7 @@ use App\Models\ChoiceList;
 use App\Models\SubCategory;
 use App\Models\SuperStar;
 use App\Models\Wallet;
+use App\Models\Currency;
 
 class CategoryController extends Controller
 {
@@ -61,6 +62,23 @@ class CategoryController extends Controller
             'selectedCategory' => $selectedCategory,
             'sugg_category' => $sugg_category,
             'allStar' => $allStar,
+        ]);
+    }
+
+    public function allDataList(){
+
+        $id = auth('sanctum')->user()->id;
+        $selectedCategory = ChoiceList::where('user_id', $id)->first();
+
+        $categoryCount = count(json_decode($selectedCategory->category));
+
+        // return $categoryCount;
+        $starCategoryCount = count(json_decode($selectedCategory->star_id));
+
+        return response()->json([
+            'status' => 200,
+            'categoryCount' => $categoryCount,
+            'starCategoryCount' => $starCategoryCount,
         ]);
     }
 
