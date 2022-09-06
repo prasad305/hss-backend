@@ -17,6 +17,7 @@ class CreateFanGroupsTable extends Migration
             $table->id();
             $table->string('group_name')->nullable();
             $table->string('slug')->nullable();
+            $table->string('room_id')->nullable();
             $table->longText('description')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

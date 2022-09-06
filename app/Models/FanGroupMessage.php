@@ -9,7 +9,7 @@ class FanGroupMessage extends Model
 {
     use HasFactory;
 
-    protected $with = ['user'];
+    // protected $with = ['user'];
 
     public function user()
     {
