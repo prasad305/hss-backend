@@ -218,7 +218,7 @@ Super Admin
                     ,success: function(data) {
                         if (data.type == 'success') {
                             Swal.fire(
-                                'Inactivated !',
+                                'Changes !',
                                 'Currency has been Changes. ' + data.message,
                                 'success'
                             )
