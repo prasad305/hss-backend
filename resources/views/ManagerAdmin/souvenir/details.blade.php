@@ -80,6 +80,14 @@ Manager Admin
                         Price
                         <h4 class="text-warning">{{ $post->price }}</h4>
                     </div>
+                    <div class="col-md-6 card py-3">
+                        Delivery Charge
+                        <h4 class="text-warning">{{ $post->delivery_charge }}</h4>
+                    </div>
+                    <div class="col-md-6 card py-3">
+                        Tax
+                        <h4 class="text-warning">{{ $post->tax }}</h4>
+                    </div>
                 </div>
 
            
