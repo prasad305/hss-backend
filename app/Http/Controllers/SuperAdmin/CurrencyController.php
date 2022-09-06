@@ -214,5 +214,17 @@ class CurrencyController extends Controller
 
         }
 
+        try {
+            return response()->json([
+                'type' => 'success',
+                'message' => 'Successfully Updated'
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => $exception->getMessage()
+            ]);
+        }
+
     }
 }
