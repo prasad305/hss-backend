@@ -2211,10 +2211,13 @@ class AuditionController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
+            $assignedJudges = AuditionAssignJudge::pluck('judge_id');
+
             $uploadVideo = new AuditionUploadVideo();
             $uploadVideo->audition_id = $request->audition_id;
             $uploadVideo->round_info_id = $request->round_info_id;
             $uploadVideo->user_id = $request->user_id;
+            $uploadVideo->judge_id =  json_encode($assignedJudges);
 
             if ($request->hasfile('video')) {
                 $destination = $uploadVideo->video;
