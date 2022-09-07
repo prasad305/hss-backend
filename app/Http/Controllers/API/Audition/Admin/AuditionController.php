@@ -2199,4 +2199,43 @@ class AuditionController extends Controller
 
         ]);
     }
+    public function liveAuditionVideoUpload(Request $request)
+
+    {
+        $validator = Validator::make($request->all(), [
+            'video' => 'required|mimes:mp4,mkv',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $uploadVideo = new AuditionUploadVideo();
+            $uploadVideo->audition_id = $request->audition_id;
+            $uploadVideo->round_info_id = $request->round_info_id;
+            $uploadVideo->user_id = $request->user_id;
+
+            if ($request->hasfile('video')) {
+                $destination = $uploadVideo->video;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file             = $request->video;
+                $folder_path       = 'uploads/videos/auditions/post/';
+                $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
+                // save to server
+                $request->video->move($folder_path, $file_new_name);
+                $uploadVideo->video = $folder_path . '/' . $file_new_name;
+            }
+
+            $uploadVideo->save();
+        }
+        return response()->json([
+
+            'status' => 200,
+            'message ' => "Video Uploaded Successfully!",
+
+        ]);
+    }
 }
