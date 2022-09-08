@@ -27,7 +27,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
      * post media upload
      */
     Route::post('mobile/post-media-upload', [UserMobileAppController::class, 'uploadPostMedia']);
-    Route::post('mobile/post-video-upload', [UserMobileAppController::class, 'uploadPostVideo']);
+    Route::post('mobile/only-media-upload', [UserMobileAppController::class, 'uploadPostVideo']);
 
 
     /**
@@ -38,4 +38,13 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
      * all star list
      */
     Route::get('/mobile/all-star-list', [UserMobileAppController::class, 'allStarList']);
+    /**
+     * user chat list
+     */
+    Route::get('/mobile/all-chat-list', [UserMobileAppController::class, 'MyChatList']);
+    /**
+     * message history get
+     */
+    Route::get('/mobile/fan-group-chat-history/{group_id}', [UserMobileAppController::class, 'getFanGroupMessage']);
+    Route::get('/mobile/qna-chat-history/{qna_id}', [UserMobileAppController::class, 'getQnaMessage']);
 });
