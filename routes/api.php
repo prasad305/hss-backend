@@ -822,8 +822,9 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('audition-admin/audition/judgeMark/{audition_id}/{round_info_id}', [AuditionController::class, 'getJudgeMark']);
     Route::get('audition-admin/audition/auditionRoundVideoMerge/{audition_id}/{round_info_id}', [AuditionController::class, 'makeRoundResultMerge']);
     Route::get('audition-admin/audition/getEligibleParticipant/{audition_id}/{round_info_id}', [AuditionController::class, 'getEligibleParticipant']);
-    Route::get('audition-admin/audition/assignJudges/{audition_id}', [AuditionController::class, 'getAssignJudges']);
     Route::post('audition-admin/audition/uploadLiveUserVideo', [AuditionController::class, 'liveAuditionVideoUpload']);
+    Route::post('audition-admin/audition/liveJudgeMarkUpload', [AuditionController::class, 'liveJudgeMarkUpload']);
+    Route::get('audition-admin/audition-mark/uploadedVideo/{user_id}/{audition_id}/{round_info_id}', [AuditionController::class, 'userUploadedVideos']);
 });
 
 

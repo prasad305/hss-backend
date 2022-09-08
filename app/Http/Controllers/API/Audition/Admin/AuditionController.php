@@ -2187,18 +2187,7 @@ class AuditionController extends Controller
 
         ]);
     }
-    public function getAssignJudges($audition_id)
 
-    {
-        $assignedJudges = AuditionAssignJudge::where('audition_id', $audition_id)->get();
-
-        return response()->json([
-
-            'status' => 200,
-            'assignedJudges ' => $assignedJudges,
-
-        ]);
-    }
     public function liveAuditionVideoUpload(Request $request)
 
     {
@@ -2238,6 +2227,51 @@ class AuditionController extends Controller
 
             'status' => 200,
             'message ' => "Video Uploaded Successfully!",
+
+        ]);
+    }
+    public function userUploadedVideos($user_id, $audition_id, $round_info_id)
+    {
+
+
+        // $videos = AuditionUploadVideo::where([['user_id', $user_id], ['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
+        return response()->json([
+
+            'status' => 200,
+            // 'videos' => $videos,
+            'user_id' => $user_id,
+            'audition_id' => $audition_id,
+            'round_info_id' => $round_info_id
+
+        ]);
+    }
+    public function liveJudgeMarkUpload(Request $request)
+    {
+
+        $videos = AuditionUploadVideo::where([['user_id', $request->user_id], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->first();
+        $validator = Validator::make($request->all(), [
+            'judge_mark' => 'required',
+            'judge_comment' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $judgeMark = new auditionJudgeMark();
+            $judgeMark->audition_id = $request->audition_id;
+            $judgeMark->round_info_id = $request->round_info_id;
+            $judgeMark->judge_id = $request->judge_id;
+            $judgeMark->judge_mark = $request->judge_mark;
+            $judgeMark->judge_comment = $request->judge_comment;
+            $judgeMark->audition_uploads_video_id = $videos->id;
+            $judgeMark->save();
+        }
+        return response()->json([
+
+            'status' => 200,
+            'message ' => "Video Marking Successfull!",
 
         ]);
     }
