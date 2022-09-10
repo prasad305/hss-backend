@@ -10,6 +10,7 @@ use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Bidding;
+use App\Models\FanGroupMessage;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
 use App\Models\LiveChatRegistration;
@@ -21,13 +22,16 @@ use App\Models\Marketplace;
 use App\Models\MarketplaceOrder;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
+use App\Models\MyChatList;
 use App\Models\Notification;
 use App\Models\QnA;
+use App\Models\QnaMessage;
 use App\Models\QnaRegistration;
 use App\Models\User;
 use App\Models\UserInfo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
@@ -109,7 +113,7 @@ class UserMobileAppController extends Controller
             $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->time_interval)->format('H:i:s');
             $eventRegistration->qna_id = $eventId;
             $eventRegistration->amount = $request->fee;
-            $eventRegistration->room_id = '-' . Str::random(19);
+            $eventRegistration->room_id = Str::random(20);
             $eventRegistration->qna_date = $event->event_date;
             $eventRegistration->qna_start_time = Carbon::parse($request->start_time)->format('H:i:s');
             $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
@@ -177,6 +181,20 @@ class UserMobileAppController extends Controller
         $eventRegistration->payment_status = 1;
         $eventRegistration->save();
 
+
+        /**
+         * qna add to my chat list
+         */
+
+        if ($modelName == 'qna') {
+            $myChatList = new MyChatList();
+            $myChatList->title =  $event->title;
+            $myChatList->type =  'qna';
+            $myChatList->qna_id =  $eventRegistration->id;
+            $myChatList->user_id =  Auth()->user()->id;
+            $myChatList->status =  1;
+            $myChatList->save();
+        }
 
         $activity->user_id = $user->id;
         $activity->event_id = $event->id;
@@ -415,6 +433,47 @@ class UserMobileAppController extends Controller
         $allStars = User::where('user_type', 'star')->where('status', 1)->orderBy('id', 'DESC')->get();
         return response()->json([
             "stars" =>  $allStars
+        ]);
+    }
+
+    /**
+     * my chat list
+     */
+    public function MyChatList()
+    {
+        $myChatList = MyChatList::where('user_id', Auth()->user()->id)->get();
+
+        return response()->json([
+            "status" => 200,
+            "chatList" => $myChatList
+        ]);
+    }
+
+
+
+    /**
+     * get fan group message
+     */
+    public function getFanGroupMessage($group_id)
+    {
+        $fanMessageHistory = FanGroupMessage::where([['group_id', $group_id], ['status', 1]])->get();
+
+        return response()->json([
+            "status" => 200,
+            "chat_history" => $fanMessageHistory
+        ]);
+    }
+
+    /**
+     * get qna message history
+     */
+    public function getQnaMessage($qna_id)
+    {
+
+        $qnaMessageHistory = QnaMessage::where([['sender_id', Auth()->user()->id], ['qna_id', $qna_id]])->get();
+        return response()->json([
+            "status" => 200,
+            "qna_history" => $qnaMessageHistory
         ]);
     }
 }

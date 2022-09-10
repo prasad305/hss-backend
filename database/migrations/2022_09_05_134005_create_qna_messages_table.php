@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFanGroupMessagesTable extends Migration
+class CreateQnaMessagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateFanGroupMessagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('fan_group_messages', function (Blueprint $table) {
+        Schema::create('qna_messages', function (Blueprint $table) {
             $table->id();
-            $table->integer('sender_id')->nullable();
-            $table->string('room_id')->nullable();
+            $table->unsignedBigInteger('sender_id')->nullable();
+            $table->unsignedBigInteger('qna_id')->nullable();
             $table->string('sender_name')->nullable();
+            $table->longText('room_id')->nullable();
+            $table->string('msg_type')->nullable();
             $table->string('sender_image')->nullable();
-            $table->integer('group_id')->nullable();
-            $table->integer('position')->nullable();
+            $table->string('media')->nullable();
             $table->longText('text')->nullable();
             $table->string('time')->nullable();
             $table->integer('status')->nullable();
@@ -35,6 +36,6 @@ class CreateFanGroupMessagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fan_group_messages');
+        Schema::dropIfExists('qna_messages');
     }
 }

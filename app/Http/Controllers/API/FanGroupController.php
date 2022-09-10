@@ -14,6 +14,7 @@ use App\Models\Notification;
 use App\Models\Wallet;
 use App\Models\Fan_Group_Join;
 use App\Models\FanGroupMessage;
+use App\Models\MyChatList;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -126,6 +127,7 @@ class FanGroupController extends Controller
             $fangroup->club_points = $request->club_points;
             $fangroup->start_date = $request->start_date;
             $fangroup->end_date = $request->end_date;
+            $fangroup->room_id = Str::random(20);
             $fangroup->min_member = $request->min_member;
             $fangroup->max_member = $request->max_member;
             $fangroup->created_by = $id;
@@ -589,9 +591,9 @@ class FanGroupController extends Controller
         $useFan = UserInfo::where('user_id', $id)->first();
 
 
-        if($useFan){
+        if ($useFan) {
             $fanUser = json_decode($useFan->user_fan_group_id);
-        }else{
+        } else {
             $fanUser = json_decode('[]');
         }
         // $fanUser = json_decode($useFan->user_fan_group_id ? $useFan->user_fan_group_id : '[]');
@@ -734,56 +736,56 @@ class FanGroupController extends Controller
 
         // $interval = $fanDetails->start_date->diff($fanDetails->end_date);
 
-        
+
         $current = Carbon::parse($fanDetails->start_date);
         $newCurrent = Carbon::parse($fanDetails->start_date);
         $end = Carbon::parse($fanDetails->end_date);
 
         $length = $end->diffInDays($current);
-        
-        
-        $week = (int)( $length / 7);
-        if($week * 7 == $length){
+
+
+        $week = (int)($length / 7);
+        if ($week * 7 == $length) {
             $week = $week;
-        }else{
+        } else {
             $week = $week + 1;
         }
 
-        
+
         // $current_timestamp = Carbon::parse($fanDetails->start_date)->format('Y-m-d H:i:s');
         // $end_timestamp = Carbon::parse($current_timestamp->addDays(7))->format('Y-m-d H:i:s');
-        
-        
+
+
         $anotherStarArray = array();
         $anotherStarWeek = array();
-        
-        for($i = 1; $i <= $week; $i++){
-            $current_timestamp =(string) $current;
-            $end_timestamp =(string) ($current->addDays(7));
 
-            $firstStarPost = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id) ->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
-            $fan_Group_Join = Fan_Group_Join::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id) ->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
-            $fanGroupMessage = FanGroupMessage::where('position', 2)->where('group_id', $fanDetails->id) ->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
+        for ($i = 1; $i <= $week; $i++) {
+            $current_timestamp = (string) $current;
+            $end_timestamp = (string) ($current->addDays(7));
 
-            array_push($anotherStarArray, ($firstStarPost+$fanGroupMessage+$fan_Group_Join));
+            $firstStarPost = FanPost::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
+            $fan_Group_Join = Fan_Group_Join::where('star_id', $fanDetails->another_star)->where('fan_group_id', $fanDetails->id)->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
+            $fanGroupMessage = FanGroupMessage::where('position', 2)->where('group_id', $fanDetails->id)->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
+
+            array_push($anotherStarArray, ($firstStarPost + $fanGroupMessage + $fan_Group_Join));
             array_push($anotherStarWeek, $i);
         }
 
         // return $anotherStarArray;
-        
-        
+
+
         $myStarArray = array();
         $myStarWeek = array();
-        
-        for($i = 1; $i <= $week; $i++){
-            $current_timestamp =(string) $newCurrent;
-            $end_timestamp =(string) ($newCurrent->addDays(7));
 
-            $secondStarPost = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id) ->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
-            $fan_Group_Join = Fan_Group_Join::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id) ->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
-            $fanGroupMessage = FanGroupMessage::where('position', 1)->where('group_id', $fanDetails->id) ->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
+        for ($i = 1; $i <= $week; $i++) {
+            $current_timestamp = (string) $newCurrent;
+            $end_timestamp = (string) ($newCurrent->addDays(7));
 
-            array_push($myStarArray, ($secondStarPost+$fanGroupMessage+$fan_Group_Join));
+            $secondStarPost = FanPost::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
+            $fan_Group_Join = Fan_Group_Join::where('star_id', $fanDetails->my_star)->where('fan_group_id', $fanDetails->id)->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
+            $fanGroupMessage = FanGroupMessage::where('position', 1)->where('group_id', $fanDetails->id)->whereBetween('created_at', [$current_timestamp, $end_timestamp])->count();
+
+            array_push($myStarArray, ($secondStarPost + $fanGroupMessage + $fan_Group_Join));
             array_push($myStarWeek, $i);
         }
 
@@ -791,10 +793,10 @@ class FanGroupController extends Controller
 
         $myStarAnalytics = $myStarArray;
         $myStarWeek = $myStarWeek;
-        
+
         $anotherStarAnalytics = $anotherStarArray;
         $anotherStarWeek = $anotherStarWeek;
-        
+
 
 
 
@@ -1051,7 +1053,6 @@ class FanGroupController extends Controller
         // dd($latestFanID);
 
         $showFanGroup = FanGroup::find($fan_group_id);
-
         $fanStore = new Fan_Group_Join();
         $fanStore->fan_group_id = $request->fan_group_id;
         $fanStore->star_id = $request->star_id;
@@ -1059,13 +1060,26 @@ class FanGroupController extends Controller
         $fanStore->user_id = $id;
         $fanStore->warning_count = 0;
 
+        $fanGroupChat = new MyChatList();
+        $fanGroupChat->title =  $showFanGroup->group_name;
+        $fanGroupChat->type =  'fan-group';
+        $fanGroupChat->fan_group_id =  $fan_group_id;
+        $fanGroupChat->user_id =  $id;
+
+
+
         if ($showFanGroup->join_approval_status == 1) {
             $fanStore->approveStatus = 1;
+            $fanGroupChat->status = 1;
         } else {
             $fanStore->approveStatus = 0;
+            $fanGroupChat->status = 0;
         }
 
         $fanStore->save();
+        $fanGroupChat->save();
+
+
 
 
         Fan_Group_Join::where('fan_group_id', $fan_group_id)->where('user_id', $id)->where('id', '!=', $fanStore->id)->delete();
@@ -1073,7 +1087,7 @@ class FanGroupController extends Controller
         // Add ID(json) in User Info table
         $user = UserInfo::where('user_id', $id)->first();
         // return $user;
-        if($user){
+        if ($user) {
             $fan_group_idd = (int) $fan_group_id;
 
             $array =  $user->user_fan_group_id ? json_decode($user->user_fan_group_id) : [];
@@ -1083,7 +1097,7 @@ class FanGroupController extends Controller
             }
             $user->user_fan_group_id = json_encode($array);
             $user->save();
-        }else{
+        } else {
             // return 'partha';
             $user = new UserInfo();
             $fan_group_idd = (int) $fan_group_id;
@@ -1093,14 +1107,14 @@ class FanGroupController extends Controller
             if (!in_array($fan_group_idd, $array)) {
                 array_push($array,  $fan_group_idd);
             }
-            
+
             $user->user_id = $id;
             $user->user_fan_group_id = json_encode($array);
             $user->save();
 
             // return gettype($user->user_fan_group_id);
         }
-        
+
 
 
         $fan_group = FanGroup::find($fan_group_id);
@@ -1245,7 +1259,7 @@ class FanGroupController extends Controller
 
         return response()->json([
             'status' => 200,
-            'fanDetails' =>$fanImage,
+            'fanDetails' => $fanImage,
             'message' => 'Fan Group Image updated Successfully',
         ]);
     }
