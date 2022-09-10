@@ -2128,6 +2128,26 @@ class AuditionController extends Controller
             'ableToMargeVideos' => $ableToMargeVideos,
         ]);
     }
+    public function getEligibleParticipant($audition_id, $round_info_id)
+    {
+        $prevRound = $round_info_id - 1;
+
+        $participants = AuditionRoundMarkTracking::with(['userUploadedVideo' => function ($q) use ($audition_id, $round_info_id) {
+            $q->with('judge_video_mark')->where([['round_info_id', $round_info_id]])->where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
+        }])->where([['audition_id', $audition_id], ['round_info_id',   $prevRound], ['wining_status', 1]])->get();
+
+        $ableToMargeVideos = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['user_judge_total_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->get();
+
+
+        $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
+        return response()->json([
+            'status' => 200,
+            'participants' => $participants,
+            'auditionRoundInfo' => $auditionRoundInfo,
+            'ableToMargeVideos' => $ableToMargeVideos,
+
+        ]);
+    }
     public function makeRoundResultMerge($audition_id, $round_info_id)
     {
         $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
@@ -2153,7 +2173,7 @@ class AuditionController extends Controller
                 $sum_of_final_mark += $video->user_judge_total_mark == null ? 0 : $video->user_judge_total_mark;
             }
 
-            $average = number_format(($sum_of_final_mark / $auditionRoundInfo->video_slot_num), 2);
+            $average = number_format(($sum_of_final_mark / ($auditionRoundInfo->video_slot_num ? $auditionRoundInfo->video_slot_num : 1)), 2);
 
 
             $auditionRoundMarkTracking  = new AuditionRoundMarkTracking();
@@ -2171,22 +2191,6 @@ class AuditionController extends Controller
         ]);
     }
 
-    public function getEligibleParticipant($audition_id, $round_info_id)
-    {
-        $prevRound = $round_info_id - 1;
-
-        $participants = AuditionRoundMarkTracking::with(['userUploadedVideo' => function ($q) use ($audition_id, $round_info_id) {
-            $q->where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
-        }])->where([['audition_id', $audition_id], ['round_info_id',   $prevRound], ['wining_status', 1]])->get();
-
-        $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
-        return response()->json([
-            'status' => 200,
-            'participants' => $participants,
-            'auditionRoundInfo' => $auditionRoundInfo,
-
-        ]);
-    }
 
     public function liveAuditionVideoUpload(Request $request)
 
@@ -2206,6 +2210,7 @@ class AuditionController extends Controller
             $uploadVideo->audition_id = $request->audition_id;
             $uploadVideo->round_info_id = $request->round_info_id;
             $uploadVideo->user_id = $request->user_id;
+            $uploadVideo->approval_status = 1;
             $uploadVideo->judge_id =  json_encode($assignedJudges);
 
             if ($request->hasfile('video')) {
@@ -2234,14 +2239,11 @@ class AuditionController extends Controller
     {
 
 
-        // $videos = AuditionUploadVideo::where([['user_id', $user_id], ['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
+        $videos = AuditionUploadVideo::where([['user_id', $user_id], ['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
         return response()->json([
 
             'status' => 200,
-            // 'videos' => $videos,
-            'user_id' => $user_id,
-            'audition_id' => $audition_id,
-            'round_info_id' => $round_info_id
+            'videos' => $videos,
 
         ]);
     }
