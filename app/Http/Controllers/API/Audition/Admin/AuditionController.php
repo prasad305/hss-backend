@@ -2261,20 +2261,33 @@ class AuditionController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $judgeMark = new auditionJudgeMark();
-            $judgeMark->audition_id = $request->audition_id;
-            $judgeMark->round_info_id = $request->round_info_id;
-            $judgeMark->judge_id = $request->judge_id;
-            $judgeMark->judge_mark = $request->judge_mark;
-            $judgeMark->judge_comment = $request->judge_comment;
-            $judgeMark->audition_uploads_video_id = $videos->id;
-            $judgeMark->save();
+
+            $judgeMarks = AuditionJudgeMark::where([['judge_id', $request->judge_id], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->first();
+
+            if (!$judgeMarks) {
+                $judgeMark = new auditionJudgeMark();
+                $judgeMark->audition_id = $request->audition_id;
+                $judgeMark->round_info_id = $request->round_info_id;
+                $judgeMark->judge_id = $request->judge_id;
+                $judgeMark->judge_mark = $request->judge_mark;
+                $judgeMark->judge_comment = $request->judge_comment;
+                $judgeMark->audition_uploads_video_id = $videos->id;
+                $judgeMark->save();
+
+                return response()->json([
+
+                    'status' => 200,
+                    'message' => "Video Marking Successfull!",
+
+                ]);
+            } else {
+                return response()->json([
+
+                    'status' => 400,
+                    'message' => "Mark Already Submitted !",
+
+                ]);
+            }
         }
-        return response()->json([
-
-            'status' => 200,
-            'message ' => "Video Marking Successfull!",
-
-        ]);
     }
 }
