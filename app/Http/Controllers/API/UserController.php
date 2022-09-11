@@ -2103,6 +2103,7 @@ class UserController extends Controller
     {
         $audition = Audition::where('slug', $event_slug)->first();
         $round_info = AuditionRoundInfo::find($audition->active_round_info_id);
+        $totalRound = AuditionRoundInfo::count('audition_id', $audition->id);
         $round_instruction = AuditionRoundInstruction::where('round_info_id', $round_info->id)->first();
         $myRoud = AuditionRoundMarkTracking::where('user_id', auth()->user()->id)->where('wining_status', 1)->where('audition_id',  $audition->id)->get();
 
@@ -2115,6 +2116,7 @@ class UserController extends Controller
             'round_info' => $round_info,
             'round_instruction' => $round_instruction,
             'myRoundPass' =>  count($myRoud),
+            'totalRound' => $totalRound
         ]);
     }
 
