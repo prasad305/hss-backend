@@ -2262,7 +2262,7 @@ class AuditionController extends Controller
             ]);
         } else {
 
-            $judgeMarks = AuditionJudgeMark::where([['judge_id', $request->judge_id], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->first();
+            $judgeMarks = AuditionJudgeMark::where([['judge_id', $request->judge_id], ['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id], ['audition_uploads_video_id', $videos->id]])->first();
 
             if (!$judgeMarks) {
                 $judgeMark = new auditionJudgeMark();
