@@ -80,9 +80,9 @@ class AuditionController extends Controller
             $audition_info->jury_groups = $auditionRule->jury_groups;
             $audition_info->event_start_date = Carbon::parse($request->start_date);
             $audition_info->event_end_date = date('Y-m-d', strtotime($request->end_date));
-            $audition_info->instruction_prepare_start_date = Carbon::parse($request->start_date);
-            $audition_info->instruction_prepare_end_date = Carbon::parse($request->instruction_prepare_start_date)->addDays($auditionRule->instruction_prepare_period);
-            $audition_info->registration_start_date = Carbon::parse($audition_info->instruction_prepare_end_date)->addDays(1);
+            // $audition_info->instruction_prepare_start_date = Carbon::parse($request->start_date);
+            // $audition_info->instruction_prepare_end_date = Carbon::parse($request->instruction_prepare_start_date)->addDays($auditionRule->instruction_prepare_period);
+            $audition_info->registration_start_date = Carbon::parse($audition_info->event_start_date);
             $audition_info->registration_end_date = Carbon::parse($audition_info->registration_start_date)->addDays($auditionRule->registration_period);
             $audition_info->save();
 
@@ -236,7 +236,11 @@ class AuditionController extends Controller
         $auditionAdmins = User::whereNotIn('id', Audition::pluck('audition_admin_id'))->where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
         $subCategories = SubCategory::where([['category_id', auth()->user()->category_id], ['status', 1]])->orderBY('id', 'desc')->get();
         $auditionRule = AuditionRules::where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->first();
-        return view('ManagerAdmin.audition.create', compact('auditionAdmins', 'subCategories', 'auditionRule'));
+
+        $auditionRoundRule = AuditionRoundRule::where([['audition_rules_id',   $auditionRule->id], ['status', 1]])->count();
+
+
+        return view('ManagerAdmin.audition.create', compact('auditionAdmins', 'subCategories', 'auditionRule', 'auditionRoundRule'));
     }
 
     public function assignManpower($audition_id)
@@ -453,9 +457,11 @@ class AuditionController extends Controller
 
         $generalMarkTraking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 0], ['type', 'general']])->pluck('user_id')->toArray();
         $appealMarkTraking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 0], ['type', 'appeal']])->pluck('user_id')->toArray();
+        // $generalWiningTracking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 1], ['type', 'general']])->pluck('user_id')->toArray();
+        $appealWinningTracking = AuditionRoundMarkTracking::where('round_info_id', $round_info_id)->where([['wining_status', 1], ['type', 'appeal']])->pluck('user_id')->toArray();
 
-        $notAppealedGeneralVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($generalMarkTraking, $appealMarkTraking, $round_info_id) {
-            return $q->where([['approval_status', 1], ['round_info_id', $round_info_id], ['type', 'general']])->whereNotIn('user_id', $appealMarkTraking)->whereIn('user_id', $generalMarkTraking)->get();
+        $notAppealedGeneralVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($generalMarkTraking, $appealMarkTraking, $round_info_id, $appealWinningTracking) {
+            return $q->where([['approval_status', 1], ['round_info_id', $round_info_id], ['type', 'general']])->whereNotIn('user_id', $appealMarkTraking)->whereNotIn('user_id', $appealWinningTracking)->whereIn('user_id', $generalMarkTraking)->get();
         }])->where([['id', $round_info_id], ['wildcard', 1], ['videofeed_status', 0], ['round_type', 0]])->first();
 
 
@@ -467,7 +473,7 @@ class AuditionController extends Controller
     }
     public function videoPublishedToVideofeed($round_info_id)
     {
-        $published = AuditionRoundInfo::findOrFail($round_info_id)->update([
+        $published = AuditionRoundInfo::where('id', $round_info_id)->update([
             'videofeed_status' => 1
         ]);
         if ($published) {

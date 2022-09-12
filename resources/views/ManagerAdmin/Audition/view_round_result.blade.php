@@ -48,19 +48,19 @@
                         <div class="col-md-4 d-flex justify-content-center">
                             <div class="cardT">
                                 <div class="card__title">{{ count($wining_users) }}<br /> Users</div>
-                                <div class="card__footer">selected user from jury result</div>
+                                <div class="card__footer">selected user result</div>
                             </div>
 
                         </div>
                         <div class="col-md-4 d-flex justify-content-center">
                             <div class="cardT">
                                 <div class="card__title">{{ count($failed_users) }}<br /> Users</div>
-                                <div class="card__footer">Unselected user from jury result</div>
+                                <div class="card__footer">Unselected user result</div>
                             </div>
                         </div>
                     </div>
 
-                    @if ( $type == 'general' ? $round_result->manager_status < 2 : $round_result->appeal_manager_status < 2)
+                    @if ($type == 'general' ? $round_result->manager_status < 2 : $round_result->appeal_manager_status < 2)
                         <div class="row my-2">
                             <div class="col-md-4 d-flex justify-content-center">
                                 <div class="comment">
@@ -80,9 +80,10 @@
 
                 <section>
                     <div class="d-flex justify-content-center my-4">
-                        <button class="btn btnGradient w-50" {{  $type == 'general' ?  $round_result->manager_status >= 2 : $round_result->appeal_manager_status >= 2  ? 'disabled' : '' }}
+                        <button class="btn btnGradient w-50"
+                            {{ ($type == 'general' ? $round_result->manager_status >= 2 : $round_result->appeal_manager_status >= 2) ? 'disabled' : '' }}
                             type="submit">
-                            {{  $type == 'general' ?  $round_result->manager_status >= 2 : $round_result->appeal_manager_status >= 2 ? 'Already Published' : 'Publish For User' }}
+                            {{ ($type == 'general' ? $round_result->manager_status >= 2 : $round_result->appeal_manager_status >= 2) ? 'Already Published' : 'Publish For User' }}
                         </button>
                     </div>
                 </section>
