@@ -43,6 +43,7 @@ class AuditionRoundRulesController extends Controller
                 'video_upload_period' => 'required',
                 'jury_or_judge_mark_period' => 'required',
                 'result_publish_period' => 'required',
+                'round_type' => 'required',
                 // 'appeal_period' => 'required',
                 // 'appeal_result_publish_period' => 'required',
             ],
@@ -53,19 +54,21 @@ class AuditionRoundRulesController extends Controller
                 'mark_live_or_offline.required_if' => 'Select Mark Offline or Live',
                 'wildcard.required' => 'Select Wild Card Options Yes or No',
                 'video_feed.required' => 'Select Video Feed Options Yes or No',
+                'round_type.required' => 'Select Round Options Yes or No',
             ]
         );
 
         $round = AuditionRoundRule::find($request->round_id);
 
         $round->has_user_vote_mark = $request->has_user_vote_mark;
+        $round->status = 1;
 
         if ($request->has_user_vote_mark == 1) {
             $round->mark_live_or_offline = $request->mark_live_or_offline;
             $round->user_vote_mark = $request->user_vote_mark == null ? 0 : $request->user_vote_mark;
         } else {
             $round->mark_live_or_offline = null;
-            $round->user_vote_mark = null;
+            $round->user_vote_mark = 0;
         }
 
         $round->has_jury_or_judge_mark = $request->has_jury_or_judge_mark;
