@@ -11,6 +11,7 @@ use App\Http\Controllers\SuperAdmin\AuctionController;
 use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
 use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
 use App\Http\Controllers\SuperAdmin\AuditionRulesController;
+use App\Http\Controllers\SuperAdmin\AuditionUserVoteController;
 use App\Http\Controllers\SuperAdmin\SuperStarController;
 use App\Http\Controllers\SuperAdmin\JuryBoardController;
 use App\Http\Controllers\SuperAdmin\DashboardInfoController;
@@ -35,6 +36,7 @@ use App\Http\Controllers\SuperAdmin\ReportController;
 use App\Http\Controllers\SuperAdmin\SimplePostController;
 use App\Http\Controllers\SuperAdmin\SouvenirController;
 use App\Http\Controllers\SuperAdmin\SubCategoryController;
+use App\Models\Audition\AuditionUserVoteMark;
 use App\Models\PaymentMethod;
 use App\Models\Slider;
 use Illuminate\Support\Facades\Route;
@@ -129,6 +131,16 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/audition-superstar-events', [DashboardController::class, 'auditionSuperstarEvents'])->name('auditionEvents.superstarEvents');
     Route::get('/auditionAdmin-list', [DashboardController::class, 'auditionAdminList'])->name('auditionEvents.auditionAdminList');
     Route::get('/audition-Admin-events', [DashboardController::class, 'auditionAdminEvents'])->name('auditionEvents.auditionAdminEvents');
+
+    // UserVoteMarkSetting
+
+    Route::get('audition-user-mark', [AuditionUserVoteController::class, 'index'])->name('userVoteMark.index');
+    Route::get('userVoteMark-create', [AuditionUserVoteController::class, 'userVoteMarkCreate'])->name('userVoteMark.create');
+    Route::post('userVoteMark-store', [AuditionUserVoteController::class, 'userVoteMarkStore'])->name('userVoteMark.store');
+    Route::get('userVoteMark-edit/{id}', [AuditionUserVoteController::class, 'userVoteMarkEdit'])->name('userVoteMark.edit');
+    Route::put('userVoteMark-update/{id}', [AuditionUserVoteController::class, 'userVoteMarkUpdate'])->name('userVoteMark.update');
+    Route::delete('userVoteMark-destroy/{id}', [AuditionUserVoteController::class, 'userVoteMarkDestroy'])->name('userVoteMark.destroy');
+
     // Audition Routes ends here
 
     // Auction Routes

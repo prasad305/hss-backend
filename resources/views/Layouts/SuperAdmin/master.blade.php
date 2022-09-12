@@ -310,10 +310,11 @@
 
         <!-- Main Footer -->
         <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+            <strong>Copyright &copy; {{ '2021' . '-' . date('Y') }} <a href="hellosuperstars.com">Hello Super
+                    Stars</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 3.2.0-rc
+                <b>Version</b>0.3.0
             </div>
         </footer>
     </div>
@@ -508,6 +509,9 @@
             if (key == 'registration_period') {
                 $('#registration_preiod_error').html(value);
             }
+            if (key == 'round_type') {
+                $('#round_type_error').html(value);
+            }
 
         }
 
@@ -539,6 +543,7 @@
             $('#name_error').html('');
             $('#event_period').html('');
             $('#registration_period').html('');
+            $('#round_type_error').html('');
         }
     </script>
 

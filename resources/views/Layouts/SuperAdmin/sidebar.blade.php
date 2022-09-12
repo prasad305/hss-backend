@@ -167,7 +167,7 @@
             <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-bullhorn"></i>
                 <p>
-                    Audtion
+                    Audition
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
@@ -206,6 +206,12 @@
                     <a href="{{ route('superAdmin.jury_groups.index') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Jury Groups</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.userVoteMark.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>User Vote Mark</p>
                     </a>
                 </li>
             </ul>
