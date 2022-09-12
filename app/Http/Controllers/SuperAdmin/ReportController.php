@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\LearningSession;
+use App\Models\LearningSessionAssignment;
+use App\Models\LearningSessionRegistration;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -13,7 +17,12 @@ class ReportController extends Controller
     }
     public function learningSessionReport()
     {
-        return view('SuperAdmin.Report.LearningSession.learningSession_report');
+        $total_assignment_fee = LearningSession::all();
+        // dd($total_assignment_fee);
+        $data = [
+            'categories' => Category::orderBy('id', 'desc')->get(),
+        ];
+        return view('SuperAdmin.Report.LearningSession.learningSession_report', $data);
     }
     public function simplePostReport()
     {
@@ -21,15 +30,15 @@ class ReportController extends Controller
     }
     public function liveChatReport()
     {
-        return view('SuperAdmin.Report.SimplePost.simplePost_report');
+        return view('SuperAdmin.Report.LiveChat.liveChat_report');
     }
     public function meetupReport()
     {
-        return view('SuperAdmin.Report.SimplePost.simplePost_report');
+        return view('SuperAdmin.Report.MeetupEvent.meetupEvent_report');
     }
     public function greetingReport()
     {
-        return view('SuperAdmin.Report.SimplePost.simplePost_report');
+        return view('SuperAdmin.Report.Greetings.greetings_report');
     }
     public function fanGroupReport()
     {
@@ -41,7 +50,7 @@ class ReportController extends Controller
     }
     public function qnaReport()
     {
-        return view('SuperAdmin.Report.SimplePost.simplePost_report');
+        return view('SuperAdmin.Report.QnA.QnA_report');
     }
     public function marketplaceReport()
     {
