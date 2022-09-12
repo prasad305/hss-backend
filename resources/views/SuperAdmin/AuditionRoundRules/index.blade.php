@@ -344,6 +344,23 @@
                     </div>
                     <center><span id="mark_check_error" class="text-danger"></span></center>
 
+                    <div class="d-flex flex-column w-100 mt-2">
+                        <div class="wildcard__title">
+                            <p class='text-warning'>Round Type</p>
+                            <hr>
+                        </div>
+                        <div class="d-flex flex-row">
+                            <div class="wild_card__one roundedYesNo p-3">
+                                <input type="radio" name="round_type" value="1"> <span>Online</span>
+                            </div>
+                            <div class="wild_card__one ml-3 roundedYesNo p-3">
+                                <input type="radio" name="round_type" value="0"> <span>Offline</span>
+                            </div>
+                            <span class="text-danger" id="round_type_error"></span>
+                        </div>
+
+                    </div>
+
 
 
                     <div class="d-flex flex-column w-100 mt-2">
@@ -738,6 +755,11 @@
                         $('input:radio[name=video_feed][value=0]').attr('checked', true);
                     } else {
                         $('input:radio[name=video_feed][value=1]').attr('checked', true);
+                    }
+                    if (data.mark.round_type == 0) {
+                        $('input:radio[name=round_type][value=0]').attr('checked', true);
+                    } else {
+                        $('input:radio[name=round_type][value=1]').attr('checked', true);
                     }
 
 

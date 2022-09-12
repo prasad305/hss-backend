@@ -87,12 +87,18 @@
                             <h5 class="text-center text-bold">{{ $audition->title }}</h5>
 
                             <center>
-                                <a href="{{route('managerAdmin.audition.showRoundResult',$audition->id)}}" class="btn btn-warning">View Round Result</a><br>
+
+                                <a href="{{ route('managerAdmin.audition.showRoundResult', $audition->id) }}"
+                                    class="btn btn-warning">View Round Result</a><br>
                             </center>
                             <center>
-                                <a href="{{route('managerAdmin.audition.viewRoundAppealResult',$audition->id)}}" class="btn btn-warning">View Round Appeal Result</a><br>
+                                @if ($audition->activeRoundInfo->appeal == 1)
+                                    <a href="{{ route('managerAdmin.audition.viewRoundAppealResult', $audition->id) }}"
+                                        class="btn btn-warning">View Round Appeal Result</a><br>
+                                @endif
+
                             </center>
-                        
+
                         </div>
                     </div>
                 </div>

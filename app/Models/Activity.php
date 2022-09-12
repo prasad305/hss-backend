@@ -14,9 +14,11 @@ class Activity extends Model
         'event_id',
         'event_registration_id',
         'user_id',
+        'marketplace_id',
+        'souvenir_id'
     ];
 
-    protected $with = ['user', 'meetup','meetupRegistration', 'livechat','livechatRegistration', 'learningSession','learningSessionRegistration','greetingRegistration','greeting','qna','qnaRegistration','auction'];
+    protected $with = ['user', 'meetup','meetupRegistration','marketPlace', 'marketPlaceOrder', 'souvenirApply' ,'livechat','livechatRegistration', 'learningSession','learningSessionRegistration','greetingRegistration','greeting','qna','qnaRegistration','auction'];
 
 
     public function user()
@@ -70,5 +72,15 @@ class Activity extends Model
     {
         return $this->belongsTo(Auction::class, 'event_id');
     }
+    public function marketPlace(){
+        return $this->belongsTo(marketPlace::class,'event_id');
+    }
+    public function marketPlaceOrder(){
+        return $this->belongsTo(MarketPlaceOrder::class, 'event_registration_id');
+    }
+    public function souvenirApply(){
+        return $this->belongsTo(SouvenirApply::class, 'event_registration_id');
+    }
+    
 
 }
