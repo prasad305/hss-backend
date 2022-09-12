@@ -670,12 +670,12 @@ class UserController extends Controller
         $interestTypes = InterestType::where('status', 1)->latest()->get();
 
         $userId = auth('sanctum')->user()->id;
-        
+
         $interest_topic_id = UserInterest::where('user_id', $userId)->first();
 
-        if($interest_topic_id){
+        if ($interest_topic_id) {
             $interest_topic_id = json_decode($interest_topic_id->interest_topic_id);
-        }else{
+        } else {
             $interest_topic_id = [];
         }
         return response()->json([
@@ -685,24 +685,24 @@ class UserController extends Controller
             'interest_topic_id' => $interest_topic_id,
         ]);
     }
-    
+
 
     public function interestStore(Request $request)
     {
         $userId = auth('sanctum')->user()->id;
         // return gettype($userId);
-        
+
         $interestTypes = UserInterest::where('user_id', $userId)->first();
 
-        if($interestTypes){
+        if ($interestTypes) {
             $interestTypes->interest_topic_id = $request->interest_topic_id;
             $interestTypes->save();
-            
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Interest Updated Successfully'
             ]);
-        }else{
+        } else {
             $newInterest = new UserInterest();
             $newInterest->user_id = $userId;
             $newInterest->interest_topic_id = $request->interest_topic_id;
@@ -718,7 +718,7 @@ class UserController extends Controller
     public function userEducationCheck()
     {
         $userId = auth('sanctum')->user()->id;
-        
+
         $educationList = UserEducation::where('user_id', $userId)->first();
 
         // return $educationList;
@@ -738,18 +738,18 @@ class UserController extends Controller
 
         $educationTypes = UserEducation::where('user_id', $userId)->first();
 
-        if($educationTypes){
-            
+        if ($educationTypes) {
+
             $educationTypes->subject = $request->subject;
             $educationTypes->institute = $request->institute;
             $educationTypes->grade = $request->degree;
             $educationTypes->save();
-            
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Education Updated Successfully'
             ]);
-        }else{
+        } else {
             $newEducation = new UserEducation();
             $newEducation->user_id = $userId;
             $newEducation->subject = $request->subject;
@@ -767,7 +767,7 @@ class UserController extends Controller
     public function userEmploymentCheck()
     {
         $userId = auth('sanctum')->user()->id;
-        
+
         $employmentList = UserEmployment::where('user_id', $userId)->first();
 
         // return $employmentList;
@@ -778,7 +778,7 @@ class UserController extends Controller
             'employmentList' => $employmentList,
         ]);
     }
-    
+
 
     public function employmentStore(Request $request)
     {
@@ -788,18 +788,18 @@ class UserController extends Controller
 
         $educationTypes = UserEmployment::where('user_id', $userId)->first();
 
-        if($educationTypes){
-            
+        if ($educationTypes) {
+
             $educationTypes->occupation = $request->position;
             $educationTypes->company = $request->company;
             $educationTypes->salary = $request->salary;
             $educationTypes->save();
-            
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Employment Updated Successfully'
             ]);
-        }else{
+        } else {
             $newEducation = new UserEmployment();
             $newEducation->user_id = $userId;
             $newEducation->occupation = $request->position;
@@ -813,11 +813,11 @@ class UserController extends Controller
             ]);
         }
     }
-    
+
     public function userPersonalList()
     {
         $userId = auth('sanctum')->user()->id;
-        
+
         $employmentList = UserInfo::where('user_id', $userId)->first();
         $userList = User::find($userId);
 
@@ -838,20 +838,20 @@ class UserController extends Controller
 
         $userInfoTypes = UserInfo::where('user_id', $userId)->first();
         $userList = User::find($userId);
-        if($userInfoTypes){
+        if ($userInfoTypes) {
             $userList->first_name = $request->first_name;
             $userList->last_name = $request->last_name;
             $userList->save();
-            
+
             $userInfoTypes->country = $request->country;
             $userInfoTypes->dob = $request->birthday;
             $userInfoTypes->save();
-            
+
             return response()->json([
                 'status' => 200,
                 'message' => 'UserInfo Updated Successfully'
             ]);
-        }else{
+        } else {
             $userList->first_name = $request->first_name;
             $userList->last_name = $request->last_name;
             $userList->save();
@@ -869,17 +869,18 @@ class UserController extends Controller
         }
     }
 
-    public function userPasswordChanges(Request $request){
+    public function userPasswordChanges(Request $request)
+    {
         // $hashedPassword = Auth::user()->password;
         $userId = auth('sanctum')->user()->id;
-        $users =User::find($userId);
+        $users = User::find($userId);
 
         // oldPassword);
         // formData.append("newPassword", newPassword);
 
-        if (\Hash::check($request->oldPassword , $users->password )){
+        if (Hash::check($request->oldPassword, $users->password)) {
 
-            
+
             $users->password = bcrypt($request->newPassword);
             $users->save();
 
@@ -887,14 +888,14 @@ class UserController extends Controller
                 'status' => 200,
                 'message' => 'User Updated Password'
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status' => 204,
                 'message' => 'Not Updated Password'
             ]);
         }
     }
-    
+
 
     public function registeredLivechat()
     {
@@ -2102,13 +2103,20 @@ class UserController extends Controller
     {
         $audition = Audition::where('slug', $event_slug)->first();
         $round_info = AuditionRoundInfo::find($audition->active_round_info_id);
+        $totalRound = AuditionRoundInfo::count('audition_id', $audition->id);
         $round_instruction = AuditionRoundInstruction::where('round_info_id', $round_info->id)->first();
+        $myRoud = AuditionRoundMarkTracking::where('user_id', auth()->user()->id)->where('wining_status', 1)->where('audition_id',  $audition->id)->get();
+
+
+
 
         return response()->json([
             'status' => 200,
             'audition' => $audition,
             'round_info' => $round_info,
             'round_instruction' => $round_instruction,
+            'myRoundPass' =>  count($myRoud),
+            'totalRound' => $totalRound
         ]);
     }
 
@@ -2291,14 +2299,29 @@ class UserController extends Controller
     {
 
 
-        $videofeed = AuditionRoundMarkTracking::whereHas('roundInfo', function ($q) {
+        $generalFailedUsers = AuditionRoundMarkTracking::whereHas('roundInfo', function ($q) {
             $q->where('videofeed_status', 1);
-        })->where([['wining_status', 0]])->pluck('user_id')->toArray();
+        })->where([['wining_status', 0], ['type', 'general']])->pluck('user_id')->toArray();
+
+        $appealFailedUsers = AuditionRoundMarkTracking::whereHas('roundInfo', function ($q) {
+            $q->where('videofeed_status', 1);
+        })->where([['wining_status', 0], ['type', 'appeal']])->pluck('user_id')->toArray();
+
+        $appealWinnerUsers = AuditionRoundMarkTracking::whereHas('roundInfo', function ($q) {
+            $q->where('videofeed_status', 1);
+        })->where([['wining_status', 1], ['type', 'appeal']])->pluck('user_id')->toArray();
 
 
-        $roundVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($videofeed) {
-            return $q->where([['approval_status', 1]])->whereIn('user_id', $videofeed)->get();
+        $generalFailedVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
+            return $q->where([['approval_status', 1], ['type', 'general']])->whereIn('user_id', $generalFailedUsers)->whereNotIn('user_id', $appealWinnerUsers)->whereNotIn('user_id', $appealFailedUsers)->get();
         }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get()->toArray();
+
+        $appealFailedVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($appealFailedUsers) {
+            return $q->where([['approval_status', 1], ['type', 'appeal']])->whereIn('user_id', $appealFailedUsers)->get();
+        }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get()->toArray();
+
+
+        $roundVideos = array_merge($generalFailedVideos, $appealFailedVideos);
 
         return response()->json([
             'status' => 200,

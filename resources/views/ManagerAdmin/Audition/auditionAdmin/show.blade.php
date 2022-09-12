@@ -21,8 +21,7 @@
                         style="background-image: url({{ asset($auditionAdmin->cover_photo ?? get_static_option('no_image')) }})">
                         <div class="centeredImg">
                             <img class="img-circle ImGAdmin"
-                                src="{{ asset($auditionAdmin->image ?? get_static_option('no_image')) }}"
-                                alt="User Avatar">
+                                src="{{ asset($auditionAdmin->image ?? get_static_option('no_image')) }}" alt="User Avatar">
                             <h4 class="text-center nameAdmin">
                                 {{ $auditionAdmin->first_name . ' ' . $auditionAdmin->last_name }}</h4>
                             <span
@@ -136,9 +135,14 @@
                                                             <div class="card card-primary card-outline">
                                                                 @foreach ($auditionAdmin->assignedAudition->assignedJuries as $assignedJury)
                                                                     <div class="card-header d-flex justify-content-between">
-                                                                        <img height="50px;" width="50px;" src="{{ asset($assignedJury->user->image ?? get_static_option('no_image')) }}" alt="Jury">
+                                                                        <img height="50px;" width="50px;"
+                                                                            src="{{ asset($assignedJury->user->image ?? get_static_option('no_image')) }}"
+                                                                            alt="Jury">
 
-                                                                        <p class="card-title">{{ $assignedJury->user ? $assignedJury->user->first_name : '' }} {{ $assignedJury->user ? $assignedJury->user->last_name : '' }}</p>
+                                                                        <p class="card-title">
+                                                                            {{ $assignedJury->user ? $assignedJury->user->first_name : '' }}
+                                                                            {{ $assignedJury->user ? $assignedJury->user->last_name : '' }}
+                                                                        </p>
                                                                     </div>
                                                                 @endforeach
                                                             </div>
@@ -155,10 +159,15 @@
                                                         <div class="card-body">
                                                             <div class="card card-primary card-outline">
                                                                 @foreach ($auditionAdmin->assignedAudition->assignedJudges as $assignedJudge)
-                                                                    <div class="card-header d-flex justify-content-between">
-                                                                        <img height="50px;" width="50px;" src="{{ asset($assignedJudge->user->image ?? get_static_option('no_image')) }}" alt="judge">
+                                                                    <div
+                                                                        class="card-header d-flex justify-content-between">
+                                                                        <img height="50px;" width="50px;"
+                                                                            src="{{ asset($assignedJudge->user->image ?? get_static_option('no_image')) }}"
+                                                                            alt="judge">
 
-                                                                        <p class="card-title">{{ $assignedJudge->user->first_name ?? '' }} {{ $assignedJudge->user->last_name ?? '' }}</p>
+                                                                        <p class="card-title">
+                                                                            {{ $assignedJudge->user->first_name ?? '' }}
+                                                                            {{ $assignedJudge->user->last_name ?? '' }}</p>
                                                                     </div>
                                                                 @endforeach
                                                             </div>
@@ -197,7 +206,8 @@
                                                             value="{{ $auditionAdmin->id }}">
                                                         <input type="hidden" name="audition_rule_id"
                                                             value="{{ $auditionRule->id ?? '' }}">
-                                                        <input type="text" name="admin_name" class="form-control" readonly
+                                                        <input type="text" name="admin_name" class="form-control"
+                                                            readonly
                                                             value="{{ $auditionAdmin->first_name . ' ' . $auditionAdmin->last_name }}">
                                                         @error('admin_name')
                                                             <p class="text-danger">{{ $message }}</p>
@@ -234,26 +244,27 @@
                                                     </div>
 
 
-                                                    @foreach ($groups  as $key => $group)
-                                                            <div class="col-3">
-                                                                <input type="hidden" name="group_ids[]" value="{{ $group->id }}">
-                                                                <label for="">Group {{$group->name}} <span class="text-danger">You have to select
-                                                                    {{ $group_data[$key]}} jury !</span></label>
-                                                                <select name="jury[{{$key}}][]" class="select2" multiple="multiple"
-                                                                    style="width: 100%;">
-                                                                    @foreach ($juries as $jury)
-                                                                        @if ($jury->jury->group_id == $group->id)
-                                                                            <option value="{{ $jury->id }}">
-                                                                                {{ $jury->first_name . ' ' . $jury->last_name }}
-                                                                            </option>
-                                                                        @endif
-
-                                                                    @endforeach
-                                                                </select>
-                                                                @error('jury')
-                                                                    <p class="text-danger">{{ $message }}</p>
-                                                                @enderror
-                                                            </div>
+                                                    @foreach ($groups as $key => $group)
+                                                        <div class="col-3">
+                                                            <input type="hidden" name="group_ids[]"
+                                                                value="{{ $group->id }}">
+                                                            <label for="">Group {{ $group->name }} <span
+                                                                    class="text-danger">You have to select
+                                                                    {{ $group_data[$key] }} jury !</span></label>
+                                                            <select name="jury[{{ $key }}][]" class="select2"
+                                                                multiple="multiple" style="width: 100%;">
+                                                                @foreach ($juries as $jury)
+                                                                    @if ($jury->jury->group_id == $group->id)
+                                                                        <option value="{{ $jury->id }}">
+                                                                            {{ $jury->first_name . ' ' . $jury->last_name }}
+                                                                        </option>
+                                                                    @endif
+                                                                @endforeach
+                                                            </select>
+                                                            @error('jury')
+                                                                <p class="text-danger">{{ $message }}</p>
+                                                            @enderror
+                                                        </div>
                                                     @endforeach
 
 
@@ -287,7 +298,8 @@
                                                     <div class="col-2">
                                                     </div>
                                                     <div class="col-10">
-                                                        <h6 class="text-warning">The audition will have to complete within {{ $auditionRule->event_period ?? 0 }} day(s)</h6>
+                                                        <h6 class="text-warning">The audition will have to complete within
+                                                            {{ $auditionRule->event_period ?? 0 }} day(s)</h6>
                                                     </div>
                                                     <hr>
                                                 </div>
@@ -420,14 +432,12 @@
             border: 2px solid gold;
             border-radius: 20px;
         }
-
     </style>
 @endsection
 
 
 @push('js')
     <script>
-
         function setEndDate() {
             var date = document.getElementById('start_date').value;
             var number = '{{ $auditionRule->event_period ?? 0 }}';
@@ -441,7 +451,7 @@
             month = end_date.getMonth() + 1;
             year = end_date.getFullYear();
 
-            var final_date = month+'/'+day+'/'+year;
+            var final_date = month + '/' + day + '/' + year;
 
 
             document.getElementById('end_date').value = final_date;
