@@ -55,4 +55,7 @@ class ReportController extends Controller
     {
         return view('SuperAdmin.Report.SimplePost.simplePost_report');
     }
+
+
+    ///kjhkjg
 }
