@@ -399,6 +399,10 @@ class AuditionController extends Controller
         $round_info_id = $request->round_info_id;
         $type = $request->type;
 
+        $auditionRoundInfo = AuditionRoundInfo::with('wildcardRoundRuleId')->where([['audition_id', $request->audition_id], ['id', $request->round_info_id]])->first();
+
+        return $auditionRoundInfo->wildcardRoundRuleId->round_num;
+
         AuditionRoundMarkTracking::where([
             ['audition_id', $audition_id],
             ['round_info_id', $round_info_id],
@@ -416,7 +420,12 @@ class AuditionController extends Controller
             'result_message' => $request->rejected_comments,
         ]);
 
-        if ($type == 'general') {
+        if ($type == 'general' && $auditionRoundInfo->appeal == 0) {
+            AuditionRoundInfo::where('id', $round_info_id)->update([
+                'manager_status' => 2,
+                'status' => 2,
+            ]);
+        } elseif ($type == 'general' && $auditionRoundInfo->appeal == 1) {
             AuditionRoundInfo::where('id', $round_info_id)->update([
                 'manager_status' => 2,
             ]);

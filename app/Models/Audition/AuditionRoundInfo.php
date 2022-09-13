@@ -61,4 +61,8 @@ class AuditionRoundInfo extends Model
     {
         return $this->hasOne(AuditionRoundInstruction::class, 'round_info_id');
     }
+    public function wildcardRoundRuleId()
+    {
+        return $this->belongsTo(AuditionRoundRule::class, 'wildcard_round');
+    }
 }
