@@ -399,7 +399,7 @@ class UserMobileAppController extends Controller
             ]);
         } catch (\Exception $exception) {
             return response()->json([
-                "message" => "Image field required, invalid image !",
+                "message" => "field required, invalid formate !",
                 "error" => $exception->getMessage(),
                 "status" => "0",
             ]);
@@ -467,10 +467,11 @@ class UserMobileAppController extends Controller
     /**
      * get qna message history
      */
-    public function getQnaMessage($qna_id)
+    public function getQnaMessage($room_id)
     {
 
-        $qnaMessageHistory = QnaMessage::where([['sender_id', Auth()->user()->id], ['qna_id', $qna_id]])->get();
+        $qnaMessageHistory = QnaMessage::where('room_id', $room_id)->get();
+
         return response()->json([
             "status" => 200,
             "qna_history" => $qnaMessageHistory
