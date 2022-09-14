@@ -16,6 +16,7 @@ class CreateFanGroupMessagesTable extends Migration
         Schema::create('fan_group_messages', function (Blueprint $table) {
             $table->id();
             $table->integer('sender_id')->nullable();
+            $table->integer('star_id')->nullable();
             $table->string('room_id')->nullable();
             $table->string('sender_name')->nullable();
             $table->string('sender_image')->nullable();
