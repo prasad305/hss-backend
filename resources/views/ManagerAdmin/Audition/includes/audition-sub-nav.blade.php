@@ -7,8 +7,8 @@
                     <div class='displaySide'>
                         <img src="{{ asset('assets/manager-admin/instagram-live.png') }}" class="ARRimg pt-2" alt="">
                         <div class='fontBold'>
-                            @if ($live)
-                                1
+                            @if ($auditionsStatus->status ==3)
+                              {{$live}}
                             @endif
                         </div>
                     </div>
@@ -26,8 +26,8 @@
                     <div class='displaySide'>
                         <img src="{{ asset('assets/manager-admin/Group1176.png') }}" class="ARRimg pt-2" alt="">
                         <div class='fontBold'>
-                            @if ($request_approval_pending)
-                            1
+                            @if ($auditionsStatus->status ==2)
+                            {{$request_approval_pending}}
                         @endif</div>
                     </div>
                 </center>
@@ -41,8 +41,8 @@
                 <center class="displaySide">
                     <img src="{{ asset('assets/manager-admin/pending-audition.png') }}" class="ARRimg pt-2" alt="">
                     <div class='fontBold'>
-                        @if ($pending)
-                            1
+                        @if  ($auditionsStatus->status ==0)
+                        {{$pending}}
                         @endif</div>
                 </center>
                 <a class="btn border-warning nav-link  @if ($pending)
