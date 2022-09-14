@@ -60,7 +60,7 @@
                 //     footer: errorMessage
                 // });
 
-                // console.log(data);
+                console.log(data);
             }
         });
     
