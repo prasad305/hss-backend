@@ -81,8 +81,5 @@ class Activity extends Model
     public function souvenirApply(){
         return $this->belongsTo(SouvenirApply::class, 'event_registration_id');
     }
-    
-
-    //...
 
 }

@@ -35,7 +35,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
-
+// use Barryvdh\DomPDF\Facade\Pdf;
+use PDF;
 
 class UserMobileAppController extends Controller
 {
@@ -475,5 +476,16 @@ class UserMobileAppController extends Controller
             "status" => 200,
             "qna_history" => $qnaMessageHistory
         ]);
+    }
+    public function getInvoice()
+    {
+        $data = [
+            'title' => 'Welcome to ItSolutionStuff.com',
+            'date' => date('m/d/Y')
+        ];
+          
+        $pdf = PDF::loadView('Others.Invoice.Invoice', $data);
+    
+        return $pdf->download('itsolutionstuff.pdf');
     }
 }

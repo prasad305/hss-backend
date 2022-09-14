@@ -47,4 +47,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
      */
     Route::get('/mobile/fan-group-chat-history/{group_id}', [UserMobileAppController::class, 'getFanGroupMessage']);
     Route::get('/mobile/qna-chat-history/{qna_id}', [UserMobileAppController::class, 'getQnaMessage']);
+
+    /**
+     * Download PDF For invoice
+     */
+    Route::get('/mobile/getInvoice', [UserMobileAppController::class, 'getInvoice']);
 });
