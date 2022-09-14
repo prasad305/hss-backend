@@ -51,5 +51,5 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     /**
      * Download PDF For invoice
      */
-    Route::get('/mobile/getInvoice', [UserMobileAppController::class, 'getInvoice']);
+    Route::post('/mobile/getInvoice/data', [UserMobileAppController::class, 'getInvoice']);
 });

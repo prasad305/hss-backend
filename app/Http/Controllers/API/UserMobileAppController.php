@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\API;
-
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Acquired_app;
 use App\Models\Activity;
@@ -478,15 +478,33 @@ class UserMobileAppController extends Controller
             "qna_history" => $qnaMessageHistory
         ]);
     }
-    public function getInvoice()
+    public function getInvoice(Request $request)
     {
         $data = [
-            'title' => 'Welcome to ItSolutionStuff.com',
-            'date' => date('m/d/Y')
+            'productName' => $request->productName,
+            'SuperStar' => $request->SuperStar,
+            'qty' => $request->qty,
+            'unitPrice' => $request->unitPrice,
+            'total' => $request->total,
+            'subTotal' => $request->subTotal,
+            'deliveryCharge' => $request->deliveryCharge,
+            'tax' => $request->tax,
+            'grandTotal' => $request->grandTotal,
+            'orderID' => $request->orderID,
+            'orderDate' => $request->orderDate,
+            'description' => $request->description,
+            'name' => $request->name,
+
         ];
-          
-        $pdf = PDF::loadView('Others.Invoice.Invoice', $data);
-    
-        return $pdf->download('itsolutionstuff.pdf');
+        $time = time();
+        try {
+            $pdf = PDF::loadView('Others.Invoice.Invoice', compact('data'));
+            file_put_contents('uploads/pdf/'. $time .'.pdf', $pdf->output());
+            $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
+            return $filename;
+        } catch (\Throwable $th) {
+            return $th;
+        }
+        
     }
 }

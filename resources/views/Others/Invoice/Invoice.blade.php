@@ -13,14 +13,6 @@
     box-sizing: border-box;
 }
 
-
-
-
-
-
-
-
-
 .invoice-main-container {
     width: 80%;
     border: 1px solid black;
@@ -269,8 +261,10 @@ th {
         <tr>
             <td>
                 <div class="order">
-                    <p>Order ID: #72224072022180626</p>
-                    <p>Order Date: July 24, 2022 6:06 PM </p>
+                @if($data)
+                    <p>Order ID: #{{ $data['orderID'] }}</p>
+                    <p>Order Date: {{ $data['orderDate'] }} </p>
+                   
                 </div>
             </td>
         </tr>
@@ -311,11 +305,11 @@ th {
         </tr>
         <tr>
             
-            <td>Shakib Bat sell</td>
-            <td>Shakib Al Hasan	</td>
-            <td>2</td>
-            <td>$5000.00</td>
-            <td>$10000</td>
+            <td>{{ $data['productName'] }}</td>
+            <td>{{ $data['SuperStar'] }}</td>
+            <td>{{ $data['qty'] }}</td>
+            <td> $ {{ $data['unitPrice'] }}</td>
+            <td> $ {{ $data['total'] }}</td>
         </tr>   
       </table>
 
@@ -324,17 +318,17 @@ th {
             <table >
                 <tr>
                     <td>Sub Total</td>
-                    <td>$30000 </td>
+                    <td>{{ $data['subTotal'] }} </td>
                     
                   </tr>
                   <tr>
                     <td >Delivery Charge</td>
-                    <td>$130.00 </td>
+                    <td> $ {{ $data['deliveryCharge'] }} </td>
                     
                   </tr>
                   <tr>
                     <td>Total Tax </td>
-                    <td> $15.00 </td>
+                    <td> $ {{ $data['tax'] }} </td>
                     
                   </tr>
 
@@ -344,24 +338,11 @@ th {
 
             </div>
 
-            <p class="g-total">Grand Total $30145.00 </p>
+            <p class="g-total">Grand Total  $ {{ $data['grandTotal'] }}  </p>
 
 
         </div>
      </div>
-
-
-    
- <!-- <div class='center-item'>
- <h2 class="thank">THANK YOU FOR YOUR BUSINESS </h2>
-
-<div class="payment-info">
-    <h3>Payment Info</h3>
-    <p>Account: 4565746345645</p>
-    <p>A/C Name: </p>
-    <p>Payment status: Paid</p>
-    </div>
- </div> -->
 
  <div class="center-contents">
     <h3>THANK YOU FOR YOUR BUSINESS</h3>
@@ -369,8 +350,7 @@ th {
  <div class="sub-content">
     <ul>
         <li>Payment Info</li>
-        <li>Account:000000</li>
-        <li>A/C Name:</li>
+        <li>A/C Name: {{ $data['name'] }}</li>
         <li>Payment Status: paid</li>
     </ul>
  </div>
@@ -388,10 +368,8 @@ th {
             <h4>Terms & Conditions</h4>
             <ul>
                 <li>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing eli
-
+                {{ $data['description'] }}
                 </li>
-                <li> Lorem ipsum dolor sit, amet consectetur adipisicing eli</li>
                 
                 
             </ul>
@@ -414,7 +392,7 @@ th {
             </div>
         </td>
       </tr>
-
+      @endif
     </table>
 </div>      
 </body>

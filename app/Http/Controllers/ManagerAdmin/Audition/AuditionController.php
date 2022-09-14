@@ -311,7 +311,7 @@ class AuditionController extends Controller
             $judges = [];
 
             foreach ($audition->assignedJudges as $key => $judge) {
-                array_push($judges, $judge->id);
+                array_push($judges, $judge->judge_id);
             }
 
             //    return $audition->star;
