@@ -149,6 +149,8 @@ class UserController extends Controller
     public function postShare($postId)
     {
         $post = Post::find($postId);
+        $post->share_count += 1;
+        $post->update();
         return response()->json([
             'status' => 200,
             'post' => $post,
