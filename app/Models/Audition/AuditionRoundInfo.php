@@ -5,6 +5,7 @@ namespace App\Models\Audition;
 
 use App\Models\Audition\Audition;
 use App\Models\AuditionRoundInstruction;
+use App\Models\WildCard;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -64,5 +65,9 @@ class AuditionRoundInfo extends Model
     public function wildcardRoundRuleId()
     {
         return $this->belongsTo(AuditionRoundRule::class, 'wildcard_round');
+    }
+    public function wildCardRoundInfo()
+    {
+        return $this->hasOne(WildCard::class, 'end_round_info_id');
     }
 }

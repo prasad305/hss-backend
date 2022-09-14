@@ -60,7 +60,7 @@ use App\Models\SouvenirCreate;
 use App\Models\FanGroup;
 use App\Models\UserInfo;
 use App\Models\Marketplace;
-
+use App\Models\WildCard;
 
 class UserController extends Controller
 {
@@ -2311,14 +2311,33 @@ class UserController extends Controller
             $q->where('videofeed_status', 1);
         })->where([['wining_status', 1], ['type', 'appeal']])->pluck('user_id')->toArray();
 
+        $generalFailedVideos = WildCard::whereHas('auditionRoundInfoEnd', function ($q) {
+            $q->where('result_publish_start_date', '>', Carbon::now());
+        })->with(['auditionRoundInfoStart' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
+            $q->with(['videos' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
+                return $q->where([['approval_status', 1], ['type', 'general']])->whereIn('user_id', $generalFailedUsers)->whereNotIn('user_id', $appealWinnerUsers)->whereNotIn('user_id', $appealFailedUsers)->get();
+            }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get();
+        }])->get()->toArray();
 
-        $generalFailedVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
-            return $q->where([['approval_status', 1], ['type', 'general']])->whereIn('user_id', $generalFailedUsers)->whereNotIn('user_id', $appealWinnerUsers)->whereNotIn('user_id', $appealFailedUsers)->get();
-        }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get()->toArray();
 
-        $appealFailedVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($appealFailedUsers) {
-            return $q->where([['approval_status', 1], ['type', 'appeal']])->whereIn('user_id', $appealFailedUsers)->get();
-        }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get()->toArray();
+        $appealFailedVideos = WildCard::whereHas('auditionRoundInfoEnd', function ($q) {
+            $q->where('result_publish_start_date', '>', Carbon::now());
+        })->with(['auditionRoundInfoStart' => function ($q) use ($appealFailedUsers) {
+            $q->with(['videos' => function ($q) use ($appealFailedUsers) {
+                return $q->where([['approval_status', 1], ['type', 'appeal']])->whereIn('user_id', $appealFailedUsers)->get();
+            }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get();
+        }])->get()->toArray();
+
+
+        // >where('result_publish_start_date', '>', Carbon::now());
+
+        // $generalFailedVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
+        //     return $q->where([['approval_status', 1], ['type', 'general']])->whereIn('user_id', $generalFailedUsers)->whereNotIn('user_id', $appealWinnerUsers)->whereNotIn('user_id', $appealFailedUsers)->get();
+        // }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get()->toArray();
+
+        // $appealFailedVideos = AuditionRoundInfo::with(['videos' => function ($q) use ($appealFailedUsers) {
+        //     return $q->where([['approval_status', 1], ['type', 'appeal']])->whereIn('user_id', $appealFailedUsers)->get();
+        // }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get()->toArray();
 
 
         $roundVideos = array_merge($generalFailedVideos, $appealFailedVideos);
