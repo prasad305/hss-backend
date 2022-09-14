@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Occupation extends Model
+class Educationlevel extends Model
 {
     use HasFactory;
-    protected $fillable = ['title','status'];
 }

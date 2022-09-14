@@ -84,7 +84,7 @@ Super Admin
                             <td>Time: {{ $rule->month }} Month {{ $rule->day }} Days</td>
                             <td style="width: 150px">
                                 <a href="{{ route('superAdmin.audition-rules.edit',$rule->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit text-white"></i></a>
-                                <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </button>
+                                {{-- <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </button> --}}
                             </td>
                         </tr>
                         @endforeach
