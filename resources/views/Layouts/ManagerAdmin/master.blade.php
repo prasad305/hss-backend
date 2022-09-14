@@ -496,7 +496,7 @@
             // console.log(title);
             // console.log(link);
             // console.log(style);
-            // // alert();
+            // alert(link);
             $('#modal').modal();
             $('#modal-title').html(title);
             $('#modal-body').html('<h1 class="text-center"><strong>Please Wait...</strong></h1>');
