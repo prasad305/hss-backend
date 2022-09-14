@@ -42,10 +42,6 @@ use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
 use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
 use App\Http\Controllers\SuperAdmin\OccupationController;
-use App\Models\Audition\AuditionUserVoteMark;
-use App\Models\PaymentMethod;
-use App\Models\Slider;
-use Illuminate\Support\Facades\Route;
 
 // Super Admin route
 
