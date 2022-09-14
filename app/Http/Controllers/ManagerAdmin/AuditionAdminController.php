@@ -416,7 +416,7 @@ class AuditionAdminController extends Controller
         $auditions =  Audition::where('category_id', auth()->user()->category_id)->get();
         $live = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 3]])->count();
         $pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 0]])->count();
-        $request_approval_pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 1]])->count();
+        $request_approval_pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 2]])->count();
         return view('ManagerAdmin.Audition.events', compact('auditions','live','pending','request_approval_pending'));
     }
 

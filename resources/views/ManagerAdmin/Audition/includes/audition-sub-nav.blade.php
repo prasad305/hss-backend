@@ -14,7 +14,9 @@
                     </div>
 
                 </center>
-                <a class="btn border-warning nav-link active "  href="#" >Live Audition</a>
+                <a class="btn border-warning nav-link  @if ($live)
+                active
+            @endif  "  href="#" >Live Audition</a>
             </a>
 
         </li>
@@ -29,7 +31,9 @@
                         @endif</div>
                     </div>
                 </center>
-                <a class="btn border-warning nav-link " href="#">Request for Approval</a>
+                <a class="btn border-warning nav-link @if ($request_approval_pending)
+                active
+            @endif " href="#">Request for Approval</a>
             </a>
         </li>
         <li class="nav-item custom-nav-item m-2 ">
@@ -41,7 +45,9 @@
                             1
                         @endif</div>
                 </center>
-                <a class="btn border-warning nav-link " href="#">Pending Audition</a>
+                <a class="btn border-warning nav-link  @if ($pending)
+                active
+            @endif " href="#">Pending Audition</a>
             </a>
         </li>
 

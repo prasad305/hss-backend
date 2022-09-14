@@ -92,8 +92,12 @@ Admin
         @foreach ($auditions as $audition)
             <div class="col-md-3 col-sm-6 col-12">
                 <div class="p-2 bg-dark shadow-none pb-4 m-3 BGaB">
-                    <img src="{{ asset($audition->banner ?? get_static_option('audition_demo_image')) }}" alt="Admin Image"
-                        class="img-fluid ImgBlue mr-3 mb-2 w-100">
+                    <img src="@if ( isset($audition->banner))
+                    {{ asset($audition->banner) }}
+                    @else {{ asset('assets/manager-admin/clock.png') }}
+                    @endif"
+                     alt="Admin Image"
+                        class="img-fluid ImgBlue mr-3 mb-2 w-100 ARRimg pt-2">
 
                 <div className="">
                     <div>
