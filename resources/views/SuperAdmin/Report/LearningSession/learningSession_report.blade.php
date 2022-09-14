@@ -22,7 +22,7 @@
     </div>
 
 
-    <form action="{{route('superAdmin.report.filter.learningSession')}}" method="post">
+    <form id="filter" action="" method="">
 
         @csrf
         <section class="content">
@@ -34,7 +34,7 @@
                         <div class="form-group mb-4">
                             <div class="datepicker date input-group">
                                 <input type="text" name="start_date" placeholder="Choose Date" class="form-control"
-                                    id="fecha1">
+                                    id="s_date">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                 </div>
@@ -47,7 +47,7 @@
                         <div class="form-group mb-4">
                             <div class="datepicker date input-group">
                                 <input type="text" name="end_date" placeholder="Choose Date" class="form-control"
-                                    id="fecha1">
+                                id="e_date">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                 </div>
@@ -73,8 +73,8 @@
                     </div> --}}
                         <div class="form-group">
                             <label for="name">Categories</label>
-                            <select name="category_id" id="category_id" name="category_name" class="form-control select2">
-                                <option selected="" disabled="">Select Category</option>
+                            <select name="category_id" id="category_id" class="form-control select2">
+                                <option>Select Category</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
@@ -119,7 +119,7 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3>{{ $assignment_fee }}</h3>
+                            <h3 id="tot_assFee">{{ $assignment_fee }}</h3>
                             <p>Total Certificate Fee</p>
                         </div>
                         <div class="icon">
@@ -132,7 +132,7 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ $registration_fee }}<sup style="font-size: 20px"></sup></h3>
+                            <h3 id="tot_regFee">{{ $registration_fee }}<sup style="font-size: 20px"></sup></h3>
                             <p>Total Registration Fee</p>
                         </div>
                         <div class="icon">
@@ -159,7 +159,7 @@
 
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>{{ $certificate }}</h3>
+                            <h3 id="tot_certificate">{{ $certificate }}</h3>
                             <p>Total Certificate</p>
                         </div>
                         <div class="icon">
@@ -173,7 +173,7 @@
 
                     <div class="small-box bg-danger">
                         <div class="inner">
-                            <h3>{{ $assignment }}</h3>
+                            <h3 id="tot_assignment">{{ $assignment }}</h3>
                             <p>Total Assignment</p>
                         </div>
                         <div class="icon">
@@ -268,4 +268,39 @@
     </script>
     <!-- Datepicker -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> --}}
+
+    <script>
+        $(document).ready(function() {
+            //  console.log('123');
+            // var form=$("#myForm");
+            $("#filter").on('submit',function(event) {
+                // console.log('123');
+                event.preventDefault();
+                // alert("hello");
+
+
+
+
+                $.ajax({
+                url: "{{ route('superAdmin.report.filter.learningSession') }}",
+                type:"POST",
+                data:$("#filter").serialize(),
+                success: function(respose) {
+                    // console.log('Submission was successful.');
+                    console.log(respose);
+                    $("#filter")[0].reset();
+                    $('#tot_certificate').html(respose.certificate);
+                    $('#tot_assFee').html(respose.assignment_fee);
+                    $('#tot_regFee').html(respose.registration_fee);
+                    $('#tot_assFee').html(respose.assignment_fee);
+                    $('#tot_assignment').html(respose.assignment);
+                },
+            });
+            });
+
+
+
+        });
+    </script>
 @endpush

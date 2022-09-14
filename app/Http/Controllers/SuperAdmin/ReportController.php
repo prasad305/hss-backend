@@ -9,6 +9,8 @@ use App\Models\LearningSessionAssignment;
 use App\Models\LearningSessionCertificate;
 use App\Models\LearningSessionRegistration;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class ReportController extends Controller
 {
@@ -46,40 +48,52 @@ class ReportController extends Controller
             $assignment = $assignment + $amount['assignment'];
         }
 
-        dd($assignment);
+        // dd($assignment);
 
         // dd($total_assignment_fee);
 
-        $categories = Category::orderBy('id', 'desc')->get();;
+        $categories = Category::orderBy('id', 'desc')->get();
 
 
         return view('SuperAdmin.Report.LearningSession.learningSession_report', compact('categories', 'assignment_fee', 'registration_fee', 'certificate', 'assignment'));
     }
     public function learningFilter(Request $request)
     {
+        $start_date = Carbon::parse($request->start_date)->format('Y-m-d  H:i:s');
+        $end_date = Carbon::parse($request->end_date)->format('Y-m-d  H:i:s');
         // dd($request);
         $assignment_fee = 0;
-        $total_assignment_fees = LearningSession::where('created_at', '>=', $request['start_date'])->where('created_at', '<=', $request['end_date'])->get();
+        $total_assignment_fees = LearningSession::whereBetween('created_at', [$start_date, $end_date])->get();
         // dd($total_assignment_fees);
-
         foreach ($total_assignment_fees as $amount) {
             $assignment_fee = $assignment_fee + $amount['assignment_fee'];
         }
 
         // dd($assignment_fee);
 
+        $start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
+        $end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
+        // dd($start_date, $end_date);
         $registration_fee = 0;
-        $total_registration_fees = LearningSession::where('created_at', '>=', $request['start_date'])->where('created_at', '<=', $request['end_date'])->get();
-
+        $total_registration_fees = LearningSession::whereBetween('created_at', [$start_date, $end_date])->get();
+        // dd($total_registration_fees);
         foreach ($total_registration_fees as $amount) {
             $registration_fee = $registration_fee + $amount['fee'];
         }
         // dd($registration_fee);
-        $certificate = LearningSessionCertificate::where('created_at', '>=', $request['start_date'])->where('created_at', '<=', $request['end_date'])->count();
+
+        $start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
+        $end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
+
+        $certificate = LearningSessionCertificate::whereBetween('created_at', [$start_date, $end_date])->count();
         // dd($certificate);
 
+
+        $start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
+        $end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
+
         $assignment = 0;
-        $total_assignments = LearningSession::where('created_at', '>=', $request['start_date'])->where('created_at', '<=', $request['end_date'])->get();
+        $total_assignments = LearningSession::whereBetween('created_at', [$start_date, $end_date])->get();
 
         foreach ($total_assignments as $amount) {
             $assignment = $assignment + $amount['assignment'];
@@ -87,11 +101,10 @@ class ReportController extends Controller
 
         // dd($assignment);
 
-        // dd($total_assignment_fee);
-
         $categories = Category::orderBy('id', 'desc')->get();;
         // dd($categories);
-        return redirect()->back()->with(compact('categories', 'assignment_fee','registration_fee','certificate','assignment'));
+        // return redirect()->back()->with(compact('categories', 'assignment_fee', 'registration_fee', 'certificate', 'assignment'));
+        return response()->json(['categories'=>$categories, 'assignment_fee'=>$assignment_fee,'registration_fee'=>$registration_fee,'assignment'=>$assignment,'certificate'=>$certificate]);
 
         // return view('SuperAdmin.Report.LearningSession.learningSession_report', compact('categories', 'assignment_fee','registration_fee','certificate','assignment'));
     }
