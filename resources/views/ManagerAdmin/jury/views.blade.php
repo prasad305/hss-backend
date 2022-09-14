@@ -18,25 +18,19 @@
 
         <div class="BodyDear">
             <h5 class="viewDear">Dear,</h5>
-            <p class="viewSakib"> {{ $jury->first_name.' '.$jury->last_name }}</p>
+            <p class="viewSakib"> {{ $jury->assignjuries->first_name.' '.$jury->assignjuries->last_name }}</p>
             <p class="viewWelcome">Welcome to Hello Superstar </p>
             <p class="viewLorem">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut asperiores reiciendis beatae
-                fugiat
-                sed nemo illum? Illum voluptates saepe,
-                incidunt ducimus commodi omnis minima enim pariatur similique? Delectus, natus fugiat.
+                {!! $jury->description !!}
             </p>
-            <p class="ViewList"> 1 .Lorem ipsum, dolor sit amet consectetur a </p>
-            <p class="ViewList"> 2 .Lorem ipsum, dolor sit amet consectetur a </p>
-            <p class="ViewList"> 3 .Lorem ipsum, dolor sit amet consectetur a </p>
-            <p class="ViewList"> 4 .Lorem ipsum, dolor sit amet consectetur a </p>
-            <p class="ViewList"> 3 .Lorem ipsum, dolor sit amet consectetur a </p>
-            <p class="ViewList"> 4 .Lorem ipsum, dolor sit amet consectetur a </p>
+            <div>
+                {!! $jury->terms_and_condition !!}
+            </div>
 
             <div class="dQr">
-                {!! QrCode::size(150)->generate($jury->jury->qr_code); !!}
+                {!! QrCode::size(150)->generate($jury->qr_code); !!}
                 <br>
-                <p class="ViewListC">{{ $jury->jury ? $jury->jury->qr_code : '' }}</p>
+                <p class="ViewListC">{{ $jury->qr_code? $jury->qr_code : '' }}</p>
             </div>
 
         </div>

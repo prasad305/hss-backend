@@ -41,6 +41,11 @@ use App\Http\Controllers\SuperAdmin\AuditionUserVoteController;
 use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
 use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
+use App\Http\Controllers\SuperAdmin\OccupationController;
+use App\Models\Audition\AuditionUserVoteMark;
+use App\Models\PaymentMethod;
+use App\Models\Slider;
+use Illuminate\Support\Facades\Route;
 
 // Super Admin route
 
@@ -269,6 +274,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     //Education Level
     Route::resource('educationlevel', EducationlevelController::class);
+    
+    //Occupation
+    Route::resource('occupation', OccupationController::class);
+    Route::post('admin/occupation-active/{id}', [OccupationController::class, 'activeNow'])->name('occupation.activeNow');
+    Route::post('admin/occupation-inactive/{id}', [OccupationController::class, 'inactiveNow'])->name('occupation.inactiveNow');
 
     // Interest Type
     Route::resource('interest-type', InterestTypeController::class);

@@ -17,17 +17,23 @@ class JuryBoardController extends Controller
     public function index()
     {
         $data = [
-            'juries' =>  User::where([['category_id',auth()->user()->category_id],['user_type', 'jury']])->orderBy('id', 'DESC')->get(),
+            // 'juries' =>  User::where([['category_id',auth()->user()->category_id],['user_type', 'jury']])->orderBy('id', 'DESC')->get(),
+            'group' => JuryGroup::with('board')->where('category_id',auth()->user()->category_id)->get(),
+            
         ];
+
         return view('ManagerAdmin.jury.index', $data);
     }
 
     public function views($jury_id)
     {
+        
         $data = [
-            'jury' =>  User::findOrFail($jury_id),
+            // 'jury' =>  User::findOrFail($jury_id),
+            'jury' => JuryBoard::findOrFail($jury_id),
 
         ];
+        // dd($data);
         return view('ManagerAdmin.jury.views', $data);
     }
 
@@ -144,8 +150,9 @@ class JuryBoardController extends Controller
         return view('ManagerAdmin.jury.index', $data);
     }
 
-    public function edit(User $jury)
+    public function edit($id)
     {
+
         $data = [
             'jury' => $jury,
             'sub_categories' => SubCategory::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('id', 'DESC')->get(),
