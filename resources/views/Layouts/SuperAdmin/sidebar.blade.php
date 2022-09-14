@@ -308,6 +308,15 @@
                 <i class="nav-icon fa fa-map-signs"></i>
                 <p>
                     Education level
+            
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{{ route('superAdmin.occupation.index') }}" class="nav-link">
+                <i class="nav-icon fa fa-map-signs"></i>
+                <p>
+                    Occupation
                 </p>
             </a>
         </li>
