@@ -122,7 +122,6 @@ Admin
                                     <a href="{{ route('managerAdmin.audition.registerUser', $audition->id) }}"
                                         class="btn btn-warning">Register User</a>
                                 @endif
-                            </center>
 
                     </div>
                 </div>
