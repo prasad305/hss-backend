@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Audition\AuditionRules;
-use Illuminate\Http\Request;
+use Exception;
 use App\Models\Category;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
+use App\Models\Audition\AuditionRules;
 use Illuminate\Support\Facades\Session;
 
 class CategoryController extends Controller
@@ -33,7 +34,7 @@ class CategoryController extends Controller
     {
         return view('SuperAdmin.category.create');
     }
-     //ddddddd
+
     /**
      * Store a newly created resource in storage.
      *
@@ -55,7 +56,7 @@ class CategoryController extends Controller
 
         if ($request->hasFile('icon')) {
             if ($category->icon != null)
-                File::delete(public_path($category->image)); //Old image delete
+                File::delete(public_path($category->icon)); //Old image delete
             $image             = $request->file('icon');
             $folder_path       = 'uploads/category/icon/';
             $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
@@ -157,14 +158,11 @@ class CategoryController extends Controller
 
         try {
             $category->save();
-            AuditionRules::create([
-                'category_id' => $category->id,
-            ]);
             return response()->json([
                 'success' => 'success',
                 'message' => 'Category Updated Successfully'
             ]);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return response()->json([
                 'type' => 'error',
                 'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),

@@ -99,8 +99,8 @@ Admin
                     <div>
                         <h5 class="text-center text-bold">{{ $audition->title }}</h5>
 
-                        <a href="{{ route('managerAdmin.audition.promoInstruction', $audition->id) }}" class="btn a-bg-color mb-2">Promo Instruction</a>
-                        <a href="{{ route('managerAdmin.audition.roundInstruction', $audition->id) }}" class="btn a-bg-color mb-2">Round Instruction</a>
+                        {{-- <a href="{{ route('managerAdmin.audition.promoInstruction', $audition->id) }}" class="btn a-bg-color mb-2">Promo Instruction</a>
+                        <a href="{{ route('managerAdmin.audition.roundInstruction', $audition->id) }}" class="btn a-bg-color mb-2">Round Instruction</a> --}}
                         <a href="{{ route('managerAdmin.audition.registerUser', $audition->id) }}" class="btn a-bg-color mb-2">Register User</a>
 
                                 {{-- <span class="text-center btn btn-info px-4 text-bold">Done</span> --}}

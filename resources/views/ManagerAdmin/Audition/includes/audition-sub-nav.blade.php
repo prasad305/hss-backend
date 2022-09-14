@@ -6,7 +6,11 @@
                 <center>
                     <div class='displaySide'>
                         <img src="{{ asset('assets/manager-admin/instagram-live.png') }}" class="ARRimg pt-2" alt="">
-                        <div class='fontBold'>00</div>
+                        <div class='fontBold'>
+                            @if ($live)
+                                1
+                            @endif
+                        </div>
                     </div>
 
                 </center>
@@ -19,7 +23,10 @@
                 <center>
                     <div class='displaySide'>
                         <img src="{{ asset('assets/manager-admin/Group1176.png') }}" class="ARRimg pt-2" alt="">
-                        <div class='fontBold'>16156</div>
+                        <div class='fontBold'>
+                            @if ($request_approval_pending)
+                            1
+                        @endif</div>
                     </div>
                 </center>
                 <a class="btn border-warning nav-link " href="#">Request for Approval</a>
@@ -29,7 +36,10 @@
             <a class="nav-link border-warning" href="#">
                 <center class="displaySide">
                     <img src="{{ asset('assets/manager-admin/pending-audition.png') }}" class="ARRimg pt-2" alt="">
-                    <div class='fontBold'>00</div>
+                    <div class='fontBold'>
+                        @if ($pending)
+                            1
+                        @endif</div>
                 </center>
                 <a class="btn border-warning nav-link " href="#">Pending Audition</a>
             </a>
