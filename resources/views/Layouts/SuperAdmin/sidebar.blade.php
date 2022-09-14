@@ -303,6 +303,14 @@
                 </p>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ route('superAdmin.educationlevel.index') }}" class="nav-link">
+                <i class="nav-icon fa fa-map-signs"></i>
+                <p>
+                    Education level
+                </p>
+            </a>
+        </li>
 
         <li class="nav-item">
             <a href="#" class="nav-link">

@@ -414,7 +414,13 @@ class AuditionAdminController extends Controller
     public function auditionEvents()
     {
         $auditions =  Audition::where('category_id', auth()->user()->category_id)->get();
-        return view('ManagerAdmin.Audition.events', compact('auditions'));
+        
+     
+        $auditionsStatus = Audition::where('category_id', auth()->user()->category_id)->first();
+        $live = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 3]])->count();
+        $pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 0]])->count();
+        $request_approval_pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 2]])->count();
+        return view('ManagerAdmin.Audition.events', compact('auditions','live','pending','request_approval_pending','auditionsStatus'));
     }
 
     public function getPromoInstruction($audition_id)
@@ -554,5 +560,19 @@ class AuditionAdminController extends Controller
         $round->save();
         session()->flash('success', 'Updated Successfully');
         return redirect()->back();
+    }
+
+    public function count()
+    {
+        $live = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 3]])->count();
+        $pending = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 0]])->count();
+        $request_approval_pending = Audition::where([['audition_admin_id', auth('sanctum')->user()->id], ['status', 1]])->count();
+
+        return response()->json([
+            'status' => 200,
+            'live' => $live,
+            'pending' => $pending,
+            'request_approval_pending' => $request_approval_pending,
+        ]);
     }
 }
