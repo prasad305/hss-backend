@@ -36,6 +36,7 @@ use App\Http\Controllers\SuperAdmin\ReportController;
 use App\Http\Controllers\SuperAdmin\SimplePostController;
 use App\Http\Controllers\SuperAdmin\SouvenirController;
 use App\Http\Controllers\SuperAdmin\SubCategoryController;
+use App\Http\Controllers\SuperAdmin\OccupationController;
 use App\Models\Audition\AuditionUserVoteMark;
 use App\Models\PaymentMethod;
 use App\Models\Slider;
@@ -265,6 +266,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('get-state/{id}', [CityController::class, 'getState'])->name('getState');
     Route::post('admin/city-active/{id}', [CityController::class, 'activeNow'])->name('city.activeNow');
     Route::post('admin/city-inactive/{id}', [CityController::class, 'inactiveNow'])->name('city.inactiveNow');
+
+    //Occupation
+    Route::resource('occupation', OccupationController::class);
+    Route::post('admin/occupation-active/{id}', [OccupationController::class, 'activeNow'])->name('occupation.activeNow');
+    Route::post('admin/occupation-inactive/{id}', [OccupationController::class, 'inactiveNow'])->name('occupation.inactiveNow');
 
     // Interest Type
     Route::resource('interest-type', InterestTypeController::class);

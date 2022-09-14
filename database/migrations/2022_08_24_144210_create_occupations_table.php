@@ -16,7 +16,7 @@ class CreateOccupationsTable extends Migration
         Schema::create('occupations', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->boolean('is_active')->default(1);
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }
