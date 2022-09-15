@@ -270,7 +270,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     //Education Level
     Route::resource('educationlevel', EducationlevelController::class);
-    
+
     //Occupation
     Route::resource('occupation', OccupationController::class);
     Route::post('admin/occupation-active/{id}', [OccupationController::class, 'activeNow'])->name('occupation.activeNow');
@@ -550,9 +550,13 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/learningSession-report', [ReportController::class, 'learningSessionReport'])->name('report.learningSession');
     Route::post('/learningSession-report-filter', [ReportController::class, 'learningFilter'])->name('report.filter.learningSession');
     Route::get('/liveChat-report', [ReportController::class, 'liveChatReport'])->name('report.liveChat');
+    Route::post('/liveChat-report', [ReportController::class, 'liveChatReportFilter'])->name('report.Filter.liveChat');
     Route::get('/qna-report', [ReportController::class, 'qnaReport'])->name('report.qna');
+    Route::post('/qna-report-filter', [ReportController::class, 'qnaReportFilter'])->name('report.Filter.qna');
     Route::get('/meetup-report', [ReportController::class, 'meetupReport'])->name('report.meetup');
+    Route::post('/meetup-report-filter', [ReportController::class, 'meetupReportFilter'])->name('report.filter.meetupevent');
     Route::get('/greeting-report', [ReportController::class, 'greetingReport'])->name('report.greeting');
+    Route::post('/greeting-report-filter', [ReportController::class, 'greetingReportFilter'])->name('report.filter.greeting');
     Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
     Route::get('/marketplace-report', [ReportController::class, 'marketplaceReport'])->name('report.marketplace');
     Route::get('/auction-report', [ReportController::class, 'auctionReport'])->name('report.auction');
