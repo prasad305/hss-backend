@@ -158,7 +158,8 @@ class JuryBoardController extends Controller
             'sub_categories' => SubCategory::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('id', 'DESC')->get(),
             'groups' => JuryGroup::where([['status',1],['category_id',auth()->user()->category_id]])->orderBy('name', 'asc')->get(),
         ];
-        return view('ManagerAdmin.jury.edit', $data);
+       
+        return view('ManagerAdmin.jury.edit', $id);
     }
 
     public function update(Request $request, $id)

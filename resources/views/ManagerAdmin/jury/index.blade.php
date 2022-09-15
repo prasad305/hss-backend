@@ -100,7 +100,7 @@ Jury Board
                                 </button>
                                 @endif
                                 <a class="btn btn-sm btn-info"
-                                    onclick="Show('Edit Jury Board','{{ route('managerAdmin.jury.edit', 1) }}')">
+                                    onclick="Show('Edit Jury Board','{{ route('managerAdmin.jury.edit', $jury['id']) }}')">
                                     <i class="fa fa-edit text-white"></i>
                                 </a>
 
