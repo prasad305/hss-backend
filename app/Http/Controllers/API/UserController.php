@@ -58,6 +58,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
 use App\Models\SouvenirCreate;
 use App\Models\FanGroup;
+use App\Models\LoveReact;
 use App\Models\UserInfo;
 use App\Models\Marketplace;
 use App\Models\WildCard;
@@ -2315,7 +2316,9 @@ class UserController extends Controller
             $q->where('result_publish_start_date', '>', Carbon::now());
         })->with(['auditionRoundInfoStart' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
             $q->with(['videos' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
-                return $q->where([['approval_status', 1], ['type', 'general']])->whereIn('user_id', $generalFailedUsers)->whereNotIn('user_id', $appealWinnerUsers)->whereNotIn('user_id', $appealFailedUsers)->get();
+                return $q->with(['totalReact' => function ($q) {
+                    $q->get();
+                }])->where([['approval_status', 1], ['type', 'general']])->whereIn('user_id', $generalFailedUsers)->whereNotIn('user_id', $appealWinnerUsers)->whereNotIn('user_id', $appealFailedUsers)->get();
             }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get();
         }])->get()->toArray();
 
@@ -2327,6 +2330,8 @@ class UserController extends Controller
                 return $q->where([['approval_status', 1], ['type', 'appeal']])->whereIn('user_id', $appealFailedUsers)->get();
             }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get();
         }])->get()->toArray();
+
+        $userVoteVideos = AuditionRoundInfo::with('videos')->where([['has_user_vote_mark', 1], ['videofeed_status', 1], ['round_type', 0], ['status', 1]])->latest()->get()->toArray();
 
 
         // >where('result_publish_start_date', '>', Carbon::now());
@@ -2345,6 +2350,23 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'roundVideos' => $roundVideos,
+            'userVoteVideos' => $userVoteVideos,
+
+        ]);
+    }
+    public function userVideoLoveReact(Request $request)
+    {
+        if (!LoveReact::where([['user_id', auth()->user()->id], ['react_num', $request->reactNum], ['video_id', $request->videoId]])->exists()) {
+            $loveReact = LoveReact::create([
+                'user_id' => auth()->user()->id,
+                'video_id' => $request->videoId,
+                'react_num' => $request->reactNum,
+                'status' => 1,
+
+            ]);
+        }
+        return response()->json([
+            'status' => 200,
         ]);
     }
 }
