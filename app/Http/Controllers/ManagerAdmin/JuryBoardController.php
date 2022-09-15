@@ -152,14 +152,12 @@ class JuryBoardController extends Controller
 
     public function edit($id)
     {
-
-        $data = [
-            'jury' => $jury,
+       $data = [
+            'jury' => JuryBoard::findOrFail($id),
             'sub_categories' => SubCategory::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('id', 'DESC')->get(),
             'groups' => JuryGroup::where([['status',1],['category_id',auth()->user()->category_id]])->orderBy('name', 'asc')->get(),
         ];
-       
-        return view('ManagerAdmin.jury.edit', $id);
+        return view('ManagerAdmin.jury.edit', $data);
     }
 
     public function update(Request $request, $id)

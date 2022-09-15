@@ -90,12 +90,12 @@ Jury Board
                                 {{-- for active and inactive --}}
                                 @if ($jury['assignjuries']['active_status'] == 0)
                                 <button class="btn btn-sm btn-success" onclick="activeNow(this)"
-                                    value="{{ route('managerAdmin.jury.activeNow', $jury['id']) }}">
+                                    value="{{ route('managerAdmin.jury.activeNow', $jury['assignjuries']['id']) }}">
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 </button>
                                 @elseif($jury['assignjuries']['active_status'] == 1)
                                 <button class="btn btn-sm btn-danger" onclick="inactiveNow(this)"
-                                    value="{{ route('managerAdmin.jury.inactiveNow', $jury['id']) }}">
+                                    value="{{ route('managerAdmin.jury.inactiveNow', $jury['assignjuries']['id']) }}">
                                     <i class="fa fa-close"></i>
                                 </button>
                                 @endif

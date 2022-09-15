@@ -496,7 +496,7 @@
             // console.log(title);
             // console.log(link);
             // console.log(style);
-            alert(link);
+            // alert(link);
 
             $('#modal').modal();
             $('#modal-title').html(title);
