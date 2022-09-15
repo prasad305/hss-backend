@@ -17,6 +17,7 @@ class AuditionRoundRulesController extends Controller
             'categories' => Category::where('status', 1)->latest()->get(),
             'rules_categories' => AuditionRules::with('category')->where('status', 1)->latest()->get(),
         ];
+      
         return view('SuperAdmin.AuditionRoundRules.index', $data);
     }
 
