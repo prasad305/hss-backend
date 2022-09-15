@@ -48,7 +48,7 @@ use App\Http\Controllers\SuperAdmin\OccupationController;
 Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin', 'prevent-back-history']], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
-    
+
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
     Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
 
@@ -546,8 +546,9 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // <================================= All Report ======================================>
 
-    Route::get('/all-report', [ReportController::class, 'allReport'])->name('report.all');
+    Route::get('/all-`report', [ReportController::class, 'allReport'])->name('report.all');
     Route::get('/learningSession-report', [ReportController::class, 'learningSessionReport'])->name('report.learningSession');
+    Route::post('/learningSession-report-filter', [ReportController::class, 'learningFilter'])->name('report.filter.learningSession');
     Route::get('/liveChat-report', [ReportController::class, 'liveChatReport'])->name('report.liveChat');
     Route::get('/qna-report', [ReportController::class, 'qnaReport'])->name('report.qna');
     Route::get('/meetup-report', [ReportController::class, 'meetupReport'])->name('report.meetup');
