@@ -133,7 +133,6 @@ $(document).ready(function () {
 
 function delete_function(objButton) {
     var url = objButton.value;
-    // alert(objButton.value)
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -152,6 +151,7 @@ function delete_function(objButton) {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (data) {
+                    console.log(data);
                     if (data.type == 'success') {
 
                         Swal.fire(

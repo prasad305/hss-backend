@@ -9,6 +9,7 @@ use App\Models\JuryBoard;
 use App\Models\JuryGroup;
 use App\Models\SubCategory;
 use App\Models\User;
+use App\Models\Audition\AuditionAssignJury;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\File;
 
@@ -230,9 +231,20 @@ class JuryBoardController extends Controller
         }
     }
 
-    public function destroy(User $jury)
+    public function destroy($id)
     {
-        $id = $jury->id;
+       $JuryBoard = JuryBoard::find($id);
+       $juryId =  $JuryBoard->assignjuries->id;
+       $jury = User::find($juryId);
+
+    //    $assignJuryId = $JuryBoard->star_id;
+    //    $AuditionAssignJury = AuditionAssignJury::where('jury_id',$assignJuryId)->first();
+    //    if ($AuditionAssignJury->jury_id) {
+    //     return "data not deleted";
+    //    }else{
+    //     return "data  deleted";
+    //    }
+
         try {
             if ($jury->image != null)
                 File::delete(public_path($jury->image)); //Old image delete
