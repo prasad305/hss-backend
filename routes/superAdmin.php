@@ -1,45 +1,47 @@
 <?php
 
-use App\Http\Controllers\SuperAdmin\AccountsController;
-use App\Http\Controllers\SuperAdmin\AdminAuditionController;
-use App\Http\Controllers\SuperAdmin\AuditionAdminController;
-use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
-use App\Http\Controllers\SuperAdmin\DashboardController;
-use App\Http\Controllers\SuperAdmin\ManagerAdminController;
+use App\Models\Slider;
+use App\Models\PaymentMethod;
+use Illuminate\Support\Facades\Route;
+use App\Models\Audition\AuditionUserVoteMark;
+use App\Http\Controllers\SuperAdmin\QnAController;
+use App\Http\Controllers\SuperAdmin\CityController;
 use App\Http\Controllers\SuperAdmin\AdminController;
+use App\Http\Controllers\SuperAdmin\StateController;
+use App\Http\Controllers\SuperAdmin\EventsController;
+use App\Http\Controllers\SuperAdmin\ReportController;
 use App\Http\Controllers\SuperAdmin\AuctionController;
-use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
-use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
-use App\Http\Controllers\SuperAdmin\AuditionRulesController;
-use App\Http\Controllers\SuperAdmin\AuditionUserVoteController;
-use App\Http\Controllers\SuperAdmin\SuperStarController;
-use App\Http\Controllers\SuperAdmin\JuryBoardController;
-use App\Http\Controllers\SuperAdmin\DashboardInfoController;
-use App\Http\Controllers\SuperAdmin\CategoryController;
 use App\Http\Controllers\SuperAdmin\CountryController;
 use App\Http\Controllers\SuperAdmin\PackageController;
+use App\Http\Controllers\SuperAdmin\AccountsController;
+use App\Http\Controllers\SuperAdmin\CategoryController;
 use App\Http\Controllers\SuperAdmin\CurrencyController;
-use App\Http\Controllers\SuperAdmin\StateController;
-use App\Http\Controllers\SuperAdmin\MarketplaceController;
-use App\Http\Controllers\SuperAdmin\CityController;
-use App\Http\Controllers\SuperAdmin\EventsController;
 use App\Http\Controllers\SuperAdmin\FanGroupController;
 use App\Http\Controllers\SuperAdmin\GreetingController;
-use App\Http\Controllers\SuperAdmin\InterestTypeController;
-use App\Http\Controllers\SuperAdmin\JuryGroupController;
-use App\Http\Controllers\SuperAdmin\JurysAuditionController;
-use App\Http\Controllers\SuperAdmin\LearningSessionController;
 use App\Http\Controllers\SuperAdmin\LiveChatController;
-use App\Http\Controllers\SuperAdmin\MeetupEventController;
-use App\Http\Controllers\SuperAdmin\QnAController;
-use App\Http\Controllers\SuperAdmin\ReportController;
-use App\Http\Controllers\SuperAdmin\SimplePostController;
 use App\Http\Controllers\SuperAdmin\SouvenirController;
+use App\Http\Controllers\SuperAdmin\DashboardController;
+use App\Http\Controllers\SuperAdmin\JuryBoardController;
+use App\Http\Controllers\SuperAdmin\JuryGroupController;
+use App\Http\Controllers\SuperAdmin\SuperStarController;
+use App\Http\Controllers\SuperAdmin\SimplePostController;
+use App\Http\Controllers\SuperAdmin\MarketplaceController;
+use App\Http\Controllers\SuperAdmin\MeetupEventController;
 use App\Http\Controllers\SuperAdmin\SubCategoryController;
-use App\Models\Audition\AuditionUserVoteMark;
-use App\Models\PaymentMethod;
-use App\Models\Slider;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SuperAdmin\InterestTypeController;
+use App\Http\Controllers\SuperAdmin\ManagerAdminController;
+use App\Http\Controllers\SuperAdmin\AdminAuditionController;
+use App\Http\Controllers\SuperAdmin\AuditionAdminController;
+use App\Http\Controllers\SuperAdmin\AuditionRulesController;
+use App\Http\Controllers\SuperAdmin\DashboardInfoController;
+use App\Http\Controllers\SuperAdmin\JurysAuditionController;
+use App\Http\Controllers\SuperAdmin\EducationlevelController;
+use App\Http\Controllers\SuperAdmin\LearningSessionController;
+use App\Http\Controllers\SuperAdmin\AuditionUserVoteController;
+use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
+use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
+use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
+use App\Http\Controllers\SuperAdmin\OccupationController;
 
 // Super Admin route
 
@@ -265,6 +267,14 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('get-state/{id}', [CityController::class, 'getState'])->name('getState');
     Route::post('admin/city-active/{id}', [CityController::class, 'activeNow'])->name('city.activeNow');
     Route::post('admin/city-inactive/{id}', [CityController::class, 'inactiveNow'])->name('city.inactiveNow');
+
+    //Education Level
+    Route::resource('educationlevel', EducationlevelController::class);
+    
+    //Occupation
+    Route::resource('occupation', OccupationController::class);
+    Route::post('admin/occupation-active/{id}', [OccupationController::class, 'activeNow'])->name('occupation.activeNow');
+    Route::post('admin/occupation-inactive/{id}', [OccupationController::class, 'inactiveNow'])->name('occupation.inactiveNow');
 
     // Interest Type
     Route::resource('interest-type', InterestTypeController::class);

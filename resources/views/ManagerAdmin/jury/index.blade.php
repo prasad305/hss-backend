@@ -5,6 +5,8 @@ Jury Board
 @endpush
 
 @section('content')
+
+
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -42,67 +44,73 @@ Jury Board
         <h4 class="mb-2">Jury Board List</h4>
 
         <hr>
+        @php 
+            $totalgroup = count($group);
+            for ($i=0; $i <$totalgroup ; $i++) { 
+        @endphp
         <div class="bg-gray-c mb-3">
-            <h4 class="px-2 py-2 co-gradient-warning text-center">Group A</h4>
+            <h4 class="px-2 py-2 co-gradient-warning text-center">{{ $group[$i]['name'] }}</h4>
             <div class="row p-2">
-                @foreach ($juries as $jury)
+                
+                @foreach ($group[$i]['board'] as $key => $jury)
                 <div class="col-md-3 col-sm-6 col-12">
                     <div class="info-box shadow-none py-4 d-flex align-items-center">
 
                         <div class="d-flex justify-content-center align-items-center">
-                            <img src="{{ asset($jury->image ?? get_static_option('user')) }}" alt="Admin Image"
+                            <img src="{{ asset($jury['image'] ?? get_static_option('user')) }}" alt="Admin Image"
                                 class="img-fluid AdminImg">
                         </div>
 
                         <div class="px-2 p-x-i" style="border-left: 1px solid gray">
                             <div class="p-x-card">
-                                <a href="{{ route('managerAdmin.jury.show', $jury->id) }}">
+                                <a href="{{ route('managerAdmin.jury.show', $jury['id']) }}">
                                     <span class="info-box-text AdminName">
-                                        <h5 class="text-light fw-bold">{{ $jury->first_name }} {{ $jury->last_name }}
+                                        <h5 class="text-light fw-bold">{{ $jury['assignjuries']['first_name'] }} {{ $jury['assignjuries']['last_name'] }}
                                         </h5>
                                     </span>
-                                    <b class="AdminMusic">{{$jury->subCategory ? $jury->subCategory->name : ''}}</b>
                                     <br />
                                 </a>
+                                <b class="AdminMusic">{{$jury['assignjuries']['subCategory']['name'] ? $jury['assignjuries']['subCategory']['name'] : ''}}</b>
 
-                                @if ($jury->assignAudition)
+                                @if ($jury['assignAudition'])
                                 <span class="right badge bg-danger my-2">Assigned</span>
                                 <i class="fa-solid fa-bahai px-2 text-danger"></i><br>
                                 @else
                                 @endif
 
                                 <p
-                                    class="{{ $jury->status == 0 ? ' bg-danger pending-text rounded-3 px-2 pb-1 mt-1' : 'text-success bg-success approved-text rounded-3 px-2 pb-1 mt-1' }}">
-                                    {{ $jury->status == 0 ? 'Pending' : 'Approved' }}</p>
+                                    class="{{ $jury['assignjuries']['status'] == 0 ? ' bg-danger pending-text rounded-3 px-2 pb-1 mt-1' : 'text-success bg-success approved-text rounded-3 px-2 pb-1 mt-1' }}">
+                                    {{ $jury['assignjuries']['status'] == 0 ? 'Pending' : 'Approved' }}</p>
 
                                 <p
-                                    class="{{ $jury->active_status == 0 ? 'text-danger text-bold' : 'text-success text-bold'  }}">
-                                    {{ $jury->active_status == 0 ? 'Inactive' : 'Active' }}</p>
+                                    class="{{ $jury['assignjuries']['active_status'] == 0 ? 'text-danger text-bold' : 'text-success text-bold'  }}">
+                                    {{ $jury['assignjuries']['active_status'] == 0 ? 'Inactive' : 'Active' }}</p>
 
-                                <p class="text-light text-bold">{{ $jury->jury ? $jury->jury->qr_code : '' }}</p>
+                                <p class="text-light text-bold">{{ $jury['qr_code'] ? $jury['qr_code'] : '' }}</p>
                                 {{-- for active and inactive --}}
-                                @if ($jury->active_status == 0)
+                                @if ($jury['assignjuries']['active_status'] == 0)
                                 <button class="btn btn-sm btn-success" onclick="activeNow(this)"
-                                    value="{{ route('managerAdmin.jury.activeNow', $jury->id) }}">
+                                    value="{{ route('managerAdmin.jury.activeNow', $jury['id']) }}">
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 </button>
-                                @elseif($jury->active_status == 1)
+                                @elseif($jury['assignjuries']['active_status'] == 1)
                                 <button class="btn btn-sm btn-danger" onclick="inactiveNow(this)"
-                                    value="{{ route('managerAdmin.jury.inactiveNow', $jury->id) }}">
+                                    value="{{ route('managerAdmin.jury.inactiveNow', $jury['id']) }}">
                                     <i class="fa fa-close"></i>
                                 </button>
                                 @endif
                                 <a class="btn btn-sm btn-info"
-                                    onclick="Show('Edit Jury Board','{{ route('managerAdmin.jury.edit', $jury->id) }}')"><i
-                                        class="fa fa-edit text-white"></i></a>
+                                    onclick="Show('Edit Jury Board','{{ route('managerAdmin.jury.edit', 1) }}')">
+                                    <i class="fa fa-edit text-white"></i>
+                                </a>
 
-                                <a href="{{ route('managerAdmin.jury.views',$jury->id) }}"
+                                <a href="{{ route('managerAdmin.jury.views',$jury['id']) }}"
                                     class="btn btn-sm btn-success">
                                     <i class="fa-solid fa-eye text-white"></i>
                                 </a>
 
                                 <button class="btn btn-sm btn-warning" onclick="delete_function(this)"
-                                    value="{{ route('managerAdmin.jury.destroy', $jury->id) }}"><i
+                                    value="{{ route('managerAdmin.jury.destroy', $jury['id']) }}"><i
                                         class="fa fa-trash"></i>
                                 </button>
                             </div>
@@ -114,152 +122,7 @@ Jury Board
             </div>
 
         </div>
-
-        <div class="bg-gray-c mb-3">
-            <h4 class="px-2 py-2 co-gradient-warning text-center">Group B</h4>
-            <div class="row p-2">
-                @foreach ($juries as $jury)
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="info-box shadow-none py-4 d-flex align-items-center">
-
-                        <div class="d-flex justify-content-center align-items-center">
-                            <img src="{{ asset($jury->image ?? get_static_option('user')) }}" alt="Admin Image"
-                                class="img-fluid AdminImg">
-                        </div>
-
-                        <div class="px-2 p-x-i" style="border-left: 1px solid gray">
-                            <div class="p-x-card">
-                                <a href="{{ route('managerAdmin.jury.show', $jury->id) }}">
-                                    <span class="info-box-text AdminName">
-                                        <h5 class="text-light fw-bold">{{ $jury->first_name }} {{ $jury->last_name }}
-                                        </h5>
-                                    </span>
-                                    <b class="AdminMusic">{{$jury->subCategory ? $jury->subCategory->name : ''}}</b>
-                                    <br />
-                                </a>
-
-                                @if ($jury->assignAudition)
-                                <span class="right badge bg-danger my-2">Assigned</span>
-                                <i class="fa-solid fa-bahai px-2 text-danger"></i><br>
-                                @else
-                                @endif
-
-                                <p
-                                    class="{{ $jury->status == 0 ? ' bg-danger pending-text rounded-3 px-2 pb-1 mt-1' : 'text-success bg-success approved-text rounded-3 px-2 pb-1 mt-1' }}">
-                                    {{ $jury->status == 0 ? 'Pending' : 'Approved' }}</p>
-
-                                <p
-                                    class="{{ $jury->active_status == 0 ? 'text-danger text-bold' : 'text-success text-bold'  }}">
-                                    {{ $jury->active_status == 0 ? 'Inactive' : 'Active' }}</p>
-
-                                <p class="text-light text-bold">{{ $jury->jury ? $jury->jury->qr_code : '' }}</p>
-                                {{-- for active and inactive --}}
-                                @if ($jury->active_status == 0)
-                                <button class="btn btn-sm btn-success" onclick="activeNow(this)"
-                                    value="{{ route('managerAdmin.jury.activeNow', $jury->id) }}">
-                                    <i class="fa fa-check" aria-hidden="true"></i>
-                                </button>
-                                @elseif($jury->active_status == 1)
-                                <button class="btn btn-sm btn-danger" onclick="inactiveNow(this)"
-                                    value="{{ route('managerAdmin.jury.inactiveNow', $jury->id) }}">
-                                    <i class="fa fa-close"></i>
-                                </button>
-                                @endif
-                                <a class="btn btn-sm btn-info"
-                                    onclick="Show('Edit Jury Board','{{ route('managerAdmin.jury.edit', $jury->id) }}')"><i
-                                        class="fa fa-edit text-white"></i></a>
-
-                                <a href="{{ route('managerAdmin.jury.views',$jury->id) }}"
-                                    class="btn btn-sm btn-success">
-                                    <i class="fa-solid fa-eye text-white"></i>
-                                </a>
-
-                                <button class="btn btn-sm btn-warning" onclick="delete_function(this)"
-                                    value="{{ route('managerAdmin.jury.destroy', $jury->id) }}"><i
-                                        class="fa fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                @endforeach
-            </div>
-
-        </div>
-
-        <div class="bg-gray-c mb-3">
-            <h4 class="px-2 py-2 co-gradient-warning text-center">Group C</h4>
-            <div class="row p-2">
-                @foreach ($juries as $jury)
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="info-box shadow-none py-4 d-flex align-items-center">
-
-                        <div class="d-flex justify-content-center align-items-center">
-                            <img src="{{ asset($jury->image ?? get_static_option('user')) }}" alt="Admin Image"
-                                class="img-fluid AdminImg">
-                        </div>
-
-                        <div class="px-2 p-x-i" style="border-left: 1px solid gray">
-                            <div class="p-x-card">
-                                <a href="{{ route('managerAdmin.jury.show', $jury->id) }}">
-                                    <span class="info-box-text AdminName">
-                                        <h5 class="text-light fw-bold">{{ $jury->first_name }} {{ $jury->last_name }}
-                                        </h5>
-                                    </span>
-                                    <b class="AdminMusic">{{$jury->subCategory ? $jury->subCategory->name : ''}}</b>
-                                    <br />
-                                </a>
-
-                                @if ($jury->assignAudition)
-                                <span class="right badge bg-danger my-2">Assigned</span>
-                                <i class="fa-solid fa-bahai px-2 text-danger"></i><br>
-                                @else
-                                @endif
-
-                                <p
-                                    class="{{ $jury->status == 0 ? ' bg-danger pending-text rounded-3 px-2 pb-1 mt-1' : 'text-success bg-success approved-text rounded-3 px-2 pb-1 mt-1' }}">
-                                    {{ $jury->status == 0 ? 'Pending' : 'Approved' }}</p>
-
-                                <p
-                                    class="{{ $jury->active_status == 0 ? 'text-danger text-bold' : 'text-success text-bold'  }}">
-                                    {{ $jury->active_status == 0 ? 'Inactive' : 'Active' }}</p>
-
-                                <p class="text-light text-bold">{{ $jury->jury ? $jury->jury->qr_code : '' }}</p>
-                                {{-- for active and inactive --}}
-                                @if ($jury->active_status == 0)
-                                <button class="btn btn-sm btn-success" onclick="activeNow(this)"
-                                    value="{{ route('managerAdmin.jury.activeNow', $jury->id) }}">
-                                    <i class="fa fa-check" aria-hidden="true"></i>
-                                </button>
-                                @elseif($jury->active_status == 1)
-                                <button class="btn btn-sm btn-danger" onclick="inactiveNow(this)"
-                                    value="{{ route('managerAdmin.jury.inactiveNow', $jury->id) }}">
-                                    <i class="fa fa-close"></i>
-                                </button>
-                                @endif
-                                <a class="btn btn-sm btn-info"
-                                    onclick="Show('Edit Jury Board','{{ route('managerAdmin.jury.edit', $jury->id) }}')"><i
-                                        class="fa fa-edit text-white"></i></a>
-
-                                <a href="{{ route('managerAdmin.jury.views',$jury->id) }}"
-                                    class="btn btn-sm btn-success">
-                                    <i class="fa-solid fa-eye text-white"></i>
-                                </a>
-
-                                <button class="btn btn-sm btn-warning" onclick="delete_function(this)"
-                                    value="{{ route('managerAdmin.jury.destroy', $jury->id) }}"><i
-                                        class="fa fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                @endforeach
-            </div>
-
-        </div>
+        @php } @endphp
 
     </div> <!-- container -->
 </div> <!-- content -->

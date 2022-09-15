@@ -92,15 +92,19 @@ Admin
         @foreach ($auditions as $audition)
             <div class="col-md-3 col-sm-6 col-12">
                 <div class="p-2 bg-dark shadow-none pb-4 m-3 BGaB">
-                    <img src="{{ asset($audition->banner ?? get_static_option('audition_demo_image')) }}" alt="Admin Image"
-                        class="img-fluid ImgBlue mr-3 mb-2 w-100">
+                    <img src="@if ( isset($audition->banner))
+                    {{ asset($audition->banner) }}
+                    @else {{ asset('assets/manager-admin/clock.png') }}
+                    @endif"
+                     alt="Admin Image"
+                        class="img-fluid ImgBlue mr-3 mb-2 w-100 ARRimg pt-2">
 
                 <div className="">
                     <div>
                         <h5 class="text-center text-bold">{{ $audition->title }}</h5>
 
-                        <a href="{{ route('managerAdmin.audition.promoInstruction', $audition->id) }}" class="btn a-bg-color mb-2">Promo Instruction</a>
-                        <a href="{{ route('managerAdmin.audition.roundInstruction', $audition->id) }}" class="btn a-bg-color mb-2">Round Instruction</a>
+                        {{-- <a href="{{ route('managerAdmin.audition.promoInstruction', $audition->id) }}" class="btn a-bg-color mb-2">Promo Instruction</a>
+                        <a href="{{ route('managerAdmin.audition.roundInstruction', $audition->id) }}" class="btn a-bg-color mb-2">Round Instruction</a> --}}
                         <a href="{{ route('managerAdmin.audition.registerUser', $audition->id) }}" class="btn a-bg-color mb-2">Register User</a>
 
                                 {{-- <span class="text-center btn btn-info px-4 text-bold">Done</span> --}}
@@ -118,7 +122,6 @@ Admin
                                     <a href="{{ route('managerAdmin.audition.registerUser', $audition->id) }}"
                                         class="btn btn-warning">Register User</a>
                                 @endif
-                            </center>
 
                     </div>
                 </div>

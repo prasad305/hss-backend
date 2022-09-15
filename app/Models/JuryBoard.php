@@ -19,7 +19,7 @@ class JuryBoard extends Model
         'status',
     ];
 
-    protected $with = ['juryBoard','group'];
+    protected $with = ['juryBoard','group','assignjuries'];
 
     public function juryBoard()
     {
@@ -29,5 +29,9 @@ class JuryBoard extends Model
     public function group()
     {
         return $this->belongsto(JuryGroup::class,'group_id','id');
+    }
+    public function assignjuries()
+    {
+        return $this->belongsTo(User::class,'star_id');
     }
 }

@@ -238,9 +238,13 @@ class AuditionController extends Controller
         $auditionRule = AuditionRules::where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->first();
 
         $auditionRoundRule = AuditionRoundRule::where([['audition_rules_id',   $auditionRule->id], ['status', 1]])->count();
+        $auditionsStatus = Audition::where('category_id', auth()->user()->category_id)->first();
+        $live = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 3]])->count();
+        $pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 0]])->count();
+        $request_approval_pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 2]])->count();
 
 
-        return view('ManagerAdmin.audition.create', compact('auditionAdmins', 'subCategories', 'auditionRule', 'auditionRoundRule'));
+        return view('ManagerAdmin.audition.create', compact('auditionAdmins', 'subCategories', 'auditionRule', 'auditionRoundRule','auditionsStatus','live','pending','request_approval_pending'));
     }
 
     public function assignManpower($audition_id)

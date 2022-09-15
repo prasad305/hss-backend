@@ -395,8 +395,6 @@
 
     <script>
         function Show(title, link, style = '') {
-
-            // alert();
             $('#modal').modal();
             $('#modal-title').html(title);
             $('#modal-body').html('<h1 class="text-center"><strong>Please Wait...</strong></h1>');
