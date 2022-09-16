@@ -19,6 +19,7 @@ use App\Models\QnA;
 use App\Models\QnaRegistration;
 use App\Models\SimplePost;
 use App\Models\SubCategory;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -107,7 +108,7 @@ class ReportController extends Controller
 
 
 
-     public function learningSubCategory($id)
+    public function allSubCategory($id)
     {
         // dd($id);
         $subCategories = SubCategory::where('category_id', $id)->get();
@@ -120,11 +121,33 @@ class ReportController extends Controller
     public function simplePostReport()
     {
         $all_post = SimplePost::all()->count();
-        $free_post = SimplePost::where('type', 'free')->count();
-        $paid_post = SimplePost::where('type', 'paid')->count();
+        $total_free_post = SimplePost::where('type', 'free')->count();
+        $total_paid_post = SimplePost::where('type', 'paid')->count();
+        $categories = Category::orderBy('id', 'desc')->get();
+        $total_published_post = SimplePost::where('status', '1')->count();
+        $total_pending_post = SimplePost::where('status', '0')->count();
+        $total_paid_post_fees = SimplePost::sum('fee');
+
+
         // dd($paid_post);
-        return view('SuperAdmin.Report.SimplePost.simplePost_report', compact('free_post', 'paid_post'));
+        return view('SuperAdmin.Report.SimplePost.simplePost_report', compact('total_free_post', 'total_paid_post', 'categories', 'total_published_post', 'total_pending_post', 'total_paid_post_fees'));
     }
+
+    public function simplePostFilter(Request $request){
+        $start_date = Carbon::parse($request['start_date'])->format('Y-m-d  H:i:s');
+        $end_date = Carbon::parse($request['end_date'])->format('Y-m-d  H:i:s');
+        // // dd($request);
+        return response()->json($request);
+    }
+
+    public function simplePostUserName($name)
+    {
+
+        $user_names = User::where('user_type', $name)->get();
+        return response()->json($user_names);
+    }
+
+
     public function liveChatReport()
     {
 
@@ -174,12 +197,10 @@ class ReportController extends Controller
 
         $categories = Category::orderBy('id', 'desc')->get();
 
-        // dd( $total_live_chat);
-        // return response()->json($request);
         return response()->json(['categories' => $categories, 'reg_fee' => $reg_fee, 'total_live_chat' => $total_live_chat, 'slot_fee' => $slot_fee]);
     }
 
-   
+
 
     public function meetupReport()
     {
@@ -211,10 +232,7 @@ class ReportController extends Controller
         foreach ($total_meetup_events as $amount) {
             $meetUp_event = $amount['id'];
         }
-        // dd($meetUp_event);
-        // $fee_of_online = MeetupEvent::all()->count();
-        $start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
-        $end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
+
 
         $total_fee_online = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('meetup_type', 'Online')->sum('fee');
         $total_fee_offline = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('meetup_type', 'Offline')->sum('fee');

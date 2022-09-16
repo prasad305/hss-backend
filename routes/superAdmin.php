@@ -550,7 +550,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/all-`report', [ReportController::class, 'allReport'])->name('report.all');
     Route::get('/learningSession-report', [ReportController::class, 'learningSessionReport'])->name('report.learningSession');
     Route::post('/learningSession-report-filter', [ReportController::class, 'learningFilter'])->name('report.filter.learningSession');
-    Route::get('/learningSession-report-filter-subCategory/{id}', [ReportController::class, 'learningSubCategory'])->name('report.filter.learningSessionSubCategory');
+    Route::get('/all-report-filter-subCategory/{id}', [ReportController::class, 'allSubCategory']);
     Route::get('/liveChat-report', [ReportController::class, 'liveChatReport'])->name('report.liveChat');
     Route::post('/liveChat-report', [ReportController::class, 'liveChatReportFilter'])->name('report.Filter.liveChat');
     Route::get('/qna-report', [ReportController::class, 'qnaReport'])->name('report.qna');
@@ -564,6 +564,8 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/auction-report', [ReportController::class, 'auctionReport'])->name('report.auction');
     Route::get('/souvenir-report', [ReportController::class, 'souvenirReport'])->name('report.souvenir');
     Route::get('/simplePost-report', [ReportController::class, 'simplePostReport'])->name('report.simplePost');
+    Route::post('/simplePost-report-filter', [ReportController::class, 'simplePostFilter' ])->name('report.filter.simplePost');
+    Route::get('/simplePost-report-filter-userType/{name}', [ReportController::class, 'simplePostUserName']);
     Route::get('/fanGroup-report', [ReportController::class, 'fanGroupReport'])->name('report.fanGroup');
 
     // <=================================End All Report ======================================>
