@@ -18,6 +18,7 @@ use App\Models\MeetupEventRegistration;
 use App\Models\QnA;
 use App\Models\QnaRegistration;
 use App\Models\SimplePost;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -66,61 +67,52 @@ class ReportController extends Controller
 
         $categories = Category::orderBy('id', 'desc')->get();
 
+        $subCategories = SubCategory::orderBy('id', 'desc')->get();
 
-        return view('SuperAdmin.Report.LearningSession.learningSession_report', compact('categories', 'assignment_fee', 'registration_fee', 'certificate', 'assignment'));
+
+        return view('SuperAdmin.Report.LearningSession.learningSession_report', compact('categories', 'subCategories', 'assignment_fee', 'registration_fee', 'certificate', 'assignment'));
     }
     public function learningFilter(Request $request)
     {
+
         $start_date = Carbon::parse($request->start_date)->format('Y-m-d  H:i:s');
         $end_date = Carbon::parse($request->end_date)->format('Y-m-d  H:i:s');
         // dd($request);
-        $assignment_fee = 0;
-        $total_assignment_fees = LearningSession::whereBetween('created_at', [$start_date, $end_date])->get();
+
+        $total_assignment_fees = LearningSession::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->get();
         // dd($total_assignment_fees);
+
+        $assignment_fee = 0;
+        $registration_fee = 0;
+        $assignment = 0;
         foreach ($total_assignment_fees as $amount) {
             $assignment_fee = $assignment_fee + $amount['assignment_fee'];
-        }
-
-        // dd($assignment_fee);
-
-        $start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
-        $end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
-        // dd($start_date, $end_date);
-        $registration_fee = 0;
-        $total_registration_fees = LearningSession::whereBetween('created_at', [$start_date, $end_date])->get();
-        // dd($total_registration_fees);
-        foreach ($total_registration_fees as $amount) {
             $registration_fee = $registration_fee + $amount['fee'];
-        }
-        // dd($registration_fee);
-
-        $start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
-        $end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
-
-        $certificate = LearningSessionCertificate::whereBetween('created_at', [$start_date, $end_date])->count();
-        // dd($certificate);
-
-
-        $start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
-        $end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
-
-        $assignment = 0;
-        $total_assignments = LearningSession::whereBetween('created_at', [$start_date, $end_date])->get();
-
-        foreach ($total_assignments as $amount) {
             $assignment = $assignment + $amount['assignment'];
         }
 
-        // dd($assignment);
+
+
+        $certificate = LearningSessionCertificate::whereBetween('created_at', [$start_date, $end_date])->count();
+
 
         $categories = Category::orderBy('id', 'desc')->get();
+        $subCategories = SubCategory::orderBy('id', 'desc')->get();
         // dd($categories);
         // return redirect()->back()->with(compact('categories', 'assignment_fee', 'registration_fee', 'certificate', 'assignment'));
-        return response()->json(['categories' => $categories, 'assignment_fee' => $assignment_fee, 'registration_fee' => $registration_fee, 'assignment' => $assignment, 'certificate' => $certificate]);
+        return response()->json(['categories' => $categories, 'subCategories' => $subCategories, 'assignment_fee' => $assignment_fee, 'registration_fee' => $registration_fee, 'assignment' => $assignment, 'certificate' => $certificate]);
 
         // return view('SuperAdmin.Report.LearningSession.learningSession_report', compact('categories', 'assignment_fee','registration_fee','certificate','assignment'));
     }
 
+
+
+     public function learningSubCategory($id)
+    {
+        // dd($id);
+        $subCategories = SubCategory::where('category_id', $id)->get();
+        return response()->json($subCategories);
+    }
 
 
 
@@ -131,7 +123,7 @@ class ReportController extends Controller
         $free_post = SimplePost::where('type', 'free')->count();
         $paid_post = SimplePost::where('type', 'paid')->count();
         // dd($paid_post);
-        return view('SuperAdmin.Report.SimplePost.simplePost_report',compact('free_post','paid_post'));
+        return view('SuperAdmin.Report.SimplePost.simplePost_report', compact('free_post', 'paid_post'));
     }
     public function liveChatReport()
     {
@@ -187,6 +179,7 @@ class ReportController extends Controller
         return response()->json(['categories' => $categories, 'reg_fee' => $reg_fee, 'total_live_chat' => $total_live_chat, 'slot_fee' => $slot_fee]);
     }
 
+   
 
     public function meetupReport()
     {
@@ -327,6 +320,8 @@ class ReportController extends Controller
     {
         return view('SuperAdmin.Report.SimplePost.simplePost_report');
     }
+
+
 
 
     ///kjhkjg

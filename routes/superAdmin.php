@@ -42,6 +42,7 @@ use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
 use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
 use App\Http\Controllers\SuperAdmin\OccupationController;
+use Illuminate\Cache\Repository;
 
 // Super Admin route
 
@@ -549,6 +550,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/all-`report', [ReportController::class, 'allReport'])->name('report.all');
     Route::get('/learningSession-report', [ReportController::class, 'learningSessionReport'])->name('report.learningSession');
     Route::post('/learningSession-report-filter', [ReportController::class, 'learningFilter'])->name('report.filter.learningSession');
+    Route::get('/learningSession-report-filter-subCategory/{id}', [ReportController::class, 'learningSubCategory'])->name('report.filter.learningSessionSubCategory');
     Route::get('/liveChat-report', [ReportController::class, 'liveChatReport'])->name('report.liveChat');
     Route::post('/liveChat-report', [ReportController::class, 'liveChatReportFilter'])->name('report.Filter.liveChat');
     Route::get('/qna-report', [ReportController::class, 'qnaReport'])->name('report.qna');
