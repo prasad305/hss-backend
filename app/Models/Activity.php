@@ -15,7 +15,8 @@ class Activity extends Model
         'event_registration_id',
         'user_id',
         'marketplace_id',
-        'souvenir_id'
+        'souvenir_id',
+
     ];
 
     protected $with = ['user', 'meetup','meetupRegistration','marketPlace', 'marketPlaceOrder', 'souvenirApply' ,'livechat','livechatRegistration', 'learningSession','learningSessionRegistration','greetingRegistration','greeting','qna','qnaRegistration','auction'];
@@ -80,6 +81,9 @@ class Activity extends Model
     }
     public function souvenirApply(){
         return $this->belongsTo(SouvenirApply::class, 'event_registration_id');
+    }
+    public function audition(){
+        return $this->belongsTo(audition::class, 'event_id');
     }
 
 }
