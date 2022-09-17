@@ -32,7 +32,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required',
-            'last_name' => 'required',
+            // 'last_name' => 'required',
             'email' => 'required|unique:users,email|email:rfc,dns|email',
             'phone' => 'required|unique:users,phone',
             'password' => 'required|min:4'
@@ -51,7 +51,8 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'password' => Hash::make($request->password),
-                'otp' => rand(100000, 999999)
+                // 'otp' => rand(100000, 999999)
+                'otp' => 123456
             ]);
 
             $token = $user->createToken($user->email . '_Token')->plainTextToken;
