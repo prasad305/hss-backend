@@ -47,4 +47,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
      */
     Route::get('/mobile/fan-group-chat-history/{group_id}', [UserMobileAppController::class, 'getFanGroupMessage']);
     Route::get('/mobile/qna-chat-history/{qna_id}', [UserMobileAppController::class, 'getQnaMessage']);
+
+    /**
+     * create form information get
+     */
+    Route::get('/user/create-user-info', [UserMobileAppController::class, 'getGetInfos']);
 });
