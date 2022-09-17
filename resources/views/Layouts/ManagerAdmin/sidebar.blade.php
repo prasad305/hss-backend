@@ -54,8 +54,7 @@
 
         <li class="nav-item">
             <a href="{{ route('managerAdmin.assigned.index') }}" class="nav-link">
-                <i
-                    class="nav-icon {{ Request::routeIs('managerAdmin.assigned.index') ? 'active' : '' }} fas fa-th"></i>
+                <i class="nav-icon {{ Request::routeIs('managerAdmin.assigned.index') ? 'active' : '' }} fas fa-th"></i>
                 <p>
                     Assign
                 </p>
@@ -450,10 +449,8 @@
         </li>
 
 
-        <li
-            class="nav-item {{ \Illuminate\Support\Facades\Request::is('manager-admin/audition*') ? 'menu-open ' : '' }}">
-            <a href="#"
-                class="nav-link {{ \Illuminate\Support\Facades\Request::is('manager-admin/audition*') ? 'active ' : '' }}">
+        <li class="nav-item {{ \Illuminate\Support\Facades\Request::is('manager-admin/audition*') ? 'menu-open ' : '' }}">
+            <a href="#" class="nav-link {{ \Illuminate\Support\Facades\Request::is('manager-admin/audition*') ? 'active ' : '' }}">
                 <i class="nav-icon fas fa-chart-pie"></i>
                 <p>Audition Management
                     <i class="right fas fa-angle-left"></i>
@@ -505,8 +502,7 @@
 
 
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.auditionAdmin.index') }}"
-                        class="nav-link {{ Request::routeIs('managerAdmin.audition.auditionAdmin.index') ? 'active' : '' }}">
+                    <a href="{{ route('managerAdmin.audition.auditionAdmin.index') }}" class="nav-link {{ Request::routeIs('managerAdmin.audition.auditionAdmin.index') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Admins</p>
                     </a>
@@ -578,6 +574,83 @@
                     <a href="{{ route('managerAdmin.accounts.index') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Dashboard</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="nav-item mb-5">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>All Report
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.all') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>All Report</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.simplePost') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Simple Post</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.learningSession') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Learning Session</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.meetup') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Meetup Event</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.greeting') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Greeting</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.liveChat') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Live Chat</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.qna') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Q&A</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.fanGroup') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Fan Group</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.marketplace') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Marketplace</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.auction') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Auction</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.souvenir') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Souvenir</p>
                     </a>
                 </li>
             </ul>
