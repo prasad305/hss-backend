@@ -59,6 +59,7 @@ use Illuminate\Support\Str;
 use App\Models\SouvenirCreate;
 use App\Models\FanGroup;
 use App\Models\LoveReact;
+use App\Models\LoveReactPayment;
 use App\Models\UserInfo;
 use App\Models\Marketplace;
 use App\Models\WildCard;
@@ -2364,6 +2365,36 @@ class UserController extends Controller
                 'status' => 1,
 
             ]);
+        }
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+    public function userVideoLoveReactPayment(Request $request)
+    {
+        // return $request->all();
+        if (!LoveReactPayment::where([['user_id', auth()->user()->id], ['react_num', $request->reactNum], ['video_id', $request->videoId]])->exists()) {
+
+            $loveReactPayment = LoveReactPayment::create([
+                'user_id' => auth()->user()->id,
+                'video_id' => $request->videoId,
+                'react_num' => $request->reactNum,
+                'cardHolderName' => $request->cardHolderName,
+                'cardNumber' => $request->cardNumber,
+                'ccv' => $request->ccv,
+                'expireDate' => $request->expireDate,
+                'status' => 1,
+
+            ]);
+            if ($loveReactPayment) {
+                $loveReact = LoveReact::create([
+                    'user_id' => auth()->user()->id,
+                    'video_id' => $request->videoId,
+                    'react_num' => $request->reactNum,
+                    'status' => 1,
+
+                ]);
+            }
         }
         return response()->json([
             'status' => 200,

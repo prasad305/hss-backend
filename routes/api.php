@@ -289,6 +289,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/user/audition/videofeed/videos', [UserController::class, 'videoFeedVidoes']);
     Route::post('/user/audition/videos/loveReact', [UserController::class, 'userVideoLoveReact']);
+    Route::post('/user/audition/videos/loveReact/payment', [UserController::class, 'userVideoLoveReactPayment']);
 
     // Promo Videos
     Route::get('/user/PromoVideos', [UserController::class, 'getPromoVideo']);
