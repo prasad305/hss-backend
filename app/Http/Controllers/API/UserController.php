@@ -60,7 +60,7 @@ use App\Models\SouvenirCreate;
 use App\Models\FanGroup;
 use App\Models\UserInfo;
 use App\Models\Marketplace;
-
+use PhpParser\Node\Stmt\TryCatch;
 
 class UserController extends Controller
 {
@@ -1977,63 +1977,79 @@ class UserController extends Controller
 
     // User Profile Update
 
-    public function updateCover(Request $request, $id)
+    public function updateCover(Request $request)
     {
 
 
 
-        $userInfo = User::findOrfail($id);
+        $userInfo = User::findOrfail(Auth()->User()->id);
 
-        if ($request->hasfile('cover_photo')) {
+
+
+        if ($request->base64) {
 
             $destination = $userInfo->cover_photo;
             if (File::exists($destination)) {
                 File::delete($destination);
             }
 
-            $file = $request->file('cover_photo');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/userPhotos/' . time() . '.' . $extension;
+            $filename = 'uploads/images/userPhotos/' . time() . '.jpg';
+            file_put_contents($filename, base64_decode($request->base64));
 
-            Image::make($file)->resize(900, 400)->save($filename, 100);
             $userInfo->cover_photo = $filename;
-        }
-        $userInfo->update();
 
-        return response()->json([
-            'status' => 200,
-            'message' => "Cover Photo updated"
-        ]);
+            $userInfo->update();
+
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => "Image Photo updated"
+            ]);
+        } else {
+            return response()->json([
+                'status' => 200,
+                'message' => "Image fild empty"
+            ]);
+        }
     }
 
 
-    public function updateProfile(Request $request, $id)
+    public function updateProfile(Request $request)
     {
 
 
 
-        $userInfo = User::findOrfail($id);
+        $userInfo = User::findOrfail(Auth()->User()->id);
 
-        if ($request->hasfile('image')) {
+
+
+        if ($request->base64) {
 
             $destination = $userInfo->image;
             if (File::exists($destination)) {
                 File::delete($destination);
             }
 
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'uploads/images/userPhotos/' . time() . '.' . $extension;
+            $filename = 'uploads/images/userPhotos/' . time() . '.jpg';
+            file_put_contents($filename, base64_decode($request->base64));
 
-            Image::make($file)->resize(900, 400)->save($filename, 100);
             $userInfo->image = $filename;
-        }
-        $userInfo->update();
 
-        return response()->json([
-            'status' => 200,
-            'message' => "Image Photo updated"
-        ]);
+            $userInfo->update();
+
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => "Image Photo updated"
+            ]);
+        } else {
+            return response()->json([
+                'status' => 200,
+                'message' => "Image fild empty"
+            ]);
+        }
     }
 
     public function userActivites()
