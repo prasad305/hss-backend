@@ -93,12 +93,9 @@ class OccupationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required',
-        ]);
-
         $occupation = Occupation::findOrFail($id);
         $occupation->title = $request->input('name');
+        $occupation->status = $request->input('status');
 
         try {
             $occupation->save();
@@ -122,7 +119,19 @@ class OccupationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $occupation = Occupation::findOrfail($id);
+        try {
+            $occupation->delete();
+            return response()->json([
+                'type' => 'success',
+                'message' => 'Successfully Deleted !!',
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'error' . $exception->getMessage(),
+            ]);
+        }
     }
     public function activeNow($id)
     {
