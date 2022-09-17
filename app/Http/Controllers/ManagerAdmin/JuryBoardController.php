@@ -237,14 +237,15 @@ class JuryBoardController extends Controller
        $juryId =  $JuryBoard->assignjuries->id;
        $jury = User::find($juryId);
 
-    //    $assignJuryId = $JuryBoard->star_id;
-    //    $AuditionAssignJury = AuditionAssignJury::where('jury_id',$assignJuryId)->first();
-    //    if ($AuditionAssignJury->jury_id) {
-    //     return "data not deleted";
-    //    }else{
-    //     return "data  deleted";
-    //    }
-
+       $assignJuryId = $JuryBoard->star_id;
+       $AuditionAssignJury = AuditionAssignJury::where('jury_id',$assignJuryId)->first();
+       $test = $AuditionAssignJury->jury_id;
+        if ($test) {
+            return response()->json([
+                'type' => 'error',
+                'message' => "You won't be able to delete this!"
+            ]);
+       }else{
         try {
             if ($jury->image != null)
                 File::delete(public_path($jury->image)); //Old image delete
@@ -268,6 +269,7 @@ class JuryBoardController extends Controller
                 'message' => $exception->getMessage()
             ]);
         }
+       }
     }
 
     public function activeNow($id)
