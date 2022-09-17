@@ -262,15 +262,15 @@ class ReportController extends Controller
         $end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
 
         $meetUp_event = 0;
-        $total_meetup_events = MeetupEventRegistration::whereBetween('created_at', [$start_date, $end_date])->get();
+        $total_meetup_events = MeetupEventRegistration::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->get();
 
         foreach ($total_meetup_events as $amount) {
             $meetUp_event = $amount['id'];
         }
 
 
-        $total_fee_online = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('meetup_type', 'Online')->sum('fee');
-        $total_fee_offline = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('meetup_type', 'Offline')->sum('fee');
+        $total_fee_online = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', 'Online')->sum('fee');
+        $total_fee_offline = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', 'Offline')->sum('fee');
         // dd($total_fee_offline);
         $categories = Category::orderBy('id', 'desc')->get();
 
