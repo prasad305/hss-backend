@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auction;
+use App\Models\Bidding;
 use App\Models\Category;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
@@ -13,11 +15,15 @@ use App\Models\LearningSessionCertificate;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChat;
 use App\Models\LiveChatRegistration;
+use App\Models\Marketplace;
+use App\Models\MarketplaceOrder;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
 use App\Models\QnA;
 use App\Models\QnaRegistration;
 use App\Models\SimplePost;
+use App\Models\SouvenirApply;
+use App\Models\SouvenirCreate;
 use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -239,14 +245,14 @@ class ReportController extends Controller
 
     public function meetupReport()
     {
-        $meetUp_event = 0;
-        $total_meetup_events = MeetupEventRegistration::all();
+        // $meetUp_event = 0;
+        // $total_meetup_events = MeetupEventRegistration::all();
 
-        foreach ($total_meetup_events as $amount) {
-            $meetUp_event = $amount['id'];
-        }
+        // foreach ($total_meetup_events as $amount) {
+        //     $meetUp_event = $amount['id'];
+        // }
         // dd($meetUp_event);
-        // $fee_of_online = MeetupEvent::all()->count();
+        $meetUp_event = MeetupEventRegistration::all()->count();
         $categories = Category::orderBy('id', 'desc')->get();
         $total_fee_online = MeetupEvent::where('meetup_type', 'online')->sum('fee');
         $total_fee_offline = MeetupEvent::where('meetup_type', 'offline')->sum('fee');
@@ -257,21 +263,17 @@ class ReportController extends Controller
 
     public function meetupReportFilter(Request $request)
     {
-        // dd($request);
-        $start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
-        $end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
 
-        $meetUp_event = 0;
-        $total_meetup_events = MeetupEventRegistration::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->get();
+        $start_date = $request['start_date'];
+        $end_date = $request['end_date'];
 
-        foreach ($total_meetup_events as $amount) {
-            $meetUp_event = $amount['id'];
-        }
+        $meetUp_event = MeetupEventRegistration::whereBetween('created_at', [$start_date, $end_date])->count();
+        // return response()->json($meetUp_event);
 
+        $total_fee_online = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Online")->sum('fee');
 
-        $total_fee_online = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', 'Online')->sum('fee');
-        $total_fee_offline = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', 'Offline')->sum('fee');
-        // dd($total_fee_offline);
+        $total_fee_offline = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Offline")->sum('fee');
+
         $categories = Category::orderBy('id', 'desc')->get();
 
         return response()->json(['categories' => $categories, 'meetUp_event' => $meetUp_event, 'total_fee_online' => $total_fee_online, 'total_fee_offline' => $total_fee_offline]);
@@ -363,15 +365,105 @@ class ReportController extends Controller
     }
     public function marketplaceReport()
     {
-        return view('SuperAdmin.Report.SimplePost.simplePost_report');
+        $unit_Product_price = 0;
+        $tax = 0;
+        $total_unit_Product_price = Marketplace::all();
+        // dd($total_qnaSlot_fees);
+        foreach ($total_unit_Product_price as $amount) {
+            $unit_Product_price = $unit_Product_price + $amount['unit_price'];
+            $tax = $tax + $amount['tax'];
+        }
+        // $total_items_quantity = Marketplace::sum('total_items');
+        $total_items = Marketplace::count();
+
+        $total_order = MarketplaceOrder::count();
+        $categories = Category::orderBy('id', 'desc')->get();
+
+        // dd($total_order);
+        return view('SuperAdmin.Report.MarketPlace.marketPlace_report', compact('categories', 'unit_Product_price', 'tax', 'total_items', 'total_order'));
+    }
+
+    public function marketPlaceFilter(Request $request)
+    {
+        $start_date = $request['start_date'];
+        $end_date = $request['end_date'];
+
+        $unit_Product_price = 0;
+        $tax = 0;
+        $total_unit_Product_price = Marketplace::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->get();
+        // dd($total_qnaSlot_fees);
+        foreach ($total_unit_Product_price as $amount) {
+            $unit_Product_price = $unit_Product_price + $amount['unit_price'];
+            $tax = $tax + $amount['tax'];
+        }
+        // $total_items_quantity = Marketplace::sum('total_items');
+        $total_items = Marketplace::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+
+        $total_order = MarketplaceOrder::whereBetween('created_at', [$start_date, $end_date])->count();
+        $categories = Category::orderBy('id', 'desc')->get();
+        // return response()->json($request);
+
+        return response()->json(['categories' => $categories, 'unit_Product_price' => $unit_Product_price, 'tax' => $tax, 'total_items' => $total_items, 'total_order' => $total_order]);
     }
     public function auctionReport()
     {
-        return view('SuperAdmin.Report.SimplePost.simplePost_report');
+        $base_price = 0;
+        $total_base_price = Auction::all();
+        // dd($total_qnaSlot_fees);
+        foreach ($total_base_price as $amount) {
+            $base_price = $base_price + $amount['base_price'];
+        }
+        $total_auction = Auction::count();
+        $total_bidding = Bidding::count();
+        $total_bidding_price = Bidding::sum('amount');
+        $categories = Category::orderBy('id', 'desc')->get();
+        // dd($total_bidding_price);
+        return view('SuperAdmin.Report.Auction.auction_report', compact('categories', 'base_price', 'total_auction', 'total_bidding', 'total_bidding_price'));
+    }
+    public function auctionReportFilter(Request $request)
+    {
+        $start_date = $request['start_date'];
+        $end_date = $request['end_date'];
+
+        $base_price = 0;
+        $total_base_price = Auction::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->get();
+        // dd($total_qnaSlot_fees);
+        foreach ($total_base_price as $amount) {
+            $base_price = $base_price + $amount['base_price'];
+        }
+        $total_auction = Auction::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+        $total_bidding = Bidding::whereBetween('created_at', [$start_date, $end_date])->count();
+        $total_bidding_price = Bidding::whereBetween('created_at', [$start_date, $end_date])->sum('amount');
+        $categories = Category::orderBy('id', 'desc')->get();
+
+        // return response()->json($request);
+
+        return response()->json(['categories' => $categories, 'base_price' => $base_price, 'total_auction' => $total_auction, 'total_bidding' => $total_bidding, 'total_bidding_price' => $total_bidding_price]);
     }
     public function souvenirReport()
     {
-        return view('SuperAdmin.Report.SimplePost.simplePost_report');
+        $total_souvenir = SouvenirApply::count();
+        $total_amount = SouvenirApply::sum('total_amount');
+        $total_sounenir_item = SouvenirCreate::count();
+        $total_sounenir_item_price = SouvenirCreate::sum('price');
+        $categories = Category::orderBy('id', 'desc')->get();
+        // dd($total_souvenir,$total_amount);
+        return view('SuperAdmin.Report.Souvenir.Souvenir_report', compact('categories','total_souvenir', 'total_amount', 'total_sounenir_item', 'total_sounenir_item_price'));
+    }
+    public function souvenirReportFilter(Request $request)
+    {
+        $start_date = $request['start_date'];
+        $end_date = $request['end_date'];
+
+        $total_souvenir = SouvenirApply::count();
+        $total_amount = SouvenirApply::sum('total_amount');
+        $total_sounenir_item = SouvenirCreate::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+        $total_sounenir_item_price = SouvenirCreate::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('price');
+        $categories = Category::orderBy('id', 'desc')->get();
+        // dd($total_souvenir,$total_amount);
+        // return response()->json($request);
+
+        return response()->json(['categories' => $categories, 'total_souvenir' => $total_souvenir, 'total_amount' => $total_amount, 'total_sounenir_item' => $total_sounenir_item, 'total_sounenir_item_price' => $total_sounenir_item_price]);
     }
 
 

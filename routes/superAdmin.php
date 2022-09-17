@@ -561,8 +561,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('/greeting-report-filter', [ReportController::class, 'greetingReportFilter'])->name('report.filter.greeting');
     Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
     Route::get('/marketplace-report', [ReportController::class, 'marketplaceReport'])->name('report.marketplace');
+    Route::post('/marketplace-report-filter', [ReportController::class, 'marketPlaceFilter'])->name('report.filter.marketPlace');
     Route::get('/auction-report', [ReportController::class, 'auctionReport'])->name('report.auction');
+    Route::post('/auction-report-filter', [ReportController::class, 'auctionReportFilter'])->name('report.filter.auctionReport');
     Route::get('/souvenir-report', [ReportController::class, 'souvenirReport'])->name('report.souvenir');
+    Route::post('/souvenir-report-filter', [ReportController::class, 'souvenirReportFilter'])->name('report.filter.souvenirReport');
     Route::get('/simplePost-report', [ReportController::class, 'simplePostReport'])->name('report.simplePost');
     Route::post('/simplePost-report-filter', [ReportController::class, 'simplePostFilter' ])->name('report.filter.simplePost');
     Route::get('/simplePost-report-filter-userType/{name}', [ReportController::class, 'simplePostUserName']);
