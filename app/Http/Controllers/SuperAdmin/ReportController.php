@@ -133,11 +133,46 @@ class ReportController extends Controller
         return view('SuperAdmin.Report.SimplePost.simplePost_report', compact('total_free_post', 'total_paid_post', 'categories', 'total_published_post', 'total_pending_post', 'total_paid_post_fees'));
     }
 
-    public function simplePostFilter(Request $request){
-        $start_date = Carbon::parse($request['start_date'])->format('Y-m-d  H:i:s');
-        $end_date = Carbon::parse($request['end_date'])->format('Y-m-d  H:i:s');
+    public function simplePostFilter(Request $request)
+    {
+
+        // $start_date = Carbon::parse($request->start_date)->format('Y-m-d  H:i:s');
+        // $end_date = Carbon::parse($request->end_date)->format('Y-m-d  H:i:s');
+
+        $start_date = $request['start_date'];
+        $end_date = $request['end_date'];
         // // dd($request);
-        return response()->json($request);
+        // return response()->json($request);
+        $enter  = false;
+        if ($request['user_type'] == "manager-admin") {
+            $enter = true;
+            $total_free_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('type', "free")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->count();
+            $total_paid_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('type', "paid")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->count();
+            $categories = Category::orderBy('id', 'desc')->get();
+            $total_published_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('status', '1')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->count();
+            $total_pending_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('status', '0')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->count();
+            $total_paid_post_fees = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->sum('fee');
+        } else if ($request['user_type'] == "star") {
+            $enter = true;
+            $total_free_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('type', "free")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->count();
+            $total_paid_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('type', "paid")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->count();
+            $categories = Category::orderBy('id', 'desc')->get();
+            $total_published_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('status', '1')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->count();
+            $total_pending_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('status', '0')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->count();
+            $total_paid_post_fees = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->sum('fee');
+        } else if ($request['user_type'] == "admin") {
+            $enter = true;
+            $total_free_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('type', "free")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->count();
+            $total_paid_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('type', "paid")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->count();
+            $categories = Category::orderBy('id', 'desc')->get();
+            $total_published_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('status', '1')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->count();
+            $total_pending_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('status', '0')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->count();
+            $total_paid_post_fees = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->sum('fee');
+        }
+
+
+        return response()->json(['total_free_post' => $total_free_post, 'total_paid_post' => $total_paid_post, 'total_published_post' => $total_published_post, 'total_pending_post' => $total_pending_post, 'total_paid_post_fees' => $total_paid_post_fees]);
+        // return response()->json($total_free_post);
     }
 
     public function simplePostUserName($name)

@@ -67,7 +67,7 @@ Super Admin
                 <div class="col-lg-3 col-md-3">
                     <div class="form-group">
                         <label for="name">SubCategories</label>
-                        <select name="sub_category_id" id="sub_category_id" class="form-control select2">
+                        <select name="subcategory_id" id="sub_category_id" class="form-control select2">
                             <option>Select SubCategory</option>
                         </select>
                     </div>
@@ -275,7 +275,7 @@ Super Admin
         $('.datepicker').datepicker({
             language: "es",
             autoclose: true,
-            format: "dd/mm/yyyy"
+            format: "yyyy/mm/dd"
         });
     });
 </script>
@@ -348,11 +348,11 @@ Super Admin
                     console.log(response);
                     $("#simplePostFilter")[0].reset();
                     // console.log(response);
-                    // $('#total_free_post').html(respose.total_free_post);
-                    // $('#total_paid_post').html(respose.total_paid_post);
-                    // $('#total_published_post').html(respose.total_published_post);
-                    // $('#total_pending_post').html(respose.total_pending_post);
-                    // $('#total_paid_post_fees').html(respose.total_paid_post_fees);
+                    $('#total_free_post').html(response.total_free_post);
+                    $('#total_paid_post').html(response.total_paid_post);
+                    $('#total_published_post').html(response.total_published_post);
+                    $('#total_pending_post').html(response.total_pending_post);
+                    $('#total_paid_post_fees').html(response.total_paid_post_fees);
                 },
             });
         });
