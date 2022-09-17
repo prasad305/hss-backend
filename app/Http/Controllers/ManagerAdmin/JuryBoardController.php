@@ -239,12 +239,14 @@ class JuryBoardController extends Controller
 
        $assignJuryId = $JuryBoard->star_id;
        $AuditionAssignJury = AuditionAssignJury::where('jury_id',$assignJuryId)->first();
-       $test = $AuditionAssignJury->jury_id;
-        if ($test) {
-            return response()->json([
-                'type' => 'error',
-                'message' => "You won't be able to delete this!"
-            ]);
+
+       if (is_object($AuditionAssignJury)) {
+            if ($AuditionAssignJury->jury_id) {
+                return response()->json([
+                    'type' => 'error',
+                    'message' => "You won't be able to delete this!"
+                ]);
+            }
        }else{
         try {
             if ($jury->image != null)
