@@ -68,15 +68,9 @@
                                     <a class="btn btn-sm btn-info"
                                         onclick="Show('Edit Occupation','{{ route('superAdmin.occupation.edit', $data->id) }}')"><i
                                             class="fa fa-edit text-white"></i></a>
-                                        @if ($data->status == 0)
-                                            <button class="btn btn-success" onclick="activeNow(this)" value="{{ route('superAdmin.occupation.activeNow', $data->id) }}">
-                                                <i class="fa fa-check" aria-hidden="true"></i>
-                                            </button>
-                                        @elseif($data->status == 1)
-                                            <button class="btn btn-danger" onclick="inactiveNow(this)" value="{{ route('superAdmin.occupation.inactiveNow', $data->id) }}">
-                                                <i class="fa fa-close"></i>
-                                            </button>
-                                        @endif
+                                        <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
+                                        value="{{ route('superAdmin.occupation.destroy', $data->id) }}"><i
+                                            class="fa fa-trash"></i> </button>
                                 </td>
                             </tr>
                         @endforeach
@@ -97,7 +91,6 @@
     <script>
       function activeNow(objButton) {
           var url = objButton.value;
-          // alert(objButton.value)
           Swal.fire({
               title: 'Are you sure?'
               , text: "You won't be able to revert this!"
@@ -108,7 +101,6 @@
               , confirmButtonText: 'Yes, Active !'
           }).then((result) => {
               if (result.isConfirmed) {
-  
                   $.ajax({
                       method: 'POST',
                       url: url,
