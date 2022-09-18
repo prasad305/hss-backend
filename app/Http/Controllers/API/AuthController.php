@@ -364,7 +364,7 @@ class AuthController extends Controller
 
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
-        $user->email = $request->email;
+        // $user->email = $request->email;
         $user->phone = $request->phone;
         $user->password = Hash::make($request->new_password);
 
@@ -400,7 +400,9 @@ class AuthController extends Controller
         }
 
         $user_info->user_id = $user->id;
-        $user_info->dob = $request->dob;
+        if ($request->dob != 0) {
+            $user_info->dob = $request->dob;
+        }
         $user_info->country = $request->country;
         $user_info->save();
 
@@ -426,8 +428,11 @@ class AuthController extends Controller
         $user_info->institute = $request->institute;
         $user_info->subject = $request->subject;
         $user_info->position = $request->position;
-        $user_info->company = $request->company;
-        $user_info->salery_range = $request->salery_range;
+        // $user_info->company = $request->company;
+        if ($user_info->salery_range != 0) {
+
+            $user_info->salery_range = $request->salery_range;
+        }
 
         $user_info->save();
 
