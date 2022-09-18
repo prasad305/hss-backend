@@ -6,6 +6,14 @@
       <input type="text" class="form-control" id="name" name="name" placeholder="Enter Occupation Title" value="{{ $occupation->title }}">
       <div id="error" style="color:#fff;"></div>
     </div>
+    <div class="form-group">
+    
+    <input type="radio" id="active" name="status" value="1"  {{ $occupation->status == 1 ? 'checked' : '' }}>
+    <label for="active">Active</label>
+    <input type="radio" id="inactive" name="status" value="0" {{ $occupation->status == 0 ? 'checked' : '' }}>
+    <label for="inactive">Inactive</label>
+      
+    </div>
 
     <button type="submit" id="updateCategoryBtn" class="btn btn-primary"><i class="fa fa-save"></i>&nbsp; Update Occupation</button>
 </form>

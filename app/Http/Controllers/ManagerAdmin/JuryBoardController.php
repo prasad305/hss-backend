@@ -9,6 +9,7 @@ use App\Models\JuryBoard;
 use App\Models\JuryGroup;
 use App\Models\SubCategory;
 use App\Models\User;
+use App\Models\Audition\AuditionAssignJury;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\File;
 
@@ -152,9 +153,8 @@ class JuryBoardController extends Controller
 
     public function edit($id)
     {
-
-        $data = [
-            'jury' => $jury,
+       $data = [
+            'jury' => JuryBoard::findOrFail($id),
             'sub_categories' => SubCategory::where([['status', 1],['category_id',auth()->user()->category_id]])->orderBy('id', 'DESC')->get(),
             'groups' => JuryGroup::where([['status',1],['category_id',auth()->user()->category_id]])->orderBy('name', 'asc')->get(),
         ];
@@ -231,9 +231,23 @@ class JuryBoardController extends Controller
         }
     }
 
-    public function destroy(User $jury)
+    public function destroy($id)
     {
-        $id = $jury->id;
+       $JuryBoard = JuryBoard::find($id);
+       $juryId =  $JuryBoard->assignjuries->id;
+       $jury = User::find($juryId);
+
+       $assignJuryId = $JuryBoard->star_id;
+       $AuditionAssignJury = AuditionAssignJury::where('jury_id',$assignJuryId)->first();
+
+       if (is_object($AuditionAssignJury)) {
+            if ($AuditionAssignJury->jury_id) {
+                return response()->json([
+                    'type' => 'error',
+                    'message' => "You won't be able to delete this!"
+                ]);
+            }
+       }else{
         try {
             if ($jury->image != null)
                 File::delete(public_path($jury->image)); //Old image delete
@@ -257,6 +271,7 @@ class JuryBoardController extends Controller
                 'message' => $exception->getMessage()
             ]);
         }
+       }
     }
 
     public function activeNow($id)
