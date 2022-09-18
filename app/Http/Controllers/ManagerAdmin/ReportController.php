@@ -41,18 +41,15 @@ class ReportController extends Controller
 
     public function learningSessionReport()
     {
-        // dd($request);
+        $user_id = Auth::id();
         $assignment_fee = 0;
-        $total_assignment_fees = LearningSession::all();
-        // foreach($total_assignment_fees as $total_assignment_fee){
-        //     $amounts = LearningSession::where('id', $total_assignment_fee->assignment_fee)->get();
-        // }
+        $total_assignment_fees = LearningSession::where('created_by_id', $user_id)->get();
         foreach ($total_assignment_fees as $amount) {
             $assignment_fee = $assignment_fee + $amount['assignment_fee'];
         }
 
         $registration_fee = 0;
-        $total_registration_fees = LearningSession::all();
+        $total_registration_fees = LearningSession::where('created_by_id', $user_id)->get();
 
         foreach ($total_registration_fees as $amount) {
             $registration_fee = $registration_fee + $amount['fee'];
@@ -62,7 +59,7 @@ class ReportController extends Controller
 
 
         $assignment = 0;
-        $total_assignments = LearningSession::all();
+        $total_assignments = LearningSession::where('created_by_id', $user_id)->get();
 
         foreach ($total_assignments as $amount) {
             $assignment = $assignment + $amount['assignment'];
@@ -81,35 +78,40 @@ class ReportController extends Controller
     }
     public function learningFilter(Request $request)
     {
+        $user_id = Auth::id();
+        $start_date = $request['start_date'];
+        $end_date = $request['end_date'];
 
-        $start_date = Carbon::parse($request->start_date)->format('Y-m-d  H:i:s');
-        $end_date = Carbon::parse($request->end_date)->format('Y-m-d  H:i:s');
-        // dd($request);
+        if ($request['user_type'] == "star") {
+            $enter = true;
 
-        $total_assignment_fees = LearningSession::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->get();
-        // dd($total_assignment_fees);
+            $registration_fee = LearningSession::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
+            $assignment_fee = LearningSession::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('assignment_fee');
 
-        $assignment_fee = 0;
-        $registration_fee = 0;
-        $assignment = 0;
-        foreach ($total_assignment_fees as $amount) {
-            $assignment_fee = $assignment_fee + $amount['assignment_fee'];
-            $registration_fee = $registration_fee + $amount['fee'];
-            $assignment = $assignment + $amount['assignment'];
+            $assignment = LearningSession::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+
+
+            $certificate = LearningSessionCertificate::whereBetween('created_at', [$start_date, $end_date])->count();
+
+
+            $categories = Category::orderBy('id', 'desc')->get();
+            $subCategories = SubCategory::orderBy('id', 'desc')->get();
+        } else if ($request['user_type'] == "admin") {
+
+            $registration_fee = LearningSession::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
+            $assignment_fee = LearningSession::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('assignment_fee');
+
+            $assignment = LearningSession::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+
+
+            $certificate = LearningSessionCertificate::whereBetween('created_at', [$start_date, $end_date])->count();
+
+
+            $categories = Category::orderBy('id', 'desc')->get();
+            $subCategories = SubCategory::orderBy('id', 'desc')->get();
         }
 
-
-
-        $certificate = LearningSessionCertificate::whereBetween('created_at', [$start_date, $end_date])->count();
-
-
-        $categories = Category::orderBy('id', 'desc')->get();
-        $subCategories = SubCategory::orderBy('id', 'desc')->get();
-        // dd($categories);
-        // return redirect()->back()->with(compact('categories', 'assignment_fee', 'registration_fee', 'certificate', 'assignment'));
         return response()->json(['categories' => $categories, 'subCategories' => $subCategories, 'assignment_fee' => $assignment_fee, 'registration_fee' => $registration_fee, 'assignment' => $assignment, 'certificate' => $certificate]);
-
-        // return view('SuperAdmin.Report.LearningSession.learningSession_report', compact('categories', 'assignment_fee','registration_fee','certificate','assignment'));
     }
 
 
@@ -152,30 +154,30 @@ class ReportController extends Controller
         $enter  = false;
         if ($request['user_type'] == "star") {
             $enter = true;
-            $total_free_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('created_by_id', $user_id)->where('type', "free")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->count();
+            $total_free_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->count();
 
-            $total_paid_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('created_by_id', $user_id)->where('type', "paid")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->where('created_by_id', $request['user_name'])->count();
+            $total_paid_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->where('type', "paid")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
             $categories = Category::orderBy('id', 'desc')->get();
 
-            $total_published_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('created_by_id', $user_id)->where('status', '1')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+            $total_published_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->where('status', '1')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
-            $total_pending_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('created_by_id', $user_id)->where('status', '0')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+            $total_pending_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->where('status', '0')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
-            $total_paid_post_fees = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('created_by_id', $user_id)->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('fee');
+            $total_paid_post_fees = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('fee');
         } else if ($request['user_type'] == "admin") {
             $enter = true;
-            $total_free_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('created_by_id', $user_id)->where('type', "free")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+            $total_free_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('type', "free")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
-            $total_paid_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('created_by_id', $user_id)->where('type', "paid")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+            $total_paid_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('type', "paid")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
             $categories = Category::orderBy('id', 'desc')->get();
 
-            $total_published_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('created_by_id', $user_id)->where('status', '1')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+            $total_published_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('status', '1')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
-            $total_pending_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('created_by_id', $user_id)->where('status', '0')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+            $total_pending_post = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('status', '0')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
-            $total_paid_post_fees = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('created_by_id', $user_id)->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('fee');
+            $total_paid_post_fees = SimplePost::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('fee');
         }
 
 
@@ -194,21 +196,16 @@ class ReportController extends Controller
 
     public function liveChatReport()
     {
+        $user_id = Auth::id();
 
-        $reg_fee = 0;
-        $total_reg_fees = LiveChat::all();
-        // dd($total_reg_fee);
-        foreach ($total_reg_fees as $amount) {
-            $reg_fee = $reg_fee + $amount['fee'];
-        }
-        $total_live_chat = LiveChatRegistration::distinct('live_chat_id')->count();
+        $reg_fee = LiveChat::where('category_id', auth()->user()->category_id)->sum('fee');
 
-        $slot_fee = 0;
-        $total_slot_fees = LiveChatRegistration::all();
-        // dd($total_reg_fee);
-        foreach ($total_slot_fees as $amount) {
-            $slot_fee = $slot_fee + $amount['amount'];
-        }
+        $total_live_chat = LiveChat::where('category_id', auth()->user()->category_id)->count();
+
+        $slot_fee = LiveChatRegistration::whereHas('liveChat', function ($q) {
+            $q->where('category_id', auth()->user()->category_id);
+        })->sum('amount');
+
         // dd($slot_fee);
 
         $categories = Category::orderBy('id', 'desc')->get();
@@ -219,27 +216,43 @@ class ReportController extends Controller
 
     public function liveChatReportFilter(Request $request)
     {
-        $start_date = Carbon::parse($request->start_date)->format('Y-m-d  H:i:s');
-        $end_date = Carbon::parse($request->end_date)->format('Y-m-d  H:i:s');
+        $user_id = $request->user_name;
 
-        $reg_fee = 0;
-        $total_reg_fees = LiveChat::whereBetween('created_at', [$start_date, $end_date])->get();
-        // dd($total_reg_fee);
-        foreach ($total_reg_fees as $amount) {
-            $reg_fee = $reg_fee + $amount['fee'];
+        $start_date = $request['start_date'];
+        $end_date = $request['end_date'];
+        $user_id = Auth::id();
+
+        if ($request['user_type'] == "star") {
+            $enter = true;
+            $reg_fee = LiveChat::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
+
+            $total_live_chat = LiveChat::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+
+            $slot_fee = LiveChatRegistration::whereHas('liveChat', function ($q) use( $user_id){
+                $q->where('star_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->sum('amount');
+            // return response()->json($slot_fee);
+
+            // dd($slot_fee);
+
+            $categories = Category::orderBy('id', 'desc')->get();
+
+        } else if ($request['user_type'] == "admin") {
+
+            $reg_fee = LiveChat::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
+
+            $total_live_chat = LiveChat::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+
+            $slot_fee = LiveChatRegistration::whereHas('liveChat', function ($q) use( $user_id){
+                $q->where('admin_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->sum('amount');
+            // return response()->json($slot_fee);
+            // dd($slot_fee);
+
+            $categories = Category::orderBy('id', 'desc')->get();
         }
 
-        $total_live_chat = LiveChatRegistration::whereBetween('created_at', [$start_date, $end_date])->distinct('live_chat_id')->count();
 
-        $slot_fee = 0;
-        $total_slot_fees = LiveChatRegistration::whereBetween('created_at', [$start_date, $end_date])->get();
-        // dd($total_reg_fee);
-        foreach ($total_slot_fees as $amount) {
-            $slot_fee = $slot_fee + $amount['amount'];
-        }
-        // dd($slot_fee);
-
-        $categories = Category::orderBy('id', 'desc')->get();
 
         return response()->json(['categories' => $categories, 'reg_fee' => $reg_fee, 'total_live_chat' => $total_live_chat, 'slot_fee' => $slot_fee]);
     }
@@ -248,19 +261,12 @@ class ReportController extends Controller
 
     public function meetupReport()
     {
-        // $meetUp_event = 0;
-        // $total_meetup_events = MeetupEventRegistration::all();
-
-        // foreach ($total_meetup_events as $amount) {
-        //     $meetUp_event = $amount['id'];
-        // }
-        // dd($meetUp_event);
-        $meetUp_event = MeetupEventRegistration::all()->count();
+        $user_id = Auth::id();
+        $meetUp_event = MeetupEvent::where('created_by_id', $user_id)->count();
         $categories = Category::orderBy('id', 'desc')->get();
-        $total_fee_online = MeetupEvent::where('meetup_type', 'online')->sum('fee');
-        $total_fee_offline = MeetupEvent::where('meetup_type', 'offline')->sum('fee');
-        // dd($total_fee_offline);
-        // return response()->back();
+        $total_fee_online = MeetupEvent::where('created_by_id', $user_id)->where('meetup_type', "Online")->sum('fee');
+        $total_fee_offline = MeetupEvent::where('created_by_id', $user_id)->where('meetup_type', "Offline")->sum('fee');
+
         return view('ManagerAdmin.Report.MeetupEvent.meetupEvent_report', compact('categories', 'meetUp_event', 'total_fee_online', 'total_fee_offline'));
     }
 
@@ -270,20 +276,34 @@ class ReportController extends Controller
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
 
-        $meetUp_event = MeetupEventRegistration::whereBetween('created_at', [$start_date, $end_date])->count();
-        // return response()->json($meetUp_event);
+        if ($request['user_type'] == "star") {
+            $enter = true;
 
-        $total_fee_online = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Online")->sum('fee');
+            $meetUp_event = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+            // return response()->json($meetUp_event);
 
-        $total_fee_offline = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Offline")->sum('fee');
+            $total_fee_online = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Online")->sum('fee');
 
-        $categories = Category::orderBy('id', 'desc')->get();
+            $total_fee_offline = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Offline")->sum('fee');
 
+            $categories = Category::orderBy('id', 'desc')->get();
+        } else if ($request['user_type'] == "admin") {
+
+            $meetUp_event = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+            // return response()->json($meetUp_event);
+
+            $total_fee_online = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Online")->sum('fee');
+
+            $total_fee_offline = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Offline")->sum('fee');
+
+            $categories = Category::orderBy('id', 'desc')->get();
+        }
         return response()->json(['categories' => $categories, 'meetUp_event' => $meetUp_event, 'total_fee_online' => $total_fee_online, 'total_fee_offline' => $total_fee_offline]);
         // return response()->json($request);
     }
     public function greetingReport()
     {
+        $user_id = Auth::id();
         $total_greetings_users = GreetingsRegistration::distinct('user_id')->count();
         $total_greetings_type = GreetingType::distinct('greeting_type')->count();
         // dd($total_greetings_type);
@@ -301,6 +321,24 @@ class ReportController extends Controller
         // dd($total_greetings_type);
         $categories = Category::orderBy('id', 'desc')->get();
         // return response()->json($request);
+
+
+        if ($request['user_type'] == "star") {
+            $enter = true;
+
+            $total_greetings_users = GreetingsRegistration::whereBetween('created_at', [$start_date, $end_date])->distinct('user_id')->count();
+            $total_greetings_type = GreetingType::whereBetween('created_at', [$start_date, $end_date])->distinct('greeting_type')->count();
+            // dd($total_greetings_type);
+            $categories = Category::orderBy('id', 'desc')->get();
+        } else if ($request['user_type'] == "admin") {
+
+            $total_greetings_users = GreetingsRegistration::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->distinct('user_id')->count();
+            $total_greetings_type = GreetingType::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->distinct('greeting_type')->count();
+            // dd($total_greetings_type);
+            $categories = Category::orderBy('id', 'desc')->get();
+
+            $categories = Category::orderBy('id', 'desc')->get();
+        }
 
         return response()->json(['categories' => $categories, 'total_greetings_users' => $total_greetings_users, 'total_greetings_type' => $total_greetings_type]);
     }
@@ -340,11 +378,11 @@ class ReportController extends Controller
 
     public function qnaReportFilter(Request $request)
     {
-        $start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
-        $end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
+        $start_date = $request['start_date'];
+        $end_date = $request['end_date'];
 
         $qna_reg_fee = 0;
-        $total_qnaReg_fees = QnA::whereBetween('created_at', [$start_date, $end_date])->get();
+        $total_qnaReg_fees = QnA::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->get();
         // dd($total_reg_fees);
         foreach ($total_qnaReg_fees as $amount) {
             $qna_reg_fee = $qna_reg_fee + $amount['fee'];

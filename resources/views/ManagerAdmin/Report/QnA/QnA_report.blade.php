@@ -82,11 +82,11 @@
                         </div>
                     </div>
 
-                    {{-- <div class="col-lg-3 col-md-3">
+                    <div class="col-lg-3 col-md-3">
 
-                    <div class="form-group mb-4">
+                        <div class="form-group mb-4">
 
-                        <label for="category">Select Module</label>
+                            {{-- <label for="category">Select Module</label>
                         <select name="category" class="custom-select rounded-0" id="category">
                             <option selected="" disabled="">Select Module</option>
                             <option value="13">Simple Post</option>
@@ -100,10 +100,16 @@
                             <option value="5">Marketplace</option>
                             <option value="4">Souvenir</option>
                             <option value="3">Fan Group</option>
-                        </select>
+                        </select> --}}
+                            <div class="form-group">
+                                <label for="name">SubCategories</label>
+                                <select name="sub_category_id" id="sub_category_id" class="form-control select2">
+                                    <option>Select SubCategory</option>
+                                </select>
+                            </div>
 
+                        </div>
                     </div>
-                </div> --}}
                 </div>
                 <div class="mb-5">
 
@@ -258,33 +264,55 @@
 
     <script>
         $(document).ready(function() {
-                    //  console.log('123');
-                    // var form=$("#myForm");
-                    $("#qnafilter").on('submit', function(event) {
-                            // console.log('123');
-                            event.preventDefault();
-                            // alert("hello");
+            //  console.log('123');
+            // var form=$("#myForm");
+            $("#qnafilter").on('submit', function(event) {
+                // console.log('123');
+                event.preventDefault();
+                // alert("hello");
 
 
 
 
-                            $.ajax({
-                                    url: "{{ route('superAdmin.report.Filter.qna') }}",
-                                    type: "POST",
-                                    data: $("#qnafilter").serialize(),
-                                    success: function(respose) {
-                                        // console.log('Submission was successful.');
-                                        // console.log(respose);
-                                            $("#qnafilter")[0].reset();
-                                            $('#tot_regfee').html(respose.qna_reg_fee);
-                                            $('#tot_qna').html(respose.total_qna);
-                                            $('#tot_slotfee').html(respose.qnaSlot_fee);
-                                        },
-                                    });
-                            });
+                $.ajax({
+                    url: "{{ route('superAdmin.report.Filter.qna') }}",
+                    type: "POST",
+                    data: $("#qnafilter").serialize(),
+                    success: function(respose) {
+                        // console.log('Submission was successful.');
+                        // console.log(respose);
+                        $("#qnafilter")[0].reset();
+                        $('#tot_regfee').html(respose.qna_reg_fee);
+                        $('#tot_qna').html(respose.total_qna);
+                        $('#tot_slotfee').html(respose.qnaSlot_fee);
+                    },
+                });
+            });
 
 
 
-                    });
+        });
+
+        $("#category_id").click(function() {
+            var category_id = $('#category_id').val();
+            console.log(category_id);
+            if (category_id > 0) {
+                $.ajax({
+                    url: "{{ url('super-admin/all-report-filter-subCategory') }}/" + category_id,
+                    type: 'GET',
+
+                    success: function(res) {
+                        console.log(res);
+
+                        var _html = '<option>Select SubCateory</option>';
+                        $.each(res, function(index, res) {
+                            _html += '<option value="' + res.id + '">' + res.name + '</option>';
+
+                        });
+                        $('#sub_category_id').html(_html);
+                    }
+                })
+            }
+        });
     </script>
 @endpush

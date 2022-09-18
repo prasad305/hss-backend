@@ -81,10 +81,10 @@
                         </div>
                     </div>
 
-                    {{-- <div class="col-lg-3 col-md-3">
+                    <div class="col-lg-3 col-md-3">
 
                     <div class="form-group mb-4">
-
+{{--
                         <label for="category">Select Module</label>
                         <select name="category" class="custom-select rounded-0" id="category">
                             <option selected="" disabled="">Select Module</option>
@@ -99,10 +99,50 @@
                             <option value="5">Marketplace</option>
                             <option value="4">Souvenir</option>
                             <option value="3">Fan Group</option>
-                        </select>
+                        </select> --}}
+
+                        <div class="form-group">
+                            <label for="name">SubCategories</label>
+                            <select name="sub_category_id" id="sub_category_id" class="form-control select2">
+                                <option>Select SubCategory</option>
+                            </select>
+                        </div>
 
                     </div>
-                </div> --}}
+                </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-3 col-md-3">
+
+                        <div class="form-group mb-4">
+                            <div class="form-group">
+                                <label for="name">User Type</label>
+                                <select name="user_type" id="user_type" class="form-control select2">
+                                    <option>Select Type</option>
+
+                                    <option value="star">Star</option>
+                                    <option value="admin">Admin</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3">
+
+                        <div class="form-group mb-4">
+
+                            <label for="category">Select Name</label>
+                            <select name="user_name" class="custom-select rounded-0" id="user_name" onmousedown="if(this.options.length>5){this.size=5;}" onchange="this.blur()" onblur="this.size=0;">
+                                <option>Select Name</option>
+
+
+                            </select>
+
+                        </div>
+                    </div>
                 </div>
                 <div class="mb-5">
 
@@ -256,12 +296,12 @@
 
 
                 $.ajax({
-                    url: "{{ route('superAdmin.report.Filter.liveChat') }}",
+                    url: "{{ route('managerAdmin.report.Filter.liveChat') }}",
                     type: "POST",
                     data: $("#livechatfilter").serialize(),
                     success: function(respose) {
                         // console.log('Submission was successful.');
-                        // console.log(respose);
+                        console.log(respose);
                         $("#livechatfilter")[0].reset();
                         $('#tot_regFee').html(respose.reg_fee);
                         $('#tot_liveChat').html(respose.total_live_chat);
@@ -269,6 +309,52 @@
                     },
                 });
             });
+
+
+
+        $("#category_id").click(function() {
+            var category_id = $('#category_id').val();
+            console.log(category_id);
+            if (category_id > 0) {
+                $.ajax({
+                    url: "{{ url('manager-admin/all-report-filter-subCategory') }}/" + category_id,
+                    type: 'GET',
+
+                    success: function(res) {
+                        console.log(res);
+
+                        var _html = '<option>Select SubCateory</option>';
+                        $.each(res, function(index, res) {
+                            _html += '<option value="' + res.id + '">' + res.name + '</option>';
+
+                        });
+                        $('#sub_category_id').html(_html);
+                    }
+                })
+            }
+        });
+        $("#user_type").click(function() {
+            var user_type = $('#user_type').val();
+            // console.log(user_type);
+            if (user_type) {
+                $.ajax({
+                    url: "{{ url('manager-admin/simplePost-report-filter-userType') }}/" + user_type,
+                    // url: "{{url('super-admin/learningSession-report-filter-subCategory')}}" + '/' + category_id,
+                    type: 'GET',
+
+                    success: function(res) {
+                        console.log(res);
+
+                        var _html = '<option>Select Name</option>';
+                        $.each(res, function(index, res) {
+                            _html += '<option value="' + res.id + '">' + res.first_name + ' ' + res.last_name + '</option>';
+
+                        });
+                        $('#user_name').html(_html);
+                    }
+                })
+            }
+        });
 
 
 

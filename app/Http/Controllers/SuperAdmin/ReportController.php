@@ -44,9 +44,7 @@ class ReportController extends Controller
         // dd($request);
         $assignment_fee = 0;
         $total_assignment_fees = LearningSession::all();
-        // foreach($total_assignment_fees as $total_assignment_fee){
-        //     $amounts = LearningSession::where('id', $total_assignment_fee->assignment_fee)->get();
-        // }
+
         foreach ($total_assignment_fees as $amount) {
             $assignment_fee = $assignment_fee + $amount['assignment_fee'];
         }
@@ -216,11 +214,11 @@ class ReportController extends Controller
 
     public function liveChatReportFilter(Request $request)
     {
-        $start_date = Carbon::parse($request->start_date)->format('Y-m-d  H:i:s');
-        $end_date = Carbon::parse($request->end_date)->format('Y-m-d  H:i:s');
+        $start_date = $request['start_date'];
+        $end_date = $request['end_date'];
 
         $reg_fee = 0;
-        $total_reg_fees = LiveChat::whereBetween('created_at', [$start_date, $end_date])->get();
+        $total_reg_fees = LiveChat::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->get();
         // dd($total_reg_fee);
         foreach ($total_reg_fees as $amount) {
             $reg_fee = $reg_fee + $amount['fee'];
@@ -245,19 +243,11 @@ class ReportController extends Controller
 
     public function meetupReport()
     {
-        // $meetUp_event = 0;
-        // $total_meetup_events = MeetupEventRegistration::all();
-
-        // foreach ($total_meetup_events as $amount) {
-        //     $meetUp_event = $amount['id'];
-        // }
-        // dd($meetUp_event);
-        $meetUp_event = MeetupEventRegistration::all()->count();
+        $meetUp_event = MeetupEvent::all()->count();
         $categories = Category::orderBy('id', 'desc')->get();
-        $total_fee_online = MeetupEvent::where('meetup_type', 'online')->sum('fee');
-        $total_fee_offline = MeetupEvent::where('meetup_type', 'offline')->sum('fee');
-        // dd($total_fee_offline);
-        // return response()->back();
+        $total_fee_online = MeetupEvent::where('meetup_type', "Online")->sum('fee');
+        $total_fee_offline = MeetupEvent::where('meetup_type', "Offline")->sum('fee');
+        // dd($total_fee_online, $total_fee_offline);
         return view('SuperAdmin.Report.MeetupEvent.meetupEvent_report', compact('categories', 'meetUp_event', 'total_fee_online', 'total_fee_offline'));
     }
 
@@ -267,7 +257,7 @@ class ReportController extends Controller
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
 
-        $meetUp_event = MeetupEventRegistration::whereBetween('created_at', [$start_date, $end_date])->count();
+        $meetUp_event = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->count();
         // return response()->json($meetUp_event);
 
         $total_fee_online = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Online")->sum('fee');
@@ -337,11 +327,11 @@ class ReportController extends Controller
 
     public function qnaReportFilter(Request $request)
     {
-        $start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
-        $end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
+        $start_date = $request['start_date'];
+        $end_date = $request['end_date'];
 
         $qna_reg_fee = 0;
-        $total_qnaReg_fees = QnA::whereBetween('created_at', [$start_date, $end_date])->get();
+        $total_qnaReg_fees = QnA::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->get();
         // dd($total_reg_fees);
         foreach ($total_qnaReg_fees as $amount) {
             $qna_reg_fee = $qna_reg_fee + $amount['fee'];

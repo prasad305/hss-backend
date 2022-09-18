@@ -1,4 +1,4 @@
-@extends('Layouts.SuperAdmin.master')
+@extends('Layouts.ManagerAdmin.master')
 
 @push('title')
     Super Admin
@@ -103,6 +103,38 @@
 
                     </div>
                 </div> --}}
+                </div>
+                <div class="row">
+
+                    <div class="col-lg-3 col-md-3">
+
+                        <div class="form-group mb-4">
+                            <div class="form-group">
+                                <label for="name">User Type</label>
+                                <select name="user_type" id="user_type" class="form-control select2">
+                                    <option>Select Type</option>
+
+                                    <option value="star">Star</option>
+                                    <option value="admin">Admin</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3">
+
+                        <div class="form-group mb-4">
+
+                            <label for="category">Select Name</label>
+                            <select name="user_name" class="custom-select rounded-0" id="user_name" onmousedown="if(this.options.length>5){this.size=5;}" onchange="this.blur()" onblur="this.size=0;">
+                                <option>Select Name</option>
+
+
+                            </select>
+
+                        </div>
+                    </div>
                 </div>
                 <div class="mb-5">
 

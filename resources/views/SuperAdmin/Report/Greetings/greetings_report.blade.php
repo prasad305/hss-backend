@@ -101,6 +101,13 @@
                             <option value="3">Fan Group</option>
                         </select>
 
+                        <div class="form-group">
+                            <label for="name">SubCategories</label>
+                            <select name="sub_category_id" id="sub_category_id" class="form-control select2">
+                                <option>Select SubCategory</option>
+                            </select>
+                        </div>
+
                     </div>
                 </div> --}}
                 </div>
@@ -255,6 +262,29 @@
                     },
                 });
             });
+
+
+        // $("#category_id").click(function() {
+        //     var category_id = $('#category_id').val();
+        //     console.log(category_id);
+        //     if (category_id > 0) {
+        //         $.ajax({
+        //             url: "{{ url('super-admin/all-report-filter-subCategory') }}/" + category_id,
+        //             type: 'GET',
+
+        //             success: function(res) {
+        //                 console.log(res);
+
+        //                 var _html = '<option>Select SubCateory</option>';
+        //                 $.each(res, function(index, res) {
+        //                     _html += '<option value="' + res.id + '">' + res.name + '</option>';
+
+        //                 });
+        //                 $('#sub_category_id').html(_html);
+        //             }
+        //         })
+        //     }
+        // });
 
 
 
