@@ -55,7 +55,9 @@ class ReportController extends Controller
             $registration_fee = $registration_fee + $amount['fee'];
         }
 
-        $certificate = LearningSessionCertificate::all()->count();
+        $certificate = LearningSessionCertificate::whereHas('learningSession', function ($q) {
+            $q->where('category_id', auth()->user()->category_id);
+        })->count();
 
 
         $assignment = 0;
@@ -78,7 +80,7 @@ class ReportController extends Controller
     }
     public function learningFilter(Request $request)
     {
-        $user_id = Auth::id();
+        $user_id = $request->user_name;
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
 
@@ -104,7 +106,9 @@ class ReportController extends Controller
             $assignment = LearningSession::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
 
 
-            $certificate = LearningSessionCertificate::whereBetween('created_at', [$start_date, $end_date])->count();
+            $certificate = LearningSessionCertificate::whereHas('learningSession', function ($q) use ($user_id) {
+                $q->where('admin_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->count();
 
 
             $categories = Category::orderBy('id', 'desc')->get();
@@ -304,7 +308,9 @@ class ReportController extends Controller
     public function greetingReport()
     {
         $user_id = Auth::id();
-        $total_greetings_users = GreetingsRegistration::distinct('user_id')->count();
+        $total_greetings_users = GreetingsRegistration::distinct('user_id')->whereHas('liveChat', function ($q) {
+            $q->where('category_id', auth()->user()->category_id);
+        })->count();
         $total_greetings_type = GreetingType::distinct('greeting_type')->count();
         // dd($total_greetings_type);
         $categories = Category::orderBy('id', 'desc')->get();

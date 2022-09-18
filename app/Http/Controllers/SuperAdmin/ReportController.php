@@ -79,10 +79,13 @@ class ReportController extends Controller
     }
     public function learningFilter(Request $request)
     {
-
+        
+        $categoryId =  $request->category_id;
+        // return ($categoryId );
         $start_date = Carbon::parse($request->start_date)->format('Y-m-d  H:i:s');
         $end_date = Carbon::parse($request->end_date)->format('Y-m-d  H:i:s');
         // dd($request);
+
 
         $total_assignment_fees = LearningSession::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->get();
         // dd($total_assignment_fees);
@@ -90,21 +93,25 @@ class ReportController extends Controller
         $assignment_fee = 0;
         $registration_fee = 0;
         $assignment = 0;
+      
         foreach ($total_assignment_fees as $amount) {
             $assignment_fee = $assignment_fee + $amount['assignment_fee'];
             $registration_fee = $registration_fee + $amount['fee'];
             $assignment = $assignment + $amount['assignment'];
+
         }
 
 
 
-        $certificate = LearningSessionCertificate::whereBetween('created_at', [$start_date, $end_date])->count();
-
+        $certificate = LearningSessionCertificate::whereHas('learningSession', function ($q) use ($categoryId) {
+            $q->where('category_id',  $categoryId);
+        })->whereBetween('created_at', [$start_date, $end_date])->count();
+        return response()->json($certificate);
+        die();
 
         $categories = Category::orderBy('id', 'desc')->get();
         $subCategories = SubCategory::orderBy('id', 'desc')->get();
-        // dd($categories);
-        // return redirect()->back()->with(compact('categories', 'assignment_fee', 'registration_fee', 'certificate', 'assignment'));
+
         return response()->json(['categories' => $categories, 'subCategories' => $subCategories, 'assignment_fee' => $assignment_fee, 'registration_fee' => $registration_fee, 'assignment' => $assignment, 'certificate' => $certificate]);
 
         // return view('SuperAdmin.Report.LearningSession.learningSession_report', compact('categories', 'assignment_fee','registration_fee','certificate','assignment'));
