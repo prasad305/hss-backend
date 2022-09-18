@@ -308,7 +308,7 @@
                 <i class="nav-icon fa fa-map-signs"></i>
                 <p>
                     Education level
-            
+                </p>
             </a>
         </li>
 

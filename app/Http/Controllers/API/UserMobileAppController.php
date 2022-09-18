@@ -10,6 +10,8 @@ use App\Models\Audition\Audition;
 use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Bidding;
+use App\Models\Country;
+use App\Models\Educationlevel;
 use App\Models\FanGroupMessage;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
@@ -24,6 +26,7 @@ use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
 use App\Models\MyChatList;
 use App\Models\Notification;
+use App\Models\Occupation;
 use App\Models\QnA;
 use App\Models\QnaMessage;
 use App\Models\QnaRegistration;
@@ -506,6 +509,23 @@ class UserMobileAppController extends Controller
         } catch (\Throwable $th) {
             return $th;
         }
+    }
         
+    /**
+     * crete user form infors
+     */
+    public function getGetInfos()
+    {
+        $ocupation = Occupation::where('status', 1)->get();
+        $edu = Educationlevel::where('status', 1)->get();
+        $country = Country::where('status', 1)->get();
+
+
+        return response()->json([
+            "status" => 200,
+            "occupation" => $ocupation,
+            "educationlevel" => $edu,
+            "country" => $country
+        ]);
     }
 }
