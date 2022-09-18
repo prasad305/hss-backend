@@ -272,6 +272,9 @@ class AuditionController extends Controller
             ->where('category_id', Auth::user()->category_id)
             ->orderBy('id', 'DESC')
             ->get();
+            $live = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 3]])->count();
+            $pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 0]])->count();
+            $request_approval_pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 2]])->count();
 
         $data = [
             'auditionAdmins' => $auditionAdmins,
@@ -281,6 +284,9 @@ class AuditionController extends Controller
             'auditionRule' => $auditionRule,
             'groups' => $groups,
             'group_data' => isset($group_data) && count($group_data) > 0 ? $group_data : null,
+            'live' => $live,
+            'pending' => $pending,
+            'request_approval_pending' => $request_approval_pending,
         ];
 
         return view('ManagerAdmin.Audition.assign-manpower', $data);
