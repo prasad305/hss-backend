@@ -34,7 +34,7 @@ class AuditionUploadVideo extends Model
         'comment'
     ];
 
-    protected $with = ['user'];
+    protected $with = ['user', 'totalReact'];
 
     public function audition()
     {

@@ -2336,9 +2336,7 @@ class UserController extends Controller
             $q->where('result_publish_start_date', '>', Carbon::now());
         })->with(['auditionRoundInfoStart' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
             $q->with(['videos' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
-                return $q->with(['totalReact' => function ($q) {
-                    $q->get();
-                }])->where([['approval_status', 1], ['type', 'general']])->whereIn('user_id', $generalFailedUsers)->whereNotIn('user_id', $appealWinnerUsers)->whereNotIn('user_id', $appealFailedUsers)->get();
+                $q->where([['approval_status', 1], ['type', 'general']])->whereIn('user_id', $generalFailedUsers)->whereNotIn('user_id', $appealWinnerUsers)->whereNotIn('user_id', $appealFailedUsers)->get();
             }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get();
         }])->get()->toArray();
 
@@ -2351,7 +2349,9 @@ class UserController extends Controller
             }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get();
         }])->get()->toArray();
 
-        $userVoteVideos = AuditionRoundInfo::with('videos')->where([['has_user_vote_mark', 1], ['videofeed_status', 1], ['round_type', 0], ['status', 1]])->latest()->get()->toArray();
+        $userVoteVideos = AuditionRoundInfo::with(['videos' => function ($q) {
+            $q->where([['approval_status', 1], ['type', 'general']])->get();
+        }])->where([['has_user_vote_mark', 1], ['videofeed_status', 1], ['status', 1]])->latest()->get()->toArray();
 
 
         // >where('result_publish_start_date', '>', Carbon::now());
@@ -2364,36 +2364,66 @@ class UserController extends Controller
         //     return $q->where([['approval_status', 1], ['type', 'appeal']])->whereIn('user_id', $appealFailedUsers)->get();
         // }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get()->toArray();
 
-
         $roundVideos = array_merge($generalFailedVideos, $appealFailedVideos);
+        $totalVideos = [];
+
+
+        foreach ($roundVideos as $infoRound) {
+            foreach (array($infoRound['audition_round_info_start']) as  $roundvideos) {
+                foreach ($roundvideos['videos'] as $videos) {
+                    array_push($totalVideos, $videos);
+                }
+            }
+        }
+
+        foreach ($userVoteVideos as $voteVideos) {
+            foreach ($voteVideos['videos'] as $videos) {
+                array_push($totalVideos, $videos);
+            }
+        }
+
+
+
 
         return response()->json([
             'status' => 200,
-            'roundVideos' => $roundVideos,
-            'userVoteVideos' => $userVoteVideos,
+            'totalVideos' => $totalVideos,
 
         ]);
     }
     public function userVideoLoveReact(Request $request)
     {
-        if (!LoveReact::where([['user_id', auth()->user()->id], ['react_num', $request->reactNum], ['video_id', $request->videoId]])->exists()) {
+        $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $request->videoId)->first();
+
+
+        if (LoveReact::where([['user_id', auth()->user()->id], ['react_num', $request->reactNum], ['video_id', $request->videoId]])->exists()) {
+
+            $freeLoveReact = LoveReact::where([['user_id', auth()->user()->id], ['react_num', $request->reactNum], ['video_id', $request->videoId]])->delete();
+        } else {
             $loveReact = LoveReact::create([
                 'user_id' => auth()->user()->id,
                 'video_id' => $request->videoId,
                 'react_num' => $request->reactNum,
+                'audition_id' => $auditionRoundInfo->roundInfo->audition_id,
+                'round_info_id' => $auditionRoundInfo->roundInfo->id,
+                'participant_id' => $auditionRoundInfo->user_id,
+                'react_voting_type' => $auditionRoundInfo->roundInfo->has_user_vote_mark == 1 ? 'user_vote' : ($auditionRoundInfo->roundInfo->wildcard == 1 ? 'wildcard' : 'general'),
                 'status' => 1,
 
             ]);
         }
+
         return response()->json([
             'status' => 200,
         ]);
     }
     public function userVideoLoveReactPayment(Request $request)
     {
-        // return $request->all();
-        if (!LoveReactPayment::where([['user_id', auth()->user()->id], ['react_num', $request->reactNum], ['video_id', $request->videoId]])->exists()) {
 
+        $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $request->videoId)->first();
+
+
+        if (!LoveReactPayment::where([['user_id', auth()->user()->id], ['react_num', $request->reactNum], ['video_id', $request->videoId]])->exists()) {
             $loveReactPayment = LoveReactPayment::create([
                 'user_id' => auth()->user()->id,
                 'video_id' => $request->videoId,
@@ -2402,6 +2432,8 @@ class UserController extends Controller
                 'cardNumber' => $request->cardNumber,
                 'ccv' => $request->ccv,
                 'expireDate' => $request->expireDate,
+                'audition_id' => $auditionRoundInfo->roundInfo->audition_id,
+                'round_info_id' => $auditionRoundInfo->roundInfo->id,
                 'status' => 1,
 
             ]);
@@ -2410,6 +2442,10 @@ class UserController extends Controller
                     'user_id' => auth()->user()->id,
                     'video_id' => $request->videoId,
                     'react_num' => $request->reactNum,
+                    'audition_id' => $auditionRoundInfo->roundInfo->audition_id,
+                    'round_info_id' => $auditionRoundInfo->roundInfo->id,
+                    'participant_id' => $auditionRoundInfo->user_id,
+                    'react_voting_type' => $auditionRoundInfo->roundInfo->has_user_vote_mark == 1 ? 'user_vote' : ($auditionRoundInfo->roundInfo->wildcard == 1 ? 'wildcard' : 'general'),
                     'status' => 1,
 
                 ]);

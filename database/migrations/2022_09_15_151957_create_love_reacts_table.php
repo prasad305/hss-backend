@@ -17,7 +17,11 @@ class CreateLoveReactsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('video_id')->nullable();
+            $table->unsignedBigInteger('audition_id')->nullable();
+            $table->unsignedBigInteger('round_info_id')->nullable();
+            $table->unsignedBigInteger('participant_id')->nullable();
             $table->integer('react_num')->nullable();
+            $table->string('react_voting_type')->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();
         });

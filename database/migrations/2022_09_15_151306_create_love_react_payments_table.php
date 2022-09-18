@@ -17,6 +17,8 @@ class CreateLoveReactPaymentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('video_id')->nullable();
+            $table->unsignedBigInteger('audition_id')->nullable();
+            $table->unsignedBigInteger('round_info_id')->nullable();
             $table->integer('react_num')->nullable();
             $table->string('cardHolderName')->nullable();
             $table->string('cardNumber')->nullable();
