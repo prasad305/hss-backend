@@ -61,7 +61,7 @@ class CreateAuditionRoundInfosTable extends Migration
 
             $table->integer('manager_status')->default(0)->comment('0 = not send, 1 = send to manager, 2 = send to user');
             $table->integer('appeal_manager_status')->default(0)->comment('0 = not send, 1 = send to manager, 2 = send to user');
-            $table->integer('status')->default(0)->comment('0 = inactive, 1= active');
+            $table->integer('status')->default(0)->comment('0 = inactive, 1= running , 2=completed');
             $table->timestamps();
         });
     }
