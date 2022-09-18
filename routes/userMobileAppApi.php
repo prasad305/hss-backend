@@ -56,4 +56,5 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     * create form information get
      */
     Route::get('/user/create-user-info', [UserMobileAppController::class, 'getGetInfos']);
+    Route::post('/user/upload-audition-round-videos', [UserMobileAppController::class, 'userRoundVideoUpload']);
 });

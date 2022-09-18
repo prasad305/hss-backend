@@ -32,6 +32,7 @@ use App\Models\QnaMessage;
 use App\Models\QnaRegistration;
 use App\Models\User;
 use App\Models\UserInfo;
+use App\Models\Audition\AuditionUploadVideo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -527,5 +528,42 @@ class UserMobileAppController extends Controller
             "educationlevel" => $edu,
             "country" => $country
         ]);
+    }
+    public function userRoundVideoUpload(Request $request){
+        
+        foreach ($request->videos[1] as $key => $file) {
+            $audition_video = new AuditionUploadVideo();
+            $audition_video->audition_id = $request->audition_id;
+            $audition_video->round_info_id = $request->round_info_id;
+            $audition_video->user_id = auth('sanctum')->user()->id;
+            $audition_video->type = $request->type;
+
+            //upload files
+            try {
+                if ($file->base64) {
+                    $originalExtension = str_ireplace("video/", "", $file->type);
+
+                    $file_path       = 'uploads/videos/auditions/';
+    
+                    $file_name    = time() . rand('0000', '9999') . $key . $originalExtension;
+                    $decodedBase64 = $file->base64;
+                }
+            
+            file_put_contents($file_path, base64_decode($decodedBase64, true));
+            $audition_video->video = $file_path . $file_name;
+            response()->json([
+                "message" => "uploaded successfully",
+                "status" => "200",
+                "path" => $videoPath
+            ]);
+            } catch (\Exception $exception) {
+                response()->json([
+                    "message" => "Video field required, invalid image !",
+                    "error" => $exception->getMessage(),
+                    "status" => "0",
+                ]);
+            }
+            // $audition_video->save();
+        }
     }
 }
