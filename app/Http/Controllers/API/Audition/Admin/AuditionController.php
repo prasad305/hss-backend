@@ -23,6 +23,8 @@ use App\Models\Audition\AuditionUploadVideo;
 use App\Models\auditionJudgeMark;
 use App\Models\AuditionRoundInstruction;
 use App\Models\JuryGroup;
+use App\Models\LoveReact;
+use App\Models\WildCard;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -479,6 +481,7 @@ class AuditionController extends Controller
         }, 'participant'])
             ->where([['audition_id', $audition_id]])
             ->get();
+        $wildCardInfo = WildCard::where([['end_round_info_id', $audition_round_info_id], ['audition_id', $audition_id]])->first();
 
         return response()->json([
             'status' => 200,
@@ -488,6 +491,7 @@ class AuditionController extends Controller
             'roundBasedAuditionUploadVideos' => $roundBasedAuditionUploadVideos,
             'participants' => $participants,
             'isAbleToMerge' => $isAbleToMerge,
+            'wildCardInfo' => $wildCardInfo,
         ]);
     }
     public function singleAuditionRoundVideoMerge($audition_id, $audition_round_info_id, $type)
@@ -2289,5 +2293,19 @@ class AuditionController extends Controller
                 ]);
             }
         }
+    }
+    public function wildcardLoveReact($audition_id, $round_info_id)
+    {
+        $wildcardLoveReact = LoveReact::where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->groupBy('participant_id')->sum('react_num');
+        $wildcardparticipant = LoveReact::where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->groupBy('participant_id')->pluck('participant_id');
+
+        $auditionParticipant = AuditionParticipant::with('totalLoveReact', 'participant')->whereIn('user_id', $wildcardparticipant)->get();
+
+        return response()->json([
+
+            'status' => 200,
+            'wildcardLoveReact' => $wildcardLoveReact,
+            'auditionParticipant' => $auditionParticipant,
+        ]);
     }
 }

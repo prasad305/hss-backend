@@ -245,7 +245,7 @@ class AuditionController extends Controller
         $request_approval_pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 2]])->count();
 
 
-        return view('ManagerAdmin.audition.create', compact('auditionAdmins', 'subCategories', 'auditionRule', 'auditionRoundRule','auditionsStatus','live','pending','request_approval_pending'));
+        return view('ManagerAdmin.audition.create', compact('auditionAdmins', 'subCategories', 'auditionRule', 'auditionRoundRule', 'auditionsStatus', 'live', 'pending', 'request_approval_pending'));
     }
 
     public function assignManpower($audition_id)
@@ -272,9 +272,9 @@ class AuditionController extends Controller
             ->where('category_id', Auth::user()->category_id)
             ->orderBy('id', 'DESC')
             ->get();
-            $live = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 3]])->count();
-            $pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 0]])->count();
-            $request_approval_pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 2]])->count();
+        $live = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 3]])->count();
+        $pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 0]])->count();
+        $request_approval_pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 2]])->count();
 
         $data = [
             'auditionAdmins' => $auditionAdmins,
