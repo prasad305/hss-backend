@@ -19,6 +19,7 @@ use App\Models\Post;
 use App\Models\JuryGroup;
 use App\Models\SubCategory;
 use App\Models\User;
+use App\Models\WildCard;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -271,6 +272,9 @@ class AuditionController extends Controller
             ->where('category_id', Auth::user()->category_id)
             ->orderBy('id', 'DESC')
             ->get();
+            $live = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 3]])->count();
+            $pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 0]])->count();
+            $request_approval_pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 2]])->count();
 
         $data = [
             'auditionAdmins' => $auditionAdmins,
@@ -280,6 +284,9 @@ class AuditionController extends Controller
             'auditionRule' => $auditionRule,
             'groups' => $groups,
             'group_data' => isset($group_data) && count($group_data) > 0 ? $group_data : null,
+            'live' => $live,
+            'pending' => $pending,
+            'request_approval_pending' => $request_approval_pending,
         ];
 
         return view('ManagerAdmin.Audition.assign-manpower', $data);
@@ -402,6 +409,23 @@ class AuditionController extends Controller
         $audition_id = $request->audition_id;
         $round_info_id = $request->round_info_id;
         $type = $request->type;
+
+        $auditionRoundInfo = AuditionRoundInfo::with('wildcardRoundRuleId')->where([['audition_id', $request->audition_id], ['id', $request->round_info_id]])->first();
+        $wildcardInfo = AuditionRoundInfo::where([['audition_id', $request->audition_id], ['round_num', $auditionRoundInfo->wildcardRoundRuleId->round_num]])->first();
+
+
+        if ($auditionRoundInfo->wildcard == 1) {
+            $wildcard = new WildCard();
+            $wildcard->audition_id = $request->audition_id;
+            $wildcard->start_round_info_id = $auditionRoundInfo->id;
+            $wildcard->start_round_num = $auditionRoundInfo->round_num;
+            $wildcard->end_round_info_id = $wildcardInfo->id - 1;
+            $wildcard->end_round_num = $wildcardInfo->round_num - 1;
+            $wildcard->status = 1;
+            $wildcard->save();
+        } else {
+            AuditionRoundInfo::where('id', $auditionRoundInfo->id)->update(['status' => 2]);
+        }
 
         AuditionRoundMarkTracking::where([
             ['audition_id', $audition_id],
