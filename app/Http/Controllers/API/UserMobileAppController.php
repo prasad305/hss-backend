@@ -517,6 +517,8 @@ class UserMobileAppController extends Controller
      */
     public function getGetInfos()
     {
+
+
         $ocupation = Occupation::where('status', 1)->get();
         $edu = Educationlevel::where('status', 1)->get();
         $country = Country::where('status', 1)->get();
@@ -530,40 +532,86 @@ class UserMobileAppController extends Controller
         ]);
     }
     public function userRoundVideoUpload(Request $request){
-        
-        foreach ($request->videos[1] as $key => $file) {
-            $audition_video = new AuditionUploadVideo();
-            $audition_video->audition_id = $request->audition_id;
-            $audition_video->round_info_id = $request->round_info_id;
-            $audition_video->user_id = auth('sanctum')->user()->id;
-            $audition_video->type = $request->type;
+        $audition_video = new AuditionUploadVideo();
+        $audition_video->audition_id = $request->audition_id;
+        $audition_video->round_info_id = $request->round_info_id;
+        $audition_video->user_id = auth('sanctum')->user()->id;
+        $audition_video->type = $request->type;
+        try {
+            if ($request->base64) {
 
-            //upload files
-            try {
-                if ($file->base64) {
-                    $originalExtension = str_ireplace("video/", "", $file->type);
+                $originalExtension = str_ireplace("video/", "", $request->videoType);
 
-                    $file_path       = 'uploads/videos/auditions/';
-    
-                    $file_name    = time() . rand('0000', '9999') . $key . $originalExtension;
-                    $decodedBase64 = $file->base64;
-                }
-            
-            file_put_contents($file_path, base64_decode($decodedBase64, true));
-            $audition_video->video = $file_path . $file_name;
-            response()->json([
+                $folder_path       = 'uploads/videos/auditions/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->base64;
+                $videoPath = $folder_path . $image_new_name;
+                file_put_contents($videoPath, base64_decode($decodedBase64, true));
+                $audition_video->video = $videoPath;
+                $audition_video->save();
+            return 'video not found';
+            return response()->json([
                 "message" => "uploaded successfully",
-                "status" => "200",
-                "path" => $videoPath
+                "status" => "200"
             ]);
-            } catch (\Exception $exception) {
-                response()->json([
-                    "message" => "Video field required, invalid image !",
-                    "error" => $exception->getMessage(),
-                    "status" => "0",
-                ]);
+                
             }
-            // $audition_video->save();
+            
+            
+            
+        } catch (\Exception $exception) {
+            return response()->json([
+                "message" => "field required, invalid formate !",
+                "error" => $exception->getMessage(),
+                "status" => "0",
+            ]);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //single video
+        // $audition_video = new AuditionUploadVideo();
+        // $audition_video->audition_id = $request->audition_id;
+        // $audition_video->round_info_id = $request->round_info_id;
+        // $audition_video->user_id = auth('sanctum')->user()->id;
+        // $audition_video->type = $request->type;
+        // $base64 = $file['base64'];
+        //     //upload files
+        //     try {
+        //         if ($base64) {
+        //             $originalExtension = str_ireplace("video/", "", $file['type']);
+                    
+        //             $file_path       = 'uploads/videos/auditions/';
+        //             $file_name    = time() . rand('0000', '9999') . $key . $originalExtension;
+        //             $decodedBase64 = $base64;
+        //             file_put_contents($file_path, base64_decode($decodedBase64, true));
+        //             $audition_video->video = $file_path . $file_name;
+        //             $audition_video->save();
+        //         }
+            
+        //     } catch (\Exception $exception) {
+        //         response()->json([
+        //             "message" => "Video field required, invalid image !",
+        //             "error" => $exception->getMessage(),
+        //             "status" => "0",
+        //         ]);
+        //     }
+            
+        //     response()->json([
+        //         "message" => "uploaded successfully",
+        //         "status" => "200",
+        //     ]);
+        // }
     }
 }
