@@ -152,7 +152,7 @@ Super Admin
 
                 <div class="small-box bg-warning">
                     <div class="inner">
-                        <h3 id="tot_certificate">{{ $total_bidding }}</h3>
+                        <h3 id="total_bidding">{{ $total_bidding }}</h3>
                         <p>Total Bidding</p>
                     </div>
                     <div class="icon">

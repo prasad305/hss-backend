@@ -71,7 +71,8 @@ class ReportController extends Controller
 
         // dd($total_assignment_fee);
 
-        $categories = Category::orderBy('id', 'desc')->get();
+        $user_category_id = Auth::user()->category_id;
+        $categories = Category::where('id', $user_category_id)->get();
 
         $subCategories = SubCategory::orderBy('id', 'desc')->get();
 
@@ -96,7 +97,8 @@ class ReportController extends Controller
             $certificate = LearningSessionCertificate::whereBetween('created_at', [$start_date, $end_date])->count();
 
 
-            $categories = Category::orderBy('id', 'desc')->get();
+            $user_category_id = Auth::user()->category_id;
+            $categories = Category::where('id', $user_category_id)->get();
             $subCategories = SubCategory::orderBy('id', 'desc')->get();
         } else if ($request['user_type'] == "admin") {
 
@@ -137,7 +139,8 @@ class ReportController extends Controller
         $all_post = SimplePost::where('created_by_id', $user_id)->count();
         $total_free_post = SimplePost::where('created_by_id', $user_id)->where('type', 'free')->count();
         $total_paid_post = SimplePost::where('created_by_id', $user_id)->where('type', 'paid')->count();
-        $categories = Category::orderBy('id', 'desc')->get();
+        $user_category_id = Auth::user()->category_id;
+        $categories = Category::where('id', $user_category_id)->get();
         $total_published_post = SimplePost::where('created_by_id', $user_id)->where('status', '1')->count();
         $total_pending_post = SimplePost::where('created_by_id', $user_id)->where('status', '0')->count();
         $total_paid_post_fees = SimplePost::where('created_by_id', $user_id)->sum('fee');
@@ -200,7 +203,7 @@ class ReportController extends Controller
 
     public function liveChatReport()
     {
-        $user_id = Auth::id();
+
 
         $reg_fee = LiveChat::where('category_id', auth()->user()->category_id)->sum('fee');
 
@@ -212,7 +215,8 @@ class ReportController extends Controller
 
         // dd($slot_fee);
 
-        $categories = Category::orderBy('id', 'desc')->get();
+        $user_category_id = Auth::user()->category_id;
+        $categories = Category::where('id', $user_category_id)->get();
 
         // dd( $total_live_chat);
         return view('ManagerAdmin.Report.LiveChat.liveChat_report', compact('categories', 'reg_fee', 'total_live_chat', 'slot_fee'));
@@ -232,14 +236,13 @@ class ReportController extends Controller
 
             $total_live_chat = LiveChat::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
 
-            $slot_fee = LiveChatRegistration::whereHas('liveChat', function ($q) use( $user_id){
+            $slot_fee = LiveChatRegistration::whereHas('liveChat', function ($q) use ($user_id) {
                 $q->where('star_id',  $user_id);
             })->whereBetween('created_at', [$start_date, $end_date])->sum('amount');
             // return response()->json($slot_fee);
 
             // dd($slot_fee);
 
-            $categories = Category::orderBy('id', 'desc')->get();
 
         } else if ($request['user_type'] == "admin") {
 
@@ -247,7 +250,7 @@ class ReportController extends Controller
 
             $total_live_chat = LiveChat::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
 
-            $slot_fee = LiveChatRegistration::whereHas('liveChat', function ($q) use( $user_id){
+            $slot_fee = LiveChatRegistration::whereHas('liveChat', function ($q) use ($user_id) {
                 $q->where('admin_id',  $user_id);
             })->whereBetween('created_at', [$start_date, $end_date])->sum('amount');
             // return response()->json($slot_fee);
@@ -267,7 +270,8 @@ class ReportController extends Controller
     {
         $user_id = Auth::id();
         $meetUp_event = MeetupEvent::where('created_by_id', $user_id)->count();
-        $categories = Category::orderBy('id', 'desc')->get();
+        $user_category_id = Auth::user()->category_id;
+        $categories = Category::where('id', $user_category_id)->get();
         $total_fee_online = MeetupEvent::where('created_by_id', $user_id)->where('meetup_type', "Online")->sum('fee');
         $total_fee_offline = MeetupEvent::where('created_by_id', $user_id)->where('meetup_type', "Offline")->sum('fee');
 
@@ -300,7 +304,8 @@ class ReportController extends Controller
 
             $total_fee_offline = MeetupEvent::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Offline")->sum('fee');
 
-            $categories = Category::orderBy('id', 'desc')->get();
+            $user_category_id = Auth::user()->category_id;
+            $categories = Category::where('id', $user_category_id)->get();
         }
         return response()->json(['categories' => $categories, 'meetUp_event' => $meetUp_event, 'total_fee_online' => $total_fee_online, 'total_fee_offline' => $total_fee_offline]);
         // return response()->json($request);
@@ -308,41 +313,50 @@ class ReportController extends Controller
     public function greetingReport()
     {
         $user_id = Auth::id();
-        $total_greetings_users = GreetingsRegistration::distinct('user_id')->whereHas('liveChat', function ($q) {
+        $total_greetings_users = GreetingsRegistration::whereHas('greeting', function ($q) {
             $q->where('category_id', auth()->user()->category_id);
-        })->count();
-        $total_greetings_type = GreetingType::distinct('greeting_type')->count();
+        })->distinct('user_id')->count();
+        // dd($total_greetings_users);
+        $total_greetings_type = GreetingsRegistration::whereHas('greeting', function ($q) {
+            $q->where('category_id', auth()->user()->category_id);
+        })->distinct('purpose')->count();
         // dd($total_greetings_type);
-        $categories = Category::orderBy('id', 'desc')->get();
+        $user_category_id = Auth::user()->category_id;
+        $categories = Category::where('id', $user_category_id)->get();
         return view('ManagerAdmin.Report.Greetings.greetings_report', compact('categories', 'total_greetings_users', 'total_greetings_type'));
     }
 
     public function greetingReportFilter(Request $request)
     {
-        $start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
-        $end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
+        $user_id = $request->user_name;
 
-        $total_greetings_users = GreetingsRegistration::whereBetween('created_at', [$start_date, $end_date])->distinct('user_id')->count();
-        $total_greetings_type = GreetingType::whereBetween('created_at', [$start_date, $end_date])->distinct('greeting_type')->count();
-        // dd($total_greetings_type);
-        $categories = Category::orderBy('id', 'desc')->get();
-        // return response()->json($request);
+        $start_date = $request['start_date'];
+        $end_date = $request['end_date'];
+
+
 
 
         if ($request['user_type'] == "star") {
             $enter = true;
+            $total_greetings_users = GreetingsRegistration::whereHas('greeting', function ($q) use ($user_id) {
+                $q->where('star_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->distinct('user_id')->count();
 
-            $total_greetings_users = GreetingsRegistration::whereBetween('created_at', [$start_date, $end_date])->distinct('user_id')->count();
-            $total_greetings_type = GreetingType::whereBetween('created_at', [$start_date, $end_date])->distinct('greeting_type')->count();
+            $total_greetings_type = GreetingsRegistration::whereHas('greeting', function ($q) use ($user_id) {
+                $q->where('star_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->distinct('purpose')->count();
             // dd($total_greetings_type);
             $categories = Category::orderBy('id', 'desc')->get();
         } else if ($request['user_type'] == "admin") {
 
-            $total_greetings_users = GreetingsRegistration::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->distinct('user_id')->count();
-            $total_greetings_type = GreetingType::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->distinct('greeting_type')->count();
-            // dd($total_greetings_type);
-            $categories = Category::orderBy('id', 'desc')->get();
+            $total_greetings_users = GreetingsRegistration::whereHas('greeting', function ($q) use ($user_id) {
+                $q->where('admin_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->distinct('user_id')->count();
 
+            $total_greetings_type = GreetingsRegistration::whereHas('greeting', function ($q) use ($user_id) {
+                $q->where('admin_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->distinct('purpose')->count();
+            // dd($total_greetings_type);
             $categories = Category::orderBy('id', 'desc')->get();
         }
 
@@ -358,25 +372,25 @@ class ReportController extends Controller
     }
     public function qnaReport()
     {
-        $qna_reg_fee = 0;
-        $total_qnaReg_fees = QnA::all();
-        // dd($total_reg_fees);
-        foreach ($total_qnaReg_fees as $amount) {
-            $qna_reg_fee = $qna_reg_fee + $amount['fee'];
-        }
+        $user_id = Auth::id();
 
-        $total_qna = QnaRegistration::distinct('qna_id')->count();
-        // dd($total_qns);
 
-        $qnaSlot_fee = 0;
-        $total_qnaSlot_fees = QnaRegistration::all();
-        // dd($total_qnaSlot_fees);
-        foreach ($total_qnaSlot_fees as $amount) {
-            $qnaSlot_fee = $qnaSlot_fee + $amount['amount'];
-        }
+        $qna_reg_fee = QnA::where('created_by_id', $user_id)->sum('fee');
+        // dd($qna_reg_fee);
+
+        $total_qna = QnaRegistration::whereHas('qna', function ($q) {
+            $q->where('category_id', auth()->user()->category_id);
+        })->distinct('qna_id')->count();
+        // dd($total_qna);
+
+
+        $qnaSlot_fee = QnaRegistration::whereHas('qna', function ($q) {
+            $q->where('category_id', auth()->user()->category_id);
+        })->sum('amount');
         // dd($qnaSlot_fee);
 
-        $categories = Category::orderBy('id', 'desc')->get();
+        $user_category_id = Auth::user()->category_id;
+        $categories = Category::where('id', $user_category_id)->get();
 
         // dd( $total_live_chat);
         return view('ManagerAdmin.Report.QnA.QnA_report', compact('categories', 'qna_reg_fee', 'total_qna', 'qnaSlot_fee'));
@@ -384,47 +398,66 @@ class ReportController extends Controller
 
     public function qnaReportFilter(Request $request)
     {
+        $user_id = $request->user_name;
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
 
-        $qna_reg_fee = 0;
-        $total_qnaReg_fees = QnA::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->get();
-        // dd($total_reg_fees);
-        foreach ($total_qnaReg_fees as $amount) {
-            $qna_reg_fee = $qna_reg_fee + $amount['fee'];
+        if ($request['user_type'] == "star") {
+
+            $qna_reg_fee = QnA::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
+            // dd($qna_reg_fee);
+
+            $total_qna = QnaRegistration::whereHas('qna', function ($q) use ($user_id) {
+                $q->where('star_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->distinct('qna_id')->count();
+            // dd($total_qna);
+
+
+            $qnaSlot_fee = QnaRegistration::whereHas('qna', function ($q) use ($user_id) {
+                $q->where('star_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->sum('amount');
+            // dd($qnaSlot_fee);
+
+            $categories = Category::orderBy('id', 'desc')->get();
+        } else if ($request['user_type'] == "admin") {
+
+            $qna_reg_fee = QnA::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
+            // dd($qna_reg_fee);
+
+            $total_qna = QnaRegistration::whereHas('qna', function ($q) use ($user_id) {
+                $q->where('admin_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->distinct('qna_id')->count();
+            // dd($total_qna);
+            // return response()->json($total_qna);
+
+            $qnaSlot_fee = QnaRegistration::whereHas('qna', function ($q) use ($user_id) {
+                $q->where('admin_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->sum('amount');
+            // dd($qnaSlot_fee);
+            // return response()->json($qnaSlot_fee);
+            $categories = Category::orderBy('id', 'desc')->get();
         }
 
-        $total_qna = QnaRegistration::whereBetween('created_at', [$start_date, $end_date])->distinct('qna_id')->count();
-        // dd($total_qns);
-
-        $qnaSlot_fee = 0;
-        $total_qnaSlot_fees = QnaRegistration::whereBetween('created_at', [$start_date, $end_date])->get();
-        // dd($total_qnaSlot_fees);
-        foreach ($total_qnaSlot_fees as $amount) {
-            $qnaSlot_fee = $qnaSlot_fee + $amount['amount'];
-        }
-        // dd($qnaSlot_fee);
-
-        $categories = Category::orderBy('id', 'desc')->get();
-
-        // dd( $total_live_chat);
+        // return response()->json($request);
         return response()->json(['categories' => $categories, 'qna_reg_fee' => $qna_reg_fee, 'total_qna' => $total_qna, 'qnaSlot_fee' => $qnaSlot_fee]);
     }
     public function marketplaceReport()
     {
-        $unit_Product_price = 0;
-        $tax = 0;
-        $total_unit_Product_price = Marketplace::all();
-        // dd($total_qnaSlot_fees);
-        foreach ($total_unit_Product_price as $amount) {
-            $unit_Product_price = $unit_Product_price + $amount['unit_price'];
-            $tax = $tax + $amount['tax'];
-        }
-        // $total_items_quantity = Marketplace::sum('total_items');
-        $total_items = Marketplace::count();
+        $user_id = Auth::id();
 
-        $total_order = MarketplaceOrder::count();
-        $categories = Category::orderBy('id', 'desc')->get();
+        $unit_Product_price = Marketplace::where('created_by_id', $user_id)->sum('unit_price');
+
+        $tax = Marketplace::where('created_by_id', $user_id)->sum('tax');
+        // dd($total_qnaSlot_fees);
+
+        // $total_items_quantity = Marketplace::sum('total_items');
+        $total_items = Marketplace::where('created_by_id', $user_id)->count();
+
+        $total_order = MarketplaceOrder::whereHas('marketplace', function ($q) {
+            $q->where('category_id', auth()->user()->category_id);
+        })->count();
+        $user_category_id = Auth::user()->category_id;
+        $categories = Category::where('id', $user_category_id)->get();
 
         // dd($total_order);
         return view('ManagerAdmin.Report.MarketPlace.marketPlace_report', compact('categories', 'unit_Product_price', 'tax', 'total_items', 'total_order'));
@@ -432,56 +465,103 @@ class ReportController extends Controller
 
     public function marketPlaceFilter(Request $request)
     {
+
+        $user_id = $request->user_name;
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
+        // return([$start_date , $end_date]);
 
-        $unit_Product_price = 0;
-        $tax = 0;
-        $total_unit_Product_price = Marketplace::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->get();
-        // dd($total_qnaSlot_fees);
-        foreach ($total_unit_Product_price as $amount) {
-            $unit_Product_price = $unit_Product_price + $amount['unit_price'];
-            $tax = $tax + $amount['tax'];
+        if ($request['user_type'] == "star") {
+
+            $unit_Product_price = Marketplace::whereBetween('created_at', [$start_date, $end_date])->where('superstar_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('unit_price');
+            // return response()->json($unit_Product_price);
+            $tax = Marketplace::whereBetween('created_at', [$start_date, $end_date])->where('superstar_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('tax');
+            // dd($total_qnaSlot_fees);
+
+            // $total_items_quantity = Marketplace::sum('total_items');
+            $total_items = Marketplace::whereBetween('created_at', [$start_date, $end_date])->where('superstar_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+
+            $total_order = MarketplaceOrder::whereHas('marketplace', function ($q) use ($user_id) {
+                $q->where('superstar_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->count();
+
+            $categories = Category::orderBy('id', 'desc')->get();
+        } else if ($request['user_type'] == "admin") {
+
+            $unit_Product_price = Marketplace::whereBetween('created_at', [$start_date, $end_date])->where('superstar_admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('unit_price');
+            // return response()->json($unit_Product_price);
+            $tax = Marketplace::whereBetween('created_at', [$start_date, $end_date])->where('superstar_admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('tax');
+            // dd($total_qnaSlot_fees);
+
+            $total_items = Marketplace::whereBetween('created_at', [$start_date, $end_date])->where('superstar_admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+
+            $total_order = MarketplaceOrder::whereHas('marketplace', function ($q) use ($user_id) {
+                $q->where('superstar_admin_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->count();
+
+            $categories = Category::orderBy('id', 'desc')->get();
         }
-        // $total_items_quantity = Marketplace::sum('total_items');
-        $total_items = Marketplace::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
-
-        $total_order = MarketplaceOrder::whereBetween('created_at', [$start_date, $end_date])->count();
-        $categories = Category::orderBy('id', 'desc')->get();
         // return response()->json($request);
 
         return response()->json(['categories' => $categories, 'unit_Product_price' => $unit_Product_price, 'tax' => $tax, 'total_items' => $total_items, 'total_order' => $total_order]);
     }
     public function auctionReport()
     {
-        $base_price = 0;
-        $total_base_price = Auction::all();
-        // dd($total_qnaSlot_fees);
-        foreach ($total_base_price as $amount) {
-            $base_price = $base_price + $amount['base_price'];
-        }
-        $total_auction = Auction::count();
-        $total_bidding = Bidding::count();
-        $total_bidding_price = Bidding::sum('amount');
-        $categories = Category::orderBy('id', 'desc')->get();
+        $user_id = Auth::id();
+        $base_price = Auction::where('created_by_id', $user_id)->sum('base_price');
+
+        $total_auction = Auction::where('created_by_id', $user_id)->count();
+
+        $total_bidding = Bidding::whereHas('auction', function ($q) {
+            $q->where('category_id', auth()->user()->category_id);
+        })->distinct('auction_id')->count();
+        $total_bidding_price = Bidding::whereHas('auction', function ($q) {
+            $q->where('category_id', auth()->user()->category_id);
+        })->sum('amount');
+
+        $user_category_id = Auth::user()->category_id;
+        $categories = Category::where('id', $user_category_id)->get();
         // dd($total_bidding_price);
         return view('ManagerAdmin.Report.Auction.auction_report', compact('categories', 'base_price', 'total_auction', 'total_bidding', 'total_bidding_price'));
     }
     public function auctionReportFilter(Request $request)
     {
+        $user_id = $request->user_name;
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
 
-        $base_price = 0;
-        $total_base_price = Auction::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->get();
-        // dd($total_qnaSlot_fees);
-        foreach ($total_base_price as $amount) {
-            $base_price = $base_price + $amount['base_price'];
+
+        if ($request['user_type'] == "star") {
+
+            $base_price = Auction::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('base_price');
+
+            $total_auction = Auction::whereBetween('created_at', [$start_date, $end_date])->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+
+            $total_bidding = Bidding::whereHas('auction', function ($q) use ($user_id) {
+                $q->where('star_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->distinct('auction_id')->count();
+
+            $total_bidding_price = Bidding::whereHas('auction', function ($q) use ($user_id) {
+                $q->where('star_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->sum('amount');
+
+            $categories = Category::orderBy('id', 'desc')->get();
+        } else if ($request['user_type'] == "admin") {
+
+            $base_price = Auction::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('base_price');
+
+            $total_auction = Auction::whereBetween('created_at', [$start_date, $end_date])->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+
+            $total_bidding = Bidding::whereHas('auction', function ($q) use ($user_id) {
+                $q->where('admin_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->distinct('auction_id')->count();
+            // return response()->json($total_bidding);
+            $total_bidding_price = Bidding::whereHas('auction', function ($q) use ($user_id) {
+                $q->where('admin_id',  $user_id);
+            })->whereBetween('created_at', [$start_date, $end_date])->sum('amount');
+            // return response()->json($total_bidding_price);
+            $categories = Category::orderBy('id', 'desc')->get();
         }
-        $total_auction = Auction::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
-        $total_bidding = Bidding::whereBetween('created_at', [$start_date, $end_date])->count();
-        $total_bidding_price = Bidding::whereBetween('created_at', [$start_date, $end_date])->sum('amount');
-        $categories = Category::orderBy('id', 'desc')->get();
 
         // return response()->json($request);
 
@@ -489,28 +569,62 @@ class ReportController extends Controller
     }
     public function souvenirReport()
     {
-        $total_souvenir = SouvenirApply::count();
-        $total_amount = SouvenirApply::sum('total_amount');
-        $total_sounenir_item = SouvenirCreate::count();
-        $total_sounenir_item_price = SouvenirCreate::sum('price');
-        $categories = Category::orderBy('id', 'desc')->get();
+        $user_id = User::where('created_by', Auth::id())->get();
+        $total_sounenir_item = 0;
+        $total_sounenir_item_price = 0;
+        $total_souvenir = 0;
+        $total_amount = 0;
+        foreach ($user_id as $admin_id) {
+            $total_sounenir_item = $total_sounenir_item + SouvenirApply::where('admin_id', $admin_id['id'])->count();
+            $total_sounenir_item_price = $total_sounenir_item_price + SouvenirApply::where('admin_id', $admin_id['id'])->sum('total_amount');
+            $total_souvenir = $total_souvenir + SouvenirCreate::where('admin_id', $admin_id['id'])->count();
+            $total_amount = $total_amount + SouvenirCreate::where('admin_id', $admin_id['id'])->sum('price');
+        }
+
+        $user_category_id = Auth::user()->category_id;
+        $categories = Category::where('id', $user_category_id)->get();
         // dd($total_souvenir,$total_amount);
         return view('ManagerAdmin.Report.Souvenir.Souvenir_report', compact('categories', 'total_souvenir', 'total_amount', 'total_sounenir_item', 'total_sounenir_item_price'));
     }
     public function souvenirReportFilter(Request $request)
     {
+        $user_id = $request['user_name'];
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
 
-        $total_souvenir = SouvenirApply::count();
-        $total_amount = SouvenirApply::sum('total_amount');
-        $total_sounenir_item = SouvenirCreate::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
-        $total_sounenir_item_price = SouvenirCreate::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('price');
-        $categories = Category::orderBy('id', 'desc')->get();
-        // dd($total_souvenir,$total_amount);
-        // return response()->json($request);
+        // $total_souvenir = SouvenirApply::count();
+        // $total_amount = SouvenirApply::sum('total_amount');
+        // $total_sounenir_item = SouvenirCreate::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+        // $total_sounenir_item_price = SouvenirCreate::whereBetween('created_at', [$start_date, $end_date])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('price');
+        // $categories = Category::orderBy('id', 'desc')->get();
 
-        return response()->json(['categories' => $categories, 'total_souvenir' => $total_souvenir, 'total_amount' => $total_amount, 'total_sounenir_item' => $total_sounenir_item, 'total_sounenir_item_price' => $total_sounenir_item_price]);
+        if ($request['user_type'] == "star") {
+
+            $total_sounenir_item = 0;
+            $total_sounenir_item_price = 0;
+
+
+            $total_sounenir_item = SouvenirApply::whereBetween('created_at', [$start_date, $end_date])->where('star_id',  $user_id)->count();
+
+            $total_sounenir_item_price = SouvenirApply::whereBetween('created_at', [$start_date, $end_date])->where('star_id',  $user_id)->sum('total_amount');
+
+
+
+            $categories = Category::orderBy('id', 'desc')->get();
+        } else if ($request['user_type'] == "admin") {
+
+            $total_sounenir_item = 0;
+            $total_sounenir_item_price = 0;
+
+
+            $total_sounenir_item = SouvenirApply::whereBetween('created_at', [$start_date, $end_date])->where('admin_id',  $user_id)->count();
+            // return response()->json($total_sounenir_item);
+            $total_sounenir_item_price = SouvenirApply::whereBetween('created_at', [$start_date, $end_date])->where('admin_id',  $user_id)->sum('total_amount');
+            // return response()->json($total_sounenir_item_price);
+            // $categories = Category::orderBy('id', 'desc')->get();
+        }
+
+        return response()->json(['total_sounenir_item' => $total_sounenir_item, 'total_sounenir_item_price' => $total_sounenir_item_price]);
     }
 
 

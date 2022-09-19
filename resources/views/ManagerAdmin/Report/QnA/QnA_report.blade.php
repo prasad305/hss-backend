@@ -1,4 +1,4 @@
-@extends('Layouts.SuperAdmin.master')
+@extends('Layouts.ManagerAdmin.master')
 
 @push('title')
     Super Admin
@@ -107,6 +107,39 @@
                                     <option>Select SubCategory</option>
                                 </select>
                             </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-3 col-md-3">
+
+                        <div class="form-group mb-4">
+                            <div class="form-group">
+                                <label for="name">User Type</label>
+                                <select name="user_type" id="user_type" class="form-control select2">
+                                    <option>Select Type</option>
+
+                                    <option value="star">Star</option>
+                                    <option value="admin">Admin</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3">
+
+                        <div class="form-group mb-4">
+
+                            <label for="category">Select Name</label>
+                            <select name="user_name" class="custom-select rounded-0" id="user_name" onmousedown="if(this.options.length>5){this.size=5;}" onchange="this.blur()" onblur="this.size=0;">
+                                <option>Select Name</option>
+
+
+                            </select>
 
                         </div>
                     </div>
@@ -275,12 +308,12 @@
 
 
                 $.ajax({
-                    url: "{{ route('superAdmin.report.Filter.qna') }}",
+                    url: "{{ route('managerAdmin.report.Filter.qna') }}",
                     type: "POST",
                     data: $("#qnafilter").serialize(),
                     success: function(respose) {
                         // console.log('Submission was successful.');
-                        // console.log(respose);
+                        console.log(respose);
                         $("#qnafilter")[0].reset();
                         $('#tot_regfee').html(respose.qna_reg_fee);
                         $('#tot_qna').html(respose.total_qna);
@@ -298,7 +331,7 @@
             console.log(category_id);
             if (category_id > 0) {
                 $.ajax({
-                    url: "{{ url('super-admin/all-report-filter-subCategory') }}/" + category_id,
+                    url: "{{ url('manager-admin/all-report-filter-subCategory') }}/" + category_id,
                     type: 'GET',
 
                     success: function(res) {
@@ -310,6 +343,28 @@
 
                         });
                         $('#sub_category_id').html(_html);
+                    }
+                })
+            }
+        });
+        $("#user_type").click(function() {
+            var user_type = $('#user_type').val();
+            // console.log(user_type);
+            if (user_type) {
+                $.ajax({
+                    url: "{{ url('manager-admin/simplePost-report-filter-userType') }}/" + user_type,
+                    // url: "{{url('super-admin/learningSession-report-filter-subCategory')}}" + '/' + category_id,
+                    type: 'GET',
+
+                    success: function(res) {
+                        console.log(res);
+
+                        var _html = '<option>Select Name</option>';
+                        $.each(res, function(index, res) {
+                            _html += '<option value="' + res.id + '">' + res.first_name + ' ' + res.last_name + '</option>';
+
+                        });
+                        $('#user_name').html(_html);
                     }
                 })
             }

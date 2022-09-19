@@ -1,4 +1,4 @@
-@extends('Layouts.SuperAdmin.master')
+@extends('Layouts.ManagerAdmin.master')
 
 @push('title')
 Super Admin
@@ -94,6 +94,39 @@ Super Admin
                                 <option>Select SubCategory</option>
                             </select>
                         </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-3 col-md-3">
+
+                    <div class="form-group mb-4">
+                        <div class="form-group">
+                            <label for="name">User Type</label>
+                            <select name="user_type" id="user_type" class="form-control select2">
+                                <option>Select Type</option>
+
+                                <option value="star">Star</option>
+                                <option value="admin">Admin</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3">
+
+                    <div class="form-group mb-4">
+
+                        <label for="category">Select Name</label>
+                        <select name="user_name" class="custom-select rounded-0" id="user_name" onmousedown="if(this.options.length>5){this.size=5;}" onchange="this.blur()" onblur="this.size=0;">
+                            <option>Select Name</option>
+
+
+                        </select>
 
                     </div>
                 </div>
@@ -275,7 +308,7 @@ Super Admin
 
 
             $.ajax({
-                url: "{{ route('superAdmin.report.filter.marketPlace') }}",
+                url: "{{ route('managerAdmin.report.filter.marketPlace') }}",
                 type: "POST",
                 data: $("#marketfilter").serialize(),
                 success: function(respose) {
@@ -298,7 +331,7 @@ Super Admin
             console.log(category_id);
             if (category_id > 0) {
                 $.ajax({
-                    url: "{{ url('super-admin/all-report-filter-subCategory') }}/" + category_id,
+                    url: "{{ url('manager-admin/all-report-filter-subCategory') }}/" + category_id,
                     type: 'GET',
 
                     success: function(res) {
@@ -314,6 +347,30 @@ Super Admin
                 })
             }
         });
+
+        $("#user_type").click(function() {
+            var user_type = $('#user_type').val();
+            // console.log(user_type);
+            if (user_type) {
+                $.ajax({
+                    url: "{{ url('manager-admin/simplePost-report-filter-userType') }}/" + user_type,
+                    // url: "{{url('super-admin/learningSession-report-filter-subCategory')}}" + '/' + category_id,
+                    type: 'GET',
+
+                    success: function(res) {
+                        console.log(res);
+
+                        var _html = '<option>Select Name</option>';
+                        $.each(res, function(index, res) {
+                            _html += '<option value="' + res.id + '">' + res.first_name + ' ' + res.last_name + '</option>';
+
+                        });
+                        $('#user_name').html(_html);
+                    }
+                })
+            }
+        });
+
 
 
     });

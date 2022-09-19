@@ -79,7 +79,7 @@ class ReportController extends Controller
     }
     public function learningFilter(Request $request)
     {
-        
+
         $categoryId =  $request->category_id;
         // return ($categoryId );
         $start_date = Carbon::parse($request->start_date)->format('Y-m-d  H:i:s');
@@ -93,7 +93,7 @@ class ReportController extends Controller
         $assignment_fee = 0;
         $registration_fee = 0;
         $assignment = 0;
-      
+
         foreach ($total_assignment_fees as $amount) {
             $assignment_fee = $assignment_fee + $amount['assignment_fee'];
             $registration_fee = $registration_fee + $amount['fee'];
@@ -106,8 +106,8 @@ class ReportController extends Controller
         $certificate = LearningSessionCertificate::whereHas('learningSession', function ($q) use ($categoryId) {
             $q->where('category_id',  $categoryId);
         })->whereBetween('created_at', [$start_date, $end_date])->count();
-        return response()->json($certificate);
-        die();
+        // return response()->json($certificate);
+        // die();
 
         $categories = Category::orderBy('id', 'desc')->get();
         $subCategories = SubCategory::orderBy('id', 'desc')->get();
