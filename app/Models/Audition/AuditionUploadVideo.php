@@ -3,6 +3,7 @@
 namespace App\Models\Audition;
 
 use App\Models\auditionJudgeMark;
+use App\Models\LoveReact;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,7 +34,7 @@ class AuditionUploadVideo extends Model
         'comment'
     ];
 
-    protected $with = ['user'];
+    protected $with = ['user', 'totalReact'];
 
     public function audition()
     {
@@ -57,5 +58,9 @@ class AuditionUploadVideo extends Model
     public function judge_video_mark()
     {
         return $this->hasMany(auditionJudgeMark::class, 'audition_uploads_video_id', 'id');
+    }
+    public function totalReact()
+    {
+        return $this->hasMany(LoveReact::class, 'video_id');
     }
 }
