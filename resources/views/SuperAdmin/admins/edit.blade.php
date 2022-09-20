@@ -102,7 +102,6 @@
                 setTimeout(function() {
                     location.reload();
                 }, 1000);
-            // console.log(data);
         },
         error: function (data) {
             $.each(data.responseJSON.errors, function(key, value) {
@@ -118,7 +117,6 @@
 getSubCategory();
 
 function getSubCategory(){
-    console.log('getSubCategory');
     $.ajax({
       url: "{{url('super-admin/admin')}}/"+$('#category_id').val()+"/get-subcategory",
       type: 'GET',
@@ -126,7 +124,6 @@ function getSubCategory(){
       data: {},
     })
     .done(function(response) {
-        console.log('subcategories.........',response);
       var subcategory='';
       var sub_category_id = '{{$admin->sub_category_id}}';
       $.each(response, function(index, val) {

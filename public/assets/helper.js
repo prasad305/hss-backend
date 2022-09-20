@@ -39,7 +39,6 @@ $(document).ready(function () {
 
     // Image chose related code
     $(".image-chose-btn").click(function () {
-        // console.log($(this).parentsUntil(".middle-image-helper").find('.image-importer'));
         $(this).parentsUntil(".middle-image-helper").find('.image-importer').click();
     })
 
@@ -151,7 +150,6 @@ function delete_function(objButton) {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (data) {
-                    console.log(data);
                     if (data.type == 'success') {
 
                         Swal.fire(

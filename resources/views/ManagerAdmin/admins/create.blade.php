@@ -90,7 +90,6 @@
         contentType: false,
         type: 'POST',
         success: function (res) {
-            // console.log(res.type);
             if (res.type === 'success') {
                 Swal.fire(
                     'Success!',
@@ -108,7 +107,6 @@
                     res.message,
                     'error'
                 )
-                console.log('monir error');
             }
             
         },

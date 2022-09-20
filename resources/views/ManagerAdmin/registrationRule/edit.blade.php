@@ -353,7 +353,6 @@
             $("#round_rules").html('');
 
             var url = "{{ url('manager-admin/audition/registration-rules/') }}";
-            console.log(url + "/" + round_id);
             $.ajax({
                 url: url + "/" + round_id, // your request url
                 type: 'GET',

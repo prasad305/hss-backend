@@ -317,7 +317,6 @@ Super Admin
         }
         var url = "{{ url('super-admin/audition-rules') }}";
         // var rule_id = "{{$rule->id}}";
-        // console.log('object............',category_id);
         $.ajax({
             url: url + "/" + category_id, // your request url
             type: 'GET',
@@ -339,7 +338,6 @@ Super Admin
                     title: 'Oops...',
                     footer: errorMessage
                 });
-                console.log(data);
             }
         });
     }
@@ -356,7 +354,6 @@ Super Admin
         var judge_num = $("#superstar").val();
         var month = $("#root3").text();
         var day = $("#root4").text();
-        console.log('Category_id', category_id);
         var formData = new FormData(form);
         formData.append('category_id', category_id);
         formData.append('round_num', round_num);
@@ -374,7 +371,6 @@ Super Admin
             contentType: false,
             type: 'POST',
             success: function(data) {
-                console.log(data);
                 Swal.fire({
                     position: 'top-end',
                     icon: data.type,
@@ -385,13 +381,11 @@ Super Admin
                 setTimeout(function() {
                     location.reload();
                 }, 1000);
-                console.log('success')
             },
             error: function(data) {
                 $.each(data.responseJSON.errors, function(key, value) {
                     ErrorMessage(key, value);
                 });
-                console.log(data);
             }
         });
     });

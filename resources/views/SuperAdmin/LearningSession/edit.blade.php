@@ -107,7 +107,6 @@
                 setTimeout(function() {
                     location.reload();
                 }, 1000);
-                console.log(data);
             },
             error: function(data) {
                 $.each(data.responseJSON.errors, function(key, value) {
@@ -138,7 +137,6 @@
 
     function getBannerOrVideo() {
         var banner_or_video = $('#banner_or_video').val();
-        console.log('banner or video', banner_or_video);
         if (banner_or_video == 0) {
             $("#hide_show_video").css("display", "none");
             $("#hide_show_banner").css("display", "block");
