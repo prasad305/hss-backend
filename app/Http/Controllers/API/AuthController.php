@@ -364,9 +364,9 @@ class AuthController extends Controller
 
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
-        // $user->email = $request->email;
+        $user->email = $request->email;
         $user->phone = $request->phone;
-        $user->password = Hash::make($request->new_password);
+        // $user->password = Hash::make($request->new_password);
 
         if ($request->hasFile('image')) {
             if ($user->image != null)
@@ -391,7 +391,7 @@ class AuthController extends Controller
         }
 
 
-        $user->update();
+        $user->save();
 
         $user_info = UserInfo::where('user_id', $user->id)->first();
 
@@ -409,7 +409,7 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => 200,
-            'message' => 'Your Information Updated Successfully'
+            'message' => 'Your Information Updatedd Successfully'
         ]);
     }
 
