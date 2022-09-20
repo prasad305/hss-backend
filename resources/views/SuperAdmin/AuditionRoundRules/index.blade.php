@@ -598,14 +598,12 @@
         var round_available_days = 0;
 
         function selectedCategory(rules_id) {
-            console.log('category', rules_id);
             var url = "{{ url('super-admin/audition-round-rules/') }}";
 
             $.ajax({
                 url: url + "/" + rules_id, // your request url
                 type: 'GET',
                 success: function(data) {
-                    console.log('get data', data);
                     $('#tab-content').html("");
                     $('#round_available_days').html(data.round_available_days);
                     round_available_days += data.round_available_days;
@@ -678,7 +676,6 @@
                         footer: errorMessage
                     });
 
-                    console.log(data);
                 }
             });
 
@@ -817,7 +814,6 @@
                         footer: errorMessage
                     });
 
-                    console.log(data);
                 }
             });
 
@@ -931,16 +927,12 @@
                         setTimeout(function() {
                             location.reload();
                         }, 1000);
-                        console.log(data)
                     },
                     error: function(data) {
 
                         $.each(data.responseJSON.errors, function(key, value) {
                             ErrorMessage(key, value);
                         });
-
-
-                        console.log(data);
                     }
                 });
                 showRules(round_id);
