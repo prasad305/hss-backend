@@ -255,7 +255,8 @@ class UserMobileAppController extends Controller
 
 
         try {
-            if ($request->img['data']) {
+            if ($request->img) {
+
 
                 $originalExtension = str_ireplace("image/", "", $request->img['type']);
 
@@ -263,15 +264,16 @@ class UserMobileAppController extends Controller
 
                 $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                 $decodedBase64 = $request->img['data'];
+                Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                $user->image = $folder_path . $image_new_name;
             }
 
-            Image::make($decodedBase64)->save($folder_path . $image_new_name);
-            $user->image = $folder_path . $image_new_name;
 
             $userInfo->user_id = $user->id;
             $userInfo->country =  $request->country;
             $userInfo->occupation =  $request->occupation;
             $userInfo->edu_level =  $request->edu;
+            $userInfo->dob =  Carbon::parse($request->birthday);
 
             $userInfo->save();
             $user->save();

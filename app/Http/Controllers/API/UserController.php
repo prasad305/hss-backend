@@ -2456,4 +2456,23 @@ class UserController extends Controller
             'status' => 200,
         ]);
     }
+
+    public function allUpCommingEvents()
+    {
+        $learningSession = LearningSession::where('status', 2)->latest()->get();
+        $LiveChat = LiveChat::where('status', 2)->orderBy('id', 'DESC')->get();
+        $qna = QnA::where('status', 2)->orderBy('id', 'DESC')->get();
+        $audition =  Audition::where('status', 2)->orderBy('id', 'DESC')->get();
+        $meetup = MeetupEvent::where('status', 2)->orderBy('id', 'DESC')->get();
+
+        return response()->json([
+            'status' => 200,
+            'learningSession' => $learningSession,
+            'LiveChat' =>  $LiveChat,
+            'qna' => $qna,
+            'audition' =>  $audition,
+            'meetup' =>  $meetup
+
+        ]);
+    }
 }

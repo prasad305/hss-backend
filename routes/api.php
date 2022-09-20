@@ -86,6 +86,11 @@ Route::get('/star_videos/{id}', [UserController::class, 'star_video']);
 Route::get('/user/getStarPost/{id}/{type}', [UserController::class, 'getStarPost']);
 Route::get('/user/getStarPost/{id}/{type}/with-paginate/{limit}', [UserController::class, 'paginate_getStarPost']);
 
+/**
+ * all upcommit events
+ */
+Route::get('/user/all-upcomming-events', [UserController::class, 'allUpCommingEvents']);
+
 
 // Data Fetching For Landing Page Right Side Bar
 Route::get('/user/learning_session/all', [LearningSessionController::class, 'user_all']);
