@@ -366,7 +366,7 @@ class AuthController extends Controller
         $user->last_name = $request->last_name;
         $user->email = $request->email;
         $user->phone = $request->phone;
-        $user->password = Hash::make($request->new_password);
+        // $user->password = Hash::make($request->new_password);
 
         if ($request->hasFile('image')) {
             if ($user->image != null)
@@ -391,7 +391,7 @@ class AuthController extends Controller
         }
 
 
-        $user->update();
+        $user->save();
 
         $user_info = UserInfo::where('user_id', $user->id)->first();
 
@@ -400,14 +400,16 @@ class AuthController extends Controller
         }
 
         $user_info->user_id = $user->id;
-        $user_info->dob = $request->dob;
+        if ($request->dob != 0) {
+            $user_info->dob = $request->dob;
+        }
         $user_info->country = $request->country;
         $user_info->save();
 
 
         return response()->json([
             'status' => 200,
-            'message' => 'Your Information Updated Successfully'
+            'message' => 'Your Information Updatedd Successfully'
         ]);
     }
 
@@ -426,8 +428,11 @@ class AuthController extends Controller
         $user_info->institute = $request->institute;
         $user_info->subject = $request->subject;
         $user_info->position = $request->position;
-        $user_info->company = $request->company;
-        $user_info->salery_range = $request->salery_range;
+        // $user_info->company = $request->company;
+        if ($user_info->salery_range != 0) {
+
+            $user_info->salery_range = $request->salery_range;
+        }
 
         $user_info->save();
 
