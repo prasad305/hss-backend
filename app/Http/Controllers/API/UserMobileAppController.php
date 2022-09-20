@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\API;
-
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Acquired_app;
 use App\Models\Activity;
@@ -32,13 +32,15 @@ use App\Models\QnaMessage;
 use App\Models\QnaRegistration;
 use App\Models\User;
 use App\Models\UserInfo;
+use App\Models\Audition\AuditionUploadVideo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
-
+// use Barryvdh\DomPDF\Facade\Pdf;
+use PDF;
 
 class UserMobileAppController extends Controller
 {
@@ -49,6 +51,7 @@ class UserMobileAppController extends Controller
         return response()->json([
             'status' => 200,
             'activity_length' => $activities->count(),
+            'audition_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'audition')->orderBy('id', 'DESC')->get(),
             'greeting_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'greeting')->orderBy('id', 'DESC')->get(),
             'learning_session_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'learningSession')->orderBy('id', 'DESC')->get(),
             'live_chat_activities' => Activity::where('user_id', auth('sanctum')->user()->id)->where('type', 'liveChat')->orderBy('id', 'DESC')->get(),
@@ -482,11 +485,42 @@ class UserMobileAppController extends Controller
             "qna_history" => $qnaMessageHistory
         ]);
     }
+    public function getInvoice(Request $request)
+    {
+        $data = [
+            'productName' => $request->productName,
+            'SuperStar' => $request->SuperStar,
+            'qty' => $request->qty,
+            'unitPrice' => $request->unitPrice,
+            'total' => $request->total,
+            'subTotal' => $request->subTotal,
+            'deliveryCharge' => $request->deliveryCharge,
+            'tax' => $request->tax,
+            'grandTotal' => $request->grandTotal,
+            'orderID' => $request->orderID,
+            'orderDate' => $request->orderDate,
+            'description' => $request->description,
+            'name' => $request->name,
+
+        ];
+        $time = time();
+        try {
+            $pdf = PDF::loadView('Others.Invoice.Invoice', compact('data'));
+            file_put_contents('uploads/pdf/'. $time .'.pdf', $pdf->output());
+            $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
+            return $filename;
+        } catch (\Throwable $th) {
+            return $th;
+        }
+    }
+        
     /**
      * crete user form infors
      */
     public function getGetInfos()
     {
+
+
         $ocupation = Occupation::where('status', 1)->get();
         $edu = Educationlevel::where('status', 1)->get();
         $country = Country::where('status', 1)->get();
@@ -498,5 +532,88 @@ class UserMobileAppController extends Controller
             "educationlevel" => $edu,
             "country" => $country
         ]);
+    }
+    public function userRoundVideoUpload(Request $request){
+        $audition_video = new AuditionUploadVideo();
+        $audition_video->audition_id = $request->audition_id;
+        $audition_video->round_info_id = $request->round_info_id;
+        $audition_video->user_id = auth('sanctum')->user()->id;
+        $audition_video->type = $request->type;
+        try {
+            if ($request->base64) {
+
+                $originalExtension = str_ireplace("video/", "", $request->videoType);
+
+                $folder_path       = 'uploads/videos/auditions/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->base64;
+                $videoPath = $folder_path . $image_new_name;
+                file_put_contents($videoPath, base64_decode($decodedBase64, true));
+                $audition_video->video = $videoPath;
+                $audition_video->save();
+            return 'video not found';
+            return response()->json([
+                "message" => "uploaded successfully",
+                "status" => "200"
+            ]);
+                
+            }
+            
+            
+            
+        } catch (\Exception $exception) {
+            return response()->json([
+                "message" => "field required, invalid formate !",
+                "error" => $exception->getMessage(),
+                "status" => "0",
+            ]);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //single video
+        // $audition_video = new AuditionUploadVideo();
+        // $audition_video->audition_id = $request->audition_id;
+        // $audition_video->round_info_id = $request->round_info_id;
+        // $audition_video->user_id = auth('sanctum')->user()->id;
+        // $audition_video->type = $request->type;
+        // $base64 = $file['base64'];
+        //     //upload files
+        //     try {
+        //         if ($base64) {
+        //             $originalExtension = str_ireplace("video/", "", $file['type']);
+                    
+        //             $file_path       = 'uploads/videos/auditions/';
+        //             $file_name    = time() . rand('0000', '9999') . $key . $originalExtension;
+        //             $decodedBase64 = $base64;
+        //             file_put_contents($file_path, base64_decode($decodedBase64, true));
+        //             $audition_video->video = $file_path . $file_name;
+        //             $audition_video->save();
+        //         }
+            
+        //     } catch (\Exception $exception) {
+        //         response()->json([
+        //             "message" => "Video field required, invalid image !",
+        //             "error" => $exception->getMessage(),
+        //             "status" => "0",
+        //         ]);
+        //     }
+            
+        //     response()->json([
+        //         "message" => "uploaded successfully",
+        //         "status" => "200",
+        //     ]);
+        // }
     }
 }
