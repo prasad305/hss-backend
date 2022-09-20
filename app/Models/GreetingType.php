@@ -15,4 +15,4 @@ class GreetingType extends Model
 //     {
 //         return $this->belongsTo(Greeting::class, 'greeting_id');
 //     }
-// }
+}

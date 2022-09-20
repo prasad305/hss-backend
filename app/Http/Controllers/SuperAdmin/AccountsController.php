@@ -3,15 +3,35 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\SubCategory;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AccountsController extends Controller
 {
     public function index()
     {
+        $categories = Category::orderBy('id', 'desc')->get();
 
-        return view('SuperAdmin.Accounts.index');
+        return view('SuperAdmin.Accounts.index', compact('categories'));
     }
+
+    public function accountSuperStarName($subCat_id, $cat_id)
+    {
+        // $sub_cat= $subCat_id;
+        // $cate_id = $cat_id;
+
+        $superstar = User::where('sub_category_id',$subCat_id)->where('category_id',$cat_id)->get();
+        return response()->json($superstar);
+    }
+
+    public function allSubCategory($id){
+        $subCategories = SubCategory::where('category_id', $id)->get();
+        return response()->json($subCategories);
+    }
+
+
     public function totalEvents()
     {
 

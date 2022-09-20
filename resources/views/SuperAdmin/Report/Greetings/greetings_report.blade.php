@@ -81,11 +81,11 @@
                         </div>
                     </div>
 
-                    {{-- <div class="col-lg-3 col-md-3">
+                    <div class="col-lg-3 col-md-3">
 
                     <div class="form-group mb-4">
 
-                        <label for="category">Select Module</label>
+                        {{-- <label for="category">Select Module</label>
                         <select name="category" class="custom-select rounded-0" id="category">
                             <option selected="" disabled="">Select Module</option>
                             <option value="13">Simple Post</option>
@@ -99,7 +99,7 @@
                             <option value="5">Marketplace</option>
                             <option value="4">Souvenir</option>
                             <option value="3">Fan Group</option>
-                        </select>
+                        </select> --}}
 
                         <div class="form-group">
                             <label for="name">SubCategories</label>
@@ -109,7 +109,7 @@
                         </div>
 
                     </div>
-                </div> --}}
+                </div>
                 </div>
                 <div class="mb-5">
 
@@ -264,27 +264,27 @@
             });
 
 
-        // $("#category_id").click(function() {
-        //     var category_id = $('#category_id').val();
-        //     console.log(category_id);
-        //     if (category_id > 0) {
-        //         $.ajax({
-        //             url: "{{ url('super-admin/all-report-filter-subCategory') }}/" + category_id,
-        //             type: 'GET',
+            $("#category_id").click(function() {
+            var category_id = $('#category_id').val();
+            console.log(category_id);
+            if (category_id > 0) {
+                $.ajax({
+                    url: "{{ url('super-admin/all-report-filter-subCategory') }}/" + category_id,
+                    type: 'GET',
 
-        //             success: function(res) {
-        //                 console.log(res);
+                    success: function(res) {
+                        console.log(res);
 
-        //                 var _html = '<option>Select SubCateory</option>';
-        //                 $.each(res, function(index, res) {
-        //                     _html += '<option value="' + res.id + '">' + res.name + '</option>';
+                        var _html = '<option>Select SubCateory</option>';
+                        $.each(res, function(index, res) {
+                            _html += '<option value="' + res.id + '">' + res.name + '</option>';
 
-        //                 });
-        //                 $('#sub_category_id').html(_html);
-        //             }
-        //         })
-        //     }
-        // });
+                        });
+                        $('#sub_category_id').html(_html);
+                    }
+                })
+            }
+        });
 
 
 
