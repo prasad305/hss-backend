@@ -323,6 +323,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('accounts-index', [AccountsController::class, 'index'])->name('accounts.index');
     Route::get('accounts-index-superstar-filter/{subCat_id}/{cat_id}', [AccountsController::class, 'accountSuperStarName']);
     Route::get('all-accounts-filter-subCategory/{id}', [AccountsController::class, 'allSubCategory']);
+    Route::post('accountFilter', [AccountsController::class, 'accountFilter'])->name('accounts.accountFilter');
     Route::get('accounts-total-events', [AccountsController::class, 'totalEvents'])->name('accounts.totalEvents');
     Route::get('accounts-daily-events', [AccountsController::class, 'dailyEvents'])->name('accounts.dailyEvents');
     Route::get('accounts-weekly-events', [AccountsController::class, 'weeklyEvents'])->name('accounts.weeklyEvents');

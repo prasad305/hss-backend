@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\LearningSession;
 use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -30,6 +31,38 @@ class AccountsController extends Controller
     {
         $subCategories = SubCategory::where('category_id', $id)->get();
         return response()->json($subCategories);
+    }
+
+    public function accountFilter(Request $request)
+    {
+        $cate_id = $request['category_id'];
+        $subCate_id = $request['sub_category_id'];
+        $star_id = $request['user_name'];
+        $module = $request['module'];
+        $start_date = $request['start_date'];
+        $end_date = $request['end_date'];
+        // Module selected Learning Session
+        if ($module == "10") {
+            //code here..
+            $learning_seassion = LearningSession::where('category_id', $cate_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->get();
+        }
+        else if ($module == "9") {
+            //code here..
+            $learning_seassion = LearningSession::where('category_id', $cate_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->get();
+        }
+        return response()->json($learning_seassion);
     }
 
 
