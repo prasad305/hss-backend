@@ -22,11 +22,12 @@ class AccountsController extends Controller
         // $sub_cat= $subCat_id;
         // $cate_id = $cat_id;
 
-        $superstar = User::where('sub_category_id',$subCat_id)->where('category_id',$cat_id)->get();
+        $superstar = User::where('sub_category_id', $subCat_id)->where('category_id', $cat_id)->where('user_type', "star")->get();
         return response()->json($superstar);
     }
 
-    public function allSubCategory($id){
+    public function allSubCategory($id)
+    {
         $subCategories = SubCategory::where('category_id', $id)->get();
         return response()->json($subCategories);
     }
