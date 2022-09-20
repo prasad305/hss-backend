@@ -72,6 +72,7 @@
                             </div>
                             <div class="card-body">
                               <p class=""><i class="fa {{ $data->club_points ? 'fa-check check' : 'fa-xmark xmark' }}"></i> Club Points :: {{ $data->club_points }} </p>
+                              <p class=""><i class="fa {{ $data->love_points ? 'fa-check check' : 'fa-xmark xmark' }}"></i> Love Points :: {{ $data->love_points }} </p>
                               <p class=""><i class="fa {{ $data->auditions ? 'fa-check check' : 'fa-xmark xmark' }}"></i> Auditions :: {{ $data->auditions }} </p>
                               <p class=""><i class="fa {{ $data->learning_session ? 'fa-check check' : 'fa-xmark xmark' }}"></i> Learning Session :: {{ $data->learning_session }} </p>
                               <p class=""><i class="fa {{ $data->live_chats ? 'fa-check check' : 'fa-xmark xmark' }}"></i> Live Chats :: {{ $data->live_chats }} </p>

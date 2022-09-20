@@ -11,6 +11,11 @@
         <input type="text" class="form-control" id="club_points" name="club_points" value="{{ $package->club_points }}" placeholder="Club points value">
       </div>
       <div class="form-group col-md-6">
+        <label for="" class="form-label">Love React <img height="15px;" width="15px;" 
+          src="{{ asset('uploads/love3.jpg') }}" alt="Card image cap"></label>
+        <input type="text" class="form-control" id="love_points" name="love_points" value="{{ $package->love_points }}" placeholder="Love react value">
+      </div>
+      <div class="form-group col-md-6">
         <label for="" class="form-label">Auditions</label>
         <input type="text" class="form-control" id="auditions" name="auditions" value="{{ $package->auditions }}" placeholder="Auditions value">
       </div>
@@ -38,7 +43,7 @@
         <label for="" class="form-label">Color Code</label>
         <input type="text" class="form-control" id="color_code" value="{{ $package->color_code }}" name="color_code" placeholder="Color Code value">
       </div>
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-12">
         <label for="" class="form-label">Price</label>
         <input type="text" class="form-control" id="price" name="price" value="{{ $package->price }}" placeholder="Price value">
       </div>
