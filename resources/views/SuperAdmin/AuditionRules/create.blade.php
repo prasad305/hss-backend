@@ -286,7 +286,6 @@
                 url: url + "/" + category_id, // your request url
                 type: 'GET',
                 success: function(data) {
-                    // console.log('get data', data);
                     $("#round").val(data.rules.round_num);
                     $("#superstar").val(data.rules.judge_num);
                     $("#jury").val(data.rules.jury_num);
@@ -309,7 +308,6 @@
                         footer: errorMessage
                     });
 
-                    console.log(data);
                 }
             });
 
@@ -332,7 +330,6 @@
             var jury_num = $("#jury").val();
             var month = $("#root3").text();
             var day = $("#root4").text();
-            console.log('Category_id', category_id);
 
 
             var formData = new FormData(form);
@@ -367,7 +364,6 @@
                     // setTimeout(function() {
                     //     location.reload();
                     // }, 1000);
-                    // console.log('success')
                 },
                 error: function(data) {
                     var errorMessage = '<div class="card bg-danger">\n' +
@@ -387,7 +383,6 @@
                         footer: errorMessage
                     });
 
-                    console.log(data);
                 }
             });
         });
