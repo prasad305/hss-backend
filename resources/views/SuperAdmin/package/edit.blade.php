@@ -21,7 +21,7 @@
       </div>
       <div class="form-group col-md-6">
         <label for="" class="form-label">Learning Session</label>
-        <input type="text" class="form-control" id="learning_session" value="0" value="{{ $package->learning_session }}" name="learning_session" placeholder="Learning session value">
+        <input type="text" class="form-control" id="learning_session" value="{{ $package->learning_session }}" name="learning_session" placeholder="Learning session value">
       </div>
       <div class="form-group col-md-6">
         <label for="" class="form-label">Live Chats</label>

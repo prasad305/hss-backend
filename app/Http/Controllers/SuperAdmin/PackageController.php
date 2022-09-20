@@ -74,7 +74,7 @@ class PackageController extends Controller
         $package = Package::findOrFail($id);
         $package->title = $request->title;
         $package->club_points = $request->club_points;
-        // $package->love_points = $request->love_points;
+        $package->love_points = $request->love_points;
         $package->auditions = $request->auditions;
         $package->learning_session = $request->learning_session;
         $package->live_chats = $request->live_chats;
