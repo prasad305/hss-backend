@@ -39,7 +39,6 @@
             contentType: false,
             type: 'POST',
             success: function(data) {
-                console.log(data)
                 Swal.fire({
                     position: 'top-end',
                     icon: data.type,
@@ -66,8 +65,6 @@
                     title: 'Oops...',
                     footer: errorMessage
                 });
-
-                console.log(data);
             }
         });
 

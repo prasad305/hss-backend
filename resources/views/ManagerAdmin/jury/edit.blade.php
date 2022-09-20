@@ -139,10 +139,8 @@
                 setTimeout(function() {
                     location.reload();
                 }, 1000);
-            console.log(data);
         },
         error: function (data) {
-            console.log(data);
             $.each(data.responseJSON.errors, function(key, value) {
                 ErrorMessage(key,value); //this function on master page for showing error message
             });

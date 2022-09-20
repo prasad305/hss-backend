@@ -70,8 +70,6 @@
                     title: 'Oops...',
                     footer: errorMessage
                 });
-
-                console.log(data);
             }
         });
     
@@ -108,7 +106,6 @@
             if(response){
                 // $("#state_id").empty();
                 // $("#state_id").append('<option>Select State</option>');
-                // console.log(res);
                 // $.each(res,function(key,value){
                 //     $("#state_id").html('<option value="'+value.id+'">'+value.name+'</option>');
                 // });
