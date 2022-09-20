@@ -990,7 +990,8 @@ class UserController extends Controller
     }
     public function getAllPostWithForSingleStar($star_id)
     {
-        $post = Post::where('user_id', $star_id)->latest()->get();
+        // $post = Post::WhereJsonContains('star_id',$star_id)->latest()->get();
+        $post = Post::where('type','!=',null)->orWhere('star_id',$star_id)->orWhere('user_id',$star_id)->orWhereJsonContains('star_id',$star_id)->latest()->get();
 
         return response()->json([
             'status' => 200,
@@ -2453,6 +2454,25 @@ class UserController extends Controller
         }
         return response()->json([
             'status' => 200,
+        ]);
+    }
+
+    public function allUpCommingEvents()
+    {
+        $learningSession = LearningSession::where('status', 2)->latest()->get();
+        $LiveChat = LiveChat::where('status', 2)->orderBy('id', 'DESC')->get();
+        $qna = QnA::where('status', 2)->orderBy('id', 'DESC')->get();
+        $audition =  Audition::where('status', 2)->orderBy('id', 'DESC')->get();
+        $meetup = MeetupEvent::where('status', 2)->orderBy('id', 'DESC')->get();
+
+        return response()->json([
+            'status' => 200,
+            'learningSession' => $learningSession,
+            'LiveChat' =>  $LiveChat,
+            'qna' => $qna,
+            'audition' =>  $audition,
+            'meetup' =>  $meetup
+
         ]);
     }
 }
