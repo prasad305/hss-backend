@@ -27,7 +27,7 @@ class CreateUserInfosTable extends Migration
             $table->text('institute')->nullable();
             $table->text('subject')->nullable();
             $table->text('position')->nullable();
-            $table->integer('salery_range')->nullable();
+            $table->integer('salery_range')->default(0);
             $table->timestamps();
         });
     }
