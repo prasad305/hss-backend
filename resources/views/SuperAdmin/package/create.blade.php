@@ -126,8 +126,6 @@
                     title: 'Oops...',
                     footer: errorMessage
                 });
-
-                console.log(data);
             }
         });
     
