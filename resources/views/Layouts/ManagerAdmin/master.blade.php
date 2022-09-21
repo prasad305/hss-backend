@@ -78,11 +78,12 @@
         }
 
         .BGa {
-            border: 1px solid rgb(255, 217, 0);
+            border: 2px solid rgb(255, 217, 0);
         }
 
         .BGaB {
-            border: 1px solid rgb(0, 204, 255);
+            border: 2px solid rgb(0, 204, 255);
+            border-radius: 5px
         }
 
         .GoldBtn {
@@ -118,7 +119,7 @@
 
         .fontBold {
             font-size: 40px;
-            font-weight: 800;
+            font-weight: 500;
         }
 
 
@@ -164,15 +165,27 @@
         }
 
         .a-bg-color {
-            width: 100%;
-            background: linear-gradient(102.45deg, #F5EA45 28.52%, #DDA336 52.38%, #E7A725 72.31%);
+            width: 40%;
+            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,79,121,1) 0%, rgba(0,212,255,1) 100%);
             border-radius: 30px;
         }
 
         .a-bg-color:hover {
-            width: 100%;
-            background: linear-gradient(102.45deg, #F5EA45 28.52%, #F5EA45 52.38%, #F5EA45 72.31%);
+            width: 40%;
+            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(40,126,167,1) 0%, rgba(0,212,255,1) 100%);
             border-radius: 30px;
+        }
+        .manpower-but{
+            width: 50%;
+            background: linear-gradient(102.45deg, #F5EA45 28.52%, #DDA336 52.38%, #E7A725 72.31%);
+            border-radius: 30px;
+        }
+
+        @media only screen and (min-width: 768px) {
+           .new-list {
+            width: 500px !important;
+           }
+           
         }
     </style>
 

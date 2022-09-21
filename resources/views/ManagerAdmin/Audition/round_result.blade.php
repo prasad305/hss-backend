@@ -16,7 +16,8 @@
         }
 
         .BGaB {
-            border: 1px solid rgb(0, 204, 255);
+            border: 1px solid goldenrod;
+           
         }
 
         .GoldBtn {
@@ -54,6 +55,21 @@
             font-size: 40px;
             font-weight: 800;
         }
+        .view-rslt{
+            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,79,121,1) 0%, rgba(0,212,255,1) 100%);
+        }
+
+        .view-rslt:hover {
+            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(40,126,167,1) 0%, rgba(0,212,255,1) 100%);
+        }
+
+        .apel-rslt{
+            background: linear-gradient(102.45deg, #F5EA45 28.52%, #DDA336 52.38%, #E7A725 72.31%); 
+            color: #000 !important;    
+           }
+           .apel-rslt:hover{
+            background: linear-gradient(to bottom, #ffcc00 0%, #ffff66 100%);
+           }
     </style>
 
     <!-- Content Header (Page header) -->
@@ -77,32 +93,22 @@
 
     <div class="row">
         @foreach ($auditions as $audition)
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="p-2 bg-dark shadow-none pb-4 m-3 BGaB">
-                    <img src="{{ asset($audition->banner ?? get_static_option('audition_demo_image')) }}" alt="Admin Image"
-                        class="img-fluid ImgBlue mr-3 mb-2 w-100">
+        <div class="col-md-3 col-sm-6 col-12 ">
+            <div class="card bg-gray BGaB m-3">
+                <img src="{{ asset($audition->banner ?? get_static_option('audition_demo_image')) }}" alt="Admin Image"
+                class="img-fluid ImgBlue p-2 mb-2 ">
+                <h5 class="text-center text-bold mb-4">{{ $audition->title }}</h5> 
+                 <a href="{{ route('managerAdmin.audition.showRoundResult', $audition->id) }}"
+                    class="btn  mb-2 view-rslt">View Round Result</a>
 
-                    <div className="">
-                        <div>
-                            <h5 class="text-center text-bold">{{ $audition->title }}</h5>
+                    @if ($audition->activeRoundInfo->appeal == 1)
+                    <a href="{{ route('managerAdmin.audition.viewRoundAppealResult', $audition->id) }}"
+                        class="text-dark apel-rslt btn  ">View Round Appeal Result</a>
+                @endif
 
-                            <center>
-
-                                <a href="{{ route('managerAdmin.audition.showRoundResult', $audition->id) }}"
-                                    class="btn btn-warning">View Round Result</a><br>
-                            </center>
-                            <center>
-                                @if ($audition->activeRoundInfo->appeal == 1)
-                                    <a href="{{ route('managerAdmin.audition.viewRoundAppealResult', $audition->id) }}"
-                                        class="btn btn-warning">View Round Appeal Result</a><br>
-                                @endif
-
-                            </center>
-
-                        </div>
-                    </div>
-                </div>
             </div>
+        </div>
+        
         @endforeach
     </div>
 @endsection
