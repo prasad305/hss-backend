@@ -7,7 +7,7 @@
     background-color: #151515;
 }
 .WidthEvent {
-    width: 18rem;
+    /* width: 18rem; */
     height: 100%;
     border: 1px solid gold !important;
     justify-content: center;
