@@ -230,17 +230,17 @@ All</a></small>
                         <label for="module">Select Module</label>
                         <select name="module" class="custom-select rounded-0" id="module">
                             <option selected="" disabled="">Select Module</option>
-                            <option value="13">Simple Post</option>
-                            <option value="12">Live Chat</option>
-                            <option value="11">Greeting</option>
-                            <option value="10">Learning Session</option>
-                            <option value="9">Meetup Event</option>
-                            <option value="8">Audition</option>
+                            <option value="1">Simple Post</option>
+                            <option value="2">Live Chat</option>
+                            <option value="3">Greeting</option>
+                            <option value="4">Learning Session</option>
+                            <option value="5">Meetup Event</option>
+                            <option value="6">Audition</option>
                             <option value="7">Q&A</option>
-                            <option value="6">Auction</option>
-                            <option value="5">Marketplace</option>
-                            <option value="4">Souvenir</option>
-                            <option value="3">Fan Group</option>
+                            <option value="8">Auction</option>
+                            <option value="9">Marketplace</option>
+                            <option value="10">Souvenir</option>
+                            <option value="11">Fan Group</option>
                         </select>
 
                     </div>
@@ -305,21 +305,25 @@ All</a></small>
         <div class="row" id="filterShowCard">
 
 
-            <!-- <div class="col-12 col-sm-6 col-md-3">
+             {{-- <div class="col-12 col-sm-6 col-md-3">
                 <div class="info-box mb-3">
                     <span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Manager Admin</span>
-                        <span class="info-box-number">41,410</span>
+                        <div class="row">
+                            <div class="col-12 col-sm-6"><span class="info-box-text">user <h1>{{$total_user}}</h1></span></div>
+                            <div class="col-12 col-sm-6"><span class="info-box-text">paticipant <h1>23</h1></span></div>
+
+                        </div>
+
+                        <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>gvhj</h3></span>
                         <span class="info-box-number">
-                            <small><a class="text-warning" href="{{ route('superAdmin.accounts.managerAdminList') }}">See
-                                    All</a></small>
+                            <small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small>
                         </span>
                     </div>
 
                 </div>
 
-            </div> -->
+            </div> --}}
         </div>
     </div>
 </section>
@@ -435,9 +439,71 @@ All</a></small>
                 success: function(response) {
                     console.log(response);
                     var _html = '';
-                    $.each(response, function(index, response) {
-                        _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3" ><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><span class= "info-box-text"> Manager Admin </span><span class="info-box-number">' + response.title + '</span> <span class="info-box-number"><small><a class="text-warning" href="" > SeeAll </a></small></span> </div></div></div>';
+                    if(response.module == 4){
+                        $.each(response.learning_seassion, function(index, res) {
+                        // console.log(response);
+                            _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>'+ response.userReg[index] +'</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>'+ response.total_amount[index] +'</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small></span> </div></div> </div>';
+
+
                     });
+
+                    }
+                    else if(response.module == 5){
+                        $.each(response.meetup_event, function(index, res) {
+                        // console.log(response);
+                            _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>'+ response.userReg[index] +'</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>'+ response.total_amount[index] +'</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small></span> </div></div> </div>';
+
+
+                    });
+
+                    }
+
+                    else if(response.module == 7){
+                        $.each(response.qna, function(index, res) {
+                        // console.log(response);
+                            _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>'+ response.userReg[index] +'</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>'+ response.total_amount[index] +'</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small></span> </div></div> </div>';
+
+
+                    });
+
+                    }
+                    else if(response.module == 2){
+                        $.each(response.live_chat, function(index, res) {
+                        // console.log(response);
+                            _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>'+ response.userReg[index] +'</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>'+ response.total_amount[index] +'</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small></span> </div></div> </div>';
+
+
+                    });
+
+                    }
+                    else if(response.module == 3){
+                        $.each(response.greetings, function(index, res) {
+                        // console.log(response);
+                            _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>'+ response.userReg[index] +'</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>'+ response.total_amount[index] +'</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small></span> </div></div> </div>';
+
+
+                    });
+
+                    }else if(response.module == 9){
+                        $.each(response.marketPlace, function(index, res) {
+                        // console.log(rmarketPlaceesponse);
+                            _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>'+ response.userReg[index] +'</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>'+ response.total_amount[index] +'</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small></span> </div></div> </div>';
+
+
+                    });
+
+                    }
+                    else if(response.module == 10){
+                        $.each(response.souvenir, function(index, res) {
+                        // console.log(rmarketPlaceesponse);
+                            _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>'+ response.userReg[index] +'</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>'+ response.total_amount[index] +'</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small></span> </div></div> </div>';
+
+
+                    });
+
+                    }
+
+
                     $('#filterShowCard').html(_html);
                 },
                 error: function(err) {

@@ -13,12 +13,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Category</h1>
+          <h1 class="m-0">Event List</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Category List</li>
+            <li class="breadcrumb-item active">Event List</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -37,7 +37,7 @@
             <div class="card">
                 <div class="card-header">
                   {{-- <h3 class="card-title">DataTable</h3> --}}
-                  <a class="btn btn-success btn-sm" style="float: right;" onclick="Show('New Category','{{ route('superAdmin.category.create') }}')"><i class=" fa fa-plus"></i>&nbsp;New Category</a>
+                  {{-- <a class="btn btn-success btn-sm" style="float: right;" onclick="Show('New Category','{{ route('superAdmin.category.create') }}')"><i class=" fa fa-plus"></i>&nbsp;New Category</a> --}}
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -52,7 +52,7 @@
                     </thead>
                     <tbody>
 
-                        @foreach ($category as $data)
+                        {{-- @foreach ($category as $data)
                             <tr>
                                 <td>{{ $data->name }}</td>
                                 <td>
@@ -70,7 +70,7 @@
                                             class="fa fa-trash"></i> </button>
                                 </td>
                             </tr>
-                        @endforeach
+                        @endforeach --}}
 
                     </tbody>
                   </table>
