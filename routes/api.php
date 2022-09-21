@@ -828,8 +828,8 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::post('audition-admin/audition/uploadLiveUserVideo', [AuditionController::class, 'liveAuditionVideoUpload']);
     Route::post('audition-admin/audition/liveJudgeMarkUpload', [AuditionController::class, 'liveJudgeMarkUpload']);
     Route::get('audition-admin/audition-mark/uploadedVideo/{user_id}/{audition_id}/{round_info_id}', [AuditionController::class, 'userUploadedVideos']);
-
     Route::get('audition-admin/audition-wildcard-mark/wildcardLoveReact/{audition_id}/{round_info_id}', [AuditionController::class, 'wildcardLoveReact']);
+    Route::post('audition-admin/audition/wildcardResultSendToManager', [AuditionController::class, 'wildcardResultSendToManager']);
 });
 
 
