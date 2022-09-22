@@ -327,6 +327,12 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/wallet/store', [WalletController::class, 'userWalletStore']);
     Route::get('/user/wallet/history', [WalletController::class, 'userWalletHistory']);
     Route::post('/user/free/wallet/store/{packageId}/{userId}', [WalletController::class, 'userFreeWalletStore']);
+
+    //all star list
+    Route::get('/all-star-list', [UserController::class, 'allStarList']);
+
+    //post search
+    Route::get('/search-post/{valu}', [UserController::class, 'searchPost']);
 });
 
 

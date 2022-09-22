@@ -2474,4 +2474,25 @@ class UserController extends Controller
 
         ]);
     }
+
+    public function allStarList()
+    {
+
+        $allStar = User::where([['user_type', 'star'], ['status', '1']])->get();
+
+        return response()->json([
+            'status' => 200,
+            'star' => $allStar
+        ]);
+    }
+
+    public function searchPost($valu)
+    {
+        $postData = Post::where('title', 'like', "%$valu%")->get();
+
+        return response()->json([
+            'status' => 200,
+            'posts' => $postData
+        ]);
+    }
 }
