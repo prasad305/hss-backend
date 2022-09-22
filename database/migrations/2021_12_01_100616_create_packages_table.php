@@ -17,6 +17,7 @@ class CreatePackagesTable extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->integer('club_points')->nullable();
+            $table->integer('love_points')->nullable();
             $table->integer('auditions')->default(0);
             $table->integer('learning_session')->default(0);
             $table->integer('live_chats')->default(0);

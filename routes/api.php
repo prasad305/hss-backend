@@ -323,10 +323,13 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // Wallet
     Route::get('/user/packages/all', [WalletController::class, 'package_list']);
+    Route::get('/user/love/all', [WalletController::class, 'love_list']);
     Route::get('/user/wallet/details', [WalletController::class, 'getUserWallet']);
     Route::post('/user/wallet/store', [WalletController::class, 'userWalletStore']);
+    Route::post('/user/wallet/love/store', [WalletController::class, 'userWalletLoveStore']);
     Route::get('/user/wallet/history', [WalletController::class, 'userWalletHistory']);
     Route::post('/user/free/wallet/store/{packageId}/{userId}', [WalletController::class, 'userFreeWalletStore']);
+    Route::post('/user/love/free/{loveId}/{userId}', [WalletController::class, 'userFreeWalleLovetStore']);
 });
 
 
@@ -833,6 +836,8 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::post('audition-admin/audition/uploadLiveUserVideo', [AuditionController::class, 'liveAuditionVideoUpload']);
     Route::post('audition-admin/audition/liveJudgeMarkUpload', [AuditionController::class, 'liveJudgeMarkUpload']);
     Route::get('audition-admin/audition-mark/uploadedVideo/{user_id}/{audition_id}/{round_info_id}', [AuditionController::class, 'userUploadedVideos']);
+    Route::get('audition-admin/audition-wildcard-mark/wildcardLoveReact/{audition_id}/{round_info_id}', [AuditionController::class, 'wildcardLoveReact']);
+    Route::post('audition-admin/audition/wildcardResultSendToManager', [AuditionController::class, 'wildcardResultSendToManager']);
 });
 
 

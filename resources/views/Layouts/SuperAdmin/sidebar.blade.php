@@ -138,6 +138,13 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.love.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.love.index') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>View Love React</p>
+                    </a>
+                </li>
 
             </ul>
         </li>

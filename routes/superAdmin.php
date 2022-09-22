@@ -1,11 +1,13 @@
 <?php
 
+
 use App\Models\Slider;
 use App\Models\PaymentMethod;
 use Illuminate\Support\Facades\Route;
 use App\Models\Audition\AuditionUserVoteMark;
 use App\Http\Controllers\SuperAdmin\QnAController;
 use App\Http\Controllers\SuperAdmin\CityController;
+use App\Http\Controllers\SuperAdmin\LoveReactPriceController;
 use App\Http\Controllers\SuperAdmin\AdminController;
 use App\Http\Controllers\SuperAdmin\StateController;
 use App\Http\Controllers\SuperAdmin\EventsController;
@@ -24,9 +26,11 @@ use App\Http\Controllers\SuperAdmin\DashboardController;
 use App\Http\Controllers\SuperAdmin\JuryBoardController;
 use App\Http\Controllers\SuperAdmin\JuryGroupController;
 use App\Http\Controllers\SuperAdmin\SuperStarController;
+use App\Http\Controllers\SuperAdmin\OccupationController;
 use App\Http\Controllers\SuperAdmin\SimplePostController;
 use App\Http\Controllers\SuperAdmin\MarketplaceController;
 use App\Http\Controllers\SuperAdmin\MeetupEventController;
+use App\Http\Controllers\SuperAdmin\PackageLoveController;
 use App\Http\Controllers\SuperAdmin\SubCategoryController;
 use App\Http\Controllers\SuperAdmin\InterestTypeController;
 use App\Http\Controllers\SuperAdmin\ManagerAdminController;
@@ -41,7 +45,6 @@ use App\Http\Controllers\SuperAdmin\AuditionUserVoteController;
 use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
 use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
-use App\Http\Controllers\SuperAdmin\OccupationController;
 
 // Super Admin route
 
@@ -254,6 +257,10 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // Package
     Route::resource('package', PackageController::class);
+    Route::resource('love',LoveReactPriceController::class);
+
+    
+    // Route::resource('love-package', LoveController::class);
     Route::post('admin/package-active/{id}', [PackageController::class, 'activeNow'])->name('package.activeNow');
     Route::post('admin/package-inactive/{id}', [PackageController::class, 'inactiveNow'])->name('package.inactiveNow');
 

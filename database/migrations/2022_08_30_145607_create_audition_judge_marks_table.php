@@ -20,7 +20,7 @@ class CreateAuditionJudgeMarksTable extends Migration
             $table->unsignedBigInteger('audition_uploads_video_id')->nullable();
             $table->unsignedBigInteger('judge_id')->nullable();
             $table->double('judge_mark', 8, 2)->nullable();
-            $table->string('judge_commnent')->nullable();
+            $table->string('judge_comment')->nullable();
             $table->tinyInteger('status')->nullable();
             $table->timestamps();
         });

@@ -32,9 +32,10 @@ class CreateAuditionUploadVideosTable extends Migration
             $table->double('group_b_jury_mark', 8, 2)->nullable();
             $table->double('group_c_jury_mark', 8, 2)->nullable();
             $table->double('jury_final_mark', 8, 2)->nullable();
+            $table->double('user_vote_avg_mark', 8, 2)->nullable();
+            $table->double('judge_avg_mark', 8, 2)->nullable();
             $table->double('user_judge_total_mark', 8, 2)->nullable();
             $table->double('jury_or_judge_avg_mark', 8, 2)->nullable();
-            $table->double('user_vote_avg_mark', 8, 2)->nullable();
             $table->string('comment')->nullable();
             $table->timestamps();
         });
