@@ -111,23 +111,36 @@
         .juryBord p {
             padding-left: 20px;
         }
+
+        .juryNote {
+            position: absolute;
+            width: 90%;
+            bottom: 7px;
+        }
+
+        .head-line {
+            border-top: 1px solid #ffad00 !important;
+            border-left: 8px solid #ffad00 !important;
+            border-bottom: 1px solid #ffad00 !important;
+            border-right: 8px solid #ffad00 !important;
+        }
+
+        .cardBg {
+            background-color: black;
+        }
     </style>
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Create Audition Rules</h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Create New Audition Rules</li>
-                    </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+            <div class="card cardBg head-line mt-4 mb-2">
+                <div class="text-light d-flex p-2">
+                    <h2 class="mx-3 text-white p-2">Create Audition Rules</h2>
+                </div>
+            </div>
+
+        </div>
     </div>
+
     <!-- /.content-header -->
     <style>
         .AddC {
@@ -302,11 +315,14 @@
                                             @endforeach
                                         @endif
 
-                                        <div class="centeredSXSThird d-flex justify-content-center px-1 pt-2">
-                                            <div>
+                                        <div class="juryNote">
 
-                                                <b class="text-danger">#Note :</b><br>
-                                                <small>You can’t create more than 23 jurys</small>
+                                            <div class="centeredSXSThird d-flex justify-content-center px-1 pt-2">
+                                                <div>
+
+                                                    <b class="text-danger">#Note :</b><br>
+                                                    <small>You can’t create more than 23 jurys</small>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

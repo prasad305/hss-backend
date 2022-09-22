@@ -147,13 +147,13 @@
         }
 
         /* .availableBanner {
-                                                                                                                                                                                                            background: linear-gradient(270deg, #FFAD00 0%, #FFD273 18.7%, #E19A04 42.13%, #FACF75 68.82%, #E7A725 85.94%, #FFAD00 100%);
-                                                                                                                                                                                                            width: 40%;
-                                                                                                                                                                                                            display: flex;
-                                                                                                                                                                                                            height: 130px;
-                                                                                                                                                                                                            justify-content: center;
-                                                                                                                                                                                                            border-radius: 80px;
-                                                                                                                                                                                                        } */
+                                                                                                                                                                                                                                    background: linear-gradient(270deg, #FFAD00 0%, #FFD273 18.7%, #E19A04 42.13%, #FACF75 68.82%, #E7A725 85.94%, #FFAD00 100%);
+                                                                                                                                                                                                                                    width: 40%;
+                                                                                                                                                                                                                                    display: flex;
+                                                                                                                                                                                                                                    height: 130px;
+                                                                                                                                                                                                                                    justify-content: center;
+                                                                                                                                                                                                                                    border-radius: 80px;
+                                                                                                                                                                                                                                } */
 
         .availableBanner {
             background: linear-gradient(270deg, #FFAD00 0%, #FFD273 18.7%, #E19A04 42.13%, #FACF75 68.82%, #E7A725 85.94%, #FFAD00 100%);
@@ -215,7 +215,7 @@
         }
 
         .pbSetTime {
-            margin-top: -30px;
+            margin-top: -44px;
         }
 
         .roundIndex {
@@ -236,6 +236,10 @@
 
         .card-bg {
             background-color: black;
+        }
+
+        .wildCardRounds {
+            margin-left: 11.5rem;
         }
     </style>
 
@@ -299,9 +303,9 @@
 
 
 
-    <div class="content-header">
+    <div class="content-header mx-4 my-1">
         <div class="container-fluid">
-            <div class="card card-bg head-line mt-4 mb-2 mt-4 mb-2">
+            <div class="card card-bg head-line mt-4 mb-2">
                 <div class="text-light d-flex p-2">
                     <h4 class="mx-3 text-white p-2">Audition List Edit</h4>
                 </div>
@@ -310,7 +314,7 @@
         </div><!-- /.container-fluid -->
     </div>
 
-    <div class="tab-content m-4" id="tab-content">
+    <div class="tab-content mx-4 mt-1 mb-4" id="tab-content">
 
     </div>
 
@@ -559,7 +563,7 @@
                             <span class="text-danger" id="wildcard_error"></span>
                         </div>
 
-                        <div class="d-flex flex-wrap my-4" id="wildcard_rounds">
+                        <div class="d-flex flex-wrap my-4 wildCardRounds" id="wildcard_rounds">
 
                         </div>
 
@@ -827,7 +831,7 @@
 
                     $('#tab-content').append(
 
-                        '<div class="my-5">' +
+                        '<div class="mb-5 mt-1">' +
                         '<div class="d-flex justify-content-center">' +
                         '<div class="availableBanner">' +
                         '<div class="clockBg">' +
