@@ -37,7 +37,8 @@
             <div class="card">
                 <div class="card-header">
                   {{-- <h3 class="card-title">DataTable</h3> --}}
-                  {{-- <a class="btn btn-success btn-sm" style="float: right;" onclick="Show('New Category','{{ route('superAdmin.category.create') }}')"><i class=" fa fa-plus"></i>&nbsp;New Category</a> --}}
+                  {{-- <a class="btn btn-success btn-sm" style="float: right;" onclick="Show('New Category','{{ route('superAdmin.category.create') }}')"><i class=" fa fa-plus"></i>&nbsp;New Cat
+                    .egory</a> --}}
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">

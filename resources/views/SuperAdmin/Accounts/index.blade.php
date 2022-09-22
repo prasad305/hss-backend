@@ -310,14 +310,14 @@ All</a></small>
                     <span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span>
                     <div class="info-box-content">
                         <div class="row">
-                            <div class="col-12 col-sm-6"><span class="info-box-text">user <h1>{{$total_user}}</h1></span></div>
+                            <div class="col-12 col-sm-6"><span class="info-box-text">user <h1></h1></span></div>
                             <div class="col-12 col-sm-6"><span class="info-box-text">paticipant <h1>23</h1></span></div>
 
                         </div>
 
                         <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>gvhj</h3></span>
                         <span class="info-box-number">
-                            <small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small>
+                            <small><button type="button" class="btn btn-warning btn-sm btn-block viewList">More Info</button></small>
                         </span>
                     </div>
 
@@ -350,32 +350,7 @@ All</a></small>
 
 <script>
     $(document).ready(function() {
-        //  console.log('123');
-        // var form=$("#myForm");
-        // $("#filter").on('submit', function(event) {
-        //     // console.log('123');
-        //     event.preventDefault();
-        //     // alert("hello");
-
-
-
-
-        //     $.ajax({
-        //         url: "{{ route('superAdmin.report.filter.learningSession') }}",
-        //         type: "POST",
-        //         data: $("#filter").serialize(),
-        //         success: function(respose) {
-        //             // console.log('Submission was successful.');
-        //             console.log(respose);
-        //             $("#filter")[0].reset();
-        //             $('#tot_certificate').html(respose.certificate);
-        //             $('#tot_assFee').html(respose.assignment_fee);
-        //             $('#tot_regFee').html(respose.registration_fee);
-        //             $('#tot_assFee').html(respose.assignment_fee);
-        //             $('#tot_assignment').html(respose.assignment);
-        //         },
-        //     });
-        // });
+         console.log('123');
 
 
 
@@ -429,6 +404,10 @@ All</a></small>
         });
 
 
+        function viewPage(id){
+            console.log(id);
+        }
+
         // account submit form
         $('#accountFilterForm').submit(function(e) {
             e.preventDefault();
@@ -442,11 +421,9 @@ All</a></small>
                     if(response.module == 4){
                         $.each(response.learning_seassion, function(index, res) {
                         // console.log(response);
-                            _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>'+ response.userReg[index] +'</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>'+ response.total_amount[index] +'</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small></span> </div></div> </div>';
-
+                            _html += '<div class="col-12 col-sm-6 col-md-3 dataList"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>'+ response.userReg[index] +'</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>'+ response.total_amount[index] +'</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><input value="learning_id" type="hidden" /><button type="button" onclick="'+viewPage+'('+response.learning_seassion[index].id +')" class="text-warning">More Info</button></small></span> </div></div> </div>';
 
                     });
-
                     }
                     else if(response.module == 5){
                         $.each(response.meetup_event, function(index, res) {
@@ -511,6 +488,11 @@ All</a></small>
                 }
             })
         })
+
+
+
+
+
 
 
 

@@ -130,6 +130,7 @@ class AccountsController extends Controller
 
             $i = 0;
             foreach ($learning_seassion as $leSess) {
+                // $userReg_id[$i] = LearningSessionRegistration::select('id')->where('learning_session_id', $leSess['id'])->get();
                 $userReg[$i] = LearningSessionRegistration::where('learning_session_id', $leSess['id'])->count();
                 $i++;
             }
@@ -274,13 +275,36 @@ class AccountsController extends Controller
         }
     }
 
-    public function superstarList()
+    public function superstarList($id)
     {
+        // if ($module == "4") {
+        //     //code here..
+        //     $learning_seassion = LearningSession::whereRaw(
+        //         "(created_at >= ? AND created_at <= ?)",
+        //         [
+        //             $start_date . " 00:00:00",
+        //             $end_date . " 23:59:59"
+        //         ]
+        //     )->get();
+
+        //     $i = 0;
+        //     foreach ($learning_seassion as $leSess) {
+        //         $userReg[$i] = LearningSessionRegistration::where('learning_session_id', $leSess['id'])->count();
+        //         $i++;
+        //     }
+
+        //     $i = 0;
+        //     foreach ($learning_seassion as $leSess) {
+        //         $total_amount[$i] = LearningSessionRegistration::where('learning_session_id', $leSess['id'])->sum('amount');
+        //         $i++;
+        //     }
 
 
-        return view('SuperAdmin.Accounts.Superstar.superstarEventList');
+        // }
+
+
+        return view('SuperAdmin.Accounts.Superstar.superstarEventList', compact($id));
     }
-
 
     public function totalEvents()
     {
