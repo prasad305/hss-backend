@@ -19,6 +19,7 @@ class CreateWalletsTable extends Migration
             $table->string('title')->nullable();
             $table->string('type')->nullable();
             $table->integer('club_points')->default(0);
+            $table->integer('love_points')->default(0);
             $table->integer('auditions')->default(0);
             $table->integer('learning_session')->default(0);
             $table->integer('live_chats')->default(0);

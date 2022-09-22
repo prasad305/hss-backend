@@ -1099,6 +1099,9 @@ class AuditionController extends Controller
                 'status' => 422,
                 'validation_errors' => $validator->errors(),
             ]);
+
+            $activeRound = Audition::where('id', $request->audition_id)->update(['active_round_info_id', $request->round_info_id]);
+
         } else {
 
             $auditionRoundInfo                         = AuditionRoundInfo::find($request->round_info_id);

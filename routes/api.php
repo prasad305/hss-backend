@@ -323,10 +323,13 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // Wallet
     Route::get('/user/packages/all', [WalletController::class, 'package_list']);
+    Route::get('/user/love/all', [WalletController::class, 'love_list']);
     Route::get('/user/wallet/details', [WalletController::class, 'getUserWallet']);
     Route::post('/user/wallet/store', [WalletController::class, 'userWalletStore']);
+    Route::post('/user/wallet/love/store', [WalletController::class, 'userWalletLoveStore']);
     Route::get('/user/wallet/history', [WalletController::class, 'userWalletHistory']);
     Route::post('/user/free/wallet/store/{packageId}/{userId}', [WalletController::class, 'userFreeWalletStore']);
+    Route::post('/user/love/free/{loveId}/{userId}', [WalletController::class, 'userFreeWalleLovetStore']);
 });
 
 

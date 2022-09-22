@@ -411,10 +411,10 @@ class AuditionController extends Controller
         $type = $request->type;
 
         $auditionRoundInfo = AuditionRoundInfo::with('wildcardRoundRuleId')->where([['audition_id', $request->audition_id], ['id', $request->round_info_id]])->first();
-        $wildcardInfo = AuditionRoundInfo::where([['audition_id', $request->audition_id], ['round_num', $auditionRoundInfo->wildcardRoundRuleId->round_num]])->first();
-
-
+        
+        
         if ($auditionRoundInfo->wildcard == 1) {
+            $wildcardInfo = AuditionRoundInfo::where([['audition_id', $request->audition_id], ['round_num', $auditionRoundInfo->wildcardRoundRuleId->round_num]])->first();
             $wildcard = new WildCard();
             $wildcard->audition_id = $request->audition_id;
             $wildcard->start_round_info_id = $auditionRoundInfo->id;
