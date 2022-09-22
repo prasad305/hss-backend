@@ -49,7 +49,12 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/mobile/qna-chat-history/{qna_id}', [UserMobileAppController::class, 'getQnaMessage']);
 
     /**
-     * create form information get
+     * Download PDF For invoice
+     */
+    Route::post('/mobile/getInvoice/data', [UserMobileAppController::class, 'getInvoice']);
+     /**
+    * create form information get
      */
     Route::get('/user/create-user-info', [UserMobileAppController::class, 'getGetInfos']);
+    Route::post('/user/upload-audition-round-videos', [UserMobileAppController::class, 'userRoundVideoUpload']);
 });

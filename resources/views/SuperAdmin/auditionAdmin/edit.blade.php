@@ -85,10 +85,8 @@
                 setTimeout(function() {
                     location.reload();
                 }, 1000);
-            console.log(data);
         },
         error: function (data) {
-            console.log(data);
             var errorMessage = '<div class="card bg-danger">\n' +
                         '<div class="card-body text-center p-5">\n' +
                         '<span class="text-white">';

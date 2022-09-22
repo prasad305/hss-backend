@@ -41,7 +41,7 @@ function nonNullIdx(data, _i0, _i1, dir) {
 }
 
 function getMinMax(data, _i0, _i1, sorted) {
-//	console.log("getMinMax()");
+
 
 	let _min = inf;
 	let _max = -inf;

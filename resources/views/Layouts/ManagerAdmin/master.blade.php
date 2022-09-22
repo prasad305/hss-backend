@@ -493,10 +493,6 @@
 
     <script>
         function Show(title, link, style = '') {
-            // console.log(title);
-            // console.log(link);
-            // console.log(style);
-            // alert(link);
 
             $('#modal').modal();
             $('#modal-title').html(title);

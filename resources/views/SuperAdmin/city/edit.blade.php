@@ -77,10 +77,8 @@
                 setTimeout(function() {
                     location.reload();
                 }, 1000);
-            console.log(data);
         },
         error: function (data) {
-            console.log(data);
             var errorMessage = '<div class="card bg-danger">\n' +
                         '<div class="card-body text-center p-5">\n' +
                         '<span class="text-white">';
@@ -103,7 +101,6 @@
 //  $(document).on('hover','#edit-form',function(e){
 //         var countryID = $(this).val(); 
 //         var stateId = '{{$cities->state_id}}'; 
-//         console.log(stateId);
 //     })
 
 // getCountryId();
@@ -113,14 +110,12 @@
  $(document).on('change','#country_id',function(e){
         var countryID = $(this).val(); 
         var stateId = '{{$cities->state_id}}'; 
-        // console.log(stateId);
 
         if(countryID){
             $.ajax({
                 type:"GET",
                 url:"{{ url('super-admin/get-state') }}/" + countryID,
                 success:function(response){    
-                    console.log(response);    
                     if(response){
                         var state='';
                         // var district_id = {{isset($officeInformation->id) ? $officeInformation->district_id : ''}}

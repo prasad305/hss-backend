@@ -990,7 +990,8 @@ class UserController extends Controller
     }
     public function getAllPostWithForSingleStar($star_id)
     {
-        $post = Post::where('user_id', $star_id)->latest()->get();
+        // $post = Post::WhereJsonContains('star_id',$star_id)->latest()->get();
+        $post = Post::where('type','!=',null)->orWhere('star_id',$star_id)->orWhere('user_id',$star_id)->orWhereJsonContains('star_id',$star_id)->latest()->get();
 
         return response()->json([
             'status' => 200,
