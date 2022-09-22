@@ -63,4 +63,8 @@ class AuditionUploadVideo extends Model
     {
         return $this->hasMany(LoveReact::class, 'video_id');
     }
+    public function totalUserVoteReact()
+    {
+        return $this->hasMany(LoveReact::class, 'video_id', 'id')->selectRaw('video_id, sum(react_num) as react_num')->where('react_voting_type', 'user_vote')->groupBy('video_id');
+    }
 }

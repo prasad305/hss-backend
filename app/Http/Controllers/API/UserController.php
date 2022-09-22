@@ -1796,7 +1796,7 @@ class UserController extends Controller
 
         $appeal_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id], ['type', 'appeal']])->get();
 
-        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'general'], ['round_info_id', $round_info_id]])->first();
+        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'general'], ['round_info_id', $round_info_id]])->orWhere('type', 'wildcard')->first();
         $appealAuditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id], ['type', 'appeal'], ['round_info_id', $round_info_id]])->first();
 
         return response()->json([
@@ -2339,7 +2339,7 @@ class UserController extends Controller
             $q->with(['videos' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
                 $q->where([['approval_status', 1], ['type', 'general']])->whereIn('user_id', $generalFailedUsers)->whereNotIn('user_id', $appealWinnerUsers)->whereNotIn('user_id', $appealFailedUsers)->get();
             }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get();
-        }])->get()->toArray();
+        }])->where('status', 1)->get()->toArray();
 
 
         $appealFailedVideos = WildCard::whereHas('auditionRoundInfoEnd', function ($q) {
@@ -2348,7 +2348,7 @@ class UserController extends Controller
             $q->with(['videos' => function ($q) use ($appealFailedUsers) {
                 return $q->where([['approval_status', 1], ['type', 'appeal']])->whereIn('user_id', $appealFailedUsers)->get();
             }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get();
-        }])->get()->toArray();
+        }])->where('status', 1)->get()->toArray();
 
         $userVoteVideos = AuditionRoundInfo::with(['videos' => function ($q) {
             $q->where([['approval_status', 1], ['type', 'general']])->get();
