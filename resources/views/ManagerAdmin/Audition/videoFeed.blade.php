@@ -2,11 +2,12 @@
 
 
 @section('content')
+
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col-sm-6 feed-title">
                     <h1 class="m-0">Video Feed</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
@@ -23,7 +24,13 @@
         <div class="container-fluid">
             <!-- Info boxes -->
             @foreach ($auditions as $audition)
-                <h1>{{ $audition->title }}</h1>
+                
+                <div class="card card-bg head-line mt-4 mb-2 ">
+                    <div class="text-light  p-2 text-center">
+                        <h4 class="mx-3 text-white p-2 feed-name ">{{ $audition->title }}</h4>
+                    </div>
+                </div>
+
                 <div class="row">
                     @foreach ($audition->auditionRound as $key => $round)
                         <div class="col-12 col-sm-6 col-md-2">

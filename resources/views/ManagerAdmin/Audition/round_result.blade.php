@@ -17,6 +17,7 @@
 
         .BGaB {
             border: 1px solid goldenrod;
+            
            
         }
 
@@ -70,6 +71,7 @@
            .apel-rslt:hover{
             background: linear-gradient(to bottom, #ffcc00 0%, #ffff66 100%);
            }
+           
     </style>
 
     <!-- Content Header (Page header) -->
@@ -91,12 +93,12 @@
         </div><!-- /.container-fluid -->
     </div>
 
-    <div class="row">
+    <div class="row ">
         @foreach ($auditions as $audition)
         <div class="col-md-3 col-sm-6 col-12 ">
             <div class="card bg-gray BGaB m-3">
                 <img src="{{ asset($audition->banner ?? get_static_option('audition_demo_image')) }}" alt="Admin Image"
-                class="img-fluid ImgBlue p-2 mb-2 ">
+                class="img-fluid ImgBlue  mb-2 ">
                 <h5 class="text-center text-bold mb-4">{{ $audition->title }}</h5> 
                  <a href="{{ route('managerAdmin.audition.showRoundResult', $audition->id) }}"
                     class="btn  mb-2 view-rslt">View Round Result</a>

@@ -82,7 +82,7 @@
         }
 
         .BGaB {
-            border: 2px solid rgb(0, 204, 255);
+            border: 1px solid goldenrod;
             border-radius: 5px
         }
 
@@ -101,11 +101,57 @@
             background: linear-gradient(90deg, #22AADD 0%, #3A8FF2 100%);
             border-radius: 25px;
         }
+       
+        .head-line{
+     border-top: 1px solid #ffad00!important;
+     border-left: 8px solid #ffad00!important;
+     border-bottom: 1px solid #ffad00!important;
+     border-right: 8px solid #ffad00!important;
+   }
+        .card-bg {
+                 background-color: black !important;
+             }  
+
 
         .BlueBtn:hover {
             background: rgb(16, 20, 29) !important;
             color: white;
             border: 1px solid rgb(0, 183, 255) !important;
+        }
+        .feed-name{
+            text-transform: uppercase;
+	      background: linear-gradient(to right,  #FFCE00 0%, #a2e431 100%);
+	      -webkit-background-clip: text;
+	      -webkit-text-fill-color: transparent;
+	      
+            font-size: 1.5vw;
+            font-family: $font;
+            font-weight:bold;
+        }
+        .select-name{
+            text-transform: uppercase;
+	      background: linear-gradient(to right,  #FFCE00 0%, #a2e431 100%);
+	      -webkit-background-clip: text;
+	      -webkit-text-fill-color: transparent;
+	      
+            font-size: 1.5vw;
+            font-family: $font;
+            font-weight:bold;
+        }
+        .unselect-name{
+            text-transform: uppercase;
+	      background: linear-gradient(to right,  #ef1515 0%, #a2e431 100%);
+	      -webkit-background-clip: text;
+	      -webkit-text-fill-color: transparent;
+	      
+            font-size: 1.5vw;
+            font-family: $font;
+            font-weight:bold;
+        }
+        .feed-title{
+            font-style: normal;
+           font-weight:bold;
+           color: #fbec77;
         }
 
         .bottomBlackLine {
@@ -180,11 +226,31 @@
             background: linear-gradient(102.45deg, #F5EA45 28.52%, #DDA336 52.38%, #E7A725 72.31%);
             border-radius: 30px;
         }
+        .reg-btn-user{
+            background-image: linear-gradient(to right, #84fab0 0%, #8fd3f4 51%, #84fab0 100%);
+            color: #000000 !important;
+        }
+        .reg-btn-user:hover { 
+            background-position: left center !important;
+        }
+        .detail-btn-use{
+            background-image: linear-gradient(to right, #f6d365 0%, #fda085 51%, #f6d365 100%);
+            border-radius: 5%;
+            color: #000000 !important;
+           
+        }
+        .detail-btn-use:hover{
+            background-position: right center !important;
+        }
+        .card-bg-event{
+         background-color: rgb(0, 0, 0) !important;
+         }
 
         @media only screen and (min-width: 768px) {
            .new-list {
             width: 500px !important;
            }
+           
            
         }
     </style>
