@@ -387,22 +387,41 @@
                     <!-- /.card-body -->
 
                     <center>
-                        <div class="row mb-3">
+                        <div class="row Footerbtn mb-3">
                             <div class="col-md-4 row mx-auto">
                                 <div class="col-md-6">
-                                    <button class="btn btnBack w-100 fw-bold">
-
-                                        <a href="{{ route('superAdmin.audition-rules.index') }}" class="fw-bold">Back</a>
-                                    </button>
+                                    <a href="{{ route('superAdmin.audition-rules.index') }}"
+                                        class="btn btnBack w-100 fw-bolder">Back</a>
                                 </div>
                                 <div class="col-md-6">
+                                    <button class="btn btnConfirm w-100 fw-bolder"
+                                        id="submitAuditionRules">Confirm</button>
+                                </div>
+                            </div>
+                            {{-- <a href="{{ route('superAdmin.audition-rules.index') }}" class="btn Back">Back</a>
+                            <button class="btn Confirm w-100 fw-bolder" id="submitAuditionRules">Confirm</button> --}}
+                        </div>
+                    </center>
 
+                    {{-- <center>
+                        <div class="row mb-3">
+                            <div class="col-md-4  row mx-auto">
+                                <div class="col-md-6">
+
+                                    <a href="{{ route('superAdmin.audition-rules.index') }}">
+                                        <button class="btn btnBack w-100 fw-bold">
+                                            Back
+                                        </button>
+                                    </a>
+
+                                </div>
+                                <div class="col-md-6">
                                     <button class="btn btnConfirm w-100 fw-bolder"
                                         id="submitAuditionRules">Confirm</button>
                                 </div>
                             </div>
                         </div>
-                    </center>
+                    </center> --}}
 
                 </form>
             </div>
