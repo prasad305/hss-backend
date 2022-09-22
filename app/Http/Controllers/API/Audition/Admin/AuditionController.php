@@ -20,6 +20,7 @@ use App\Models\Audition\AuditionRoundInstructionSendInfo;
 use App\Models\Audition\AuditionRoundMarkTracking;
 use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
+use App\Models\Audition\AuditionUserVoteMark;
 use App\Models\auditionJudgeMark;
 use App\Models\AuditionRoundInstruction;
 use App\Models\JuryGroup;
@@ -1181,6 +1182,10 @@ class AuditionController extends Controller
                 $instruction->send_to_manager = 1;
                 $instruction->save();
 
+
+                Audition::where('id', $request->audition_id)->update(['active_round_info_id' => $request->round_info_id]);
+
+
                 return response()->json([
                     'status' => 200,
                     'message' => 'Audition Round Instruction submitted successfully !!',
@@ -1270,6 +1275,7 @@ class AuditionController extends Controller
                 }
                 $instruction->send_to_manager = 1;
                 $instruction->save();
+
                 return response()->json([
                     'status' => 200,
                     'message' => 'Round Instruction Send Manager Admin successfully !!',
@@ -2149,7 +2155,7 @@ class AuditionController extends Controller
 
         $auditionRoundInfo  = AuditionRoundInfo::find($round_info_id);
         $roundBasedAuditionUploadVideos = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['audition_id', $audition_id], ['approval_status', 1]])->get();
-        $ableToMargeVideos = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['user_judge_total_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->get();
+        $ableToMargeVideos = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['judge_avg_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->get();
 
         return response()->json([
             'status' => 200,
@@ -2167,7 +2173,7 @@ class AuditionController extends Controller
             $q->with('judge_video_mark')->where([['round_info_id', $round_info_id]])->where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
         }])->where([['audition_id', $audition_id], ['round_info_id',   $prevRound], ['wining_status', 1]])->get();
 
-        $ableToMargeVideos = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['user_judge_total_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->get();
+        $ableToMargeVideos = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['judge_avg_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->get();
 
 
         $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
@@ -2182,14 +2188,24 @@ class AuditionController extends Controller
     public function makeRoundResultMerge($audition_id, $round_info_id)
     {
         $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
-
-        $ableToMargeVideos = AuditionUploadVideo::with('judge_video_mark')->where([['round_info_id', $round_info_id], ['user_judge_total_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->get();
+        $auditionUserVotingMark = AuditionUserVoteMark::find($audition_id);
+        $ableToMargeVideos = AuditionUploadVideo::with('judge_video_mark', 'totalUserVoteReact')->where([['round_info_id', $round_info_id], ['user_judge_total_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->get();
 
         foreach ($ableToMargeVideos as $videos) {
             foreach ($videos->judge_video_mark->groupBy('audition_uploads_video_id') as $mark) {
-                $videos->user_judge_total_mark = $mark->sum('judge_mark') / $mark->count();
+                $videos->judge_avg_mark = (($mark->sum('judge_mark') / $mark->count()) * $auditionRoundInfo->jury_or_judge_mark) / 100;
                 $videos->save();
             }
+        }
+        foreach ($ableToMargeVideos as $videos) {
+            foreach (($videos->totalUserVoteReact) as $mark) {
+                $videos->user_vote_avg_mark = ($mark['react_num'] * $auditionUserVotingMark->user_mark) / $auditionUserVotingMark->total_react;
+                $videos->save();
+            }
+        }
+        foreach ($ableToMargeVideos as $videos) {
+            $videos->user_judge_total_mark = $videos->user_vote_avg_mark + $videos->judge_avg_mark;
+            $videos->save();
         }
 
         $participants = AuditionParticipant::whereHas('videos', function ($query) use ($round_info_id) {
@@ -2201,7 +2217,7 @@ class AuditionController extends Controller
         foreach ($participants as $parentKey => $auditionParticipant) {
             $sum_of_final_mark = 0;
             foreach ($auditionParticipant->videos as $key => $video) {
-                $sum_of_final_mark += $video->user_judge_total_mark == null ? 0 : $video->user_judge_total_mark;
+                $sum_of_final_mark += $video->judge_avg_mark == null ? 0 : $video->judge_avg_mark;
             }
 
             $average = number_format(($sum_of_final_mark / ($auditionRoundInfo->video_slot_num ? $auditionRoundInfo->video_slot_num : 1)), 2);
