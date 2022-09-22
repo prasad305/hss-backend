@@ -170,7 +170,7 @@
                                         @if (isset($categories[0]))
                                             @foreach ($categories as $key => $category)
                                                 <label class="container"><span
-                                                        style="color:#F8EE00; font-size: 14px; padding-bottom: 18px">{{ $category->name }}</span>
+                                                        style="color:#F8EE00; font-size: 16px; margin-bottom: 18px">{{ $category->name }}</span>
                                                     <input type="radio" name="category_id" class="radioBtnClass "
                                                         value="{{ $category->id }}"
                                                         {{ $category->id == $rule->category_id ? 'checked' : '' }}
