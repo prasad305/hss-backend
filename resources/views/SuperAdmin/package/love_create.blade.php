@@ -32,11 +32,11 @@
   </form>
 
   <script>
-    // function fetch()
-    // {
-    //   var get = document.getElementById("get").value;
-    //   document.getElementById("color_code").value = get;
-    // }
+    function fetch()
+    {
+      var get = document.getElementById("get").value;
+      document.getElementById("color_code").value = get;
+    }
   </script>
   <script>
     $(document).on('click','#addCategoryBtn',function (event) {

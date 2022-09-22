@@ -16,6 +16,7 @@ class CreateWalletPaymentsTable extends Migration
         Schema::create('wallet_payments', function (Blueprint $table) {
             $table->id();
             $table->integer('packages_id')->nullable();
+            $table->integer('love_points')->nullable();
             $table->integer('user_id')->nullable();
             $table->string('card_holder_name')->nullable();
             $table->string('card_no')->nullable();
