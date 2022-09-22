@@ -256,6 +256,16 @@
     width: 180px;
 }
 
+.parentAuditionRules {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.childRules {
+    width: 300px;
+}
+
 .AddC {
     border-top: 1px solid gold !important;
 }

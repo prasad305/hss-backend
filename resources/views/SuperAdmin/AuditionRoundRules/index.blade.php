@@ -147,13 +147,13 @@
         }
 
         /* .availableBanner {
-                                                                                                                                        background: linear-gradient(270deg, #FFAD00 0%, #FFD273 18.7%, #E19A04 42.13%, #FACF75 68.82%, #E7A725 85.94%, #FFAD00 100%);
-                                                                                                                                        width: 40%;
-                                                                                                                                        display: flex;
-                                                                                                                                        height: 130px;
-                                                                                                                                        justify-content: center;
-                                                                                                                                        border-radius: 80px;
-                                                                                                                                    } */
+                                                                                                                                                                                                            background: linear-gradient(270deg, #FFAD00 0%, #FFD273 18.7%, #E19A04 42.13%, #FACF75 68.82%, #E7A725 85.94%, #FFAD00 100%);
+                                                                                                                                                                                                            width: 40%;
+                                                                                                                                                                                                            display: flex;
+                                                                                                                                                                                                            height: 130px;
+                                                                                                                                                                                                            justify-content: center;
+                                                                                                                                                                                                            border-radius: 80px;
+                                                                                                                                                                                                        } */
 
         .availableBanner {
             background: linear-gradient(270deg, #FFAD00 0%, #FFD273 18.7%, #E19A04 42.13%, #FACF75 68.82%, #E7A725 85.94%, #FFAD00 100%);
@@ -184,7 +184,8 @@
         }
 
         .textFontBolder {
-            font-size: 50px;
+            font-size: 35px;
+
             color: #000;
             /* font-weight: bold; */
             font-family: 'Bebas Neue', cursive;
@@ -225,12 +226,23 @@
         .roundText {
             font-weight: bold;
         }
+
+        .head-line {
+            border-top: 1px solid #ffad00 !important;
+            border-left: 8px solid #ffad00 !important;
+            border-bottom: 1px solid #ffad00 !important;
+            border-right: 8px solid #ffad00 !important;
+        }
+
+        .card-bg {
+            background-color: black;
+        }
     </style>
 
     <!-- Content Header (Page header) -->
 
 
-    <div class="content-header BorderRpo">
+    {{-- <div class="content-header BorderRpo">
         <div class="container-fluid">
             <div class="row ">
                 <div class="col-sm-6">
@@ -245,6 +257,18 @@
                 </div>
             </div>
         </div>
+    </div> --}}
+
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="card card-bg head-line mt-4 mb-2 mt-4 mb-2">
+                <div class="text-light d-flex p-2">
+                    <h4 class="mx-3 text-white p-2">Audition List</h4>
+                </div>
+            </div>
+
+        </div><!-- /.container-fluid -->
     </div>
 
 
@@ -275,12 +299,15 @@
 
 
 
-    <div class="tab-content m-4">
-        <h3>Audition List Edit</h3>
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="card card-bg head-line mt-4 mb-2 mt-4 mb-2">
+                <div class="text-light d-flex p-2">
+                    <h4 class="mx-3 text-white p-2">Audition List Edit</h4>
+                </div>
+            </div>
 
-    </div>
-    <div class="bottomDiv">
-
+        </div><!-- /.container-fluid -->
     </div>
 
     <div class="tab-content m-4" id="tab-content">
@@ -304,6 +331,47 @@
                                     <input type="hidden" name="round_id" id="round_id">
                                     <div class="d-flex  justify-content-between BorderInSA p-2 m-1 mt-3 col-md-12">
                                         <div class="text-light mt-1">
+                                            <div class="custom-control">
+
+                                                <label class=""><span class="px-3">Jury/Judge Vote
+                                                        Mark</span></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+
+                                <div class="d-flex flex-row flexRow my-3 mx-2 w-100">
+                                    <div class="audition__mark">
+                                        <input type="radio" name="has_jury_or_judge_mark" value="0"> <span>Jury
+                                            Mark</span>
+                                    </div>
+                                    <div class="audition__mark ml-3">
+                                        <input type="radio" name="has_jury_or_judge_mark" value="1"> <span>Judge
+                                            Mark</span>
+                                    </div>
+
+                                    <span class="text-danger" id="jury_or_judge_error"></span>
+
+                                    <div class='col-md-8 displayNine'>
+
+                                        <div class="col-md-3">
+                                            <input type="text" name="jury_or_judge_mark" id="jury_or_judge_mark"
+                                                onkeyup="markCheck()" class="form-control text-center" placeholder="Mark">
+                                            <span class="text-danger" id="jury_or_judge_mark_error"></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div>
+                                    <input type="hidden" name="round_id" id="round_id">
+                                    <div class="d-flex  justify-content-between BorderInSA p-2 mt-3 col-md-12">
+                                        <div class="text-light">
                                             <div class="custom-control">
                                                 <input type="checkbox" id="checkbox1" class="mt-3" value="1" />
                                                 <label class="" for="jury"><span class="px-3">User Vote
@@ -340,55 +408,7 @@
                                     </div>
 
                                 </div>
-                                <div id="hid_show_live_or_offile" style="display: none!important">
 
-                                    <div class="d-flex flex-row flexRow mx-2 my-3 w-100">
-                                        <div class="audition__mark">
-                                            <input type="radio" name="mark_live_or_offline" value="1"> <span>Live
-                                                Mark</span>
-                                        </div>
-                                        <div class="audition__mark ml-3">
-                                            <input type="radio" name="mark_live_or_offline" value="0"> <span>Offline
-                                                Mark</span>
-                                        </div>
-                                        <span class="text-danger" id="mark_live_or_offline_error"></span>
-
-                                        <div class="col-md-8 displayNine">
-
-                                            <div class="col-md-3">
-                                                <input type="text" name="user_vote_mark" id="user_vote_mark"
-                                                    onkeyup="markCheck()" class="form-control text-center"
-                                                    placeholder="User Vote Mark">
-                                                <span class="text-danger" id="user_vote_mark_error"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="d-flex flex-row flexRow my-3 mx-2 w-100">
-                                    <div class="audition__mark">
-                                        <input type="radio" name="has_jury_or_judge_mark" value="0"> <span>Jury
-                                            Mark</span>
-                                    </div>
-                                    <div class="audition__mark ml-3">
-                                        <input type="radio" name="has_jury_or_judge_mark" value="1"> <span>Judge
-                                            Mark</span>
-                                    </div>
-
-                                    <span class="text-danger" id="jury_or_judge_error"></span>
-
-                                    <div class='col-md-8 displayNine'>
-
-                                        <div class="col-md-3">
-                                            <input type="text" name="jury_or_judge_mark" id="jury_or_judge_mark"
-                                                onkeyup="markCheck()" class="form-control text-center"
-                                                placeholder="Mark">
-                                            <span class="text-danger" id="jury_or_judge_mark_error"></span>
-                                        </div>
-                                    </div>
-
-                                </div>
                             </div>
                         </div>
                         {{-- <div id="hid_show_live_or_offile" style="display: none!important">
@@ -640,7 +660,7 @@
                             </div>
                         </div>
 
-                       
+
                     </div>
 
 
@@ -815,8 +835,8 @@
                         '</div>' +
                         '<div class="mx-4">' +
                         '<div class="d-flex align-items-center fixedHeight">' +
-                        '<p class="textFontBold pt-3">Available Days:</p>' +
-                        '<p class="textFontBolder pt-3">' + data.round_available_days + '</p>' +
+                        '<p class="textFontBold ">Available Days:</p>' +
+                        '<p class="textFontBolder mx-1">' + data.round_available_days + '</p>' +
                         '</div>' +
                         '<p class="text-center textDark pbSetTime">(Set Time Period be Carefully)</p>' +
                         '</div>' +

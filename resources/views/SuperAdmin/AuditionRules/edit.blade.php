@@ -147,12 +147,12 @@
                 <form id="create-form">
                     @csrf
                     <!-- /.card-header -->
-                    <div class="card-body d-flex justify-content-between mx-2">
+                    <div class="card-body mx-2">
 
 
-                        <div class="row">
+                        <div class="parentAuditionRules">
 
-                            <div class="col-md-3 my-2 mx-auto">
+                            <div class="childRules my-2 mx-auto">
 
                                 <div class=" WidthEvent">
                                     <div class="divS my-3">
@@ -182,7 +182,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 my-2 mx-auto">
+                            <div class="childRules my-2 mx-auto">
                                 <div class=" WidthEvent" style="position: relative">
                                     <div class="divS my-2">
                                         <center>
@@ -226,7 +226,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 my-2 mx-auto">
+                            <div class="childRules my-2 mx-auto">
                                 <div class=" WidthEvent" style="position: relative">
                                     <div class="divS my-2">
                                         <center>
@@ -267,7 +267,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 my-2 mx-auto">
+                            <div class="childRules my-2 mx-auto">
                                 <div class=" WidthEvent py-2" style="position: relative">
                                     <div class="divS mt-2">
                                         <center>
@@ -312,7 +312,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 my-2 mx-auto">
+                            <div class="childRules my-2 mx-auto">
                                 <div class=" WidthEvent" style="position: relative">
                                     <div class="divS mt-2">
                                         <center>

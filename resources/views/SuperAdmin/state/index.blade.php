@@ -11,6 +11,16 @@
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
+        <div class="card card-bg head-line mt-4 mb-2">
+            <div class="text-light d-flex p-2">
+                <h4 class="mx-3 text-white p-2">State List</h4>
+            </div>
+        </div>
+  
+    </div><!-- /.container-fluid -->
+  </div>
+<div class="content-header">
+    <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
           <h1 class="m-0">State Lists</h1>

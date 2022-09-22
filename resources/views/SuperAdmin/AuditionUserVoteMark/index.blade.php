@@ -7,22 +7,30 @@
 
 
 @section('content')
+    <style>
+        .head-line {
+            border-top: 1px solid #ffad00 !important;
+            border-left: 8px solid #ffad00 !important;
+            border-bottom: 1px solid #ffad00 !important;
+            border-right: 8px solid #ffad00 !important;
+        }
+
+        .card-bg {
+            background-color: black;
+        }
+    </style>
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">User Vote Mark</h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">User Vote Mark</li>
-                    </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
+            <div class="card card-bg head-line mt-4 mb-2">
+                <div class="text-light d-flex p-2">
+                    <h4 class="mx-3 text-white p-2">User Vote Mark</h4>
+                </div>
+            </div>
+
         </div><!-- /.container-fluid -->
     </div>
+  
     <!-- /.content-header -->
 
 
