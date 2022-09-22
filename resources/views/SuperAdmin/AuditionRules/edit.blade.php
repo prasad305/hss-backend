@@ -32,7 +32,7 @@
         /* Create a custom radio button */
         .checkmark {
             position: absolute;
-            top: 0;
+            top: 6px;
             left: 0;
             height: 25px;
             width: 25px;
@@ -216,9 +216,12 @@
                                             <span class="btn btn-sm minus NumAdd" data-increase>+</span>
                                         </div>
 
-                                        <div class="centeredSXSThird px-2 pt-2 mx-3 mt-5">
-                                            <b class="text-danger">#Note :</b><br>
-                                            <small>You can’t create more than 8 rounds</small>
+                                        <div class="centeredSXSThird d-flex justify-content-center px-2 pt-2 mx-3 mt-5">
+                                            <div>
+
+                                                <b class="text-danger">#Note :</b><br>
+                                                <small>You can’t create more than 8 rounds</small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -254,9 +257,12 @@
 
                                             <span class="btn btn-sm minus NumAdd" data-increase>+</span>
                                         </div>
-                                        <div class="centeredSXSThird px-1 mt-5 pt-2 mx-2">
-                                            <b class="text-danger">#Note :</b><br>
-                                            <small> You can’t create more than 3 superstars</small>
+                                        <div class="centeredSXSThird d-flex justify-content-center px-1 mt-5 pt-2 mx-2">
+                                            <div>
+
+                                                <b class="text-danger">#Note :</b><br>
+                                                <small> You can’t create more than 3 superstars</small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -296,9 +302,12 @@
                                             @endforeach
                                         @endif
 
-                                        <div class="centeredSXSThird px-1 pt-2">
-                                            <b class="text-danger">#Note :</b><br>
-                                            <small>You can’t create more than 23 jurys</small>
+                                        <div class="centeredSXSThird d-flex justify-content-center px-1 pt-2">
+                                            <div>
+
+                                                <b class="text-danger">#Note :</b><br>
+                                                <small>You can’t create more than 23 jurys</small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -329,8 +338,8 @@
                                                     value="{{ $rule->event_period > 0 ? $rule->event_period : '' }}">
                                                 <span id="event_preiod_error" class="text-danger"></span>
                                             </div>
-                                            <div class="row  mt-2">
-                                                <label for="" class="text-warning">Registration Preiod
+                                            <div class="row  mt-2 mb-5">
+                                                <label for="" class="text-warning">Registration Period
                                                     (Day)</label>
                                                 <input type="text" class="form-control from-contro-day"
                                                     name="registration_period" placeholder="Enter Registration Period"

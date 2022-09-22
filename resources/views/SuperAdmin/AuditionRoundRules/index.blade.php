@@ -147,13 +147,13 @@
         }
 
         /* .availableBanner {
-                                                                                                                        background: linear-gradient(270deg, #FFAD00 0%, #FFD273 18.7%, #E19A04 42.13%, #FACF75 68.82%, #E7A725 85.94%, #FFAD00 100%);
-                                                                                                                        width: 40%;
-                                                                                                                        display: flex;
-                                                                                                                        height: 130px;
-                                                                                                                        justify-content: center;
-                                                                                                                        border-radius: 80px;
-                                                                                                                    } */
+                                                                                                                                        background: linear-gradient(270deg, #FFAD00 0%, #FFD273 18.7%, #E19A04 42.13%, #FACF75 68.82%, #E7A725 85.94%, #FFAD00 100%);
+                                                                                                                                        width: 40%;
+                                                                                                                                        display: flex;
+                                                                                                                                        height: 130px;
+                                                                                                                                        justify-content: center;
+                                                                                                                                        border-radius: 80px;
+                                                                                                                                    } */
 
         .availableBanner {
             background: linear-gradient(270deg, #FFAD00 0%, #FFD273 18.7%, #E19A04 42.13%, #FACF75 68.82%, #E7A725 85.94%, #FFAD00 100%);
@@ -515,7 +515,7 @@
 
 
 
-                    <div class="row w-100 mt-2">
+                    <div class="row w-100 my-2">
                         <div class="col-md-2">
                             <div class="wildcard__title">
                                 <p class="text-warning">WildCard</p>
@@ -640,56 +640,8 @@
                             </div>
                         </div>
 
-                        {{-- <div class="row">
-                            <div class="col-md-4"></div>
-                            <div class="col-md-4"></div>
-                            <div class="col-md-4"></div>
-                        </div> --}}
-
-
+                       
                     </div>
-
-                    <div class="">
-                        {{-- <div class="d-flex flex-column w-100 mt-2">
-                            <div class="wildcard__title">
-                                <p>Video Duration</p>
-                                <hr>
-                            </div>
-                            <div class="d-flex flex-row col-md-4">
-                                <input type="text" class="form-control" name="video_duration" id="video_duration"
-                                    placeholder="ex: 3min">
-                            </div>
-                        </div>
-
-                        <div class="d-flex flex-column w-100 mt-2">
-                            <div class="wildcard__title">
-                                <p>Video Slot Num</p>
-                                <hr>
-                            </div>
-                            <div class="d-flex flex-row col-md-4">
-                                <input type="text" class="form-control" name="video_slot_num" id="video_slot_num"
-                                    placeholder="ex: 4 videos">
-                            </div>
-                        </div> --}}
-
-
-
-
-                        {{-- <div class="col-md-6"> --}}
-
-                        {{-- <div class="d-flex flex-column w-100 mt-2">
-                                <div class="wildcard__title">
-                                    <p class='text-warning'>Video Upload Period</p>
-                                    <hr>
-                                </div>
-                                <div class="d-flex flex-row">
-                                    <input type="text" class="form-control" name="video_upload_period"
-                                        id="video_upload_period" onkeyup="periodCheck()" placeholder="ex: 123 days">
-                                </div>
-                            </div> --}}
-                        {{-- </div> --}}
-                    </div>
-
 
 
                     <div class=" p-3 my-5 bg-dark rounded-lg">
