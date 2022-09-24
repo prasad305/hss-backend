@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\API;
+
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Acquired_app;
@@ -33,6 +34,7 @@ use App\Models\QnaRegistration;
 use App\Models\User;
 use App\Models\UserInfo;
 use App\Models\Audition\AuditionUploadVideo;
+use App\Models\Fan_Group_Join;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -506,14 +508,14 @@ class UserMobileAppController extends Controller
         $time = time();
         try {
             $pdf = PDF::loadView('Others.Invoice.Invoice', compact('data'));
-            file_put_contents('uploads/pdf/'. $time .'.pdf', $pdf->output());
+            file_put_contents('uploads/pdf/' . $time . '.pdf', $pdf->output());
             $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
             return $filename;
         } catch (\Throwable $th) {
             return $th;
         }
     }
-        
+
     /**
      * crete user form infors
      */
@@ -533,7 +535,8 @@ class UserMobileAppController extends Controller
             "country" => $country
         ]);
     }
-    public function userRoundVideoUpload(Request $request){
+    public function userRoundVideoUpload(Request $request)
+    {
         $audition_video = new AuditionUploadVideo();
         $audition_video->audition_id = $request->audition_id;
         $audition_video->round_info_id = $request->round_info_id;
@@ -552,16 +555,12 @@ class UserMobileAppController extends Controller
                 file_put_contents($videoPath, base64_decode($decodedBase64, true));
                 $audition_video->video = $videoPath;
                 $audition_video->save();
-            return 'video not found';
-            return response()->json([
-                "message" => "uploaded successfully",
-                "status" => "200"
-            ]);
-                
+                return 'video not found';
+                return response()->json([
+                    "message" => "uploaded successfully",
+                    "status" => "200"
+                ]);
             }
-            
-            
-            
         } catch (\Exception $exception) {
             return response()->json([
                 "message" => "field required, invalid formate !",
@@ -593,7 +592,7 @@ class UserMobileAppController extends Controller
         //     try {
         //         if ($base64) {
         //             $originalExtension = str_ireplace("video/", "", $file['type']);
-                    
+
         //             $file_path       = 'uploads/videos/auditions/';
         //             $file_name    = time() . rand('0000', '9999') . $key . $originalExtension;
         //             $decodedBase64 = $base64;
@@ -601,7 +600,7 @@ class UserMobileAppController extends Controller
         //             $audition_video->video = $file_path . $file_name;
         //             $audition_video->save();
         //         }
-            
+
         //     } catch (\Exception $exception) {
         //         response()->json([
         //             "message" => "Video field required, invalid image !",
@@ -609,11 +608,25 @@ class UserMobileAppController extends Controller
         //             "status" => "0",
         //         ]);
         //     }
-            
+
         //     response()->json([
         //         "message" => "uploaded successfully",
         //         "status" => "200",
         //     ]);
         // }
+    }
+
+    /**
+     * fan group member list
+     */
+    public function ganGroupJoinMemebers($fangroup_id)
+    {
+
+        $fanGroupMemebers = Fan_Group_Join::where([['fan_group_id', $fangroup_id], ['approveStatus', 1]])->get();
+
+        return response()->json([
+            "status" => "200",
+            "members" => $fanGroupMemebers
+        ]);
     }
 }
