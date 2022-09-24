@@ -203,7 +203,6 @@ class AccountsController extends Controller
             }
 
             return response()->json(['qna' => $qna, 'userReg' => $userReg, 'total_amount' => $total_amount, 'module' => $module]);
-
         } else if ($module == "8") {
             //code here..
             $audition = Audition::where('category_id', $cate_id)->where('subcategory_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
@@ -214,7 +213,6 @@ class AccountsController extends Controller
                 ]
             )->get();
             return response()->json($audition);
-
         } else if ($module == "9") {
             //code here..
             $marketPlace = Marketplace::where('category_id', $cate_id)->where('subcategory_id', $subCate_id)->where('superstar_id', $star_id)->whereRaw(
@@ -238,7 +236,6 @@ class AccountsController extends Controller
             }
 
             return response()->json(['marketPlace' => $marketPlace, 'userReg' => $userReg, 'total_amount' => $total_amount, 'module' => $module]);
-
         } else if ($module == "10") {
             //code here..
             $souvenir = SouvenirCreate::where('category_id', $cate_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
@@ -261,7 +258,6 @@ class AccountsController extends Controller
                 $i++;
             }
             return response()->json(['souvenir' => $souvenir, 'userReg' => $userReg, 'total_amount' => $total_amount, 'module' => $module]);
-
         } else if ($module == "11") {
             //code here..
             $fanGroup = FanGroup::where('category_id', $cate_id)->where('sub_category_id', $subCate_id)->where('my_star', $star_id)->whereRaw(
@@ -275,30 +271,14 @@ class AccountsController extends Controller
         }
     }
 
-    public function superstarList($id )
+    public function superstarList($id, $module)
     {
 
+        if ($module == "4") {
+            $learning_seassion_reg = LearningSessionRegistration::where('learning_session_id', $id)->get();
 
-            //code here..
-            $learning_seassion = LearningSession::all();
-
-
-            $i = 0;
-            foreach ($learning_seassion as $leSess) {
-                $userReg[$i] = LearningSessionRegistration::where('learning_session_id', $leSess['id'])->count();
-                $i++;
-            }
-
-            // $i = 0;
-            // foreach ($learning_seassion as $leSess) {
-            //     $total_amount[$i] = LearningSessionRegistration::where('learning_session_id', $leSess['id'])->sum('amount');
-            //     $i++;
-            // }
-
-
-
-
-        return view('SuperAdmin.Accounts.Superstar.superstarEventList', compact('id', 'learning_seassion','userReg' ));
+            return view('SuperAdmin.Accounts.Superstar.superstarEventList', compact('learning_seassion_reg'));
+        }
     }
 
     public function totalEvents()
