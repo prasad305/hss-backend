@@ -546,7 +546,8 @@ class AuditionController extends Controller
     public function singleAuditionRoundVideoResultByPercentage($audition_id, $audition_round_info_id, $percentage_range, $type)
     {
         if ($type == "wildcard") {
-            $percentageWildcardMarkTrackings = LoveReact::selectRaw('participant_id, sum(react_num) as react_num')->groupBy('participant_id')->where([['round_info_id', $audition_round_info_id], ['react_voting_type', $type], ['audition_id', $audition_id]])->get();
+            $wildcardInfo = WildCard::where('end_round_info_id', $audition_round_info_id)->first();
+            $percentageWildcardMarkTrackings = LoveReact::selectRaw('participant_id, sum(react_num) as react_num')->groupBy('participant_id')->where([['round_info_id', $wildcardInfo->start_round_info_id], ['react_voting_type', $type], ['audition_id', $audition_id]])->get();
 
             $myArray = json_decode($percentageWildcardMarkTrackings);
 
@@ -573,8 +574,11 @@ class AuditionController extends Controller
 
     public function singleAuditionRoundVideoResultByFilterNumber($audition_id, $audition_round_info_id, $filter_number, $type)
     {
+
         if ($type == "wildcard") {
-            $filterNumberBaseRoundMarkTrackings = LoveReact::selectRaw('participant_id,sum(react_num) as total_react_num')->groupBy('participant_id')->where([['round_info_id', $audition_round_info_id], ['react_voting_type', $type], ['audition_id', $audition_id]])->orderBy('total_react_num', 'DESC')->take($filter_number)->get();
+            $wildcardInfo = WildCard::where('end_round_info_id', $audition_round_info_id)->first();
+
+            $filterNumberBaseRoundMarkTrackings = LoveReact::selectRaw('participant_id,sum(react_num) as total_react_num')->groupBy('participant_id')->where([['round_info_id', $wildcardInfo->start_round_info_id], ['react_voting_type', $type], ['audition_id', $audition_id]])->orderBy('total_react_num', 'DESC')->take($filter_number)->get();
 
             return response()->json([
                 'status' => 200,
@@ -1133,7 +1137,6 @@ class AuditionController extends Controller
             ]);
 
             $activeRound = Audition::where('id', $request->audition_id)->update(['active_round_info_id', $request->round_info_id]);
-
         } else {
 
             $auditionRoundInfo                         = AuditionRoundInfo::find($request->round_info_id);
@@ -2355,7 +2358,9 @@ class AuditionController extends Controller
     public function wildcardResultSendToManager(Request $request)
     {
         if ($request->filter_type == "number") {
-            $wildcardSelectedParticipant = LoveReact::selectRaw('participant_id,sum(react_num) as total_react_num')->groupBy('participant_id')->where([['round_info_id', $request->round_info_id], ['react_voting_type', $request->type], ['audition_id', $request->audition_id]])->orderBy('total_react_num', 'DESC')->take($request->filter_number)->get();
+            $wildcardInfo = WildCard::where('end_round_info_id', $request->round_info_id)->first();
+
+            $wildcardSelectedParticipant = LoveReact::selectRaw('participant_id,sum(react_num) as total_react_num')->groupBy('participant_id')->where([['round_info_id',  $wildcardInfo->start_round_info_id], ['react_voting_type', $request->type], ['audition_id', $request->audition_id]])->orderBy('total_react_num', 'DESC')->take($request->filter_number)->get();
             foreach ($wildcardSelectedParticipant as $selectedParticipant) {
                 foreach (array($selectedParticipant) as $participant) {
                     AuditionRoundMarkTracking::create([
@@ -2376,7 +2381,8 @@ class AuditionController extends Controller
         }
         $percentage_range = $request->percentage_range;
         if ($request->filter_type == "percentage") {
-            $percentageWildcardMarkTrackings = LoveReact::selectRaw('participant_id, sum(react_num) as react_num')->groupBy('participant_id')->where([['round_info_id', $request->round_info_id], ['react_voting_type', $request->type], ['audition_id', $request->audition_id]])->get();
+            $wildcardInfo = WildCard::where('end_round_info_id', $request->round_info_id)->first();
+            $percentageWildcardMarkTrackings = LoveReact::selectRaw('participant_id, sum(react_num) as react_num')->groupBy('participant_id')->where([['round_info_id', $wildcardInfo->start_round_info_id], ['react_voting_type', $request->type], ['audition_id', $request->audition_id]])->get();
 
             $myArray = json_decode($percentageWildcardMarkTrackings);
 
