@@ -163,6 +163,16 @@
     );
   
 }
+.rules-edit{
+    background: linear-gradient(90deg, rgba(86,231,215,1) 0%, rgba(2,242,58,1) 100%);
+}
+.create-rules-btn{
+    background: linear-gradient(270deg,#ffad00,#ffd273 18.7%,#e19a04 42.13%,#facf75 68.82%,#e7a725 85.94%,#ffad00);
+    color: #000 !important;
+    font: bold !important;
+}
+    
+
 @media screen and (max-width: 600px){
     .banner__overlay h4{
         font-size: 10px !important;
@@ -178,5 +188,8 @@
    }
    .feed-name{
     font-size: 20px !important;
+   }
+   .rst-publish-btn {
+    width: 200px;
    }
 }

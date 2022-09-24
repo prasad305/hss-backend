@@ -105,7 +105,7 @@
 
                 <section>
                     <div class="d-flex justify-content-center my-4">
-                        <button class="btn btnGradient w-25"
+                        <button class="btn btnGradient rst-publish-btn"
                             {{ ($type == 'general' ? $round_result->manager_status >= 2 : $round_result->appeal_manager_status >= 2) ? 'disabled' : '' }}
                             type="submit">
                             {{ ($type == 'general' ? $round_result->manager_status >= 2 : $round_result->appeal_manager_status >= 2) ? 'Already Published' : 'Publish For User' }}

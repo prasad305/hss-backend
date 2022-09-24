@@ -66,10 +66,11 @@
 
         .apel-rslt{
             background: linear-gradient(102.45deg, #F5EA45 28.52%, #DDA336 52.38%, #E7A725 72.31%); 
-            color: #000 !important;    
+            /* color: #000 !important;     */
            }
            .apel-rslt:hover{
             background: linear-gradient(to bottom, #ffcc00 0%, #ffff66 100%);
+            
            }
            
     </style>
@@ -101,11 +102,11 @@
                 class="img-fluid ImgBlue  mb-2 ">
                 <h5 class="text-center text-bold mb-4">{{ $audition->title }}</h5> 
                  <a href="{{ route('managerAdmin.audition.showRoundResult', $audition->id) }}"
-                    class="btn  mb-2 view-rslt">View Round Result</a>
+                    class="btn  mb-2 view-rslt ">View Round Result</a>
 
                     @if ($audition->activeRoundInfo->appeal == 1)
                     <a href="{{ route('managerAdmin.audition.viewRoundAppealResult', $audition->id) }}"
-                        class="text-dark apel-rslt btn  ">View Round Appeal Result</a>
+                        class="btn text-dark apel-rslt  ">View Round Appeal Result</a>
                 @endif
 
             </div>
