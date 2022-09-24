@@ -178,6 +178,7 @@
 
 .BorderRpo {
     border-bottom: 1px solid white;
+    
 }
 
 .custom-nav-item {
@@ -215,9 +216,18 @@
 }
 
 .ARRimg {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     object-fit: contain;
+}
+
+.cart-backg{
+    background-color: #000000;
+}
+.cart-button{
+    color: white;
+    font-weight:500px !important;
+    
 }
 
 
