@@ -65,7 +65,7 @@
         }
 
         .apel-rslt{
-            background: linear-gradient(102.45deg, #F5EA45 28.52%, #DDA336 52.38%, #E7A725 72.31%); 
+            background: linear-gradient(270deg,#ffad00,#ffd273 18.7%,#e19a04 42.13%,#facf75 68.82%,#e7a725 85.94%,#ffad00); 
             /* color: #000 !important;     */
            }
            .apel-rslt:hover{
