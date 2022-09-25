@@ -83,7 +83,6 @@
                 setTimeout(function() {
                     location.reload();
                 }, 1000);
-                console.log(data);
             },
             error: function(data) {
                 $.each(data.responseJSON.errors, function(key, value) {

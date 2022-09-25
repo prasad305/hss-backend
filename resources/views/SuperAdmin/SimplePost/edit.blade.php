@@ -90,7 +90,6 @@
                 }, 1000);
             },
             error: function(response) {
-                // console.log(response);
                 $.each(response.responseJSON.errors, function(key, value) {
                     ErrorMessage(key, value);
                 });
