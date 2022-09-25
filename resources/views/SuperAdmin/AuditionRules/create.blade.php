@@ -69,7 +69,6 @@
             border-radius: 50%;
             background: white;
         }
-
     </style>
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -92,7 +91,6 @@
         .AddC {
             border-color: 1px solid gold !important;
         }
-
     </style>
     <div class="content">
         <div class="container-fluid">
@@ -112,8 +110,8 @@
                         <div class=" WidhtEvent pys-3">
                             <div class="divS mt-3">
                                 <center>
-                                    <img src="{{ asset('assets/super-admin/images/Category.png') }}"
-                                        class="mb-1" width="35" height="35" alt="">
+                                    <img src="{{ asset('assets/super-admin/images/Category.png') }}" class="mb-1"
+                                        width="35" height="35" alt="">
                                     <p><b class="fw-bold pt-4" style="color:#F8EE00;font-size: 20px;">Select Category</b>
                                     </p>
                                 </center>
@@ -122,8 +120,7 @@
                             <div class=" border-warning mx-5 mt-3 mb-5">
                                 @if (isset($categories[0]))
                                     @foreach ($categories as $key => $category)
-                                        <label class="container"><span
-                                                style="color:#F8EE00">{{ $category->name }}</span>
+                                        <label class="container"><span style="color:#F8EE00">{{ $category->name }}</span>
                                             <input type="radio" name="category_id" class="radioBtnClass"
                                                 value="{{ $category->id }}" {{ $key == 0 ? 'checked' : '' }}
                                                 onchange="resetAll()">
@@ -148,14 +145,14 @@
                                 <div class="centeredSX">
                                     <span data-decrease class="minus btn btn-sm  NumAdd">-</span>
 
-                                    <input data-value id="round" class="Number text-center fw-bold p-3 mx-2 " type="text"
-                                        value="0" min="0" disabled />
+                                    <input data-value id="round" class="Number text-center fw-bold p-3 mx-2 "
+                                        type="text" value="0" min="0" disabled />
                                     <span class="btn btn-sm minus NumAdd" data-increase>+</span>
                                 </div>
 
                                 <div class="centeredSXS text-center">
                                     <b class="text-danger">#Note:</b><br>
-                                    <small>You can’t create more than 6 rounds</small>
+                                    <small>You can’t create more than 8 rounds</small>
                                 </div>
                             </div>
                         </div>
@@ -179,7 +176,7 @@
                                 </div>
                                 <div class="centeredSXS text-center">
                                     <b class="text-danger">#Note:</b><br>
-                                    <small> You can’t create more than 4 superstars</small>
+                                    <small> You can’t create more than 3 superstars</small>
                                 </div>
                             </div>
                         </div>
@@ -196,13 +193,13 @@
                             <div class=" border-warning mx-5 mt-2 mb-3">
                                 <div class="centeredSX">
                                     <span data-decrease class="btn btn-sm minus NumAdd">-</span>
-                                    <input data-value id="jury" class="Number text-center fw-bold  p-3 mx-2 " type="text"
-                                        value="0" />
+                                    <input data-value id="jury" class="Number text-center fw-bold  p-3 mx-2 "
+                                        type="text" value="0" />
                                     <span class="btn btn-sm minus NumAdd" data-increase>+</span>
                                 </div>
                                 <div class="centeredSXS text-center">
                                     <b class="text-danger">#Note:</b><br>
-                                    <small>You can’t create more than 8 jurys</small>
+                                    <small>You can’t create more than 23 jurys</small>
                                 </div>
                             </div>
                         </div>
@@ -266,6 +263,7 @@
 
     <script>
         resetAll();
+
         function resetAll() {
             // alert('Resetting');
             //    $("#category_id").val();
