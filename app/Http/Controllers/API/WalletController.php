@@ -106,7 +106,7 @@ class WalletController extends Controller
 
                 if ($userWallet) {
 
-                    $userWallet->love_points += $loveBundel->love_points;
+                    $userWallet->love_points =  $userWallet->love_points + $loveBundel->love_points;
                     $userWallet->price = $loveBundel->price;
 
                     $userWallet->save();
@@ -121,7 +121,7 @@ class WalletController extends Controller
 
                     $wallet = new Wallet();
                     $wallet->user_id = auth('sanctum')->user()->id;
-                    $wallet->love_points += $loveBundel->love_points;
+                    $wallet->love_points = $loveBundel->love_points;
                     $wallet->type = "Basic";
                     $wallet->price = $loveBundel->price;
                     $wallet->status = 0;
