@@ -9,8 +9,11 @@ use App\Models\WalletHistory;
 use App\Models\WalletPayment;
 use App\Models\LoveReactPrice;
 use App\Http\Controllers\Controller;
+use App\Models\LoveReact;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+
+use function PHPSTORM_META\type;
 
 class WalletController extends Controller
 {
@@ -18,18 +21,20 @@ class WalletController extends Controller
     {
         $id = auth('sanctum')->user()->id;
         $allPackages = Package::where('status', 1)->latest()->get();
+        $loveReactBundel = LoveReactPrice::latest()->get();
 
         return response()->json([
             'status' => 200,
             'allPackages' => $allPackages,
             'userId' => $id,
+            'reactBundel' => $loveReactBundel,
         ]);
     }
     public function love_list()
     {
         $id = auth('sanctum')->user()->id;
         $alllove = LoveReactPrice::latest()->get();
-        
+
 
         return response()->json([
             'status' => 200,
@@ -70,7 +75,12 @@ class WalletController extends Controller
         } else {
             $walletPayment = new WalletPayment();
             $walletPayment->user_id = auth('sanctum')->user()->id;
-            $walletPayment->packages_id = $request->packages_id;
+            if ($request->type == "lovebundel") {
+                $walletPayment->love_bundel_id = $request->packages_id;
+            } else {
+                $walletPayment->packages_id = $request->packages_id;
+            }
+
             $walletPayment->card_holder_name = $request->card_holder_name;
             $walletPayment->card_no = $request->card_no;
             $walletPayment->card_expire_date = $request->card_expire_date;
@@ -79,58 +89,96 @@ class WalletController extends Controller
             $walletPayment->save();
 
             $walletHistory = new WalletHistory();
-            $walletHistory->packages_id = $request->packages_id;
+            if ($request->type == "lovebundel") {
+                $walletHistory->love_bundel_id = $request->packages_id;
+            } else {
+                $walletHistory->packages_id = $request->packages_id;
+            }
             $walletHistory->user_id = auth('sanctum')->user()->id;
             $walletHistory->wallet_payment_id = $walletPayment->id;
             $walletHistory->status = 0;
             $walletHistory->save();
 
             $userWallet = Wallet::where('user_id', auth('sanctum')->user()->id)->first();
-            $addPackages = Package::where('id', $request->packages_id)->first();
-           
 
-            if ($userWallet) {
+            if ($request->type == "lovebundel") {
+                $loveBundel = LoveReactPrice::where('id', $request->packages_id)->first();
 
-                $userWallet->club_points += $addPackages->club_points;
-                $userWallet->love_points += $addPackages->love_points;
-                $userWallet->auditions += $addPackages->auditions;
-                $userWallet->learning_session += $addPackages->learning_session;
-                $userWallet->live_chats += $addPackages->live_chats;
-                $userWallet->meetup += $addPackages->meetup;
-                $userWallet->greetings += $addPackages->greetings;
-                $userWallet->qna += $addPackages->qna;
-                $userWallet->type = $addPackages->title;
-                $userWallet->price = $addPackages->price;
-                $userWallet->save();
+                if ($userWallet) {
 
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Payment Added Successfully ',
-                    'waletInfo' => $userWallet
+                    $userWallet->love_points += $loveBundel->love_points;
+                    $userWallet->price = $loveBundel->price;
 
-                ]);
+                    $userWallet->save();
+
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Payment Added Successfully ',
+                        'waletInfo' => $userWallet
+
+                    ]);
+                } else {
+
+                    $wallet = new Wallet();
+                    $wallet->user_id = auth('sanctum')->user()->id;
+                    $wallet->love_points += $loveBundel->love_points;
+                    $wallet->type = "Basic";
+                    $wallet->price = $loveBundel->price;
+                    $wallet->status = 0;
+                    $wallet->save();
+
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Payment Added Successfully ',
+                        'waletInfo' => $wallet
+                    ]);
+                }
             } else {
 
-                $wallet = new Wallet();
-                $wallet->user_id = auth('sanctum')->user()->id;
-                $wallet->club_points += $addPackages->club_points;
-                $wallet->love_points += $addPackages->love_points;
-                $wallet->auditions += $addPackages->auditions;
-                $wallet->learning_session += $addPackages->learning_session;
-                $wallet->live_chats += $addPackages->live_chats;
-                $wallet->meetup += $addPackages->meetup;
-                $wallet->greetings += $addPackages->greetings;
-                $wallet->qna += $addPackages->qna;
-                $wallet->type = $addPackages->title;
-                $wallet->price = $addPackages->price;
-                $wallet->status = 0;
-                $wallet->save();
+                $addPackages = Package::where('id', $request->packages_id)->first();
+                if ($userWallet) {
 
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'Payment Added Successfully ',
-                    'waletInfo' => $wallet
-                ]);
+                    $userWallet->club_points += $addPackages->club_points;
+                    $userWallet->love_points += $addPackages->love_points;
+                    $userWallet->auditions += $addPackages->auditions;
+                    $userWallet->learning_session += $addPackages->learning_session;
+                    $userWallet->live_chats += $addPackages->live_chats;
+                    $userWallet->meetup += $addPackages->meetup;
+                    $userWallet->greetings += $addPackages->greetings;
+                    $userWallet->qna += $addPackages->qna;
+                    $userWallet->type = $addPackages->title;
+                    $userWallet->price = $addPackages->price;
+                    $userWallet->save();
+
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Payment Added Successfully ',
+                        'waletInfo' => $userWallet
+
+                    ]);
+                } else {
+
+                    $wallet = new Wallet();
+                    $wallet->user_id = auth('sanctum')->user()->id;
+                    $wallet->club_points += $addPackages->club_points;
+                    $wallet->love_points += $addPackages->love_points;
+                    $wallet->auditions += $addPackages->auditions;
+                    $wallet->learning_session += $addPackages->learning_session;
+                    $wallet->live_chats += $addPackages->live_chats;
+                    $wallet->meetup += $addPackages->meetup;
+                    $wallet->greetings += $addPackages->greetings;
+                    $wallet->qna += $addPackages->qna;
+                    $wallet->type = $addPackages->title;
+                    $wallet->price = $addPackages->price;
+                    $wallet->status = 0;
+                    $wallet->save();
+
+                    return response()->json([
+                        'status' => 200,
+                        'message' => 'Payment Added Successfully ',
+                        'waletInfo' => $wallet
+                    ]);
+                }
             }
         }
     }
@@ -218,7 +266,7 @@ class WalletController extends Controller
         ]);
     }
 
-    public function userFreeWalletStore($packageid,$userId)
+    public function userFreeWalletStore($packageid, $userId)
     {
 
         $walletHistory = new WalletHistory();
@@ -269,7 +317,7 @@ class WalletController extends Controller
             ]);
         }
     }
-    public function userFreeWalleLovetStore($loveId,$userId)
+    public function userFreeWalleLovetStore($loveId, $userId)
     {
 
         $walletHistory = new WalletHistory();
