@@ -1,7 +1,7 @@
-@extends('Layouts.SuperAdmin.master')
+@extends('Layouts.ManagerAdmin.master')
 
 @push('title')
-    Super Admin
+    Manager Admin
 @endpush
 
 

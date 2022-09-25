@@ -230,7 +230,7 @@ All</a></small>
                         <label for="module">Select Module</label>
                         <select name="module" class="custom-select rounded-0" id="module">
                             <option selected="" disabled="">Select Module</option>
-                            <option value="1">Simple Post</option>
+                            {{-- <option value="1">Simple Post</option> --}}
                             <option value="2">Live Chat</option>
                             <option value="3">Greeting</option>
                             <option value="4">Learning Session</option>
@@ -420,54 +420,86 @@ All</a></small>
                         var i = 0;
                         $.each(response.learning_seassion, function(index, res) {
                             // console.log(response);
-                            _html += '<div class="col-12 col-sm-6 col-md-3 dataList"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><input type="hidden" value="' + response.module + '" id="module" /><input type="hidden" value="' + res.id + '" id="viewPageId-' + i + '" /><button type="button" class="text-warning viewPage" id="' + i + '">More Info</button></small></span> </div></div> </div>';
+                            _html += '<div class="col-12 col-sm-6 col-md-3 dataList"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><input type="hidden" value="' + response.module + '" id="module" /><input type="hidden" value="' + res.id + '" id="viewPageId-' + i + '" /><button type="button" class="btn btn-warning btn-sm viewPage" id="' + i + '">More Info</button></small></span> </div></div> </div>';
 
                             i++;
                         });
                     } else if (response.module == 5) {
+                        var i = 0;
                         $.each(response.meetup_event, function(index, res) {
                             // console.log(response);
-                            _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small></span> </div></div> </div>';
+                            _html += '<div class="col-12 col-sm-6 col-md-3 dataList"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><input type="hidden" value="' + response.module + '" id="module" /><input type="hidden" value="' + res.id + '" id="viewPageId-' + i + '" /><button type="button" class="btn btn-warning btn-sm viewPage" id="' + i + '">More Info</button></small></span> </div></div> </div>';
+
+                            i++;
 
 
                         });
 
                     } else if (response.module == 7) {
+                        var i = 0;
                         $.each(response.qna, function(index, res) {
                             // console.log(response);
-                            _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small></span> </div></div> </div>';
+                            _html += '<div class="col-12 col-sm-6 col-md-3 dataList"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><input type="hidden" value="' + response.module + '" id="module" /><input type="hidden" value="' + res.id + '" id="viewPageId-' + i + '" /><button type="button" class="btn btn-warning btn-sm viewPage" id="' + i + '">More Info</button></small></span> </div></div> </div>';
+
+                            i++;
 
 
                         });
 
                     } else if (response.module == 2) {
+                        var i = 0;
                         $.each(response.live_chat, function(index, res) {
                             // console.log(response);
-                            _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small></span> </div></div> </div>';
+                            _html += '<div class="col-12 col-sm-6 col-md-3 dataList"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><input type="hidden" value="' + response.module + '" id="module" /><input type="hidden" value="' + res.id + '" id="viewPageId-' + i + '" /><button type="button" class="btn btn-warning btn-sm viewPage" id="' + i + '">More Info</button></small></span> </div></div> </div>';
+
+                            i++;
 
 
                         });
 
                     } else if (response.module == 3) {
+                        var i = 0;
                         $.each(response.greetings, function(index, res) {
                             // console.log(response);
-                            _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small></span> </div></div> </div>';
+                            _html += '<div class="col-12 col-sm-6 col-md-3 dataList"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><input type="hidden" value="' + response.module + '" id="module" /><input type="hidden" value="' + res.id + '" id="viewPageId-' + i + '" /><button type="button" class="btn btn-warning btn-sm viewPage" id="' + i + '">More Info</button></small></span> </div></div> </div>';
+
+                            i++;
+
+
+
+                        });
+
+                    }
+                    else if (response.module == 8) {
+                        var i = 0;
+                        $.each(response.auction, function(index, res) {
+                            // console.log(response);
+                            _html += '<div class="col-12 col-sm-6 col-md-3 dataList"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><input type="hidden" value="' + response.module + '" id="module" /><input type="hidden" value="' + res.id + '" id="viewPageId-' + i + '" /><button type="button" class="btn btn-warning btn-sm viewPage" id="' + i + '">More Info</button></small></span> </div></div> </div>';
+
+                            i++;
+
 
 
                         });
 
                     } else if (response.module == 9) {
+                        var i = 0;
                         $.each(response.marketPlace, function(index, res) {
                             // console.log(rmarketPlaceesponse);
-                            _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small></span> </div></div> </div>';
+                            _html += '<div class="col-12 col-sm-6 col-md-3 dataList"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><input type="hidden" value="' + response.module + '" id="module" /><input type="hidden" value="' + res.id + '" id="viewPageId-' + i + '" /><button type="button" class="btn btn-warning btn-sm viewPage" id="' + i + '">More Info</button></small></span> </div></div> </div>';
+
+                            i++;
 
 
                         });
 
                     } else if (response.module == 10) {
+                        var i = 0;
                         $.each(response.souvenir, function(index, res) {
                             // console.log(rmarketPlaceesponse);
-                            _html += '<div class="col-12 col-sm-6 col-md-3"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><a class="text-warning" href="" ><h6 style="color:rgb(251, 255, 0)">More Info</h6></a></small></span> </div></div> </div>';
+                            _html += '<div class="col-12 col-sm-6 col-md-3 dataList"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><input type="hidden" value="' + response.module + '" id="module" /><input type="hidden" value="' + res.id + '" id="viewPageId-' + i + '" /><button type="button" class="btn btn-warning btn-sm viewPage" id="' + i + '">More Info</button></small></span> </div></div> </div>';
+
+                            i++;
 
 
                         });
@@ -502,13 +534,6 @@ All</a></small>
             success: function(res) {
                 console.log(res);
                 window.open("{{ url('super-admin/superstar-accounts') }}" + '/' + viewPageId + '/' + mod, "_blank");
-
-                // var _html = '<option>Select Name</option>';
-                // $.each(res, function(index, res) {
-                //     _html += '<option value="' + res.id + '">' + res.first_name + ' ' + res.last_name + '</option>';
-
-                // });
-                // $('#user_name').html(_html);
             }
         });
 

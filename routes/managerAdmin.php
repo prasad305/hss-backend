@@ -402,13 +402,11 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('dashboard/roundCompleteCard', [DashboardController::class, 'roundCompleteCard'])->name('roundCompleteCard');
     //====================== Accounts Route =================
 
-    Route::get('accounts-dashboaad', [AccountsController::class, 'index'])->name('accounts.index');
-    Route::get('accounts-admin', [AccountsController::class, 'accountsAdminList'])->name('accountsAdminList');
-    Route::get('accounts-admin-income', [AccountsController::class, 'adminIncome'])->name('adminIncome');
-    Route::get('accounts-superstar', [AccountsController::class, 'accountsSuperstarList'])->name('accountsSuperstarList');
-    Route::get('accounts-superstar-income', [AccountsController::class, 'superstarIncome'])->name('superstarIncome');
-    Route::get('accounts-audition-admin', [AccountsController::class, 'accountsAuditionAdminList'])->name('accountsAuditionAdminList');
-    Route::get('accounts-audition-income', [AccountsController::class, 'auditionIncome'])->name('auditionIncome');
+    Route::get('accounts-index', [AccountsController::class, 'index'])->name('accounts.index');
+    Route::get('accounts-index-superstar-filter/{subCat_id}/{cat_id}', [AccountsController::class, 'accountSuperStarName']);
+    Route::get('all-accounts-filter-subCategory/{id}', [AccountsController::class, 'allSubCategory']);
+    Route::post('accountFilter', [AccountsController::class, 'accountFilter'])->name('accounts.accountFilter');
+    Route::get('superstar-accounts/{id}/{module}', [AccountsController::class, 'superstarList'])->name('accounts.superstarList');
 
 
     // simple posts
