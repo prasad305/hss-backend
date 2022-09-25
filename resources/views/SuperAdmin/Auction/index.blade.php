@@ -8,20 +8,27 @@
 
 
 @section('content')
+    <style>
+        .head-line {
+            border-top: 1px solid #ffad00 !important;
+            border-left: 8px solid #ffad00 !important;
+            border-bottom: 1px solid #ffad00 !important;
+            border-right: 8px solid #ffad00 !important;
+        }
+
+        .card-bg {
+            background-color: black;
+        }
+    </style>
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Auction</h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Auction</li>
-                    </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
+            <div class="card card-bg head-line mt-4 mb-2">
+                <div class="text-light d-flex p-2">
+                    <h4 class="mx-3 text-white p-2">Auction</h4>
+                </div>
+            </div>
+
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
@@ -54,8 +61,8 @@
                                                 class="icon-checkmark-round"></i> Published</button>
                                     @endif
 
-                                    <a href="{{ route('managerAdmin.auctionProduct.details', [$val->id]) }}"
-                                        type="button" class="btn btn-info waves-effect waves-light">Details <i
+                                    <a href="{{ route('managerAdmin.auctionProduct.details', [$val->id]) }}" type="button"
+                                        class="btn btn-info waves-effect waves-light">Details <i
                                             class="fa fa-angle-double-right"></i></a>
 
                                 </div>

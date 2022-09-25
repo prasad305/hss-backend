@@ -16,4 +16,5 @@ yarn-error.log
 /.idea
 /.vscode
 composer.lock
+*.jpg
 *.mp4
