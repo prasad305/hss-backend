@@ -6,6 +6,14 @@
     border-radius: 10px;
     background-color: #151515;
 }
+.WidthEvent {
+    /* width: 18rem; */
+    height: 100%;
+    border: 1px solid gold !important;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: #151515;
+}
 
 .CheckIB {
     background-color: #dda336 !important;
@@ -23,7 +31,6 @@
 }
 
 .NumAdd {
-    background: #302f2f;
     color: white;
     font-weight: 600;
     /* padding: 9px;
@@ -41,12 +48,12 @@
 
 .centeredSX {
     position: absolute;
-    top: 55%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.note-x{
+.note-x {
     position: absolute;
     bottom: 20px !important;
 }
@@ -59,6 +66,54 @@
     left: 50%;
     bottom: 20px;
     transform: translate(-50%, -50%);
+}
+.centeredSXSThird {
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #242424;
+}
+
+.inputColor {
+    background-color: #ddd !important;
+    color: #151515 !important;
+    font-size: 30px !important;
+    /* box-shadow: 0px 3px 9px 5px #9ca0b1 !important;
+    -webkit-box-shadow: 0px 3px 15px 9px #9ca0b1;
+    -moz-box-shadow: 0px 3px 21px 9px #9ca0b1; */
+}
+
+.responsiveRound {
+    padding: 5rem 0 !important;
+    display: flex;
+    justify-content: center;
+    height: 2.8rem;
+}
+
+.btnRes {
+    height: 40px !important;
+}
+
+@media only screen and (max-width: 600px) {
+    .responsiveRound {
+        padding: 1rem 0 !important;
+        display: flex;
+        justify-content: center;
+        height: 2.8rem;
+    }
+    .btnRes {
+        height: 40px !important;
+    }
+    .inputColor {
+        width: 70px !important;
+        font-size: 20px !important;
+    }
+}
+
+.centerContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 0;
 }
 
 .centeredSX1 {
@@ -76,10 +131,28 @@
     border-radius: 10px;
 }
 
+.btnBack {
+    background-image: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+    border-radius: 10px;
+}
+
+.textColorBtn {
+    color: #000 !important;
+}
+
 .Confirm {
     width: 100px;
     height: 40px;
     margin: 20px;
+    background: linear-gradient(
+        102.45deg,
+        #f5ea45 28.52%,
+        #dda336 52.38%,
+        #e7a725 72.31%
+    );
+    border-radius: 10px;
+}
+.btnConfirm {
     background: linear-gradient(
         102.45deg,
         #f5ea45 28.52%,
@@ -184,20 +257,30 @@
     width: 180px;
 }
 
+.parentAuditionRules {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.childRules {
+    width: 285px;
+}
+
 .AddC {
     border-top: 1px solid gold !important;
 }
 
-.approved-text{
+.approved-text {
     width: 65px !important;
     border-radius: 5px;
     font-size: 12px;
     padding-top: 2px;
 }
-.p-x-card{
+.p-x-card {
     padding-left: 10px;
 }
-.pending-text{
+.pending-text {
     color: black !important;
     width: 65px !important;
     border-radius: 5px;
@@ -206,7 +289,7 @@
 }
 
 .cards {
-    border: 1px solid #FFD910 !important;
+    border: 1px solid #ffd910 !important;
     border-radius: 10px !important;
 }
 
@@ -220,8 +303,7 @@
     object-fit: contain;
 }
 
-
-.custom-navx{
+.custom-navx {
     /* position: relative; */
 }
 .mnssa {
@@ -231,9 +313,7 @@
   transform: translate(-50%, -50%); */
 }
 
-
-
-.BorderInSA{
+.BorderInSA {
     background-color: #242424;
     border-radius: 5px;
     border: 1px solid rgba(230, 230, 250, 0.562);
@@ -296,25 +376,24 @@
     font-weight: 600;
 }
 
-
-  .BTNdone{
-      font-weight: 600;
-  }
-.p-x-i{
+.BTNdone {
+    font-weight: 600;
+}
+.p-x-i {
     margin-left: 10px;
 }
-.bg-gray-c{
+.bg-gray-c {
     border-radius: 30px;
     background-color: #eaeaf042;
 }
-.co-gradient-warning{
+.co-gradient-warning {
     width: 160px;
-    background: linear-gradient(90deg, #FFCE00 0%, #DFA434 100%);
+    background: linear-gradient(90deg, #ffce00 0%, #dfa434 100%);
     border-top-left-radius: 30px;
     border-bottom-right-radius: 30px;
 }
 
-  .AdminImg {
+.AdminImg {
     width: 100px;
     height: 100px;
     object-fit: cover;
@@ -329,7 +408,6 @@
     background: linear-gradient(90deg, #ffce00 0%, #dfa434 100%);
     border-radius: 25px;
 }
-
 
 .custom-control-label {
     margin-bottom: 0.5rem;

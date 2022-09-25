@@ -245,7 +245,7 @@ class AuditionController extends Controller
         $request_approval_pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 2]])->count();
 
 
-        return view('ManagerAdmin.audition.create', compact('auditionAdmins', 'subCategories', 'auditionRule', 'auditionRoundRule','auditionsStatus','live','pending','request_approval_pending'));
+        return view('ManagerAdmin.audition.create', compact('auditionAdmins', 'subCategories', 'auditionRule', 'auditionRoundRule', 'auditionsStatus', 'live', 'pending', 'request_approval_pending'));
     }
 
     public function assignManpower($audition_id)
@@ -272,9 +272,9 @@ class AuditionController extends Controller
             ->where('category_id', Auth::user()->category_id)
             ->orderBy('id', 'DESC')
             ->get();
-            $live = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 3]])->count();
-            $pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 0]])->count();
-            $request_approval_pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 2]])->count();
+        $live = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 3]])->count();
+        $pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 0]])->count();
+        $request_approval_pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 2]])->count();
 
         $data = [
             'auditionAdmins' => $auditionAdmins,
@@ -409,20 +409,22 @@ class AuditionController extends Controller
         $audition_id = $request->audition_id;
         $round_info_id = $request->round_info_id;
         $type = $request->type;
-
         $auditionRoundInfo = AuditionRoundInfo::with('wildcardRoundRuleId')->where([['audition_id', $request->audition_id], ['id', $request->round_info_id]])->first();
-        
-        
         if ($auditionRoundInfo->wildcard == 1) {
             $wildcardInfo = AuditionRoundInfo::where([['audition_id', $request->audition_id], ['round_num', $auditionRoundInfo->wildcardRoundRuleId->round_num]])->first();
-            $wildcard = new WildCard();
-            $wildcard->audition_id = $request->audition_id;
-            $wildcard->start_round_info_id = $auditionRoundInfo->id;
-            $wildcard->start_round_num = $auditionRoundInfo->round_num;
-            $wildcard->end_round_info_id = $wildcardInfo->id - 1;
-            $wildcard->end_round_num = $wildcardInfo->round_num - 1;
-            $wildcard->status = 1;
-            $wildcard->save();
+            if (!WildCard::where([
+                ['audition_id', $audition_id],
+                ['start_round_info_id', $round_info_id],
+            ])->exists()) {
+                $wildcard = new WildCard();
+                $wildcard->audition_id = $request->audition_id;
+                $wildcard->start_round_info_id = $auditionRoundInfo->id;
+                $wildcard->start_round_num = $auditionRoundInfo->round_num;
+                $wildcard->end_round_info_id = $wildcardInfo->id - 1;
+                $wildcard->end_round_num = $wildcardInfo->round_num - 1;
+                $wildcard->status = 1;
+                $wildcard->save();
+            }
         } else {
             AuditionRoundInfo::where('id', $auditionRoundInfo->id)->update(['status' => 2]);
         }
@@ -443,6 +445,26 @@ class AuditionController extends Controller
         ])->update([
             'result_message' => $request->rejected_comments,
         ]);
+        AuditionRoundMarkTracking::where([
+            ['audition_id', $audition_id],
+            ['round_info_id', $round_info_id],
+            ['type', 'wildcard'],
+            ['wining_status', 1]
+        ])->update([
+            'result_message' => "You are selected via Wildcard",
+        ]);
+
+        if (WildCard::where([
+            ['audition_id', $audition_id],
+            ['end_round_info_id', $round_info_id],
+        ])->exists()) {
+            WildCard::where([
+                ['audition_id', $audition_id],
+                ['end_round_info_id', $round_info_id],
+            ])->update([
+                'status' => 3,
+            ]);
+        }
 
         if ($type == 'general') {
             AuditionRoundInfo::where('id', $round_info_id)->update([

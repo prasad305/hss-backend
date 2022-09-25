@@ -34,7 +34,7 @@ class AuditionUploadVideo extends Model
         'comment'
     ];
 
-    protected $with = ['user', 'totalReact'];
+    protected $with = ['user', 'totalReact', 'getTotalReact'];
 
     public function audition()
     {
@@ -61,6 +61,14 @@ class AuditionUploadVideo extends Model
     }
     public function totalReact()
     {
+        return $this->hasMany(LoveReact::class, 'video_id')->where('user_id', auth()->user()->id);
+    }
+    public function getTotalReact()
+    {
         return $this->hasMany(LoveReact::class, 'video_id');
+    }
+    public function totalUserVoteReact()
+    {
+        return $this->hasMany(LoveReact::class, 'video_id', 'id')->selectRaw('video_id, sum(react_num) as react_num')->where('react_voting_type', 'user_vote')->groupBy('video_id');
     }
 }
