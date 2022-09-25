@@ -65,7 +65,8 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function allDataList(){
+    public function allDataList()
+    {
 
         $id = auth('sanctum')->user()->id;
         $selectedCategory = ChoiceList::where('user_id', $id)->first();
@@ -173,7 +174,8 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function allSelectedCategoryList($id){
+    public function allSelectedCategoryList($id)
+    {
 
         $userId = auth('sanctum')->user()->id;
         $selectedCategory = ChoiceList::where('user_id', $userId)->first();
@@ -185,10 +187,10 @@ class CategoryController extends Controller
         $allSelectedFollowCategory = Superstar::where('category_id', $id)->whereIn('id', $selectedStarCategory)->latest()->get();
 
         $allUnFollowCategory = Superstar::where('category_id', $id)->whereNotIn('id', $selectedStarCategory)->latest()->get();
-        $allsuggestionCategory = Superstar::where('category_id','!=', $id)->whereNotIn('id', $selectedStarCategory)->latest()->get();
+        $allsuggestionCategory = Superstar::where('category_id', '!=', $id)->whereNotIn('id', $selectedStarCategory)->latest()->get();
 
         // return $allUnFollowCategory;
-        
+
 
         return response()->json([
             'status' => 200,
@@ -223,11 +225,13 @@ class CategoryController extends Controller
         }
 
 
+
+
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
             'followStarCategory' => $followStarCategory,
-            'followingStarCategory' => $followingStarCategory,
+            'followingStarCategory' => $selectedCategory->star_id,
             'suggFollowingStarCategory' => $suggFollowingStarCategory,
             'allSuperstar' => $allSuperstar,
             'allCategory' => $allCategory,
@@ -350,40 +354,39 @@ class CategoryController extends Controller
             ->get();
 
         // category unset
-        foreach ($userStarCategory as $key => $category){
+        foreach ($userStarCategory as $key => $category) {
             if (($key = array_search($category->category_id, $all_category_id)) !== false) {
                 unset($all_category_id[$key]);
-                
             }
         }
-        $newCategory=array();
+        $newCategory = array();
 
-        foreach($all_category_id as $obj=>$key) {
+        foreach ($all_category_id as $obj => $key) {
             array_push($newCategory, $key);
         }
 
         // Sub category unset
-        foreach ($userStarCategory as $key => $subcategory){
+        foreach ($userStarCategory as $key => $subcategory) {
             if (($key = array_search($subcategory->sub_category_id, $all_subcategory_id)) !== false) {
                 unset($all_subcategory_id[$key]);
-                
             }
         }
-        $newSubCategory=array();
+        $newSubCategory = array();
 
-        foreach($all_subcategory_id as $obj=>$key) {
+        foreach ($all_subcategory_id as $obj => $key) {
             array_push($newSubCategory, $key);
         }
 
 
         $cat->star_id = $request->star_id;
-        $cat->category = $newCategory;
-        $cat->subcategory = $newSubCategory;
+        // $cat->category = $newCategory;
+        // $cat->subcategory = $newSubCategory;
         $cat->save();
 
         return response()->json([
             'status' => 200,
             'message' => 'Admin category added',
+            'followers' => $cat->star_id
         ]);
     }
 
@@ -440,7 +443,7 @@ class CategoryController extends Controller
         $subCategories = SubCategory::whereIn('category_id', $req->cat)->get();
 
         $user = ChoiceList::where('user_id', auth('sanctum')->user()->id)->first();
-        
+
         $wallet = Wallet::where('user_id', auth('sanctum')->user()->id)->first();
         if (!$wallet) {
             Wallet::create([

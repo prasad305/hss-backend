@@ -17,6 +17,7 @@ class CreateWalletPaymentsTable extends Migration
             $table->id();
             $table->integer('packages_id')->nullable();
             $table->integer('love_bundel_id')->nullable();
+
             $table->integer('user_id')->nullable();
             $table->string('card_holder_name')->nullable();
             $table->string('card_no')->nullable();
