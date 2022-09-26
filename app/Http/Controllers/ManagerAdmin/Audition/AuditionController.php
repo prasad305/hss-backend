@@ -103,6 +103,9 @@ class AuditionController extends Controller
                 $auditionRoundInfo->mark_live_or_offline =  $auditionRoundRule->mark_live_or_offline;
                 $auditionRoundInfo->wildcard =  $auditionRoundRule->wildcard;
                 $auditionRoundInfo->round_type =  $auditionRoundRule->round_type;
+                if ($auditionRoundRule->round_type == 1) {
+                    $auditionRoundInfo->room_id = createRoomID();
+                }
                 $auditionRoundInfo->wildcard_round =  $auditionRoundRule->wildcard_round;
                 $auditionRoundInfo->appeal =  $auditionRoundRule->appeal;
                 $auditionRoundInfo->video_feed =  $auditionRoundRule->video_feed;
