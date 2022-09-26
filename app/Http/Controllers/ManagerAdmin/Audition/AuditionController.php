@@ -109,6 +109,7 @@ class AuditionController extends Controller
                 $auditionRoundInfo->wildcard_round =  $auditionRoundRule->wildcard_round;
                 $auditionRoundInfo->appeal =  $auditionRoundRule->appeal;
                 $auditionRoundInfo->video_feed =  $auditionRoundRule->video_feed;
+                $auditionRoundInfo->oxygen_feed =  $auditionRoundRule->oxygen_feed;
                 $auditionRoundInfo->video_duration =  $auditionRoundRule->video_duration;
                 $auditionRoundInfo->video_slot_num =  $auditionRoundRule->video_slot_num;
 
@@ -210,11 +211,13 @@ class AuditionController extends Controller
                 foreach ($request->judge as $key => $value) {
                     $auditionAssignJudge                    = new AuditionAssignJudge();
                     $auditionAssignJudge->judge_id          =  $value;
+                    $auditionAssignJudge->super_judge       =  $value == $request->super_judge ? 1 :0;
                     $auditionAssignJudge->judge_admin_id    =  $this->getParentUserIdById($value);
                     $auditionAssignJudge->audition_id       =    $audition->id;
                     $auditionAssignJudge->approved_by_judge = 0;
                     $auditionAssignJudge->save();
                 }
+               
 
                 foreach ($request->group_ids as $key => $group_id) { // how many groups are allowed total_items
                     foreach ($request->jury[$key] as $jury) { // per groups jury assigne
@@ -223,10 +226,11 @@ class AuditionController extends Controller
                         $auditionAssignJury->jury_id               =  $jury;
                         $auditionAssignJury->group_id              =  $group_id;
                         $auditionAssignJury->approved_by_jury      =  0;
-                        $auditionAssignJury->status                =   0;
+                        $auditionAssignJury->status                =  0;
                         $auditionAssignJury->save();
                     }
                 }
+
                 session()->flash('success', 'Man power assigned successfully !');
             }
         } else {

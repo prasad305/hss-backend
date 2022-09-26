@@ -30,6 +30,7 @@ class CreateAuditionRoundInfosTable extends Migration
             $table->integer('wildcard_round')->nullable();
             $table->integer('appeal')->nullable()->comment('0 = no, 1= yes');
             $table->integer('video_feed')->nullable()->comment('0 = no, 1= yes');
+            $table->integer('oxygen_feed')->nullable()->comment('0 = no, 1= yes');
             $table->integer('video_duration')->nullable();
             $table->integer('video_slot_num')->nullable();
             $table->date('round_start_date')->nullable();
