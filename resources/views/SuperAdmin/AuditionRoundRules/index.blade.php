@@ -597,6 +597,33 @@
 
                     </div>
 
+                    {{-- oxygen feed --}}
+                    <div class="row w-100 my-5">
+                        <div class="col-md-2">
+                            <div class="wildcard__title">
+                                <p class='text-warning'>Oxygen Feed</p>
+
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="wild_card__one roundedYesNo w-100 p-3">
+                                <input type="radio" name="oxygen_feed" value="1"> <span>Yes</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="wild_card__one ml-3 w-100 roundedYesNo p-3">
+                                <input type="radio" name="oxygen_feed" value="0"> <span>No</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-row">
+
+
+                            <span class="text-danger" id="oxygen_feed_error"></span>
+                        </div>
+
+                    </div>
+
 
 
                     <div class="row p-3  my-5 bg-dark rounded-lg">
@@ -949,6 +976,13 @@
                     } else {
                         $('input:radio[name=video_feed][value=1]').attr('checked', true);
                     }
+
+                    if (data.mark.oxygen_feed == 0) {
+                        $('input:radio[name=oxygen_feed][value=0]').attr('checked', true);
+                    } else {
+                        $('input:radio[name=oxygen_feed][value=1]').attr('checked', true);
+                    }
+
                     if (data.mark.round_type == 0) {
                         $('input:radio[name=round_type][value=0]').attr('checked', true);
                     } else {

@@ -2136,7 +2136,7 @@ class UserController extends Controller
             'audition' => $audition,
             'round_info' => $round_info,
             'round_instruction' => $round_instruction,
-            'myRoundPass' =>  $myRoud->round_num,
+            'myRoundPass' => $myRoud? $myRoud->round_num:0,
             'totalRound' => $totalRound
         ]);
     }
