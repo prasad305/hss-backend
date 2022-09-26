@@ -537,6 +537,41 @@ class AuditionController extends Controller
             $auditionRoundMarkTracking->avg_mark = $average;
             $auditionRoundMarkTracking->save();
         }
+        if ($type == "general") {
+            $rejectedUserListGeneral = AuditionUploadVideo::selectRaw('user_id,count(approval_status) as totalRejected')->where([['audition_id', $audition_id], ['round_info_id', $audition_round_info_id], ['approval_status', 2], ['type', 'general']])->groupBy('user_id')->get('video');
+            foreach ($rejectedUserListGeneral as $rejectedUser) {
+                if ($rejectedUser->totalRejected == $auditionRoundInfo->video_slot_num) {
+                    $auditionRoundMarkTracking  = new AuditionRoundMarkTracking();
+                    $auditionRoundMarkTracking->user_id = $rejectedUser->user_id;
+                    $auditionRoundMarkTracking->type = "rejected";
+                    $auditionRoundMarkTracking->round_info_id = $audition_round_info_id;
+                    $auditionRoundMarkTracking->audition_id = $audition_id;
+                    $auditionRoundMarkTracking->audition_id = $audition_id;
+                    $auditionRoundMarkTracking->result_message = "You are rejected";
+                    $auditionRoundMarkTracking->avg_mark = 00;
+                    $auditionRoundMarkTracking->save();
+                }
+            }
+        }
+
+        if ($type == "appeal") {
+            $rejectedUserListAppeal = AuditionUploadVideo::selectRaw('user_id,count(approval_status) as totalRejected')->where([['audition_id', $audition_id], ['round_info_id', $audition_round_info_id], ['approval_status', 2], ['type', 'appeal']])->groupBy('user_id')->get('video');
+            foreach ($rejectedUserListAppeal as $rejectedUser) {
+                if ($rejectedUser->totalRejected == $auditionRoundInfo->appeal_video_slot_num) {
+                    $auditionRoundMarkTracking  = new AuditionRoundMarkTracking();
+                    $auditionRoundMarkTracking->user_id = $rejectedUser->user_id;
+                    $auditionRoundMarkTracking->type = "rejected";
+                    $auditionRoundMarkTracking->round_info_id = $audition_round_info_id;
+                    $auditionRoundMarkTracking->audition_id = $audition_id;
+                    $auditionRoundMarkTracking->audition_id = $audition_id;
+                    $auditionRoundMarkTracking->result_message = "You are rejected";
+                    $auditionRoundMarkTracking->avg_mark = 00;
+                    $auditionRoundMarkTracking->save();
+                }
+            }
+        }
+
+
 
         return response()->json([
             'status' => 200,
