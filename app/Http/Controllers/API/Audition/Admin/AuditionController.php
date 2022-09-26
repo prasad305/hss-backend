@@ -560,7 +560,7 @@ class AuditionController extends Controller
                 if ($rejectedUser->totalRejected == $auditionRoundInfo->appeal_video_slot_num) {
                     $auditionRoundMarkTracking  = new AuditionRoundMarkTracking();
                     $auditionRoundMarkTracking->user_id = $rejectedUser->user_id;
-                    $auditionRoundMarkTracking->type = "rejected";
+                    $auditionRoundMarkTracking->type = "appeal_rejected";
                     $auditionRoundMarkTracking->round_info_id = $audition_round_info_id;
                     $auditionRoundMarkTracking->audition_id = $audition_id;
                     $auditionRoundMarkTracking->audition_id = $audition_id;
