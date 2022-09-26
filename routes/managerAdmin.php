@@ -403,8 +403,8 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     //====================== Accounts Route =================
 
     Route::get('accounts-index', [AccountsController::class, 'index'])->name('accounts.index');
-    Route::get('accounts-index-superstar-filter/{subCat_id}/{cat_id}', [AccountsController::class, 'accountSuperStarName']);
-    Route::get('all-accounts-filter-subCategory/{id}', [AccountsController::class, 'allSubCategory']);
+    Route::get('accounts-index-superstar-filter/{subCat_id}', [AccountsController::class, 'accountSuperStarName']);
+    // Route::get('all-accounts-filter-subCategory', [AccountsController::class, 'allSubCategory']);
     Route::post('accountFilter', [AccountsController::class, 'accountFilter'])->name('accounts.accountFilter');
     Route::get('superstar-accounts/{id}/{module}', [AccountsController::class, 'superstarList'])->name('accounts.superstarList');
 

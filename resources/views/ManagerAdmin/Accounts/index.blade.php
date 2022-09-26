@@ -1,6 +1,6 @@
 @extends('Layouts.ManagerAdmin.master')
 @push('title')
-    Manager Admin
+Manager Admin
 @endpush
 
 @section('content')
@@ -197,7 +197,7 @@ All</a></small>
 
 <section class="content">
     <div class="container-fluid">
-        <form id="accountFilterForm">
+        <form id="accountFiltermanager">
             @csrf
             <div class="row">
                 <div class="col-lg-4 col-md-4">
@@ -249,20 +249,15 @@ All</a></small>
 
             <div class="row">
 
-                <div class="col-lg-4 col-md-4">
+                <!-- <div class="col-lg-4 col-md-4">
 
 
                     <div class="form-group">
                         <label for="name">Categories</label>
-                        <select name="category_id" class="form-control select2 category_id">
-                            <option>Select Category</option>
-                            @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
+                       
                     </div>
 
-                </div>
+                </div> -->
 
                 <div class="col-lg-4 col-md-4">
 
@@ -270,7 +265,10 @@ All</a></small>
                         <div class="form-group">
                             <label for="name">SubCategories</label>
                             <select name="sub_category_id" class="form-control select2 sub_category_id">
-                                <option>Select SubCategory</option>
+                                <option>Select Category</option>
+                                @foreach ($subCategories as $subcategory)
+                                <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
+                                @endforeach
                             </select>
                         </div>
 
@@ -281,7 +279,7 @@ All</a></small>
                     <div class="form-group mb-4">
                         <div class="form-group">
                             <label for="name">SuperStar</label>
-                            <select name="user_name" id="user_name" class="custom-select rounded-0" id="user_name" onmousedown="if(this.options.length>5){this.size=5;}" onchange="this.blur()" onblur="this.size=0;">
+                            <select name="user_name" id="user_name" class="custom-select rounded-0" onmousedown="if(this.options.length>5){this.size=5;}" onchange="this.blur()" onblur="this.size=0;">
                                 <option>Select SuperStar</option>
 
 
@@ -355,38 +353,38 @@ All</a></small>
 
 
 
-        $(".category_id").click(function() {
-            var category_id = $('.category_id').val();
-            console.log(category_id);
-            if (category_id > 0) {
-                $.ajax({
-                    url: "{{ url('manager-admin/all-accounts-filter-subCategory') }}/" + category_id,
-                    type: 'GET',
+        // $(".category_id").click(function() {
+        //     var category_id = $('.category_id').val();
+        //     console.log(category_id);
+        //     if (category_id > 0) {
+        //         $.ajax({
+        //             url: "{{ url('manager-admin/accounts-index-superstar-filter') }}/" + category_id,
+        //             type: 'GET',
 
-                    success: function(res) {
-                        console.log(res);
+        //             success: function(res) {
+        //                 console.log(res);
 
-                        var _html = '<option>Select SuperStar</option>';
-                        $.each(res, function(index, res) {
-                            _html += '<option value="' + res.id + '">' + res.name + '</option>';
+        //                 var _html = '<option>Select SuperStar</option>';
+        //                 $.each(res, function(index, res) {
+        //                     _html += '<option value="' + res.id + '">' + res.name + '</option>';
 
-                        });
-                        $('.sub_category_id').html(_html);
-                    }
-                })
-            }
-        });
+        //                 });
+        //                 $('.sub_category_id').html(_html);
+        //             }
+        //         })
+        //     }
+        // });
 
 
         $(".sub_category_id").click(function() {
             // alert('123');
             var subCat_id = $('.sub_category_id').val();
-            var cat_id = $('.category_id').val();
-            console.log(subCat_id, cat_id);
+            // var cat_id = $('.category_id').val();
+            console.log(subCat_id);
             if (subCat_id > 0) {
 
                 $.ajax({
-                    url: "{{ url('manager-admin/accounts-index-superstar-filter') }}" + '/' + subCat_id + '/' + cat_id,
+                    url: "{{ url('manager-admin/accounts-index-superstar-filter') }}" + '/' + subCat_id,
                     type: 'GET',
 
                     success: function(res) {
@@ -407,11 +405,11 @@ All</a></small>
 
 
         // account submit form
-        $('#accountFilterForm').submit(function(e) {
+        $('#accountFiltermanager').submit(function(e) {
             e.preventDefault();
             $.ajax({
                 url: "{{url('manager-admin/accountFilter')}}",
-                data: jQuery('#accountFilterForm').serialize(),
+                data: jQuery('#accountFiltermanager').serialize(),
                 type: 'post',
                 success: function(response) {
                     console.log(response);
@@ -449,7 +447,7 @@ All</a></small>
                     } else if (response.module == 2) {
                         var i = 0;
                         $.each(response.live_chat, function(index, res) {
-                            // console.log(response);
+                            console.log(response);
                             _html += '<div class="col-12 col-sm-6 col-md-3 dataList"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' + response.userReg[index] + '</h1></span></div><div class="col-12 col-sm-6"><span class="info-box-text">Amounts<h1>' + response.total_amount[index] + '</h1></span></div></div> <span class="info-box-number" style="color:rgb(236, 189, 119)"><h3>' + res.title + '</h3></span><span class="info-box-number"><small><input type="hidden" value="' + response.module + '" id="module" /><input type="hidden" value="' + res.id + '" id="viewPageId-' + i + '" /><button type="button" class="btn btn-warning btn-sm viewPage" id="' + i + '">More Info</button></small></span> </div></div> </div>';
 
                             i++;
@@ -469,8 +467,7 @@ All</a></small>
 
                         });
 
-                    }
-                    else if (response.module == 8) {
+                    } else if (response.module == 8) {
                         var i = 0;
                         $.each(response.auction, function(index, res) {
                             // console.log(response);

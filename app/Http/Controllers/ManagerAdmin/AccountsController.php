@@ -32,30 +32,36 @@ class AccountsController extends Controller
 {
     public function index()
     {
-        $user_category_id = Auth::user()->category_id;
-        $categories = Category::where('id', $user_category_id)->get();
 
-        return view('ManagerAdmin.Accounts.index', compact('categories'));
+        $user_subcategory_id = Auth::user()->category_id;
+    
+        $subCategories = SubCategory::where('category_id', $user_subcategory_id)->get();
+
+
+        return view('ManagerAdmin.Accounts.index', compact('subCategories'));
     }
 
-    public function accountSuperStarName($subCat_id, $cat_id)
+    public function accountSuperStarName($subCat_id)
     {
         // $sub_cat= $subCat_id;
         // $cate_id = $cat_id;
 
-        $superstar = User::where('sub_category_id', $subCat_id)->where('category_id', $cat_id)->where('user_type', "star")->get();
+        $superstar = User::where('sub_category_id', $subCat_id)->where('user_type', "star")->get();
+        // dd($superstar);
         return response()->json($superstar);
     }
 
-    public function allSubCategory($id)
-    {
-        $subCategories = SubCategory::where('category_id', $id)->get();
-        return response()->json($subCategories);
-    }
+    // public function allSubCategory()
+    // {
+    //     $user_subcategory_id = Auth::user()->category_id;
+    //     $subCategories = SubCategory::where('id', $user_subcategory_id)->get();
+    //     return response()->json($subCategories);
+
+    //     // return view('ManagerAdmin.Accounts.index', compact('subCategories'));
+    // }
 
     public function accountFilter(Request $request)
     {
-        $cate_id = $request['category_id'];
         $subCate_id = $request['sub_category_id'];
         $star_id = $request['user_name'];
         $module = $request['module'];
@@ -65,7 +71,7 @@ class AccountsController extends Controller
         // Module selected Learning Session
         if ($module == "1") {
             //code here..
-            $simple_post = SimplePost::where('category_id', $cate_id)->where('subcategory_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
+            $simple_post = SimplePost::where('subcategory_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $start_date . " 00:00:00",
@@ -78,7 +84,8 @@ class AccountsController extends Controller
         } else if ($module == "2") {
             //code here..
             $user_id = Auth::id();
-            $live_chat = LiveChat::where('created_by_id', $user_id)->where('category_id', $cate_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
+            
+            $live_chat = LiveChat::where('created_by_id', $user_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $start_date . " 00:00:00",
@@ -91,17 +98,18 @@ class AccountsController extends Controller
                 $userReg[$i] = LiveChatRegistration::where('live_chat_id', $leSess['id'])->distinct('user_id')->count();
                 $i++;
             }
-
+;
             $i = 0;
             foreach ($live_chat as $leSess) {
                 $total_amount[$i] = LiveChatRegistration::where('live_chat_id', $leSess['id'])->sum('amount');
                 $i++;
             }
             return response()->json(['live_chat' => $live_chat, 'userReg' => $userReg, 'total_amount' => $total_amount, 'module' => $module]);
+
         } else if ($module == "3") {
             //code here..
             $user_id = Auth::id();
-            $greetings = Greeting::where('created_by_id', $user_id)->where('category_id', $cate_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
+            $greetings = Greeting::where('created_by_id', $user_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $start_date . " 00:00:00",
@@ -127,7 +135,7 @@ class AccountsController extends Controller
         } else if ($module == "4") {
             //code here..
             $user_id = Auth::id();
-            $learning_seassion = LearningSession::where('created_by_id', $user_id)->where('category_id', $cate_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
+            $learning_seassion = LearningSession::where('created_by_id', $user_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $start_date . " 00:00:00",
@@ -153,7 +161,7 @@ class AccountsController extends Controller
         } else if ($module == "5") {
             //code here..
             $user_id = Auth::id();
-            $meetup_event = MeetupEvent::where('created_by_id', $user_id)->where('category_id', $cate_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
+            $meetup_event = MeetupEvent::where('created_by_id', $user_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $start_date . " 00:00:00",
@@ -178,7 +186,7 @@ class AccountsController extends Controller
 
         // else if ($module == "6") {
         //     //code here..
-        //     $audition = Audition::where('category_id', $cate_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
+        //     $audition = Audition::where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
         //         "(created_at >= ? AND created_at <= ?)",
         //         [
         //             $start_date . " 00:00:00",
@@ -191,7 +199,7 @@ class AccountsController extends Controller
         else if ($module == "7") {
             //code here..
             $user_id = Auth::id();
-            $qna = QnA::where('created_by_id', $user_id)->where('category_id', $cate_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
+            $qna = QnA::where('created_by_id', $user_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $start_date . " 00:00:00",
@@ -214,7 +222,7 @@ class AccountsController extends Controller
             return response()->json(['qna' => $qna, 'userReg' => $userReg, 'total_amount' => $total_amount, 'module' => $module]);
         } else if ($module == "6") {
             //code here..
-            $audition = Audition::where('category_id', $cate_id)->where('subcategory_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
+            $audition = Audition::where('subcategory_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $start_date . " 00:00:00",
@@ -225,7 +233,7 @@ class AccountsController extends Controller
         } else if ($module == "9") {
             //code here..
             $user_id = Auth::id();
-            $marketPlace = Marketplace::where('created_by_id', $user_id)->where('category_id', $cate_id)->where('subcategory_id', $subCate_id)->where('superstar_id', $star_id)->whereRaw(
+            $marketPlace = Marketplace::where('created_by_id', $user_id)->where('subcategory_id', $subCate_id)->where('superstar_id', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $start_date . " 00:00:00",
@@ -249,7 +257,7 @@ class AccountsController extends Controller
         } else if ($module == "10") {
             //code here..
 
-            $souvenir = SouvenirCreate::where('category_id', $cate_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
+            $souvenir = SouvenirCreate::where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $start_date . " 00:00:00",
@@ -272,7 +280,7 @@ class AccountsController extends Controller
         }else if ($module == "8") {
             //code here..
             $user_id = Auth::id();
-            $auction = Auction::where('created_by_id', $user_id)->where('category_id', $cate_id)->where('subcategory_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
+            $auction = Auction::where('created_by_id', $user_id)->where('subcategory_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $start_date . " 00:00:00",
@@ -294,7 +302,7 @@ class AccountsController extends Controller
 
         } else if ($module == "11") {
             //code here..
-            $fanGroup = FanGroup::where('category_id', $cate_id)->where('sub_category_id', $subCate_id)->where('my_star', $star_id)->whereRaw(
+            $fanGroup = FanGroup::where('sub_category_id', $subCate_id)->where('my_star', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $start_date . " 00:00:00",
