@@ -218,6 +218,37 @@
 
                     </div>
             @endif
+            @if ($module == 11)
+            <div class="card">
+                <div class="card-header">
+
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>Email</th>
+
+
+                                {{-- <th style="width: 150px">Action</th> --}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($learning_seassion_reg as $data)
+                                <tr>
+                                    <td>{{ $data->user_id }}</td>
+                                    <td>{{ $data->user->first_name }}</td>
+                                    <td>{{ $data->user->email }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                </div>
+        @endif
             <!-- /.card-body -->
         </div>
 

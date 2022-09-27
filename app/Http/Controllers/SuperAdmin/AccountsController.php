@@ -7,6 +7,7 @@ use App\Models\Auction;
 use App\Models\Audition\Audition;
 use App\Models\Bidding;
 use App\Models\Category;
+use App\Models\Fan_Group_Join;
 use App\Models\FanGroup;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
@@ -279,7 +280,6 @@ class AccountsController extends Controller
             }
             return response()->json(['auction' => $auction, 'userReg' => $userReg, 'total_amount' => $total_amount, 'module' => $module]);
         } else if ($module == "11") {
-
             $fanGroup = FanGroup::where('category_id', $cate_id)->where('sub_category_id', $subCate_id)->where('my_star', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
@@ -287,7 +287,18 @@ class AccountsController extends Controller
                     $end_date . " 23:59:59"
                 ]
             )->get();
-            return response()->json($fanGroup);
+            // return response()->json($fanGroup);
+            $i = 0;
+            foreach ($fanGroup as $leSess) {
+                $userReg[$i] = Fan_Group_Join::where('fan_group_id', $leSess['id'])->distinct('user_id')->count();
+                $i++;
+            }
+            $i = 0;
+            foreach ($fanGroup as $leSess) {
+                $total_amount[$i] = FanGroup::where('id', $leSess['id'])->sum('club_points');
+                $i++;
+            }
+            return response()->json(['fanGroup' => $fanGroup, 'userReg' => $userReg, 'total_amount' => $total_amount, 'module' => $module]);
         }
     }
 
@@ -333,6 +344,11 @@ class AccountsController extends Controller
         } else if ($module == "10") {
 
             $learning_seassion_reg = SouvenirApply::where('souvenir_id', $id)->get();
+
+            return view('SuperAdmin.Accounts.Superstar.superstarEventList', compact('module', 'learning_seassion_reg'));
+        } else if ($module == "11") {
+
+            $learning_seassion_reg = Fan_Group_Join::where('fan_group_id', $id)->get();
 
             return view('SuperAdmin.Accounts.Superstar.superstarEventList', compact('module', 'learning_seassion_reg'));
         }

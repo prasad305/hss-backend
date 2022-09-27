@@ -7,6 +7,7 @@ use App\Models\Auction;
 use App\Models\Audition\Audition;
 use App\Models\Bidding;
 use App\Models\Category;
+use App\Models\Fan_Group_Join;
 use App\Models\FanGroup;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
@@ -244,24 +245,26 @@ class AccountsController extends Controller
             return response()->json(['marketPlace' => $marketPlace, 'userReg' => $userReg, 'total_amount' => $total_amount, 'module' => $module]);
         } else if ($module == "10") {
 
+           $user_id = User::where('created_by', Auth::id())->where('user_type', 'admin')->get();
 
-            $souvenir = SouvenirCreate::where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
+            $souvenir = SouvenirCreate::where('admin_id',$user_id)->where('sub_category_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $start_date . " 00:00:00",
                     $end_date . " 23:59:59"
                 ]
             )->get();
-
+    //  return response()->json($souvenir);
             $i = 0;
             foreach ($souvenir as $leSess) {
-                $userReg[$i] = SouvenirApply::where('souvenir_id', $leSess['id'])->distinct('user_id')->count();
+                $userReg[$i] = SouvenirApply::where('admin_id',$user_id)->where('souvenir_id', $leSess['id'])->distinct('user_id')->count();
                 $i++;
             }
+    //  return response()->json($userReg);
 
             $i = 0;
             foreach ($souvenir as $leSess) {
-                $total_amount[$i] = SouvenirApply::where('souvenir_id', $leSess['id'])->sum('total_amount');
+                $total_amount[$i] = SouvenirApply::where('admin_id',$user_id)->where('souvenir_id', $leSess['id'])->sum('total_amount');
                 $i++;
             }
             return response()->json(['souvenir' => $souvenir, 'userReg' => $userReg, 'total_amount' => $total_amount, 'module' => $module]);
@@ -289,14 +292,26 @@ class AccountsController extends Controller
             return response()->json(['auction' => $auction, 'userReg' => $userReg, 'total_amount' => $total_amount, 'module' => $module]);
         } else if ($module == "11") {
 
-            $fanGroup = FanGroup::where('sub_category_id', $subCate_id)->where('my_star', $star_id)->whereRaw(
+            $user_id = Auth::id();
+            $fanGroup = FanGroup::where('created_by', $user_id)->where('sub_category_id', $subCate_id)->where('my_star', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $start_date . " 00:00:00",
                     $end_date . " 23:59:59"
                 ]
             )->get();
-            return response()->json($fanGroup);
+            // return response()->json($fanGroup);
+            $i = 0;
+            foreach ($fanGroup as $leSess) {
+                $userReg[$i] = Fan_Group_Join::where('fan_group_id', $leSess['id'])->distinct('user_id')->count();
+                $i++;
+            }
+            $i = 0;
+            foreach ($fanGroup as $leSess) {
+                $total_amount[$i] = FanGroup::where('id', $leSess['id'])->sum('club_points');
+                $i++;
+            }
+            return response()->json(['fanGroup' => $fanGroup, 'userReg' => $userReg, 'total_amount' => $total_amount, 'module' => $module]);
         }
     }
 
@@ -341,6 +356,11 @@ class AccountsController extends Controller
         } else if ($module == "10") {
 
             $learning_seassion_reg = SouvenirApply::where('souvenir_id', $id)->get();
+
+            return view('ManagerAdmin.Accounts.Superstar.superstarEventList', compact('module', 'learning_seassion_reg'));
+        }else if ($module == "11") {
+
+            $learning_seassion_reg = Fan_Group_Join::where('fan_group_id', $id)->get();
 
             return view('ManagerAdmin.Accounts.Superstar.superstarEventList', compact('module', 'learning_seassion_reg'));
         }
