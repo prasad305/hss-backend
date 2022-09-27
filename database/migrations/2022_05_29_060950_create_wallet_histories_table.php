@@ -17,7 +17,6 @@ class CreateWalletHistoriesTable extends Migration
             $table->id();
             $table->integer('packages_id')->nullable();
             $table->integer('love_bundel_id')->nullable();
-
             $table->integer('user_id')->nullable();
             $table->integer('wallet_payment_id')->nullable();
             $table->integer('status')->default(0);
