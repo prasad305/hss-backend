@@ -131,6 +131,7 @@
                         </div>
                     @endforeach
                 </div>
+
                 <div class="form-group row">
                     <div class="col-2">
                         <label>Select Judges</label> <br>
@@ -139,6 +140,26 @@
                     </div>
                     <div class="col-10">
                         <select name="judge[]" class="select2" multiple="multiple" style="width: 100%;">
+                            @foreach ($judges as $judge)
+                                <option value="{{ $judge->id }}">
+                                    {{ $judge->first_name . ' ' . $judge->last_name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('judge')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-2">
+                        <label>Select Super Judges</label> <br>
+                        <span class="text-danger">You have to select Super judge only One ! </span>
+                    </div>
+                    <div class="col-3">
+                        <select name="super_judge"  style="width: 100%;padding:7px ;border-radius:5px"  >
+                           
                             @foreach ($judges as $judge)
                                 <option value="{{ $judge->id }}">
                                     {{ $judge->first_name . ' ' . $judge->last_name }}
