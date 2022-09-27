@@ -25,16 +25,14 @@ class CreateAuditionRoundInfosTable extends Migration
             $table->integer('mark_live_or_offline')->nullable()->comment('0 = offline,1= live');
             $table->integer('wildcard')->nullable()->comment('0 = no , 1= yes');
             $table->integer('round_type')->nullable()->comment('0 = offline , 1= online')->default(0);
-
+            $table->longText('room_id')->nullable();
             $table->integer('videofeed_status')->default(0)->comment('0 = unpublished , 1 = published from manager admin');
             $table->integer('wildcard_round')->nullable();
             $table->integer('appeal')->nullable()->comment('0 = no, 1= yes');
             $table->integer('video_feed')->nullable()->comment('0 = no, 1= yes');
             $table->integer('oxygen_feed')->nullable()->comment('0 = no, 1= yes');
             $table->integer('video_duration')->nullable();
-
             $table->integer('video_slot_num')->nullable();
-
             $table->date('round_start_date')->nullable();
             $table->date('round_end_date')->nullable();
             $table->date('instruction_prepare_start_date')->nullable();
