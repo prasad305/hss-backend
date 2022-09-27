@@ -40,6 +40,7 @@ class AuditionRoundRulesController extends Controller
                 'mark_live_or_offline' => 'required_if:user_vote_mark,1',
                 'wildcard' => 'required',
                 'video_feed' => 'required',
+                'oxygen_feed' => 'required',
                 'round_period' => 'required',
                 'video_upload_period' => 'required',
                 'jury_or_judge_mark_period' => 'required',
@@ -55,6 +56,7 @@ class AuditionRoundRulesController extends Controller
                 'mark_live_or_offline.required_if' => 'Select Mark Offline or Live',
                 'wildcard.required' => 'Select Wild Card Options Yes or No',
                 'video_feed.required' => 'Select Video Feed Options Yes or No',
+                'oxygen_feed.required' => 'Select Oxigen Feed Options Yes or No',
                 'round_type.required' => 'Select Round Options Yes or No',
             ]
         );
@@ -84,6 +86,7 @@ class AuditionRoundRulesController extends Controller
         }
 
         $round->video_feed = $request->video_feed;
+        $round->oxygen_feed = $request->oxygen_feed;
 
         $round->video_duration = $request->video_duration;
         $round->video_slot_num = $request->video_slot_num;
