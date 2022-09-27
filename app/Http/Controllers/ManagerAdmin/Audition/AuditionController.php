@@ -103,9 +103,13 @@ class AuditionController extends Controller
                 $auditionRoundInfo->mark_live_or_offline =  $auditionRoundRule->mark_live_or_offline;
                 $auditionRoundInfo->wildcard =  $auditionRoundRule->wildcard;
                 $auditionRoundInfo->round_type =  $auditionRoundRule->round_type;
+                if ($auditionRoundRule->round_type == 1) {
+                    $auditionRoundInfo->room_id = createRoomID();
+                }
                 $auditionRoundInfo->wildcard_round =  $auditionRoundRule->wildcard_round;
                 $auditionRoundInfo->appeal =  $auditionRoundRule->appeal;
                 $auditionRoundInfo->video_feed =  $auditionRoundRule->video_feed;
+                $auditionRoundInfo->oxygen_feed =  $auditionRoundRule->oxygen_feed;
                 $auditionRoundInfo->video_duration =  $auditionRoundRule->video_duration;
                 $auditionRoundInfo->video_slot_num =  $auditionRoundRule->video_slot_num;
 
@@ -207,11 +211,13 @@ class AuditionController extends Controller
                 foreach ($request->judge as $key => $value) {
                     $auditionAssignJudge                    = new AuditionAssignJudge();
                     $auditionAssignJudge->judge_id          =  $value;
+                    $auditionAssignJudge->super_judge       =  $value == $request->super_judge ? 1 :0;
                     $auditionAssignJudge->judge_admin_id    =  $this->getParentUserIdById($value);
                     $auditionAssignJudge->audition_id       =    $audition->id;
                     $auditionAssignJudge->approved_by_judge = 0;
                     $auditionAssignJudge->save();
                 }
+               
 
                 foreach ($request->group_ids as $key => $group_id) { // how many groups are allowed total_items
                     foreach ($request->jury[$key] as $jury) { // per groups jury assigne
@@ -220,10 +226,11 @@ class AuditionController extends Controller
                         $auditionAssignJury->jury_id               =  $jury;
                         $auditionAssignJury->group_id              =  $group_id;
                         $auditionAssignJury->approved_by_jury      =  0;
-                        $auditionAssignJury->status                =   0;
+                        $auditionAssignJury->status                =  0;
                         $auditionAssignJury->save();
                     }
                 }
+
                 session()->flash('success', 'Man power assigned successfully !');
             }
         } else {
@@ -410,17 +417,21 @@ class AuditionController extends Controller
         $round_info_id = $request->round_info_id;
         $type = $request->type;
         $auditionRoundInfo = AuditionRoundInfo::with('wildcardRoundRuleId')->where([['audition_id', $request->audition_id], ['id', $request->round_info_id]])->first();
-
         if ($auditionRoundInfo->wildcard == 1) {
             $wildcardInfo = AuditionRoundInfo::where([['audition_id', $request->audition_id], ['round_num', $auditionRoundInfo->wildcardRoundRuleId->round_num]])->first();
-            $wildcard = new WildCard();
-            $wildcard->audition_id = $request->audition_id;
-            $wildcard->start_round_info_id = $auditionRoundInfo->id;
-            $wildcard->start_round_num = $auditionRoundInfo->round_num;
-            $wildcard->end_round_info_id = $wildcardInfo->id - 1;
-            $wildcard->end_round_num = $wildcardInfo->round_num - 1;
-            $wildcard->status = 1;
-            $wildcard->save();
+            if (!WildCard::where([
+                ['audition_id', $audition_id],
+                ['start_round_info_id', $round_info_id],
+            ])->exists()) {
+                $wildcard = new WildCard();
+                $wildcard->audition_id = $request->audition_id;
+                $wildcard->start_round_info_id = $auditionRoundInfo->id;
+                $wildcard->start_round_num = $auditionRoundInfo->round_num;
+                $wildcard->end_round_info_id = $wildcardInfo->id - 1;
+                $wildcard->end_round_num = $wildcardInfo->round_num - 1;
+                $wildcard->status = 1;
+                $wildcard->save();
+            }
         } else {
             AuditionRoundInfo::where('id', $auditionRoundInfo->id)->update(['status' => 2]);
         }
@@ -436,11 +447,20 @@ class AuditionController extends Controller
         AuditionRoundMarkTracking::where([
             ['audition_id', $audition_id],
             ['round_info_id', $round_info_id],
+            ['type', $type],
+            ['wining_status', 0]
+        ])->update([
+            'result_message' => $request->rejected_comments,
+        ]);
+        AuditionRoundMarkTracking::where([
+            ['audition_id', $audition_id],
+            ['round_info_id', $round_info_id],
             ['type', 'wildcard'],
             ['wining_status', 1]
         ])->update([
             'result_message' => "You are selected via Wildcard",
         ]);
+
         if (WildCard::where([
             ['audition_id', $audition_id],
             ['end_round_info_id', $round_info_id],
@@ -452,9 +472,6 @@ class AuditionController extends Controller
                 'status' => 3,
             ]);
         }
-        AuditionRoundMarkTracking::where([['audition_id', $audition_id], ['round_info_id', $round_info_id],])->update([
-            'result_message' => "You are selected via Wildcard",
-        ]);
 
         if ($type == 'general') {
             AuditionRoundInfo::where('id', $round_info_id)->update([
