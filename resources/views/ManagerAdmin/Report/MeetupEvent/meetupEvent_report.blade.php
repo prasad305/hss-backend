@@ -1,7 +1,7 @@
 @extends('Layouts.ManagerAdmin.master')
 
 @push('title')
-    Super Admin
+   Manager Admin
 @endpush
 
 @section('content')
@@ -56,21 +56,6 @@
                     </div>
 
                     <div class="col-lg-3 col-md-3">
-
-                        {{-- <div class="form-group mb-4">
-
-                        <label for="category">Categories</label>
-                        <select name="category" class="custom-select rounded-0" id="category">
-                            <option selected="" disabled="">Select Category</option>
-                            <select name="category_id" id="category_id" class="form-control select2">
-                                @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-
-                        </select>
-
-                    </div> --}}
                         <div class="form-group">
                             <label for="name">Categories</label>
                             <select name="category_id" id="category_id" class="form-control select2">
@@ -84,22 +69,6 @@
                     <div class="col-lg-3 col-md-3">
 
                         <div class="form-group mb-4">
-
-                            <!-- <label for="category">Select Module</label>
-                                        <select name="category" class="custom-select rounded-0" id="category">
-                                            <option selected="" disabled="">Select Module</option>
-                                            <option value="13">Simple Post</option>
-                                            <option value="12">Live Chat</option>
-                                            <option value="11">Greeting</option>
-                                            <option value="10">Learning Session</option>
-                                            <option value="9">Meetup Event</option>
-                                            <option value="8">Audition</option>
-                                            <option value="7">Q&A</option>
-                                            <option value="6">Auction</option>
-                                            <option value="5">Marketplace</option>
-                                            <option value="4">Souvenir</option>
-                                            <option value="3">Fan Group</option>
-                                        </select> -->
 
                             <div class="form-group">
                                 <label for="name">SubCategories</label>
@@ -197,19 +166,6 @@
                     </div>
                 </div>
 
-                {{-- <div class="col-lg-3 col-6">
-
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3 id="tot_assignment">{{ $assignment }}</h3>
-                            <p>Total Assignment</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div> --}}
             </div>
         </div>
     </section>
@@ -296,14 +252,11 @@
     </script>
     <!-- Datepicker -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> --}}
+
 
     <script>
         $(document).ready(function() {
-            //  console.log('123');
-            // var form=$("#myForm");
             $("#meetUpfilter").on('submit', function(event) {
-                // console.log('123');
                 event.preventDefault();
                 // alert("hello");
 
@@ -315,8 +268,6 @@
                     type: "POST",
                     data: $("#meetUpfilter").serialize(),
                     success: function(respose) {
-                        // console.log('Submission was successful.');
-                        console.log(respose);
                         $("#meetUpfilter")[0].reset();
                         $('#tot_feeOn').html(respose.total_fee_online);
                         $('#tot_feeOff').html(respose.total_fee_offline);
@@ -327,7 +278,6 @@
 
             $("#category_id").click(function() {
                 var category_id = $('#category_id').val();
-                console.log(category_id);
                 if (category_id > 0) {
                     $.ajax({
                         url: "{{ url('manager-admin/all-report-filter-subCategory') }}/" +
@@ -335,8 +285,6 @@
                         type: 'GET',
 
                         success: function(res) {
-                            console.log(res);
-
                             var _html = '<option>Select SubCateory</option>';
                             $.each(res, function(index, res) {
                                 _html += '<option value="' + res.id + '">' + res.name +
@@ -351,16 +299,12 @@
 
              $("#user_type").click(function() {
             var user_type = $('#user_type').val();
-            // console.log(user_type);
             if (user_type) {
                 $.ajax({
                     url: "{{ url('manager-admin/simplePost-report-filter-userType') }}/" + user_type,
-                    // url: "{{url('super-admin/learningSession-report-filter-subCategory')}}" + '/' + category_id,
                     type: 'GET',
 
                     success: function(res) {
-                        console.log(res);
-
                         var _html = '<option>Select Name</option>';
                         $.each(res, function(index, res) {
                             _html += '<option value="' + res.id + '">' + res.first_name + ' ' + res.last_name + '</option>';

@@ -67,9 +67,6 @@ class ReportController extends Controller
             $assignment = $assignment + $amount['assignment'];
         }
 
-        // dd($assignment);
-
-        // dd($total_assignment_fee);
 
         $user_category_id = Auth::user()->category_id;
         $categories = Category::where('id', $user_category_id)->get();
@@ -89,36 +86,36 @@ class ReportController extends Controller
             $enter = true;
 
             $registration_fee = LearningSession::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
             $assignment_fee = LearningSession::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('assignment_fee');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('assignment_fee');
 
             $assignment = LearningSession::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
 
 
             $certificate = LearningSessionCertificate::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->count();
 
 
             $user_category_id = Auth::user()->category_id;
@@ -127,38 +124,38 @@ class ReportController extends Controller
         } else if ($request['user_type'] == "admin") {
 
             $registration_fee = LearningSession::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
             $assignment_fee = LearningSession::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('assignment_fee');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('assignment_fee');
 
             $assignment = LearningSession::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
 
 
             $certificate = LearningSessionCertificate::whereHas('learningSession', function ($q) use ($user_id) {
                 $q->where('admin_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->count();
 
 
             $categories = Category::orderBy('id', 'desc')->get();
@@ -172,7 +169,6 @@ class ReportController extends Controller
 
     public function allSubCategory($id)
     {
-        // dd($id);
         $subCategories = SubCategory::where('category_id', $id)->get();
         return response()->json($subCategories);
     }
@@ -183,7 +179,6 @@ class ReportController extends Controller
     public function simplePostReport()
     {
         $user_id = Auth::id();
-        // dd($user_id);
         $all_post = SimplePost::where('created_by_id', $user_id)->count();
         $total_free_post = SimplePost::where('created_by_id', $user_id)->where('type', 'free')->count();
         $total_paid_post = SimplePost::where('created_by_id', $user_id)->where('type', 'paid')->count();
@@ -194,7 +189,6 @@ class ReportController extends Controller
         $total_paid_post_fees = SimplePost::where('created_by_id', $user_id)->sum('fee');
 
 
-        // dd($paid_post);
         return view('ManagerAdmin.Report.SimplePost.simplePost_report', compact('total_free_post', 'total_paid_post', 'categories', 'total_published_post', 'total_pending_post', 'total_paid_post_fees'));
     }
 
@@ -210,94 +204,93 @@ class ReportController extends Controller
         if ($request['user_type'] == "star") {
             $enter = true;
             $total_free_post = SimplePost::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->count();
 
             $total_paid_post = SimplePost::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->where('type', "paid")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->where('type', "paid")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
             $categories = Category::orderBy('id', 'desc')->get();
 
             $total_published_post = SimplePost::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->where('status', '1')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->where('status', '1')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
             $total_pending_post = SimplePost::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->where('status', '0')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->where('status', '0')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
             $total_paid_post_fees = SimplePost::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('fee');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('created_by_id', $user_id)->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('fee');
         } else if ($request['user_type'] == "admin") {
             $enter = true;
             $total_free_post = SimplePost::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('type', "free")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('type', "free")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
             $total_paid_post = SimplePost::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('type', "paid")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('type', "paid")->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
             $categories = Category::orderBy('id', 'desc')->get();
 
             $total_published_post = SimplePost::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('status', '1')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('status', '1')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
             $total_pending_post = SimplePost::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('status', '0')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('status', '0')->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
             $total_paid_post_fees = SimplePost::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('fee');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('created_by_id', $user_id)->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('fee');
         }
 
 
         return response()->json(['total_free_post' => $total_free_post, 'total_paid_post' => $total_paid_post, 'total_published_post' => $total_published_post, 'total_pending_post' => $total_pending_post, 'total_paid_post_fees' => $total_paid_post_fees]);
-        // return response()->json($total_free_post);
     }
 
     public function simplePostUserName($name)
@@ -321,12 +314,12 @@ class ReportController extends Controller
             $q->where('category_id', auth()->user()->category_id);
         })->sum('amount');
 
-        // dd($slot_fee);
+
 
         $user_category_id = Auth::user()->category_id;
         $categories = Category::where('id', $user_category_id)->get();
 
-        // dd( $total_live_chat);
+
         return view('ManagerAdmin.Report.LiveChat.liveChat_report', compact('categories', 'reg_fee', 'total_live_chat', 'slot_fee'));
     }
 
@@ -341,64 +334,58 @@ class ReportController extends Controller
         if ($request['user_type'] == "star") {
             $enter = true;
             $reg_fee = LiveChat::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
 
             $total_live_chat = LiveChat::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
 
             $slot_fee = LiveChatRegistration::whereHas('liveChat', function ($q) use ($user_id) {
                 $q->where('star_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->sum('amount');
-            // return response()->json($slot_fee);
-
-            // dd($slot_fee);
-
-
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->sum('amount');
         } else if ($request['user_type'] == "admin") {
 
             $reg_fee = LiveChat::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
 
             $total_live_chat = LiveChat::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
 
             $slot_fee = LiveChatRegistration::whereHas('liveChat', function ($q) use ($user_id) {
                 $q->where('admin_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->sum('amount');
-            // return response()->json($slot_fee);
-            // dd($slot_fee);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->sum('amount');
+
 
             $categories = Category::orderBy('id', 'desc')->get();
         }
@@ -432,63 +419,62 @@ class ReportController extends Controller
             $enter = true;
 
             $meetUp_event = MeetupEvent::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
-            // return response()->json($meetUp_event);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+
 
             $total_fee_online = MeetupEvent::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Online")->sum('fee');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Online")->sum('fee');
 
             $total_fee_offline = MeetupEvent::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Offline")->sum('fee');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Offline")->sum('fee');
 
             $categories = Category::orderBy('id', 'desc')->get();
         } else if ($request['user_type'] == "admin") {
 
             $meetUp_event = MeetupEvent::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
-            // return response()->json($meetUp_event);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+
 
             $total_fee_online = MeetupEvent::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Online")->sum('fee');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Online")->sum('fee');
 
             $total_fee_offline = MeetupEvent::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Offline")->sum('fee');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->where('meetup_type', "Offline")->sum('fee');
 
             $user_category_id = Auth::user()->category_id;
             $categories = Category::where('id', $user_category_id)->get();
         }
         return response()->json(['categories' => $categories, 'meetUp_event' => $meetUp_event, 'total_fee_online' => $total_fee_online, 'total_fee_offline' => $total_fee_offline]);
-        // return response()->json($request);
     }
     public function greetingReport()
     {
@@ -496,11 +482,11 @@ class ReportController extends Controller
         $total_greetings_users = GreetingsRegistration::whereHas('greeting', function ($q) {
             $q->where('category_id', auth()->user()->category_id);
         })->distinct('user_id')->count();
-        // dd($total_greetings_users);
+
         $total_greetings_type = GreetingsRegistration::whereHas('greeting', function ($q) {
             $q->where('category_id', auth()->user()->category_id);
         })->distinct('purpose')->count();
-        // dd($total_greetings_type);
+
         $user_category_id = Auth::user()->category_id;
         $categories = Category::where('id', $user_category_id)->get();
         return view('ManagerAdmin.Report.Greetings.greetings_report', compact('categories', 'total_greetings_users', 'total_greetings_type'));
@@ -521,46 +507,46 @@ class ReportController extends Controller
             $total_greetings_users = GreetingsRegistration::whereHas('greeting', function ($q) use ($user_id) {
                 $q->where('star_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->distinct('user_id')->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->distinct('user_id')->count();
 
             $total_greetings_type = GreetingsRegistration::whereHas('greeting', function ($q) use ($user_id) {
                 $q->where('star_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->distinct('purpose')->count();
-            // dd($total_greetings_type);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->distinct('purpose')->count();
+
             $categories = Category::orderBy('id', 'desc')->get();
         } else if ($request['user_type'] == "admin") {
 
             $total_greetings_users = GreetingsRegistration::whereHas('greeting', function ($q) use ($user_id) {
                 $q->where('admin_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->distinct('user_id')->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->distinct('user_id')->count();
 
             $total_greetings_type = GreetingsRegistration::whereHas('greeting', function ($q) use ($user_id) {
                 $q->where('admin_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->distinct('purpose')->count();
-            // dd($total_greetings_type);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->distinct('purpose')->count();
+
             $categories = Category::orderBy('id', 'desc')->get();
         }
 
@@ -580,23 +566,23 @@ class ReportController extends Controller
 
 
         $qna_reg_fee = QnA::where('created_by_id', $user_id)->sum('fee');
-        // dd($qna_reg_fee);
+
 
         $total_qna = QnaRegistration::whereHas('qna', function ($q) {
             $q->where('category_id', auth()->user()->category_id);
         })->distinct('qna_id')->count();
-        // dd($total_qna);
+
 
 
         $qnaSlot_fee = QnaRegistration::whereHas('qna', function ($q) {
             $q->where('category_id', auth()->user()->category_id);
         })->sum('amount');
-        // dd($qnaSlot_fee);
+
 
         $user_category_id = Auth::user()->category_id;
         $categories = Category::where('id', $user_category_id)->get();
 
-        // dd( $total_live_chat);
+
         return view('ManagerAdmin.Report.QnA.QnA_report', compact('categories', 'qna_reg_fee', 'total_qna', 'qnaSlot_fee'));
     }
 
@@ -609,76 +595,74 @@ class ReportController extends Controller
         if ($request['user_type'] == "star") {
 
             $qna_reg_fee = QnA::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
-            // dd($qna_reg_fee);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
+
 
             $total_qna = QnaRegistration::whereHas('qna', function ($q) use ($user_id) {
                 $q->where('star_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->distinct('qna_id')->count();
-            // dd($total_qna);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->distinct('qna_id')->count();
+
 
 
             $qnaSlot_fee = QnaRegistration::whereHas('qna', function ($q) use ($user_id) {
                 $q->where('star_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->sum('amount');
-            // dd($qnaSlot_fee);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->sum('amount');
+
 
             $categories = Category::orderBy('id', 'desc')->get();
         } else if ($request['user_type'] == "admin") {
 
             $qna_reg_fee = QnA::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
-            // dd($qna_reg_fee);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->sum('fee');
+
 
             $total_qna = QnaRegistration::whereHas('qna', function ($q) use ($user_id) {
                 $q->where('admin_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->distinct('qna_id')->count();
-            // dd($total_qna);
-            // return response()->json($total_qna);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->distinct('qna_id')->count();
+
 
             $qnaSlot_fee = QnaRegistration::whereHas('qna', function ($q) use ($user_id) {
                 $q->where('admin_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->sum('amount');
-            // dd($qnaSlot_fee);
-            // return response()->json($qnaSlot_fee);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->sum('amount');
+
             $categories = Category::orderBy('id', 'desc')->get();
         }
 
-        // return response()->json($request);
+
         return response()->json(['categories' => $categories, 'qna_reg_fee' => $qna_reg_fee, 'total_qna' => $total_qna, 'qnaSlot_fee' => $qnaSlot_fee]);
     }
     public function marketplaceReport()
@@ -688,9 +672,7 @@ class ReportController extends Controller
         $unit_Product_price = Marketplace::where('created_by_id', $user_id)->sum('unit_price');
 
         $tax = Marketplace::where('created_by_id', $user_id)->sum('tax');
-        // dd($total_qnaSlot_fees);
 
-        // $total_items_quantity = Marketplace::sum('total_items');
         $total_items = Marketplace::where('created_by_id', $user_id)->count();
 
         $total_order = MarketplaceOrder::whereHas('marketplace', function ($q) {
@@ -699,7 +681,6 @@ class ReportController extends Controller
         $user_category_id = Auth::user()->category_id;
         $categories = Category::where('id', $user_category_id)->get();
 
-        // dd($total_order);
         return view('ManagerAdmin.Report.MarketPlace.marketPlace_report', compact('categories', 'unit_Product_price', 'tax', 'total_items', 'total_order'));
     }
 
@@ -709,87 +690,85 @@ class ReportController extends Controller
         $user_id = $request->user_name;
         $start_date = $request['start_date'];
         $end_date = $request['end_date'];
-        // return([$start_date , $end_date]);
+
 
         if ($request['user_type'] == "star") {
 
             $unit_Product_price = Marketplace::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('superstar_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('unit_price');
-            // return response()->json($unit_Product_price);
-            $tax = Marketplace::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('superstar_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('tax');
-            // dd($total_qnaSlot_fees);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('superstar_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('unit_price');
 
-            // $total_items_quantity = Marketplace::sum('total_items');
+            $tax = Marketplace::whereRaw(
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('superstar_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('tax');
+
             $total_items = Marketplace::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('superstar_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('superstar_id', $request['user_name'])->where('category_id', $request['category_id'])->where('sub_category_id', $request['sub_category_id'])->count();
 
             $total_order = MarketplaceOrder::whereHas('marketplace', function ($q) use ($user_id) {
                 $q->where('superstar_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->count();
 
             $categories = Category::orderBy('id', 'desc')->get();
         } else if ($request['user_type'] == "admin") {
 
             $unit_Product_price = Marketplace::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('superstar_admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('unit_price');
-            // return response()->json($unit_Product_price);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('superstar_admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('unit_price');
+
             $tax = Marketplace::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('superstar_admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('tax');
-            // dd($total_qnaSlot_fees);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('superstar_admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('tax');
+
 
             $total_items = Marketplace::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('superstar_admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('superstar_admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
             $total_order = MarketplaceOrder::whereHas('marketplace', function ($q) use ($user_id) {
                 $q->where('superstar_admin_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->count();
 
             $categories = Category::orderBy('id', 'desc')->get();
         }
-        // return response()->json($request);
+
 
         return response()->json(['categories' => $categories, 'unit_Product_price' => $unit_Product_price, 'tax' => $tax, 'total_items' => $total_items, 'total_order' => $total_order]);
     }
@@ -809,7 +788,7 @@ class ReportController extends Controller
 
         $user_category_id = Auth::user()->category_id;
         $categories = Category::where('id', $user_category_id)->get();
-        // dd($total_bidding_price);
+
         return view('ManagerAdmin.Report.Auction.auction_report', compact('categories', 'base_price', 'total_auction', 'total_bidding', 'total_bidding_price'));
     }
     public function auctionReportFilter(Request $request)
@@ -822,84 +801,84 @@ class ReportController extends Controller
         if ($request['user_type'] == "star") {
 
             $base_price = Auction::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('base_price');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('base_price');
 
             $total_auction = Auction::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
             $total_bidding = Bidding::whereHas('auction', function ($q) use ($user_id) {
                 $q->where('star_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->distinct('auction_id')->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->distinct('auction_id')->count();
 
             $total_bidding_price = Bidding::whereHas('auction', function ($q) use ($user_id) {
                 $q->where('star_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->sum('amount');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->sum('amount');
 
             $categories = Category::orderBy('id', 'desc')->get();
         } else if ($request['user_type'] == "admin") {
 
             $base_price = Auction::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('base_price');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->sum('base_price');
 
             $total_auction = Auction::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id', $request['user_name'])->where('category_id', $request['category_id'])->where('subcategory_id', $request['subcategory_id'])->count();
 
             $total_bidding = Bidding::whereHas('auction', function ($q) use ($user_id) {
                 $q->where('admin_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->distinct('auction_id')->count();
-            // return response()->json($total_bidding);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->distinct('auction_id')->count();
+
             $total_bidding_price = Bidding::whereHas('auction', function ($q) use ($user_id) {
                 $q->where('admin_id',  $user_id);
             })->whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->sum('amount');
-            // return response()->json($total_bidding_price);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->sum('amount');
+
             $categories = Category::orderBy('id', 'desc')->get();
         }
 
-        // return response()->json($request);
+
 
         return response()->json(['categories' => $categories, 'base_price' => $base_price, 'total_auction' => $total_auction, 'total_bidding' => $total_bidding, 'total_bidding_price' => $total_bidding_price]);
     }
@@ -919,7 +898,7 @@ class ReportController extends Controller
 
         $user_category_id = Auth::user()->category_id;
         $categories = Category::where('id', $user_category_id)->get();
-        // dd($total_souvenir,$total_amount);
+
         return view('ManagerAdmin.Report.Souvenir.Souvenir_report', compact('categories', 'total_souvenir', 'total_amount', 'total_sounenir_item', 'total_sounenir_item_price'));
     }
     public function souvenirReportFilter(Request $request)
@@ -935,20 +914,20 @@ class ReportController extends Controller
 
 
             $total_sounenir_item = SouvenirApply::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id',  $user_id)->count();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id',  $user_id)->count();
 
             $total_sounenir_item_price = SouvenirApply::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('star_id',  $user_id)->sum('total_amount');
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('star_id',  $user_id)->sum('total_amount');
 
 
 
@@ -960,29 +939,22 @@ class ReportController extends Controller
 
 
             $total_sounenir_item = SouvenirApply::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id',  $user_id)->count();
-            // return response()->json($total_sounenir_item);
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id',  $user_id)->count();
+
             $total_sounenir_item_price = SouvenirApply::whereRaw(
-            "(created_at >= ? AND created_at <= ?)",
-            [
-                $start_date . " 00:00:00",
-                $end_date . " 23:59:59"
-            ]
-        )->where('admin_id',  $user_id)->sum('total_amount');
-            // return response()->json($total_sounenir_item_price);
-            // $categories = Category::orderBy('id', 'desc')->get();
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $start_date . " 00:00:00",
+                    $end_date . " 23:59:59"
+                ]
+            )->where('admin_id',  $user_id)->sum('total_amount');
         }
 
         return response()->json(['total_sounenir_item' => $total_sounenir_item, 'total_sounenir_item_price' => $total_sounenir_item_price]);
     }
-
-
-
-
-    ///kjhkjg
 }

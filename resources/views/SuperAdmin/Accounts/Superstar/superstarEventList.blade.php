@@ -56,7 +56,6 @@
                                         <td>{{ $data->user->first_name }}</td>
                                         <td>{{ $data->user->email }}</td>
                                         <td>{{ $data->user_id }}</td>
-
                                         <td>{{ $data->amount }}</td>
 
                                     </tr>
@@ -167,8 +166,8 @@
                                         $start_time = strtotime($data->qna_start_time);
                                         $end_time = strtotime($data->qna_end_time);
                                         $diff = $end_time - $start_time;
-                                         ?>
-                                        <td>{{ $diff/60 }}</td>
+                                        ?>
+                                        <td>{{ $diff / 60 }}</td>
                                         <td>{{ $data->amount }}</td>
 
                                     </tr>
@@ -207,8 +206,8 @@
                                         $start_time = strtotime($data->meetupEvent->start_time);
                                         $end_time = strtotime($data->meetupEvent->end_time);
                                         $diff = $end_time - $start_time;
-                                         ?>
-                                        <td>{{ $diff/60  }}</td>
+                                        ?>
+                                        <td>{{ $diff / 60 }}</td>
                                         <td>{{ $data->amount }}</td>
 
                                     </tr>

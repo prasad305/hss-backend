@@ -401,13 +401,12 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     Route::get('dashboard/roundCompleteCard', [DashboardController::class, 'roundCompleteCard'])->name('roundCompleteCard');
     //====================== Accounts Route =================
-
+    //manager panel start
     Route::get('accounts-index', [AccountsController::class, 'index'])->name('accounts.index');
     Route::get('accounts-index-superstar-filter/{subCat_id}', [AccountsController::class, 'accountSuperStarName']);
-    // Route::get('all-accounts-filter-subCategory', [AccountsController::class, 'allSubCategory']);
     Route::post('accountFilter', [AccountsController::class, 'accountFilter'])->name('accounts.accountFilter');
     Route::get('superstar-accounts/{id}/{module}', [AccountsController::class, 'superstarList'])->name('accounts.superstarList');
-
+    //manager panel end
 
     // simple posts
     Route::get('simplePost-totalIncome', [AccountsController::class, 'simplePostTotalIncome'])->name('simplePostTotalIncome');

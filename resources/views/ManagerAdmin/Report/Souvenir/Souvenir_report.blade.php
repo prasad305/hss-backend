@@ -1,7 +1,7 @@
 @extends('Layouts.ManagerAdmin.master')
 
 @push('title')
-Super Admin
+Manager Admin
 @endpush
 
 @section('content')
@@ -71,23 +71,6 @@ Super Admin
                 <div class="col-lg-3 col-md-3">
 
                     <div class="form-group mb-4">
-
-                        <!-- <label for="category">Select Module</label>
-                        <select name="category" class="custom-select rounded-0" id="category">
-                            <option selected="" disabled="">Select Module</option>
-                            <option value="13">Simple Post</option>
-                            <option value="12">Live Chat</option>
-                            <option value="11">Greeting</option>
-                            <option value="10">Learning Session</option>
-                            <option value="9">Meetup Event</option>
-                            <option value="8">Audition</option>
-                            <option value="7">Q&A</option>
-                            <option value="6">Auction</option>
-                            <option value="5">Marketplace</option>
-                            <option value="4">Souvenir</option>
-                            <option value="3">Fan Group</option>
-                        </select> -->
-
                         <div class="form-group">
                             <label for="name">SubCategories</label>
                             <select name="sub_category_id" id="sub_category_id" class="form-control select2">
@@ -167,20 +150,6 @@ Super Admin
                     <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            {{-- <div class="col-lg-3 col-6">
-
-                    <div class="small-box bg-secondary">
-                        <div class="inner">
-                            <h3>44</h3>
-                            <p>Total Certificate Fee</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div> --}}
-
             <div class="col-lg-3 col-6">
 
                 <div class="small-box bg-warning">
@@ -293,14 +262,11 @@ Super Admin
 </script>
 <!-- Datepicker -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-{{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> --}}
+
 
 <script>
     $(document).ready(function() {
-        //  console.log('123');
-        // var form=$("#myForm");
         $("#souvenirfilter").on('submit', function(event) {
-            // console.log('123');
             event.preventDefault();
             // alert("hello");
 
@@ -312,8 +278,6 @@ Super Admin
                 type: "POST",
                 data: $("#souvenirfilter").serialize(),
                 success: function(respose) {
-                    // console.log('Submission was successful.');
-                    console.log(respose);
                     $("#souvenirfilter")[0].reset();
                     $('#total_amount').html(respose.total_amount);
                     $('#total_sounenir_item').html(respose.total_sounenir_item);
@@ -328,15 +292,12 @@ Super Admin
 
         $("#category_id").click(function() {
             var category_id = $('#category_id').val();
-            console.log(category_id);
             if (category_id > 0) {
                 $.ajax({
                     url: "{{ url('manager-admin/all-report-filter-subCategory') }}/" + category_id,
                     type: 'GET',
 
                     success: function(res) {
-                        console.log(res);
-
                         var _html = '<option>Select SubCateory</option>';
                         $.each(res, function(index, res) {
                             _html += '<option value="' + res.id + '">' + res.name + '</option>';
@@ -350,16 +311,12 @@ Super Admin
 
         $("#user_type").click(function() {
             var user_type = $('#user_type').val();
-            // console.log(user_type);
             if (user_type) {
                 $.ajax({
                     url: "{{ url('manager-admin/simplePost-report-filter-userType') }}/" + user_type,
-                    // url: "{{url('super-admin/learningSession-report-filter-subCategory')}}" + '/' + category_id,
                     type: 'GET',
 
                     success: function(res) {
-                        console.log(res);
-
                         var _html = '<option>Select Name</option>';
                         $.each(res, function(index, res) {
                             _html += '<option value="' + res.id + '">' + res.first_name + ' ' + res.last_name + '</option>';

@@ -327,13 +327,13 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('jury/active/{id}', [JuryBoardController::class, 'activeNow'])->name('jury.activeNow');
     Route::post('jury/inactive/{id}', [JuryBoardController::class, 'inactiveNow'])->name('jury.inactiveNow');
 
-    // all events
+    // superadmin start
     Route::get('accounts-index', [AccountsController::class, 'index'])->name('accounts.index');
     Route::get('accounts-index-superstar-filter/{subCat_id}/{cat_id}', [AccountsController::class, 'accountSuperStarName']);
     Route::get('all-accounts-filter-subCategory/{id}', [AccountsController::class, 'allSubCategory']);
     Route::post('accountFilter', [AccountsController::class, 'accountFilter'])->name('accounts.accountFilter');
     Route::get('superstar-accounts/{id}/{module}', [AccountsController::class, 'superstarList'])->name('accounts.superstarList');
-    // Route::get('accounts-total-events', [AccountsController::class, 'totalEvents'])->name('accounts.totalEvents');
+    // superadmin end
 
 
 

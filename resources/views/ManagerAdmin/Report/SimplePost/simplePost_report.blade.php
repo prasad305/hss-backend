@@ -180,14 +180,7 @@ Manager Admin
                                 <h3 id="total_paid_post_fees">{{$total_paid_post_fees}}</h3>
                                 <p> Total Paid Post Fees</p>
                             </div>
-                            <!-- <div class="col-sm">
-                                <h3>65%</h3>
-                                <p>Paid Post</p>
-                            </div>
-                            <div class="col-sm">
-                                <h3>65%</h3>
-                                <p>Total Post</p>
-                            </div> -->
+
                         </div>
                     </div>
                     <div class="icon">
@@ -286,14 +279,12 @@ Manager Admin
     $(document).ready(function() {
         $("#category_id").click(function() {
             var category_id = $('#category_id').val();
-            console.log(category_id);
             if (category_id > 0) {
                 $.ajax({
                     url: "{{ url('manager-admin/all-report-filter-subCategory') }}/" + category_id,
                     type: 'GET',
-
                     success: function(res) {
-                        console.log(res);
+
 
                         var _html = '<option>Select SubCateory</option>';
                         $.each(res, function(index, res) {
@@ -310,15 +301,12 @@ Manager Admin
 
         $("#user_type").click(function() {
             var user_type = $('#user_type').val();
-            // console.log(user_type);
             if (user_type) {
                 $.ajax({
                     url: "{{ url('manager-admin/simplePost-report-filter-userType') }}/" + user_type,
-                    // url: "{{url('super-admin/learningSession-report-filter-subCategory')}}" + '/' + category_id,
                     type: 'GET',
 
                     success: function(res) {
-                        console.log(res);
 
                         var _html = '<option>Select Name</option>';
                         $.each(res, function(index, res) {
@@ -332,7 +320,6 @@ Manager Admin
         });
 
         $("#simplePostFilter").on('submit', function(event) {
-            // console.log('123');
             event.preventDefault();
             // alert("hello");
 
@@ -344,10 +331,7 @@ Manager Admin
                 type: "POST",
                 data: $("#simplePostFilter").serialize(),
                 success: function(response) {
-                    // console.log('Submission was successful.');
-                    console.log(response);
                     $("#simplePostFilter")[0].reset();
-                    // console.log(response);
                     $('#total_free_post').html(response.total_free_post);
                     $('#total_paid_post').html(response.total_paid_post);
                     $('#total_published_post').html(response.total_published_post);
