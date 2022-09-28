@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWalletHistoriesTable extends Migration
+class CreateAuditionCertificationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateWalletHistoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('wallet_histories', function (Blueprint $table) {
+        Schema::create('audition_certifications', function (Blueprint $table) {
             $table->id();
-            $table->integer('packages_id')->nullable();
-            $table->integer('love_bundel_id')->nullable();
-            $table->integer('user_id')->nullable();
-            $table->integer('wallet_payment_id')->nullable();
+            $table->unsignedBigInteger('audition_id')->nullable();
+            $table->unsignedBigInteger('round_info_id')->nullable();
+            $table->unsignedBigInteger('participant_id')->nullable();
             $table->integer('status')->default(0);
             $table->timestamps();
         });
@@ -31,6 +30,6 @@ class CreateWalletHistoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wallet_histories');
+        Schema::dropIfExists('audition_certifications');
     }
 }

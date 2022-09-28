@@ -838,6 +838,9 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('audition-admin/audition-mark/uploadedVideo/{user_id}/{audition_id}/{round_info_id}', [AuditionController::class, 'userUploadedVideos']);
     Route::get('audition-admin/audition-wildcard-mark/wildcardLoveReact/{audition_id}/{round_info_id}', [AuditionController::class, 'wildcardLoveReact']);
     Route::post('audition-admin/audition/wildcardResultSendToManager', [AuditionController::class, 'wildcardResultSendToManager']);
+    Route::post('audition-admin/audition/OxygenVideoUpload', [AuditionController::class, 'OxygenVideoUpload']);
+    Route::get('audition-admin/audition/oxygen-reply-videos/{audition_id}/{round_info_id}/{user_id}', [AuditionController::class, 'getReplyVideos']);
+    Route::get('audition-admin/audition/make-oxygen-winner/{audition_id}/{round_info_id}/{user_id}', [AuditionController::class, 'makeOxygenWinner']);
 });
 
 

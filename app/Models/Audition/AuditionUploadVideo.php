@@ -61,7 +61,7 @@ class AuditionUploadVideo extends Model
     }
     public function totalReact()
     {
-        return $this->hasMany(LoveReact::class, 'video_id')->where('user_id', auth()->user()->id);
+        return $this->hasMany(LoveReact::class, 'video_id')->where('user_id', auth('sanctum')->user()->id);
     }
     public function getTotalReact()
     {

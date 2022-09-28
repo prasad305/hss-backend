@@ -64,6 +64,7 @@ use App\Models\UserInfo;
 use App\Models\Marketplace;
 use PhpParser\Node\Stmt\TryCatch;
 use App\Models\WildCard;
+use Illuminate\Support\Arr;
 
 class UserController extends Controller
 {
@@ -313,28 +314,37 @@ class UserController extends Controller
         $selectedSubCat = json_decode($selectedCategory->subcategory);
         $selectedSubSubCat = json_decode($selectedCategory->star_id);
 
-        $cat_post = Post::select("*")
-            ->whereIn('category_id', $selectedCat)
+        // $cat_post = Post::select("*")
+        //     ->whereIn('category_id', $selectedCat)
+        //     ->orderBy('id', 'DESC')->paginate($limit);
+
+
+        // $cat_post = Post::where('type', 'fangroup')->orderBy('id', 'DESC')->paginate($limit);
+
+        $PostArray = Post::select("*")
+            ->whereIn('type', ['fangroup'])
+            ->orWhereIn('star_id', $selectedSubSubCat)
+            ->orWhereIn('sub_category_id', $selectedSubCat)
             ->orderBy('id', 'DESC')->paginate($limit);
 
-        if (isset($sub_cat_post)) {
-            $sub_cat_post = Post::select("*")
-                ->whereIn('sub_category_id', $selectedSubCat)
-                ->orderBy('id', 'DESC')->paginate($limit);
-        } else {
-            $sub_cat_post = [];
-        }
+        // if (isset($selectedSubCat)) {
+        //     $sub_cat_post = Post::select("*")
+        //         ->whereIn('sub_category_id', $selectedSubCat)
+        //         ->orderBy('id', 'DESC')->paginate($limit);
+        // } else {
+        //     $sub_cat_post = [];
+        // }
 
-        if (isset($sub_sub_cat_post)) {
-            $sub_sub_cat_post = Post::select("*")
-                ->whereIn('user_id', $selectedSubSubCat)
-                ->orderBy('id', 'DESC')->paginate($limit);
-        } else {
-            $sub_sub_cat_post = [];
-        }
-
-        $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
-        // $post = $cat_post;
+        // if (isset($selectedSubSubCat)) {
+        //     $sub_sub_cat_post = Post::select("*")
+        //         ->whereIn('star_id', $selectedSubSubCat)
+        //         ->orderBy('id', 'DESC')->paginate($limit);
+        // } else {
+        //     $sub_sub_cat_post = [];
+        // }
+        $dame = array();
+        // $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
+        $post = $PostArray->concat($dame);
 
         return response()->json([
             'status' => 200,
@@ -1796,8 +1806,8 @@ class UserController extends Controller
 
         $appeal_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id], ['type', 'appeal']])->get();
 
-        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'general'], ['round_info_id', $round_info_id]])->orWhere([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'wildcard'], ['round_info_id', $round_info_id]])->first();
-        $appealAuditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id], ['type', 'appeal'], ['round_info_id', $round_info_id]])->first();
+        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'general'], ['round_info_id', $round_info_id]])->orWhere([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'wildcard'], ['round_info_id', $round_info_id]])->orWhere([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'rejected'], ['round_info_id', $round_info_id]])->first();
+        $appealAuditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id], ['type', 'appeal'], ['round_info_id', $round_info_id]])->orWhere([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'appeal_rejected'], ['round_info_id', $round_info_id]])->first();
 
         return response()->json([
             'status' => 200,
@@ -2136,7 +2146,7 @@ class UserController extends Controller
             'audition' => $audition,
             'round_info' => $round_info,
             'round_instruction' => $round_instruction,
-            'myRoundPass' =>  $myRoud->round_num,
+            'myRoundPass' => $myRoud? $myRoud->round_num:0,
             'totalRound' => $totalRound
         ]);
     }
