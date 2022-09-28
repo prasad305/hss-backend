@@ -43,9 +43,9 @@
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
+                                    <th>Id</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>Id</th>
                                     <th>Amount</th>
                                     {{-- <th style="width: 150px">Action</th> --}}
                                 </tr>
@@ -53,9 +53,9 @@
                             <tbody>
                                 @foreach ($learning_seassion_reg as $data)
                                     <tr>
+                                        <td>{{ $data->user_id }}</td>
                                         <td>{{ $data->user->first_name }}</td>
                                         <td>{{ $data->user->email }}</td>
-                                        <td>{{ $data->user_id }}</td>
                                         <td>{{ $data->amount }}</td>
 
                                     </tr>
@@ -80,9 +80,9 @@
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
+                                    <th>Id</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>Id</th>
                                     <th>Amount</th>
                                     {{-- <th style="width: 150px">Action</th> --}}
                                 </tr>
@@ -90,10 +90,9 @@
                             <tbody>
                                 @foreach ($learning_seassion_reg as $data)
                                     <tr>
+                                        <td>{{ $data->user_id }}</td>
                                         <td>{{ $data->user->first_name }}</td>
                                         <td>{{ $data->user->email }}</td>
-                                        <td>{{ $data->user_id }}</td>
-
                                         <td>{{ $data->unit_price }}</td>
 
                                     </tr>
@@ -114,9 +113,9 @@
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
+                                    <th>Id</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>Id</th>
                                     <th>Amount</th>
                                     {{-- <th style="width: 150px">Action</th> --}}
                                 </tr>
@@ -124,10 +123,9 @@
                             <tbody>
                                 @foreach ($learning_seassion_reg as $data)
                                     <tr>
+                                        <td>{{ $data->user_id }}</td>
                                         <td>{{ $data->user->first_name }}</td>
                                         <td>{{ $data->user->email }}</td>
-                                        <td>{{ $data->user_id }}</td>
-
                                         <td>{{ $data->total_amount }}</td>
 
                                     </tr>

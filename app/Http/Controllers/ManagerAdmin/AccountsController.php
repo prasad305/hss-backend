@@ -261,24 +261,12 @@ class AccountsController extends Controller
                     break;
                 }
             }
-            // $userReg = SouvenirApply::where('souvenir_id', $souvenir->id)->distinct('user_id')->count();
+             ;
+            $userReg = SouvenirApply::where('souvenir_id', $souvenir->id)->count();
 
-            // $total_amount = SouvenirApply::where('souvenir_id', $souvenir->id)->sum('total_amount');
-            
-            $i = 0;
-            foreach ($souvenir as $leSess) {
-                $userReg[$i] = SouvenirApply::where('souvenir_id', $leSess['id'])->distinct('user_id')
-                ->count();
-                $i++;
-            }
-             return response()->json($userReg);
-            die();
-            // $i = 0;
-            // foreach ($souvenir as $leSess) {
-            //     $total_amount[$i] = SouvenirApply::where('admin_id', $user_id)->where('souvenir_id', $leSess['id'])->sum('total_amount');
-            //     $i++;
-            // }
-            // return response()->json(['souvenir' => $souvenir, 'userReg' => $userReg, 'total_amount' => $total_amount, 'module' => $module]);
+            $total_amount = SouvenirApply::where('souvenir_id', $souvenir->id)->sum('total_amount');
+
+            return response()->json(['souvenir' => $souvenir, 'userReg' => $userReg, 'total_amount' => $total_amount, 'module' => $module]);
         } else if ($module == "8") {
 
             $user_id = Auth::id();
