@@ -19,7 +19,7 @@
                             </div>
                             <div class="card-body">
                                 <h1>{{ $audition->title }}</h1>
-                                <p>{{ $audition->description }} </p>
+                                <p>{!! $audition->description !!} </p>
                             </div>
                             <div class="card-footer">
                                 <a class="btn  create-rules-btn" href="{{ route('managerAdmin.audition.registration.rules.create',$audition->id) }}">Create new rules</a>
