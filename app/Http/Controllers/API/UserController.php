@@ -2134,11 +2134,11 @@ class UserController extends Controller
     public function current_round_info($event_slug)
     {
         $audition = Audition::where('slug', $event_slug)->first();
-        $round_info = AuditionRoundInfo::find($audition->active_round_info_id);
-        $totalRound = AuditionRoundInfo::count('audition_id', $audition->id);
+        $round_info = AuditionRoundInfo::where('id', $audition->active_round_info_id)->first();
+        $totalRound = AuditionRoundInfo::where('audition_id', $audition->id)->count();
         $round_instruction = AuditionRoundInstruction::where('round_info_id', $round_info->id)->first();
         $myWinningRoudInfoId = AuditionRoundMarkTracking::where('user_id', auth()->user()->id)->where('wining_status', 1)->where('audition_id',  $audition->id)->max('round_info_id');
-        $myRoud = AuditionRoundInfo::where('id', $myWinningRoudInfoId)->first();
+        $myRoud = AuditionRoundInfo::where([['id', $myWinningRoudInfoId], ['audition_id',  $audition->id]])->first();
 
 
         return response()->json([
@@ -2146,7 +2146,7 @@ class UserController extends Controller
             'audition' => $audition,
             'round_info' => $round_info,
             'round_instruction' => $round_instruction,
-            'myRoundPass' => $myRoud? $myRoud->round_num:0,
+            'myRoundPass' => $myRoud ? $myRoud->round_num : 0,
             'totalRound' => $totalRound
         ]);
     }
