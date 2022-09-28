@@ -11,6 +11,13 @@ Manager Admin
         height: 300px;
         object-fit: cover;
     }
+    .round-nmbr{
+    background-color: #A9BA9D;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+
 </style>
 
 
@@ -42,9 +49,9 @@ Manager Admin
                     <a class="nav-link border-warning text-warning font-weight-bold" data-toggle="tab" href="" role="tab">
                         <center class="mb-2">
                             <h4>Round</h4>
-                            <span class="bg-gray p-1 btn " > {{$round->round_num}} </span>
+                            <span class=" p-1 btn round-nmbr font-weight-bold " > {{$round->round_num}} </span>
                         </center>
-                        <a class="btn border-warning nav-link " data-toggle="tab" href="" role="tab">Rules</a>
+                        <a class="btn border-warning nav-link font-weight-bold text-light" data-toggle="tab" href="" role="tab">Rules</a>
                     </a>
                     </li>
                 </ul>

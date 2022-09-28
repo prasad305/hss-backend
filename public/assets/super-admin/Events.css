@@ -251,6 +251,7 @@
 
 .BorderRpo {
     border-bottom: 1px solid white;
+    
 }
 
 .custom-nav-item {
@@ -298,12 +299,22 @@
 }
 
 .ARRimg {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     object-fit: contain;
 }
 
-.custom-navx {
+.cart-backg{
+    background-color: #000000;
+}
+.cart-button{
+    color: white;
+    font-weight:500px !important;
+    
+}
+
+
+.custom-navx{
     /* position: relative; */
 }
 .mnssa {
@@ -445,4 +456,4 @@
     .custom-control-input:disabled:checked ~ .custom-control-label::after {
         background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='25.412' height='19.855' viewBox='0 0 25.412 19.855'%3e%3cpath id='check' d='M22.6,3.8,8,19.4,1.4,11.7,0,12.9l7.9,9.3L24,5.1Z' transform='translate(0.703 -3.095)' fill='%239ca0b1' stroke='%239ca0b1' stroke-width='1'/%3e%3c/svg%3e ");
     }
-}
+
