@@ -921,6 +921,8 @@ Route::post('submit_react/{id}', [UserController::class, 'submit_react']);
 Route::get('check_react/{id}', [UserController::class, 'check_react']);
 Route::get('checkchoice', [CategoryController::class, 'check']);
 
+//<======================== Admin DashBoard ========================>
+
 //<======================== Auction Route ========================>
 
 Route::post('/add/auction/product', [AuctionController::class, 'addProduct']);
