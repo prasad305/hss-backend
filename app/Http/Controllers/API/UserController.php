@@ -46,6 +46,9 @@ use App\Models\QnaRegistration;
 use App\Models\User;
 use App\Models\UserInterest;
 use App\Models\UserEducation;
+use App\Models\Audition\AuditionAssignJudge;
+use App\Models\SuperStar;
+use App\Models\AuditionCertificationContent;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
@@ -65,6 +68,7 @@ use App\Models\Marketplace;
 use PhpParser\Node\Stmt\TryCatch;
 use App\Models\WildCard;
 use Illuminate\Support\Arr;
+use PDF;
 
 class UserController extends Controller
 {
@@ -1820,6 +1824,54 @@ class UserController extends Controller
     }
 
 
+    public function getCertificate($audition_id, $round_info_id){
+
+        $isWinner = false; 
+        $super = false;
+        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id],
+        ['audition_id', $audition_id], ['round_info_id', $round_info_id], ['wining_status',1]])->first();
+        if($auditionRoundMarkTracking){
+            $isWinner = true;
+        } else{
+            $isWinner = false;
+        }
+        if($isWinner){
+        $assignedJudges = AuditionAssignJudge::where('audition_id', $audition_id)->get();
+        // return $assignedJudges;
+        $totalStars = array();
+        foreach($assignedJudges as $judge){
+            if($judge->super_judge === 1){
+                $super = true;
+            }
+            $superstarId = $judge->judge_id;
+            $superStar = SuperStar::where('star_id', $superstarId)->first();
+            $superstarName = $superStar->superStar->first_name." ".$superStar->superStar->last_name;
+            $starInfo = [
+                'isSuperAdmin'=> $super,
+                'signature'=> $superStar['signature'],
+                'name' => $superstarName,
+            ];
+            array_push($totalStars,$starInfo);
+        }
+        $userInfo = $auditionRoundMarkTracking->user;
+        $certificateContent = AuditionCertificationContent::where(['audition_id', $audition_id]);
+
+        $PDFInfo = [
+            'user' => ($userInfo['first_name']. ' ' .$userInfo['last_name']),
+            'stars' => $totalStars,
+            'certificateContent' => $certificateContent,
+            
+        ];
+            // retur0n $PDFInfo;
+            return view('Others.Certificate.Certificate', compact('PDFInfo'));
+            // $pdf = PDF::loadView('Others.Certificate.Certificate', compact('PDFInfo'));
+            
+            return $pdf;
+        }
+        else{
+            return 'not win';
+        }
+    } 
 
 
     public function videoUpload(Request $request)
