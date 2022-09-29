@@ -16,7 +16,7 @@
         }
 
         .BGaB {
-            border: 1px solid rgb(0, 204, 255);
+            border: 1px solid goldenrod !important;
         }
 
         .GoldBtn {
@@ -41,11 +41,7 @@
             border: 1px solid rgb(0, 183, 255) !important;
         }
 
-        /* .ImgBlue{
-                        height: 150px;
-                        width: 100% !important;
-                    } */
-
+        
     </style>
 
     <div class="row">

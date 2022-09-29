@@ -64,6 +64,7 @@ use App\Models\UserInfo;
 use App\Models\Marketplace;
 use PhpParser\Node\Stmt\TryCatch;
 use App\Models\WildCard;
+use Illuminate\Support\Arr;
 
 class UserController extends Controller
 {
@@ -313,28 +314,37 @@ class UserController extends Controller
         $selectedSubCat = json_decode($selectedCategory->subcategory);
         $selectedSubSubCat = json_decode($selectedCategory->star_id);
 
-        $cat_post = Post::select("*")
-            ->whereIn('category_id', $selectedCat)
+        // $cat_post = Post::select("*")
+        //     ->whereIn('category_id', $selectedCat)
+        //     ->orderBy('id', 'DESC')->paginate($limit);
+
+
+        // $cat_post = Post::where('type', 'fangroup')->orderBy('id', 'DESC')->paginate($limit);
+
+        $PostArray = Post::select("*")
+            ->whereIn('type', ['fangroup'])
+            ->orWhereIn('star_id', $selectedSubSubCat)
+            ->orWhereIn('sub_category_id', $selectedSubCat)
             ->orderBy('id', 'DESC')->paginate($limit);
 
-        if (isset($sub_cat_post)) {
-            $sub_cat_post = Post::select("*")
-                ->whereIn('sub_category_id', $selectedSubCat)
-                ->orderBy('id', 'DESC')->paginate($limit);
-        } else {
-            $sub_cat_post = [];
-        }
+        // if (isset($selectedSubCat)) {
+        //     $sub_cat_post = Post::select("*")
+        //         ->whereIn('sub_category_id', $selectedSubCat)
+        //         ->orderBy('id', 'DESC')->paginate($limit);
+        // } else {
+        //     $sub_cat_post = [];
+        // }
 
-        if (isset($sub_sub_cat_post)) {
-            $sub_sub_cat_post = Post::select("*")
-                ->whereIn('user_id', $selectedSubSubCat)
-                ->orderBy('id', 'DESC')->paginate($limit);
-        } else {
-            $sub_sub_cat_post = [];
-        }
-
-        $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
-        // $post = $cat_post;
+        // if (isset($selectedSubSubCat)) {
+        //     $sub_sub_cat_post = Post::select("*")
+        //         ->whereIn('star_id', $selectedSubSubCat)
+        //         ->orderBy('id', 'DESC')->paginate($limit);
+        // } else {
+        //     $sub_sub_cat_post = [];
+        // }
+        $dame = array();
+        // $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
+        $post = $PostArray->concat($dame);
 
         return response()->json([
             'status' => 200,
@@ -2124,11 +2134,11 @@ class UserController extends Controller
     public function current_round_info($event_slug)
     {
         $audition = Audition::where('slug', $event_slug)->first();
-        $round_info = AuditionRoundInfo::find($audition->active_round_info_id);
-        $totalRound = AuditionRoundInfo::count('audition_id', $audition->id);
+        $round_info = AuditionRoundInfo::where('id', $audition->active_round_info_id)->first();
+        $totalRound = AuditionRoundInfo::where('audition_id', $audition->id)->count();
         $round_instruction = AuditionRoundInstruction::where('round_info_id', $round_info->id)->first();
         $myWinningRoudInfoId = AuditionRoundMarkTracking::where('user_id', auth()->user()->id)->where('wining_status', 1)->where('audition_id',  $audition->id)->max('round_info_id');
-        $myRoud = AuditionRoundInfo::where('id', $myWinningRoudInfoId)->first();
+        $myRoud = AuditionRoundInfo::where([['id', $myWinningRoudInfoId], ['audition_id',  $audition->id]])->first();
 
 
         return response()->json([
@@ -2136,7 +2146,7 @@ class UserController extends Controller
             'audition' => $audition,
             'round_info' => $round_info,
             'round_instruction' => $round_instruction,
-            'myRoundPass' => $myRoud? $myRoud->round_num:0,
+            'myRoundPass' => $myRoud ? $myRoud->round_num : 0,
             'totalRound' => $totalRound
         ]);
     }
