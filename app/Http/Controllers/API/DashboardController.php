@@ -254,25 +254,25 @@ class DashboardController extends Controller
     public function adminPost($type)
     {
         if ($type == "Simple-Post") {
-            $post = SimplePost::where('admin_id', auth('sanctum')->user()->id)->latest()->get();
+            $post = SimplePost::where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Live-Chat") {
-            $post = LiveChat::with('registeredLiveChats')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
+            $post = LiveChat::with('registeredLiveChats')->where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Q&A") {
-            $post = QnA::with('registeredQna')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
+            $post = QnA::with('registeredQna')->where('admin_id', auth('sanctum')->user()->id)->where('star_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Meetup-Event") {
-            $post = MeetupEvent::with('registeredMeetupEvents')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
+            $post = MeetupEvent::with('registeredMeetupEvents')->where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Learning-Session") {
-            $post = LearningSession::with('registeredLearningSessions')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
+            $post = LearningSession::with('registeredLearningSessions')->where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Greeting") {
-            $post = Greeting::with('registeredGreeting')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
+            $post = Greeting::with('registeredGreeting')->where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Fan-Group") {
-            $post = FanGroup::where('created_by', auth('sanctum')->user()->id)->orWhere('another_star_admin_id', auth('sanctum')->user()->id)->latest()->get();
+            $post = FanGroup::where('created_by', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->orWhere('another_star_admin_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Auction") {
-            $post = Auction::with('bidding')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
+            $post = Auction::with('bidding')->where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Marketplace") {
-            $post = Marketplace::with('marketplace_order')->where('superstar_admin_id', auth('sanctum')->user()->id)->orWhere('superstar_id', auth('sanctum')->user()->id)->latest()->get();
+            $post = Marketplace::with('marketplace_order')->where('superstar_admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Souvenir") {
-            $post = SouvenirCreate::with('souvenirApply')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
+            $post = SouvenirCreate::with('souvenirApply')->where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();
         } else {
             return response()->json([
                 'status' => 403,
@@ -289,52 +289,52 @@ class DashboardController extends Controller
     {
 
         if ($type == "Simple-Post") {
-            $post = SimplePost::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
+            $post = SimplePost::where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = GeneralPostPayment::whereHas('simpleposts', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere('star_id', auth('sanctum')->user()->id);
             })->where('post_id', $id)->get();
         } elseif ($type == "Live-Chat") {
-            $post = LiveChat::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
+            $post = LiveChat::where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = LiveChatRegistration::whereHas('liveChat', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere('star_id', auth('sanctum')->user()->id);
             })->where('live_chat_id', $id)->get();
         } elseif ($type == "Q&A") {
-            $post = QnA::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
+            $post = QnA::where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = QnaRegistration::whereHas('qna', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere('star_id', auth('sanctum')->user()->id);
             })->where('qna_id', $id)->get();
         } elseif ($type == "Meetup-Event") {
-            $post = MeetupEvent::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
+            $post = MeetupEvent::where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere('star_id', auth('sanctum')->user()->id);
             })->where('meetup_event_id', $id)->get();
         } elseif ($type == "Learning-Session") {
-            $post = LearningSession::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
+            $post = LearningSession::where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = LearningSessionRegistration::whereHas('learningSession', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere('star_id', auth('sanctum')->user()->id);
             })->where('learning_session_id', $id)->get();
         } elseif ($type == "Greeting") {
-            $post = Greeting::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
+            $post = Greeting::where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = GreetingsRegistration::whereHas('greeting', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere('star_id', auth('sanctum')->user()->id);
             })->where('greeting_id', $id)->get();
         } elseif ($type == "Auction") {
-            $post = Auction::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
+            $post = Auction::where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = Bidding::whereHas('auction', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere('star_id', auth('sanctum')->user()->id);
             })->where('auction_id', $id)->get();
         } elseif ($type == "Marketplace") {
-            $post = Marketplace::where('superstar_admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
+            $post = Marketplace::where('superstar_admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = MarketplaceOrder::whereHas('marketplace', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]])->orWhere([['superstar_admin_id', auth()->user()->id]]);
+                $q->where([['superstar_admin_id', auth()->user()->id]])->orWhere('star_id', auth('sanctum')->user()->id);
             })->where('marketplace_id', $id)->get();
         } elseif ($type == "Souvenir") {
-            $post = SouvenirCreate::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
+            $post = SouvenirCreate::where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = SouvenirApply::whereHas('souvenir', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere('star_id', auth('sanctum')->user()->id);
             })->where('souvenir_id', $id)->get();
         } elseif ($type == "Fan-Group") {
-            $post = FanGroup::where('created_by', auth('sanctum')->user()->id)->orWhere('another_star_admin_id', auth('sanctum')->user()->id)->orWhere('my_star', auth('sanctum')->user()->id)->where('id', $id)->first();
+            $post = FanGroup::where('created_by', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->orWhere('another_star_admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
 
             $participant = json_decode($post->my_user_join);
             $another_user = json_decode($post->another_user_join);
