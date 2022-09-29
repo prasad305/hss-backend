@@ -295,7 +295,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/audition/videofeed/videos', [UserController::class, 'videoFeedVidoes']);
     Route::post('/user/audition/videos/loveReact', [UserController::class, 'userVideoLoveReact']);
     Route::post('/user/audition/videos/loveReact/payment', [UserController::class, 'userVideoLoveReactPayment']);
-
+    Route::get('/user/audition/getOxygen/videos', [UserController::class, 'getOxygenVideo']);
+    Route::post('/user/audition/getOxygenReply/video', [UserController::class, 'oxygenReplyVideo']);
     // Promo Videos
     Route::get('/user/PromoVideos', [UserController::class, 'getPromoVideo']);
 
@@ -548,7 +549,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/checkingSuperStar', function () {
         return response()->json(['message' => 'You are in as Superstar', 'status' => 200], 200);
     });
-
+    Route::get('star/dashboard/posts/{type}', [DashboardController::class, 'adminPost']);
+    Route::get('star/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
+    Route::get('star/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('/livechat', [LiveChatController::class, 'livechat']);
     Route::get('/sinlgeLiveChat/{id}', [LiveChatController::class, 'sinlgeLiveChat']);
 
@@ -922,6 +925,8 @@ Route::post('select_star', [SubCategoryController::class, 'select_star']);
 Route::post('submit_react/{id}', [UserController::class, 'submit_react']);
 Route::get('check_react/{id}', [UserController::class, 'check_react']);
 Route::get('checkchoice', [CategoryController::class, 'check']);
+
+//<======================== Admin DashBoard ========================>
 
 //<======================== Auction Route ========================>
 

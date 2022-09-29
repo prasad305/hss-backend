@@ -26,10 +26,9 @@
             <a href="{{ route('managerAdmin.admin.index') }}" class="nav-link {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-user">
                 </i>
-                {{-- <i class="fa-solid fa-list-check"></i> --}}
+                
                 <p>
                     Admins
-                    {{-- <span class="right badge badge-danger">New</span> --}}
                 </p>
             </a>
         </li>
@@ -583,10 +582,86 @@
             </ul>
         </li>
 
-        {{-- Creating gap --}}
-        <li style="height: 150px"></li>
-        {{-- Creating gap --}}
+        <li class="nav-item mb-5">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chart-pie"></i>
+                <p>All Report
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.audition') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Audition</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.simplePost') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Simple Post</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.learningSession') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Learning Session</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.meetup') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Meetup Event</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.greeting') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Greeting</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.liveChat') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Live Chat</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.qna') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Q&A</p>
+                    </a>
+                </li>
+                {{-- <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.fanGroup') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Fan Group</p>
+                    </a>
+                </li> --}}
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.marketplace') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Marketplace</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.auction') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Auction</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('managerAdmin.report.souvenir') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Souvenir</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
+        <li style="height: 150px"></li>
     </ul>
 </nav>
 <!-- /.sidebar-menu -->
+
+
