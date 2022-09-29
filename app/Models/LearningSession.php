@@ -66,4 +66,8 @@ class LearningSession extends Model
     {
         return $this->hasMany(LearningSessionAssignment::class, 'event_id');
     }
+    public function learningSessionCertificate()
+    {
+        return $this->hasMany(learningSessionCertificate::class);
+    }
 }

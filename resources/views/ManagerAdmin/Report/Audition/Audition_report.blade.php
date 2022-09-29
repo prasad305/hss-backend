@@ -1,7 +1,7 @@
-@extends('Layouts.SuperAdmin.master')
+@extends('Layouts.ManagerAdmin.master')
 
 @push('title')
-    Super Admin
+    Manager Admin
 @endpush
 
 @section('content')
@@ -20,43 +20,37 @@
             </div>
         </div>
     </div>
+    <section class="content">
+        <div class="container-fluid">
 
-
-    <form id="filter" action="" method="">
-
-        @csrf
-        <section class="content">
-            <div class="container-fluid">
-
-                <div class="row">
-                    <div class="col-lg-3 col-md-3">
-                        <label for="category">Start Date</label>
-                        <div class="form-group mb-4">
-                            <div class="datepicker date input-group">
-                                <input type="text" name="start_date" placeholder="Choose Date" class="form-control"
-                                    id="s_date">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <label for="category">Start Date</label>
+                    <div class="form-group mb-4">
+                        <div class="datepicker date input-group">
+                            <input type="text" placeholder="Choose Date" class="form-control" id="fecha1">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-lg-3 col-md-3">
-                        <label for="category">End Date</label>
-                        <div class="form-group mb-4">
-                            <div class="datepicker date input-group">
-                                <input type="text" name="end_date" placeholder="Choose Date" class="form-control"
-                                    id="e_date">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                </div>
+                <div class="col-lg-3 col-md-3">
+                    <label for="category">End Date</label>
+                    <div class="form-group mb-4">
+                        <div class="datepicker date input-group">
+                            <input type="text" placeholder="Choose Date" class="form-control" id="fecha1">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-lg-3 col-md-3">
+                <div class="col-lg-3 col-md-3">
 
+                    <div class="form-group mb-4">
 
                         <div class="form-group">
                             <label for="name">Categories</label>
@@ -69,28 +63,29 @@
                         </div>
 
                     </div>
+                </div>
 
-                    <div class="col-lg-3 col-md-3">
+                {{-- <div class="col-lg-3 col-md-3">
 
-                        <div class="form-group mb-4">
+                    <div class="form-group mb-4">
 
-                            <div class="form-group">
-                                <label for="name">SubCategories</label>
-                                <select name="sub_category_id" id="sub_category_id" class="form-control select2">
-                                    <option>Select SubCategory</option>
-                                </select>
-                            </div>
 
+                        <div class="form-group">
+                            <label for="name">SubCategories</label>
+                            <select name="sub_category_id" id="sub_category_id" class="form-control select2">
+                                <option>Select SubCategory</option>
+                            </select>
                         </div>
-                    </div>
-                </div>
-                <div class="mb-5">
 
-                    <button type="submit" class="btn btn-lm btn-success">Get Report</button>
-                </div>
+                    </div>
+                </div> --}}
             </div>
-        </section>
-    </form>
+            <div class="mb-5">
+
+                <button class="btn btn-lm btn-success">Get Report</button>
+            </div>
+        </div>
+    </section>
     <section class="content">
         <div class="container-fluid">
 
@@ -98,8 +93,8 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3 id="tot_assFee">{{ $assignment_fee }}</h3>
-                            <p>Total Certificate Fee</p>
+                            <h3>150</h3>
+                            <p>Registration Fees</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
@@ -111,8 +106,8 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3 id="tot_regFee">{{ $registration_fee }}<sup style="font-size: 20px"></sup></h3>
-                            <p>Total Registration Fee</p>
+                            <h3>53<sup style="font-size: 20px">%</sup></h3>
+                            <p>Certificate Fees</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -125,29 +120,30 @@
 
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3 id="tot_certificate">{{ $certificate }}</h3>
-                            <p>Total Certificate</p>
+                            <h3>44</h3>
+                            <p>Appeal Fees</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
                         </div>
-                        <a href="#" class="small-box-footer"><i class="fa-solid fa-clipboard"></i></a>
+                        <a href="#" class="small-box-footer"><i class="fa-duotone fa-dollar-sign"></i></a>
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-6">
+                {{-- <div class="col-lg-3 col-6">
 
                     <div class="small-box bg-danger">
                         <div class="inner">
-                            <h3 id="tot_assignment">{{ $assignment }}</h3>
-                            <p>Total Assignment</p>
+                            <h3>65</h3>
+                            <p>Unique Visitors</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-pie-graph"></i>
                         </div>
-                        <a href="#" class="small-box-footer"><i class="fa-solid fa-clipboard"></i></a>
+                        <a href="#" class="small-box-footer">More info <i
+                                class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
@@ -228,69 +224,10 @@
             $('.datepicker').datepicker({
                 language: "es",
                 autoclose: true,
-                format: "yyyy/mm/dd"
+                format: "dd/mm/yyyy"
             });
         });
     </script>
     <!-- Datepicker -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-
-
-    <script>
-        $(document).ready(function() {
-            $("#filter").on('submit', function(event) {
-
-                event.preventDefault();
-
-
-
-
-
-                $.ajax({
-                    url: "{{ route('superAdmin.report.filter.learningSession') }}",
-                    type: "POST",
-                    data: $("#filter").serialize(),
-                    success: function(respose) {
-                        // console.log('Submission was successful.');
-                        console.log(respose);
-                        $("#filter")[0].reset();
-                        $('#tot_certificate').html(respose.certificate);
-                        $('#tot_assFee').html(respose.assignment_fee);
-                        $('#tot_regFee').html(respose.registration_fee);
-                        $('#tot_assFee').html(respose.assignment_fee);
-                        $('#tot_assignment').html(respose.assignment);
-                    },
-                });
-            });
-
-
-
-
-            $("#category_id").click(function() {
-                var category_id = $('#category_id').val();
-                // console.log(category_id);
-                if (category_id > 0) {
-                    $.ajax({
-                        url: "{{ url('super-admin/all-report-filter-subCategory') }}/" +
-                            category_id,
-                        type: 'GET',
-
-                        success: function(res) {
-                            // console.log(res);
-
-                            var _html = '<option>Select SubCateory</option>';
-                            $.each(res, function(index, res) {
-                                _html += '<option value="' + res.id + '">' + res.name +
-                                    '</option>';
-
-                            });
-                            $('#sub_category_id').html(_html);
-                        }
-                    })
-                }
-            });
-
-
-        });
-    </script>
 @endpush

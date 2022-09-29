@@ -1,7 +1,7 @@
-@extends('Layouts.SuperAdmin.master')
+@extends('Layouts.ManagerAdmin.master')
 
 @push('title')
-Super Admin
+Manager Admin
 @endpush
 
 @section('content')
@@ -20,16 +20,20 @@ Super Admin
         </div>
     </div>
 </div>
-<section class="content">
-    <div class="container-fluid">
-        <form id="simplePostFilter">
-            @csrf
+
+
+<form id="souvenirfilter" action="" method="">
+
+    @csrf
+    <section class="content">
+        <div class="container-fluid">
+
             <div class="row">
                 <div class="col-lg-3 col-md-3">
                     <label for="category">Start Date</label>
                     <div class="form-group mb-4">
                         <div class="datepicker date input-group">
-                            <input type="text" name="start_date" placeholder="Choose Date" class="form-control" id="fecha1">
+                            <input type="text" name="start_date" placeholder="Choose Date" class="form-control" id="s_date">
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             </div>
@@ -41,7 +45,7 @@ Super Admin
                     <label for="category">End Date</label>
                     <div class="form-group mb-4">
                         <div class="datepicker date input-group">
-                            <input type="text" name="end_date" placeholder="Choose Date" class="form-control" id="fecha1">
+                            <input type="text" name="end_date" placeholder="Choose Date" class="form-control" id="e_date">
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             </div>
@@ -56,24 +60,28 @@ Super Admin
                         <label for="name">Categories</label>
                         <select name="category_id" id="category_id" class="form-control select2">
                             <option>Select Category</option>
-                            @foreach($categories as $category)
-                            <option value="{{$category->id}}">{{$category->name}}</option>
+                            @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
-
                         </select>
                     </div>
+
                 </div>
 
                 <div class="col-lg-3 col-md-3">
-                    <div class="form-group">
-                        <label for="name">SubCategories</label>
-                        <select name="subcategory_id" id="sub_category_id" class="form-control select2">
-                            <option>Select SubCategory</option>
-                        </select>
-                    </div>
 
+                    <div class="form-group mb-4">
+                        <div class="form-group">
+                            <label for="name">SubCategories</label>
+                            <select name="sub_category_id" id="sub_category_id" class="form-control select2">
+                                <option>Select SubCategory</option>
+                            </select>
+                        </div>
+
+                    </div>
                 </div>
             </div>
+
             <div class="row">
 
                 <div class="col-lg-3 col-md-3">
@@ -82,8 +90,8 @@ Super Admin
                         <div class="form-group">
                             <label for="name">User Type</label>
                             <select name="user_type" id="user_type" class="form-control select2">
-                                <option>Select Category</option>
-                                <option value="manager-admin">Manager-Admin</option>
+                                <option>Select Type</option>
+
                                 <option value="star">Star</option>
                                 <option value="admin">Admin</option>
 
@@ -110,9 +118,9 @@ Super Admin
 
                 <button type="submit" class="btn btn-lm btn-success">Get Report</button>
             </div>
-        </form>
-    </div>
-</section>
+        </div>
+    </section>
+</form>
 <section class="content">
     <div class="container-fluid">
 
@@ -120,40 +128,39 @@ Super Admin
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3 id="total_published_post">{{$total_published_post}}</h3>
-                        <p>Published Post</p>
+                        <h3 id="total_souvenir"> {{ $total_souvenir }}</h3>
+                        <p>Souvenir</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-bag"></i>
                     </div>
-                    <a href="#" class="small-box-footer"><i class="fa-solid fa-clipboard"></i></a>
+                    <a href="#" class="small-box-footer"><i class="fa-solid fa-bag-shopping"></i></a>
                 </div>
             </div>
 
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3 id="total_pending_post">{{$total_pending_post}}</h3>
-                        <p>Pending Post</p>
+                        <h3 id="total_amount">{{ $total_amount }}<sup style="font-size: 20px"></sup></h3>
+                        <p>Amount</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
                     </div>
-                    <a href="#" class="small-box-footer"><i class="fa-solid fa-clipboard"></i></a>
+                    <a href="#" class="small-box-footer"><i class="fa-solid fa-sack-dollar"></i></a>
                 </div>
             </div>
-
             <div class="col-lg-3 col-6">
 
                 <div class="small-box bg-warning">
                     <div class="inner">
-                        <h3 id="total_free_post">{{$total_free_post}}</h3>
-                        <p> Total Free Post</p>
+                        <h3 id="total_sounenir_item">{{ $total_sounenir_item }}</h3>
+                        <p>Total Souvenir Item</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-person-add"></i>
                     </div>
-                    <a href="#" class="small-box-footer"><i class="fa-solid fa-clipboard"></i></a>
+                    <a href="#" class="small-box-footer"><i class="fa-solid fa-bag-shopping"></i></a>
                 </div>
             </div>
 
@@ -161,31 +168,13 @@ Super Admin
 
                 <div class="small-box bg-danger">
                     <div class="inner">
-                        <h3 id="total_paid_post">{{$total_paid_post}}</h3>
-                        <p> Total Paid Post</p>
+                        <h3 id="total_sounenir_item_price">{{ $total_sounenir_item_price }}</h3>
+                        <p>Total Souvenir Item Price </p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-pie-graph"></i>
                     </div>
-                    <a href="#" class="small-box-footer"><i class="fa-solid fa-clipboard"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-6">
-
-                <div class="small-box bg-secondary">
-                    <div class="inner">
-                        <div class="row">
-                            <div class="col-sm">
-                                <h3 id="total_paid_post_fees">{{$total_paid_post_fees}}</h3>
-                                <p> Total Paid Post Fees</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
-                    </div>
-                    <a href="#" class="small-box-footer"><i class="fa-duotone fa-dollar-sign"></i></a>
+                    <a href="#" class="small-box-footer"><i class="fa-solid fa-sack-dollar"></i></a>
                 </div>
             </div>
         </div>
@@ -274,13 +263,38 @@ Super Admin
 <!-- Datepicker -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
+
 <script>
     $(document).ready(function() {
+        $("#souvenirfilter").on('submit', function(event) {
+            event.preventDefault();
+            // alert("hello");
+
+
+
+
+            $.ajax({
+                url: "{{ route('managerAdmin.report.filter.souvenirReport') }}",
+                type: "POST",
+                data: $("#souvenirfilter").serialize(),
+                success: function(respose) {
+                    $("#souvenirfilter")[0].reset();
+                    $('#total_amount').html(respose.total_amount);
+                    $('#total_sounenir_item').html(respose.total_sounenir_item);
+                    $('#total_sounenir_item_price').html(respose.total_sounenir_item_price);
+                    $('#total_souvenir').html(respose.total_souvenir);
+                },
+            });
+        });
+
+
+
+
         $("#category_id").click(function() {
             var category_id = $('#category_id').val();
             if (category_id > 0) {
                 $.ajax({
-                    url: "{{ url('super-admin/all-report-filter-subCategory') }}/" + category_id,
+                    url: "{{ url('manager-admin/all-report-filter-subCategory') }}/" + category_id,
                     type: 'GET',
 
                     success: function(res) {
@@ -295,17 +309,14 @@ Super Admin
             }
         });
 
-
-
         $("#user_type").click(function() {
             var user_type = $('#user_type').val();
             if (user_type) {
                 $.ajax({
-                    url: "{{ url('super-admin/simplePost-report-filter-userType') }}/" + user_type,
+                    url: "{{ url('manager-admin/simplePost-report-filter-userType') }}/" + user_type,
                     type: 'GET',
 
                     success: function(res) {
-
                         var _html = '<option>Select Name</option>';
                         $.each(res, function(index, res) {
                             _html += '<option value="' + res.id + '">' + res.first_name + ' ' + res.last_name + '</option>';
@@ -317,33 +328,8 @@ Super Admin
             }
         });
 
-        $("#simplePostFilter").on('submit', function(event) {
-            event.preventDefault();
-            // alert("hello");
-
-
-
-
-            $.ajax({
-                url: "{{ route('superAdmin.report.filter.simplePost') }}",
-                type: "POST",
-                data: $("#simplePostFilter").serialize(),
-                success: function(response) {
-                    $("#simplePostFilter")[0].reset();
-                    // console.log(response);
-                    $('#total_free_post').html(response.total_free_post);
-                    $('#total_paid_post').html(response.total_paid_post);
-                    $('#total_published_post').html(response.total_published_post);
-                    $('#total_pending_post').html(response.total_pending_post);
-                    $('#total_paid_post_fees').html(response.total_paid_post_fees);
-                },
-            });
-        });
-
-
-
-
     });
 </script>
+
 
 @endpush

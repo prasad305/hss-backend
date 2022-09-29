@@ -22,7 +22,7 @@
     </div>
 
 
-    <form id="filter" action="" method="">
+    <form id="souvenirfilter" action="" method="">
 
         @csrf
         <section class="content">
@@ -74,6 +74,7 @@
 
                         <div class="form-group mb-4">
 
+
                             <div class="form-group">
                                 <label for="name">SubCategories</label>
                                 <select name="sub_category_id" id="sub_category_id" class="form-control select2">
@@ -98,21 +99,21 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3 id="tot_assFee">{{ $assignment_fee }}</h3>
-                            <p>Total Certificate Fee</p>
+                            <h3 id="total_souvenir">{{ $total_souvenir }}</h3>
+                            <p>Total Souvenir</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer"><i class="fa-duotone fa-dollar-sign"></i></a>
+                        <a href="#" class="small-box-footer"><i class="fa-solid fa-bag-shopping"></i></a>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3 id="tot_regFee">{{ $registration_fee }}<sup style="font-size: 20px"></sup></h3>
-                            <p>Total Registration Fee</p>
+                            <h3 id="total_amount">{{ $total_amount }}<sup style="font-size: 20px"></sup></h3>
+                            <p>Total Amount</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -125,13 +126,13 @@
 
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3 id="tot_certificate">{{ $certificate }}</h3>
-                            <p>Total Certificate</p>
+                            <h3 id="total_sounenir_item">{{ $total_sounenir_item }}</h3>
+                            <p>Total Souvenir Item</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
                         </div>
-                        <a href="#" class="small-box-footer"><i class="fa-solid fa-clipboard"></i></a>
+                        <a href="#" class="small-box-footer"><i class="fa-solid fa-bag-shopping"></i></a>
                     </div>
                 </div>
 
@@ -139,13 +140,13 @@
 
                     <div class="small-box bg-danger">
                         <div class="inner">
-                            <h3 id="tot_assignment">{{ $assignment }}</h3>
-                            <p>Total Assignment</p>
+                            <h3 id="total_sounenir_item_price">{{ $total_sounenir_item_price }}</h3>
+                            <p>Total Souvenir Item Price </p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-pie-graph"></i>
                         </div>
-                        <a href="#" class="small-box-footer"><i class="fa-solid fa-clipboard"></i></a>
+                        <a href="#" class="small-box-footer"><i class="fa-duotone fa-dollar-sign"></i></a>
                     </div>
                 </div>
             </div>
@@ -238,27 +239,23 @@
 
     <script>
         $(document).ready(function() {
-            $("#filter").on('submit', function(event) {
-
+            $("#souvenirfilter").on('submit', function(event) {
                 event.preventDefault();
-
+                // alert("hello");
 
 
 
 
                 $.ajax({
-                    url: "{{ route('superAdmin.report.filter.learningSession') }}",
+                    url: "{{ route('superAdmin.report.filter.souvenirReport') }}",
                     type: "POST",
-                    data: $("#filter").serialize(),
+                    data: $("#souvenirfilter").serialize(),
                     success: function(respose) {
-                        // console.log('Submission was successful.');
-                        console.log(respose);
-                        $("#filter")[0].reset();
-                        $('#tot_certificate').html(respose.certificate);
-                        $('#tot_assFee').html(respose.assignment_fee);
-                        $('#tot_regFee').html(respose.registration_fee);
-                        $('#tot_assFee').html(respose.assignment_fee);
-                        $('#tot_assignment').html(respose.assignment);
+                        $("#souvenirfilter")[0].reset();
+                        $('#total_amount').html(respose.total_amount);
+                        $('#total_sounenir_item').html(respose.total_sounenir_item);
+                        $('#total_sounenir_item_price').html(respose.total_sounenir_item_price);
+                        $('#total_souvenir').html(respose.total_souvenir);
                     },
                 });
             });
@@ -268,7 +265,7 @@
 
             $("#category_id").click(function() {
                 var category_id = $('#category_id').val();
-                // console.log(category_id);
+
                 if (category_id > 0) {
                     $.ajax({
                         url: "{{ url('super-admin/all-report-filter-subCategory') }}/" +
@@ -276,7 +273,7 @@
                         type: 'GET',
 
                         success: function(res) {
-                            // console.log(res);
+
 
                             var _html = '<option>Select SubCateory</option>';
                             $.each(res, function(index, res) {

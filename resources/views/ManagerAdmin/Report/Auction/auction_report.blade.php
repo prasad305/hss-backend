@@ -1,7 +1,7 @@
-@extends('Layouts.SuperAdmin.master')
+@extends('Layouts.ManagerAdmin.master')
 
 @push('title')
-    Super Admin
+    Manager Admin
 @endpush
 
 @section('content')
@@ -22,7 +22,7 @@
     </div>
 
 
-    <form id="filter" action="" method="">
+    <form id="auctionfilter" action="" method="">
 
         @csrf
         <section class="content">
@@ -73,13 +73,47 @@
                     <div class="col-lg-3 col-md-3">
 
                         <div class="form-group mb-4">
-
                             <div class="form-group">
                                 <label for="name">SubCategories</label>
-                                <select name="sub_category_id" id="sub_category_id" class="form-control select2">
+                                <select name="subcategory_id" id="subcategory_id" class="form-control select2">
                                     <option>Select SubCategory</option>
                                 </select>
                             </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-3 col-md-3">
+
+                        <div class="form-group mb-4">
+                            <div class="form-group">
+                                <label for="name">User Type</label>
+                                <select name="user_type" id="user_type" class="form-control select2">
+                                    <option>Select Type</option>
+
+                                    <option value="star">Star</option>
+                                    <option value="admin">Admin</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3">
+
+                        <div class="form-group mb-4">
+
+                            <label for="category">Select Name</label>
+                            <select name="user_name" class="custom-select rounded-0" id="user_name"
+                                onmousedown="if(this.options.length>5){this.size=5;}" onchange="this.blur()"
+                                onblur="this.size=0;">
+                                <option>Select Name</option>
+
+
+                            </select>
 
                         </div>
                     </div>
@@ -98,40 +132,39 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3 id="tot_assFee">{{ $assignment_fee }}</h3>
-                            <p>Total Certificate Fee</p>
+                            <h3 id="base_price">{{ $base_price }}</h3>
+                            <p>Total Base Price</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer"><i class="fa-duotone fa-dollar-sign"></i></a>
+                        <a href="#" class="small-box-footer"><i class="fa-solid fa-sack-dollar"></i></a>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3 id="tot_regFee">{{ $registration_fee }}<sup style="font-size: 20px"></sup></h3>
-                            <p>Total Registration Fee</p>
+                            <h3 id="total_auction">{{ $total_auction }}<sup style="font-size: 20px"></sup></h3>
+                            <p>Total Auction</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="#" class="small-box-footer"><i class="fa-duotone fa-dollar-sign"></i></a>
+                        <a href="#" class="small-box-footer"><i class="fa-solid fa-bag-shopping"></i></a>
                     </div>
                 </div>
-
                 <div class="col-lg-3 col-6">
 
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3 id="tot_certificate">{{ $certificate }}</h3>
-                            <p>Total Certificate</p>
+                            <h3 id="total_bidding">{{ $total_bidding }}</h3>
+                            <p>Total Bidding</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
                         </div>
-                        <a href="#" class="small-box-footer"><i class="fa-solid fa-clipboard"></i></a>
+                        <a href="#" class="small-box-footer"><i class="fa-solid fa-bag-shopping"></i></a>
                     </div>
                 </div>
 
@@ -139,13 +172,13 @@
 
                     <div class="small-box bg-danger">
                         <div class="inner">
-                            <h3 id="tot_assignment">{{ $assignment }}</h3>
-                            <p>Total Assignment</p>
+                            <h3 id="tot_assignment">{{ $total_bidding_price }}</h3>
+                            <p>Total Bidding Price</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-pie-graph"></i>
                         </div>
-                        <a href="#" class="small-box-footer"><i class="fa-solid fa-clipboard"></i></a>
+                        <a href="#" class="small-box-footer"><i class="fa-solid fa-sack-dollar"></i></a>
                     </div>
                 </div>
             </div>
@@ -235,30 +268,25 @@
     <!-- Datepicker -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
-
     <script>
         $(document).ready(function() {
-            $("#filter").on('submit', function(event) {
-
+            $("#auctionfilter").on('submit', function(event) {
                 event.preventDefault();
-
+                // alert("hello");
 
 
 
 
                 $.ajax({
-                    url: "{{ route('superAdmin.report.filter.learningSession') }}",
+                    url: "{{ route('managerAdmin.report.filter.auctionReport') }}",
                     type: "POST",
-                    data: $("#filter").serialize(),
+                    data: $("#auctionfilter").serialize(),
                     success: function(respose) {
-                        // console.log('Submission was successful.');
-                        console.log(respose);
-                        $("#filter")[0].reset();
-                        $('#tot_certificate').html(respose.certificate);
-                        $('#tot_assFee').html(respose.assignment_fee);
-                        $('#tot_regFee').html(respose.registration_fee);
-                        $('#tot_assFee').html(respose.assignment_fee);
-                        $('#tot_assignment').html(respose.assignment);
+                        $("#auctionfilter")[0].reset();
+                        $('#base_price').html(respose.base_price);
+                        $('#total_auction').html(respose.total_auction);
+                        $('#total_bidding').html(respose.total_bidding);
+                        $('#total_bidding_price').html(respose.total_bidding_price);
                     },
                 });
             });
@@ -268,23 +296,41 @@
 
             $("#category_id").click(function() {
                 var category_id = $('#category_id').val();
-                // console.log(category_id);
                 if (category_id > 0) {
                     $.ajax({
-                        url: "{{ url('super-admin/all-report-filter-subCategory') }}/" +
+                        url: "{{ url('manager-admin/all-report-filter-subCategory') }}/" +
                             category_id,
                         type: 'GET',
 
                         success: function(res) {
-                            // console.log(res);
-
                             var _html = '<option>Select SubCateory</option>';
                             $.each(res, function(index, res) {
                                 _html += '<option value="' + res.id + '">' + res.name +
                                     '</option>';
 
                             });
-                            $('#sub_category_id').html(_html);
+                            $('#subcategory_id').html(_html);
+                        }
+                    })
+                }
+            });
+
+            $("#user_type").click(function() {
+                var user_type = $('#user_type').val();
+                if (user_type) {
+                    $.ajax({
+                        url: "{{ url('manager-admin/simplePost-report-filter-userType') }}/" +
+                            user_type,
+                        type: 'GET',
+
+                        success: function(res) {
+                            var _html = '<option>Select Name</option>';
+                            $.each(res, function(index, res) {
+                                _html += '<option value="' + res.id + '">' + res
+                                    .first_name + ' ' + res.last_name + '</option>';
+
+                            });
+                            $('#user_name').html(_html);
                         }
                     })
                 }

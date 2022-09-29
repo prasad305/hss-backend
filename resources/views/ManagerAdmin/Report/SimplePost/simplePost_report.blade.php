@@ -1,7 +1,7 @@
-@extends('Layouts.SuperAdmin.master')
+@extends('Layouts.ManagerAdmin.master')
 
 @push('title')
-Super Admin
+Manager Admin
 @endpush
 
 @section('content')
@@ -83,7 +83,7 @@ Super Admin
                             <label for="name">User Type</label>
                             <select name="user_type" id="user_type" class="form-control select2">
                                 <option>Select Category</option>
-                                <option value="manager-admin">Manager-Admin</option>
+
                                 <option value="star">Star</option>
                                 <option value="admin">Admin</option>
 
@@ -180,6 +180,7 @@ Super Admin
                                 <h3 id="total_paid_post_fees">{{$total_paid_post_fees}}</h3>
                                 <p> Total Paid Post Fees</p>
                             </div>
+
                         </div>
                     </div>
                     <div class="icon">
@@ -280,10 +281,11 @@ Super Admin
             var category_id = $('#category_id').val();
             if (category_id > 0) {
                 $.ajax({
-                    url: "{{ url('super-admin/all-report-filter-subCategory') }}/" + category_id,
+                    url: "{{ url('manager-admin/all-report-filter-subCategory') }}/" + category_id,
                     type: 'GET',
-
                     success: function(res) {
+
+
                         var _html = '<option>Select SubCateory</option>';
                         $.each(res, function(index, res) {
                             _html += '<option value="' + res.id + '">' + res.name + '</option>';
@@ -301,7 +303,7 @@ Super Admin
             var user_type = $('#user_type').val();
             if (user_type) {
                 $.ajax({
-                    url: "{{ url('super-admin/simplePost-report-filter-userType') }}/" + user_type,
+                    url: "{{ url('manager-admin/simplePost-report-filter-userType') }}/" + user_type,
                     type: 'GET',
 
                     success: function(res) {
@@ -325,12 +327,11 @@ Super Admin
 
 
             $.ajax({
-                url: "{{ route('superAdmin.report.filter.simplePost') }}",
+                url: "{{ route('managerAdmin.report.filter.simplePost') }}",
                 type: "POST",
                 data: $("#simplePostFilter").serialize(),
                 success: function(response) {
                     $("#simplePostFilter")[0].reset();
-                    // console.log(response);
                     $('#total_free_post').html(response.total_free_post);
                     $('#total_paid_post').html(response.total_paid_post);
                     $('#total_published_post').html(response.total_published_post);

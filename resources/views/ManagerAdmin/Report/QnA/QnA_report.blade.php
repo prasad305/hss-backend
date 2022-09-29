@@ -1,7 +1,7 @@
-@extends('Layouts.SuperAdmin.master')
+@extends('Layouts.ManagerAdmin.master')
 
 @push('title')
-    Super Admin
+    Manager Admin
 @endpush
 
 @section('content')
@@ -22,7 +22,7 @@
     </div>
 
 
-    <form id="filter" action="" method="">
+    <form id="qnafilter">
 
         @csrf
         <section class="content">
@@ -57,7 +57,6 @@
 
                     <div class="col-lg-3 col-md-3">
 
-
                         <div class="form-group">
                             <label for="name">Categories</label>
                             <select name="category_id" id="category_id" class="form-control select2">
@@ -67,19 +66,50 @@
                                 @endforeach
                             </select>
                         </div>
-
                     </div>
 
                     <div class="col-lg-3 col-md-3">
 
                         <div class="form-group mb-4">
-
                             <div class="form-group">
                                 <label for="name">SubCategories</label>
                                 <select name="sub_category_id" id="sub_category_id" class="form-control select2">
                                     <option>Select SubCategory</option>
                                 </select>
                             </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-3 col-md-3">
+
+                        <div class="form-group mb-4">
+                            <div class="form-group">
+                                <label for="name">User Type</label>
+                                <select name="user_type" id="user_type" class="form-control select2">
+                                    <option>Select Type</option>
+
+                                    <option value="star">Star</option>
+                                    <option value="admin">Admin</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3">
+
+                        <div class="form-group mb-4">
+
+                            <label for="category">Select Name</label>
+                            <select name="user_name" class="custom-select rounded-0" id="user_name" onmousedown="if(this.options.length>5){this.size=5;}" onchange="this.blur()" onblur="this.size=0;">
+                                <option>Select Name</option>
+
+
+                            </select>
 
                         </div>
                     </div>
@@ -98,54 +128,41 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3 id="tot_assFee">{{ $assignment_fee }}</h3>
-                            <p>Total Certificate Fee</p>
+                            <h3 id="tot_regfee">{{ $qna_reg_fee }}</h3>
+                            <p>Total Registration Fee</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer"><i class="fa-duotone fa-dollar-sign"></i></a>
+                        <a href="#" class="small-box-footer"><i class="fa-solid fa-sack-dollar"></i></a>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3 id="tot_regFee">{{ $registration_fee }}<sup style="font-size: 20px"></sup></h3>
-                            <p>Total Registration Fee</p>
+                            <h3 id="tot_qna">{{ $total_qna }}<sup style="font-size: 20px"></sup></h3>
+                            <p>Total Event</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="#" class="small-box-footer"><i class="fa-duotone fa-dollar-sign"></i></a>
+                        <a href="#" class="small-box-footer"><i class="fa-regular fa-calendar"></i></a>
                     </div>
                 </div>
+
 
                 <div class="col-lg-3 col-6">
 
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3 id="tot_certificate">{{ $certificate }}</h3>
-                            <p>Total Certificate</p>
+                            <h3 id="tot_slotfee">{{ $qnaSlot_fee }}</h3>
+                            <p>Total Slot Fee</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
                         </div>
-                        <a href="#" class="small-box-footer"><i class="fa-solid fa-clipboard"></i></a>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-6">
-
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3 id="tot_assignment">{{ $assignment }}</h3>
-                            <p>Total Assignment</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
-                        </div>
-                        <a href="#" class="small-box-footer"><i class="fa-solid fa-clipboard"></i></a>
+                        <a href="#" class="small-box-footer"><i class="fa-solid fa-sack-dollar"></i></a>
                     </div>
                 </div>
             </div>
@@ -238,59 +255,66 @@
 
     <script>
         $(document).ready(function() {
-            $("#filter").on('submit', function(event) {
-
+            $("#qnafilter").on('submit', function(event) {
                 event.preventDefault();
-
+                // alert("hello");
 
 
 
 
                 $.ajax({
-                    url: "{{ route('superAdmin.report.filter.learningSession') }}",
+                    url: "{{ route('managerAdmin.report.Filter.qna') }}",
                     type: "POST",
-                    data: $("#filter").serialize(),
+                    data: $("#qnafilter").serialize(),
                     success: function(respose) {
-                        // console.log('Submission was successful.');
-                        console.log(respose);
-                        $("#filter")[0].reset();
-                        $('#tot_certificate').html(respose.certificate);
-                        $('#tot_assFee').html(respose.assignment_fee);
-                        $('#tot_regFee').html(respose.registration_fee);
-                        $('#tot_assFee').html(respose.assignment_fee);
-                        $('#tot_assignment').html(respose.assignment);
+                        $("#qnafilter")[0].reset();
+                        $('#tot_regfee').html(respose.qna_reg_fee);
+                        $('#tot_qna').html(respose.total_qna);
+                        $('#tot_slotfee').html(respose.qnaSlot_fee);
                     },
                 });
             });
 
 
 
+        });
 
-            $("#category_id").click(function() {
-                var category_id = $('#category_id').val();
-                // console.log(category_id);
-                if (category_id > 0) {
-                    $.ajax({
-                        url: "{{ url('super-admin/all-report-filter-subCategory') }}/" +
-                            category_id,
-                        type: 'GET',
+        $("#category_id").click(function() {
+            var category_id = $('#category_id').val();
+            if (category_id > 0) {
+                $.ajax({
+                    url: "{{ url('manager-admin/all-report-filter-subCategory') }}/" + category_id,
+                    type: 'GET',
 
-                        success: function(res) {
-                            // console.log(res);
+                    success: function(res) {
+                        var _html = '<option>Select SubCateory</option>';
+                        $.each(res, function(index, res) {
+                            _html += '<option value="' + res.id + '">' + res.name + '</option>';
 
-                            var _html = '<option>Select SubCateory</option>';
-                            $.each(res, function(index, res) {
-                                _html += '<option value="' + res.id + '">' + res.name +
-                                    '</option>';
+                        });
+                        $('#sub_category_id').html(_html);
+                    }
+                })
+            }
+        });
+        $("#user_type").click(function() {
+            var user_type = $('#user_type').val();
+            if (user_type) {
+                $.ajax({
+                    url: "{{ url('manager-admin/simplePost-report-filter-userType') }}/" + user_type,
+                    type: 'GET',
 
-                            });
-                            $('#sub_category_id').html(_html);
-                        }
-                    })
-                }
-            });
+                    success: function(res) {
 
+                        var _html = '<option>Select Name</option>';
+                        $.each(res, function(index, res) {
+                            _html += '<option value="' + res.id + '">' + res.first_name + ' ' + res.last_name + '</option>';
 
+                        });
+                        $('#user_name').html(_html);
+                    }
+                })
+            }
         });
     </script>
 @endpush
