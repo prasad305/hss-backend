@@ -295,7 +295,7 @@
             </ul>
         </li>
 
-        <li class="nav-item {{ Request::routeIs('managerAdmin.dashboard.fanGroup') || Request::routeIs('managerAdmin.fanGroup.published') || Request::routeIs('managerAdmin.fanGroup.pending')|| Request::routeIs('managerAdmin.fanGroup.all')? 'menu-open' : '' }}">
+        <li class="nav-item {{ Request::routeIs('managerAdmin.dashboard.fanGroup') || Request::routeIs('managerAdmin.fangroup.published') || Request::routeIs('managerAdmin.fangroup.pending')|| Request::routeIs('managerAdmin.fangroup.all')? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
             <i class="nav-icon fa-solid fa-people-group"></i>
                 <p>Fan Group
@@ -310,19 +310,19 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.fangroup.published') }}" class="nav-link {{ Request::routeIs('managerAdmin.fanGroup.published')? 'active' : '' }}">
+                    <a href="{{ route('managerAdmin.fangroup.published') }}" class="nav-link {{ Request::routeIs('managerAdmin.fangroup.published')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Published</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.fangroup.pending') }}" class="nav-link {{ Request::routeIs('managerAdmin.fanGroup.pending')? 'active' : '' }}">
+                    <a href="{{ route('managerAdmin.fangroup.pending') }}" class="nav-link {{ Request::routeIs('managerAdmin.fangroup.pending')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Pending</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.fangroup.all') }}" class="nav-link {{ Request::routeIs('managerAdmin.fanGroup.all')? 'active' : '' }}">
+                    <a href="{{ route('managerAdmin.fangroup.all') }}" class="nav-link {{ Request::routeIs('managerAdmin.fangroup.all')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>All</p>
                     </a>
@@ -535,7 +535,7 @@
         <li class="nav-item {{ Request::routeIs('managerAdmin.dashboard.qna') || Request::routeIs('managerAdmin.qna.published') || Request::routeIs('managerAdmin.qna.pending') || Request::routeIs('managerAdmin.qna.all') ? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
             <i class="nav-icon fa-solid fa-person-circle-question"></i>
-                <p>Q&A
+                <p>Q & A
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
