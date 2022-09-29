@@ -568,7 +568,7 @@
         </li>
         <li class="nav-item {{ Request::routeIs('managerAdmin.accounts.index') ? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
-            <i class="nav-icon fa-solid fa-receipt"></i>
+            <i class="nav-icon fa-solid fa-user-pen"></i>
                 <p>Accounts
                     <i class="right fas fa-angle-left"></i>
                 </p>
