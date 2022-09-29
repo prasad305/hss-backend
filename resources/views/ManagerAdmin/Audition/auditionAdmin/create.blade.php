@@ -5,21 +5,25 @@
             <label for="first_name">First Name</label>
             <input type="text" class="form-control" id="first_name" required name="first_name"
                 placeholder="Enter Audition Admin First Name">
+                <span class="text-danger" id="first_name_error"></span>
         </div>
         <div class="row form-group">
             <label for="last_name">Last Name</label>
             <input type="text" class="form-control" id="last_name" required name="last_name"
                 placeholder="Enter Audition Admin Last Name">
+                <span class="text-danger" id="last_name_error"></span>
         </div>
         <div class="row form-group">
             <label for="phone">Phone</label>
             <input type="text" class="form-control" id="phone" required name="phone"
                 placeholder="Enter Audition Admin Phone">
+                <span class="text-danger" id="phone_error"></span>
         </div>
         <div class="row form-group">
             <label for="email">Email</label>
             <input type="email" class="form-control" id="email" required name="email"
                 placeholder="Enter Audition Admin Email">
+                <span class="text-danger" id="email_error"></span>
         </div>
         {{-- <div class="row form-group">
             <label for="category">Select Category</label>
@@ -36,12 +40,13 @@
                 <br><img id="icon1" onchange="validateMultipleImage('icon1')" alt="image" src="" height="180px"
                     width="180px" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';"
                     required />
+                    
 
                 <br><br>
 
                 <input type="file" class="mt-2" id="image" name="image"
                     onchange="document.getElementById('icon1').src = window.URL.createObjectURL(this.files[0]); show(this)"
-                    accept=".jfif,.jpg,.jpeg,.png,.gif" required>
+                    accept=".jfif,.jpg,.jpeg,.png,.gif">
 
             </div>
             <div class="form-group col-md-6">
@@ -52,7 +57,7 @@
                 <br><br>
                 <input type="file" class="mt-2" id="cover_photo" name="cover_photo"
                     onchange="document.getElementById('image1').src = window.URL.createObjectURL(this.files[0]); show(this)"
-                    accept=".jfif,.jpg,.jpeg,.png,.gif" required>
+                    accept=".jfif,.jpg,.jpeg,.png,.gif">
             </div>
         </span>
       <div class="row float-right">
@@ -62,49 +67,43 @@
 </div>
 
 <script>
-    $(document).on('click', '#btnSendData', function(event) {
-        event.preventDefault();
-        var form = $('#create-form')[0];
-        var formData = new FormData(form);
+    $(document).on('click','#btnSendData',function (event) {
+    event.preventDefault();
+    ErrorMessageClear(); // clear previous error message
+    var form = $('#create-form')[0];
+    var formData = new FormData(form);
 
-        // Set header if need any otherwise remove setup part
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
-            }
-        });
-        $.ajax({
-            url: "{{ route('managerAdmin.audition.auditionAdmin.store') }}", // your request url
-            data: formData,
-            processData: false,
-            contentType: false,
-            type: 'POST',
-            success: function(data) {
-                Swal.fire(
-                    'Success!',
-                    'Audition Admin has been Added. ' + data.message,
-                    'success'
-                )
+    // Set header if need any otherwise remove setup part
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
+        }
+    });
+    $.ajax({
+        url: "{{route('managerAdmin.audition.auditionAdmin.store')}}",// your request url
+        data: formData,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function (res) {
                 setTimeout(function() {
                     location.reload();
-                }, 1000);
-            },
-            error: function(data) {
-                var errorMessage = '<div class="card bg-danger">\n' +
-                    '<div class="card-body text-center p-5">\n' +
-                    '<span class="text-white">';
-                $.each(data.responseJSON.errors, function(key, value) {
-                    errorMessage += ('' + value + '<br>');
-                });
-                errorMessage += '</span>\n' +
-                    '</div>\n' +
-                    '</div>';
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    footer: errorMessage
-                })
+                }, 100);
+            if (res.type === 'error') {
+                Swal.fire(
+                    'Error!',
+                    res.message,
+                    'error'
+                )
             }
-        });
+            
+        },
+        error: function (data) {
+            $.each(data.responseJSON.errors, function(key, value) {
+                ErrorMessage(key,value); // validation message show
+            });
+        }
     });
+});
+
 </script>
