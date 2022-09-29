@@ -4,7 +4,7 @@
         <!-- Add icons to the links using the .nav-icon class
            with font-awesome or any other icon font library -->
         <li class="nav-item menu-open">
-            <a href="{{ route('managerAdmin.dashboard') }}" class="nav-link active">
+            <a href="{{ route('managerAdmin.dashboard') }}" class="nav-link {{ Request::routeIs('managerAdmin.dashboard') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                     Dashboard
@@ -13,8 +13,8 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('managerAdmin.schedule.index') }}" class="nav-link">
-                <i class="nav-icon {{ Request::routeIs('managerAdmin.schedule.index') ? 'active' : '' }} fa fa-calendar"></i>
+            <a href="{{ route('managerAdmin.schedule.index') }}" class="nav-link {{ Request::routeIs('managerAdmin.schedule.index') ? 'active' : '' }}">
+                <i class="nav-icon  fa fa-calendar"></i>
                 <p>
                     Schedules
                 </p>
@@ -23,8 +23,8 @@
 
 
         <li class="nav-item">
-            <a href="{{ route('managerAdmin.admin.index') }}" class="nav-link">
-                <i class="nav-icon {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }} fa fa-user">
+            <a href="{{ route('managerAdmin.admin.index') }}" class="nav-link {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }}">
+                <i class="nav-icon fa fa-user">
                 </i>
                 {{-- <i class="fa-solid fa-list-check"></i> --}}
                 <p>
@@ -35,8 +35,8 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('managerAdmin.star.index') }}" class="nav-link">
-                <i class="nav-icon {{ Request::routeIs('managerAdmin.star.index') ? 'active' : '' }} fa fa-star"></i>
+            <a href="{{ route('managerAdmin.star.index') }}" class="nav-link {{ Request::routeIs('managerAdmin.star.index') ? 'active' : '' }}">
+                <i class="nav-icon fa fa-star"></i>
                 <p>
                     Super Stars
                 </p>
@@ -44,8 +44,8 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('managerAdmin.jury.index') }}" class="nav-link">
-                <i class="nav-icon {{ Request::routeIs('managerAdmin.jury.index') ? 'active' : '' }} fa-solid fa-gavel"></i>
+            <a href="{{ route('managerAdmin.jury.index') }}" class="nav-link {{ Request::routeIs('managerAdmin.jury.index') ? 'active' : '' }}">
+                <i class="nav-icon fa-solid fa-gavel"></i>
                 <p>
                     Jury
                 </p>
@@ -53,9 +53,9 @@
         </li>
 
         <li class="nav-item">
-            <a href="{{ route('managerAdmin.assigned.index') }}" class="nav-link">
+            <a href="{{ route('managerAdmin.assigned.index') }}" class="nav-link {{ Request::routeIs('managerAdmin.assigned.index') ? 'active' : '' }}">
                 <i
-                    class="nav-icon {{ Request::routeIs('managerAdmin.assigned.index') ? 'active' : '' }} fa-sharp fa-solid fa-door-open"></i>
+                    class="nav-icon  fa-sharp fa-solid fa-door-open"></i>
                 <p>
                     Assign
                 </p>
@@ -65,42 +65,41 @@
 
 
 
-        <li class="nav-item">
+        <li class="nav-item {{ Request::routeIs('managerAdmin.dashboard.simplePost') || Request::routeIs('managerAdmin.simplePost.published') ||Request::routeIs('managerAdmin.simplePost.pending') ||Request::routeIs('managerAdmin.simplePost.all') ? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
-                <!-- <i class="nav-icon fas fa-chart-pie"></i> -->
-                <i class="fa-sharp fa-solid fa-signs-post"></i>
+                <i class="nav-icon fa-sharp fa-solid fa-signs-post"></i>
                 <p>Simple Post
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.dashboard.simplePost') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.simplePost') }}" class="nav-link {{ Request::routeIs('managerAdmin.dashboard.simplePost') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.simplePost.published') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.simplePost.published') }}" class="nav-link {{ Request::routeIs('managerAdmin.simplePost.published') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Published</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.simplePost.pending') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.simplePost.pending') }}" class="nav-link {{ Request::routeIs('managerAdmin.simplePost.pending') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Pending</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.simplePost.all') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.simplePost.all') }}" class="nav-link {{ Request::routeIs('managerAdmin.simplePost.all') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>All</p>
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{ Request::routeIs('managerAdmin.promoVideo.published') || Request::routeIs('managerAdmin.promoVideo.pending') || Request::routeIs('managerAdmin.promoVideo.all')? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-video-camera"></i>
                 <p>Promo Videos
@@ -109,47 +108,47 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.promoVideo.published') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.promoVideo.published') }}" class="nav-link {{ Request::routeIs('managerAdmin.promoVideo.published') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Published</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.promoVideo.pending') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.promoVideo.pending') }}" class="nav-link {{ Request::routeIs('managerAdmin.promoVideo.pending') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Pending</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.promoVideo.all') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.promoVideo.all') }}" class="nav-link {{ Request::routeIs('managerAdmin.promoVideo.all') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>All</p>
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{ Request::routeIs('managerAdmin.dashboard.greeting') || Request::routeIs('managerAdmin.greeting.request') || Request::routeIs('managerAdmin.greeting.published')? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
-                <i class="fa-solid fa-heart"></i>
+                <i class="nav-icon fa-solid fa-heart"></i>
                 <p>Greetings
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.dashboard.greeting') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.greeting') }}" class="nav-link {{ Request::routeIs('managerAdmin.dashboard.greeting')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.greeting.request') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.greeting.request') }}" class="nav-link {{ Request::routeIs('managerAdmin.greeting.request')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Request</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.greeting.published') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.greeting.published') }}" class="nav-link {{ Request::routeIs('managerAdmin.greeting.published')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Published</p>
                     </a>
@@ -158,7 +157,7 @@
         </li>
 
 
-        <li class="nav-item">
+        <li class="nav-item {{ Request::routeIs('managerAdmin.dashboard.marketplace') || Request::routeIs('managerAdmin.marketplace.published') || Request::routeIs('managerAdmin.marketplace.pending') || Request::routeIs('managerAdmin.marketplace.all') || Request::routeIs('managerAdmin.marketplace.allOrderList') || Request::routeIs('managerAdmin.dashboard.auction') || Request::routeIs('managerAdmin.auctionProduct.published') || Request::routeIs('managerAdmin.auctionProduct.pending') || Request::routeIs('managerAdmin.auctionProduct.all') || Request::routeIs('managerAdmin.dashboard.souvenir') || Request::routeIs('managerAdmin.souvenir.published') || Request::routeIs('managerAdmin.souvenir.pending') || Request::routeIs('managerAdmin.souvenir.all') || Request::routeIs('managerAdmin.souvenir.showApply') || Request::routeIs('managerAdmin.souvenir.showApplyDelete')? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-shopping-cart"></i>
                 <p>
@@ -167,40 +166,40 @@
                 </p>
             </a>
             <ul class="nav nav-treeview">
-                <li class="nav-item">
+                <li class="nav-item {{ Request::routeIs('managerAdmin.dashboard.marketplace') || Request::routeIs('managerAdmin.marketplace.published') || Request::routeIs('managerAdmin.marketplace.pending') || Request::routeIs('managerAdmin.marketplace.all') || Request::routeIs('managerAdmin.marketplace.allOrderList')? 'menu-open' : ''}}">
                     <a href="#" class="nav-link">
-                        <i class="fa-solid fa-shop"></i>
+                        <i class="nav-icon fa-solid fa-shop"></i>
                         <p>Marketplace
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.dashboard.marketplace') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.dashboard.marketplace') }}" class="nav-link {{ Request::routeIs('managerAdmin.dashboard.marketplace')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.marketplace.published') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.marketplace.published') }}" class="nav-link {{ Request::routeIs('managerAdmin.marketplace.published')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>Published</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.marketplace.pending') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.marketplace.pending') }}" class="nav-link {{ Request::routeIs('managerAdmin.marketplace.pending')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>Pending</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.marketplace.all') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.marketplace.all') }}" class="nav-link {{ Request::routeIs('managerAdmin.marketplace.all')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>All</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.marketplace.allOrderList') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.marketplace.allOrderList') }}" class="nav-link {{ Request::routeIs('managerAdmin.marketplace.allOrderList')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>Order List</p>
                             </a>
@@ -210,34 +209,34 @@
 
             </ul>
             <ul class="nav nav-treeview">
-                <li class="nav-item">
+                <li class="nav-item {{Request::routeIs('managerAdmin.dashboard.auction') || Request::routeIs('managerAdmin.auctionProduct.published') || Request::routeIs('managerAdmin.auctionProduct.pending') || Request::routeIs('managerAdmin.auctionProduct.all') ? 'menu-open' : ''}}">
                     <a href="#" class="nav-link">
-                        <i class="fa-solid fa-person-running"></i>
+                        <i class="nav-icon fa-solid fa-person-running"></i>
                         <p>Auction
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.dashboard.auction') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.dashboard.auction') }}" class="nav-link {{ Request::routeIs('managerAdmin.dashboard.auction')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.auctionProduct.published') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.auctionProduct.published') }}" class="nav-link {{ Request::routeIs('managerAdmin.auctionProduct.published')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>Published</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.auctionProduct.pending') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.auctionProduct.pending') }}" class="nav-link {{ Request::routeIs('managerAdmin.auctionProduct.pending')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>Pending</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.auctionProduct.all') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.auctionProduct.all') }}" class="nav-link {{ Request::routeIs('managerAdmin.auctionProduct.all')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>All</p>
                             </a>
@@ -246,46 +245,46 @@
                 </li>
             </ul>
             <ul class="nav nav-treeview">
-                <li class="nav-item">
+                <li class="nav-item {{ Request::routeIs('managerAdmin.dashboard.souvenir') || Request::routeIs('managerAdmin.souvenir.published') || Request::routeIs('managerAdmin.souvenir.pending') || Request::routeIs('managerAdmin.souvenir.all') || Request::routeIs('managerAdmin.souvenir.showApply') || Request::routeIs('managerAdmin.souvenir.showApplyDelete')? 'menu-open' : '' }}">
                     <a href="#" class="nav-link">
-                    <i class="fa-solid fa-file-signature"></i>
+                    <i class="nav-icon fa-solid fa-file-signature"></i>
                         <p>Souvenir
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.dashboard.souvenir') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.dashboard.souvenir') }}" class="nav-link {{ Request::routeIs('managerAdmin.dashboard.souvenir')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.souvenir.published') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.souvenir.published') }}" class="nav-link {{ Request::routeIs('managerAdmin.souvenir.published')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>Published</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.souvenir.pending') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.souvenir.pending') }}" class="nav-link {{ Request::routeIs('managerAdmin.souvenir.pending')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>Pending</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.souvenir.all') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.souvenir.all') }}" class="nav-link {{ Request::routeIs('managerAdmin.souvenir.all')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>All</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.souvenir.showApply') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.souvenir.showApply') }}" class="nav-link {{ Request::routeIs('managerAdmin.souvenir.showApply')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>Register List</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('managerAdmin.souvenir.showApplyDelete') }}" class="nav-link">
+                            <a href="{{ route('managerAdmin.souvenir.showApplyDelete') }}" class="nav-link {{ Request::routeIs('managerAdmin.souvenir.showApplyDelete')? 'active' : '' }}">
                                 <i class="fa fa-arrow-right nav-icon"></i>
                                 <p>Delete List</p>
                             </a>
@@ -296,34 +295,34 @@
             </ul>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item {{ Request::routeIs('managerAdmin.dashboard.fanGroup') || Request::routeIs('managerAdmin.fanGroup.published') || Request::routeIs('managerAdmin.fanGroup.pending')|| Request::routeIs('managerAdmin.fanGroup.all')? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
-            <i class="fa-solid fa-people-group"></i>
+            <i class="nav-icon fa-solid fa-people-group"></i>
                 <p>Fan Group
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.dashboard.fanGroup') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.fanGroup') }}" class="nav-link {{ Request::routeIs('managerAdmin.dashboard.fanGroup')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.fangroup.published') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.fangroup.published') }}" class="nav-link {{ Request::routeIs('managerAdmin.fanGroup.published')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Published</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.fangroup.pending') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.fangroup.pending') }}" class="nav-link {{ Request::routeIs('managerAdmin.fanGroup.pending')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Pending</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.fangroup.all') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.fangroup.all') }}" class="nav-link {{ Request::routeIs('managerAdmin.fanGroup.all')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>All</p>
                     </a>
@@ -331,7 +330,7 @@
             </ul>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item {{ Request::routeIs('managerAdmin.dashboard.meetupEvent') || Request::routeIs('managerAdmin.meetupEvent.published') || Request::routeIs('managerAdmin.meetupEvent.pending')|| Request::routeIs('managerAdmin.meetupEvent.all')? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
             <i class="nav-icon fa-solid fa-handshake"></i>
                 <p>Meetup Events
@@ -341,25 +340,25 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.dashboard.meetupEvent') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.meetupEvent') }}" class="nav-link {{ Request::routeIs('managerAdmin.dashboard.meetupEvent')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.meetupEvent.published') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.meetupEvent.published') }}" class="nav-link {{ Request::routeIs('managerAdmin.meetupEvent.published')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Published</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.meetupEvent.pending') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.meetupEvent.pending') }}" class="nav-link {{ Request::routeIs('managerAdmin.meetupEvent.pending')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Pending</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.meetupEvent.all') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.meetupEvent.all') }}" class="nav-link {{ Request::routeIs('managerAdmin.meetupEvent.all')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>All</p>
                     </a>
@@ -368,34 +367,34 @@
         </li>
 
 
-        <li class="nav-item">
+        <li class="nav-item {{ Request::routeIs('managerAdmin.dashboard.liveChat') || Request::routeIs('managerAdmin.liveChat.published') || Request::routeIs('managerAdmin.liveChat.pending')|| Request::routeIs('managerAdmin.liveChat.all')? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
-            <i class="fa-solid fa-comment-sms"></i>
+            <i class="nav-icon fa-solid fa-comment-sms"></i>
                 <p>Live Chat
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.dashboard.liveChat') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.liveChat') }}" class="nav-link {{ Request::routeIs('managerAdmin.dashboard.liveChat')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.liveChat.published') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.liveChat.published') }}" class="nav-link {{ Request::routeIs('managerAdmin.liveChat.published')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Published</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.liveChat.pending') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.liveChat.pending') }}" class="nav-link {{ Request::routeIs('managerAdmin.liveChat.pending')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Pending</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.liveChat.all') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.liveChat.all') }}" class="nav-link {{ Request::routeIs('managerAdmin.liveChat.all')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>All</p>
                     </a>
@@ -403,46 +402,46 @@
             </ul>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item {{ Request::routeIs('managerAdmin.dashboard.learningSession') || Request::routeIs('managerAdmin.learningSession.evaluation') || Request::routeIs('managerAdmin.learningSession.published')|| Request::routeIs('managerAdmin.learningSession.pending') || Request::routeIs('managerAdmin.learningSession.all') || Request::routeIs('managerAdmin.learningSession.rejected')? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
-            <i class="fa-solid fa-chalkboard-user"></i>
+            <i class="nav-icon fa-solid fa-chalkboard-user"></i>
                 <p>Learning Session
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.dashboard.learningSession') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.learningSession') }}" class="nav-link {{ Request::routeIs('managerAdmin.dashboard.learningSession')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Dashbaord</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.learningSession.evaluation') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.learningSession.evaluation') }}" class="nav-link {{ Request::routeIs('managerAdmin.learningSession.evaluation')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Evaluation</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.learningSession.published') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.learningSession.published') }}" class="nav-link {{ Request::routeIs('managerAdmin.learningSession.published')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Published</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.learningSession.pending') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.learningSession.pending') }}" class="nav-link {{ Request::routeIs('managerAdmin.learningSession.pending')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Pending</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.learningSession.all') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.learningSession.all') }}" class="nav-link {{ Request::routeIs('managerAdmin.learningSession.all')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>All</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.learningSession.rejected') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.learningSession.rejected') }}" class="nav-link {{ Request::routeIs('managerAdmin.learningSession.rejected')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Rejected By Star</p>
                     </a>
@@ -452,11 +451,10 @@
 
 
         <li
-            class="nav-item {{ \Illuminate\Support\Facades\Request::is('manager-admin/audition*') ? 'menu-open ' : '' }}">
-            <a href="#"
-                class="nav-link {{ \Illuminate\Support\Facades\Request::is('manager-admin/audition*') ? 'active ' : '' }}">
+            class="nav-item {{ Request::routeIs('managerAdmin.dashboard.audition') || Request::routeIs('managerAdmin.audition.events') || Request::routeIs('managerAdmin.audition.pending')|| Request::routeIs('managerAdmin.audition.all') || Request::routeIs('managerAdmin.audition.published') || Request::routeIs('managerAdmin.audition.registration.rules') || Request::routeIs('managerAdmin.audition..auditionAdmin.index')|| Request::routeIs('managerAdmin.audition.juries')|| Request::routeIs('managerAdmin.audition.videoFeed')|| Request::routeIs('managerAdmin.audition.roundResult')? 'menu-open' : '' }}">
+            <a href="#" class="nav-link">
 
-                <i class="fa-solid fa-person-skating"></i>
+                <i class="nav-icon fa-solid fa-person-skating"></i>
 
                 <p>Audition Management
                     <i class="right fas fa-angle-left"></i>
@@ -464,42 +462,42 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.dashboard.audition') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.audition') }}" class="nav-link {{ Request::routeIs('managerAdmin.dashboard.audition')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.events') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.audition.events') }}" class="nav-link {{ Request::routeIs('managerAdmin.audition.events')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Events</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.pending') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.audition.pending') }}" class="nav-link {{ Request::routeIs('managerAdmin.audition.pending')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Pending</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.all') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.audition.all') }}" class="nav-link {{ Request::routeIs('managerAdmin.audition.all')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>All</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.published') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.audition.published') }}" class="nav-link {{ Request::routeIs('managerAdmin.audition.published')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Published</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.registration.rules') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.audition.registration.rules') }}" class="nav-link {{ Request::routeIs('managerAdmin.audition.registration.rules')? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Audition Reg. Rules</p>
                     </a>
@@ -508,26 +506,25 @@
 
 
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.auditionAdmin.index') }}"
-                        class="nav-link {{ Request::routeIs('managerAdmin.audition.auditionAdmin.index') ? 'active' : '' }}">
+                    <a href="{{ route('managerAdmin.audition.auditionAdmin.index') }}" class="nav-link {{ Request::routeIs('managerAdmin.audition.auditionAdmin.index') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Admins</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.juries') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.audition.juries') }}" class="nav-link {{ Request::routeIs('managerAdmin.audition.juries') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Juries</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.videoFeed') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.audition.videoFeed') }}" class="nav-link {{ Request::routeIs('managerAdmin.audition.videoFeed') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Video Feed</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.audition.roundResult') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.audition.roundResult') }}" class="nav-link {{ Request::routeIs('managerAdmin.audition.roundResult') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Results</p>
                     </a>
@@ -535,50 +532,50 @@
             </ul>
         </li>
         {{-- Question And Answers --}}
-        <li class="nav-item">
+        <li class="nav-item {{ Request::routeIs('managerAdmin.dashboard.qna') || Request::routeIs('managerAdmin.qna.published') || Request::routeIs('managerAdmin.qna.pending') || Request::routeIs('managerAdmin.qna.all') ? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
-            <i class="fa-solid fa-person-circle-question"></i>
+            <i class="nav-icon fa-solid fa-person-circle-question"></i>
                 <p>Q&A
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.dashboard.qna') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.dashboard.qna') }}" class="nav-link {{ Request::routeIs('managerAdmin..dashboard.qna') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.qna.published') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.qna.published') }}" class="nav-link {{ Request::routeIs('managerAdmin.qna.published') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Published</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.qna.pending') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.qna.pending') }}" class="nav-link {{ Request::routeIs('managerAdmin.qna.pending') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Pending</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.qna.all') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.qna.all') }}" class="nav-link {{ Request::routeIs('managerAdmin.qna.all') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>All</p>
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{ Request::routeIs('managerAdmin.accounts.index') ? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
-            <i class="fa-solid fa-receipt"></i>
+            <i class="nav-icon fa-solid fa-receipt"></i>
                 <p>Accounts
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.accounts.index') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.accounts.index') }}" class="nav-link {{ Request::routeIs('managerAdmin.accounts.index') ? 'active' : '' }}">
                         <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
