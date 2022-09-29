@@ -35,37 +35,72 @@
         </div>
 
         <div class="row">
-            <div class='col-md-3'>
-                <div class="card m-3" style="
-                                                            backgroundColor: black;
-                                                            border: none;
-                                                            outline: none;
-                                                          ">
-                    <div class="card-body">
-                        <div class="text-center d-flex justify-content-center">
-                            <img src={{ asset('assets/manager-admin/events/person-1.png') }} alt="" height="150"
-                                width="150" style=" borderRadius: 50% " />
-                        </div>
-                        <h5 class="text-muted text-center">Oni Hasan</h5>
-                        <h6 class="text-muted text-center">Music</h6>
-                        <p class="text-muted text-center">Specialist</p>
-                    </div>
-                    <div class="text-center mb-2">
-                        <button class="btn btn-danger"> Assigned</button>
+            <div class="col-sm-6 col-md-4  col-lg-3">
+                <div class=" bg-dark shadow-none pb-4 m-3 BGaB">
+                    <img src="{{ asset('assets/manager-admin/events/person-2.png') }}" class="img-fluid w-100 h-75"style="max-height:200px borderRadius: 50% " alt="Admin Image"
+                        class="img-fluid ImgBlue mr-3 mb-2 w-100">
 
+                    <div className="">
+                        <div>
+                            <h5 class="text-muted text-center">Oni Hasan</h5>
+                            <h6 class="text-muted text-center">Music</h6>
+                            <p class="text-muted text-center">Specialist</p>
+
+                            <center>
+                                <a type="button" class="btn reg-btn-user ">Assigned <i class="fa fa-angle-double-right"></i></a>
+
+                            </center>
+
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class='col-md-3'>
-                <div class="card m-3" style="
-                                                            backgroundColor: black;
-                                                            border: none;
-                                                            outline: none;
-                                                          ">
+            <div class="col-sm-6 col-md-4  col-lg-3">
+                <div class=" bg-dark shadow-none pb-4 m-3 BGaB">
+                    <img src="{{ asset('assets/manager-admin/events/person-2.png') }}" class="img-fluid w-100"style="max-height:200px borderRadius: 50% " alt="Admin Image"
+                        class="img-fluid ImgBlue mr-3 mb-2 w-100">
+
+                    <div className="">
+                        <div>
+                            <h5 class="text-muted text-center">Oni Hasan</h5>
+                            <h6 class="text-muted text-center">Music</h6>
+                            <p class="text-muted text-center">Specialist</p>
+
+                            <center>
+                                <button class="border-0 p-2 detail-btn-use" style="width: 100px">Free <i class="fa fa-angle-double-right"></i></button >
+
+                            </center>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4  col-lg-3">
+                <div class=" bg-dark shadow-none pb-4 m-3 BGaB">
+                    <img src="{{ asset('assets/manager-admin/events/person-2.png') }}" class="img-fluid w-100"style="max-height:200px borderRadius: 50% " alt="Admin Image"
+                        class="img-fluid ImgBlue mr-3 mb-2 w-100">
+
+                    <div className="">
+                        <div>
+                            <h5 class="text-muted text-center">Oni Hasan</h5>
+                            <h6 class="text-muted text-center">Music</h6>
+                            <p class="text-muted text-center">Specialist</p>
+
+                            <center>
+                                <a type="button" class="btn  reg-btn-user ">Assigned<i class="fa fa-angle-double-right"></i></a>
+
+                            </center>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- <div class='col-sm-6 col-md-4  col-lg-3 '>
+                <div class="card m-3" style=" backgroundColor: black;">
                     <div class="card-body">
                         <div class="text-center d-flex justify-content-center">
-                            <img src={{ asset('assets/manager-admin/events/person-2.png') }} alt="" height="150"
-                                width="150" style=" borderRadius: 50% " />
+                            <img src={{ asset('assets/manager-admin/events/person-2.png') }} alt=""   class="img-fluid ImgBlue mr-3 mb-2 w-100">
+                                  
                         </div>
                         <h5 class="text-muted text-center">Oni Hasan</h5>
                         <h6 class="text-muted text-center">Music</h6>
@@ -77,12 +112,8 @@
                     </div>
                 </div>
             </div>
-            <div class='col-md-3'>
-                <div class="card m-3" style="
-                                                            backgroundColor: black;
-                                                            border: none;
-                                                            outline: none;
-                                                          ">
+            <div class='col-sm-6 col-md-4  col-lg-3'>
+                <div class="card m-3" style="  backgroundColor: black;  ">
                     <div class="card-body">
                         <div class="text-center d-flex justify-content-center">
                             <img src={{ asset('assets/manager-admin/events/person-3.png') }} alt="" height="150"
@@ -97,7 +128,7 @@
 
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
     </div>

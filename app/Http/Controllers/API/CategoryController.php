@@ -12,6 +12,7 @@ use App\Models\SubCategory;
 use App\Models\SuperStar;
 use App\Models\Wallet;
 use App\Models\Currency;
+use phpDocumentor\Reflection\Types\Null_;
 
 class CategoryController extends Controller
 {
@@ -75,11 +76,13 @@ class CategoryController extends Controller
 
         // return $categoryCount;
         $starCategoryCount = count(json_decode($selectedCategory->star_id));
+        $wallet = Wallet::where('user_id', $id)->first();
 
         return response()->json([
             'status' => 200,
             'categoryCount' => $categoryCount,
             'starCategoryCount' => $starCategoryCount,
+            'wallet' => $wallet,
         ]);
     }
 
@@ -255,6 +258,13 @@ class CategoryController extends Controller
         $subcategory = json_decode($cat->subcategory);
         $starcategory = json_decode($cat->star_id);
 
+        $superStar = User::where([['user_type', 'star'], ['active_status', 1], ['password', '!=', NULL]])->whereIn('category_id', $category)->get();
+
+        $followingStars = array();
+        foreach ($superStar as $key => $value) {
+            array_push($followingStars, $value->id);
+        }
+
         $subCat = array();
         $starCat = array();
 
@@ -276,23 +286,23 @@ class CategoryController extends Controller
             }
         }
 
-        for ($x = 0; $x < $starCatLen; $x++) {
-            $ok = false;
-            for ($y = 0; $y < $catLen; $y++) {
-                $scat = SuperStar::find($starcategory[$x]);
-                if ($category[$y] == $scat->category_id) {
-                    $ok = true;
-                }
-            }
-            if ($ok === false) {
-                array_push($starCat, $starcategory[$x]);
-                // $ok = false;
-            }
-        }
+        // for ($x = 0; $x < $starCatLen; $x++) {
+        //     $ok = false;
+        //     for ($y = 0; $y < $catLen; $y++) {
+        //         $scat = SuperStar::find($starcategory[$x]);
+        //         if ($category[$y] == $scat->category_id) {
+        //             $ok = true;
+        //         }
+        //     }
+        //     if ($ok === false) {
+        //         array_push($starCat, $starcategory[$x]);
+        //         // $ok = false;
+        //     }
+        // }
 
         $cat->category = $category;
         $cat->subcategory = $subCat;
-        $cat->star_id = $starCat;
+        $cat->star_id = json_encode($followingStars);
         $cat->save();
 
         return response()->json([
@@ -442,9 +452,18 @@ class CategoryController extends Controller
 
         $subCategories = SubCategory::whereIn('category_id', $req->cat)->get();
 
+
         $user = ChoiceList::where('user_id', auth('sanctum')->user()->id)->first();
 
         $wallet = Wallet::where('user_id', auth('sanctum')->user()->id)->first();
+
+        $superStar = User::where([['user_type', 'star'], ['active_status', 1], ['password', '!=', NULL]])->whereIn('category_id', $req->cat)->get();
+
+        $followingStars = array();
+        foreach ($superStar as $key => $value) {
+            array_push($followingStars, $value->id);
+        }
+
         if (!$wallet) {
             Wallet::create([
                 'user_id' => auth('sanctum')->user()->id,
@@ -467,7 +486,7 @@ class CategoryController extends Controller
                 'user_id' => auth('sanctum')->user()->id,
                 'category' => json_encode($req->cat),
                 'subcategory' => '[]',
-                'star_id' => '[]'
+                'star_id' => json_encode($followingStars)
             ]);
         }
 

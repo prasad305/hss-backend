@@ -6,11 +6,10 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-12 mt-3">
             @if (isset($auditions[0]))
                 @foreach ($auditions as $key => $audition)
-                    <div class="col-md-4">
-                        <div class="card">
+                    <div class="col-md-6 ">
+                        <div class="card m-3">
                             <div class="card-header bg-primary">
                                 Audition Admin :
                                 @if ($audition->auditionAdmin)
@@ -20,16 +19,15 @@
                             </div>
                             <div class="card-body">
                                 <h1>{{ $audition->title }}</h1>
-                                <p>{{ $audition->description }} </p>
+                                <p>{!! $audition->description !!} </p>
                             </div>
                             <div class="card-footer">
-                                <a class="btn btn-success text-light" href="{{ route('managerAdmin.audition.registration.rules.create',$audition->id) }}">Create new rules</a>
-                                <a class="btn btn-warning text-light" href="{{ route('managerAdmin.audition.registration.rules.edit',$audition->id) }}">edit rules</a>
+                                <a class="btn  create-rules-btn" href="{{ route('managerAdmin.audition.registration.rules.create',$audition->id) }}">Create new rules</a>
+                                <a class="btn  rules-edit" href="{{ route('managerAdmin.audition.registration.rules.edit',$audition->id) }}">edit rules</a>
                             </div>
                         </div>
                     </div>
                 @endforeach
             @endif
-        </div>
     </div>
 @endsection

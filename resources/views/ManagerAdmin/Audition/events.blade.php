@@ -16,7 +16,7 @@ Admin
     }
 
     .BGaB {
-        border: 1px solid rgb(0, 204, 255);
+        border: 1px solid goldenrod;
     }
 
     .GoldBtn {
@@ -90,8 +90,8 @@ Admin
     </div>
     <div class="row">
         @foreach ($auditions as $audition)
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="p-2 bg-dark shadow-none pb-4 m-3 BGaB">
+            <div class=" col-sm-6 col-md-6 col-lg-3 new-list ">
+                <div class="p-4 bg-dark shadow-none pb-4 m-3 BGaB">
                     <img src="@if ( isset($audition->banner))
                     {{ asset($audition->banner) }}
                     @else {{ asset('assets/manager-admin/clock.png') }}
@@ -101,11 +101,11 @@ Admin
 
                 <div className="">
                     <div>
-                        <h5 class="text-center text-bold">{{ $audition->title }}</h5>
+                        <h4 class="text-center text-bold mb-5 text-warning">{{ $audition->title }}</h4>
 
                         {{-- <a href="{{ route('managerAdmin.audition.promoInstruction', $audition->id) }}" class="btn a-bg-color mb-2">Promo Instruction</a>
                         <a href="{{ route('managerAdmin.audition.roundInstruction', $audition->id) }}" class="btn a-bg-color mb-2">Round Instruction</a> --}}
-                        <a href="{{ route('managerAdmin.audition.registerUser', $audition->id) }}" class="btn a-bg-color mb-2">Register User</a>
+                        <a href="{{ route('managerAdmin.audition.registerUser', $audition->id) }}" class="btn a-bg-color text-light">Register User</a>
 
                                 {{-- <span class="text-center btn btn-info px-4 text-bold">Done</span> --}}
                                 {{-- <a href="{{ route('managerAdmin.audition.promoInstruction', $audition->id) }}"
@@ -117,10 +117,10 @@ Admin
 
                                 @if ($audition->audition_admin_id == null)
                                     <a href="{{ route('managerAdmin.audition.assignManpower', $audition->id) }}"
-                                        class="btn btn-warning m-2">Assign Manpower</a>
+                                        class="btn mx-2 manpower-but ">Assign Manpower</a>
                                 @else
                                     <a href="{{ route('managerAdmin.audition.registerUser', $audition->id) }}"
-                                        class="btn btn-warning">Register User</a>
+                                        class="btn btn-warning a-bg-color text-light">Register User</a>
                                 @endif
 
                     </div>

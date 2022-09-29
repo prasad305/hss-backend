@@ -37,14 +37,14 @@ Manager Admin
     <div class="container-fluid">
         <div class="row">
             @foreach ($audition as $val)
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="p-2 bg-dark shadow-none pb-4 m-3 BGaB">
-                    <img src="{{ asset($val->banner) }}" clss="img-fluid"style="max-height:200px" alt="Admin Image"
+            <div class="col-sm-6 col-md-4  col-lg-3">
+                <div class=" bg-dark shadow-none pb-4 m-3 BGaB">
+                    <img src="{{ asset($val->banner) }}" class="img-fluid w-100"style="max-height:200px borderRadius: 50% " alt="Admin Image"
                         class="img-fluid ImgBlue mr-3 mb-2 w-100">
 
                     <div className="">
                         <div>
-                            <h5 class="text-center text-bold">{{ $val->name }}</h5>
+                            <h5 class="text-center text-bold mt-4">{{ $val->name }}</h5>
 
                             <center>
 
@@ -57,10 +57,10 @@ Manager Admin
                             <button type="button" class="btn btn-success waves-effect  waves-light"><i class="icon-checkmark-round"></i> Published</button>
                             @endif --}}
 
-                                <a href="{{ route('managerAdmin.audition.details', [$val->id]) }}" type="button" class="btn btn-info waves-effect  waves-light">Details <i class="fa fa-angle-double-right"></i></a>
+                                <a href="{{ route('managerAdmin.audition.details', [$val->id]) }}" type="button" class="btn waves-effect  waves-light detail-btn-use text-light">Details <i class="fa fa-angle-double-right"></i></a>
 
                             @if ($val->status >= 3)
-                                <a href="{{route('managerAdmin.audition.registerUser',$val->id)}}" class="btn btn-warning">Register User</a>
+                                <a href="{{route('managerAdmin.audition.registerUser',$val->id)}}" class="btn  reg-btn-user  mx-1">Register User</a>
                             @endif
                             </center>
 
