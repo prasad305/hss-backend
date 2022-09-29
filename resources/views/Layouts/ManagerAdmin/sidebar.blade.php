@@ -5,7 +5,7 @@
            with font-awesome or any other icon font library -->
         <li class="nav-item menu-open">
             <a href="{{ route('managerAdmin.dashboard') }}" class="nav-link {{ Request::routeIs('managerAdmin.dashboard') ? 'active' : '' }}">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <i class="nav-icon fa-solid fa-house"></i>
                 <p>
                     Dashboard
                 </p>
