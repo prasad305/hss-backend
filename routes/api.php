@@ -549,6 +549,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
         return response()->json(['message' => 'You are in as Superstar', 'status' => 200], 200);
     });
 
+    Route::get('star/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('/livechat', [LiveChatController::class, 'livechat']);
     Route::get('/sinlgeLiveChat/{id}', [LiveChatController::class, 'sinlgeLiveChat']);
 

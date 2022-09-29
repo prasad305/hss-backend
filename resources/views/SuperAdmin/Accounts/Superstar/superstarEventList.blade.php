@@ -33,7 +33,7 @@
         <div class="container-fluid">
 
 
-            @if ($module == 4 || $module == 2 || $module == 3 || $module == 8)
+            @if ($module == 4 || $module == 2 || $module == 3 || $module == 8 || $module ==  1)
                 <div class="card">
                     <div class="card-header">
 

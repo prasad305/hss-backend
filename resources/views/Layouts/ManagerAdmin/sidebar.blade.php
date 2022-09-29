@@ -588,9 +588,9 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.report.all') }}" class="nav-link">
+                    <a href="{{ route('managerAdmin.report.audition') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>All Report</p>
+                        <p>Audition</p>
                     </a>
                 </li>
                 <li class="nav-item">

@@ -474,7 +474,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // <================================= All Report ======================================>
 
-    Route::get('/all-`report', [ReportController::class, 'allReport'])->name('report.all');
+    Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
     Route::get('/learningSession-report', [ReportController::class, 'learningSessionReport'])->name('report.learningSession');
     Route::post('/learningSession-report-filter', [ReportController::class, 'learningFilter'])->name('report.filter.learningSession');
     Route::get('/all-report-filter-subCategory/{id}', [ReportController::class, 'allSubCategory']);
@@ -486,7 +486,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('/meetup-report-filter', [ReportController::class, 'meetupReportFilter'])->name('report.filter.meetupevent');
     Route::get('/greeting-report', [ReportController::class, 'greetingReport'])->name('report.greeting');
     Route::post('/greeting-report-filter', [ReportController::class, 'greetingReportFilter'])->name('report.filter.greeting');
-    Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
+    // Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
     Route::get('/marketplace-report', [ReportController::class, 'marketplaceReport'])->name('report.marketplace');
     Route::post('/marketplace-report-filter', [ReportController::class, 'marketPlaceFilter'])->name('report.filter.marketPlace');
     Route::get('/auction-report', [ReportController::class, 'auctionReport'])->name('report.auction');

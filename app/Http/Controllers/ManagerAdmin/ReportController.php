@@ -34,10 +34,10 @@ use function PHPSTORM_META\map;
 
 class ReportController extends Controller
 {
-    public function allReport()
-    {
-        return view('ManagerAdmin.Report.AllReport.all_report');
-    }
+    // public function allReport()
+    // {
+    //     return view('ManagerAdmin.Report.AllReport.all_report');
+    // }
 
     public function learningSessionReport()
     {
@@ -558,7 +558,10 @@ class ReportController extends Controller
     }
     public function auditionReport()
     {
-        return view('ManagerAdmin.Report.SimplePost.simplePost_report');
+        $user_category_id = Auth::user()->category_id;
+        $categories = Category::where('id', $user_category_id)->get();
+
+        return view('ManagerAdmin.Report.Audition.Audition_report',compact('categories'));
     }
     public function qnaReport()
     {

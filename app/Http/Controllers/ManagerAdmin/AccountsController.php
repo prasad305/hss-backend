@@ -9,6 +9,7 @@ use App\Models\Bidding;
 use App\Models\Category;
 use App\Models\Fan_Group_Join;
 use App\Models\FanGroup;
+use App\Models\GeneralPostPayment;
 use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
 use App\Models\LearningSession;
@@ -61,8 +62,8 @@ class AccountsController extends Controller
         $end_date = $request['end_date'];
 
         if ($module == "1") {
-
-            $simple_post = SimplePost::where('subcategory_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
+            $user_id = Auth::id();
+            $simple_post = SimplePost::where('created_by_id', $user_id)->where('subcategory_id', $subCate_id)->where('star_id', $star_id)->whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $start_date . " 00:00:00",
@@ -70,8 +71,20 @@ class AccountsController extends Controller
                 ]
             )->get();
 
+            $i = 0;
+            foreach ($simple_post as $leSess) {
+                $userReg[$i] = GeneralPostPayment::where('post_id', $leSess['id'])->distinct('user_id')->count();
+                $i++;
+            }
 
-            return response()->json($simple_post);
+            $i = 0;
+            foreach ($simple_post as $leSess) {
+                $total_amount[$i] = GeneralPostPayment::where('post_id', $leSess['id'])->sum('amount');
+                $i++;
+            }
+
+
+            return response()->json(['simple_post' => $simple_post, 'userReg' => $userReg, 'total_amount' => $total_amount, 'module' => $module]);
         } else if ($module == "2") {
 
             $user_id = Auth::id();
@@ -327,7 +340,12 @@ class AccountsController extends Controller
             $learning_seassion_reg = MeetupEventRegistration::where('meetup_event_id', $id)->get();
 
             return view('ManagerAdmin.Accounts.Superstar.superstarEventList', compact('module', 'learning_seassion_reg'));
-        } else if ($module == "7") {
+        } else if ($module == "1") {
+
+            $learning_seassion_reg = GeneralPostPayment::where('post_id', $id)->get();
+
+            return view('ManagerAdmin.Accounts.Superstar.superstarEventList', compact('module', 'learning_seassion_reg'));
+        }else if ($module == "7") {
 
             $learning_seassion_reg = QnaRegistration::where('qna_id', $id)->get();
 

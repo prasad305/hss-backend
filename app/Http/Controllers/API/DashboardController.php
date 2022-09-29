@@ -38,188 +38,188 @@ class DashboardController extends Controller
 
 
         $simplepost['simplePostTotalIncome'] = GeneralPostPayment::whereHas('simpleposts', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->sum('amount');
 
         $simplepost['simplePostDailyIncome'] = GeneralPostPayment::whereHas('simpleposts', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
 
         $simplepost['simplePostWeeklyIncome'] = GeneralPostPayment::whereHas('simpleposts', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
 
         $simplepost['simplePostMonthlyIncome'] = GeneralPostPayment::whereHas('simpleposts', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
 
         $simplepost['simplePostYearlyIncome'] = GeneralPostPayment::whereHas('simpleposts', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
 
         // Income Statement meetup
 
         $meetup['meetupTotalIncome'] = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->sum('amount');
         // return response()->json($meetup['meetupTotalIncome']);
         $meetup['meetupDailyIncome'] = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
         $meetup['meetupWeeklyIncome'] = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
         $meetup['meetupMonthlyIncome'] = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
         $meetup['meetupYearlyIncome'] = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
         // Income Statement meetup
 
         $learning['learningSessionTotalIncome'] = LearningSessionRegistration::whereHas('learningSession', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->sum('amount');
         $learning['learningSessionDailyIncome'] = LearningSessionRegistration::whereHas('learningSession', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
         $learning['learningSessionWeeklyIncome'] = LearningSessionRegistration::whereHas('learningSession', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
         $learning['learningSessionMonthlyIncome'] = LearningSessionRegistration::whereHas('learningSession', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
         $learning['learningSessionYearlyIncome'] = LearningSessionRegistration::whereHas('learningSession', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
         // Income Statement Live Chat
 
         $liveChat['liveChatTotalIncome'] = LiveChatRegistration::whereHas('liveChat', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->sum('amount');
         $liveChat['liveChatDailyIncome'] = LiveChatRegistration::whereHas('liveChat', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
         $liveChat['liveChatWeeklyIncome'] = LiveChatRegistration::whereHas('liveChat', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
         $liveChat['liveChatMonthlyIncome'] = LiveChatRegistration::whereHas('liveChat', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
         $liveChat['liveChatYearlyIncome'] = LiveChatRegistration::whereHas('liveChat', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
         // Income Statement Q&A
 
         $qna['qnaTotalIncome'] = QnaRegistration::whereHas('qna', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->sum('amount');
         $qna['qnaDailyIncome'] = QnaRegistration::whereHas('qna', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
         $qna['qnaWeeklyIncome'] = QnaRegistration::whereHas('qna', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
         $qna['qnaMonthlyIncome'] = QnaRegistration::whereHas('qna', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
         $qna['qnaYearlyIncome'] = QnaRegistration::whereHas('qna', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
         // Income Statement Greetings
 
         $greeting['greetingTotalIncome'] = GreetingsRegistration::whereHas('greeting', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->sum('amount');
         $greeting['greetingDailyIncome'] = GreetingsRegistration::whereHas('greeting', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
         $greeting['greetingWeeklyIncome'] = GreetingsRegistration::whereHas('greeting', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
         $greeting['greetingMonthlyIncome'] = GreetingsRegistration::whereHas('greeting', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
         $greeting['greetingYearlyIncome'] = GreetingsRegistration::whereHas('greeting', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
         // Income Statement Auction
 
         $auction['auctionTotalIncome'] = Bidding::whereHas('auction', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->sum('amount');
         $auction['auctionDailyIncome'] = Bidding::whereHas('auction', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
         $auction['auctionWeeklyIncome'] = Bidding::whereHas('auction', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
         $auction['auctionMonthlyIncome'] = Bidding::whereHas('auction', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
         $auction['auctionYearlyIncome'] = Bidding::whereHas('auction', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
-        // Income Statement Marketplace
+        // Income Statement fangroup
+
+        // $marketplace['marketplaceTotalIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
+        //     $q->where([['superstar_admin_id', auth()->user()->id]]);
+        // })->sum('total_price');
+        // $marketplace['marketplaceDailyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
+        //     $q->where([['superstar_admin_id', auth()->user()->id]]);
+        // })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('total_price');
+        // $marketplace['marketplaceWeeklyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
+        //     $q->where([['superstar_admin_id', auth()->user()->id]]);
+        // })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_price');
+        // $marketplace['marketplaceMonthlyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
+        //     $q->where([['superstar_admin_id', auth()->user()->id]]);
+        // })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_price');
+        // $marketplace['marketplaceYearlyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
+        //     $q->where([['superstar_admin_id', auth()->user()->id]]);
+        // })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_price');
+
+            // Income Statement Marketplace
 
         $marketplace['marketplaceTotalIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
-            $q->where([['superstar_admin_id', auth()->user()->id]]);
+            $q->where([['superstar_admin_id', auth()->user()->id]])->orWhere([['superstar_id', auth()->user()->id]]);
         })->sum('total_price');
         $marketplace['marketplaceDailyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
-            $q->where([['superstar_admin_id', auth()->user()->id]]);
-        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('total_price');
+            $q->where([['superstar_admin_id', auth()->user()->id]])->orWhere([['superstar_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('unit_price');
         $marketplace['marketplaceWeeklyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
-            $q->where([['superstar_admin_id', auth()->user()->id]]);
-        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_price');
+            $q->where([['superstar_admin_id', auth()->user()->id]])->orWhere([['superstar_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('unit_price');
         $marketplace['marketplaceMonthlyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
-            $q->where([['superstar_admin_id', auth()->user()->id]]);
-        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_price');
+            $q->where([['superstar_admin_id', auth()->user()->id]])->orWhere([['superstar_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('unit_price');
         $marketplace['marketplaceYearlyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
-            $q->where([['superstar_admin_id', auth()->user()->id]]);
-        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_price');
-
-        // Income Statement FanGroup
-
-        $marketplace['marketplaceTotalIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
-            $q->where([['superstar_admin_id', auth()->user()->id]]);
-        })->sum('total_price');
-        $marketplace['marketplaceDailyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
-            $q->where([['superstar_admin_id', auth()->user()->id]]);
-        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('total_price');
-        $marketplace['marketplaceWeeklyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
-            $q->where([['superstar_admin_id', auth()->user()->id]]);
-        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_price');
-        $marketplace['marketplaceMonthlyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
-            $q->where([['superstar_admin_id', auth()->user()->id]]);
-        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_price');
-        $marketplace['marketplaceYearlyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
-            $q->where([['superstar_admin_id', auth()->user()->id]]);
-        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_price');
+            $q->where([['superstar_admin_id', auth()->user()->id]])->orWhere([['superstar_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('unit_price');
 
 
         // Income Statement Souvenir
 
         $souvenir['souvenirTotalIncome'] = SouvenirApply::whereHas('souvenir', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->sum('total_amount');
         $souvenir['souvenirDailyIncome'] = SouvenirApply::whereHas('souvenir', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('total_amount');
         $souvenir['souvenirWeeklyIncome'] = SouvenirApply::whereHas('souvenir', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_amount');
         $souvenir['souvenirMonthlyIncome'] = SouvenirApply::whereHas('souvenir', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_amount');
         $souvenir['souvenirYearlyIncome'] = SouvenirApply::whereHas('souvenir', function ($q) {
-            $q->where([['admin_id', auth()->user()->id]]);
+            $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
         })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_amount');
 
         //Total Statement
@@ -270,7 +270,7 @@ class DashboardController extends Controller
         } elseif ($type == "Auction") {
             $post = Auction::with('bidding')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Marketplace") {
-            $post = Marketplace::with('marketplace_order')->where('superstar_admin_id', auth('sanctum')->user()->id)->latest()->get();
+            $post = Marketplace::with('marketplace_order')->where('superstar_admin_id', auth('sanctum')->user()->id)->orWhere('superstar_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Souvenir") {
             $post = SouvenirCreate::with('souvenirApply')->where('admin_id', auth('sanctum')->user()->id)->latest()->get();
         } else {
@@ -291,50 +291,50 @@ class DashboardController extends Controller
         if ($type == "Simple-Post") {
             $post = SimplePost::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = GeneralPostPayment::whereHas('simpleposts', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
             })->where('post_id', $id)->get();
         } elseif ($type == "Live-Chat") {
             $post = LiveChat::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = LiveChatRegistration::whereHas('liveChat', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
             })->where('live_chat_id', $id)->get();
         } elseif ($type == "Q&A") {
             $post = QnA::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = QnaRegistration::whereHas('qna', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
             })->where('qna_id', $id)->get();
         } elseif ($type == "Meetup-Event") {
             $post = MeetupEvent::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = MeetupEventRegistration::whereHas('meetupEvent', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
             })->where('meetup_event_id', $id)->get();
         } elseif ($type == "Learning-Session") {
             $post = LearningSession::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = LearningSessionRegistration::whereHas('learningSession', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
             })->where('learning_session_id', $id)->get();
         } elseif ($type == "Greeting") {
             $post = Greeting::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = GreetingsRegistration::whereHas('greeting', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
             })->where('greeting_id', $id)->get();
         } elseif ($type == "Auction") {
             $post = Auction::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = Bidding::whereHas('auction', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
             })->where('auction_id', $id)->get();
         } elseif ($type == "Marketplace") {
             $post = Marketplace::where('superstar_admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = MarketplaceOrder::whereHas('marketplace', function ($q) {
-                $q->where([['superstar_admin_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere([['superstar_admin_id', auth()->user()->id]]);
             })->where('marketplace_id', $id)->get();
         } elseif ($type == "Souvenir") {
             $post = SouvenirCreate::where('admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
             $participant = SouvenirApply::whereHas('souvenir', function ($q) {
-                $q->where([['admin_id', auth()->user()->id]]);
+                $q->where([['admin_id', auth()->user()->id]])->orWhere([['star_id', auth()->user()->id]]);
             })->where('souvenir_id', $id)->get();
         } elseif ($type == "Fan-Group") {
-            $post = FanGroup::where('created_by', auth('sanctum')->user()->id)->orWhere('another_star_admin_id', auth('sanctum')->user()->id)->where('id', $id)->first();
+            $post = FanGroup::where('created_by', auth('sanctum')->user()->id)->orWhere('another_star_admin_id', auth('sanctum')->user()->id)->orWhere('my_star', auth('sanctum')->user()->id)->where('id', $id)->first();
 
             $participant = json_decode($post->my_user_join);
             $another_user = json_decode($post->another_user_join);
