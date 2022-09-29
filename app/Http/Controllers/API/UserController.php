@@ -48,6 +48,7 @@ use App\Models\UserInterest;
 use App\Models\UserEducation;
 use App\Models\Audition\AuditionAssignJudge;
 use App\Models\SuperStar;
+use App\Models\AuditionCertification;
 use App\Models\AuditionCertificationContent;
 use Carbon\Carbon;
 use DateTime;
@@ -1836,37 +1837,54 @@ class UserController extends Controller
             $isWinner = false;
         }
         if($isWinner){
-        $assignedJudges = AuditionAssignJudge::where('audition_id', $audition_id)->get();
-        // return $assignedJudges;
-        $totalStars = array();
-        foreach($assignedJudges as $judge){
-            if($judge->super_judge === 1){
-                $super = true;
+            $certificate = AuditionCertification::where([['audition_id', $audition_id],['round_info_id', $round_info_id]])->first();
+            if($certificate){
+                return $certificate->certificate;
             }
-            $superstarId = $judge->judge_id;
-            $superStar = SuperStar::where('star_id', $superstarId)->first();
-            $superstarName = $superStar->superStar->first_name." ".$superStar->superStar->last_name;
-            $starInfo = [
-                'isSuperAdmin'=> $super,
-                'signature'=> $superStar['signature'],
-                'name' => $superstarName,
-            ];
-            array_push($totalStars,$starInfo);
-        }
-        $userInfo = $auditionRoundMarkTracking->user;
-        $certificateContent = AuditionCertificationContent::where(['audition_id', $audition_id]);
+            $assignedJudges = AuditionAssignJudge::where('audition_id', $audition_id)->get();
+            // return $assignedJudges;
+            $totalStars = array();
+            foreach($assignedJudges as $judge){
+                if($judge->super_judge === 1){
+                    $super = true;
+                }
+                $superstarId = $judge->judge_id;
+                $superStar = SuperStar::where('star_id', $superstarId)->first();
+                $superstarName = $superStar->superStar->first_name." ".$superStar->superStar->last_name;
+                $starInfo = [
+                    'isSuperAdmin'=> $super,
+                    'signature'=> $superStar['signature'],
+                    'name' => $superstarName,
+                ];
+                array_push($totalStars,$starInfo);
+            }
+            $userInfo = $auditionRoundMarkTracking->user;
+            $certificateContent = AuditionCertificationContent::where([['audition_id', $audition_id]])->first();
 
-        $PDFInfo = [
-            'user' => ($userInfo['first_name']. ' ' .$userInfo['last_name']),
-            'stars' => $totalStars,
-            'certificateContent' => $certificateContent,
-            
-        ];
-            // retur0n $PDFInfo;
-            return view('Others.Certificate.Certificate', compact('PDFInfo'));
-            // $pdf = PDF::loadView('Others.Certificate.Certificate', compact('PDFInfo'));
-            
-            return $pdf;
+            $PDFInfo = [
+                'user' => ($userInfo['first_name']. ' ' .$userInfo['last_name']),
+                'stars' => $totalStars,
+                'certificateContent' => $certificateContent,
+                
+            ];
+            $time = time();
+                try{
+                    $pdf = PDF::loadView('Others.Certificate.Certificate', compact('PDFInfo'));
+                    file_put_contents('uploads/pdf/auditions/certificates/' . $time . '.pdf', $pdf->output());
+                    $filename = 'uploads/pdf/auditions/certificates/' . $time . '.' . 'pdf';
+                }catch (\Throwable $th) {
+                    return $th;
+                }
+                $auditionCertification = new AuditionCertification();
+                $auditionCertification->audition_id = $audition_id;
+                $auditionCertification->round_info_id = $round_info_id;
+                $auditionCertification->participant_id = $userInfo->id;
+                $auditionCertification->certificate = $filename;
+                $auditionCertification->status = 1;
+                $auditionCertification->save();
+                if($auditionCertification){
+                    return $auditionCertification->certificate;
+                }
         }
         else{
             return 'not win';

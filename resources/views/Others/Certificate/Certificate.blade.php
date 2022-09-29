@@ -5,9 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HelloSuperstar Cirtificate</title>
-    <!-- <link rel="stylesheet" href="./assets/css/style.css"> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+{{-- <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet"> --}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+{{-- <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet"> --}}
+<!-- <link rel="stylesheet" href="./assets/css/style.css"> -->
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap");
+      /* @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap"); */
 
       * {
         box-sizing: border-box;
@@ -147,9 +153,9 @@
         height: 30px;
         width: 200px;
       }
-      .font-Name {
+      /* .font-Name {
         font-family: "Dancing Script", cursive;
-      }
+      } */
 
       .header {
         /* background-color: green; */
@@ -177,6 +183,9 @@
   margin: 5px;
   padding: 0;
   }
+  .mainContent p{
+    font-size: 14px;
+  }
     </style>
   </head>
 
@@ -191,6 +200,9 @@
     <div class="cert-container print-m-0">
       <div id="content2" class="cert">
         <img src="{{asset('/assets/img/bg.png')}}" class="cert-bg" alt="" />
+        @if ($PDFInfo['certificateContent'])
+          
+        
         <div class="cert-content">
           <div class="header">
             <table>
@@ -212,7 +224,8 @@
 
           <!-- <h1 class="other-font" style="font-size: 30px;">Certificate of Participation</h1> -->
           <div class="text-img">
-            <h1 class="titlecirtificate">Certification of particapition</h1>
+
+            <h1 class="titlecirtificate">{{$PDFInfo['certificateContent']->title}}</h1>
           </div>
           <span
             style="
@@ -220,7 +233,7 @@
               text-transform: uppercase;
               font-weight: bold;
             "
-            >This is to certify that</span
+            >{{$PDFInfo['certificateContent']->sub_title}}</span
           >
           <br />
           <span class="other-font">
@@ -234,17 +247,14 @@
           @if($PDFInfo)
           
           <span class="other-font" style="font-size: 35px"
-            ><span class="font-Name">{{ $PDFInfo['user'] }}</span></span
+            ><span class="">{{ $PDFInfo['user'] }}</span></span
           >
           @endif
           <br />
           <br />
-          <small>has successfully participated in ............ &</small>
-
-          <br />
-          <small
-            >is being recoginized for his/her phenomenal and worthy
-            performance.</small
+          
+          <div class="mainContent">{!!html_entity_decode($PDFInfo['certificateContent']->main_content)!!}</div
+            
           >
           <br /><br />
 
@@ -255,7 +265,7 @@
             <span>☆</span>
             <span>☆</span>
           </div>
-
+          @endif
           <table>
             <tr>
               <th>
@@ -284,26 +294,21 @@
                   />
                 </div>
               </th>
-              <th>
-                <div class="signature">
-                  <div class="sign">
-                    <img src="{{asset('/assets/img/bal_sign.png')}}" alt="" />
-                  </div>
-                  <span>Mashrafe Bin Mortaza</span> <br />
-                  <small>Judge</small> <br />
-                  <small>Hello Super Stars</small>
-                </div>
-              </th>
-              <th>
-                <div class="signature">
-                  <div class="sign">
-                    <img src="{{asset('/assets/img/bal_sign.png')}}" alt="" />
-                  </div>
-                  <span>Tamim Iqbal</span> <br />
-                  <small>Judge</small> <br />
-                  <small>Hello Super Stars</small>
-                </div>
-              </th>
+              @foreach ($PDFInfo['stars'] as $PDF)
+                        @if (!$PDF['isSuperAdmin'])
+                        <th>
+                          <div class="signature">
+                            <div class="sign">
+                              <img src=" {{ asset('http://localhost:8000/' . $PDF['signature']) }}" alt="" />
+                            </div>
+                            <span>{{ $PDF['name'] }}</span> <br />
+                            <small>Judge</small> <br />
+                            <small>Hello Super Stars</small>
+                          </div>
+                        </th>
+                        @endif
+                @endforeach
+              
             </tr>
           </table>
 

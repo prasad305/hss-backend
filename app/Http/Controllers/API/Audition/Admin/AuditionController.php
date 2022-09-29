@@ -2541,7 +2541,6 @@ class AuditionController extends Controller
         $auditionCertificationContent->sub_title = $request->sub_title;
         $auditionCertificationContent->main_content = $request->main_content;
 
-        
         try {
             if ($request->hasfile('company_logo')) {
                 $image             = $request->company_logo;
