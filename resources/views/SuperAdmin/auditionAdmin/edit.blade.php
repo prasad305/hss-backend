@@ -23,7 +23,7 @@
         <div class="col-md-6">
              <label for="email">Email</label>
              <input type="text" class="form-control" id="email" name="email" placeholder="Enter Audition Admin Email" value="{{$admin->email}}">
-             <span class="text-danger" id="phone_error"></span>
+             <span class="text-danger" id="email_error"></span>
         </div>
     </div>
 
