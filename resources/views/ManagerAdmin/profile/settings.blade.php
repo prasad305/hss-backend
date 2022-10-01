@@ -4,6 +4,25 @@
     Manager Admin
 @endpush
 
+<style>
+    .password-container{
+        position: relative;
+    }
+    .password-container input[type="password"],
+    .password-container input[type="text"]{
+        width: 100%;
+        padding: 12px 36px 12px 12px;
+        box-sizing: border-box;
+    }
+    .fa-eye{
+        position: absolute;
+        top: 60%;
+        right: 2%;
+        cursor: pointer;
+        color: lightgray;
+    }
+</style>
+
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -32,11 +51,14 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6" style=" border: 1px solid gold; padding: 10px; border-radius: 5px;">
-                    <form action="{{ route('managerAdmin.change.password') }}" method="POST">
+                    <form action="{{ route('managerAdmin.change.password') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title  text-white">My Profile Test</h3>
+                            <div class="panel-heading text-center">
+                            <h2 style="color:#FFD700;border-bottom:1px solid #FFD700;">UPDATE YOUR PROFILE</h2>
+                                    <img src="{{asset($user->image)}}" class="img-circle" style="width:150px; height:150px; border:3px solid #FFD700" alt="Image not found">
+                                    <br>
+                                    <input type="file" name="profile" style="width:93px;">
                             </div>
                             <div class="panel-body">
                                 <div class="row">
@@ -62,24 +84,42 @@
                                                 <input type="text" name="phone" class="form-control" id="phone"
                                                     value="{{ $user->phone }}" disabled>
                                             </div>
+                                            <div class="panel-footer">
+                                                <div class=" text-right">
+                                                    <button type="submit" class="btn btn-dark waves-effect waves-ligh">Update Profile</button>
+                                                </div>
+                                            </div>
                                             <hr>
                                             <h4 class="panel-title  text-white">Change Password</h4>
 
                                             @include('Others.message')
                                             <hr>
-                                            <div class="form-group">
-                                                <label for="oldPassword">Current Password</label>
-                                                <input type="password" name="oldPassword" class="form-control"
-                                                    id="oldPassword">
+                                            <div class="row form-group">
+                                                <div class="col-md-6">
+                                                    <div class="password-container">
+                                                        <label for="oldPassword">Current Password</label>
+                                                        <input type="password" name="oldPassword" class="form-control passwordold" id="oldPassword">
+                                                        <i class="fa-solid fa-eye" id="eyeold"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="password-container">
+                                                        <label for="password">New Password</label>
+                                                        <input type="password" name="password" class="form-control passwordnew" id="password">
+                                                        <i class="fa-solid fa-eye" id="eyenew"></i>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="password">New Password</label>
-                                                <input type="password" name="password" class="form-control" id="password">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="confirmPassword">Confirm Password</label>
-                                                <input type="password" name="confirmPassword" class="form-control"
-                                                    id="confirmPassword">
+                                            <div class="row form-group">
+                                                <div class="col-md-6">
+                                                    <div class="password-container">
+                                                        <label for="confirmPassword">Confirm Password</label>
+                                                        <input type="password" name="confirmPassword" class="form-control passwordconf" id="confirmPassword">
+                                                        <i class="fa-solid fa-eye" id="eyeconf"></i>
+
+                                                        
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -87,13 +127,48 @@
                             </div>
                             <div class="panel-footer">
                                 <div class=" text-right">
-                                    <button type="submit" class="btn btn-dark waves-effect waves-ligh">Submit</button>
+                                    <button type="submit" class="btn btn-dark waves-effect waves-ligh">Change Passowrd</button>
                                 </div>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
+ <script>
+    const passwordold = document.querySelector(".passwordold");
+    const passwordnew = document.querySelector(".passwordnew");
+    const passwordconf = document.querySelector(".passwordconf");
+
+    const eyeold= document.querySelector("#eyeold");
+    const eyenew= document.querySelector("#eyenew");
+    const eyeconf= document.querySelector("#eyeconf");
+
+    eyeold.addEventListener("click", function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        eyeold.classList.toggle("fa-eye-slash");
+        const type = passwordold.getAttribute("type") === "password" ? "text" : "password";
+        passwordold.setAttribute("type", type);
+    })
+
+    eyenew.addEventListener("click", function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        eyeold.classList.toggle("fa-eye-slash");
+        const type = passwordnew.getAttribute("type") === "password" ? "text" : "password";
+        passwordnew.setAttribute("type", type);
+    })
+
+    eyeconf.addEventListener("click", function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        eyeold.classList.toggle("fa-eye-slash");
+        const type = passwordconf.getAttribute("type") === "password" ? "text" : "password";
+        passwordconf.setAttribute("type", type);
+    })
+
+    
+</script>
 
 
         </div> <!-- container -->
@@ -119,3 +194,5 @@
     {{-- <script src="{{ asset('assets/manager-admin/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script> --}}
     <script src="{{ asset('assets/manager-admin/pages/dashborad.js') }}"></script>
 @endpush
+
+
