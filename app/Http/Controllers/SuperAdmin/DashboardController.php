@@ -81,6 +81,11 @@ class DashboardController extends Controller
     $data['interestTypeCount'] = InterestType::count();
     $data['marketplaceCount'] = Marketplace::count();
     $data['auctionCount'] = Auction::count();
+    $data['totalLearningAmount'] = LearningSessionRegistration::sum('amount');
+    $data['totalPostAmount'] = GeneralPostPayment::sum('amount');
+    $data['totalLiveChatAmount'] = LiveChatRegistration::sum('amount');
+    $data['totalGreetingAmount'] = GreetingsRegistration::sum('amount');
+    $data['totalMeetUpAmount'] = MeetupEventRegistration::sum('amount');
 
     return view('SuperAdmin.dashboard.index', $data);
   }
@@ -102,12 +107,13 @@ class DashboardController extends Controller
         $userId = auth('sanctum')->user()->id;
         $users =User::find($userId);
 
+
         // oldPassword);
         // formData.append("newPassword", newPassword);
 
         if (\Hash::check($request->oldPassword , $users->password )){
 
-            
+
             $users->password = bcrypt($request->password);
             $users->save();
             Auth::logout();
@@ -233,8 +239,8 @@ class DashboardController extends Controller
 
 
     $data['allGreetingCount'] = Greeting::count();
-    $data['completeGreetingCount'] = Greeting::whereDate('event_date', '>', Carbon::now())->count();
-    $data['upcomingGreetingCount'] = Greeting::whereDate('event_date', '<', Carbon::now())->count();
+    $data['completeGreetingCount'] = Greeting::whereDate('created_at', '>', Carbon::now())->count();
+    $data['upcomingGreetingCount'] = Greeting::whereDate('created_at', '<', Carbon::now())->count();
 
     return view('SuperAdmin.dashboard.greetings', $data);
   }
@@ -688,7 +694,7 @@ class DashboardController extends Controller
   }
   public function fanGroupSuperstarEvents($id)
   {
-    $posts = FanGroup::where('star_id', $id)->get();
+    $posts = FanGroup::where('my_star', $id)->get();
     return view('SuperAdmin.dashboard.FanGroup.Superstar.superstar_events', compact('posts'));
   }
 

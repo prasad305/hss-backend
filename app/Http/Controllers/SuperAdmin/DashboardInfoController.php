@@ -57,28 +57,28 @@ class DashboardInfoController extends Controller
     public function allCompleteOfflineMeetUp()
     {
         $date = Carbon::now();
-        $data['allMeetUp'] = MeetupEvent::where('meetup_type', 'Offline')->whereDate('date', '>', $date)->latest()->get();
+        $data['allMeetUp'] = MeetupEvent::where('meetup_type', 'Offline')->whereDate('created_at', '>', $date)->latest()->get();
         $data['meetUpType'] = "Complete Offline";
         return view('SuperAdmin.dashboardInfo.meetup', $data);
     }
     public function allCompleteOnlineMeetUp()
     {
         $date = Carbon::now();
-        $data['allMeetUp'] = MeetupEvent::where('meetup_type', 'Online')->whereDate('date', '>', $date)->latest()->get();
+        $data['allMeetUp'] = MeetupEvent::where('meetup_type', 'Online')->whereDate('created_at', '>', $date)->latest()->get();
         $data['meetUpType'] = "Complete Online";
         return view('SuperAdmin.dashboardInfo.meetup', $data);
     }
     public function allUpcomingOfflineMeetUp()
     {
         $date = Carbon::now();
-        $data['allMeetUp'] = MeetupEvent::where('meetup_type', 'Offline')->whereDate('date', '<', $date)->latest()->get();
+        $data['allMeetUp'] = MeetupEvent::where('meetup_type', 'Offline')->whereDate('created_at', '<', $date)->latest()->get();
         $data['meetUpType'] = "Upcoming Offline";
         return view('SuperAdmin.dashboardInfo.meetup', $data);
     }
     public function allUpcomingOnlineMeetUp()
     {
         $date = Carbon::now();
-        $data['allMeetUp'] = MeetupEvent::where('meetup_type', 'Online')->whereDate('date', '<', $date)->latest()->get();
+        $data['allMeetUp'] = MeetupEvent::where('meetup_type', 'Online')->whereDate('created_at', '<', $date)->latest()->get();
         $data['meetUpType'] = "Upcoming Online";
         return view('SuperAdmin.dashboardInfo.meetup', $data);
     }
@@ -92,14 +92,14 @@ class DashboardInfoController extends Controller
     public function allCompleteLearningSession()
     {
         $date = Carbon::now();
-        $data['allMeetUp'] = LearningSession::whereDate('date', '>', $date)->latest()->get();
+        $data['allMeetUp'] = LearningSession::whereDate('created_at', '>', $date)->latest()->get();
         $data['learningType'] = "Complete";
         return view('SuperAdmin.dashboardInfo.learning_session', $data);
     }
     public function allUpcomingLearningSession()
     {
         $date = Carbon::now();
-        $data['allMeetUp'] = LearningSession::whereDate('date', '<', $date)->latest()->get();
+        $data['allMeetUp'] = LearningSession::whereDate('created_at', '<', $date)->latest()->get();
         $data['learningType'] = "Upcoming";
         return view('SuperAdmin.dashboardInfo.learning_session', $data);
     }
@@ -113,21 +113,21 @@ class DashboardInfoController extends Controller
     public function allCompleteLiveChat()
     {
         $date = Carbon::now();
-        $data['allMeetUp'] = LiveChat::whereDate('date', '>', $date)->latest()->get();
+        $data['allMeetUp'] = LiveChat::whereDate('created_at', '>', $date)->latest()->get();
         $data['learningType'] = "Complete";
         return view('SuperAdmin.dashboardInfo.live-chat', $data);
     }
     public function allUpcomingLiveChat()
     {
         $date = Carbon::now();
-        $data['allMeetUp'] = LiveChat::whereDate('date', '<', $date)->latest()->get();
+        $data['allMeetUp'] = LiveChat::whereDate('created_at', '<', $date)->latest()->get();
         $data['learningType'] = "Upcoming";
         return view('SuperAdmin.dashboardInfo.live-chat', $data);
     }
     public function allRunningLiveChat()
     {
         $date = Carbon::now();
-        $data['allMeetUp'] = LiveChat::whereDate('date', '=', $date)->latest()->get();
+        $data['allMeetUp'] = LiveChat::whereDate('created_at', '=', $date)->latest()->get();
         $data['learningType'] = "Running";
         return view('SuperAdmin.dashboardInfo.live-chat', $data);
     }
@@ -142,14 +142,14 @@ class DashboardInfoController extends Controller
     public function allCompleteGreeting()
     {
         $date = Carbon::now();
-        $data['allMeetUp'] = Greeting::whereDate('date', '>', $date)->latest()->get();
+        $data['allMeetUp'] = Greeting::whereDate('created_at', '>', $date)->latest()->get();
         $data['learningType'] = "Complete";
         return view('SuperAdmin.dashboardInfo.greeting', $data);
     }
     public function allUpcomingGreeting()
     {
         $date = Carbon::now();
-        $data['allMeetUp'] = Greeting::whereDate('date', '<', $date)->latest()->get();
+        $data['allMeetUp'] = Greeting::whereDate('created_at', '<', $date)->latest()->get();
         $data['learningType'] = "Upcoming";
         return view('SuperAdmin.dashboardInfo.greeting', $data);
     }

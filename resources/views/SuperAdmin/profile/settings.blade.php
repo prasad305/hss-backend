@@ -56,6 +56,12 @@ Super Admin
                         <form action="{{ route('superAdmin.change.password') }}" method="POST">
                             @csrf
                             <div class="panel panel-primary">
+                                <div style="text-align: center;">
+                                    <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" style="width: 150px;border: 1px solid gold;"
+                                        alt="Avatar" /><br>
+                                        <input type="file" style="text-align: center;padding-left:70px;" id="customFile" />
+                                </div>
+
                                 <div class="panel-heading">
                                     <h3 class="panel-title  text-white">My Profile</h3>
                                 </div>
@@ -66,12 +72,12 @@ Super Admin
                                                 <div class="form-group">
                                                     <label for="first_name">First Name</label>
                                                     <input type="text" name="first_name" class="form-control" id="first_name"
-                                                        value="{{ $user->first_name }}" disabled>
+                                                        value="{{ $user->first_name }}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="last_name">Last Name</label>
                                                     <input type="text" name="last_name" class="form-control" id="last_name"
-                                                        value="{{ $user->last_name }}" disabled>
+                                                        value="{{ $user->last_name }}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="email">Email Address</label>
@@ -83,9 +89,13 @@ Super Admin
                                                     <input type="text" name="phone" class="form-control" id="phone"
                                                         value="{{ $user->phone }}" disabled>
                                                 </div>
-                                                <hr>
+                                                <div class="panel-footer">
+                                                    <div class=" text-right">
+                                                        <button type="submit" class="btn btn-dark waves-effect waves-ligh">Submit</button>
+                                                    </div>
+                                                <hr style="border: 1px solid gold;">
                                                 <h4 class="panel-title  text-white">Change Password</h4>
-    
+
                                                 @include('Others.message')
                                                 <hr>
                                                 <div class="form-group">
