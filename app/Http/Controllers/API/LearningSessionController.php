@@ -431,8 +431,8 @@ class LearningSessionController extends Controller
 
     public function count()
     {
-        $pending = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', 0]])->count();
-        $approved = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', 1]])->count();
+        $pending = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', '<', 2]])->count();
+        $approved = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', '>', 2], ['status', '<', 11]])->count();
 
         return response()->json([
             'status' => 200,
@@ -781,8 +781,8 @@ class LearningSessionController extends Controller
 
     public function star_count()
     {
-        $pending = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 0]])->count();
-        $approved = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 1]])->count();
+        $pending = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 0]])->count();
+        $approved = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 1]])->count();
 
         return response()->json([
             'status' => 200,
