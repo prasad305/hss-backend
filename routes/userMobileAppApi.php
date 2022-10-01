@@ -62,4 +62,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
      * fan group join member list
      */
     Route::get('/user/fangroup-member/{fangroup_id}', [UserMobileAppController::class, 'ganGroupJoinMemebers']);
+
+    //test server
+    Route::get('/sdkTestUrl/{room_id}', [UserMobileAppController::class, 'sdktestUrl']);
 });

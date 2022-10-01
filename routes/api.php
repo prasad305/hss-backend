@@ -30,6 +30,13 @@ use App\Http\Controllers\API\CurrencyController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\SdkController\SdkController;
+
+
+//video for SDK
+Route::get('/sdk/get-token', [SdkController::class, 'getToken']);
+Route::post('/sdk/create-meeting', [SdkController::class, 'createMeetingId']);
+Route::post('/sdk/validate-meeting/{roomId}', [SdkController::class, 'roomValidate']);
 
 Route::post('/uplad-video', [HomeController::class, 'video_upload']);
 
