@@ -5,6 +5,7 @@
           <div class="form-group col-md-12">
             <label for="" class="form-label">Package Name</label>
             <input type="text" class="form-control" id="title" name="title" placeholder="Package name">
+            <span class="text-danger" id="title_error"></span>
           </div>
           <div class="form-group col-md-6">
             <label for="" class="form-label">Club Points</label>
@@ -89,6 +90,7 @@
   <script>
     $(document).on('click','#addCategoryBtn',function (event) {
         event.preventDefault();
+        $('#title_error').text('');
         var form = $('#create-form')[0];
         var formData = new FormData(form);
         
@@ -122,15 +124,12 @@
                             '<span class="text-white">';
                 $.each(data.responseJSON.errors, function(key, value) {
                     errorMessage += ('' + value + '<br>');
+                    $("#" + key + "_error").text(value[0]);
                 });
                 errorMessage += '</span>\n' +
                     '</div>\n' +
                     '</div>';
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    footer: errorMessage
-                });
+                
             }
         });
     

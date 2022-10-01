@@ -11,6 +11,7 @@
         <label for="" class="form-label">Love React <img height="15px;" width="15px;" 
           src="{{ asset('uploads/love3.jpg') }}" alt="Card image cap"></label>
         <input type="text" class="form-control" id="love_points" name="love_points" value="{{ $package->love_points }}" placeholder="Love react value">
+        <span class="text-danger" id="love_points_error"></span>
       </div>
   
       <div class="form-group col-md-12">
@@ -30,6 +31,7 @@
 <script>
     $(document).on('click','#updateCategoryBtn',function (event) {
     event.preventDefault();
+    $('#love_points_error').text('');
     var form = $('#edit-form')[0];
     var formData = new FormData(form);
     formData.append('_method','PUT');
@@ -66,15 +68,12 @@
                         '<span class="text-white">';
                     $.each(data.responseJSON.errors, function(key, value) {
                         errorMessage += ('' + value + '<br>');
+                        $("#" + key + "_error").text(value[0]);
                     });
                     errorMessage += '</span>\n' +
                         '</div>\n' +
                         '</div>';
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        footer: errorMessage
-                    })
+                    
         }
     });
 

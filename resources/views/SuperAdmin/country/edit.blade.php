@@ -4,6 +4,7 @@
     <div class="form-group">
       <label for="name">Country Name</label>
       <input type="text" class="form-control" id="name" name="name" placeholder="Enter Country Name" value="{{ $country->name }}">
+      <span class="text-danger" id="name_error"></span>
     </div>
 
     <button type="submit" id="updateCategoryBtn" class="btn btn-primary"><i class="fa fa-save"></i>&nbsp; Update Country</button>
@@ -12,6 +13,7 @@
 <script>
     $(document).on('click','#updateCategoryBtn',function (event) {
     event.preventDefault();
+    $('#name_error').text('');
     var form = $('#edit-form')[0];
     var formData = new FormData(form);
     formData.append('_method','PUT');
@@ -46,15 +48,12 @@
                         '<span class="text-white">';
                     $.each(data.responseJSON.errors, function(key, value) {
                         errorMessage += ('' + value + '<br>');
+                        $("#" + key + "_error").text(value[0]);
                     });
                     errorMessage += '</span>\n' +
                         '</div>\n' +
                         '</div>';
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        footer: errorMessage
-                    })
+                    
         }
     });
 

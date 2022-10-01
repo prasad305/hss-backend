@@ -5,10 +5,12 @@
         <div class="col-md-6">
               <label for="first_name">First Name</label>
               <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter Audition Admin First Name" value="{{$admin->first_name}}">
+              <span class="text-danger" id="first_name_error"></span>
          </div>
          <div class="col-md-6">
               <label for="last_name">Last Name</label>
               <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Audition Admin Last Name" value="{{$admin->last_name}}">
+              <span class="text-danger" id="last_name_error"></span>
         </div>
      </div>
 
@@ -16,10 +18,12 @@
         <div class="col-md-6">
           <label for="phone">Phone</label>
           <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter Audition Admin Phone" value="{{$admin->phone}}">
+          <span class="text-danger" id="phone_error"></span>
         </div>
         <div class="col-md-6">
              <label for="email">Email</label>
              <input type="text" class="form-control" id="email" name="email" placeholder="Enter Audition Admin Email" value="{{$admin->email}}">
+             <span class="text-danger" id="phone_error"></span>
         </div>
     </div>
 
@@ -60,6 +64,10 @@
 <script>
    $(document).on('click','#btnUpdateData',function (event) {
     event.preventDefault();
+    $('#first_name_error').text('');
+        $('#last_name_error').text('');
+        $('#phone_error').text('');
+        $('#email_error').text('');
     var form = $('#edit-form')[0];
     var formData = new FormData(form);
     formData.append('_method','PUT');
@@ -92,15 +100,12 @@
                         '<span class="text-white">';
                     $.each(data.responseJSON.errors, function(key, value) {
                         errorMessage += ('' + value + '<br>');
+                        $("#" + key + "_error").text(value[0]);
                     });
                     errorMessage += '</span>\n' +
                         '</div>\n' +
                         '</div>';
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        footer: errorMessage
-                    })
+                    
         }
     });
 

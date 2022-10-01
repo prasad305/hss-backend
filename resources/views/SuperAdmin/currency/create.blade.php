@@ -4,10 +4,12 @@
         <div class="col-md-6">
               <label for="country">Country Name</label>
               <input type="text" class="form-control" id="country" name="country" placeholder="United States...">
+              <span class="text-danger" id="country_error"></span>
          </div>
          <div class="col-md-6">
               <label for="currency_code">Currency Code</label>
               <input type="text" class="form-control" id="currency_code" name="currency_code" placeholder="USD...">
+              <span class="text-danger" id="currency_code_error"></span>
         </div>
      </div>
 
@@ -15,10 +17,12 @@
         <div class="col-md-6">
           <label for="currency">Currency</label>
           <input type="text" class="form-control" id="currency" name="currency" placeholder="Dollars...">
+          <span class="text-danger" id="currency_error"></span>
         </div>
         <div class="col-md-6">
              <label for="symbol">Symbol</label>
              <input type="text" class="form-control" id="symbol" name="symbol" placeholder="$...">
+             <span class="text-danger" id="symbol_error"></span>
         </div>
     </div>
 
@@ -40,7 +44,11 @@
   <script>
     $(document).on('click','#btnSaveAdmin',function (event) {
         event.preventDefault();
-        ErrorMessageClear();
+        $('#country_error').text('');
+        $('#currency_code_error').text('');
+        $('#currency_error').text('');
+        $('#symbol_error').text('');
+       
         var form = $('#create-form')[0];
         var formData = new FormData(form);
 
@@ -67,10 +75,16 @@
                 }, 1000);
             },
             error: function (data) {
-               
+                var errorMessage = '<div class="card bg-danger">\n' +
+                            '<div class="card-body text-center p-5">\n' +
+                            '<span class="text-white">';
                 $.each(data.responseJSON.errors, function(key, value) {
-                    ErrorMessage(key,value);
+                    errorMessage += ('' + value + '<br>');
+                    $("#" + key + "_error").text(value[0]);
                 });
+                errorMessage += '</span>\n' +
+                    '</div>\n' +
+                    '</div>';
                 
             }
         });
