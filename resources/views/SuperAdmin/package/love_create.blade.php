@@ -8,8 +8,10 @@
       </div>
           <div class="form-group col-md-12">
             <label for="" class="form-label">Love React <img height="15px;" width="15px;" 
-              src="{{ asset('uploads/love3.jpg') }}" alt="Card image cap"></label>
+              src="{{ asset('assets/super-admin/dist/img/love.png') }}" alt="Card image cap"></label>
             <input type="text" class="form-control" id="love_points" name="love_points" placeholder="Love react value">
+            <span class="text-danger" id="love_points_error"></span>
+  
           </div>
           <div class="form-group col-md-12">
             <label for="" class="form-label">Price</label>
@@ -41,6 +43,7 @@
   <script>
     $(document).on('click','#addCategoryBtn',function (event) {
         event.preventDefault();
+        $('#love_points_error').text('');
         var form = $('#create-form')[0];
         var formData = new FormData(form);
         
@@ -74,17 +77,11 @@
                             '<span class="text-white">';
                 $.each(data.responseJSON.errors, function(key, value) {
                     errorMessage += ('' + value + '<br>');
+                    $("#" + key + "_error").text(value[0]);
                 });
                 errorMessage += '</span>\n' +
                     '</div>\n' +
                     '</div>';
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    footer: errorMessage
-                });
-
-                console.log(data);
             }
         });
     

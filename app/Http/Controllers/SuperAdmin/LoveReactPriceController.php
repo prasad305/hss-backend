@@ -94,6 +94,10 @@ class LoveReactPriceController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'love_points' => 'required',
+        ]);
+
         $package = LoveReactPrice::findOrFail($id);
         $package->title = $request->title;
         $package->love_points = $request->love_points;
