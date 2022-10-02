@@ -7,5 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class GreetingType extends Model
 {
-    use HasFactory;
+//     use HasFactory;
+//     protected $with = ['user','greeting'];
+//     // protected $with = ['user', 'greeting'];
+
+//     public function greeting()
+//     {
+//         return $this->belongsTo(Greeting::class, 'greeting_id');
+//     }
 }

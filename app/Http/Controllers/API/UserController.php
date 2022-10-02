@@ -13,6 +13,8 @@ use App\Models\Audition\AuditionRoundAppealRegistration;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundMarkTracking;
 use App\Models\Audition\AuditionUploadVideo;
+use App\Models\AuditionOxygenReplyVideo;
+use App\Models\AuditionOxygenVideo;
 use App\Models\AuditionRoundInstruction;
 use App\Models\Bidding;
 use App\Models\FanGroupMessage;
@@ -2555,6 +2557,52 @@ class UserController extends Controller
         }
         return response()->json([
             'status' => 200,
+        ]);
+    }
+    public function getOxygenVideo()
+    {
+        $oxygenVideos = AuditionOxygenVideo::whereHas('auditionRoundInfo', function ($q) {
+            $q->where('status', 1);
+        })->get();
+
+        return response()->json([
+            'status' => 200,
+            'oxygenVideos' => $oxygenVideos
+        ]);
+    }
+    public function oxygenReplyVideo(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'video' => 'required|mimes:mp4,mkv',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+
+            if ($request->hasfile('video')) {
+                $file = $request->file('video');
+                $extension = $file->getClientOriginalExtension();
+                $newFileName = time() . '.' . $extension;
+                $file->move('uploads/videos/auditions/post/', $newFileName);
+            }
+
+            $oxygenReply = AuditionOxygenReplyVideo::create([
+                'audition_id' => $request->oxy_audition_id,
+                'round_info_id' => $request->oxy_round_info_id,
+                'reply_video' => 'uploads/videos/auditions/post/' . $newFileName,
+                'oxygen_video_id' => $request->oxy_video_id,
+                'user_id' => auth('sanctum')->user()->id,
+                'participant_id' => $request->oxy_user_id,
+
+            ]);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => "Video Comment Sent"
         ]);
     }
 
