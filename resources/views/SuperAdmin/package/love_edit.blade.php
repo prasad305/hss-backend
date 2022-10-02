@@ -9,7 +9,7 @@
      
       <div class="form-group col-md-6">
         <label for="" class="form-label">Love React <img height="15px;" width="15px;" 
-          src="{{ asset('uploads/love3.jpg') }}" alt="Card image cap"></label>
+          src="{{ asset('assets/super-admin/dist/img/love.png')}}" alt="Card image cap"></label>
         <input type="text" class="form-control" id="love_points" name="love_points" value="{{ $package->love_points }}" placeholder="Love react value">
       </div>
   

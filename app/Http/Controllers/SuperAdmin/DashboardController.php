@@ -85,13 +85,22 @@ class DashboardController extends Controller
     return view('SuperAdmin.dashboard.index', $data);
   }
 
+  
+  public function profile()
+  {
+    $user = Auth::user();
+    return view('SuperAdmin.profile.index', compact('user'));
+  }
+
   public function settings()
     {
         $user = User::find(Auth::user()->id);
         // dd($user);
         return view('SuperAdmin.profile.settings', compact('user'));
     }
-    public function changePassword(Request $request){
+    
+    public function changePassword(Request $request)
+    {
         // return $request->all();
         $request->validate([
             'oldPassword' => 'required',
@@ -105,7 +114,7 @@ class DashboardController extends Controller
         // oldPassword);
         // formData.append("newPassword", newPassword);
 
-        if (\Hash::check($request->oldPassword , $users->password )){
+        if (Hash::check($request->oldPassword , $users->password )){
 
             
             $users->password = bcrypt($request->password);
@@ -299,13 +308,6 @@ class DashboardController extends Controller
         'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
       ]);
     }
-  }
-
-
-  public function profile()
-  {
-    $user = Auth::user();
-    return view('SuperAdmin.profile.index', compact('user'));
   }
 
   // Dashboard Meetup

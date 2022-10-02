@@ -54,8 +54,8 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-    Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
-    Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
+    
+   
 
     Route::get('/meetup-events', [DashboardController::class, 'meetupEvents'])->name('meetupEvents');
     Route::get('/learning-session', [DashboardController::class, 'learningSessions'])->name('learningSessions');
@@ -107,7 +107,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/all/post/weekly', [DashboardInfoController::class, 'weeklyPost'])->name('weeklyPost');
     Route::get('/all/post/monthly', [DashboardInfoController::class, 'monthlyPost'])->name('monthlyPost');
 
+    //Super Admin Profile
+
     Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
+    Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
+    Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
 
     // manager admin
     Route::get('/manager-admin/list', [ManagerAdminController::class, 'list'])->name('managerAdminList');
