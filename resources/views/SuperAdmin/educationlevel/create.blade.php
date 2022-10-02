@@ -3,7 +3,7 @@
     <div class="form-group">
       <label for="name">Educationlevel Name</label>
       <input type="text" class="form-control" id="name" name="name" placeholder="Enter Educationlevel Name">
-      <small id="name_error" class="form-text text-danger"></small>
+      <span id="name_error" class="form-text text-danger"></span>
     </div>
 
     

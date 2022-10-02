@@ -10,7 +10,7 @@
                 @endforeach
             @endif
         </select>
-        <span id="category_error" class="text-danger"></span>
+        <span id="audition_id_error" class="text-danger"></span>
     </div>
 
     <div class="form-group">
@@ -43,7 +43,10 @@
 <script>
     $(document).on('click', '#addSubCategoryBtn', function(event) {
         event.preventDefault();
-        ErrorMessageClear();
+        $('#audition_id_error').text('');
+        $('#total_react_error').text('');
+        $('#user_mark_error').text('');
+        
         var form = $('#create-form')[0];
         var formData = new FormData(form);
 
@@ -71,11 +74,19 @@
                     location.reload();
                 }, 1000);
             },
-            error: function(data) {
-                $.each(data.responseJSON.errors, function(key, value) {
-                    ErrorMessage(key, value);
-                });
-            }
+            error: function (data) {
+            var errorMessage = '<div class="card bg-danger">\n' +
+                        '<div class="card-body text-center p-5">\n' +
+                        '<span class="text-white">';
+                    $.each(data.responseJSON.errors, function(key, value) {
+                        errorMessage += ('' + value + '<br>');
+                        $("#" + key + "_error").text(value[0]);
+                    });
+                    errorMessage += '</span>\n' +
+                        '</div>\n' +
+                        '</div>';
+                    
+        }
         });
 
     });
