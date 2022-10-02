@@ -229,7 +229,8 @@ class LearningSessionController extends Controller
 
     public function evaluationResultPublished($id)
     {
-        $event = LearningSession::findOrFail($id);
+        $event = LearningSession::findOrFail($id)->update(['status' => 9]);
+
         $assignment = LearningSessionAssignment::where([['event_id', $id], ['send_to_manager', 1]])->update([
             'send_to_user' => 1,
         ]);
