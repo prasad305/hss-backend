@@ -436,7 +436,7 @@
             <ul class="nav nav-treeview">
                 <li class="nav-item {{ Request::routeIs('superAdmin.auction.index') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link ">
-                        <i class="fa fa-gavel" aria-hidden="true"></i>
+                        <i class="nav-icon fa fa-gavel" aria-hidden="true"></i>
                         <p>
                             Auction
                             <i class="right fas fa-angle-left"></i>
@@ -467,7 +467,7 @@
             <ul class="nav nav-treeview">
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="fa-solid fa-gift"></i>
+                        <i class="nav-icon fa-solid fa-gift"></i>
                         <p>
                             Souvenir
                             <i class="right fas fa-angle-left"></i>
@@ -553,7 +553,7 @@
         
         <li class="nav-item {{ Request::routeIs('superAdmin.accounts.index') ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ Request::routeIs('superAdmin.accounts.index') ? 'active' : '' }}">
-                <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                <i class="nav-icon fa fa-sort-amount-asc" aria-hidden="true"></i>
                 <p>Accounts
                     <i class="right fas fa-angle-left"></i>
                 </p>
