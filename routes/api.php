@@ -283,8 +283,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/audition/uploaded_round_videos/{audition_id}/{round_info_id}', [UserController::class, 'uploaded_round_videos']);
 
     // Audition download certificate
-    Route::get('user/audition/getCertificate/{audition_id}/{round_info_id}', [UserController::class, 'getCertificate']);
-
+    Route::get('user/audition/getAuditionCertificate/{audition_id}/{round_info_id}', [UserController::class, 'getCertificate']);
+    Route::post('user/audition/auditionCertificatePayment', [UserController::class, 'auditionCertificatePayment']);
     // Audition Appeal Route
     Route::post('/user/audition/round-appeal-registration', [UserController::class, 'roundAppealRegister']);
     Route::get('user/audition/is_appeal/round/{audition_id}/{round_info_id}', [UserController::class, 'isAppealForThisRound']);
