@@ -427,6 +427,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/learning_session/assignment/marks/{slug}', [LearningSessionController::class, 'admin_assignment_marks']);
     Route::get('/admin/learning_session/setComplete/{id}', [LearningSessionController::class, 'admin_assignment_set_complete']);
     Route::get('/admin/learning_session/setAssignment/{id}', [LearningSessionController::class, 'admin_assignment_set_assignment']);
+    Route::get('/admin/learning_session/result', [LearningSessionController::class, 'showLearninSessionResult']);
+    Route::get('/admin/learning_session/showResult/{eventId}', [LearningSessionController::class, 'showLearninSessionResultData']);
 
 
     // Live Session Section
@@ -630,6 +632,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/learning_session/assignment/{id}', [LearningSessionController::class, 'star_assignment_details']);
     Route::post('/star/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
     Route::post('/star/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'star_assignment_set_approval']);
+    Route::get('/star/learning_session/result', [LearningSessionController::class, 'starShowLearninSessionResult']);
+    Route::get('/star/learning_session/showResult/{eventId}', [LearningSessionController::class, 'starShowLearninSessionResultData']);
+
 
 
     // Question and Answers

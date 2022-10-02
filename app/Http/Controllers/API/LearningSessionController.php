@@ -579,6 +579,27 @@ class LearningSessionController extends Controller
             'message' => 'Success',
         ]);
     }
+    public function showLearninSessionResult()
+    {
+        $event = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', 9], ['assignment', 1]])->latest()->get();
+        $count = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', 9], ['assignment', 1]])->count();
+
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+            'count' => $count,
+            'message' => 'Success',
+        ]);
+    }
+    public function showLearninSessionResultData($eventId)
+    {
+        $events = LearningSessionAssignment::where([['event_id', $eventId]])->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'events' => $events,
+            'message' => 'Success',
+        ]);
+    }
 
 
     /// For Super Star ///
@@ -791,6 +812,16 @@ class LearningSessionController extends Controller
             'message' => 'Success',
         ]);
     }
+    public function star_completed_list()
+    {
+        $events = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 9]]);
+
+        return response()->json([
+            'status' => 200,
+            'events' => $events->latest()->get(),
+            'count' => $events->count(),
+        ]);
+    }
 
 
     public function star_all()
@@ -914,6 +945,28 @@ class LearningSessionController extends Controller
             'message' => 'Success',
         ]);
     }
+    public function starShowLearninSessionResult()
+    {
+        $event = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 9], ['assignment', 1]])->latest()->get();
+        $count = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 9], ['assignment', 1]])->count();
+
+        return response()->json([
+            'status' => 200,
+            'event' => $event,
+            'count' => $count,
+            'message' => 'Success',
+        ]);
+    }
+    public function StarShowLearninSessionResultData($eventId)
+    {
+        $events = LearningSessionAssignment::where([['event_id', $eventId]])->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'events' => $events,
+            'message' => 'Success',
+        ]);
+    }
+
 
 
 
