@@ -3,6 +3,7 @@
     <div class="form-group">
       <label for="name">Country Name</label>
       <input type="text" class="form-control" id="name" name="name" placeholder="Enter Country name">
+      <span class="text-danger" id="name_error"></span>
     </div>
 
     <button type="submit" id="addCategoryBtn" class="btn btn-primary"><i class="fa fa-save"></i>&nbsp; Add Country</button>
@@ -11,6 +12,7 @@
   <script>
     $(document).on('click','#addCategoryBtn',function (event) {
         event.preventDefault();
+        $('#name_error').text('');
         var form = $('#create-form')[0];
         var formData = new FormData(form);
         
@@ -44,15 +46,12 @@
                             '<span class="text-white">';
                 $.each(data.responseJSON.errors, function(key, value) {
                     errorMessage += ('' + value + '<br>');
+                    $("#" + key + "_error").text(value[0]);
                 });
                 errorMessage += '</span>\n' +
                     '</div>\n' +
                     '</div>';
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    footer: errorMessage
-                });
+                
             }
         });
     

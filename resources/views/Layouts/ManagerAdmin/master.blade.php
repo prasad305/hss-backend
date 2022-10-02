@@ -458,8 +458,12 @@
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="{{ asset('assets/manager-admin/dist/img/user2-160x160.jpg') }}"
-                            class="img-circle elevation-2" alt="User Image">
+                        @if(Auth::user()->image)
+                        <img src="{{ asset(Auth::user()->image) }}"
+                            class="img-circle" alt="User Image" style="width:50px; height:50px;">
+                        @else
+                            <img src="{{asset('uploads/images/users/manager-admin-avatar.png')}}" class="img-circle" alt="User Image" style="width:50px; height:50px;">
+                        @endif
                     </div>
                     <div class="info">
                         <a href="{{ route('managerAdmin.dashboard') }}"

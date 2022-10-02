@@ -10,7 +10,7 @@
             @endforeach
             @endif
         </select>
-        <span id="category_error" class="text-danger"></span>
+        <span id="category_+id_error" class="text-danger"></span>
     </div>
 
     <div class="form-group">

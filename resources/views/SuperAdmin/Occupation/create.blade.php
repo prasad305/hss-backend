@@ -3,7 +3,7 @@
     <div class="form-group">
       <label for="name">Occupation Name</label>
       <input type="text" class="form-control" id="name" name="name" placeholder="Enter Occupation title">
-      <div id="error" style="color:#fff;"></div>
+      <div id="error" class="text-danger"></div>
     </div>
 
     <button type="submit" id="addCategoryBtn" class="btn btn-primary"><i class="fa fa-save"></i>&nbsp; Add Occupation</button>

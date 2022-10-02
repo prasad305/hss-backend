@@ -20,6 +20,7 @@ use App\Http\Controllers\ManagerAdmin\QnaController;
 use App\Http\Controllers\ManagerAdmin\ScheduleController;
 use App\Http\Controllers\ManagerAdmin\StarAssignedController;
 use App\Http\Controllers\ManagerAdmin\SuperStarController;
+use App\Http\Controllers\ManagerAdmin\ReportController;
 use App\Http\Controllers\ManagerAdmin\Audition\AuditionController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,8 +32,9 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
     Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
+    Route::post('/change/password/updateprofile', [DashboardController::class, 'updateProfile'])->name('change.updateprofile');
 
-    
+
     // Dashboard Routes By Srabon
 
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
@@ -400,15 +402,12 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     Route::get('dashboard/roundCompleteCard', [DashboardController::class, 'roundCompleteCard'])->name('roundCompleteCard');
     //====================== Accounts Route =================
-
-    Route::get('accounts-dashboaad', [AccountsController::class, 'index'])->name('accounts.index');
-    Route::get('accounts-admin', [AccountsController::class, 'accountsAdminList'])->name('accountsAdminList');
-    Route::get('accounts-admin-income', [AccountsController::class, 'adminIncome'])->name('adminIncome');
-    Route::get('accounts-superstar', [AccountsController::class, 'accountsSuperstarList'])->name('accountsSuperstarList');
-    Route::get('accounts-superstar-income', [AccountsController::class, 'superstarIncome'])->name('superstarIncome');
-    Route::get('accounts-audition-admin', [AccountsController::class, 'accountsAuditionAdminList'])->name('accountsAuditionAdminList');
-    Route::get('accounts-audition-income', [AccountsController::class, 'auditionIncome'])->name('auditionIncome');
-
+    //manager panel start
+    Route::get('accounts-index', [AccountsController::class, 'index'])->name('accounts.index');
+    Route::get('accounts-index-superstar-filter/{subCat_id}', [AccountsController::class, 'accountSuperStarName']);
+    Route::post('accountFilter', [AccountsController::class, 'accountFilter'])->name('accounts.accountFilter');
+    Route::get('superstar-accounts/{id}/{module}', [AccountsController::class, 'superstarList'])->name('accounts.superstarList');
+    //manager panel end
 
     // simple posts
     Route::get('simplePost-totalIncome', [AccountsController::class, 'simplePostTotalIncome'])->name('simplePostTotalIncome');
@@ -480,6 +479,33 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
 
     //======================== Accounts Route  End ==================
+
+
+    // <================================= All Report ======================================>
+
+    Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
+    Route::get('/learningSession-report', [ReportController::class, 'learningSessionReport'])->name('report.learningSession');
+    Route::post('/learningSession-report-filter', [ReportController::class, 'learningFilter'])->name('report.filter.learningSession');
+    Route::get('/all-report-filter-subCategory/{id}', [ReportController::class, 'allSubCategory']);
+    Route::get('/liveChat-report', [ReportController::class, 'liveChatReport'])->name('report.liveChat');
+    Route::post('/liveChat-report', [ReportController::class, 'liveChatReportFilter'])->name('report.Filter.liveChat');
+    Route::get('/qna-report', [ReportController::class, 'qnaReport'])->name('report.qna');
+    Route::post('/qna-report-filter', [ReportController::class, 'qnaReportFilter'])->name('report.Filter.qna');
+    Route::get('/meetup-report', [ReportController::class, 'meetupReport'])->name('report.meetup');
+    Route::post('/meetup-report-filter', [ReportController::class, 'meetupReportFilter'])->name('report.filter.meetupevent');
+    Route::get('/greeting-report', [ReportController::class, 'greetingReport'])->name('report.greeting');
+    Route::post('/greeting-report-filter', [ReportController::class, 'greetingReportFilter'])->name('report.filter.greeting');
+    // Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
+    Route::get('/marketplace-report', [ReportController::class, 'marketplaceReport'])->name('report.marketplace');
+    Route::post('/marketplace-report-filter', [ReportController::class, 'marketPlaceFilter'])->name('report.filter.marketPlace');
+    Route::get('/auction-report', [ReportController::class, 'auctionReport'])->name('report.auction');
+    Route::post('/auction-report-filter', [ReportController::class, 'auctionReportFilter'])->name('report.filter.auctionReport');
+    Route::get('/souvenir-report', [ReportController::class, 'souvenirReport'])->name('report.souvenir');
+    Route::post('/souvenir-report-filter', [ReportController::class, 'souvenirReportFilter'])->name('report.filter.souvenirReport');
+    Route::get('/simplePost-report', [ReportController::class, 'simplePostReport'])->name('report.simplePost');
+    Route::post('/simplePost-report-filter', [ReportController::class, 'simplePostFilter'])->name('report.filter.simplePost');
+    Route::get('/simplePost-report-filter-userType/{name}', [ReportController::class, 'simplePostUserName']);
+    Route::get('/fanGroup-report', [ReportController::class, 'fanGroupReport'])->name('report.fanGroup');
 });
 
 

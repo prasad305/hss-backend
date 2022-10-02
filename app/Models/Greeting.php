@@ -47,4 +47,5 @@ class Greeting extends Model
     {
         return $this->hasMany(GreetingsRegistration::class, 'greeting_id');
     }
+
 }
