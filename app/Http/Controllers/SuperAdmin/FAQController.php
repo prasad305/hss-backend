@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Models\AboutUs;
+use App\Models\FAQ;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AboutUsController extends Controller
+class FAQController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class AboutUsController extends Controller
     public function index()
     {
 
-        $data = AboutUs::orderBy('id', 'DESC')->first();
-        return view('SuperAdmin.AboutUs.index', compact('data'));
+        $data = FAQ::where('status', 1)->orderBy('id', 'DESC')->get();
+        return view('SuperAdmin.FAQ.index', compact('data'));
     }
 
     /**
@@ -28,9 +28,9 @@ class AboutUsController extends Controller
     public function create()
     {
         $data = [
-            'aboutUs' => AboutUs::orderBy('id', 'desc')->where('status', 1)->first(),
+            'faq' => FAQ::orderBy('id', 'desc')->where('status', 1)->get(),
         ];
-        return view('SuperAdmin.AboutUs.create', $data);
+        return view('SuperAdmin.FAQ.create', $data);
     }
     /**
      * Store a newly created resource in storage.
@@ -45,16 +45,16 @@ class AboutUsController extends Controller
             'details' => 'required',
           
         ]);
-            $aboutus = new AboutUs();
-            $aboutus->title = $request->input('title');
-            $aboutus->details = $request->input('details');
-            $aboutus->status = 1;
+            $faq = new FAQ();
+            $faq->title = $request->input('title');
+            $faq->details = $request->input('details');
+            $faq->status = 1;
 
         try {
-            $aboutus->save();
+            $faq->save();
                 return response()->json([
                     'success' => true,
-                    'message' => 'Aboutus Summary Add Successfully'
+                    'message' => 'FAQ Add Successfully'
                 ]);
             
         } catch (\Exception $exception) {
@@ -67,9 +67,9 @@ class AboutUsController extends Controller
 
     public function edit($id)
     {
-        $aboutus = AboutUs::findOrfail($id);
+        $data = FAQ::findOrfail($id);
       
-        return view('SuperAdmin.AboutUs.edit', compact('aboutus'));
+        return view('SuperAdmin.FAQ.edit', compact('data'));
     }
 
     public function update(Request $request, $id)
@@ -80,16 +80,16 @@ class AboutUsController extends Controller
           
         ]);
 
-            $aboutus = AboutUs::findOrFail($id);
-            $aboutus->title = $request->input('title');
-            $aboutus->details = $request->input('details');
-            $aboutus->status = $request->input('status');
+            $faq = FAQ::findOrFail($id);
+            $faq->title = $request->input('title');
+            $faq->details = $request->input('details');
+            $faq->status = $request->input('status');
 
         try {
-            $aboutus->save();
+            $faq->save();
             return response()->json([
                 'success' => 'success',
-                'message' => 'Aboute Summary Updated Successfully'
+                'message' => 'FAQ Updated Successfully'
             ]);
         } catch (\Exception $exception) {
             return response()->json([
@@ -101,9 +101,9 @@ class AboutUsController extends Controller
 
     public function destroy($id)
     {
-        $educationlevel = AboutUs::findOrfail($id);
+        $faq = FAQ::findOrfail($id);
         try {
-            $educationlevel->delete();
+            $faq->delete();
             return response()->json([
                 'type' => 'success',
                 'message' => 'Successfully Deleted !!',
@@ -115,5 +115,4 @@ class AboutUsController extends Controller
             ]);
         }
     }
-
 }
