@@ -41,6 +41,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Image;
 
 class DashboardController extends Controller
 {
@@ -95,6 +96,24 @@ class DashboardController extends Controller
         $user = User::find(Auth::user()->id);
         // dd($user);
         return view('SuperAdmin.profile.settings', compact('user'));
+    }
+    public function changeProfile(Request $request){
+// dd($request);
+    $user = User::find(Auth::user()->id);
+
+    if ($request['image']) {
+      // $image = $request->file('image');
+      $file_Name = time() . '.' . $request->file('image')->getClientOriginalExtension();
+      // $request->image->make('public/uploads/profile/image', $image_Name);
+      // Image::make($image)->save('public/uploads/images/' . $image_Name);
+      $user->image = $request->file('image')->storeAs('uploads', $file_Name, 'public');
+    }
+  //  dd($user); 
+    $user->first_name = $request->first_name;
+    $user->last_name = $request->last_name;
+    $user->update();
+    return redirect()->back()->with('success', 'Changed Successfully');
+
     }
     public function changePassword(Request $request){
         // return $request->all();
