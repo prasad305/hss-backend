@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Models\AboutUs;
+use App\Models\PrivacyPolicy;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AboutUsController extends Controller
+class PrivacyPolicyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class AboutUsController extends Controller
     public function index()
     {
 
-        $data = AboutUs::orderBy('id', 'DESC')->first();
-        return view('SuperAdmin.AboutUs.index', compact('data'));
+        $data = PrivacyPolicy::orderBy('id', 'desc')->where('status', 1)->get();
+        return view('SuperAdmin.PrivacyPolicy.index', compact('data'));
     }
 
     /**
@@ -28,9 +28,9 @@ class AboutUsController extends Controller
     public function create()
     {
         $data = [
-            'aboutUs' => AboutUs::orderBy('id', 'desc')->where('status', 1)->first(),
+            'aboutUs' => PrivacyPolicy::orderBy('id', 'desc')->where('status', 1)->first(),
         ];
-        return view('SuperAdmin.AboutUs.create', $data);
+        return view('SuperAdmin.PrivacyPolicy.create', $data);
     }
     /**
      * Store a newly created resource in storage.
@@ -45,7 +45,7 @@ class AboutUsController extends Controller
             'details' => 'required',
           
         ]);
-            $aboutus = new AboutUs();
+            $aboutus = new PrivacyPolicy();
             $aboutus->title = $request->input('title');
             $aboutus->details = $request->input('details');
             $aboutus->status = 1;
@@ -54,7 +54,7 @@ class AboutUsController extends Controller
             $aboutus->save();
                 return response()->json([
                     'success' => true,
-                    'message' => 'Aboutus Summary Add Successfully'
+                    'message' => 'Privacy Policy Add Successfully'
                 ]);
             
         } catch (\Exception $exception) {
@@ -67,9 +67,9 @@ class AboutUsController extends Controller
 
     public function edit($id)
     {
-        $aboutus = AboutUs::findOrfail($id);
+        $data = PrivacyPolicy::findOrfail($id);
       
-        return view('SuperAdmin.AboutUs.edit', compact('aboutus'));
+        return view('SuperAdmin.PrivacyPolicy.edit', compact('data'));
     }
 
     public function update(Request $request, $id)
@@ -80,7 +80,7 @@ class AboutUsController extends Controller
           
         ]);
 
-            $aboutus = AboutUs::findOrFail($id);
+            $aboutus = PrivacyPolicy::findOrFail($id);
             $aboutus->title = $request->input('title');
             $aboutus->details = $request->input('details');
             $aboutus->status = $request->input('status');
@@ -89,7 +89,7 @@ class AboutUsController extends Controller
             $aboutus->save();
             return response()->json([
                 'success' => 'success',
-                'message' => 'Aboute Summary Updated Successfully'
+                'message' => 'Privacy Policy Updated Successfully'
             ]);
         } catch (\Exception $exception) {
             return response()->json([
@@ -101,7 +101,7 @@ class AboutUsController extends Controller
 
     public function destroy($id)
     {
-        $educationlevel = AboutUs::findOrfail($id);
+        $educationlevel = PrivacyPolicy::findOrfail($id);
         try {
             $educationlevel->delete();
             return response()->json([
@@ -115,5 +115,4 @@ class AboutUsController extends Controller
             ]);
         }
     }
-
 }
