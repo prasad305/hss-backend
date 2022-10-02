@@ -279,7 +279,62 @@
         
             </ul>
         </li>
-        
+
+        <li class="nav-item ">
+            <a href="#" class="nav-link ">
+                <i class="nav-icon fa fa-bullseye" aria-hidden="true"></i>
+                <p >
+                    Landing Settings
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#"
+                        class="nav-link ">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>About us</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href=""
+                        class="nav-link">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Privacy policy</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href=""
+                        class="nav-link">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Product purchase</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href=""
+                        class="nav-link">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Refund Policy</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href=""
+                        class="nav-link">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Tarms And Condition</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href=""
+                        class="nav-link">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>FAQ</p>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
         <li class="nav-item">
             <a href="{{ route('superAdmin.simplePost.index') }}"
                 class="nav-link {{ Request::routeIs('superAdmin.simplePost.index') ? 'active' : '' }}">
