@@ -26,7 +26,8 @@
         }
 
         .print-m-0 {
-          margin: 0 !important;
+          margin: 20% !important;
+          width: 90% !important;
         }
       }
 
@@ -49,8 +50,8 @@
       }
 
       .cert-container {
-        margin: 65px 0 10px 0;
-        width: 100%;
+        margin: 65px 0 65px 0;
+        width: 80%;
         display: flex;
         justify-content: center;
       }
@@ -260,11 +261,17 @@
 
           <div class="stars">
             <i class="far fa-star fa-stack-1x"></i>
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-            <span>☆</span>
-            <span>☆</span>
+            @foreach(range(1,5) as $i)
+    @if($PDFInfo['starRating'] >0)
+        @if($PDFInfo['starRating'] >0.5)
+            <i class="fa fa-star"></i>
+        @else
+            <i class="fa fa-star-half-o"></i>
+        @endif
+    @else
+        <i class="fa  fa-star-o"></i>
+    @endif
+@endforeach
           </div>
           @endif
           <table>
@@ -287,14 +294,7 @@
                 @endif
                 
               </th>
-              <th>
-                <div class="QrCode">
-                  <img
-                    src="https://pngimg.com/uploads/qr_code/qr_code_PNG33.png"
-                    alt=""
-                  />
-                </div>
-              </th>
+              
               @foreach ($PDFInfo['stars'] as $PDF)
                         @if (!$PDF['isSuperAdmin'])
                         <th>

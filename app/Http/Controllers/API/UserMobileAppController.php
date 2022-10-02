@@ -671,12 +671,15 @@ class UserMobileAppController extends Controller
             }
             $userInfo = $auditionRoundMarkTracking->user;
             $certificateContent = AuditionCertificationContent::where([['audition_id', $audition_id]])->first();
-
+// Calculate for rating star 
+$round_info = AuditionRoundInfo::where('id', $round_info_id)->first();
+$totalRound = AuditionRoundInfo::where('audition_id', $audition_id)->count();
+$starRating =  ((($round_info->round_num / $totalRound) * 100)*5)/100;
             $PDFInfo = [
                 'user' => ($userInfo['first_name']. ' ' .$userInfo['last_name']),
                 'stars' => $totalStars,
                 'certificateContent' => $certificateContent,
-                
+                'starRating' => $starRating,
             ];
             $time = time();
                 try{
