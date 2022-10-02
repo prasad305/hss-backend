@@ -56,9 +56,14 @@
                         <div class="panel panel-primary">
                             <div class="panel-heading text-center">
                             <h2 style="color:#FFD700;border-bottom:1px solid #FFD700;">UPDATE YOUR PROFILE</h2>
+                            @if($user->image)
                                     <img src="{{asset($user->image)}}" class="img-circle" style="width:150px; height:150px; border:3px solid #FFD700" alt="Image not found">
                                     <br>
                                     <input type="file" name="profile" style="width:93px;">
+
+                            @else
+                                <img src="{{asset('uploads/images/users/manager-admin-avatar.png')}}" class="img-circle" style="width:150px; height:150px; border:3px solid #FFD700" alt="Image not found">
+                            @endif
                             </div>
                             <div class="panel-body">
                                 <div class="row">
