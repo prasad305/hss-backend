@@ -3,6 +3,7 @@
     <div class="form-group">
       <label for="interest_type">Interests Type</label>
       <input type="text" class="form-control" id="interest_type" name="interest_type" placeholder="Enter Interest Type">
+      <span class="text-danger" id="interest_type_error"></span>
     </div>
 
     <button type="submit" id="addCategoryBtn" class="btn btn-primary"><i class="fa fa-save"></i>&nbsp; Add Interest Type</button>
@@ -11,6 +12,7 @@
   <script>
     $(document).on('click','#addCategoryBtn',function (event) {
         event.preventDefault();
+        $('#interest_type_error').text('');
         var form = $('#create-form')[0];
         var formData = new FormData(form);
         
@@ -44,15 +46,12 @@
                             '<span class="text-white">';
                 $.each(data.responseJSON.errors, function(key, value) {
                     errorMessage += ('' + value + '<br>');
+                    $("#" + key + "_error").text(value[0]);
                 });
                 errorMessage += '</span>\n' +
                     '</div>\n' +
                     '</div>';
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    footer: errorMessage
-                });
+                
             }
         });
     

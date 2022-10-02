@@ -5,7 +5,7 @@
         <div class="col-md-6">
               <label for="first_name">Country Name</label>
               <input type="text" class="form-control" id="country" name="country" placeholder="United States...." value="{{$currency->country}}">
-              <span class="text-danger" id="currency_country_error"></span>
+              <span class="text-danger" id="country_error"></span>
          </div> 
          
          <div class="col-md-6">
@@ -24,7 +24,7 @@
         <div class="col-md-6">
              <label for="symbol">Currency Symbol</label>
              <input type="text" class="form-control" id="symbol" name="symbol" placeholder="$...." value="{{$currency->symbol}}">
-             <span class="text-danger" id="currency_symbol_error"></span>
+             <span class="text-danger" id="symbol_error"></span>
         </div>  
     </div>
     
@@ -47,7 +47,10 @@
 <script>
    $(document).on('click','#btnUpdateAdmin',function (event) {
     event.preventDefault();
-    ErrorMessageClear();
+    $('#country_error').text('');
+        $('#currency_code_error').text('');
+        $('#currency_error').text('');
+        $('#symbol_error').text('');
     var form = $('#edit-form')[0];
     var formData = new FormData(form);
     formData.append('_method','PUT');
@@ -77,10 +80,18 @@
                 }, 1000);
         },
         error: function (data) {
-            $.each(data.responseJSON.errors, function(key, value) {
-                ErrorMessage(key,value);
-            });       
-        }
+                var errorMessage = '<div class="card bg-danger">\n' +
+                            '<div class="card-body text-center p-5">\n' +
+                            '<span class="text-white">';
+                $.each(data.responseJSON.errors, function(key, value) {
+                    errorMessage += ('' + value + '<br>');
+                    $("#" + key + "_error").text(value[0]);
+                });
+                errorMessage += '</span>\n' +
+                    '</div>\n' +
+                    '</div>';
+                
+            }
     });
 
   
