@@ -2548,7 +2548,7 @@ class AuditionController extends Controller
                 $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
                 // save to server
                 $request->company_logo->move($image_folder_path, $image_new_name);
-                $auditionCertificationContent->company_logo = $image_folder_path . '/' . $image_new_name;
+                $auditionCertificationContent->company_logo = $image_folder_path . $image_new_name;
             }
         }
         catch (\Exception $exception) {
@@ -2564,7 +2564,7 @@ class AuditionController extends Controller
                 $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
                 // save to server
                 $request->brand_logo->move($image_folder_path, $image_new_name);
-                $auditionCertificationContent->brand_logo = $image_folder_path . '/' . $image_new_name;
+                $auditionCertificationContent->brand_logo = $image_folder_path . $image_new_name;
             }
         }
         catch (\Exception $exception) {
@@ -2580,7 +2580,7 @@ class AuditionController extends Controller
                 $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
                 // save to server
                 $request->frame->move($image_folder_path, $image_new_name);
-                $auditionCertificationContent->frame = $image_folder_path . '/' . $image_new_name;
+                $auditionCertificationContent->frame = $image_folder_path . $image_new_name;
             }
         }
         catch (\Exception $exception) {

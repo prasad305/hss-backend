@@ -259,6 +259,7 @@
           <br /><br />
 
           <div class="stars">
+            <i class="far fa-star fa-stack-1x"></i>
             <span>★</span>
             <span>★</span>
             <span>★</span>
