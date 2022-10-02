@@ -51,7 +51,7 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6" style=" border: 1px solid gold; padding: 10px; border-radius: 5px;">
-                    <form action="{{ route('managerAdmin.change.password') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('managerAdmin.change.updateprofile') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="panel panel-primary">
                             <div class="panel-heading text-center">
@@ -85,10 +85,22 @@
                                                     value="{{ $user->phone }}" disabled>
                                             </div>
                                             <div class="panel-footer">
-                                                <div class=" text-right">
+                                                <div class=" text-center">
                                                     <button type="submit" class="btn btn-dark waves-effect waves-ligh">Update Profile</button>
                                                 </div>
                                             </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form action="{{ route('managerAdmin.change.password') }}" method="POST">
+                        @csrf
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="container">
+                                        <div class="col">
                                             <hr>
                                             <h4 class="panel-title  text-white">Change Password</h4>
 
@@ -116,8 +128,6 @@
                                                         <label for="confirmPassword">Confirm Password</label>
                                                         <input type="password" name="confirmPassword" class="form-control passwordconf" id="confirmPassword">
                                                         <i class="fa-solid fa-eye" id="eyeconf"></i>
-
-                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -126,47 +136,43 @@
                                 </div>
                             </div>
                             <div class="panel-footer">
-                                <div class=" text-right">
-                                    <button type="submit" class="btn btn-dark waves-effect waves-ligh">Change Passowrd</button>
+                                <div class=" text-center">
+                                    <button type="submit" class="btn btn-dark waves-effect waves-ligh">Update Passowrd</button>
                                 </div>
                             </div>
                         </div>
                     </form>
+                    <br><br>
                 </div>
             </div>
+            
  <script>
     const passwordold = document.querySelector(".passwordold");
     const passwordnew = document.querySelector(".passwordnew");
     const passwordconf = document.querySelector(".passwordconf");
-
-    const eyeold= document.querySelector("#eyeold");
-    const eyenew= document.querySelector("#eyenew");
-    const eyeconf= document.querySelector("#eyeconf");
+    const eyeold = document.querySelector("#eyeold");
+    const eyenew = document.querySelector("#eyenew");
+    const eyeconf = document.querySelector("#eyeconf");
 
     eyeold.addEventListener("click", function(e){
-        e.stopPropagation();
         e.preventDefault();
         eyeold.classList.toggle("fa-eye-slash");
         const type = passwordold.getAttribute("type") === "password" ? "text" : "password";
         passwordold.setAttribute("type", type);
     })
-
     eyenew.addEventListener("click", function(e){
-        e.stopPropagation();
         e.preventDefault();
-        eyeold.classList.toggle("fa-eye-slash");
+        eyenew.classList.toggle("fa-eye-slash");
         const type = passwordnew.getAttribute("type") === "password" ? "text" : "password";
         passwordnew.setAttribute("type", type);
     })
-
     eyeconf.addEventListener("click", function(e){
-        e.stopPropagation();
         e.preventDefault();
-        eyeold.classList.toggle("fa-eye-slash");
+        eyeconf.classList.toggle("fa-eye-slash");
         const type = passwordconf.getAttribute("type") === "password" ? "text" : "password";
         passwordconf.setAttribute("type", type);
     })
-
+ 
     
 </script>
 
@@ -186,8 +192,15 @@
                     timer: 1500
                 })
             });
+
+
+
         </script>
-    @endif
+    @else{
+        <script>
+            console.log('error')
+        </script>
+    }@endif
 @endsection
 
 @push('script')

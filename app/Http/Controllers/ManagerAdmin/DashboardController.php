@@ -64,18 +64,10 @@ class DashboardController extends Controller
         $user = User::find(Auth::user()->id);
         return view('ManagerAdmin.profile.settings', compact('user'));
     }
-    public function changePassword(Request $request){
 
-        $request->validate([
-            'oldPassword' => 'required',
-            'password' => 'required',
-            'confirmPassword' => ['same:password'],
-        ]);
-
+    public function updateProfile(Request $request){
         $userId = auth('sanctum')->user()->id;
         $users =User::find($userId);
-
-     
 
         if ($request->hasFile('profile')) {
             if ($users->image != null)
@@ -90,18 +82,32 @@ class DashboardController extends Controller
             $users->save();
         }
 
-       
+        if ($users->first_name){
+            $users->first_name = $request->first_name;
+            $users->last_name = $request->last_name;
+            $users->save();
+            return redirect()->back()->with('success', 'Profile update Successfully');
+        }else{
+            return redirect()->back()->with('success', 'Profile Not update');
+        }
+    }
 
+    public function changePassword(Request $request){
+
+        $request->validate([
+            'oldPassword' => 'required',
+            'password' => 'required',
+            'confirmPassword' => ['same:password'],
+        ]);
+
+        $userId = auth('sanctum')->user()->id;
+        $users =User::find($userId);
         
         // oldPassword);
         // formData.append("newPassword", newPassword);
 
         if (\Hash::check($request->oldPassword , $users->password )){
-
-            
             $users->password = bcrypt($request->password);
-            $users->first_name = $request->first_name;
-            $users->last_name = $request->last_name;
             $users->save();
             Auth::logout();
 
@@ -110,6 +116,7 @@ class DashboardController extends Controller
             return redirect()->back()->with('success', 'Not Changed');
         }
     }
+
 
     public function learningSessions()
 
