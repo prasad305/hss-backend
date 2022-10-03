@@ -35,6 +35,11 @@ use App\Models\User;
 use App\Models\UserInfo;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\Fan_Group_Join;
+use App\Models\Audition\AuditionAssignJudge;
+use App\Models\SuperStar;
+use App\Models\AuditionCertification;
+use App\Models\AuditionCertificationContent;
+use App\Models\Audition\AuditionRoundMarkTracking;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -629,4 +634,80 @@ class UserMobileAppController extends Controller
             "members" => $fanGroupMemebers
         ]);
     }
+
+    public function getCertificate($audition_id, $round_info_id){
+
+        $isWinner = false; 
+        $super = false;
+        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id],
+        ['audition_id', $audition_id], ['round_info_id', $round_info_id], ['wining_status',1]])->first();
+
+        if($auditionRoundMarkTracking){
+            $certificate = AuditionCertification::where([['audition_id', $audition_id],['round_info_id', $round_info_id],['participant_id',auth()->user()->id]])->first();
+            if($certificate){
+                return response()->json([
+                    'status' => 200,
+                    'certificateURL' =>  $certificate->certificate,
+                ]); 
+            }
+
+
+            $assignedJudges = AuditionAssignJudge::where('audition_id', $audition_id)->get();
+            // return $assignedJudges;
+            $totalStars = [];
+            foreach($assignedJudges as $judge){
+                if($judge->super_judge == 1){
+                    $super = true;
+                }
+                $superstarId = $judge->judge_id;
+                $superStar = SuperStar::where('star_id', $superstarId)->first();
+                $superstarName = $superStar->superStar->first_name." ".$superStar->superStar->last_name;
+                $starInfo = [
+                    'isSuperAdmin'=> $super,
+                    'signature'=> $superStar['signature'],
+                    'name' => $superstarName,
+                ];
+                array_push($totalStars,$starInfo);
+            }
+            $userInfo = $auditionRoundMarkTracking->user;
+            $certificateContent = AuditionCertificationContent::where([['audition_id', $audition_id]])->first();
+            // Calculate for rating star 
+            $round_info = AuditionRoundInfo::where('id', $round_info_id)->first();
+            $totalRound = AuditionRoundInfo::where('audition_id', $audition_id)->count();
+            $starRating =  ((($round_info->round_num / $totalRound) * 100)*5)/100;
+            $PDFInfo = [
+                'user' => ($userInfo['first_name']. ' ' .$userInfo['last_name']),
+                'stars' => $totalStars,
+                'certificateContent' => $certificateContent,
+                'starRating' => $starRating,
+            ];
+            $time = time();
+                try{
+                    $pdf = PDF::loadView('Others.Certificate.Certificate', compact('PDFInfo'))->save(public_path('uploads/pdf/auditions/certificates/' . $time . '.' . 'pdf'));
+                    $filename = 'uploads/pdf/auditions/certificates/' . $time . '.' . 'pdf';
+                }catch (\Throwable $th) {
+                    return $th;
+                }
+
+                $auditionCertification = new AuditionCertification();
+                $auditionCertification->audition_id = $audition_id;
+                $auditionCertification->round_info_id = $round_info_id;
+                $auditionCertification->participant_id = $userInfo->id;
+                $auditionCertification->certificate = $filename;
+                $auditionCertification->status = 1;
+                $auditionCertification->save();
+                if($auditionCertification){
+                    return response()->json([
+                        'status' => 200,
+                        'certificateURL' =>  $auditionCertification->certificate,
+                    ]); 
+                }
+        }
+        else{
+           return response()->json([
+                        'status' => 200,
+                        'message' =>  "Sorry!",
+                    ]);
+        }
+    } 
 }

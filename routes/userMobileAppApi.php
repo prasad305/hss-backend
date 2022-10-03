@@ -62,4 +62,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
      * fan group join member list
      */
     Route::get('/user/fangroup-member/{fangroup_id}', [UserMobileAppController::class, 'ganGroupJoinMemebers']);
+
+    /**
+     *  Download audition certificate
+     */
+    Route::get('mobile/audition/getAuditionCertificate/{audition_id}/{round_info_id}', [UserMobileAppController::class, 'getCertificate']);
 });
