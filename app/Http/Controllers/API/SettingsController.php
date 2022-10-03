@@ -20,7 +20,7 @@ class SettingsController extends Controller
         return response()->json([
             'status' => 200,
             'data' => $data,
-            'message' => 'Souvenir Added Successfully',
+            'message' => 'About us Added Successfully',
         ]);
     }
     public function policy()
@@ -30,7 +30,7 @@ class SettingsController extends Controller
         return response()->json([
             'status' => 200,
             'data' => $data,
-            'message' => 'Souvenir Added Successfully',
+            'message' => 'Policy Added Successfully',
         ]);
     }
     public function faq()
@@ -40,7 +40,7 @@ class SettingsController extends Controller
         return response()->json([
             'status' => 200,
             'data' => $data,
-            'message' => 'Souvenir Added Successfully',
+            'message' => 'Faq Added Successfully',
         ]);
     }
     public function productPurchase()
@@ -50,7 +50,7 @@ class SettingsController extends Controller
         return response()->json([
             'status' => 200,
             'data' => $data,
-            'message' => 'Souvenir Added Successfully',
+            'message' => 'Product Purchase Added Successfully',
         ]);
     }
     public function termsCondition()
@@ -60,7 +60,7 @@ class SettingsController extends Controller
         return response()->json([
             'status' => 200,
             'data' => $data,
-            'message' => 'Souvenir Added Successfully',
+            'message' => 'Tarms Condition Added Successfully',
         ]);
     }
     public function refund()
@@ -70,7 +70,7 @@ class SettingsController extends Controller
         return response()->json([
             'status' => 200,
             'data' => $data,
-            'message' => 'Souvenir Added Successfully',
+            'message' => 'Refund Added Successfully',
         ]);
     }
 }
