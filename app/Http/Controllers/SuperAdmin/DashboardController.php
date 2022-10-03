@@ -41,6 +41,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Image;
 
 class DashboardController extends Controller
 {
@@ -81,11 +82,16 @@ class DashboardController extends Controller
     $data['interestTypeCount'] = InterestType::count();
     $data['marketplaceCount'] = Marketplace::count();
     $data['auctionCount'] = Auction::count();
+    $data['totalLearningAmount'] = LearningSessionRegistration::sum('amount');
+    $data['totalPostAmount'] = GeneralPostPayment::sum('amount');
+    $data['totalLiveChatAmount'] = LiveChatRegistration::sum('amount');
+    $data['totalGreetingAmount'] = GreetingsRegistration::sum('amount');
+    $data['totalMeetUpAmount'] = MeetupEventRegistration::sum('amount');
 
     return view('SuperAdmin.dashboard.index', $data);
   }
 
-  
+
   public function profile()
   {
     $user = Auth::user();
@@ -98,9 +104,22 @@ class DashboardController extends Controller
         // dd($user);
         return view('SuperAdmin.profile.settings', compact('user'));
     }
-    
-    public function changePassword(Request $request)
-    {
+    public function changeProfile(Request $request){
+// dd($request);
+    $user = User::find(Auth::user()->id);
+
+    if ($request['image']) {
+      $file_Name = time() . '.' . $request->file('image')->getClientOriginalExtension();
+      $user->image = $request->file('image')->storeAs('uploads', $file_Name, 'public');
+    }
+  //  dd($user);
+    $user->first_name = $request->first_name;
+    $user->last_name = $request->last_name;
+    $user->update();
+    return redirect()->back()->with('success', 'Changed Successfully');
+
+    }
+    public function changePassword(Request $request){
         // return $request->all();
         $request->validate([
             'oldPassword' => 'required',
@@ -111,12 +130,13 @@ class DashboardController extends Controller
         $userId = auth('sanctum')->user()->id;
         $users =User::find($userId);
 
+
         // oldPassword);
         // formData.append("newPassword", newPassword);
 
         if (Hash::check($request->oldPassword , $users->password )){
 
-            
+
             $users->password = bcrypt($request->password);
             $users->save();
             Auth::logout();
@@ -242,8 +262,8 @@ class DashboardController extends Controller
 
 
     $data['allGreetingCount'] = Greeting::count();
-    $data['completeGreetingCount'] = Greeting::whereDate('event_date', '>', Carbon::now())->count();
-    $data['upcomingGreetingCount'] = Greeting::whereDate('event_date', '<', Carbon::now())->count();
+    $data['completeGreetingCount'] = Greeting::whereDate('created_at', '>', Carbon::now())->count();
+    $data['upcomingGreetingCount'] = Greeting::whereDate('created_at', '<', Carbon::now())->count();
 
     return view('SuperAdmin.dashboard.greetings', $data);
   }
@@ -690,7 +710,7 @@ class DashboardController extends Controller
   }
   public function fanGroupSuperstarEvents($id)
   {
-    $posts = FanGroup::where('star_id', $id)->get();
+    $posts = FanGroup::where('my_star', $id)->get();
     return view('SuperAdmin.dashboard.FanGroup.Superstar.superstar_events', compact('posts'));
   }
 

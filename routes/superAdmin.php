@@ -54,14 +54,16 @@ use App\Http\Controllers\SuperAdmin\TermsConditionController;
 use App\Http\Controllers\SuperAdmin\RefundController;
 
 
-// Super Admin route
+// Super Admin routechange.password
 
 Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin', 'prevent-back-history']], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-    
-   
+    Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
+    Route::post('/profile/change/store', [DashboardController::class, 'changeProfile'])->name('change.profile');
+
+    Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
 
     Route::get('/meetup-events', [DashboardController::class, 'meetupEvents'])->name('meetupEvents');
     Route::get('/learning-session', [DashboardController::class, 'learningSessions'])->name('learningSessions');

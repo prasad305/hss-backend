@@ -192,16 +192,16 @@ class DashboardController extends Controller
         })->sum('total_price');
         $marketplace['marketplaceDailyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
             $q->where([['superstar_admin_id', auth()->user()->id]])->orWhere([['superstar_id', auth()->user()->id]]);
-        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('unit_price');
+        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('total_price');
         $marketplace['marketplaceWeeklyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
             $q->where([['superstar_admin_id', auth()->user()->id]])->orWhere([['superstar_id', auth()->user()->id]]);
-        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('unit_price');
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('total_price');
         $marketplace['marketplaceMonthlyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
             $q->where([['superstar_admin_id', auth()->user()->id]])->orWhere([['superstar_id', auth()->user()->id]]);
-        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('unit_price');
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('total_price');
         $marketplace['marketplaceYearlyIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
             $q->where([['superstar_admin_id', auth()->user()->id]])->orWhere([['superstar_id', auth()->user()->id]]);
-        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('unit_price');
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_price');
 
 
         // Income Statement Souvenir
