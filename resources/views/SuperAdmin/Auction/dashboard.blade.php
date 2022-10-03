@@ -39,7 +39,7 @@
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
                                             href="{{ route('superAdmin.auction.list', $category->id) }}">see
-                                            more</a></small>
+                                           Auction</a></small>
                                 </span>
                             </div>
 
