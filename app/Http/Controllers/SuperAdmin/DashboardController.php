@@ -102,13 +102,10 @@ class DashboardController extends Controller
     $user = User::find(Auth::user()->id);
 
     if ($request['image']) {
-      // $image = $request->file('image');
       $file_Name = time() . '.' . $request->file('image')->getClientOriginalExtension();
-      // $request->image->make('public/uploads/profile/image', $image_Name);
-      // Image::make($image)->save('public/uploads/images/' . $image_Name);
       $user->image = $request->file('image')->storeAs('uploads', $file_Name, 'public');
     }
-  //  dd($user); 
+  //  dd($user);
     $user->first_name = $request->first_name;
     $user->last_name = $request->last_name;
     $user->update();
