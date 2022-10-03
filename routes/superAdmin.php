@@ -49,6 +49,9 @@ use App\Http\Controllers\SuperAdmin\AuditionUserVoteController;
 use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
 use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
+use App\Http\Controllers\SuperAdmin\ProductPurchaseController;
+use App\Http\Controllers\SuperAdmin\TermsConditionController;
+use App\Http\Controllers\SuperAdmin\RefundController;
 
 
 // Super Admin route
@@ -179,6 +182,17 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('auction-edit/{id}', [AuctionController::class, 'auctionEdit'])->name('auction.edit');
     Route::PUT('auction-update/{id}', [AuctionController::class, 'auctionUpdate'])->name('auction.update');
     Route::delete('auction-destroy/{id}', [AuctionController::class, 'auctionDestroy'])->name('auction.destroy');
+
+    // Product Purchase
+    Route::resource('productpurchase', ProductPurchaseController::class);
+
+    // Tersm and Condtition
+    Route::resource('termscondition', TermsConditionController::class);
+
+    // Refund Policy
+    Route::resource('refundpolicy', RefundController::class);
+
+    
     // Marketplace
     Route::get('marketplace-dashboard', [MarketplaceController::class, 'dashboard'])->name('marketplace.dashboard');
     Route::get('marketplace-list/{id}', [MarketplaceController::class, 'marketplaceList'])->name('marketplace.list');

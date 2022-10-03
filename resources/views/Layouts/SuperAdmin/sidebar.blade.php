@@ -305,24 +305,21 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href=""
-                        class="nav-link">
+                    <a href="{{ route('superAdmin.productpurchase.index') }}" class="nav-link {{ Request::routeIs('superAdmin.productpurchase.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Product purchase</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href=""
-                        class="nav-link">
+                    <a href="{{ route('superAdmin.refundpolicy.index') }}" class="nav-link {{ Request::routeIs('superAdmin.refundpolicy.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Refund Policy</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href=""
-                        class="nav-link">
+                    <a href="{{ route('superAdmin.termscondition.index') }}"  class="nav-link {{ Request::routeIs('superAdmin.termscondition.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
-                        <p>Tarms And Condition</p>
+                        <p>Terms And Condition</p>
                     </a>
                 </li>
                 <li class="nav-item">
