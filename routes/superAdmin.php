@@ -49,16 +49,21 @@ use App\Http\Controllers\SuperAdmin\AuditionUserVoteController;
 use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
 use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
+use App\Http\Controllers\SuperAdmin\ProductPurchaseController;
+use App\Http\Controllers\SuperAdmin\TermsConditionController;
+use App\Http\Controllers\SuperAdmin\RefundController;
 
 
-// Super Admin route
+// Super Admin routechange.password
 
 Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin', 'prevent-back-history']], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-    
-   
+    Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
+    Route::post('/profile/change/store', [DashboardController::class, 'changeProfile'])->name('change.profile');
+
+    Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
 
     Route::get('/meetup-events', [DashboardController::class, 'meetupEvents'])->name('meetupEvents');
     Route::get('/learning-session', [DashboardController::class, 'learningSessions'])->name('learningSessions');
@@ -179,6 +184,17 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('auction-edit/{id}', [AuctionController::class, 'auctionEdit'])->name('auction.edit');
     Route::PUT('auction-update/{id}', [AuctionController::class, 'auctionUpdate'])->name('auction.update');
     Route::delete('auction-destroy/{id}', [AuctionController::class, 'auctionDestroy'])->name('auction.destroy');
+
+    // Product Purchase
+    Route::resource('productpurchase', ProductPurchaseController::class);
+
+    // Tersm and Condtition
+    Route::resource('termscondition', TermsConditionController::class);
+
+    // Refund Policy
+    Route::resource('refundpolicy', RefundController::class);
+
+    
     // Marketplace
     Route::get('marketplace-dashboard', [MarketplaceController::class, 'dashboard'])->name('marketplace.dashboard');
     Route::get('marketplace-list/{id}', [MarketplaceController::class, 'marketplaceList'])->name('marketplace.list');

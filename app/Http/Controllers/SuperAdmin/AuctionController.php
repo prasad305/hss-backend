@@ -63,12 +63,9 @@ class AuctionController extends Controller
     }
 
     public function termsUpdate(Request $request, $id)
-    { {
-
+    { 
             $request->validate([
-
                 'acquired_instruction' => 'required',
-
 
             ], [
                 'acquired_instruction.required' => 'Instruction Field Is Required',
@@ -94,7 +91,6 @@ class AuctionController extends Controller
                     'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
                 ]);
             }
-        }
     }
     public function termsDestroy($id)
     {

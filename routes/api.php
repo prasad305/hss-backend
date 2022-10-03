@@ -30,9 +30,17 @@ use App\Http\Controllers\API\CurrencyController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\SettingsController;
 
 Route::post('/uplad-video', [HomeController::class, 'video_upload']);
 
+//Policy
+Route::get('aboutus', [SettingsController::class, 'aboutus']);
+Route::get('policy', [SettingsController::class, 'policy']);
+Route::get('faq', [SettingsController::class, 'faq']);
+Route::get('product-purchase', [SettingsController::class, 'productPurchase']);
+Route::get('terms-condition', [SettingsController::class, 'termsCondition']);
+Route::get('refund', [SettingsController::class, 'refund']);
 
 // Authentication API
 Route::post('register', [AuthController::class, 'register']);
