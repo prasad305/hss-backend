@@ -11,7 +11,7 @@
             @endforeach
             @endif
         </select>
-        <span id="category_error" class="text-danger"></span>
+        <span id="category_id_error" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label for="name">Name</label>

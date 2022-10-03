@@ -582,77 +582,77 @@
             </ul>
         </li>
 
-        <li class="nav-item mb-5">
+        <li class="nav-item mb-5 {{ Request::routeIs('managerAdmin.report.audition') || Request::routeIs('managerAdmin.report.simplePost') || Request::routeIs('managerAdmin.report.learningSession') ||Request::routeIs('managerAdmin.report.meetup') ||Request::routeIs('managerAdmin.report.greeting') ||Request::routeIs('managerAdmin.report.liveChat') ||Request::routeIs('managerAdmin.report.qna') ||Request::routeIs('managerAdmin.report.fanGroup') ||Request::routeIs('managerAdmin.report.marketplace') ||Request::routeIs('managerAdmin.report.auction') ||Request::routeIs('managerAdmin.report.souvenir')? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-chart-pie"></i>
+                <i class="nav-icon fa-solid fa-file-invoice"></i>
                 <p>All Report
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.report.audition') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                    <a href="{{ route('managerAdmin.report.audition') }}" class="nav-link {{ Request::routeIs('managerAdmin.report.audition') ? 'active' : '' }}">
+                       <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Audition</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.report.simplePost') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                    <a href="{{ route('managerAdmin.report.simplePost') }}" class="nav-link {{ Request::routeIs('managerAdmin.report.simplePost') ? 'active' : '' }}">
+                       <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Simple Post</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.report.learningSession') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                    <a href="{{ route('managerAdmin.report.learningSession') }}" class="nav-link {{ Request::routeIs('managerAdmin.report.learningSession') ? 'active' : '' }}">
+                       <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Learning Session</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.report.meetup') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                    <a href="{{ route('managerAdmin.report.meetup') }}" class="nav-link {{ Request::routeIs('managerAdmin.report.meetup') ? 'active' : '' }}">
+                       <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Meetup Event</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.report.greeting') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                    <a href="{{ route('managerAdmin.report.greeting') }}" class="nav-link {{ Request::routeIs('managerAdmin.report.greeting') ? 'active' : '' }}">
+                       <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Greeting</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.report.liveChat') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                    <a href="{{ route('managerAdmin.report.liveChat') }}" class="nav-link {{ Request::routeIs('managerAdmin.report.liveChat') ? 'active' : '' }}">
+                       <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Live Chat</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.report.qna') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                    <a href="{{ route('managerAdmin.report.qna') }}" class="nav-link {{ Request::routeIs('managerAdmin.report.qna') ? 'active' : '' }}">
+                       <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Q&A</p>
                     </a>
                 </li>
                 {{-- <li class="nav-item">
-                    <a href="{{ route('managerAdmin.report.fanGroup') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                    <a href="{{ route('managerAdmin.report.fanGroup') }}" class="nav-link {{ Request::routeIs('managerAdmin.report.fanGroup') ? 'active' : '' }}">
+                       <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Fan Group</p>
                     </a>
                 </li> --}}
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.report.marketplace') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                    <a href="{{ route('managerAdmin.report.marketplace') }}" class="nav-link {{ Request::routeIs('managerAdmin.report.marketplace') ? 'active' : '' }}">
+                        <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Marketplace</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.report.auction') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                    <a href="{{ route('managerAdmin.report.auction') }}" class="nav-link {{ Request::routeIs('managerAdmin.report.auction') ? 'active' : '' }}">
+                        <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Auction</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('managerAdmin.report.souvenir') }}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
+                    <a href="{{ route('managerAdmin.report.souvenir') }}" class="nav-link {{ Request::routeIs('managerAdmin.report.souvenir') ? 'active' : '' }}">
+                        <i class="fa fa-arrow-right nav-icon"></i>
                         <p>Souvenir</p>
                     </a>
                 </li>

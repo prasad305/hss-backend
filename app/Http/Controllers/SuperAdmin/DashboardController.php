@@ -91,6 +91,13 @@ class DashboardController extends Controller
     return view('SuperAdmin.dashboard.index', $data);
   }
 
+
+  public function profile()
+  {
+    $user = Auth::user();
+    return view('SuperAdmin.profile.index', compact('user'));
+  }
+
   public function settings()
     {
         $user = User::find(Auth::user()->id);
@@ -127,7 +134,7 @@ class DashboardController extends Controller
         // oldPassword);
         // formData.append("newPassword", newPassword);
 
-        if (\Hash::check($request->oldPassword , $users->password )){
+        if (Hash::check($request->oldPassword , $users->password )){
 
 
             $users->password = bcrypt($request->password);
@@ -321,13 +328,6 @@ class DashboardController extends Controller
         'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
       ]);
     }
-  }
-
-
-  public function profile()
-  {
-    $user = Auth::user();
-    return view('SuperAdmin.profile.index', compact('user'));
   }
 
   // Dashboard Meetup

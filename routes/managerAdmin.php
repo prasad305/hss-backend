@@ -32,6 +32,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
     Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
+    Route::post('/change/password/updateprofile', [DashboardController::class, 'updateProfile'])->name('change.updateprofile');
 
 
     // Dashboard Routes By Srabon

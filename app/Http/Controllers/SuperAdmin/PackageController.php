@@ -69,6 +69,9 @@ class PackageController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'title' => 'required',
+        ]);
        
 
         $package = Package::findOrFail($id);
