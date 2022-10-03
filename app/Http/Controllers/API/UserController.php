@@ -1883,7 +1883,7 @@ class UserController extends Controller
             // Calculate for rating star 
             $round_info = AuditionRoundInfo::where('id', $round_info_id)->first();
             $totalRound = AuditionRoundInfo::where('audition_id', $audition_id)->count();
-            $starRating =  ((($round_info->round_num / $totalRound) * 100)*5)/100;
+            $starRating =  (($round_info->round_num * 5 ) / $totalRound);
             // return $totalRound;
 
 
