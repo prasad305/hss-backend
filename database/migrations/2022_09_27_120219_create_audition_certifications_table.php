@@ -18,6 +18,7 @@ class CreateAuditionCertificationsTable extends Migration
             $table->unsignedBigInteger('audition_id')->nullable();
             $table->unsignedBigInteger('round_info_id')->nullable();
             $table->unsignedBigInteger('participant_id')->nullable();
+            $table->string('certificate')->nullable();
             $table->integer('status')->default(0);
             $table->timestamps();
         });

@@ -540,6 +540,7 @@ class SimplePostController extends Controller
             $npost = new Post();
             $npost->type = 'general';
             $npost->user_id = auth('sanctum')->user()->id;
+            $npost->star_id = auth('sanctum')->user()->id;
             $npost->category_id = auth('sanctum')->user()->category_id;
             $npost->sub_category_id = auth('sanctum')->user()->sub_category_id;
             $npost->event_id = $post->id;

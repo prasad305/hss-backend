@@ -29,6 +29,7 @@ use App\Models\AuditionRoundInstruction;
 use App\Models\JuryGroup;
 use App\Models\LoveReact;
 use App\Models\WildCard;
+use App\Models\AuditionCertificationContent;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -2532,5 +2533,72 @@ class AuditionController extends Controller
             'message' => "Participant Selected",
 
         ]);
+    }
+    public function makeCertificate(Request $request){
+        $auditionCertificationContent = new AuditionCertificationContent();
+        $auditionCertificationContent->audition_id = $request->audition_id;
+        $auditionCertificationContent->title = $request->title;
+        $auditionCertificationContent->sub_title = $request->sub_title;
+        $auditionCertificationContent->main_content = $request->main_content;
+
+        try {
+            if ($request->hasfile('company_logo')) {
+                $image             = $request->company_logo;
+                $image_folder_path       = 'uploads/images/auditions/certificate/';
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                // save to server
+                $request->company_logo->move($image_folder_path, $image_new_name);
+                $auditionCertificationContent->company_logo = $image_folder_path . $image_new_name;
+            }
+        }
+        catch (\Exception $exception) {
+            return response()->json([
+                'status' => 200,
+                'message' =>  $exception->getMessage(),
+            ]);
+        }
+        try {
+            if ($request->hasfile('brand_logo')) {
+                $image             = $request->brand_logo;
+                $image_folder_path       = 'uploads/images/auditions/certificate/';
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                // save to server
+                $request->brand_logo->move($image_folder_path, $image_new_name);
+                $auditionCertificationContent->brand_logo = $image_folder_path . $image_new_name;
+            }
+        }
+        catch (\Exception $exception) {
+            return response()->json([
+                'status' => 200,
+                'message' =>  $exception->getMessage(),
+            ]);
+        }
+        try {
+            if ($request->hasfile('frame')) {
+                $image             = $request->frame;
+                $image_folder_path       = 'uploads/images/auditions/certificate/';
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                // save to server
+                $request->frame->move($image_folder_path, $image_new_name);
+                $auditionCertificationContent->frame = $image_folder_path . $image_new_name;
+            }
+        }
+        catch (\Exception $exception) {
+            return response()->json([
+                'status' => 200,
+                'message' =>  $exception->getMessage(),
+            ]);
+        }
+
+        $auditionCertificationContent->save();
+        if($auditionCertificationContent){
+            return response()->json([
+                'status' => 200,
+                'message' => "content created",
+            ]);
+        }
+
+        
+        
     }
 }
