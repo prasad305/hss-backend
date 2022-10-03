@@ -3,6 +3,7 @@
     <div class="form-group">
       <label for="name">City Name</label>
       <input type="text" class="form-control" id="name" name="name" placeholder="Enter City name">
+      <span class="text-danger" id="name_error"></span>
     </div>
 
     <div class="form-group">
@@ -13,6 +14,7 @@
             <option value="{{ $country->id }}">{{ $country->name }}</option>
             @endforeach
         </select>
+        <span class="text-danger" id="country_id_error"></span>
     </div>
 
     <div class="form-group">
@@ -20,6 +22,7 @@
         <select name="state_id" id="state_id" class="form-control select2">
             
         </select>
+        <span class="text-danger" id="state_id_error"></span>
     </div>
 
     <button type="submit" id="addCategoryBtn" class="btn btn-primary"><i class="fa fa-save"></i>&nbsp; Add City</button>
@@ -28,6 +31,9 @@
   <script>
     $(document).on('click','#addCategoryBtn',function (event) {
         event.preventDefault();
+        $('#name_error').text('');
+        $('#country_id_error').text('');
+        $('#state_id_error').text('');
         var form = $('#create-form')[0];
         var formData = new FormData(form);
         
@@ -61,15 +67,12 @@
                             '<span class="text-white">';
                 $.each(data.responseJSON.errors, function(key, value) {
                     errorMessage += ('' + value + '<br>');
+                    $("#" + key + "_error").text(value[0]);
                 });
                 errorMessage += '</span>\n' +
                     '</div>\n' +
                     '</div>';
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    footer: errorMessage
-                });
+                
             }
         });
     

@@ -3,15 +3,17 @@
 
 use App\Models\Slider;
 use App\Models\PaymentMethod;
+use Illuminate\Cache\Repository;
 use Illuminate\Support\Facades\Route;
 use App\Models\Audition\AuditionUserVoteMark;
+use App\Http\Controllers\SuperAdmin\FAQController;
 use App\Http\Controllers\SuperAdmin\QnAController;
 use App\Http\Controllers\SuperAdmin\CityController;
-use App\Http\Controllers\SuperAdmin\LoveReactPriceController;
 use App\Http\Controllers\SuperAdmin\AdminController;
 use App\Http\Controllers\SuperAdmin\StateController;
 use App\Http\Controllers\SuperAdmin\EventsController;
 use App\Http\Controllers\SuperAdmin\ReportController;
+use App\Http\Controllers\SuperAdmin\AboutUsController;
 use App\Http\Controllers\SuperAdmin\AuctionController;
 use App\Http\Controllers\SuperAdmin\CountryController;
 use App\Http\Controllers\SuperAdmin\PackageController;
@@ -39,13 +41,14 @@ use App\Http\Controllers\SuperAdmin\AuditionAdminController;
 use App\Http\Controllers\SuperAdmin\AuditionRulesController;
 use App\Http\Controllers\SuperAdmin\DashboardInfoController;
 use App\Http\Controllers\SuperAdmin\JurysAuditionController;
+use App\Http\Controllers\SuperAdmin\PrivacyPolicyController;
 use App\Http\Controllers\SuperAdmin\EducationlevelController;
+use App\Http\Controllers\SuperAdmin\LoveReactPriceController;
 use App\Http\Controllers\SuperAdmin\LearningSessionController;
 use App\Http\Controllers\SuperAdmin\AuditionUserVoteController;
 use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
 use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
-use Illuminate\Cache\Repository;
 
 
 // Super Admin route
@@ -54,8 +57,8 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-    Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
-    Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
+    
+   
 
     Route::get('/meetup-events', [DashboardController::class, 'meetupEvents'])->name('meetupEvents');
     Route::get('/learning-session', [DashboardController::class, 'learningSessions'])->name('learningSessions');
@@ -107,7 +110,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/all/post/weekly', [DashboardInfoController::class, 'weeklyPost'])->name('weeklyPost');
     Route::get('/all/post/monthly', [DashboardInfoController::class, 'monthlyPost'])->name('monthlyPost');
 
+    //Super Admin Profile
+
     Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
+    Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
+    Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
 
     // manager admin
     Route::get('/manager-admin/list', [ManagerAdminController::class, 'list'])->name('managerAdminList');
@@ -279,6 +286,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     //Education Level
     Route::resource('educationlevel', EducationlevelController::class);
+
+    //AboutUs Level
+    Route::resource('aboutUs', AboutUsController::class);
+    Route::resource('privacy', PrivacyPolicyController::class);
+    Route::resource('faq', FAQController::class);
 
     //Occupation
     Route::resource('occupation', OccupationController::class);

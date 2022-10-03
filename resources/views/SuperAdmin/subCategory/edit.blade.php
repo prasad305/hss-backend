@@ -5,6 +5,7 @@
     <div class="form-group">
         <label for="name">Name</label>
         <input type="text" class="form-control" id="name" name="name" placeholder="Enter Category Name" value="{{ $subCategory->name }}">
+        <span class="text-danger" id="name_error"></span>
     </div>
 
     <div class="form-group">
@@ -14,6 +15,7 @@
             <option @if($subCategory->category_id == $category->id ) selected @endif value="{{ $category->id }}">{{ $category->name }}</option>
             @endforeach
         </select>
+        <span class="text-danger" id="category_id_error"></span>
     </div>
 
     <span class="row">
@@ -36,6 +38,8 @@
 <script>
     $(document).on('click','#updateSubCategoryBtn',function (event) {
     event.preventDefault();
+    $('#name_error').text('');
+        $('#category_id_error').text('');
     var form = $('#edit-form')[0];
     var formData = new FormData(form);
     formData.append('_method','PUT');
@@ -70,15 +74,12 @@
                         '<span class="text-white">';
                     $.each(data.responseJSON.errors, function(key, value) {
                         errorMessage += ('' + value + '<br>');
+                        $("#" + key + "_error").text(value[0]);
                     });
                     errorMessage += '</span>\n' +
                         '</div>\n' +
                         '</div>';
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        footer: errorMessage
-                    })
+                    
         }
     });
 

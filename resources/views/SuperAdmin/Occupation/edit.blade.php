@@ -4,7 +4,7 @@
     <div class="form-group">
       <label for="name">Occupation Title</label>
       <input type="text" class="form-control" id="name" name="name" placeholder="Enter Occupation Title" value="{{ $occupation->title }}">
-      <div id="error" style="color:#fff;"></div>
+      <div id="error" class="text-danger"></div>
     </div>
     <div class="form-group">
     
