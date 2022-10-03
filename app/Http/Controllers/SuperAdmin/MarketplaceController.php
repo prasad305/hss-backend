@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Marketplace;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -12,6 +13,11 @@ use Illuminate\Support\Str;
 
 class MarketplaceController extends Controller
 {
+    public function index()
+    {
+        $categories = Category::get();
+        return view('SuperAdmin.Marketplace.index', compact('categories'));
+    }
 
     public function marketplaceList($categoryId)
     {
