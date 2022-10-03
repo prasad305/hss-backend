@@ -35,6 +35,7 @@ use App\Models\User;
 use App\Models\UserInfo;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\Fan_Group_Join;
+use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -179,7 +180,12 @@ class UserMobileAppController extends Controller
             $eventRegistration->audition_id = $eventId;
             $eventRegistration->round_info_id = $first_round_info->id;
             $eventRegistration->amount = $event->fees;
+            $eventRegistration->payment_method = $request->payment_method;
             $eventRegistration->save();
+            if ($request->payment_method == "wallet") {
+                $walletAuditions =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('auditions');
+                Wallet::where('user_id', auth('sanctum')->user()->id)->update(['auditions' => $walletAuditions->auditions - 1]);
+            }
         }
 
         $eventRegistration->user_id = $user->id;
@@ -188,6 +194,7 @@ class UserMobileAppController extends Controller
         $eventRegistration->payment_date = Carbon::now();
         $eventRegistration->payment_status = 1;
         $eventRegistration->save();
+
 
 
         /**
