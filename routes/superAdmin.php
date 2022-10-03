@@ -3,15 +3,17 @@
 
 use App\Models\Slider;
 use App\Models\PaymentMethod;
+use Illuminate\Cache\Repository;
 use Illuminate\Support\Facades\Route;
 use App\Models\Audition\AuditionUserVoteMark;
+use App\Http\Controllers\SuperAdmin\FAQController;
 use App\Http\Controllers\SuperAdmin\QnAController;
 use App\Http\Controllers\SuperAdmin\CityController;
-use App\Http\Controllers\SuperAdmin\LoveReactPriceController;
 use App\Http\Controllers\SuperAdmin\AdminController;
 use App\Http\Controllers\SuperAdmin\StateController;
 use App\Http\Controllers\SuperAdmin\EventsController;
 use App\Http\Controllers\SuperAdmin\ReportController;
+use App\Http\Controllers\SuperAdmin\AboutUsController;
 use App\Http\Controllers\SuperAdmin\AuctionController;
 use App\Http\Controllers\SuperAdmin\CountryController;
 use App\Http\Controllers\SuperAdmin\PackageController;
@@ -39,7 +41,9 @@ use App\Http\Controllers\SuperAdmin\AuditionAdminController;
 use App\Http\Controllers\SuperAdmin\AuditionRulesController;
 use App\Http\Controllers\SuperAdmin\DashboardInfoController;
 use App\Http\Controllers\SuperAdmin\JurysAuditionController;
+use App\Http\Controllers\SuperAdmin\PrivacyPolicyController;
 use App\Http\Controllers\SuperAdmin\EducationlevelController;
+use App\Http\Controllers\SuperAdmin\LoveReactPriceController;
 use App\Http\Controllers\SuperAdmin\LearningSessionController;
 use App\Http\Controllers\SuperAdmin\AuditionUserVoteController;
 use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
@@ -48,7 +52,6 @@ use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
 use App\Http\Controllers\SuperAdmin\ProductPurchaseController;
 use App\Http\Controllers\SuperAdmin\TermsConditionController;
 use App\Http\Controllers\SuperAdmin\RefundController;
-use Illuminate\Cache\Repository;
 
 
 // Super Admin route
@@ -297,6 +300,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     //Education Level
     Route::resource('educationlevel', EducationlevelController::class);
+
+    //AboutUs Level
+    Route::resource('aboutUs', AboutUsController::class);
+    Route::resource('privacy', PrivacyPolicyController::class);
+    Route::resource('faq', FAQController::class);
 
     //Occupation
     Route::resource('occupation', OccupationController::class);

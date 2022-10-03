@@ -280,8 +280,8 @@
             </ul>
         </li>
 
-        <li class="nav-item ">
-            <a href="#" class="nav-link ">
+        <li class="nav-item {{ Request::routeIs('superAdmin.aboutUs.index')||Request::routeIs('superAdmin.privacy.index')||Request::routeIs('superAdmin.faq.index') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ Request::routeIs('superAdmin.aboutUs.index')||Request::routeIs('superAdmin.privacy.index')||Request::routeIs('superAdmin.faq.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-bullseye" aria-hidden="true"></i>
                 <p >
                     Landing Settings
@@ -290,16 +290,16 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="#"
-                        class="nav-link ">
+                    <a href="{{ route('superAdmin.aboutUs.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.aboutUs.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>About us</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href=""
-                        class="nav-link">
+                    <a href="{{ route('superAdmin.privacy.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.privacy.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Privacy policy</p>
                     </a>
@@ -323,8 +323,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href=""
-                        class="nav-link">
+                    <a href="{{ route('superAdmin.faq.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.faq.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>FAQ</p>
                     </a>
