@@ -68,6 +68,7 @@ use App\Models\LoveReact;
 use App\Models\LoveReactPayment;
 use App\Models\UserInfo;
 use App\Models\Marketplace;
+use App\Models\Wallet;
 use PhpParser\Node\Stmt\TryCatch;
 use App\Models\WildCard;
 use Illuminate\Support\Arr;
@@ -2504,25 +2505,31 @@ class UserController extends Controller
     public function userVideoLoveReactPayment(Request $request)
     {
 
+
+
         $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $request->videoId)->first();
 
 
         if (!LoveReactPayment::where([['user_id', auth()->user()->id], ['react_num', $request->reactNum], ['video_id', $request->videoId]])->exists()) {
-            $loveReactPayment = LoveReactPayment::create([
-                'user_id' => auth()->user()->id,
-                'video_id' => $request->videoId,
-                'react_num' => $request->reactNum,
-                'cardHolderName' => $request->cardHolderName,
-                'cardNumber' => $request->cardNumber,
-                'ccv' => $request->ccv,
-                'expireDate' => $request->expireDate,
-                'audition_id' => $auditionRoundInfo->roundInfo->audition_id,
-                'round_info_id' => $auditionRoundInfo->roundInfo->id,
-                'status' => 1,
 
-            ]);
+            $loveReactPayment = new LoveReactPayment();
+            $loveReactPayment->user_id = auth()->user()->id;
+            $loveReactPayment->video_id = $request->videoId;
+            $loveReactPayment->react_num = $request->reactNum;
+            $loveReactPayment->cardHolderName = $request->cardHolderName;
+            $loveReactPayment->ccv = $request->ccv;
+            $loveReactPayment->expireDate = $request->expireDate;
+            $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
+            $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
+            $loveReactPayment->status = 1;
+            $loveReactPayment->type = $request->type;
+            $loveReactPayment->save();
+            if ($request->type == "wallet") {
+                $lovePoints =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('love_points');
+                Wallet::where('user_id', auth('sanctum')->user()->id)->update(['love_points' => $lovePoints->love_points - $request->reactNum]);
+            }
             if ($loveReactPayment) {
-                $loveReact = LoveReact::create([
+                LoveReact::create([
                     'user_id' => auth()->user()->id,
                     'video_id' => $request->videoId,
                     'react_num' => $request->reactNum,

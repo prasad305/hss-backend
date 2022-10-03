@@ -35,6 +35,7 @@ use App\Models\User;
 use App\Models\UserInfo;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\Fan_Group_Join;
+use App\Models\Wallet;
 use App\Models\Audition\AuditionAssignJudge;
 use App\Models\SuperStar;
 use App\Models\AuditionCertification;
@@ -184,7 +185,12 @@ class UserMobileAppController extends Controller
             $eventRegistration->audition_id = $eventId;
             $eventRegistration->round_info_id = $first_round_info->id;
             $eventRegistration->amount = $event->fees;
+            $eventRegistration->payment_method = $request->payment_method;
             $eventRegistration->save();
+            if ($request->payment_method == "wallet") {
+                $walletAuditions =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('auditions');
+                Wallet::where('user_id', auth('sanctum')->user()->id)->update(['auditions' => $walletAuditions->auditions - 1]);
+            }
         }
 
         $eventRegistration->user_id = $user->id;
@@ -193,6 +199,7 @@ class UserMobileAppController extends Controller
         $eventRegistration->payment_date = Carbon::now();
         $eventRegistration->payment_status = 1;
         $eventRegistration->save();
+
 
 
         /**
@@ -635,79 +642,81 @@ class UserMobileAppController extends Controller
         ]);
     }
 
-    public function getCertificate($audition_id, $round_info_id){
+    public function getCertificate($audition_id, $round_info_id)
+    {
 
-        $isWinner = false; 
+        $isWinner = false;
         $super = false;
-        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id],
-        ['audition_id', $audition_id], ['round_info_id', $round_info_id], ['wining_status',1]])->first();
+        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([
+            ['user_id', auth()->user()->id],
+            ['audition_id', $audition_id], ['round_info_id', $round_info_id], ['wining_status', 1]
+        ])->first();
 
-        if($auditionRoundMarkTracking){
-            $certificate = AuditionCertification::where([['audition_id', $audition_id],['round_info_id', $round_info_id],['participant_id',auth()->user()->id]])->first();
-            if($certificate){
+        if ($auditionRoundMarkTracking) {
+            $certificate = AuditionCertification::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['participant_id', auth()->user()->id]])->first();
+            if ($certificate) {
                 return response()->json([
                     'status' => 200,
                     'certificateURL' =>  $certificate->certificate,
-                ]); 
+                ]);
             }
 
 
             $assignedJudges = AuditionAssignJudge::where('audition_id', $audition_id)->get();
             // return $assignedJudges;
             $totalStars = [];
-            foreach($assignedJudges as $judge){
-                if($judge->super_judge == 1){
+            foreach ($assignedJudges as $judge) {
+                if ($judge->super_judge == 1) {
                     $super = true;
                 }
                 $superstarId = $judge->judge_id;
                 $superStar = SuperStar::where('star_id', $superstarId)->first();
-                $superstarName = $superStar->superStar->first_name." ".$superStar->superStar->last_name;
+                $superstarName = $superStar->superStar->first_name . " " . $superStar->superStar->last_name;
                 $starInfo = [
-                    'isSuperAdmin'=> $super,
-                    'signature'=> $superStar['signature'],
+                    'isSuperAdmin' => $super,
+                    'signature' => $superStar['signature'],
                     'name' => $superstarName,
                 ];
-                array_push($totalStars,$starInfo);
+                array_push($totalStars, $starInfo);
             }
             $userInfo = $auditionRoundMarkTracking->user;
             $certificateContent = AuditionCertificationContent::where([['audition_id', $audition_id]])->first();
             // Calculate for rating star 
             $round_info = AuditionRoundInfo::where('id', $round_info_id)->first();
             $totalRound = AuditionRoundInfo::where('audition_id', $audition_id)->count();
-            $starRating =  ((($round_info->round_num / $totalRound) * 100)*5)/100;
+            $starRating =  ((($round_info->round_num / $totalRound) * 100) * 5) / 100;
             $PDFInfo = [
-                'user' => ($userInfo['first_name']. ' ' .$userInfo['last_name']),
+                'user' => ($userInfo['first_name'] . ' ' . $userInfo['last_name']),
                 'stars' => $totalStars,
                 'certificateContent' => $certificateContent,
                 'starRating' => $starRating,
             ];
             $time = time();
-                try{
-                    $pdf = PDF::loadView('Others.Certificate.Certificate', compact('PDFInfo'))->save(public_path('uploads/pdf/auditions/certificates/' . $time . '.' . 'pdf'));
-                    $filename = 'uploads/pdf/auditions/certificates/' . $time . '.' . 'pdf';
-                }catch (\Throwable $th) {
-                    return $th;
-                }
+            try {
+                $pdf = PDF::loadView('Others.Certificate.Certificate', compact('PDFInfo'))->save(public_path('uploads/pdf/auditions/certificates/' . $time . '.' . 'pdf'));
+                $filename = 'uploads/pdf/auditions/certificates/' . $time . '.' . 'pdf';
+            } catch (\Throwable $th) {
+                return $th;
+            }
 
-                $auditionCertification = new AuditionCertification();
-                $auditionCertification->audition_id = $audition_id;
-                $auditionCertification->round_info_id = $round_info_id;
-                $auditionCertification->participant_id = $userInfo->id;
-                $auditionCertification->certificate = $filename;
-                $auditionCertification->status = 1;
-                $auditionCertification->save();
-                if($auditionCertification){
-                    return response()->json([
-                        'status' => 200,
-                        'certificateURL' =>  $auditionCertification->certificate,
-                    ]); 
-                }
+            $auditionCertification = new AuditionCertification();
+            $auditionCertification->audition_id = $audition_id;
+            $auditionCertification->round_info_id = $round_info_id;
+            $auditionCertification->participant_id = $userInfo->id;
+            $auditionCertification->certificate = $filename;
+            $auditionCertification->status = 1;
+            $auditionCertification->save();
+            if ($auditionCertification) {
+                return response()->json([
+                    'status' => 200,
+                    'certificateURL' =>  $auditionCertification->certificate,
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => 200,
+                'message' =>  "Sorry!",
+            ]);
         }
-        else{
-           return response()->json([
-                        'status' => 200,
-                        'message' =>  "Sorry!",
-                    ]);
-        }
-    } 
+    }
 }
