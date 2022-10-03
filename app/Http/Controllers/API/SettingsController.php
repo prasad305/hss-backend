@@ -25,7 +25,7 @@ class SettingsController extends Controller
     }
     public function policy()
     {
-        $data = PrivacyPolicy::orderBy('id', 'desc')->where('status', 1)->get();
+        $data = PrivacyPolicy::orderBy('id', 'asc')->where('status', 1)->get();
 
         return response()->json([
             'status' => 200,
@@ -35,7 +35,7 @@ class SettingsController extends Controller
     }
     public function faq()
     {
-        $data = FAQ::where('status', 1)->orderBy('id', 'DESC')->get();
+        $data = FAQ::where('status', 1)->orderBy('id', 'asc')->get();
 
         return response()->json([
             'status' => 200,
