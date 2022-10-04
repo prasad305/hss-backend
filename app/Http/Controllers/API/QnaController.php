@@ -689,4 +689,19 @@ class QnaController extends Controller
             'users' => $users,
         ]);
     }
+    /**
+     * enroll user status update
+     */
+    public function QnaUserStatusUpdate($id)
+    {
+
+        $enrollUser = QnaRegistration::find($id);
+        $enrollUser->publish_status = 0;
+        $enrollUser->update();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'register user status update successfully',
+        ]);
+    }
 }

@@ -32,11 +32,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\SdkController\SdkController;
 
-
 //video for SDK
 Route::get('/sdk/get-token', [SdkController::class, 'getToken']);
-Route::post('/sdk/create-meeting', [SdkController::class, 'createMeetingId']);
+Route::get('/sdk/createMeeting/{token}', [SdkController::class, 'createMeetingId']);
 Route::post('/sdk/validate-meeting/{roomId}', [SdkController::class, 'roomValidate']);
+Route::get('/sdk/videoEnd/{room_id}/{token}', [SdkController::class, 'roomRoomEnd']);
 
 Route::post('/uplad-video', [HomeController::class, 'video_upload']);
 
@@ -651,6 +651,10 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/qna/rejected/{id}', [QnaController::class, 'setRejectedQna']);
     Route::post('/star/update_Qna', [QnaController::class, 'update_Qna']);
     Route::get('/star/registeredList/{slug}', [QnaController::class, 'QnaRegisteredList']);
+    Route::get('/star/qna_enrolluser_status_update/{id}', [QnaController::class, 'QnaUserStatusUpdate']);
+
+
+
 
 
     // Live Session Section

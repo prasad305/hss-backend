@@ -43,10 +43,10 @@ class SdkController extends Controller
     /**
      * create meeting id
      */
-    public function createMeetingId(Request $request)
+    public function createMeetingId($token)
     {
         $request = Http::withHeaders([
-            'Authorization' => $request->token,
+            'Authorization' => $token,
             'Content-Type' => ' application/json'
         ])->post('https://api.videosdk.live/v2/rooms');
 
@@ -64,6 +64,23 @@ class SdkController extends Controller
             'Content-Type' => ' application/json'
         ])->get('https://api.videosdk.live/v2/rooms/validate/' . $roomId);
 
+
+        return $request;
+    }
+    /**
+     * end session
+     */
+    public function roomRoomEnd($roomId, $token)
+    {
+        //   sleep(3000);
+        $room_id = json_encode(array("roomId" => $roomId));
+
+        $request = Http::withHeaders([
+            'Authorization' => $token,
+            'Content-Type' => ' application/json'
+        ])->post('https://api.videosdk.live/v2/sessions/end', [
+            'roomId' => $roomId,
+        ]);
 
         return $request;
     }
