@@ -12,7 +12,7 @@
                 <p >
                     Dashboard
                     <i class="right fas fa-angle-left"></i>
-                    
+
                 </p>
             </a>
             <ul class="nav nav-treeview">
@@ -118,7 +118,7 @@
             <a href="{{ route('superAdmin.subCategory.index') }}"
                 class="nav-link {{ Request::routeIs('superAdmin.subCategory.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-window-restore" aria-hidden="true"></i>
-                
+
                 <p >
                     Subcategory
                 </p>
@@ -155,7 +155,7 @@
         </li>
 
 
-       
+
         <li class="nav-item">
             <a href="{{ route('superAdmin.managerAdmin.index') }}"
                 class="nav-link {{ Request::routeIs('superAdmin.managerAdmin.index') ? 'active' : '' }}">
@@ -177,7 +177,7 @@
             </a>
         </li>
 
-        
+
 
         <li class="nav-item">
             <a href="{{ route('superAdmin.star.index') }}"
@@ -198,7 +198,7 @@
                 </p>
             </a>
         </li>
-      
+
         <li class="nav-item {{ Request::routeIs('superAdmin.greeting-type.index')||Request::routeIs('superAdmin.interest-type.index')||Request::routeIs('superAdmin.currency.index')|| Request::routeIs('superAdmin.country.index')||Request::routeIs('superAdmin.state.index')||Request::routeIs('superAdmin.city.index')||Request::routeIs('superAdmin.educationlevel.index')||Request::routeIs('superAdmin.occupation.index') ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ Request::routeIs('superAdmin.greeting-type.index')||Request::routeIs('superAdmin.interest-type.index')||Request::routeIs('superAdmin.currency.index')|| Request::routeIs('superAdmin.country.index')||Request::routeIs('superAdmin.state.index')||Request::routeIs('superAdmin.city.index')||Request::routeIs('superAdmin.educationlevel.index')||Request::routeIs('superAdmin.occupation.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-sliders" aria-hidden="true"></i>
@@ -250,7 +250,7 @@
                         </p>
                     </a>
                 </li>
-        
+
                 <li class="nav-item">
                     <a href="{{ route('superAdmin.city.index') }}" class="nav-link {{ Request::routeIs('superAdmin.city.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
@@ -267,7 +267,7 @@
                         </p>
                     </a>
                 </li>
-        
+
                 <li class="nav-item">
                     <a href="{{ route('superAdmin.occupation.index') }}" class="nav-link {{ Request::routeIs('superAdmin.occupation.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
@@ -276,7 +276,7 @@
                         </p>
                     </a>
                 </li>
-        
+
             </ul>
         </li>
 
@@ -357,8 +357,8 @@
                 </li>
             </ul>
         </li>
-        <li class="nav-item ">
-            <a href="#" class="nav-link {">
+        <li class="nav-item {{ Request::routeIs('superAdmin.qna.index') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ Request::routeIs('superAdmin.qna.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-question-circle" aria-hidden="true"></i>
                 <p>Q&A
                     <i class="right fas fa-angle-left"></i>
@@ -366,7 +366,7 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="#" class="nav-link ">
+                    <a href="{{ route('superAdmin.qna.index') }}" class="nav-link {{ Request::routeIs('superAdmin.qna.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>All Events</p>
                     </a>
@@ -437,7 +437,7 @@
                 </li>
             </ul>
         </li>
-{{-- 
+{{--
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-shopping-cart"></i>
@@ -446,8 +446,8 @@
                 </p>
             </a>
         </li> --}}
-        <li class="nav-item {{ Request::routeIs('superAdmin.auction.index') ? 'menu-open' : '' }} ">
-            <a href="#" class="nav-link {{ Request::routeIs('superAdmin.auction.index') ? 'active' : '' }} ">
+        <li class="nav-item {{ Request::routeIs('superAdmin.marketplace.dashboard')||Request::routeIs('superAdmin.auction.dashboard')||Request::routeIs('superAdmin.souvenir.dashboard') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ Request::routeIs('superAdmin.marketplace.dashboard')||Request::routeIs('superAdmin.auction.dashboard')||Request::routeIs('superAdmin.souvenir.dashboard') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-id-card" aria-hidden="true"></i>
                 <p>
                     Star Showcase
@@ -455,8 +455,8 @@
                 </p>
             </a>
             <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
+                <li class="nav-item {{ Request::routeIs('superAdmin.marketplace.dashboard') ? 'menu-open' : '' }}" >
+                    <a href="#" class="nav-link {{ Request::routeIs('superAdmin.marketplace.dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-shopping-cart"></i>
                         <p>
                             Marketplace
@@ -465,29 +465,17 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('superAdmin.marketplace.dashboard') }}" class="nav-link {{ Request::routeIs('superAdmin.marketplace.dashboard') ? 'active' : '' }}">
                                 <i class="fas fa-caret-right nav-icon"></i>
-                                <p>Level 3</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-caret-right nav-icon"></i>
-                                <p>Level 3</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-caret-right nav-icon"></i>
-                                <p>Level 3</p>
+                                <p>All Events</p>
                             </a>
                         </li>
                     </ul>
                 </li>
             </ul>
             <ul class="nav nav-treeview">
-                <li class="nav-item {{ Request::routeIs('superAdmin.auction.index') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link ">
+                <li class="nav-item {{ Request::routeIs('superAdmin.auction.dashboard') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ Request::routeIs('superAdmin.auction.dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-gavel" aria-hidden="true"></i>
                         <p>
                             Auction
@@ -496,29 +484,17 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('superAdmin.auction.index') }}" class="nav-link {{ Request::routeIs('superAdmin.auction.index') ? 'active' : '' }}">
+                            <a href="{{ route('superAdmin.auction.dashboard') }}" class="nav-link {{ Request::routeIs('superAdmin.auction.dashboard') ? 'active' : '' }}">
                                 <i class="fas fa-caret-right nav-icon"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-caret-right nav-icon"></i>
-                                <p>Level 3</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-caret-right nav-icon"></i>
-                                <p>Level 3</p>
+                                <p>All Events</p>
                             </a>
                         </li>
                     </ul>
                 </li>
             </ul>
             <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
+                <li class="nav-item {{ Request::routeIs('superAdmin.souvenir.dashboard') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ Request::routeIs('superAdmin.souvenir.dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fa-solid fa-gift"></i>
                         <p>
                             Souvenir
@@ -527,28 +503,16 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('superAdmin.souvenir.dashboard') }}" class="nav-link {{ Request::routeIs('superAdmin.souvenir.dashboard') ? 'active' : '' }}">
                                 <i class="fas fa-caret-right nav-icon"></i>
-                                <p>Level 3</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-caret-right nav-icon"></i>
-                                <p>Level 3</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-caret-right nav-icon"></i>
-                                <p>Level 3</p>
+                                <p>All Events</p>
                             </a>
                         </li>
                     </ul>
                 </li>
             </ul>
         </li>
-        
+
         <li class="nav-item {{ Request::routeIs('superAdmin.auditionList') ||Request::routeIs('superAdmin.audition-rules.index')||Request::routeIs('superAdmin.superAdmin.audition-rules.edit')||Request::routeIs('superAdmin.audition-round-rules.index')||Request::routeIs('superAdmin.auditionAdmin.index')|| Request::routeIs('superAdmin.jury_groups.index') ||  Request::routeIs('superAdmin.userVoteMark.index')? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ Request::routeIs('superAdmin.auditionList') ||Request::routeIs('superAdmin.audition-rules.index')||Request::routeIs('superAdmin.audition-round-rules.index')||Request::routeIs('superAdmin.auditionAdmin.index')|| Request::routeIs('superAdmin.jury_groups.index') ||  Request::routeIs('superAdmin.userVoteMark.index')? 'active' : '' }}">
                 <i class="nav-icon fa fa-bullhorn"></i>
@@ -602,7 +566,7 @@
                 </li>
             </ul>
         </li>
-        
+
         <li class="nav-item {{ Request::routeIs('superAdmin.accounts.index') ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ Request::routeIs('superAdmin.accounts.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-sort-amount-asc" aria-hidden="true"></i>

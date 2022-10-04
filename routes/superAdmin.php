@@ -196,7 +196,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     
     // Marketplace
-    Route::get('marketplace-dashboard', [MarketplaceController::class, 'dashboard'])->name('marketplace.dashboard');
+    Route::get('marketplace-index', [MarketplaceController::class, 'index'])->name('marketplace.dashboard');
     Route::get('marketplace-list/{id}', [MarketplaceController::class, 'marketplaceList'])->name('marketplace.list');
     Route::get('marketplace-details/{id}', [MarketplaceController::class, 'marketplaceDetails'])->name('marketplace.details');
     Route::get('marketplace-edit/{id}', [MarketplaceController::class, 'marketplaceEdit'])->name('marketplace.edit');

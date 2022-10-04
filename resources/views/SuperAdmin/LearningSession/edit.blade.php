@@ -34,7 +34,7 @@
         <div class="col-md-12">
             <label for="phone">Select Banner Or Video</label>
             <select name="banner_or_video" id="banner_or_video" onchange="getBannerOrVideo()" class="form-control">
-                <option {{ $event->banner != null ? 'selected' : '' }} value="0">Bnner</option>
+                <option {{ $event->banner != null ? 'selected' : '' }} value="0">Banner</option>
                 <option {{ $event->video != null ? 'selected' : '' }} value="1">Video</option>
             </select>
         </div>

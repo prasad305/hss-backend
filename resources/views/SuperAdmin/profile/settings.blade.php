@@ -69,7 +69,7 @@ Super Admin
                                     <div class="row">
                                         <div class="container">
                                             <div class="col">
-                                              
+
                                                 <div class="form-group">
                                                     <label for="first_name">First Name</label>
                                                     <input type="text" name="first_name" class="form-control" id="first_name" value="{{ $user->first_name }}">
@@ -103,14 +103,19 @@ Super Admin
                             <div class="form-group">
                                 <label for="oldPassword">Current Password</label>
                                 <input type="password" name="oldPassword" class="form-control" id="oldPassword">
+                                <i  class="bi bi-eye-slash field-icon" id="togglePasswordOld"></i>
+
                             </div>
                             <div class="form-group">
                                 <label for="password">New Password</label>
-                                <input type="password" name="password" class="form-control" id="password">
+                                <input type="password" name="password" class="form-control passwordIcon" id="passwordNew" />
+                                <i  class="bi bi-eye-slash field-icon" id="togglePasswordNew"></i>
+
                             </div>
                             <div class="form-group">
                                 <label for="confirmPassword">Confirm Password</label>
-                                <input type="password" name="confirmPassword" class="form-control" id="confirmPassword">
+                                <input type="password" name="confirmPassword" class="form-control passwordIcon" id="confirmPassword">
+                                <i  class="bi bi-eye-slash field-icon" id="togglePasswordConfirm" ></i>
                             </div>
                     </div>
                 </div>
@@ -218,8 +223,60 @@ Super Admin
         })
     }
 </script>
+<style>
+    .field-icon {
+      float: right;
+      margin-right: 30px !important;
+      margin-top: -30px !important;
+      position: relative; */
+    }
+
+    /* .eyeIcon{
+        margin-left: 100px !important;
+
+    } */
+    </style>
+<script>
+    const OldtogglePassword = document.querySelector(".togglePasswordOld");
+    const Oldpassword = document.querySelector(".oldPassword");
+
+    const NewtogglePassword = document.querySelector(".togglePasswordNew");
+    const password = document.querySelector(".passwordNew");
+
+    const ConfirmtogglePassword = document.querySelector(".togglePasswordConfirm");
+    const Confirmpassword = document.querySelector(".confirmPassword");
+
+    togglePasswordOld.addEventListener("click", function () {
+        // toggle the type attribute
+        const type = oldPassword.getAttribute("type") === "password" ? "text" : "password";
+        oldPassword.setAttribute("type", type);
+
+        // toggle the icon
+        this.classList.toggle("bi-eye");
+    });
+    togglePasswordNew.addEventListener("click", function () {
+        // toggle the type attribute
+        const type = passwordNew.getAttribute("type") === "password" ? "text" : "password";
+        passwordNew.setAttribute("type", type);
+
+        // toggle the icon
+        this.classList.toggle("bi-eye");
+    });
+    togglePasswordConfirm.addEventListener("click", function () {
+        // toggle the type attribute
+        const type = passwordNew.getAttribute("type") === "password" ? "text" : "password";
+        confirmPassword.setAttribute("type", type);
+
+        // toggle the icon
+        this.classList.toggle("bi-eye");
+    });
+
+    // prevent form submit
+</script>
 
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+<link rel="stylesheet" href="css/style.css" />
 
 
 
