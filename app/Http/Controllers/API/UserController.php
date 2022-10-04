@@ -13,6 +13,8 @@ use App\Models\Audition\AuditionRoundAppealRegistration;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundMarkTracking;
 use App\Models\Audition\AuditionUploadVideo;
+use App\Models\AuditionOxygenReplyVideo;
+use App\Models\AuditionOxygenVideo;
 use App\Models\AuditionRoundInstruction;
 use App\Models\Bidding;
 use App\Models\FanGroupMessage;
@@ -46,6 +48,10 @@ use App\Models\QnaRegistration;
 use App\Models\User;
 use App\Models\UserInterest;
 use App\Models\UserEducation;
+use App\Models\Audition\AuditionAssignJudge;
+use App\Models\SuperStar;
+use App\Models\AuditionCertification;
+use App\Models\AuditionCertificationContent;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
@@ -62,9 +68,11 @@ use App\Models\LoveReact;
 use App\Models\LoveReactPayment;
 use App\Models\UserInfo;
 use App\Models\Marketplace;
+use App\Models\Wallet;
 use PhpParser\Node\Stmt\TryCatch;
 use App\Models\WildCard;
 use Illuminate\Support\Arr;
+use PDF;
 
 class UserController extends Controller
 {
@@ -1818,8 +1826,85 @@ class UserController extends Controller
             'message' => 'Success!',
         ]);
     }
+    public function auditionCertificatePayment(Request $request){
+        $payment = new Payment();
+        $payment->user_id =  auth('sanctum')->user()->id;
+        $payment->event_id = $request->event_id;
+        $payment->round_id = $request->round_id;
+        $payment->event_type = $request->event_type;
+        $payment->payment_type = $request->payment_type;
+        $payment->card_holder_name = $request->card_holder_name;
+        $payment->card_number = $request->card_number;
+        $payment->date = $request->date;
+        $payment->status = 1;
+        $payment->save();
+        if($payment){
+            return response()->json([
+                'status' => 200,
+                'message' => 'Certificate Payment Successfully'
+            ]);
+        }
+        else{
+            return response()->json([
+                'status' => 402,
+                'message' => 'Something wrong'
+            ]);
+        }
+    }
 
 
+    public function getAuditionCertificateData($audition_id, $round_info_id){
+        $super = false;
+        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id],
+        ['audition_id', $audition_id], ['round_info_id', $round_info_id], ['wining_status',1]])->first();
+
+        if($auditionRoundMarkTracking){
+
+
+            $assignedJudges = AuditionAssignJudge::where('audition_id', $audition_id)->get();
+            $totalStars = [];
+            foreach($assignedJudges as $judge){
+                if($judge->super_judge == 1){
+                    $super = true;
+                }
+                $superstarId = $judge->judge_id;
+                $superStar = SuperStar::where('star_id', $superstarId)->first();
+                $superstarName = $superStar->superStar->first_name." ".$superStar->superStar->last_name;
+                $starInfo = [
+                    'isSuperAdmin'=> $super,
+                    'signature'=> $superStar['signature'],
+                    'name' => $superstarName,
+                ];
+                array_push($totalStars,$starInfo);
+            }
+            $userInfo = $auditionRoundMarkTracking->user;
+            $certificateContent = AuditionCertificationContent::where([['audition_id', $audition_id]])->first();
+
+            // Calculate for rating star 
+            $round_info = AuditionRoundInfo::where('id', $round_info_id)->first();
+            $totalRound = AuditionRoundInfo::where('audition_id', $audition_id)->count();
+            $starRating =  ((($round_info->round_num / $totalRound) * 100)*5)/100;
+            // return $totalRound;
+
+
+            $PDFInfo = [
+                'user' => ($userInfo['first_name']. ' ' .$userInfo['last_name']),
+                'stars' => $totalStars,
+                'certificateContent' => $certificateContent,
+                'starRating' => $starRating
+            ];
+            return response()->json([
+                'status' => 200,
+                'certificateData' => $PDFInfo,
+            ]);
+        }
+        else{
+           return response()->json([
+                        'status' => 200,
+                        'message' =>  "Sorry! You are not passed",
+                    ]);
+        }
+    } 
 
 
     public function videoUpload(Request $request)
@@ -2134,11 +2219,11 @@ class UserController extends Controller
     public function current_round_info($event_slug)
     {
         $audition = Audition::where('slug', $event_slug)->first();
-        $round_info = AuditionRoundInfo::find($audition->active_round_info_id);
-        $totalRound = AuditionRoundInfo::count('audition_id', $audition->id);
+        $round_info = AuditionRoundInfo::where('id', $audition->active_round_info_id)->first();
+        $totalRound = AuditionRoundInfo::where('audition_id', $audition->id)->count();
         $round_instruction = AuditionRoundInstruction::where('round_info_id', $round_info->id)->first();
         $myWinningRoudInfoId = AuditionRoundMarkTracking::where('user_id', auth()->user()->id)->where('wining_status', 1)->where('audition_id',  $audition->id)->max('round_info_id');
-        $myRoud = AuditionRoundInfo::where('id', $myWinningRoudInfoId)->first();
+        $myRoud = AuditionRoundInfo::where([['id', $myWinningRoudInfoId], ['audition_id',  $audition->id]])->first();
 
 
         return response()->json([
@@ -2146,7 +2231,7 @@ class UserController extends Controller
             'audition' => $audition,
             'round_info' => $round_info,
             'round_instruction' => $round_instruction,
-            'myRoundPass' => $myRoud? $myRoud->round_num:0,
+            'myRoundPass' => $myRoud ? $myRoud->round_num : 0,
             'totalRound' => $totalRound
         ]);
     }
@@ -2420,25 +2505,31 @@ class UserController extends Controller
     public function userVideoLoveReactPayment(Request $request)
     {
 
+
+
         $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $request->videoId)->first();
 
 
         if (!LoveReactPayment::where([['user_id', auth()->user()->id], ['react_num', $request->reactNum], ['video_id', $request->videoId]])->exists()) {
-            $loveReactPayment = LoveReactPayment::create([
-                'user_id' => auth()->user()->id,
-                'video_id' => $request->videoId,
-                'react_num' => $request->reactNum,
-                'cardHolderName' => $request->cardHolderName,
-                'cardNumber' => $request->cardNumber,
-                'ccv' => $request->ccv,
-                'expireDate' => $request->expireDate,
-                'audition_id' => $auditionRoundInfo->roundInfo->audition_id,
-                'round_info_id' => $auditionRoundInfo->roundInfo->id,
-                'status' => 1,
 
-            ]);
+            $loveReactPayment = new LoveReactPayment();
+            $loveReactPayment->user_id = auth()->user()->id;
+            $loveReactPayment->video_id = $request->videoId;
+            $loveReactPayment->react_num = $request->reactNum;
+            $loveReactPayment->cardHolderName = $request->cardHolderName;
+            $loveReactPayment->ccv = $request->ccv;
+            $loveReactPayment->expireDate = $request->expireDate;
+            $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
+            $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
+            $loveReactPayment->status = 1;
+            $loveReactPayment->type = $request->type;
+            $loveReactPayment->save();
+            if ($request->type == "wallet") {
+                $lovePoints =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('love_points');
+                Wallet::where('user_id', auth('sanctum')->user()->id)->update(['love_points' => $lovePoints->love_points - $request->reactNum]);
+            }
             if ($loveReactPayment) {
-                $loveReact = LoveReact::create([
+                LoveReact::create([
                     'user_id' => auth()->user()->id,
                     'video_id' => $request->videoId,
                     'react_num' => $request->reactNum,
@@ -2453,6 +2544,52 @@ class UserController extends Controller
         }
         return response()->json([
             'status' => 200,
+        ]);
+    }
+    public function getOxygenVideo()
+    {
+        $oxygenVideos = AuditionOxygenVideo::whereHas('auditionRoundInfo', function ($q) {
+            $q->where('status', 1);
+        })->get();
+
+        return response()->json([
+            'status' => 200,
+            'oxygenVideos' => $oxygenVideos
+        ]);
+    }
+    public function oxygenReplyVideo(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'video' => 'required|mimes:mp4,mkv',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+
+            if ($request->hasfile('video')) {
+                $file = $request->file('video');
+                $extension = $file->getClientOriginalExtension();
+                $newFileName = time() . '.' . $extension;
+                $file->move('uploads/videos/auditions/post/', $newFileName);
+            }
+
+            $oxygenReply = AuditionOxygenReplyVideo::create([
+                'audition_id' => $request->oxy_audition_id,
+                'round_info_id' => $request->oxy_round_info_id,
+                'reply_video' => 'uploads/videos/auditions/post/' . $newFileName,
+                'oxygen_video_id' => $request->oxy_video_id,
+                'user_id' => auth('sanctum')->user()->id,
+                'participant_id' => $request->oxy_user_id,
+
+            ]);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => "Video Comment Sent"
         ]);
     }
 

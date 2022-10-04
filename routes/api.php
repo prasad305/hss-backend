@@ -30,6 +30,7 @@ use App\Http\Controllers\API\CurrencyController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\SettingsController;
 use App\Http\Controllers\API\SdkController\SdkController;
 
 //video for SDK
@@ -38,8 +39,18 @@ Route::get('/sdk/createMeeting/{token}', [SdkController::class, 'createMeetingId
 Route::post('/sdk/validate-meeting/{roomId}', [SdkController::class, 'roomValidate']);
 Route::get('/sdk/videoEnd/{room_id}/{token}', [SdkController::class, 'roomRoomEnd']);
 
+
+
+
 Route::post('/uplad-video', [HomeController::class, 'video_upload']);
 
+//Policy
+Route::get('aboutus', [SettingsController::class, 'aboutus']);
+Route::get('policy', [SettingsController::class, 'policy']);
+Route::get('faq', [SettingsController::class, 'faq']);
+Route::get('product-purchase', [SettingsController::class, 'productPurchase']);
+Route::get('terms-condition', [SettingsController::class, 'termsCondition']);
+Route::get('refund', [SettingsController::class, 'refund']);
 
 // Authentication API
 Route::post('register', [AuthController::class, 'register']);
@@ -118,6 +129,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/checkingAuthenticated', function () {
         return response()->json(['message' => 'You are in', 'status' => 200], 200);
     });
+  
+  
 
 
     Route::post('/learning-assinment-upload', [UserController::class, 'lerningSessionAssinmentVideoUplad']);
@@ -289,6 +302,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/audition/round-video-upload', [UserController::class, 'userRoundVideoUpload']);
     Route::get('/user/audition/uploaded_round_videos/{audition_id}/{round_info_id}', [UserController::class, 'uploaded_round_videos']);
 
+    // Audition download certificate
+    Route::get('user/audition/getAuditionCertificateData/{audition_id}/{round_info_id}', [UserController::class, 'getAuditionCertificateData']);
+    Route::post('user/audition/auditionCertificatePayment', [UserController::class, 'auditionCertificatePayment']);
     // Audition Appeal Route
     Route::post('/user/audition/round-appeal-registration', [UserController::class, 'roundAppealRegister']);
     Route::get('user/audition/is_appeal/round/{audition_id}/{round_info_id}', [UserController::class, 'isAppealForThisRound']);
@@ -302,7 +318,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/audition/videofeed/videos', [UserController::class, 'videoFeedVidoes']);
     Route::post('/user/audition/videos/loveReact', [UserController::class, 'userVideoLoveReact']);
     Route::post('/user/audition/videos/loveReact/payment', [UserController::class, 'userVideoLoveReactPayment']);
-
+    Route::get('/user/audition/getOxygen/videos', [UserController::class, 'getOxygenVideo']);
+    Route::post('/user/audition/getOxygenReply/video', [UserController::class, 'oxygenReplyVideo']);
     // Promo Videos
     Route::get('/user/PromoVideos', [UserController::class, 'getPromoVideo']);
 
@@ -433,6 +450,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/learning_session/assignment/marks/{slug}', [LearningSessionController::class, 'admin_assignment_marks']);
     Route::get('/admin/learning_session/setComplete/{id}', [LearningSessionController::class, 'admin_assignment_set_complete']);
     Route::get('/admin/learning_session/setAssignment/{id}', [LearningSessionController::class, 'admin_assignment_set_assignment']);
+    Route::get('/admin/learning_session/result', [LearningSessionController::class, 'showLearninSessionResult']);
+    Route::get('/admin/learning_session/showResult/{eventId}', [LearningSessionController::class, 'showLearninSessionResultData']);
 
 
     // Live Session Section
@@ -555,7 +574,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/checkingSuperStar', function () {
         return response()->json(['message' => 'You are in as Superstar', 'status' => 200], 200);
     });
-
+    Route::get('star/dashboard/posts/{type}', [DashboardController::class, 'adminPost']);
+    Route::get('star/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
+    Route::get('star/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('/livechat', [LiveChatController::class, 'livechat']);
     Route::get('/sinlgeLiveChat/{id}', [LiveChatController::class, 'sinlgeLiveChat']);
 
@@ -636,6 +657,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/learning_session/assignment/{id}', [LearningSessionController::class, 'star_assignment_details']);
     Route::post('/star/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
     Route::post('/star/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'star_assignment_set_approval']);
+    Route::get('/star/learning_session/result', [LearningSessionController::class, 'starShowLearninSessionResult']);
+    Route::get('/star/learning_session/showResult/{eventId}', [LearningSessionController::class, 'starShowLearninSessionResultData']);
+
 
 
     // Question and Answers
@@ -849,7 +873,10 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     Route::get('audition-admin/audition-mark/uploadedVideo/{user_id}/{audition_id}/{round_info_id}', [AuditionController::class, 'userUploadedVideos']);
     Route::get('audition-admin/audition-wildcard-mark/wildcardLoveReact/{audition_id}/{round_info_id}', [AuditionController::class, 'wildcardLoveReact']);
     Route::post('audition-admin/audition/wildcardResultSendToManager', [AuditionController::class, 'wildcardResultSendToManager']);
-    Route::get('audition-admin/audition/audition-rejected-users/{audition_id}/{round_info_id}', [AuditionController::class, 'rejectedUsers']);
+    Route::post('audition-admin/audition/OxygenVideoUpload', [AuditionController::class, 'OxygenVideoUpload']);
+    Route::get('audition-admin/audition/oxygen-reply-videos/{audition_id}/{round_info_id}/{user_id}', [AuditionController::class, 'getReplyVideos']);
+    Route::get('audition-admin/audition/make-oxygen-winner/{audition_id}/{round_info_id}/{user_id}', [AuditionController::class, 'makeOxygenWinner']);
+    Route::post('audition-admin/audition/make-certificate/{audition_id}', [AuditionController::class, 'makeCertificate']);
 });
 
 
@@ -931,6 +958,8 @@ Route::post('select_star', [SubCategoryController::class, 'select_star']);
 Route::post('submit_react/{id}', [UserController::class, 'submit_react']);
 Route::get('check_react/{id}', [UserController::class, 'check_react']);
 Route::get('checkchoice', [CategoryController::class, 'check']);
+
+//<======================== Admin DashBoard ========================>
 
 //<======================== Auction Route ========================>
 

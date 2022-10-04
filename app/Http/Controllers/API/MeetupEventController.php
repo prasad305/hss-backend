@@ -30,7 +30,7 @@ class MeetupEventController extends Controller
             'reg_start_date' => 'required',
             'reg_end_date' => 'required',
             'fee' => 'required',
-            'slots' => 'required',
+            'total_seat' => 'required',
             'venue' => 'required_if:meetup_type,"Offline"',
         ]);
 
@@ -58,7 +58,7 @@ class MeetupEventController extends Controller
             $meetup->end_time = $request->input('end_time');
             $meetup->description = $request->input('description');
             $meetup->instruction = $request->input('instruction');
-            $meetup->total_seat = $request->input('slots');
+            $meetup->total_seat = $request->input('total_seat');
             $meetup->reg_start_date = $request->input('reg_start_date');
             $meetup->reg_end_date = $request->input('reg_end_date');
             $meetup->fee = $request->input('fee');
@@ -304,7 +304,7 @@ class MeetupEventController extends Controller
 
         return response()->json([
             'status' => 200,
-            'message' => 'Approved',
+            'message' => 'Rejected',
         ]);
     }
 
@@ -504,7 +504,7 @@ class MeetupEventController extends Controller
             'reg_start_date' => 'required',
             'reg_end_date' => 'required',
             'fee' => 'required',
-            'slots' => 'required',
+            'total_seat' => 'required',
             'venue' => 'required_if:meetup_type,"Offline"',
         ]);
 
@@ -532,7 +532,7 @@ class MeetupEventController extends Controller
             $meetup->end_time = $request->input('end_time');
             $meetup->description = $request->input('description');
             $meetup->instruction = $request->input('instruction');
-            $meetup->total_seat = $request->input('slots');
+            $meetup->total_seat = $request->input('total_seat');
             $meetup->reg_start_date = $request->input('reg_start_date');
             $meetup->reg_end_date = $request->input('reg_end_date');
             $meetup->fee = $request->input('fee');
@@ -596,7 +596,7 @@ class MeetupEventController extends Controller
             'reg_start_date' => 'required',
             'reg_end_date' => 'required',
             'fee' => 'required',
-            'slots' => 'required',
+            'total_seat' => 'required',
             'venue' => 'required_if:meetup_type,"Offline"',
         ]);
 

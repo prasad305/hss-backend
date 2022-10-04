@@ -5,21 +5,25 @@
             <label for="first_name">First Name</label>
             <input type="text" class="form-control" id="first_name" required name="first_name"
                 value="{{ $auditionAdmin->first_name }}">
+                <span class="text-danger" id="first_name_error"></span>
         </div>
         <div class="row form-group">
             <label for="last_name">Last Name</label>
             <input type="text" class="form-control" id="last_name" required name="last_name"
             value="{{ $auditionAdmin->last_name }}">
+            <span class="text-danger" id="last_name_error"></span>
         </div>
         <div class="row form-group">
             <label for="phone">Phone</label>
             <input type="text" class="form-control" id="phone" required name="phone"
             value="{{ $auditionAdmin->phone }}">
+            <span class="text-danger" id="phone_error"></span>
         </div>
         <div class="row form-group">
             <label for="email">Email</label>
             <input type="email" class="form-control" id="email" required name="email"
             value="{{ $auditionAdmin->email }}">
+            <span class="text-danger" id="email_error"></span>
         </div>
         {{-- <div class="row form-group">
             <label for="category">Select Category</label>
@@ -56,57 +60,48 @@
             </div>
         </span>
       <div class="row float-right">
-        <button style="padding: 10px 20px; background: #3A8FF2; border-radius: 5px;" type="submit" class="btn btn-primary mr-4 align-right" id="btnSendData">Submit</button>
+        <button style="padding: 10px 20px; background: #3A8FF2; border-radius: 5px;" type="submit" class="btn btn-primary mr-4 align-right" id="btnUpdateData">Submit</button>
       </div>
     </form>
 </div>
 
 <script>
-    $(document).on('click', '#btnSendData', function(event) {
-        event.preventDefault();
-        var form = $('#edit-form')[0];
-        var formData = new FormData(form);
-        formData.append('_method','PUT');
+    $(document).on('click','#btnUpdateData',function (event) {
+    event.preventDefault();
+    ErrorMessageClear();
+    var form = $('#edit-form')[0];
+    var formData = new FormData(form);
+    formData.append('_method','PUT');
+    // Set header if need any otherwise remove setup part
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
+        }
+    });
 
-
-        // Set header if need any otherwise remove setup part
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
-            }
-        });
-        $.ajax({
-            url: "{{ route('managerAdmin.audition.auditionAdmin.update', $auditionAdmin->id) }}", // your request url
-            data: formData,
-            processData: false,
-            contentType: false,
-            type: 'POST',
-            success: function(data) {
-                Swal.fire(
+    $.ajax({
+        url: "{{ route('managerAdmin.audition.auditionAdmin.update', $auditionAdmin->id) }}",// your request url
+        data: formData,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function (data) {
+            Swal.fire(
                     'Success!',
-                    'Audition Admin has been Updated. ' + data.message,
+                     data.message,
                     'success'
                 )
                 setTimeout(function() {
                     location.reload();
                 }, 1000);
-            },
-            error: function(data) {
-                var errorMessage = '<div class="card bg-danger">\n' +
-                    '<div class="card-body text-center p-5">\n' +
-                    '<span class="text-white">';
-                $.each(data.responseJSON.errors, function(key, value) {
-                    errorMessage += ('' + value + '<br>');
-                });
-                errorMessage += '</span>\n' +
-                    '</div>\n' +
-                    '</div>';
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    footer: errorMessage
-                })
-            }
-        });
+        },
+        error: function (data) {
+          
+            $.each(data.responseJSON.errors, function(key, value) {
+                ErrorMessage(key,value);
+            });
+        }
     });
+
+});
 </script>

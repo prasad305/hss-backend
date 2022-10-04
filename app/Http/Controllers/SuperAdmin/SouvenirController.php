@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\SouvenirCreate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -12,6 +13,11 @@ use Illuminate\Support\Str;
 class SouvenirController extends Controller
 {
 
+    public function dashboard()
+    {
+        $categories = Category::get();
+        return view('SuperAdmin.Souvenir.index', compact('categories'));
+    }
     public function souvenirList($categoryId)
     {
         $postList = SouvenirCreate::where('category_id', $categoryId)->latest()->get();

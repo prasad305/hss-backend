@@ -23,10 +23,13 @@ use App\Models\Audition\AuditionRoundRule;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\Audition\AuditionUserVoteMark;
 use App\Models\auditionJudgeMark;
+use App\Models\AuditionOxygenReplyVideo;
+use App\Models\AuditionOxygenVideo;
 use App\Models\AuditionRoundInstruction;
 use App\Models\JuryGroup;
 use App\Models\LoveReact;
 use App\Models\WildCard;
+use App\Models\AuditionCertificationContent;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -2223,7 +2226,7 @@ class AuditionController extends Controller
 
         $participants = AuditionRoundMarkTracking::with(['userUploadedVideo' => function ($q) use ($audition_id, $round_info_id) {
             $q->with('judge_video_mark', 'totalUserVoteReact')->where([['round_info_id', $round_info_id]])->where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
-        }])->where([['audition_id', $audition_id], ['round_info_id',   $prevRound], ['wining_status', 1]])->get();
+        }, 'oxygenVideo'])->where([['audition_id', $audition_id], ['round_info_id',   $prevRound], ['wining_status', 1]])->get();
 
         $ableToMargeVideos = AuditionUploadVideo::where([['round_info_id', $round_info_id], ['judge_avg_mark', null], ['audition_id', $audition_id], ['approval_status', 1]])->get();
 
@@ -2303,7 +2306,7 @@ class AuditionController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $assignedJudges = AuditionAssignJudge::pluck('judge_id');
+            $assignedJudges = AuditionAssignJudge::where([['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->pluck('judge_id');
 
             $uploadVideo = new AuditionUploadVideo();
             $uploadVideo->audition_id = $request->audition_id;
@@ -2336,7 +2339,6 @@ class AuditionController extends Controller
     }
     public function userUploadedVideos($user_id, $audition_id, $round_info_id)
     {
-
 
         $videos = AuditionUploadVideo::where([['user_id', $user_id], ['audition_id', $audition_id], ['round_info_id', $round_info_id]])->get();
         return response()->json([
@@ -2456,5 +2458,147 @@ class AuditionController extends Controller
                 'message' => 'Result Sent To manager',
             ]);
         }
+    }
+    public function OxygenVideoUpload(Request $request)
+
+    {
+        $validator = Validator::make($request->all(), [
+            'video' => 'required|mimes:mp4,mkv',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $uploadVideo = new AuditionOxygenVideo();
+            $uploadVideo->audition_id = $request->audition_id;
+            $uploadVideo->round_info_id = $request->round_info_id;
+            $uploadVideo->user_id = $request->user_id;
+            $uploadVideo->status = 1;
+
+            if ($request->hasfile('video')) {
+                $destination = $uploadVideo->video;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file             = $request->video;
+                $folder_path       = 'uploads/videos/auditions/post';
+                $file_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $file->getClientOriginalExtension();
+                // save to server
+                $request->video->move($folder_path, $file_new_name);
+                $uploadVideo->video = $folder_path . '/' . $file_new_name;
+            }
+
+            $uploadVideo->save();
+        }
+        return response()->json([
+
+            'status' => 200,
+            'message ' => "Video Uploaded Successfully!",
+
+        ]);
+    }
+    public function getReplyVideos($audition_id, $round_info_id, $user_id)
+    {
+        $replyVideos = AuditionOxygenReplyVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['participant_id', $user_id]])->get();
+        return response()->json([
+
+            'status' => 200,
+            'replyVideos' => $replyVideos,
+
+        ]);
+    }
+    public function makeOxygenWinner($audition_id, $round_info_id, $user_id)
+    {
+        $replyVideos = AuditionOxygenVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', $user_id]])->update([
+            'status' => 2,
+        ]);
+        if ($replyVideos) {
+            AuditionRoundMarkTracking::create([
+                'user_id' => $user_id,
+                'audition_id' => $audition_id,
+                'round_info_id' => $round_info_id,
+                'type' => "oxygen",
+                'result_message' => "Congratulations ! You are selected Via Oxygen",
+                'avg_mark' => 00,
+                'wining_status' => 1,
+
+            ]);
+        }
+
+        return response()->json([
+
+            'status' => 200,
+            'message' => "Participant Selected",
+
+        ]);
+    }
+    public function makeCertificate(Request $request){
+        $auditionCertificationContent = new AuditionCertificationContent();
+        $auditionCertificationContent->audition_id = $request->audition_id;
+        $auditionCertificationContent->title = $request->title;
+        $auditionCertificationContent->sub_title = $request->sub_title;
+        $auditionCertificationContent->main_content = $request->main_content;
+
+        try {
+            if ($request->hasfile('company_logo')) {
+                $image             = $request->company_logo;
+                $image_folder_path       = 'uploads/images/auditions/certificate/';
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                // save to server
+                $request->company_logo->move($image_folder_path, $image_new_name);
+                $auditionCertificationContent->company_logo = $image_folder_path . $image_new_name;
+            }
+        }
+        catch (\Exception $exception) {
+            return response()->json([
+                'status' => 200,
+                'message' =>  $exception->getMessage(),
+            ]);
+        }
+        try {
+            if ($request->hasfile('brand_logo')) {
+                $image             = $request->brand_logo;
+                $image_folder_path       = 'uploads/images/auditions/certificate/';
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                // save to server
+                $request->brand_logo->move($image_folder_path, $image_new_name);
+                $auditionCertificationContent->brand_logo = $image_folder_path . $image_new_name;
+            }
+        }
+        catch (\Exception $exception) {
+            return response()->json([
+                'status' => 200,
+                'message' =>  $exception->getMessage(),
+            ]);
+        }
+        try {
+            if ($request->hasfile('frame')) {
+                $image             = $request->frame;
+                $image_folder_path       = 'uploads/images/auditions/certificate/';
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
+                // save to server
+                $request->frame->move($image_folder_path, $image_new_name);
+                $auditionCertificationContent->frame = $image_folder_path . $image_new_name;
+            }
+        }
+        catch (\Exception $exception) {
+            return response()->json([
+                'status' => 200,
+                'message' =>  $exception->getMessage(),
+            ]);
+        }
+
+        $auditionCertificationContent->save();
+        if($auditionCertificationContent){
+            return response()->json([
+                'status' => 200,
+                'message' => "content created",
+            ]);
+        }
+
+        
+        
     }
 }

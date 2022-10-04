@@ -37,7 +37,7 @@
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
                                             href="{{ route('superAdmin.qna.list', $category->id) }}">see
-                                            Live chats</a></small>
+                                            QnA</a></small>
                                 </span>
                             </div>
 

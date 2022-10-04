@@ -32,6 +32,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\ImageManagerStatic as Image;
 
 
 class DashboardController extends Controller
@@ -60,11 +62,38 @@ class DashboardController extends Controller
     public function settings()
     {
         $user = User::find(Auth::user()->id);
-        // dd($user);
         return view('ManagerAdmin.profile.settings', compact('user'));
     }
+
+    public function updateProfile(Request $request){
+        $userId = auth('sanctum')->user()->id;
+        $users =User::find($userId);
+
+        if ($request->hasFile('profile')) {
+            if ($users->image != null)
+                File::delete(public_path($users->image)); //Old image delete
+
+            $image             = $request->file('profile');
+            $folder_path       = 'uploads/images/users/';
+            $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
+            //resize and save to server
+            Image::make($image->getRealPath())->save($folder_path . $image_new_name);
+            $users->image   = $folder_path . $image_new_name;
+            $users->save();
+        }
+
+        if ($users->first_name){
+            $users->first_name = $request->first_name;
+            $users->last_name = $request->last_name;
+            $users->save();
+            return redirect()->back()->with('success', 'Profile update Successfully');
+        }else{
+            return redirect()->back()->with('success', 'Profile Not update');
+        }
+    }
+
     public function changePassword(Request $request){
-        // return $request->all();
+
         $request->validate([
             'oldPassword' => 'required',
             'password' => 'required',
@@ -73,13 +102,11 @@ class DashboardController extends Controller
 
         $userId = auth('sanctum')->user()->id;
         $users =User::find($userId);
-
+        
         // oldPassword);
         // formData.append("newPassword", newPassword);
 
         if (\Hash::check($request->oldPassword , $users->password )){
-
-            
             $users->password = bcrypt($request->password);
             $users->save();
             Auth::logout();
@@ -89,6 +116,7 @@ class DashboardController extends Controller
             return redirect()->back()->with('success', 'Not Changed');
         }
     }
+
 
     public function learningSessions()
 

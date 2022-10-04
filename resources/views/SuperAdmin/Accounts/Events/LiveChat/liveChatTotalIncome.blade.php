@@ -24,7 +24,7 @@
 
 
 
-    <div class="content">
+    {{-- <div class="content">
 
         <div class="container-fluid">
 
@@ -157,5 +157,6 @@
 
             </div>
         </div>
-    </div> <!-- content -->
+    </div> <!-- content --> --}}
+    
 @endsection

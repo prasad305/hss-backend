@@ -6,7 +6,7 @@
          <div class="col-md-6">
               <label for="name"> Name</label>
               <input type="text" class="form-control" id="name" name="name" placeholder="Enter Audition Admin Last Name" value="{{$educationlevel->name}}">
-              <small id="name_error" class="form-text text-danger"></small>
+              <span id="name_error" class="form-text text-danger"></span>
         </div>
     </div>
     

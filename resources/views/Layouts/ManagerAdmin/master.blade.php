@@ -78,11 +78,12 @@
         }
 
         .BGa {
-            border: 1px solid rgb(255, 217, 0);
+            border: 2px solid rgb(255, 217, 0);
         }
 
         .BGaB {
-            border: 1px solid rgb(0, 204, 255);
+            border: 1px solid goldenrod;
+            border-radius: 5px
         }
 
         .GoldBtn {
@@ -100,11 +101,57 @@
             background: linear-gradient(90deg, #22AADD 0%, #3A8FF2 100%);
             border-radius: 25px;
         }
+       
+        .head-line{
+     border-top: 1px solid #ffad00!important;
+     border-left: 8px solid #ffad00!important;
+     border-bottom: 1px solid #ffad00!important;
+     border-right: 8px solid #ffad00!important;
+   }
+        .card-bg {
+                 background-color: black !important;
+             }  
+
 
         .BlueBtn:hover {
             background: rgb(16, 20, 29) !important;
             color: white;
             border: 1px solid rgb(0, 183, 255) !important;
+        }
+        .feed-name{
+            text-transform: uppercase;
+	      background: linear-gradient(to right,  #FFCE00 0%, #a2e431 100%);
+	      -webkit-background-clip: text;
+	      -webkit-text-fill-color: transparent;
+	      
+            font-size: 1.5vw;
+            font-family: $font;
+            font-weight:bold;
+        }
+        .select-name{
+            text-transform: uppercase;
+	      background: linear-gradient(to right,  #FFCE00 0%, #a2e431 100%);
+	      -webkit-background-clip: text;
+	      -webkit-text-fill-color: transparent;
+	      
+            font-size: 1.5vw;
+            font-family: $font;
+            font-weight:bold;
+        }
+        .unselect-name{
+            text-transform: uppercase;
+	      background: linear-gradient(to right,  #ef1515 0%, #a2e431 100%);
+	      -webkit-background-clip: text;
+	      -webkit-text-fill-color: transparent;
+	      
+            font-size: 1.5vw;
+            font-family: $font;
+            font-weight:bold;
+        }
+        .feed-title{
+            font-style: normal;
+           font-weight:bold;
+           color: #fbec77;
         }
 
         .bottomBlackLine {
@@ -118,7 +165,7 @@
 
         .fontBold {
             font-size: 40px;
-            font-weight: 800;
+            font-weight: 500;
         }
 
 
@@ -164,15 +211,47 @@
         }
 
         .a-bg-color {
-            width: 100%;
-            background: linear-gradient(102.45deg, #F5EA45 28.52%, #DDA336 52.38%, #E7A725 72.31%);
+            width: 40%;
+            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,79,121,1) 0%, rgba(0,212,255,1) 100%);
             border-radius: 30px;
         }
 
         .a-bg-color:hover {
-            width: 100%;
-            background: linear-gradient(102.45deg, #F5EA45 28.52%, #F5EA45 52.38%, #F5EA45 72.31%);
+            width: 40%;
+            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(40,126,167,1) 0%, rgba(0,212,255,1) 100%);
             border-radius: 30px;
+        }
+        .manpower-but{
+            width: 50%;
+            background: linear-gradient(102.45deg, #F5EA45 28.52%, #DDA336 52.38%, #E7A725 72.31%);
+            border-radius: 30px;
+        }
+        .reg-btn-user{
+            background-image: linear-gradient(to right, #84fab0 0%, #8fd3f4 51%, #84fab0 100%);
+            color: #000000 !important;
+        }
+        .reg-btn-user:hover { 
+            background-position: left center !important;
+        }
+        .detail-btn-use{
+            background-image: linear-gradient(to right, #f6d365 0%, #fda085 51%, #f6d365 100%);
+            border-radius: 5%;
+            color: #000000 !important;
+           
+        }
+        .detail-btn-use:hover{
+            background-position: right center !important;
+        }
+        .card-bg-event{
+         background-color: rgb(0, 0, 0) !important;
+         }
+
+        @media only screen and (min-width: 768px) {
+           .new-list {
+            width: 500px !important;
+           }
+           
+           
         }
     </style>
 
@@ -368,6 +447,7 @@
         </nav>
         <!-- /.navbar -->
 
+        
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <a href="{{ route('managerAdmin.dashboard') }}" class="brand-link">
@@ -379,8 +459,12 @@
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="{{ asset('assets/manager-admin/dist/img/user2-160x160.jpg') }}"
-                            class="img-circle elevation-2" alt="User Image">
+                        @if(Auth::user()->image)
+                        <img src="{{ asset(Auth::user()->image) }}"
+                            class="img-circle" alt="User Image" style="width:50px; height:50px;">
+                        @else
+                            <img src="{{asset('uploads/images/users/manager-admin-avatar.png')}}" class="img-circle" alt="User Image" style="width:50px; height:50px;">
+                        @endif
                     </div>
                     <div class="info">
                         <a href="{{ route('managerAdmin.dashboard') }}"
