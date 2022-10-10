@@ -506,6 +506,7 @@ class LiveChatController extends Controller
             $liveChat->registration_end_date = Carbon::parse($request->input('registration_end_date'));
             $liveChat->fee = $request->input('fee');
             $liveChat->max_time = $request->input('max_time');
+            $liveChat->min_time = $request->input('min_time');
             $liveChat->interval = $request->input('interval');
             $liveChat->status = 1;
 
