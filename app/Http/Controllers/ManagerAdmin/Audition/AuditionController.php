@@ -211,13 +211,13 @@ class AuditionController extends Controller
                 foreach ($request->judge as $key => $value) {
                     $auditionAssignJudge                    = new AuditionAssignJudge();
                     $auditionAssignJudge->judge_id          =  $value;
-                    $auditionAssignJudge->super_judge       =  $value == $request->super_judge ? 1 :0;
+                    $auditionAssignJudge->super_judge       =  $value == $request->super_judge ? 1 : 0;
                     $auditionAssignJudge->judge_admin_id    =  $this->getParentUserIdById($value);
                     $auditionAssignJudge->audition_id       =    $audition->id;
                     $auditionAssignJudge->approved_by_judge = 0;
                     $auditionAssignJudge->save();
                 }
-               
+
 
                 foreach ($request->group_ids as $key => $group_id) { // how many groups are allowed total_items
                     foreach ($request->jury[$key] as $jury) { // per groups jury assigne

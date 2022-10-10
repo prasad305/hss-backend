@@ -2306,7 +2306,7 @@ class AuditionController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $assignedJudges = AuditionAssignJudge::where([['audition_id', $request->audition_id], ['round_info_id', $request->round_info_id]])->pluck('judge_id');
+            $assignedJudges = AuditionAssignJudge::where([['audition_id', $request->audition_id]])->pluck('judge_id');
 
             $uploadVideo = new AuditionUploadVideo();
             $uploadVideo->audition_id = $request->audition_id;
@@ -2534,7 +2534,8 @@ class AuditionController extends Controller
 
         ]);
     }
-    public function makeCertificate(Request $request){
+    public function makeCertificate(Request $request)
+    {
         $auditionCertificationContent = new AuditionCertificationContent();
         $auditionCertificationContent->audition_id = $request->audition_id;
         $auditionCertificationContent->title = $request->title;
@@ -2550,8 +2551,7 @@ class AuditionController extends Controller
                 $request->company_logo->move($image_folder_path, $image_new_name);
                 $auditionCertificationContent->company_logo = $image_folder_path . $image_new_name;
             }
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             return response()->json([
                 'status' => 200,
                 'message' =>  $exception->getMessage(),
@@ -2566,8 +2566,7 @@ class AuditionController extends Controller
                 $request->brand_logo->move($image_folder_path, $image_new_name);
                 $auditionCertificationContent->brand_logo = $image_folder_path . $image_new_name;
             }
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             return response()->json([
                 'status' => 200,
                 'message' =>  $exception->getMessage(),
@@ -2582,8 +2581,7 @@ class AuditionController extends Controller
                 $request->frame->move($image_folder_path, $image_new_name);
                 $auditionCertificationContent->frame = $image_folder_path . $image_new_name;
             }
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             return response()->json([
                 'status' => 200,
                 'message' =>  $exception->getMessage(),
@@ -2591,14 +2589,11 @@ class AuditionController extends Controller
         }
 
         $auditionCertificationContent->save();
-        if($auditionCertificationContent){
+        if ($auditionCertificationContent) {
             return response()->json([
                 'status' => 200,
                 'message' => "content created",
             ]);
         }
-
-        
-        
     }
 }

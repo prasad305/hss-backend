@@ -68,6 +68,7 @@ use App\Models\LoveReact;
 use App\Models\LoveReactPayment;
 use App\Models\UserInfo;
 use App\Models\Marketplace;
+use App\Models\Payment;
 use App\Models\Wallet;
 use PhpParser\Node\Stmt\TryCatch;
 use App\Models\WildCard;
@@ -333,6 +334,7 @@ class UserController extends Controller
             ->whereIn('type', ['fangroup'])
             ->orWhereIn('star_id', $selectedSubSubCat)
             ->orWhereIn('sub_category_id', $selectedSubCat)
+            ->orWhere('type', 'audition')
             ->orderBy('id', 'DESC')->paginate($limit);
 
         // if (isset($selectedSubCat)) {
@@ -1814,7 +1816,7 @@ class UserController extends Controller
 
         $appeal_videos = AuditionUploadVideo::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['user_id', auth()->user()->id], ['type', 'appeal']])->get();
 
-        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'general'], ['round_info_id', $round_info_id]])->orWhere([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'wildcard'], ['round_info_id', $round_info_id]])->orWhere([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'rejected'], ['round_info_id', $round_info_id]])->first();
+        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'general'], ['round_info_id', $round_info_id]])->orWhere([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'wildcard'], ['round_info_id', $round_info_id]])->orWhere([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'rejected'], ['round_info_id', $round_info_id]])->orWhere([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'oxygen'], ['round_info_id', $round_info_id]])->first();
         $appealAuditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id], ['type', 'appeal'], ['round_info_id', $round_info_id]])->orWhere([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'appeal_rejected'], ['round_info_id', $round_info_id]])->first();
 
         return response()->json([
@@ -1826,7 +1828,8 @@ class UserController extends Controller
             'message' => 'Success!',
         ]);
     }
-    public function auditionCertificatePayment(Request $request){
+    public function auditionCertificatePayment(Request $request)
+    {
         $payment = new Payment();
         $payment->user_id =  auth('sanctum')->user()->id;
         $payment->event_id = $request->event_id;
@@ -1838,13 +1841,12 @@ class UserController extends Controller
         $payment->date = $request->date;
         $payment->status = 1;
         $payment->save();
-        if($payment){
+        if ($payment) {
             return response()->json([
                 'status' => 200,
                 'message' => 'Certificate Payment Successfully'
             ]);
-        }
-        else{
+        } else {
             return response()->json([
                 'status' => 402,
                 'message' => 'Something wrong'
@@ -1853,29 +1855,32 @@ class UserController extends Controller
     }
 
 
-    public function getAuditionCertificateData($audition_id, $round_info_id){
+    public function getAuditionCertificateData($audition_id, $round_info_id)
+    {
         $super = false;
-        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id],
-        ['audition_id', $audition_id], ['round_info_id', $round_info_id], ['wining_status',1]])->first();
+        $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([
+            ['user_id', auth()->user()->id],
+            ['audition_id', $audition_id], ['round_info_id', $round_info_id], ['wining_status', 1]
+        ])->first();
 
-        if($auditionRoundMarkTracking){
+        if ($auditionRoundMarkTracking) {
 
 
             $assignedJudges = AuditionAssignJudge::where('audition_id', $audition_id)->get();
             $totalStars = [];
-            foreach($assignedJudges as $judge){
-                if($judge->super_judge == 1){
+            foreach ($assignedJudges as $judge) {
+                if ($judge->super_judge == 1) {
                     $super = true;
                 }
                 $superstarId = $judge->judge_id;
                 $superStar = SuperStar::where('star_id', $superstarId)->first();
-                $superstarName = $superStar->superStar->first_name." ".$superStar->superStar->last_name;
+                $superstarName = $superStar->superStar->first_name . " " . $superStar->superStar->last_name;
                 $starInfo = [
-                    'isSuperAdmin'=> $super,
-                    'signature'=> $superStar['signature'],
+                    'isSuperAdmin' => $super,
+                    'signature' => $superStar['signature'],
                     'name' => $superstarName,
                 ];
-                array_push($totalStars,$starInfo);
+                array_push($totalStars, $starInfo);
             }
             $userInfo = $auditionRoundMarkTracking->user;
             $certificateContent = AuditionCertificationContent::where([['audition_id', $audition_id]])->first();
@@ -1883,12 +1888,12 @@ class UserController extends Controller
             // Calculate for rating star 
             $round_info = AuditionRoundInfo::where('id', $round_info_id)->first();
             $totalRound = AuditionRoundInfo::where('audition_id', $audition_id)->count();
-            $starRating =  ((($round_info->round_num / $totalRound) * 100)*5)/100;
+            $starRating =  ((($round_info->round_num / $totalRound) * 100) * 5) / 100;
             // return $totalRound;
 
 
             $PDFInfo = [
-                'user' => ($userInfo['first_name']. ' ' .$userInfo['last_name']),
+                'user' => ($userInfo['first_name'] . ' ' . $userInfo['last_name']),
                 'stars' => $totalStars,
                 'certificateContent' => $certificateContent,
                 'starRating' => $starRating
@@ -1897,14 +1902,13 @@ class UserController extends Controller
                 'status' => 200,
                 'certificateData' => $PDFInfo,
             ]);
+        } else {
+            return response()->json([
+                'status' => 200,
+                'message' =>  "Sorry! You are not passed",
+            ]);
         }
-        else{
-           return response()->json([
-                        'status' => 200,
-                        'message' =>  "Sorry! You are not passed",
-                    ]);
-        }
-    } 
+    }
 
 
     public function videoUpload(Request $request)
