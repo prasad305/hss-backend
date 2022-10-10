@@ -693,8 +693,8 @@ class UserMobileAppController extends Controller
             ];
             $time = time();
             try {
-                $pdf = PDF::loadView('Others.Certificate.Certificate', compact('PDFInfo'))->save(public_path('uploads/pdf/auditions/certificates/' . $time . '.' . 'pdf'));
-                $filename = 'uploads/pdf/auditions/certificates/' . $time . '.' . 'pdf';
+                $pdf = PDF::loadView('Others.Certificate.Certificate', compact('PDFInfo'))->save(public_path('uploads/pdf/auditions/' . $time . '.' . 'pdf'));
+                $filename = 'uploads/pdf/auditions/' . $time . '.' . 'pdf';
             } catch (\Throwable $th) {
                 return $th;
             }
