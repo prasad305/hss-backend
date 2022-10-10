@@ -26,10 +26,11 @@ use App\Models\MeetupEventRegistration;
 
 class QnaController extends Controller
 {
-    public function qnaWalletStore(Request $request){
+    public function qnaWalletStore(Request $request)
+    {
         // return $request->all();
 
-        if($request->event_type == 'qna'){
+        if ($request->event_type == 'qna') {
             $event = QnA::find($request->eventId);
 
             $eventRegistration = new QnaRegistration();
@@ -40,9 +41,9 @@ class QnaController extends Controller
 
             $eventRegistration->qna_id = $event->id;
             $eventRegistration->user_id = Auth::user()->id;
-            $eventRegistration->card_holder_name = Auth::user()->first_name ." ". Auth::user()->last_name;
+            $eventRegistration->card_holder_name = Auth::user()->first_name . " " . Auth::user()->last_name;
 
-            
+
             $eventRegistration->amount = $request->fee;
             $eventRegistration->payment_status = 1;
             $eventRegistration->payment_method = 'wallet';
@@ -66,8 +67,8 @@ class QnaController extends Controller
                 'message' => 'QnA Successfully Registered ',
             ]);
         }
-   
-        if($request->event_type == 'livechat'){
+
+        if ($request->event_type == 'livechat') {
             $event = LiveChat::find($request->eventId);
 
             $eventRegistration = new LiveChatRegistration();
@@ -78,7 +79,7 @@ class QnaController extends Controller
 
             $eventRegistration->live_chat_id = $event->id;
             $eventRegistration->user_id = Auth::user()->id;
-            $eventRegistration->card_holder_name = Auth::user()->first_name ." ". Auth::user()->last_name;
+            $eventRegistration->card_holder_name = Auth::user()->first_name . " " . Auth::user()->last_name;
             $eventRegistration->amount = $request->fee;
             $eventRegistration->payment_status = 1;
             $eventRegistration->payment_method = 'wallet';
@@ -89,6 +90,9 @@ class QnaController extends Controller
             $eventRegistration->live_chat_end_time = Carbon::parse($request->end_time)->format('H:i:s');
             // $activity->type = 'qna';
             $eventRegistration->save();
+
+            $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s');
+            $event->update();
 
             $activity = new Activity();
             $activity->type = 'livechat';
@@ -102,9 +106,9 @@ class QnaController extends Controller
                 'message' => 'LiveChat Successfully Registered ',
             ]);
         }
-        
 
-        if($request->event_type == 'learningSession'){
+
+        if ($request->event_type == 'learningSession') {
             $event = LearningSession::find($request->eventId);
 
             $eventRegistration = new LearningSessionRegistration();
@@ -115,7 +119,7 @@ class QnaController extends Controller
 
             $eventRegistration->learning_session_id = $event->id;
             $eventRegistration->user_id = Auth::user()->id;
-            $eventRegistration->card_holder_name = Auth::user()->first_name ." ". Auth::user()->last_name;
+            $eventRegistration->card_holder_name = Auth::user()->first_name . " " . Auth::user()->last_name;
             $eventRegistration->amount = $request->fee;
             $eventRegistration->payment_status = 1;
             $eventRegistration->payment_method = 'wallet';
@@ -134,9 +138,9 @@ class QnaController extends Controller
                 'message' => 'Learning Session Successfully Registered ',
             ]);
         }
-        
 
-        if($request->event_type == 'greeting'){
+
+        if ($request->event_type == 'greeting') {
             $event = Greeting::find($request->eventId);
 
             $eventRegistration = GreetingsRegistration::where('user_id', Auth::user()->id)->where('greeting_id', $request->eventId)->first();
@@ -145,7 +149,7 @@ class QnaController extends Controller
             $walletData->greetings = $walletData->greetings - 1;
             $walletData->save();
 
-            $eventRegistration->card_holder_name = Auth::user()->first_name ." ". Auth::user()->last_name;
+            $eventRegistration->card_holder_name = Auth::user()->first_name . " " . Auth::user()->last_name;
             $eventRegistration->amount = $event->cost;
             $eventRegistration->payment_status = 1;
             $eventRegistration->status = 1;
@@ -165,9 +169,9 @@ class QnaController extends Controller
                 'message' => 'Greeting Successfully Registered',
             ]);
         }
-        
 
-        if($request->event_type == 'meetup'){
+
+        if ($request->event_type == 'meetup') {
             $event = MeetupEvent::find($request->eventId);
 
             $eventRegistration = new MeetupEventRegistration();
@@ -178,7 +182,7 @@ class QnaController extends Controller
 
             $eventRegistration->meetup_event_id = $event->id;
             $eventRegistration->user_id = Auth::user()->id;
-            $eventRegistration->card_holder_name = Auth::user()->first_name ." ". Auth::user()->last_name;
+            $eventRegistration->card_holder_name = Auth::user()->first_name . " " . Auth::user()->last_name;
             $eventRegistration->amount = $event->fee;
             $eventRegistration->payment_status = 1;
             // $eventRegistration->status = 1;
@@ -198,11 +202,6 @@ class QnaController extends Controller
                 'message' => 'Meetup Events Successfully Registered',
             ]);
         }
-        
-
-        
-
-
     }
     public function add_qna(Request $request)
     {
@@ -688,6 +687,21 @@ class QnaController extends Controller
             'status' => 200,
             'message' => 'Ok',
             'users' => $users,
+        ]);
+    }
+    /**
+     * enroll user status update
+     */
+    public function QnaUserStatusUpdate($id)
+    {
+
+        $enrollUser = QnaRegistration::find($id);
+        $enrollUser->publish_status = 0;
+        $enrollUser->update();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'register user status update successfully',
         ]);
     }
 }

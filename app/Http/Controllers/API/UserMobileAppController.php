@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use Firebase\JWT\JWT;
+use Illuminate\Support\Facades\Http;
+
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Acquired_app;
@@ -42,9 +45,11 @@ use App\Models\AuditionCertification;
 use App\Models\AuditionCertificationContent;
 use App\Models\Audition\AuditionRoundMarkTracking;
 use Carbon\Carbon;
+use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
 // use Barryvdh\DomPDF\Facade\Pdf;
@@ -109,7 +114,7 @@ class UserMobileAppController extends Controller
             $create_room_id =  createRoomID();
             $eventRegistration = new LiveChatRegistration();
             $event = LiveChat::find($eventId);
-            $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->interval)->format('H:i:s');
+            $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s');
             $eventRegistration->live_chat_id = $eventId;
             $eventRegistration->amount = $request->fee;
             $eventRegistration->room_id = $create_room_id;
@@ -642,6 +647,42 @@ class UserMobileAppController extends Controller
         ]);
     }
 
+
+
+    /**
+     * sdk test url
+     */
+    public function sdktestUrl($room_id)
+    {
+        return $room_id;
+        $VIDEOSDK_API_KEY = "9af32487-b9c6-4679-a9f1-c5239c35410b";
+        $VIDEOSDK_SECRET_KEY = "aaf9ba47bc165fdcd5a0f57638efd822cee41261a389c6ce438c314c4b3ef429";
+
+        header("Content-type: application/json; charset=utf-8");
+
+        $issuedAt   = new DateTimeImmutable();
+        $expire     = $issuedAt->modify('+24 hours')->getTimestamp();
+
+        $payload = [
+            'apikey' => $VIDEOSDK_API_KEY,
+            'permissions' => array(
+                "allow_join", "allow_mod"
+            ),
+            'iat' => $issuedAt->getTimestamp(),
+            'exp' => $expire
+        ];
+
+
+        $jwt = JWT::encode($payload, $VIDEOSDK_SECRET_KEY, 'HS256');
+
+        $request = Http::withHeaders([
+            'Authorization' =>  $jwt,
+            'Content-Type' => ' application/json'
+        ])->GET('https://api.videosdk.live/v2/sessions/?roomId=' . $room_id);
+
+
+        return $request; //for live
+
     public function getCertificate($audition_id, $round_info_id)
     {
 
@@ -718,5 +759,6 @@ class UserMobileAppController extends Controller
                 'message' =>  "Sorry!",
             ]);
         }
+
     }
 }
