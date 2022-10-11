@@ -682,6 +682,7 @@ class UserMobileAppController extends Controller
 
 
         return $request; //for live
+    }
 
     public function getCertificate($audition_id, $round_info_id)
     {
