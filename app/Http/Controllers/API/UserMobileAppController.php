@@ -205,7 +205,7 @@ class UserMobileAppController extends Controller
         $eventRegistration->payment_status = 1;
         $eventRegistration->save();
 
-
+        
 
         /**
          * qna add to my chat list
@@ -226,12 +226,15 @@ class UserMobileAppController extends Controller
         $activity->event_registration_id = $eventRegistration->id;
         $activity->save();
 
+        $userWallet = Wallet::where('user_id', Auth::user()->id)->first();
+
         return response()->json([
             'status' => 200,
             'eventRegistration' => $eventRegistration,
             'modelName' => $modelName,
             'eventId' => $eventId,
             'message' => 'Success Registered',
+            'waletInfo' => $userWallet
         ]);
     }
 
@@ -682,6 +685,20 @@ class UserMobileAppController extends Controller
 
 
         return $request; //for live
+    }
+
+    public function getLearningSessionCertificate ($slug)
+    {
+        try {
+            return view('Others.Certificate.LearningCertificate');
+            $pdf = PDF::loadView('Others.Certificate.LearningCertificate');
+            return $pdf;
+            // file_put_contents('uploads/pdf/' . $time . '.pdf', $pdf->output());
+            // $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
+            // return $filename;
+        } catch (\Throwable $th) {
+            return $th;
+        }
     }
 
     public function getCertificate($audition_id, $round_info_id)
