@@ -2546,8 +2546,10 @@ class UserController extends Controller
                 ]);
             }
         }
+        $userWallet = Wallet::where('user_id', auth('sanctum')->user()->id)->first();
         return response()->json([
             'status' => 200,
+            'waletInfo' => $userWallet
         ]);
     }
     public function getOxygenVideo()
