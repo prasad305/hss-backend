@@ -682,6 +682,8 @@ class UserMobileAppController extends Controller
 
 
         return $request; //for live
+    }
+
 
     public function getCertificate($audition_id, $round_info_id)
     {
@@ -722,7 +724,7 @@ class UserMobileAppController extends Controller
             }
             $userInfo = $auditionRoundMarkTracking->user;
             $certificateContent = AuditionCertificationContent::where([['audition_id', $audition_id]])->first();
-            // Calculate for rating star 
+            // Calculate for rating star
             $round_info = AuditionRoundInfo::where('id', $round_info_id)->first();
             $totalRound = AuditionRoundInfo::where('audition_id', $audition_id)->count();
             $starRating =  ((($round_info->round_num / $totalRound) * 100) * 5) / 100;
@@ -759,6 +761,5 @@ class UserMobileAppController extends Controller
                 'message' =>  "Sorry!",
             ]);
         }
-
     }
 }

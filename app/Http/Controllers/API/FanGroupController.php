@@ -598,15 +598,15 @@ class FanGroupController extends Controller
         }
         // $fanUser = json_decode($useFan->user_fan_group_id ? $useFan->user_fan_group_id : '[]');
 
-        $fanCount = FanGroup::select("*")
-            ->whereIn('id', $fanUser)
-            ->where('status', 1)
-            ->count();
+        $fanCount = Fan_Group_Join::where('user_id', Auth('sanctum')->user()->id)->count();
 
-        $useFanGroup = FanGroup::select("*")
-            ->whereIn('id', $fanUser)
-            ->where('status', 1)
-            ->get();
+        // $useFanGroup = FanGroup::select("*")
+        //     ->whereIn('id', $fanUser)
+        //     ->where('status', 1)
+        //     ->get();
+
+
+        $useFanGroup = Fan_Group_Join::where('user_id', Auth('sanctum')->user()->id)->get();
 
         $fanList = FanGroup::where('status', 1)->whereNotIn('id', $fanUser)->latest()->get();
 
