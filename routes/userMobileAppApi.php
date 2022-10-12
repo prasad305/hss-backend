@@ -75,6 +75,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     /**
      *  Download learning session certificate
      */
-    Route::get('mobile/audition/getLearningSessionCertificate/{slug}', [UserMobileAppController::class, 'getLearningSessionCertificate']);
+    Route::post('mobile/audition/getLearningSessionCertificate/{slug}', [UserMobileAppController::class, 'getLearningSessionCertificate']);
 
 });

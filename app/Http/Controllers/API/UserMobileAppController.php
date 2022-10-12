@@ -146,9 +146,9 @@ class UserMobileAppController extends Controller
             $eventRegistration->status = 1;
             $activity->type = 'greeting';
 
-            $notification = Notification::find($request->notification_id);
-            $notification->view_status = 1;
-            $notification->save();
+            // $notification = Notification::find($request->notification_id);
+            // $notification->view_status = 1;
+            // $notification->save();
         }
         if ($modelName == 'auction') {
             $eventRegistration = Bidding::find($request->event_registration_id);
@@ -687,12 +687,35 @@ class UserMobileAppController extends Controller
         return $request; //for live
     }
 
-    public function getLearningSessionCertificate ($slug)
+    public function getLearningSessionCertificate (Request $request, $slug)
     {
+        // return $request->all();
+        $learnigSession = LearningSession::where([['slug', $slug]])->first();
+        $superStar = SuperStar::where('star_id', $learnigSession->star->id)->first();
+
+        $starFullName =  $learnigSession->star->first_name . ' ' . $learnigSession->star->last_name;
+        $sign = $superStar->signature;
+        $userName = $request->name;
+        $userFatherName = $request->fatherName;
+        $time = time();
+        $PDFInfo = [
+            'starFullName' => $starFullName,
+            'signature' => $sign,
+            'userName' => $userName,
+            'fatherName' => $userFatherName,
+        ];
         try {
-            return view('Others.Certificate.LearningCertificate');
-            $pdf = PDF::loadView('Others.Certificate.LearningCertificate');
-            return $pdf;
+            // return view('Others.Certificate.LearningCertificate');
+            // $pdf = PDF::loadView('Others.Certificate.LearningCertificate');
+            // return $pdf;
+
+
+            $pdf = PDF::loadView('Others.Certificate.LearningCertificate', compact('PDFInfo'))->save(public_path('uploads/pdf/' . $time . '.' . 'pdf'));
+                $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
+                return response()->json([
+                    'status' => 200,
+                    'certificateURL' =>  $filename,
+                ]); 
             // file_put_contents('uploads/pdf/' . $time . '.pdf', $pdf->output());
             // $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
             // return $filename;
