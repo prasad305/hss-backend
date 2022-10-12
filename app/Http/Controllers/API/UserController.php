@@ -2291,7 +2291,7 @@ class UserController extends Controller
             $learning_video->user_id = auth()->user()->id;
             $learning_video->evaluation_id = $evaluation->id;
 
-            $path = "uploads/" . time() . rand('0000', '9999') . $request->video['name'] . ".mp4";
+            $path = "uploads/videos/learnings/" . time() . rand('0000', '9999') . $request->video['name'] . ".mp4";
 
             $learning_video->video = $path;
             $learning_video->save();
