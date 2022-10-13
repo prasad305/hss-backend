@@ -146,9 +146,9 @@ class UserMobileAppController extends Controller
             $eventRegistration->status = 1;
             $activity->type = 'greeting';
 
-            $notification = Notification::find($request->notification_id);
-            $notification->view_status = 1;
-            $notification->save();
+            // $notification = Notification::find($request->notification_id);
+            // $notification->view_status = 1;
+            // $notification->save();
         }
         if ($modelName == 'auction') {
             $eventRegistration = Bidding::find($request->event_registration_id);
@@ -205,7 +205,7 @@ class UserMobileAppController extends Controller
         $eventRegistration->payment_status = 1;
         $eventRegistration->save();
 
-
+        
 
         /**
          * qna add to my chat list
@@ -226,12 +226,15 @@ class UserMobileAppController extends Controller
         $activity->event_registration_id = $eventRegistration->id;
         $activity->save();
 
+        $userWallet = Wallet::where('user_id', Auth::user()->id)->first();
+
         return response()->json([
             'status' => 200,
             'eventRegistration' => $eventRegistration,
             'modelName' => $modelName,
             'eventId' => $eventId,
             'message' => 'Success Registered',
+            'waletInfo' => $userWallet
         ]);
     }
 
@@ -684,6 +687,42 @@ class UserMobileAppController extends Controller
         return $request; //for live
     }
 
+    public function getLearningSessionCertificate (Request $request, $slug)
+    {
+        // return $request->all();
+        $learnigSession = LearningSession::where([['slug', $slug]])->first();
+        $superStar = SuperStar::where('star_id', $learnigSession->star->id)->first();
+
+        $starFullName =  $learnigSession->star->first_name . ' ' . $learnigSession->star->last_name;
+        $sign = $superStar->signature;
+        $userName = $request->name;
+        $userFatherName = $request->fatherName;
+        $time = time();
+        $PDFInfo = [
+            'starFullName' => $starFullName,
+            'signature' => $sign,
+            'userName' => $userName,
+            'fatherName' => $userFatherName,
+        ];
+        try {
+            // return view('Others.Certificate.LearningCertificate');
+            // $pdf = PDF::loadView('Others.Certificate.LearningCertificate');
+            // return $pdf;
+
+
+            $pdf = PDF::loadView('Others.Certificate.LearningCertificate', compact('PDFInfo'))->save(public_path('uploads/pdf/' . $time . '.' . 'pdf'));
+                $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
+                return response()->json([
+                    'status' => 200,
+                    'certificateURL' =>  $filename,
+                ]); 
+            // file_put_contents('uploads/pdf/' . $time . '.pdf', $pdf->output());
+            // $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
+            // return $filename;
+        } catch (\Throwable $th) {
+            return $th;
+        }
+    }
 
     public function getCertificate($audition_id, $round_info_id)
     {
@@ -736,8 +775,8 @@ class UserMobileAppController extends Controller
             ];
             $time = time();
             try {
-                $pdf = PDF::loadView('Others.Certificate.Certificate', compact('PDFInfo'))->save(public_path('uploads/pdf/auditions/certificates/' . $time . '.' . 'pdf'));
-                $filename = 'uploads/pdf/auditions/certificates/' . $time . '.' . 'pdf';
+                $pdf = PDF::loadView('Others.Certificate.Certificate', compact('PDFInfo'))->save(public_path('uploads/pdf/auditions/' . $time . '.' . 'pdf'));
+                $filename = 'uploads/pdf/auditions/' . $time . '.' . 'pdf';
             } catch (\Throwable $th) {
                 return $th;
             }

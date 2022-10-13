@@ -1892,7 +1892,7 @@ class UserController extends Controller
             // Calculate for rating star
             $round_info = AuditionRoundInfo::where('id', $round_info_id)->first();
             $totalRound = AuditionRoundInfo::where('audition_id', $audition_id)->count();
-            $starRating =  ((($round_info->round_num / $totalRound) * 100) * 5) / 100;
+            $starRating =  (($round_info->round_num * 5 ) / $totalRound);
             // return $totalRound;
 
 
@@ -2299,7 +2299,7 @@ class UserController extends Controller
             $learning_video->user_id = auth()->user()->id;
             $learning_video->evaluation_id = $evaluation->id;
 
-            $path = "uploads/" . time() . rand('0000', '9999') . $request->video['name'] . ".mp4";
+            $path = "uploads/videos/learnings/" . time() . rand('0000', '9999') . $request->video['name'] . ".mp4";
 
             $learning_video->video = $path;
             $learning_video->save();
@@ -2554,8 +2554,10 @@ class UserController extends Controller
                 ]);
             }
         }
+        $userWallet = Wallet::where('user_id', auth('sanctum')->user()->id)->first();
         return response()->json([
             'status' => 200,
+            'waletInfo' => $userWallet
         ]);
     }
     public function getOxygenVideo()

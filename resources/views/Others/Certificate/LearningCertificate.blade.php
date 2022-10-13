@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <style>
+        /* @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap"); */
+
         * {
             box-sizing: border-box;
         }
@@ -71,10 +73,12 @@
         }
 
         .cert-content {
-            width: 580px;
+            /* background-color: #ad7b17; */
+            width: 570px;
             height: 470px;
             padding: 30px 60px 0px 60px;
             text-align: center;
+
             font-family: Arial, Helvetica, sans-serif;
         }
 
@@ -126,13 +130,13 @@
         .sign {
             border-width: 1;
             border-bottom: 1px solid black;
-            width: 60%;
+            width: 30%;
             margin: 0 auto;
         }
 
         .sign img {
-            height: 30px;
-            width: 30px;
+            height: 40px;
+            width: 40px;
         }
 
         .signature small {
@@ -185,20 +189,27 @@
         }
 
         .titlecirtificate {
-            font-size: 30px;
+            font-size: 20px;
             font-weight: 800;
             color: #ad7b17;
             margin: 5px;
             padding: 0;
         }
 
-        .mainContent p {
-            font-size: 14px;
+
+        .mainContent span {
+            font-size: 13px;
+        }
+
+        .mainContent b {
+            font-size: 13px;
         }
 
         .tableRow {
+            left: -10px;
             position: absolute;
-            top: 22rem;
+            top: 20rem;
+            /* background-color: green; */
         }
     </style>
 </head>
@@ -213,129 +224,98 @@
 
     <div class="cert-container print-m-0">
         <div id="content2" class="cert">
-            <img src="{{ asset($PDFInfo['certificateContent']->frame) }}" class="cert-bg" alt="" />
-            @if ($PDFInfo['certificateContent'])
+            <img src="{{ asset('/assets/img/bg.png') }}" class="cert-bg" alt="" />
 
 
-                <div class="cert-content">
-                    <div class="header">
-                        <table>
-                            <tr>
-                                <th>
-                                    <div class="Logo" style="text-align: left">
-                                        <img src="{{ asset($PDFInfo['certificateContent']->company_logo) }}"
-                                            alt="" />
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="Logo" style="text-align: right">
+            <div class="cert-content">
+                <div class="header">
+                    <table>
+                        <tr>
+                            <th>
+                                <div class="Logo" style="text-align: center">
+                                    <img src="{{ asset('/assets/img/logo.png') }}" alt="" />
+                                </div>
+                            </th>
 
-                                        <img src="{{ asset(asset($PDFInfo['certificateContent']->brand_logo)) }}"
-                                            alt="" />
-                                    </div>
-                                </th>
-                            </tr>
-                        </table>
-                    </div>
+                        </tr>
+                    </table>
+                </div>
 
-                    <!-- <h1 class="other-font" style="font-size: 30px;">Certificate of Participation</h1> -->
-                    <div class="text-img">
+                <div class="text-img">
 
-                        <h1 class="titlecirtificate">{{ $PDFInfo['certificateContent']->title }}</h1>
-                    </div>
-                    <span
-                        style="
+                    <h1 class="titlecirtificate">CERTIFICATE OF ACHIEVEMENT</h1>
+                </div>
+                <span
+                    style="
                         font-size: 15px;
                         text-transform: uppercase;
                         font-weight: bold;
-                      ">{{ $PDFInfo['certificateContent']->sub_title }}</span>
-                    <br />
-                    <span class="other-font">
-                        <div class="text-img2">
+                      ">This
+                    certificate is proudly presented to</span>
+                <br />
+                <span class="other-font">
+                    <div class="text-img2">
 
-                            <img src="{{ asset('/assets/img/mid-design.png') }}" alt="" />
-                        </div>
-                    </span>
-                    @if ($PDFInfo)
-                        <span class="other-font" style="font-size: 35px"><span
-                                class="">{{ $PDFInfo['user'] }}</span></span>
-                    @endif
-                    <div class="mainContent">{!! html_entity_decode($PDFInfo['certificateContent']->main_content) !!}</div>
-                    <br />
-
-                    <div class="stars">
-                        <i class="far fa-star fa-stack-1x"></i>
-                        @foreach (range(1, 5) as $i)
-                            @if ($PDFInfo['starRating'] > 0)
-                                @if ($PDFInfo['starRating'] > 0.5)
-                                    <i class="fa fa-star"></i>
-                                @else
-                                    <i class="fa fa-star-half-o"></i>
-                                @endif
-                            @else
-                                <i class="fa  fa-star-o"></i>
-                            @endif
-                        @endforeach
+                        <img src="{{ asset('/assets/img/mid-design.png') }}" alt="" />
                     </div>
-                </div>
+                </span>
+                <span class="other-font" style="font-size: 30px"><span
+                        class="">{{ $PDFInfo['userName'] }}</span></span>
 
-            @endif
+                <div class="mainContent">
+                    <span>This is certified by the HelloSuperStar authority
+
+                        <b>{{ $PDFInfo['userName'] }}</b> son of <b>{{ $PDFInfo['fatherName'] }}</b>
+                    </span>
+                    </br>
+                    <span>
+                        an online grand talent reviewing session authorized by stars and offered through
+                        HelloSuperStars.
+                    </span>
+
+                </div>
+                <br />
+
+
+            </div>
+
+
             <table class="tableRow">
                 <tr>
                     <th>
-                        @if (sizeof($PDFInfo['stars']) > 0)
-                            @foreach ($PDFInfo['stars'] as $PDF)
-                                @if ($PDF['isSuperAdmin'])
-                                    {{-- @dd($PDF['fullName']) --}}
-                                    <div class="signature">
-                                        <div class="sign">
-                                            <img src=" {{ asset('http://localhost:8000/' . $PDF['signature']) }}"
-                                                alt="" />
-                                        </div>
-                                        <span>{{ $PDF['name'] }}</span> <br />
-                                        <small>Super Judge</small> <br />
-                                        <small>Hello Super Stars</small>
-                                    </div>
-                                @endif
-                            @endforeach
-                        @endif
+
+                        <div class="signature">
+                            <div class="sign">
+                                {{-- <img src="{{ asset('/assets/img/text.png') }}" alt="" /> --}}
+                                <img src=" {{ asset('http://localhost:8000/' . $PDFInfo['signature']) }}"
+                                    alt="" />
+                            </div>
+                            <span>{{ $PDFInfo['starFullName'] }}</span> <br />
+                            <small>Super Star</small> <br />
+                            <small>Hello Super Stars</small>
+                        </div>
 
                     </th>
+                    <th>
+                        <div class="signature">
+                            <div class="sign">
+                                <img src="{{ asset('/assets/img/qr_code.png') }}" alt="" />
+                            </div>
+                        </div>
+                    </th>
 
-                    @foreach ($PDFInfo['stars'] as $PDF)
-                        @if (!$PDF['isSuperAdmin'])
-                            <th>
-                                <div class="signature">
-                                    <div class="sign">
-                                        <img src=" {{ asset('http://localhost:8000/' . $PDF['signature']) }}"
-                                            alt="" />
-                                    </div>
-                                    <span>{{ $PDF['name'] }}</span> <br />
-                                    <small>Judge</small> <br />
-                                    <small>Hello Super Stars</small>
-                                </div>
-                            </th>
-                        @endif
-                    @endforeach
+
+
+
 
                 </tr>
             </table>
-
-            <!-- <small
-              >lorem jf sdkljflsdjfklsdjfksdlf</small
-            > -->
-            <!-- <div class="bottom-txt">
-              <span>dsfsdfsdfF</span>
-              <span>Completed on:  2022</span>
-            </div> -->
+            </span>
         </div>
     </div>
     </div>
+    </div>
 
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
-    <script src="./assets/js/main.js"></script> -->
     <script>
         $("#downloadPDF").click(function() {
             // $("#content2").addClass('ml-215'); // JS solution for smaller screen but better to add media queries to tackle the issue

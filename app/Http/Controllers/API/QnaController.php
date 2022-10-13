@@ -132,10 +132,13 @@ class QnaController extends Controller
             $activity->event_id = $event->id;
             $activity->event_registration_id = $eventRegistration->id;
             $activity->save();
+            
+            $userWallet = Wallet::where('user_id', Auth::user()->id)->first();
 
             return response()->json([
                 'status' => 200,
                 'message' => 'Learning Session Successfully Registered ',
+                'waletInfo' => $userWallet
             ]);
         }
 
@@ -144,7 +147,6 @@ class QnaController extends Controller
             $event = Greeting::find($request->eventId);
 
             $eventRegistration = GreetingsRegistration::where('user_id', Auth::user()->id)->where('greeting_id', $request->eventId)->first();
-
             $walletData = Wallet::where('user_id', Auth::user()->id)->first();
             $walletData->greetings = $walletData->greetings - 1;
             $walletData->save();
@@ -163,10 +165,12 @@ class QnaController extends Controller
             $activity->event_id = $event->id;
             $activity->event_registration_id = $eventRegistration->id;
             $activity->save();
-
+            $userWallet = Wallet::where('user_id', Auth::user()->id)->first();
             return response()->json([
                 'status' => 200,
                 'message' => 'Greeting Successfully Registered',
+                'waletInfo' => $userWallet,
+                'eventRegistration' => $eventRegistration
             ]);
         }
 
