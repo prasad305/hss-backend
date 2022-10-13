@@ -40,13 +40,13 @@
 
         .full-container {
             min-height: 100vh;
-            background-color: #F2F5F8;
+            /* background-color: #F2F5F8; */
 
 
         }
 
         .ticket-container {
-            width: 100%;
+            width: 800px;
             margin: 0px auto;
 
         }

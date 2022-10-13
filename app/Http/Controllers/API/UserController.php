@@ -2623,4 +2623,14 @@ class UserController extends Controller
 
         ]);
     }
+
+    public function searchPost($valu)
+    {
+        $postData = Post::where('title', 'like', "%$valu%")->get();
+
+        return response()->json([
+            'status' => 200,
+            'posts' => $postData
+        ]);
+    }
 }
