@@ -72,4 +72,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
      */
     Route::get('mobile/audition/getAuditionCertificate/{audition_id}/{round_info_id}', [UserMobileAppController::class, 'getCertificate']);
 
+    /**
+     * tiket for offline meetup
+     */
+    Route::get('/offlineMeetup/ticketDownload/{id}', [UserMobileAppController::class, 'meetUpTicketDownload']);
 });

@@ -146,7 +146,7 @@ class MeetupEventController extends Controller
                 'post_end_date' => 'required',
             ]);
 
-            if ($meetup->meetup_type = "Online") {
+            if ($meetup->meetup_type == "Online") {
                 $meetup->event_link = createRoomID();
             }
 

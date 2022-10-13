@@ -52,6 +52,7 @@ use App\Models\Audition\AuditionAssignJudge;
 use App\Models\SuperStar;
 use App\Models\AuditionCertification;
 use App\Models\AuditionCertificationContent;
+use App\Models\Fan_Group_Join;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
@@ -663,7 +664,7 @@ class UserController extends Controller
     {
         // $star_ids = '['.$id.']';
         $star_id = json_decode($id);
-
+        $int_value = (int) $id;
 
         if ($type == 'livechat') {
             $post = Post::select("*")->where([['user_id', $id], ['type', 'livechat']])->latest()->paginate($limit);
@@ -675,7 +676,8 @@ class UserController extends Controller
             $post = Post::select("*")->where([['user_id', $id], ['type', 'learningSession']])->latest()->paginate($limit);
         }
         if ($type == 'all') {
-            $post = Post::select("*")->where('user_id', $id)->latest()->paginate($limit);
+            // $post = Post::select("*")->where('user_id', $id)->latest()->paginate($limit);
+            $post = Post::where('type', '!=', null)->where('star_id', $star_id)->orWhereJsonContains('star_id', [$int_value])->latest()->get();
         }
 
 
@@ -1010,8 +1012,10 @@ class UserController extends Controller
     }
     public function getAllPostWithForSingleStar($star_id)
     {
-        // $post = Post::WhereJsonContains('star_id',$star_id)->latest()->get();
-        $post = Post::where('type', '!=', null)->orWhere('star_id', $star_id)->orWhere('user_id', $star_id)->orWhereJsonContains('star_id', $star_id)->latest()->get();
+        $int_value = (int) $star_id;
+
+        $post = Post::where('type', '!=', null)->where('star_id', $star_id)->orWhereJsonContains('star_id', [$int_value])->latest()->get();
+        // $post = Post::where('type', '!=', null)->orWhere('star_id', $star_id)->orWhere('user_id', $star_id)->orWhereJsonContains('star_id', $star_id)->latest()->get();
 
         return response()->json([
             'status' => 200,
@@ -1885,7 +1889,7 @@ class UserController extends Controller
             $userInfo = $auditionRoundMarkTracking->user;
             $certificateContent = AuditionCertificationContent::where([['audition_id', $audition_id]])->first();
 
-            // Calculate for rating star 
+            // Calculate for rating star
             $round_info = AuditionRoundInfo::where('id', $round_info_id)->first();
             $totalRound = AuditionRoundInfo::where('audition_id', $audition_id)->count();
             $starRating =  ((($round_info->round_num / $totalRound) * 100) * 5) / 100;
@@ -2159,15 +2163,19 @@ class UserController extends Controller
     {
 
         $userActivites = Activity::orderBy('id', 'DESC')->where('user_id', auth()->user()->id)->get();
+        $fanGroup = Fan_Group_Join::orderBy('id', 'DESC')->where('user_id', auth()->user()->id)->get();
         return response()->json([
             'status' => 200,
-            'userActivites' => $userActivites
+            'userActivites' => $userActivites,
+            'fanGroup' => $fanGroup,
+
         ]);
     }
 
     public function paginate_userActivites($limit)
     {
         $userActivites = Activity::orderBy('id', 'DESC')->where('user_id', auth()->user()->id)->paginate($limit);
+
 
         return response()->json([
             'status' => 200,
@@ -2613,6 +2621,16 @@ class UserController extends Controller
             'audition' =>  $audition,
             'meetup' =>  $meetup
 
+        ]);
+    }
+
+    public function searchPost($valu)
+    {
+        $postData = Post::where('title', 'like', "%$valu%")->get();
+
+        return response()->json([
+            'status' => 200,
+            'posts' => $postData
         ]);
     }
 }

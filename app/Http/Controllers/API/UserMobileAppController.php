@@ -682,6 +682,8 @@ class UserMobileAppController extends Controller
 
 
         return $request; //for live
+    }
+
 
     public function getCertificate($audition_id, $round_info_id)
     {
@@ -722,7 +724,7 @@ class UserMobileAppController extends Controller
             }
             $userInfo = $auditionRoundMarkTracking->user;
             $certificateContent = AuditionCertificationContent::where([['audition_id', $audition_id]])->first();
-            // Calculate for rating star 
+            // Calculate for rating star
             $round_info = AuditionRoundInfo::where('id', $round_info_id)->first();
             $totalRound = AuditionRoundInfo::where('audition_id', $audition_id)->count();
             $starRating =  ((($round_info->round_num / $totalRound) * 100) * 5) / 100;
@@ -759,6 +761,27 @@ class UserMobileAppController extends Controller
                 'message' =>  "Sorry!",
             ]);
         }
+    }
+    /**
+     * offline meetup ticket downlode
+     */
+    public function meetUpTicketDownload($id)
+    {
 
+        $time = time();
+
+        $user = User::find(auth()->user()->id);
+        $meetUp = MeetupEvent::find($id);
+
+        try {
+            $pdf = PDF::loadView('Others.ticket.ticketMeetup', compact('user', 'meetUp'))->save(public_path('uploads/pdf/' . $time . '.' . 'pdf'));
+            $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
+            return response()->json([
+                'status' => 200,
+                'certificateURL' =>  $filename,
+            ]);
+        } catch (\Throwable $th) {
+            return $th;
+        }
     }
 }
