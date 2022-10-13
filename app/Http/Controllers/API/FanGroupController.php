@@ -1229,6 +1229,7 @@ class FanGroupController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Fan Group Post Successfully',
+            'post' => $fanPost
         ]);
     }
 

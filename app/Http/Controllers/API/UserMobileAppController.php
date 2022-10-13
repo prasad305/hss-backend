@@ -762,4 +762,26 @@ class UserMobileAppController extends Controller
             ]);
         }
     }
+    /**
+     * offline meetup ticket downlode
+     */
+    public function meetUpTicketDownload($id)
+    {
+
+        $time = time();
+
+        $user = User::find(auth()->user()->id);
+        $meetUp = MeetupEvent::find($id);
+
+        try {
+            $pdf = PDF::loadView('Others.ticket.ticketMeetup', compact('user', 'meetUp'))->save(public_path('uploads/pdf/' . $time . '.' . 'pdf'));
+            $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
+            return response()->json([
+                'status' => 200,
+                'certificateURL' =>  $filename,
+            ]);
+        } catch (\Throwable $th) {
+            return $th;
+        }
+    }
 }
