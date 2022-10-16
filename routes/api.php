@@ -27,6 +27,7 @@ use App\Http\Controllers\API\QnaController;
 use App\Http\Controllers\API\StarGreetingController;
 use App\Http\Controllers\API\StarScheduleController;
 use App\Http\Controllers\API\CurrencyController;
+use App\Http\Controllers\API\Paytm\Payment;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -124,11 +125,17 @@ Route::get('/guest/PromoVideos', [GuestController::class, 'getPromoVideo']);
 
 Route::get('/user/star_list', [UserController::class, 'star_list']);
 
+//after payment redirect
+Route::post('paytm-callback/{redirectTo}/{user_id}/{type}/{event_id}', [Payment::class, 'paytmCallback']);
+
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/checkingAuthenticated', function () {
         return response()->json(['message' => 'You are in', 'status' => 200], 200);
     });
+
+    //paytm make payment
+    Route::post('paytm-payment', [Payment::class, 'paymentNow']);
 
 
     //post search
@@ -980,6 +987,8 @@ Route::post('/bidding/auction/product/{id}', [AuctionController::class, 'bidNow'
 Route::get('/live/allProduct', [AuctionController::class, 'allLiveProduct']);
 
 Route::get('/user_info/{id}', [AuthController::class, 'user_data']);
+
+
 
 
 
