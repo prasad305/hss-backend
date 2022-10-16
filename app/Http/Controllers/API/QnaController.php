@@ -145,8 +145,8 @@ class QnaController extends Controller
 
         if ($request->event_type == 'greeting') {
             $event = Greeting::find($request->eventId);
-
-            $eventRegistration = GreetingsRegistration::where('user_id', Auth::user()->id)->where('greeting_id', $request->eventId)->first();
+            $eventRegistration = GreetingsRegistration::where('user_id', Auth::user()->id)->where('id', $request->greetingId)->first();
+            
             $walletData = Wallet::where('user_id', Auth::user()->id)->first();
             $walletData->greetings = $walletData->greetings - 1;
             $walletData->save();
