@@ -957,6 +957,17 @@ class UserController extends Controller
         ]);
     }
 
+    public function registerGreetings()
+    {
+        $register = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'events' => $register,
+        ]);
+    }
+
     public function registeredMeetup()
     {
         $post = MeetupEventRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
