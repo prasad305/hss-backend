@@ -171,17 +171,21 @@ class SouvinerController extends Controller
     {
 
         $getSouviner = SouvenirCreate::where('star_id', $starId)->where('status', 1)->first();
+        return response()->json([
+            'status' => 200,
+            'getSouviner' => $getSouviner,
+        ]);
 
-        if ($getSouviner) {
-            return response()->json([
-                'status' => 200,
-                'getSouviner' => $getSouviner,
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Not Services!',
-            ]);
-        }
+        // if ($getSouviner) {
+        //     return response()->json([
+        //         'status' => 200,
+        //         'getSouviner' => $getSouviner,
+        //     ]);
+        // } else {
+        //     return response()->json([
+        //         'message' => 'Not Services!',
+        //     ]);
+        // }
     }
 
     public function statusSouvenirChange($status, $souvenirId)

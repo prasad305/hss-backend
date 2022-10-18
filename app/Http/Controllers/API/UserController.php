@@ -640,6 +640,8 @@ class UserController extends Controller
 
     public function getStarPost($id, $type)
     {
+        $star_id = json_decode($id);
+        $int_value = (int) $id;
         if ($type == 'livechat') {
             $post = Post::where([['user_id', $id], ['type', 'livechat']])->latest()->get();
         }
@@ -649,8 +651,11 @@ class UserController extends Controller
         if ($type == 'learning') {
             $post = Post::where([['user_id', $id], ['type', 'learningSession']])->latest()->get();
         }
+        if ($type == 'audition') {
+            $post = Post::where('type', 'audition')->whereJsonContains('star_id', [$int_value])->latest()->get();
+        }
         if ($type == 'all') {
-            $post = Post::where('user_id', $id)->latest()->get();
+            $post = Post::where('user_id', $id)->orWhereJsonContains('star_id', [$int_value])->latest()->get();
         }
 
         return response()->json([
