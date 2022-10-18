@@ -205,7 +205,7 @@ class UserMobileAppController extends Controller
         $eventRegistration->payment_status = 1;
         $eventRegistration->save();
 
-        
+
 
         /**
          * qna add to my chat list
@@ -687,7 +687,7 @@ class UserMobileAppController extends Controller
         return $request; //for live
     }
 
-    public function getLearningSessionCertificate (Request $request, $slug)
+    public function getLearningSessionCertificate(Request $request, $slug)
     {
         // return $request->all();
         $learnigSession = LearningSession::where([['slug', $slug]])->first();
@@ -711,11 +711,11 @@ class UserMobileAppController extends Controller
 
 
             $pdf = PDF::loadView('Others.Certificate.LearningCertificate', compact('PDFInfo'))->save(public_path('uploads/pdf/' . $time . '.' . 'pdf'));
-                $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
-                return response()->json([
-                    'status' => 200,
-                    'certificateURL' =>  $filename,
-                ]); 
+            $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
+            return response()->json([
+                'status' => 200,
+                'certificateURL' =>  $filename,
+            ]);
             // file_put_contents('uploads/pdf/' . $time . '.pdf', $pdf->output());
             // $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
             // return $filename;

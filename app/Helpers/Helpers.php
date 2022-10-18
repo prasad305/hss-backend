@@ -234,7 +234,7 @@ if (!function_exists('random_code')) {
         ])->post('https://api.videosdk.live/v2/rooms');
 
 
-        //return $request['roomId']; //for live
+        // return $request['roomId']; //for live
 
     }
 }
