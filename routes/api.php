@@ -695,6 +695,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     // Live Session Section
     Route::get('/star/live-chat/{type}', [LiveChatController::class, 'liveChatList']);
+    Route::get('/star/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
     Route::get('/star/live-chat/details/{slug}', [LiveChatController::class, 'details']);
     Route::get('/star/live-chat/setApprove/{id}', [LiveChatController::class, 'setApproveLiveChat']);
     Route::get('/star/live-chat/setReject/{id}', [LiveChatController::class, 'set_reject_by_star']);
