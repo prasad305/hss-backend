@@ -23,6 +23,7 @@ class CreateLearningSessionRegistrationsTable extends Migration
             $table->float('amount')->nullable();
             $table->string('card_holder_name')->nullable();
             $table->string('account_no')->nullable();
+            $table->integer('publish_status')->nullable();
             $table->timestamps();
         });
     }
