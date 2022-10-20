@@ -3,7 +3,13 @@
 namespace App\Http\Controllers\API\Paytm;
 
 use App\Http\Controllers\Controller;
+use App\Models\LearningSession;
+use App\Models\LearningSessionRegistration;
 use App\Models\LiveChatRegistration;
+use App\Models\MeetupEventRegistration;
+use App\Models\QnaRegistration;
+use App\Models\SouvenirApply;
+use App\Models\SouvenirPayment;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -99,13 +105,199 @@ class Payment extends Controller
         }
     }
 
-    //form live chat
+    public function getPaytmStatus($orderId)
+    {
+        $paytmStatement =  Paytm::where('order_id', $orderId)->first();
+        return response()->json([
+            'paytmStatement' => $paytmStatement
+        ]);
+    }
+    // for mobile app
+
+    public function txnTokenGenerate($amount)
+    {
+        $mid = "iELVJt50414347554560";
+        $websiteName = "WEBSTAGING";
+        $mkey = "zXhNYVPF4RKIsIIz";
+
+        //for Staging Environment
+        $callBackUrl = "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=";
+
+        //for Production Environment
+        // $callBackUrl = "https://securegw.paytm.in/theia/paytmCallback?ORDER_ID=";
+
+
+        $paytmParams = array();
+        $orderId = Str::orderedUuid();
+
+        $paytmParams["body"] = array(
+            "requestType"   => "Payment",
+            "mid"           =>  $mid,
+            "websiteName"   =>  $websiteName,
+            "orderId"       => $orderId,
+            "callbackUrl"   => "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=" . $orderId,
+            "txnAmount"     => array(
+                "value"     =>  $amount . ".00",
+                "currency"  => "INR",
+            ),
+            "userInfo"      => array(
+                "custId"    => "CUST_001",
+            ),
+        );
+
+        $checksum = PaytmChecksum::generateSignature(json_encode($paytmParams["body"]), $mkey);
+
+
+        $paytmParams["head"] = array(
+            "signature"    => $checksum
+        );
+
+        $post_data = json_encode($paytmParams);
+
+        /* for Staging */
+        $url = "https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid=" .  $mid  . "&orderId=" . $orderId;
+
+        /* for Production */
+        // $url = "https://securegw.paytm.in/theia/api/v1/initiateTransaction?mid=YOUR_MID_HERE&orderId=ORDERID_98765";
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        $response = curl_exec($ch);
+        return response()->json([
+            "Token_data" => json_decode($response),
+            "orderId" => $orderId,
+            "mid" =>  $mid,
+            "amount" => $amount . ".00",
+            "callBackUrl" => $callBackUrl
+        ]);
+    }
+
+    public function paytmPaymentSuccessForMobile(Request $request)
+    {
+        // return $request->all();
+        $user = auth()->user();
+        if ($request->STATUS == 'TXN_SUCCESS') {
+            Transaction::create([
+                'user_id' => $user->id,
+                'order_id' => $request->ORDERID,
+                'txn_id' => $request->TXNID,
+                'event' => $request->modelName,
+                'event_id' => $request->eventId,
+                'txn_amount' => $request->TXNAMOUNT,
+                'currency' => "INR",
+                'bank_name' => $request->BANKNAME,
+                'resp_msg' => "mobile-payment",
+                'status' => $request->STATUS,
+
+            ]);
+
+
+
+
+            //live chat regupdate
+            if ($request->modelName == 'livechat') {
+                return $this->LiveChatRegUpdate($user->id, $request->eventId, "PayTm-mobile");
+            }
+            if ($request->modelName == 'qna') {
+                return $this->qnaRegUpdate($user->id, $request->eventId, "PayTm-mobile");
+            }
+            if ($request->modelName == 'learningSession') {
+                return $this->learningSessionRegUpdate($user->id, $request->eventId, "PayTm-mobile");
+            }
+
+            if ($request->modelName == 'meetup') {
+                return $this->meetSessionRegUpdate($user->id, $request->eventId, "PayTm-mobile");
+            }
+
+            if ($request->modelName == 'souvenir') {
+                return $this->souvenirRegUpdate($request->souvenir_apply_id, $request->souvenir_create_id, $request->TXNAMOUNT, "PayTm-mobile");
+            }
+
+
+            return "success data recived" . "__" . $request->modelName;
+        }
+    }
+
+
+
+
+    // mobile payment end
+
+
+    //for live chat
     public function LiveChatRegUpdate($user_id, $event_id, $method)
     {
+        try {
+            $registerEvent = LiveChatRegistration::where([['live_chat_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->publish_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
 
-        $registerEvent = LiveChatRegistration::where([['live_chat_id', $event_id], ['user_id', $user_id]])->first();
-        $registerEvent->publish_status = 1;
-        $registerEvent->payment_method = $method;
-        $registerEvent->update();
+    //for qna
+    public function qnaRegUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = QnaRegistration::where([['qna_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->publish_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+    //for learning session
+    public function learningSessionRegUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = LearningSessionRegistration::where([['learning_session_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->publish_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    //for meetup
+    public function meetSessionRegUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = MeetupEventRegistration::where([['meetup_event_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    //for souvenir
+    public function souvenirRegUpdate($souvenir_apply_id, $souvenir_create_id, $total_amount, $payment_method)
+    {
+        try {
+            $statusChangeSouvenir = SouvenirApply::find($souvenir_apply_id);
+            $statusChangeSouvenir->status = 2;
+            $statusChangeSouvenir->save();
+
+            $souvenir = new SouvenirPayment();
+
+            $souvenir->souvenir_create_id = $souvenir_create_id;
+            $souvenir->souvenir_apply_id = $souvenir_apply_id;
+            $souvenir->user_id = auth('sanctum')->user()->id;
+            $souvenir->payment_method = $payment_method;
+            $souvenir->payment_status = 1;
+            $souvenir->total_amount = $total_amount;
+            $souvenir->status = 1;
+            $souvenir->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 }

@@ -332,10 +332,9 @@ class UserController extends Controller
         // $cat_post = Post::where('type', 'fangroup')->orderBy('id', 'DESC')->paginate($limit);
 
         $PostArray = Post::select("*")
-            ->whereIn('type', ['fangroup'])
+            ->whereIn('type', ['fangroup', 'audition'])
             ->orWhereIn('star_id', $selectedSubSubCat)
             ->orWhereIn('sub_category_id', $selectedSubCat)
-            ->orWhere('type', 'audition')
             ->orderBy('id', 'DESC')->paginate($limit);
 
         // if (isset($selectedSubCat)) {
@@ -1908,7 +1907,7 @@ class UserController extends Controller
             // Calculate for rating star
             $round_info = AuditionRoundInfo::where('id', $round_info_id)->first();
             $totalRound = AuditionRoundInfo::where('audition_id', $audition_id)->count();
-            $starRating =  (($round_info->round_num * 5 ) / $totalRound);
+            $starRating =  (($round_info->round_num * 5) / $totalRound);
             // return $totalRound;
 
 
