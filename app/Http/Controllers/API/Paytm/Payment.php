@@ -8,6 +8,8 @@ use App\Models\LearningSessionRegistration;
 use App\Models\LiveChatRegistration;
 use App\Models\MeetupEventRegistration;
 use App\Models\QnaRegistration;
+use App\Models\SouvenirApply;
+use App\Models\SouvenirPayment;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -210,6 +212,10 @@ class Payment extends Controller
                 return $this->meetSessionRegUpdate($user->id, $request->eventId, "PayTm-mobile");
             }
 
+            if ($request->modelName == 'souvenir') {
+                return $this->souvenirRegUpdate($request->souvenir_apply_id, $request->souvenir_create_id, $request->TXNAMOUNT, "PayTm-mobile");
+            }
+
 
             return "success data recived" . "__" . $request->modelName;
         }
@@ -267,6 +273,29 @@ class Payment extends Controller
             $registerEvent->payment_status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    //for souvenir
+    public function souvenirRegUpdate($souvenir_apply_id, $souvenir_create_id, $total_amount, $payment_method)
+    {
+        try {
+            $statusChangeSouvenir = SouvenirApply::find($souvenir_apply_id);
+            $statusChangeSouvenir->status = 2;
+            $statusChangeSouvenir->save();
+
+            $souvenir = new SouvenirPayment();
+
+            $souvenir->souvenir_create_id = $souvenir_create_id;
+            $souvenir->souvenir_apply_id = $souvenir_apply_id;
+            $souvenir->user_id = auth('sanctum')->user()->id;
+            $souvenir->payment_method = $payment_method;
+            $souvenir->payment_status = 1;
+            $souvenir->total_amount = $total_amount;
+            $souvenir->status = 1;
+            $souvenir->save();
         } catch (\Throwable $th) {
             //throw $th;
         }
