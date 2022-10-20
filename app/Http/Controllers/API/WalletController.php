@@ -62,10 +62,10 @@ class WalletController extends Controller
         // return $request->all();
         //Add walet Payment
         $validator = Validator::make($request->all(), [
-            'card_holder_name' => 'required',
-            'card_no' => 'required',
-            'card_expire_date' => 'required',
-            'card_cvv' => 'required',
+            // 'card_holder_name' => 'required',
+            // 'card_no' => 'required',
+            // 'card_expire_date' => 'required',
+            // 'card_cvv' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -81,11 +81,11 @@ class WalletController extends Controller
                 $walletPayment->packages_id = $request->packages_id;
             }
 
-            $walletPayment->card_holder_name = $request->card_holder_name;
-            $walletPayment->card_no = $request->card_no;
-            $walletPayment->card_expire_date = $request->card_expire_date;
-            $walletPayment->card_cvv = $request->card_cvv;
-            $walletPayment->status = 0;
+            // $walletPayment->card_holder_name = $request->card_holder_name;
+            // $walletPayment->card_no = $request->card_no;
+            // $walletPayment->card_expire_date = $request->card_expire_date;
+            // $walletPayment->card_cvv = $request->card_cvv;
+            // $walletPayment->status = 0;
             $walletPayment->save();
 
             $walletHistory = new WalletHistory();

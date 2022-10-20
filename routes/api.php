@@ -125,11 +125,16 @@ Route::get('/guest/PromoVideos', [GuestController::class, 'getPromoVideo']);
 
 Route::get('/user/star_list', [UserController::class, 'star_list']);
 
-//after payment redirect
+//after payTM redirect
 Route::post('paytm-callback/{redirectTo}/{user_id}/{type}/{event_id}', [Payment::class, 'paytmCallback']);
+
+//paytm mobile
+Route::get('/paytm-status/{orderId}', [Payment::class, 'getPaytmStatus']);
+Route::get('/txn-token-mobile/{amount}', [Payment::class, 'txnTokenGenerate']);
 
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
+
     Route::get('/checkingAuthenticated', function () {
         return response()->json(['message' => 'You are in', 'status' => 200], 200);
     });
@@ -137,6 +142,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //paytm make payment
     Route::post('paytm-payment', [Payment::class, 'paymentNow']);
 
+    //paytm mobile payment success
+    Route::post('paytm-payment-success', [Payment::class, 'paytmPaymentSuccessForMobile']);
 
     //post search
     Route::get('/search-post/{valu}', [UserController::class, 'searchPost']);

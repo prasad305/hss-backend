@@ -413,7 +413,7 @@ class MeetupEventController extends Controller
         $meetup->account_no = $request->input('card_number');
         $meetup->payment_date = $request->input('event_date');
         $meetup->amount = $event->fee;
-        $meetup->payment_status = 1;
+        // $meetup->payment_status = 1;
 
         $meetup->save();
 
