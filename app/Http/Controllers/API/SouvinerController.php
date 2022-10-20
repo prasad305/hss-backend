@@ -449,17 +449,16 @@ class SouvinerController extends Controller
                 $apply->star_id = $starId;
                 $apply->admin_id = $star->parent_user;
                 $apply->category_id = $star->category_id;
-                if ( $request->isRequestFromApp && $request->isRequestFromApp === true) {
-                    if($request['image']['type'] && $request['image']['data']){
+                if ($request->isRequestFromApp && $request->isRequestFromApp === true) {
+                    if ($request['image']['type'] && $request['image']['data']) {
                         // code for image save by base64 data
-                        $originalExtension = str_ireplace("image/","",$request['image']['type']);
+                        $originalExtension = str_ireplace("image/", "", $request['image']['type']);
                         $folder_path       = 'uploads/images/souviner/apply/';
-                        $image_new_name    = Str::random(20).'-'.now()->timestamp.'.'.$originalExtension;
+                        $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                         $decodedBase64 = $request['image']['data'];
-                        Image::make($decodedBase64)->save($folder_path.$image_new_name);
-                        $apply->image = $folder_path.$image_new_name;
+                        Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                        $apply->image = $folder_path . $image_new_name;
                     }
-
                 } else {
                     if ($request->hasfile('image')) {
                         $destination = $apply->image;
@@ -545,7 +544,7 @@ class SouvinerController extends Controller
     public function registerSouvenirApprove($id)
     {
 
-        
+
         $registerSouvenir = SouvenirApply::find($id);
         $registerSouvenir->status = 1;
         $registerSouvenir->save();
@@ -620,14 +619,14 @@ class SouvinerController extends Controller
             $souvenir->souvenir_create_id = $request->souvenir_create_id;
             $souvenir->souvenir_apply_id = $request->souvenir_apply_id;
             $souvenir->user_id = auth('sanctum')->user()->id;
-            $souvenir->payment_method = 'ssl';
-            $souvenir->payment_status = 1;
-            $souvenir->card_holder_name = $request->card_holder_name;
-            $souvenir->card_no = $request->card_no;
-            $souvenir->card_expire_date = $request->card_expire_date;
-            $souvenir->card_cvv = $request->card_cvv;
+            // $souvenir->payment_method = 'ssl';
+            // $souvenir->payment_status = 1;
+            // $souvenir->card_holder_name = $request->card_holder_name;
+            // $souvenir->card_no = $request->card_no;
+            // $souvenir->card_expire_date = $request->card_expire_date;
+            // $souvenir->card_cvv = $request->card_cvv;
             $souvenir->total_amount = $request->total_amount;
-            $souvenir->status = 1;
+            // $souvenir->status = 1;
             $souvenir->save();
 
             return response()->json([
