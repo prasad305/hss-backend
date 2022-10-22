@@ -27,7 +27,7 @@ use App\Http\Controllers\API\QnaController;
 use App\Http\Controllers\API\StarGreetingController;
 use App\Http\Controllers\API\StarScheduleController;
 use App\Http\Controllers\API\CurrencyController;
-use App\Http\Controllers\API\Paytm\Payment;
+use App\Http\Controllers\API\Paytm\PaytmController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -126,11 +126,10 @@ Route::get('/guest/PromoVideos', [GuestController::class, 'getPromoVideo']);
 Route::get('/user/star_list', [UserController::class, 'star_list']);
 
 //after payTM redirect
-Route::post('paytm-callback/{redirectTo}/{user_id}/{type}/{event_id}', [Payment::class, 'paytmCallback']);
+Route::post('paytm-callback/{redirectTo}/{user_id}/{type}/{event_id}', [PaytmController::class, 'paytmCallback']);
 
 //paytm mobile
-Route::get('/paytm-status/{orderId}', [Payment::class, 'getPaytmStatus']);
-Route::get('/txn-token-mobile/{amount}', [Payment::class, 'txnTokenGenerate']);
+Route::get('/txn-token-mobile/{amount}', [PaytmController::class, 'txnTokenGenerate']);
 
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
@@ -140,10 +139,10 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     });
 
     //paytm make payment
-    Route::post('paytm-payment', [Payment::class, 'paymentNow']);
+    Route::post('paytm-payment', [PaytmController::class, 'paymentNow']);
 
     //paytm mobile payment success
-    Route::post('paytm-payment-success', [Payment::class, 'paytmPaymentSuccessForMobile']);
+    Route::post('paytm-payment-success', [PaytmController::class, 'paytmPaymentSuccessForMobile']);
 
     //post search
     Route::get('/search-post/{valu}', [UserController::class, 'searchPost']);
@@ -701,7 +700,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
 
     // Live Session Section
+    \Route::get('/star/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
     Route::get('/star/live-chat/{type}', [LiveChatController::class, 'liveChatList']);
+    Route::get('/star/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
     Route::get('/star/live-chat/details/{slug}', [LiveChatController::class, 'details']);
     Route::get('/star/live-chat/setApprove/{id}', [LiveChatController::class, 'setApproveLiveChat']);
     Route::get('/star/live-chat/setReject/{id}', [LiveChatController::class, 'set_reject_by_star']);

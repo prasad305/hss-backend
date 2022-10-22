@@ -203,7 +203,7 @@ class UserMobileAppController extends Controller
         $eventRegistration->card_holder_name = $request->card_holder_name;
         $eventRegistration->account_no = $request->card_number;
         $eventRegistration->payment_date = Carbon::now();
-        $eventRegistration->payment_status = 1;
+        $eventRegistration->payment_status = 0;
         $eventRegistration->save();
 
 
@@ -235,7 +235,8 @@ class UserMobileAppController extends Controller
             'modelName' => $modelName,
             'eventId' => $eventId,
             'message' => 'Success Registered',
-            'waletInfo' => $userWallet
+            'waletInfo' => $userWallet,
+            'payment_method' => $request->payment_method,
         ]);
     }
 

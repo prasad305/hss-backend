@@ -61,10 +61,11 @@ class QnaController extends Controller
             $activity->event_id = $event->id;
             $activity->event_registration_id = $eventRegistration->id;
             $activity->save();
-
+            $userWallet = Wallet::where('user_id', Auth::user()->id)->first();
             return response()->json([
                 'status' => 200,
                 'message' => 'QnA Successfully Registered ',
+                'waletInfo' => $userWallet,
             ]);
         }
 
@@ -100,10 +101,11 @@ class QnaController extends Controller
             $activity->event_id = $event->id;
             $activity->event_registration_id = $eventRegistration->id;
             $activity->save();
-
+            $userWallet = Wallet::where('user_id', Auth::user()->id)->first();
             return response()->json([
                 'status' => 200,
                 'message' => 'LiveChat Successfully Registered ',
+                'waletInfo' => $userWallet,
             ]);
         }
 

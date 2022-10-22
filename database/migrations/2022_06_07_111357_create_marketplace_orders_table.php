@@ -35,6 +35,7 @@ class CreateMarketplaceOrdersTable extends Migration
             $table->string('card_holder_name')->nullable();
             $table->string('account_no')->nullable();
             $table->timestamp('payment_date')->nullable();
+            $table->string('payment_method')->nullable();
             $table->string('payment_status')->nullable();
             $table->string('expire_date')->nullable();
             $table->integer('cvc')->nullable();
