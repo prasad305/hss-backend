@@ -3,20 +3,22 @@
 namespace App\Http\Controllers\API\Paytm;
 
 use App\Http\Controllers\Controller;
+use App\Models\Audition\AuditionParticipant;
+use Illuminate\Http\Request;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChatRegistration;
+use App\Models\MarketplaceOrder;
 use App\Models\MeetupEventRegistration;
 use App\Models\QnaRegistration;
 use App\Models\SouvenirApply;
 use App\Models\SouvenirPayment;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use paytm\paytmchecksum\PaytmChecksum;
 
-class Payment extends Controller
+class PaytmController extends Controller
 {
     //get paytm token
     public function paymentNow(Request $request)
@@ -83,6 +85,8 @@ class Payment extends Controller
                 Transaction::create([
                     'user_id' => $user_id,
                     'order_id' => $result->body->orderId,
+                    'event' => $request->type,
+                    'event_id' => $request->event_id,
                     'txn_id' => $result->body->txnId,
                     'txn_amount' => $result->body->txnAmount,
                     'currency' => "INR",
@@ -96,22 +100,31 @@ class Payment extends Controller
                 if ($type == 'livechat') {
                     $this->LiveChatRegUpdate($user_id, $event_id, "PayTm");
                 }
+                // audition regupdate
+                if ($type == 'audition') {
+                    $this->AuditionRegUpdate($user_id, $event_id, "PayTm");
+                }
+                if ($type == 'qna') {
+                    $this->qnaRegUpdate($user_id, $event_id, "PayTm");
+                }
+                if ($type == 'learningSession') {
+                    $this->learningSessionRegUpdate($user_id, $event_id, "PayTm");
+                }
+                if ($type == 'meetup') {
+                    $this->meetSessionRegUpdate($user_id, $event_id, "PayTm");
+                }
+                if ($type == 'marketplace') {
+                    $this->marketplaceUpdate($user_id, $event_id, "PayTm");
+                }
             }
             $orderId = $result->body->orderId;
-            $url = "http://localhost:3001/";
+            $url = "http://localhost:3000/";
             return  redirect()->away($url . $redirectTo);
         } else {
             return "Checksum Mismatched";
         }
     }
 
-    public function getPaytmStatus($orderId)
-    {
-        $paytmStatement =  Paytm::where('order_id', $orderId)->first();
-        return response()->json([
-            'paytmStatement' => $paytmStatement
-        ]);
-    }
     // for mobile app
 
     public function txnTokenGenerate($amount)
@@ -227,6 +240,19 @@ class Payment extends Controller
     // mobile payment end
 
 
+    // Auditions
+    public function AuditionRegUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = AuditionParticipant::where([['audition_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
     //for live chat
     public function LiveChatRegUpdate($user_id, $event_id, $method)
     {
@@ -257,7 +283,7 @@ class Payment extends Controller
     {
         try {
             $registerEvent = LearningSessionRegistration::where([['learning_session_id', $event_id], ['user_id', $user_id]])->first();
-            $registerEvent->publish_status = 1;
+            $registerEvent->payment_status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
         } catch (\Throwable $th) {
@@ -270,6 +296,18 @@ class Payment extends Controller
     {
         try {
             $registerEvent = MeetupEventRegistration::where([['meetup_event_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+    // Marketplace
+    public function marketplaceUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = MarketplaceOrder::where([['marketplace_id', $event_id], ['user_id', $user_id]])->first();
             $registerEvent->payment_status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
