@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChatRegistration;
+use App\Models\MarketplaceOrder;
 use App\Models\MeetupEventRegistration;
 use App\Models\QnaRegistration;
 use App\Models\SouvenirApply;
@@ -111,6 +112,9 @@ class PaytmController extends Controller
                 }
                 if ($type == 'meetup') {
                     $this->meetSessionRegUpdate($user_id, $event_id, "PayTm");
+                }
+                if ($type == 'marketplace') {
+                    $this->marketplaceUpdate($user_id, $event_id, "PayTm");
                 }
             }
             $orderId = $result->body->orderId;
@@ -292,6 +296,18 @@ class PaytmController extends Controller
     {
         try {
             $registerEvent = MeetupEventRegistration::where([['meetup_event_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+    // Marketplace
+    public function marketplaceUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = MarketplaceOrder::where([['marketplace_id', $event_id], ['user_id', $user_id]])->first();
             $registerEvent->payment_status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
