@@ -144,6 +144,7 @@ class UserMobileAppController extends Controller
             $eventRegistration = GreetingsRegistration::find($request->event_registration_id);
             $event = Greeting::find($eventId);
             $eventRegistration->status = 1;
+            $eventRegistration->amount = $event->cost;
             $activity->type = 'greeting';
 
             // $notification = Notification::find($request->notification_id);
