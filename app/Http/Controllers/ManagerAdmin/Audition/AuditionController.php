@@ -252,7 +252,7 @@ class AuditionController extends Controller
         $request_approval_pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 2]])->count();
 
 
-        return view('ManagerAdmin.audition.create', compact('auditionAdmins', 'subCategories', 'auditionRule', 'auditionRoundRule', 'auditionsStatus', 'live', 'pending', 'request_approval_pending'));
+        return view('ManagerAdmin.Audition.create', compact('auditionAdmins', 'subCategories', 'auditionRule', 'auditionRoundRule', 'auditionsStatus', 'live', 'pending', 'request_approval_pending'));
     }
 
     public function assignManpower($audition_id)
@@ -374,7 +374,7 @@ class AuditionController extends Controller
 
         $users = AuditionParticipant::where([['audition_id', $audition_id]])->get();
 
-        return view('ManagerAdmin.audition.register_users', compact('audition', 'users'));
+        return view('ManagerAdmin.Audition.register_users', compact('audition', 'users'));
     }
 
     public function getResultByRound($audition_id, $round_info_id, $type)
@@ -408,7 +408,7 @@ class AuditionController extends Controller
             'type' => $type,
         ];
 
-        return view('ManagerAdmin.audition.view_round_result', $data);
+        return view('ManagerAdmin.Audition.view_round_result', $data);
     }
 
     public function roundResultPublish(Request $request)
@@ -490,7 +490,7 @@ class AuditionController extends Controller
     public function getRoundInstruction($audition_id, $round_info_id)
     {
         $round_instruction =  AuditionRoundInstruction::where([['audition_id', $audition_id], ['round_info_id', $round_info_id]])->first();
-        return view('ManagerAdmin.audition.round_based_instruction', compact('round_instruction'));
+        return view('ManagerAdmin.Audition.round_based_instruction', compact('round_instruction'));
     }
 
     public function roundInstructionPublished($instruction_id)
