@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Paytm;
 
 use App\Http\Controllers\Controller;
 use App\Models\Audition\AuditionParticipant;
+use App\Models\GreetingsRegistration;
 use Illuminate\Http\Request;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
@@ -115,6 +116,15 @@ class PaytmController extends Controller
                 }
                 if ($type == 'marketplace') {
                     $this->marketplaceUpdate($user_id, $event_id, "PayTm");
+                }
+                if ($type == 'package') {
+                    $this->packageUpdate($type, $event_id, $user_id);
+                }
+                if ($type == 'lovebundel') {
+                    $this->packageUpdate($type, $event_id, $user_id);
+                }
+                if ($type == 'greeting') {
+                    $this->greetingUpdate($user_id, $event_id, "PayTm");
                 }
             }
             $orderId = $result->body->orderId;
@@ -303,11 +313,43 @@ class PaytmController extends Controller
             //throw $th;
         }
     }
+    public function greetingUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->status = 2;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
     // Marketplace
     public function marketplaceUpdate($user_id, $event_id, $method)
     {
         try {
             $registerEvent = MarketplaceOrder::where([['marketplace_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+    // Marketplace
+    public function packageUpdate($type, $event_id, $user_id)
+    {
+        $walletStore = userPackageWalletStore($type, $event_id, $user_id);
+    }
+    public function souvenirUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $statusChangeSouvenir = SouvenirApply::find($event_id);
+            $statusChangeSouvenir->status = 2;
+            $statusChangeSouvenir->save();
+
+            $registerEvent = SouvenirPayment::where([['souvenir_apply_id', $event_id], ['user_id', $user_id]])->first();
             $registerEvent->payment_status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
