@@ -115,6 +115,9 @@ class PaytmController extends Controller
                 if ($type == 'meetup') {
                     $this->meetSessionRegUpdate($user_id, $event_id, "PayTm");
                 }
+                if ($type == 'souvenir') {
+                    $this->souvenirUpdate($user_id, $event_id, "PayTm");
+                }
                 if ($type == 'marketplace') {
                     $this->marketplaceUpdate($user_id, $event_id, "PayTm");
                 }
