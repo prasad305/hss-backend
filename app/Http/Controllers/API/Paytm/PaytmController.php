@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Paytm;
 
 use App\Http\Controllers\Controller;
 use App\Models\Audition\AuditionParticipant;
+use App\Models\GeneralPostPayment;
 use App\Models\GreetingsRegistration;
 use Illuminate\Http\Request;
 use App\Models\LearningSession;
@@ -125,6 +126,9 @@ class PaytmController extends Controller
                 }
                 if ($type == 'greeting') {
                     $this->greetingUpdate($user_id, $event_id, "PayTm");
+                }
+                if ($type == 'generalpost') {
+                    $this->generalPostUpdate($event_id, $user_id, "PayTm", $result->body->txnAmount);
                 }
             }
             $orderId = $result->body->orderId;
@@ -337,10 +341,22 @@ class PaytmController extends Controller
             //throw $th;
         }
     }
-    // Marketplace
+    // Package
     public function packageUpdate($type, $event_id, $user_id)
     {
-        $walletStore = userPackageWalletStore($type, $event_id, $user_id);
+        userPackageWalletStore($type, $event_id, $user_id);
+    }
+    // General post
+    public function generalPostUpdate($event_id, $user_id, $method, $fee)
+    {
+        GeneralPostPayment::create([
+
+            'post_id' => $event_id,
+            'user_id' => $user_id,
+            'payment_method' => $method,
+            'amount' => $fee,
+            'status' => 1,
+        ]);
     }
     public function souvenirUpdate($user_id, $event_id, $method)
     {
