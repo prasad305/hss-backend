@@ -248,9 +248,12 @@ class PaymentController extends Controller
             if ($request->modelName == 'souvenir') {
                 return $this->souvenirRegUpdate($request->souvenir_apply_id, $request->souvenir_create_id, $request->TXNAMOUNT, "PayTm-mobile");
             }
+            if ($request->modelName == 'generalpost') {
+                return $this->generalPostUpdateMobile($request->eventId, $user->id, "PayTm-mobile", $request->TXNAMOUNT);
+            }
 
 
-            return "success data recived" . "__" . $request->modelName;
+            return "success data received" . "__" . $request->modelName;
         }
     }
     //paytem moble end
@@ -434,6 +437,21 @@ class PaymentController extends Controller
     }
 
     // General post
+    public function generalPostUpdateMobile($event_id, $user_id, $method, $fee)
+    {
+        // return 'hit inside update';
+        try {
+            $generalPostPayment = new GeneralPostPayment();
+            $generalPostPayment->post_id = $event_id;
+            $generalPostPayment->user_id = auth('sanctum')->user()->id;
+            $generalPostPayment->payment_method = $method;
+            $generalPostPayment->amount = $fee;
+            $generalPostPayment->status = 1;
+            $generalPostPayment->save();
+        }  catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
     public function generalPostUpdate($event_id, $user_id, $method, $fee)
     {
         GeneralPostPayment::create([

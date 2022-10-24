@@ -246,12 +246,6 @@ class MarketplaceController extends Controller
                 $marketplace->save();
 
 
-                $activity = new Activity();
-                $activity->user_id = auth('sanctum')->user()->id;
-                $activity->event_id = $marketplace->id;
-                $activity->event_registration_id =  $data->id;
-                $activity->type = 'marketplace';
-                $activity->save();
 
 
                 return response()->json([
