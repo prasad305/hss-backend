@@ -253,6 +253,7 @@ class PaymentController extends Controller
             return "success data recived" . "__" . $request->modelName;
         }
     }
+
     //paytem moble end
     //---------------------paytm end--------------------------
 
@@ -260,12 +261,16 @@ class PaymentController extends Controller
     //-------------------stripe start------------------------
     public function stripePaymentMake(Request $request)
     {
-        $public_key = "pk_test_51LtSJLGiXzKYuOYkQjOQcod5ZhxNxnsyIezQUgDHHC5BPSr1JVrOeCrBUwdG1owKJEzFjh9V9CsXtRB9RTzEtaU200Kr8oNp8P";
-        Stripe::setApiKey("sk_test_51LtSJLGiXzKYuOYkMt700dVTWeL5RG1a0e870EDiLRDuzgOkT7S0ylsMKUD2epCiLS5CvZD4imEFR7xDwuiWp7xZ00gQ3CCxeJ");
+        $public_key = "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh";
+        Stripe::setApiKey("sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX");
+
+        // Use an existing Customer ID if this is a returning customer.
+        $customer = \Stripe\Customer::create();
 
         try {
             $paymentIntent = PaymentIntent::create([
-                'amount' =>  $request->amount,
+                'amount' =>  $request->amount * 100,
+                'customer' => $customer->id,
                 'currency' => 'usd',
                 'description' => "This is test payment",
                 'receipt_email' => "srabon.tfp@gmail.com",

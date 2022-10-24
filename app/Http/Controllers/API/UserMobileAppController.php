@@ -129,18 +129,20 @@ class UserMobileAppController extends Controller
         }
         if ($modelName == 'qna') {
             $eventRegistration = new QnaRegistration();
-            $event = QnA::find($eventId);
-            $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->time_interval)->format('H:i:s');
-            $eventRegistration->qna_id = $eventId;
-            $eventRegistration->amount = $request->fee;
-            $eventRegistration->room_id = Str::random(20);
-            $eventRegistration->qna_date = $event->event_date;
-            $eventRegistration->publish_status = 1;
-            $eventRegistration->qna_start_time = Carbon::parse($request->start_time)->format('H:i:s');
-            $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
-            $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
-            $activity->type = 'qna';
-            $event->update();
+            // if (!QnaRegistration::where([['user_id', auth()->user()->id], ['qna_id', $eventId]])->exists()) {
+            //     $event = QnA::find($eventId);
+            //     $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->time_interval)->format('H:i:s');
+            //     $eventRegistration->qna_id = $eventId;
+            //     $eventRegistration->amount = $request->fee;
+            //     $eventRegistration->room_id = Str::random(20);
+            //     $eventRegistration->qna_date = $event->event_date;
+            //     $eventRegistration->publish_status = 1;
+            //     $eventRegistration->qna_start_time = Carbon::parse($request->start_time)->format('H:i:s');
+            //     $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
+            //     $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
+            //     $activity->type = 'qna';
+            //     $event->update();
+            // }
         }
 
         if ($modelName == 'greeting') {
@@ -216,13 +218,15 @@ class UserMobileAppController extends Controller
          */
 
         if ($modelName == 'qna') {
-            $myChatList = new MyChatList();
-            $myChatList->title =  $event->title;
-            $myChatList->type =  'qna';
-            $myChatList->qna_id =  $eventRegistration->id;
-            $myChatList->user_id =  Auth()->user()->id;
-            $myChatList->status =  1;
-            $myChatList->save();
+            if (!QnaRegistration::where([['user_id', auth()->user()->id], ['qna_id', $eventId]])->exists()) {
+                $myChatList = new MyChatList();
+                $myChatList->title =  $event->title;
+                $myChatList->type =  'qna';
+                $myChatList->qna_id =  $eventRegistration->id;
+                $myChatList->user_id =  Auth()->user()->id;
+                $myChatList->status =  1;
+                $myChatList->save();
+            }
         }
 
         $activity->user_id = $user->id;
@@ -831,7 +835,7 @@ class UserMobileAppController extends Controller
     /**
      * oxygenReplyVideo
      */
-    public function oxygenReplyVideo(Request $request) 
+    public function oxygenReplyVideo(Request $request)
     {
         try {
             if ($request->base64) {
@@ -846,14 +850,13 @@ class UserMobileAppController extends Controller
             $videoPath = $folder_path . $image_new_name;
 
             file_put_contents($videoPath, base64_decode($decodedBase64, true));
-            
-            if($videoPath)
-            {
+
+            if ($videoPath) {
                 // return $request->oxy_audition_id;
                 $oxygenReply = new AuditionOxygenReplyVideo();
 
                 $oxygenReply->audition_id = $request->oxy_audition_id;
-                
+
                 $oxygenReply->round_info_id = $request->oxy_round_info_id;
                 // return;
                 $oxygenReply->reply_video = $videoPath;
@@ -878,9 +881,6 @@ class UserMobileAppController extends Controller
                     "path" => $videoPath
                 ]);
             }
-
-
-            
         } catch (\Exception $exception) {
             return response()->json([
                 "message" => "field required, invalid formate !",
