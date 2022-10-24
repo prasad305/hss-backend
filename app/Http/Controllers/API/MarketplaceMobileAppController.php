@@ -31,6 +31,7 @@ class MarketplaceMobileAppController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Order Stored Successfully',
+                'marketplaceOrder' => $marketplaceOrder,
             ]);
         } else {
             return response()->json([
@@ -67,7 +68,7 @@ class MarketplaceMobileAppController extends Controller
     public function checkPaymentUncompletedOrder($marketplace_id ,Marketplace $marketplace){
         $marketplace = $marketplace->find($marketplace_id);
 
-        $marketplaceOrder = MarketplaceOrder::where([['status', null],['marketplace_id',$marketplace_id]])->first();
+        $marketplaceOrder = MarketplaceOrder::where([['status', null],['marketplace_id',$marketplace_id],['user_id', $Auth::user()->id]])->first();
         $isHavePaymentUncompletedOrder = false;
         if($marketplaceOrder){
             $isHavePaymentUncompletedOrder = true;
