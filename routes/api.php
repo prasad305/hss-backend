@@ -33,6 +33,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\SettingsController;
 use App\Http\Controllers\API\SdkController\SdkController;
+use App\Http\Controllers\API\VirtualtourController;
 
 //video for SDK
 Route::get('/sdk/get-token', [SdkController::class, 'getToken']);
@@ -51,7 +52,11 @@ Route::get('policy', [SettingsController::class, 'policy']);
 Route::get('faq', [SettingsController::class, 'faq']);
 Route::get('product-purchase', [SettingsController::class, 'productPurchase']);
 Route::get('terms-condition', [SettingsController::class, 'termsCondition']);
-Route::get('refund', [SettingsController::class, 'refund']);
+
+
+//Virtual Tour
+Route::get('virtualtourforweb', [VirtualtourController::class, 'virtualtourforweb']);
+Route::get('virtualtourforphone', [VirtualtourController::class, 'virtualtourforphone']);
 
 // Authentication API
 Route::post('register', [AuthController::class, 'register']);
