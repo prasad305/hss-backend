@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\API\Paytm;
+namespace App\Http\Controllers\API\Payment;
 
 use App\Http\Controllers\Controller;
-use App\Models\Audition\AuditionParticipant;
 use Illuminate\Http\Request;
+use App\Models\Audition\AuditionParticipant;
+use App\Models\GeneralPostPayment;
+use App\Models\GreetingsRegistration;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChatRegistration;
@@ -17,9 +19,12 @@ use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use paytm\paytmchecksum\PaytmChecksum;
+use Stripe\Stripe;
+use Stripe\PaymentIntent;
 
-class PaytmController extends Controller
+class PaymentController extends Controller
 {
+    //---------------------paytm start--------------------------
     //get paytm token
     public function paymentNow(Request $request)
     {
@@ -113,8 +118,23 @@ class PaytmController extends Controller
                 if ($type == 'meetup') {
                     $this->meetSessionRegUpdate($user_id, $event_id, "PayTm");
                 }
+                if ($type == 'souvenir') {
+                    $this->souvenirUpdate($user_id, $event_id, "PayTm");
+                }
                 if ($type == 'marketplace') {
                     $this->marketplaceUpdate($user_id, $event_id, "PayTm");
+                }
+                if ($type == 'package') {
+                    $this->packageUpdate($type, $event_id, $user_id);
+                }
+                if ($type == 'lovebundel') {
+                    $this->packageUpdate($type, $event_id, $user_id);
+                }
+                if ($type == 'greeting') {
+                    $this->greetingUpdate($user_id, $event_id, "PayTm");
+                }
+                if ($type == 'generalpost') {
+                    $this->generalPostUpdate($event_id, $user_id, "PayTm", $result->body->txnAmount);
                 }
             }
             $orderId = $result->body->orderId;
@@ -125,7 +145,7 @@ class PaytmController extends Controller
         }
     }
 
-    // for mobile app
+    //paytem for mobile start
 
     public function txnTokenGenerate($amount)
     {
@@ -233,13 +253,50 @@ class PaytmController extends Controller
             return "success data recived" . "__" . $request->modelName;
         }
     }
+    //paytem moble end
+    //---------------------paytm end--------------------------
 
 
+    //-------------------stripe start------------------------
+    public function stripePaymentMake(Request $request)
+    {
+        $public_key = "pk_test_51LtSJLGiXzKYuOYkQjOQcod5ZhxNxnsyIezQUgDHHC5BPSr1JVrOeCrBUwdG1owKJEzFjh9V9CsXtRB9RTzEtaU200Kr8oNp8P";
+        Stripe::setApiKey("sk_test_51LtSJLGiXzKYuOYkMt700dVTWeL5RG1a0e870EDiLRDuzgOkT7S0ylsMKUD2epCiLS5CvZD4imEFR7xDwuiWp7xZ00gQ3CCxeJ");
+
+        try {
+            $paymentIntent = PaymentIntent::create([
+                'amount' =>  $request->amount,
+                'currency' => 'usd',
+                'description' => "This is test payment",
+                'receipt_email' => "srabon.tfp@gmail.com",
+                'automatic_payment_methods' => [
+                    'enabled' => true,
+                ],
+            ]);
+
+            $output = [
+                'clientSecret' => $paymentIntent->client_secret,
+                'public_key' => $public_key
+            ];
+
+            return response()->json($output);
+        } catch (Error $e) {
+
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function stripePaymentSuccess($event_id, $event_type)
+    {
+        Transaction::create([
+            'user_id' => auth()->user()->id,
+            'resp_msg' => "stripe-payment",
+            'status' => "paid",
+        ]);
+    }
 
 
-    // mobile payment end
-
-
+    //--------------------stripe end---------------------------
     // Auditions
     public function AuditionRegUpdate($user_id, $event_id, $method)
     {
@@ -283,7 +340,7 @@ class PaytmController extends Controller
     {
         try {
             $registerEvent = LearningSessionRegistration::where([['learning_session_id', $event_id], ['user_id', $user_id]])->first();
-            $registerEvent->payment_status = 1;
+            $registerEvent->publish_status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
         } catch (\Throwable $th) {
@@ -316,7 +373,7 @@ class PaytmController extends Controller
         }
     }
 
-    //for souvenir
+    //for souvenir for mobile
     public function souvenirRegUpdate($souvenir_apply_id, $souvenir_create_id, $total_amount, $payment_method)
     {
         try {
@@ -337,5 +394,55 @@ class PaytmController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
         }
+    }
+
+    //for souvenir for web
+    public function souvenirUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $statusChangeSouvenir = SouvenirApply::find($event_id);
+            $statusChangeSouvenir->status = 2;
+            $statusChangeSouvenir->save();
+
+            $registerEvent = SouvenirPayment::where([['souvenir_apply_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    // Package
+    public function packageUpdate($type, $event_id, $user_id)
+    {
+        userPackageWalletStore($type, $event_id, $user_id);
+    }
+
+    //greeting update
+    public function greetingUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->status = 2;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    // General post
+    public function generalPostUpdate($event_id, $user_id, $method, $fee)
+    {
+        GeneralPostPayment::create([
+
+            'post_id' => $event_id,
+            'user_id' => $user_id,
+            'payment_method' => $method,
+            'amount' => $fee,
+            'status' => 1,
+        ]);
     }
 }

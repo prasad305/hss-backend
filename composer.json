@@ -24,6 +24,7 @@
         "realrashid/sweet-alert": "^4.1",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "stevebauman/location": "^6.5",
+        "stripe/stripe-php": "^9.8",
         "vonage/client": "^2.4"
     },
     "require-dev": {

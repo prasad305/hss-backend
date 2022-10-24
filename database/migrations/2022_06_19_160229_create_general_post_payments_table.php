@@ -15,13 +15,10 @@ class CreateGeneralPostPaymentsTable extends Migration
     {
         Schema::create('general_post_payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('post_id');
-            $table->unsignedBigInteger('user_id');
-            $table->string('name');
-            $table->double('amount');
-            $table->integer('card_number');
-            $table->integer('ccv');
-            $table->string('expiry_date');
+            $table->unsignedBigInteger('post_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->double('amount')->nullable();
+            $table->string('payment_method')->nullable();
             $table->boolean('status')->default(0);
             $table->timestamps();
         });
