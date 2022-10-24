@@ -38,7 +38,7 @@
 
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-3">
                     <div class="card px-3 py-3">
                         <div class="d-flex mb-3 align-content-center  ">
                             <div class="">
@@ -159,7 +159,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                                                                                                                                                                                                                                                                                                                                    success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })
