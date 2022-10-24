@@ -237,35 +237,35 @@ Super Admin
     } */
     </style>
 <script>
-    const OldtogglePassword = document.querySelector(".togglePasswordOld");
-    const Oldpassword = document.querySelector(".oldPassword");
+    const OldtogglePassword = document.querySelector("#togglePasswordOld");
+    const Oldpassword = document.querySelector("#oldPassword");
 
-    const NewtogglePassword = document.querySelector(".togglePasswordNew");
-    const password = document.querySelector(".passwordNew");
+    const NewtogglePassword = document.querySelector("#togglePasswordNew");
+    const password = document.querySelector("#passwordNew");
 
-    const ConfirmtogglePassword = document.querySelector(".togglePasswordConfirm");
-    const Confirmpassword = document.querySelector(".confirmPassword");
+    const ConfirmtogglePassword = document.querySelector("#togglePasswordConfirm");
+    const Confirmpassword = document.querySelector("#confirmPassword");
 
-    togglePasswordOld.addEventListener("click", function () {
+    OldtogglePassword.addEventListener("click", function () {
         // toggle the type attribute
-        const type = oldPassword.getAttribute("type") === "password" ? "text" : "password";
-        oldPassword.setAttribute("type", type);
+        const type = Oldpassword.getAttribute("type") === "password" ? "text" : "password";
+        Oldpassword.setAttribute("type", type);
 
         // toggle the icon
         this.classList.toggle("bi-eye");
     });
-    togglePasswordNew.addEventListener("click", function () {
+    NewtogglePassword.addEventListener("click", function () {
         // toggle the type attribute
-        const type = passwordNew.getAttribute("type") === "password" ? "text" : "password";
-        passwordNew.setAttribute("type", type);
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
 
         // toggle the icon
         this.classList.toggle("bi-eye");
     });
-    togglePasswordConfirm.addEventListener("click", function () {
+    ConfirmtogglePassword.addEventListener("click", function () {
         // toggle the type attribute
-        const type = passwordNew.getAttribute("type") === "password" ? "text" : "password";
-        confirmPassword.setAttribute("type", type);
+        const type = Confirmpassword.getAttribute("type") === "password" ? "text" : "password";
+        Confirmpassword.setAttribute("type", type);
 
         // toggle the icon
         this.classList.toggle("bi-eye");

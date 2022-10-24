@@ -33,6 +33,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\SettingsController;
 use App\Http\Controllers\API\SdkController\SdkController;
+use App\Http\Controllers\API\VirtualtourController;
 
 //video for SDK
 Route::get('/sdk/get-token', [SdkController::class, 'getToken']);
@@ -51,7 +52,11 @@ Route::get('policy', [SettingsController::class, 'policy']);
 Route::get('faq', [SettingsController::class, 'faq']);
 Route::get('product-purchase', [SettingsController::class, 'productPurchase']);
 Route::get('terms-condition', [SettingsController::class, 'termsCondition']);
-Route::get('refund', [SettingsController::class, 'refund']);
+
+
+//Virtual Tour
+Route::get('virtualtourforweb', [VirtualtourController::class, 'virtualtourforweb']);
+Route::get('virtualtourforphone', [VirtualtourController::class, 'virtualtourforphone']);
 
 // Authentication API
 Route::post('register', [AuthController::class, 'register']);
@@ -158,6 +163,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user_info', [AuthController::class, 'user_info']);
     Route::post('/user_info_update', [AuthController::class, 'user_info_update']);
     Route::post('/user_info_update/star_admin', [AuthController::class, 'star_admin_info_update']);
+    Route::post('/user_info_update/star_admin_info', [AuthController::class, 'star_admin_info']);
     Route::post('/user_otherInfo_update', [AuthController::class, 'user_OtherInfo_update']);
     Route::get('/user_data/{id}', [AuthController::class, 'user_data']);
 
@@ -350,8 +356,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/PromoVideos', [UserController::class, 'getPromoVideo']);
 
     // User Profile
-    Route::post('/user/coverUpdate', [UserController::class, 'updateCover']);
-    Route::post('/user/profileUpdate', [UserController::class, 'updateProfile']);
+    Route::post('/user/coverUpdate/{id}', [UserController::class, 'updateCover']);
+    Route::post('/user/profileUpdate/{id}', [UserController::class, 'updateProfile']);
 
     // Souviner Section
     Route::get('/user/souviner/view/{starId}', [SouvinerController::class, 'getUserSouvenir']);
