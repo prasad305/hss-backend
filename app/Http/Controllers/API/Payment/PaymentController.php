@@ -255,11 +255,15 @@ class PaymentController extends Controller
             if ($request->modelName == 'souvenir') {
                 return $this->souvenirRegUpdate($request->souvenir_apply_id, $request->souvenir_create_id, $request->TXNAMOUNT, "PayTm-mobile");
             }
+            if ($request->modelName == 'generalpost') {
+                return $this->generalPostUpdateMobile($request->eventId, $user->id, "PayTm-mobile", $request->TXNAMOUNT);
+            }
 
 
-            return "success data recived" . "__" . $request->modelName;
+            return "success data received" . "__" . $request->modelName;
         }
     }
+
     //paytem moble end
     //---------------------paytm end--------------------------
 
@@ -267,12 +271,16 @@ class PaymentController extends Controller
     //-------------------stripe start------------------------
     public function stripePaymentMake(Request $request)
     {
-        $public_key = "pk_test_51LtSJLGiXzKYuOYkQjOQcod5ZhxNxnsyIezQUgDHHC5BPSr1JVrOeCrBUwdG1owKJEzFjh9V9CsXtRB9RTzEtaU200Kr8oNp8P";
-        Stripe::setApiKey("sk_test_51LtSJLGiXzKYuOYkMt700dVTWeL5RG1a0e870EDiLRDuzgOkT7S0ylsMKUD2epCiLS5CvZD4imEFR7xDwuiWp7xZ00gQ3CCxeJ");
+        $public_key = "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh";
+        Stripe::setApiKey("sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX");
+
+        // Use an existing Customer ID if this is a returning customer.
+        $customer = \Stripe\Customer::create();
 
         try {
             $paymentIntent = PaymentIntent::create([
-                'amount' =>  $request->amount,
+                'amount' =>  $request->amount * 100,
+                'customer' => $customer->id,
                 'currency' => 'usd',
                 'description' => "This is test payment",
                 'receipt_email' => "srabon.tfp@gmail.com",
@@ -441,6 +449,21 @@ class PaymentController extends Controller
     }
 
     // General post
+    public function generalPostUpdateMobile($event_id, $user_id, $method, $fee)
+    {
+        // return 'hit inside update';
+        try {
+            $generalPostPayment = new GeneralPostPayment();
+            $generalPostPayment->post_id = $event_id;
+            $generalPostPayment->user_id = auth('sanctum')->user()->id;
+            $generalPostPayment->payment_method = $method;
+            $generalPostPayment->amount = $fee;
+            $generalPostPayment->status = 1;
+            $generalPostPayment->save();
+        }  catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
     public function generalPostUpdate($event_id, $user_id, $method, $fee)
     {
         GeneralPostPayment::create([
