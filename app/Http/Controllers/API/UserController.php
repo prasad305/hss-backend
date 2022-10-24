@@ -954,6 +954,31 @@ class UserController extends Controller
     }
 
 
+    public function registeredSingleMeetup($event_id)
+    {
+        $regMeetup = MeetupEventRegistration::where([['user_id', auth('sanctum')->user()->id], ['meetup_event_id', $event_id]])->first();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'event' => $regMeetup,
+        ]);
+    }
+
+
+    public function registeredSingleLearning($event_id)
+    {
+        $regData = LearningSessionRegistration::where([['user_id', auth('sanctum')->user()->id], ['learning_session_id', $event_id]])->first();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'event' => $regData,
+        ]);
+    }
+
+
+
     public function getAllLiveChatEvent()
     {
         $livechats = LiveChat::orderBy('id', 'DESC')->get();

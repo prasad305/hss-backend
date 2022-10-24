@@ -27,7 +27,7 @@ use App\Http\Controllers\API\QnaController;
 use App\Http\Controllers\API\StarGreetingController;
 use App\Http\Controllers\API\StarScheduleController;
 use App\Http\Controllers\API\CurrencyController;
-use App\Http\Controllers\API\Paytm\PaytmController;
+use App\Http\Controllers\API\Payment\PaymentController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -126,10 +126,10 @@ Route::get('/guest/PromoVideos', [GuestController::class, 'getPromoVideo']);
 Route::get('/user/star_list', [UserController::class, 'star_list']);
 
 //after payTM redirect
-Route::post('paytm-callback/{redirectTo}/{user_id}/{type}/{event_id}', [PaytmController::class, 'paytmCallback']);
+Route::post('paytm-callback/{redirectTo}/{user_id}/{type}/{event_id}', [PaymentController::class, 'paytmCallback']);
 
 //paytm mobile
-Route::get('/txn-token-mobile/{amount}', [PaytmController::class, 'txnTokenGenerate']);
+Route::get('/txn-token-mobile/{amount}', [PaymentController::class, 'txnTokenGenerate']);
 
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
@@ -139,10 +139,15 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     });
 
     //paytm make payment
-    Route::post('paytm-payment', [PaytmController::class, 'paymentNow']);
+    Route::post('paytm-payment', [PaymentController::class, 'paymentNow']);
 
     //paytm mobile payment success
-    Route::post('paytm-payment-success', [PaytmController::class, 'paytmPaymentSuccessForMobile']);
+    Route::post('paytm-payment-success', [PaymentController::class, 'paytmPaymentSuccessForMobile']);
+
+
+    //stripe make payment
+    Route::post('/stripe-payment-make', [PaymentController::class, 'stripePaymentMake']);
+    Route::get('/stripe-payment-success/{event_id}/{event_type}', [PaymentController::class, 'stripePaymentSuccess']);
 
     //post search
     Route::get('/search-post/{valu}', [UserController::class, 'searchPost']);
@@ -181,6 +186,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
 
     Route::get('/user/registerMeestup', [UserController::class, 'registeredMeetup']);
+    Route::get('/user/registerMeestup-single/{event_id}', [UserController::class, 'registeredSingleMeetup']);
+    Route::get('/user/learning-single/{event_id}', [UserController::class, 'registeredSingleLearning']);
     Route::get('/user/registerLivechat', [UserController::class, 'registeredLivechat']);
     Route::get('/user/registerLearningSession', [UserController::class, 'registeredLearningSession']);
     Route::get('/user/registerGreetings', [UserController::class, 'registerGreetings']);
