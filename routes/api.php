@@ -701,7 +701,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
 
     // Live Session Section
-    \Route::get('/star/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
+    Route::get('/star/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
     Route::get('/star/live-chat/{type}', [LiveChatController::class, 'liveChatList']);
     Route::get('/star/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
     Route::get('/star/live-chat/details/{slug}', [LiveChatController::class, 'details']);

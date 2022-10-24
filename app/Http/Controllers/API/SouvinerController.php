@@ -598,41 +598,18 @@ class SouvinerController extends Controller
     public function userSouvenirPaymentStore(Request $request)
     {
 
-        $validator = Validator::make($request->all(), [
-            'card_holder_name' => 'required',
-            'card_no' => 'required',
-            'card_expire_date' => 'required',
-            'card_cvv' => 'required',
+
+        $souvenir = new SouvenirPayment();
+
+        $souvenir->souvenir_create_id = $request->souvenir_create_id;
+        $souvenir->souvenir_apply_id = $request->souvenir_apply_id;
+        $souvenir->user_id = auth('sanctum')->user()->id;
+        $souvenir->total_amount = $request->total_amount;
+        $souvenir->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Souvenir Payment Successfully'
         ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'validation_errors' => $validator->errors(),
-            ]);
-        } else {
-            $statusChangeSouvenir = SouvenirApply::find($request->souvenir_apply_id);
-            $statusChangeSouvenir->status = 2;
-            $statusChangeSouvenir->save();
-
-            $souvenir = new SouvenirPayment();
-
-            $souvenir->souvenir_create_id = $request->souvenir_create_id;
-            $souvenir->souvenir_apply_id = $request->souvenir_apply_id;
-            $souvenir->user_id = auth('sanctum')->user()->id;
-            // $souvenir->payment_method = 'ssl';
-            // $souvenir->payment_status = 1;
-            // $souvenir->card_holder_name = $request->card_holder_name;
-            // $souvenir->card_no = $request->card_no;
-            // $souvenir->card_expire_date = $request->card_expire_date;
-            // $souvenir->card_cvv = $request->card_cvv;
-            $souvenir->total_amount = $request->total_amount;
-            // $souvenir->status = 1;
-            $souvenir->save();
-
-            return response()->json([
-                'status' => 200,
-                'message' => 'Souvenir Payment Successfully'
-            ]);
-        }
     }
 }
