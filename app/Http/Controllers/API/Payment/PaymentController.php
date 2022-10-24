@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\API\Paytm;
+namespace App\Http\Controllers\API\Payment;
 
 use App\Http\Controllers\Controller;
-use App\Models\Audition\AuditionParticipant;
 use Illuminate\Http\Request;
+use App\Models\Audition\AuditionParticipant;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChatRegistration;
@@ -17,9 +17,12 @@ use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use paytm\paytmchecksum\PaytmChecksum;
+use Stripe\Stripe;
+use Stripe\PaymentIntent;
 
-class PaytmController extends Controller
+class PaymentController extends Controller
 {
+    //---------------------paytm start--------------------------
     //get paytm token
     public function paymentNow(Request $request)
     {
@@ -125,7 +128,7 @@ class PaytmController extends Controller
         }
     }
 
-    // for mobile app
+    //paytem for mobile start
 
     public function txnTokenGenerate($amount)
     {
@@ -233,13 +236,50 @@ class PaytmController extends Controller
             return "success data recived" . "__" . $request->modelName;
         }
     }
+    //paytem moble end
+    //---------------------paytm end--------------------------
 
 
+    //-------------------stripe start------------------------
+    public function stripePaymentMake(Request $request)
+    {
+        $public_key = "pk_test_51LtSJLGiXzKYuOYkQjOQcod5ZhxNxnsyIezQUgDHHC5BPSr1JVrOeCrBUwdG1owKJEzFjh9V9CsXtRB9RTzEtaU200Kr8oNp8P";
+        Stripe::setApiKey("sk_test_51LtSJLGiXzKYuOYkMt700dVTWeL5RG1a0e870EDiLRDuzgOkT7S0ylsMKUD2epCiLS5CvZD4imEFR7xDwuiWp7xZ00gQ3CCxeJ");
+
+        try {
+            $paymentIntent = PaymentIntent::create([
+                'amount' =>  $request->amount,
+                'currency' => 'usd',
+                'description' => "This is test payment",
+                'receipt_email' => "srabon.tfp@gmail.com",
+                'automatic_payment_methods' => [
+                    'enabled' => true,
+                ],
+            ]);
+
+            $output = [
+                'clientSecret' => $paymentIntent->client_secret,
+                'public_key' => $public_key
+            ];
+
+            return response()->json($output);
+        } catch (Error $e) {
+
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function stripePaymentSuccess($event_id, $event_type)
+    {
+        Transaction::create([
+            'user_id' => auth()->user()->id,
+            'resp_msg' => "stripe-payment",
+            'status' => "paid",
+        ]);
+    }
 
 
-    // mobile payment end
-
-
+    //--------------------stripe end---------------------------
     // Auditions
     public function AuditionRegUpdate($user_id, $event_id, $method)
     {
@@ -283,7 +323,7 @@ class PaytmController extends Controller
     {
         try {
             $registerEvent = LearningSessionRegistration::where([['learning_session_id', $event_id], ['user_id', $user_id]])->first();
-            $registerEvent->payment_status = 1;
+            $registerEvent->publish_status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
         } catch (\Throwable $th) {
