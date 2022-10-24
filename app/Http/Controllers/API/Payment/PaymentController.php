@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API\Payment;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Audition\AuditionParticipant;
+use App\Models\GeneralPostPayment;
+use App\Models\GreetingsRegistration;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChatRegistration;
@@ -116,8 +118,23 @@ class PaymentController extends Controller
                 if ($type == 'meetup') {
                     $this->meetSessionRegUpdate($user_id, $event_id, "PayTm");
                 }
+                if ($type == 'souvenir') {
+                    $this->souvenirUpdate($user_id, $event_id, "PayTm");
+                }
                 if ($type == 'marketplace') {
                     $this->marketplaceUpdate($user_id, $event_id, "PayTm");
+                }
+                if ($type == 'package') {
+                    $this->packageUpdate($type, $event_id, $user_id);
+                }
+                if ($type == 'lovebundel') {
+                    $this->packageUpdate($type, $event_id, $user_id);
+                }
+                if ($type == 'greeting') {
+                    $this->greetingUpdate($user_id, $event_id, "PayTm");
+                }
+                if ($type == 'generalpost') {
+                    $this->generalPostUpdate($event_id, $user_id, "PayTm", $result->body->txnAmount);
                 }
             }
             $orderId = $result->body->orderId;
@@ -356,7 +373,7 @@ class PaymentController extends Controller
         }
     }
 
-    //for souvenir
+    //for souvenir for mobile
     public function souvenirRegUpdate($souvenir_apply_id, $souvenir_create_id, $total_amount, $payment_method)
     {
         try {
@@ -377,5 +394,55 @@ class PaymentController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
         }
+    }
+
+    //for souvenir for web
+    public function souvenirUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $statusChangeSouvenir = SouvenirApply::find($event_id);
+            $statusChangeSouvenir->status = 2;
+            $statusChangeSouvenir->save();
+
+            $registerEvent = SouvenirPayment::where([['souvenir_apply_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    // Package
+    public function packageUpdate($type, $event_id, $user_id)
+    {
+        userPackageWalletStore($type, $event_id, $user_id);
+    }
+
+    //greeting update
+    public function greetingUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->status = 2;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    // General post
+    public function generalPostUpdate($event_id, $user_id, $method, $fee)
+    {
+        GeneralPostPayment::create([
+
+            'post_id' => $event_id,
+            'user_id' => $user_id,
+            'payment_method' => $method,
+            'amount' => $fee,
+            'status' => 1,
+        ]);
     }
 }
