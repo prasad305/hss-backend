@@ -2,8 +2,13 @@
 
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\JuryGroup;
+use App\Models\LoveReactPrice;
+use App\Models\Package;
 use App\Models\StaticOption;
 use App\Models\User;
+use App\Models\Wallet;
+use App\Models\WalletHistory;
+use App\Models\WalletPayment;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -236,5 +241,87 @@ if (!function_exists('random_code')) {
 
         // return $request['roomId']; //for live
 
+    }
+
+
+
+    function userPackageWalletStore($type, $event_id, $user_id)
+    {
+
+        $walletPayment = new WalletPayment();
+        $walletPayment->user_id = $user_id;
+        if ($type == "lovebundel") {
+            $walletPayment->love_bundel_id = $event_id;
+        } else {
+            $walletPayment->packages_id = $event_id;
+        }
+        $walletPayment->save();
+
+        $walletHistory = new WalletHistory();
+        if ($type == "lovebundel") {
+            $walletHistory->love_bundel_id = $event_id;
+        } else {
+            $walletHistory->packages_id = $event_id;
+        }
+        $walletHistory->user_id = $user_id;
+        $walletHistory->wallet_payment_id = $walletPayment->id;
+        $walletHistory->status = 0;
+        $walletHistory->save();
+
+        $userWallet = Wallet::where('user_id', $user_id)->first();
+
+        if ($type == "lovebundel") {
+            $loveBundel = LoveReactPrice::where('id', $event_id)->first();
+
+            if ($userWallet) {
+
+                $userWallet->love_points =  $userWallet->love_points + $loveBundel->love_points;
+                $userWallet->price = $loveBundel->price;
+
+                $userWallet->save();
+            } else {
+
+                $wallet = new Wallet();
+                $wallet->user_id = $user_id;
+                $wallet->love_points = $loveBundel->love_points;
+                $wallet->type = "Basic";
+                $wallet->price = $loveBundel->price;
+                $wallet->status = 0;
+                $wallet->save();
+            }
+        } else {
+
+            $addPackages = Package::where('id', $event_id)->first();
+            if ($userWallet) {
+
+                $userWallet->club_points += $addPackages->club_points;
+                $userWallet->love_points += $addPackages->love_points;
+                $userWallet->auditions += $addPackages->auditions;
+                $userWallet->learning_session += $addPackages->learning_session;
+                $userWallet->live_chats += $addPackages->live_chats;
+                $userWallet->meetup += $addPackages->meetup;
+                $userWallet->greetings += $addPackages->greetings;
+                $userWallet->qna += $addPackages->qna;
+                $userWallet->type = $addPackages->title;
+                $userWallet->price = $addPackages->price;
+                $userWallet->save();
+            } else {
+
+                $wallet = new Wallet();
+                $wallet->user_id = $user_id;
+                $wallet->club_points += $addPackages->club_points;
+                $wallet->love_points += $addPackages->love_points;
+                $wallet->auditions += $addPackages->auditions;
+                $wallet->learning_session += $addPackages->learning_session;
+                $wallet->live_chats += $addPackages->live_chats;
+                $wallet->meetup += $addPackages->meetup;
+                $wallet->greetings += $addPackages->greetings;
+                $wallet->qna += $addPackages->qna;
+                $wallet->type = $addPackages->title;
+                $wallet->price = $addPackages->price;
+                $wallet->status = 0;
+                $wallet->save();
+            }
+        }
     }
 }
