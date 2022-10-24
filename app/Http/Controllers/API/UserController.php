@@ -67,8 +67,10 @@ use App\Models\SouvenirCreate;
 use App\Models\FanGroup;
 use App\Models\LoveReact;
 use App\Models\LoveReactPayment;
+use App\Models\LoveReactPrice;
 use App\Models\UserInfo;
 use App\Models\Marketplace;
+use App\Models\PaidLoveReactPrice;
 use App\Models\Payment;
 use App\Models\Wallet;
 use PhpParser\Node\Stmt\TryCatch;
@@ -2166,6 +2168,34 @@ class UserController extends Controller
         }
         
     }
+    public function purchasedPhotos() {
+        $alreadyPaid = GeneralPostPayment::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+        $totalPhotos = [];
+        foreach ($alreadyPaid as $paidPost) {
+            $post = SimplePost::where([['id', $paidPost->post_id], ['status', 1]])->whereNull('video')->latest()->get();
+            array_push($totalPhotos, $post);
+        }
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'photos' => $totalPhotos,
+        ]);
+    }
+    public function purchasedVideos() {
+        $alreadyPaid = GeneralPostPayment::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+        $totalVideos = [];
+        foreach ($alreadyPaid as $paidPost) {
+            $post = SimplePost::where([['id', $paidPost->post_id], ['status', 1]])->whereNull('image')->latest()->get();
+            array_push($totalVideos, $post);
+        }
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'videos' => $totalVideos,
+        ]);
+    }
 
     public function userActivites()
     {
@@ -2641,6 +2671,15 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'posts' => $postData
+        ]);
+    }
+    public function getVideoFeedLoveReact()
+    {
+        $loveReact = PaidLoveReactPrice::orderBy('loveReact', 'ASC')->get();
+
+        return response()->json([
+            'status' => 200,
+            'loveReact' => $loveReact
         ]);
     }
 }

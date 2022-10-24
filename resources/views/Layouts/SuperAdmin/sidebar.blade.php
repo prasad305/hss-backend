@@ -5,11 +5,13 @@
            with font-awesome or any other icon font library -->
 
 
-        <li class="nav-item {{ Request::routeIs('superAdmin.dashboard')||Request::routeIs('superAdmin.auditionEvents.dashboard')||Request::routeIs('superAdmin.learningSessionEvents.dashboard')|| Request::routeIs('superAdmin.meetupEvents.dashboard')||Request::routeIs('superAdmin.liveChatEvents.dashboard')||Request::routeIs('superAdmin.fanGroupEvents.dashboard')||Request::routeIs('superAdmin.greetingEvents.dashboard')||Request::routeIs('superAdmin.simplePostEvents.dashboard')||Request::routeIs('superAdmin.qnaEvents.dashboard')||Request::routeIs('superAdmin.marketplaceEvents.dashboard')||Request::routeIs('superAdmin.auctionEvents.dashboard')||Request::routeIs('superAdmin.souvenirEvents.dashboard') ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ Request::routeIs('superAdmin.dashboard')||Request::routeIs('superAdmin.auditionEvents.dashboard')||Request::routeIs('superAdmin.learningSessionEvents.dashboard')|| Request::routeIs('superAdmin.meetupEvents.dashboard')||Request::routeIs('superAdmin.liveChatEvents.dashboard')||Request::routeIs('superAdmin.fanGroupEvents.dashboard')||Request::routeIs('superAdmin.greetingEvents.dashboard')||Request::routeIs('superAdmin.simplePostEvents.dashboard')||Request::routeIs('superAdmin.qnaEvents.dashboard')||Request::routeIs('superAdmin.marketplaceEvents.dashboard')||Request::routeIs('superAdmin.auctionEvents.dashboard')||Request::routeIs('superAdmin.souvenirEvents.dashboard') ? 'active' : '' }}">
+        <li
+            class="nav-item {{ Request::routeIs('superAdmin.dashboard') || Request::routeIs('superAdmin.auditionEvents.dashboard') || Request::routeIs('superAdmin.learningSessionEvents.dashboard') || Request::routeIs('superAdmin.meetupEvents.dashboard') || Request::routeIs('superAdmin.liveChatEvents.dashboard') || Request::routeIs('superAdmin.fanGroupEvents.dashboard') || Request::routeIs('superAdmin.greetingEvents.dashboard') || Request::routeIs('superAdmin.simplePostEvents.dashboard') || Request::routeIs('superAdmin.qnaEvents.dashboard') || Request::routeIs('superAdmin.marketplaceEvents.dashboard') || Request::routeIs('superAdmin.auctionEvents.dashboard') || Request::routeIs('superAdmin.souvenirEvents.dashboard') ? 'menu-open' : '' }}">
+            <a href="#"
+                class="nav-link {{ Request::routeIs('superAdmin.dashboard') || Request::routeIs('superAdmin.auditionEvents.dashboard') || Request::routeIs('superAdmin.learningSessionEvents.dashboard') || Request::routeIs('superAdmin.meetupEvents.dashboard') || Request::routeIs('superAdmin.liveChatEvents.dashboard') || Request::routeIs('superAdmin.fanGroupEvents.dashboard') || Request::routeIs('superAdmin.greetingEvents.dashboard') || Request::routeIs('superAdmin.simplePostEvents.dashboard') || Request::routeIs('superAdmin.qnaEvents.dashboard') || Request::routeIs('superAdmin.marketplaceEvents.dashboard') || Request::routeIs('superAdmin.auctionEvents.dashboard') || Request::routeIs('superAdmin.souvenirEvents.dashboard') ? 'active' : '' }}">
                 {{-- <i class="nav-icon fa fa-bullhorn"></i> --}}
                 <i class="nav-icon fa fa-tachometer" aria-hidden="true"></i>
-                <p >
+                <p>
                     Dashboard
                     <i class="right fas fa-angle-left"></i>
 
@@ -109,7 +111,7 @@
                 class="nav-link {{ Request::routeIs('superAdmin.category.index') ? 'active' : '' }}">
                 {{-- <i class="nav-icon fas fa-edit"></i> --}}
                 <i class=" nav-icon fa fa-list-alt" aria-hidden="true"></i>
-                <p >
+                <p>
                     Category
                 </p>
             </a>
@@ -119,17 +121,19 @@
                 class="nav-link {{ Request::routeIs('superAdmin.subCategory.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-window-restore" aria-hidden="true"></i>
 
-                <p >
+                <p>
                     Subcategory
                 </p>
             </a>
         </li>
 
 
-        <li class="nav-item {{ Request::routeIs('superAdmin.package.index') ||Request::routeIs('superAdmin.love.index')? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ Request::routeIs('superAdmin.package.index') ||Request::routeIs('superAdmin.love.index')? 'active' : '' }}">
+        <li
+            class="nav-item {{ Request::routeIs('superAdmin.package.index') || Request::routeIs('superAdmin.love.index') ? 'menu-open' : '' }}">
+            <a href="#"
+                class="nav-link {{ Request::routeIs('superAdmin.package.index') || Request::routeIs('superAdmin.love.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-bullseye" aria-hidden="true"></i>
-                <p >
+                <p>
                     Package
                     <i class="right fas fa-angle-left"></i>
                 </p>
@@ -199,8 +203,10 @@
             </a>
         </li>
 
-        <li class="nav-item {{ Request::routeIs('superAdmin.greeting-type.index')||Request::routeIs('superAdmin.interest-type.index')||Request::routeIs('superAdmin.currency.index')|| Request::routeIs('superAdmin.country.index')||Request::routeIs('superAdmin.state.index')||Request::routeIs('superAdmin.city.index')||Request::routeIs('superAdmin.educationlevel.index')||Request::routeIs('superAdmin.occupation.index') ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ Request::routeIs('superAdmin.greeting-type.index')||Request::routeIs('superAdmin.interest-type.index')||Request::routeIs('superAdmin.currency.index')|| Request::routeIs('superAdmin.country.index')||Request::routeIs('superAdmin.state.index')||Request::routeIs('superAdmin.city.index')||Request::routeIs('superAdmin.educationlevel.index')||Request::routeIs('superAdmin.occupation.index') ? 'active' : '' }}">
+        <li
+            class="nav-item {{ Request::routeIs('superAdmin.greeting-type.index') || Request::routeIs('superAdmin.interest-type.index') || Request::routeIs('superAdmin.currency.index') || Request::routeIs('superAdmin.country.index') || Request::routeIs('superAdmin.state.index') || Request::routeIs('superAdmin.city.index') || Request::routeIs('superAdmin.educationlevel.index') || Request::routeIs('superAdmin.occupation.index') ? 'menu-open' : '' }}">
+            <a href="#"
+                class="nav-link {{ Request::routeIs('superAdmin.greeting-type.index') || Request::routeIs('superAdmin.interest-type.index') || Request::routeIs('superAdmin.currency.index') || Request::routeIs('superAdmin.country.index') || Request::routeIs('superAdmin.state.index') || Request::routeIs('superAdmin.city.index') || Request::routeIs('superAdmin.educationlevel.index') || Request::routeIs('superAdmin.occupation.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-sliders" aria-hidden="true"></i>
                 <p>Settings
                     <i class=" nav-icon right fas fa-angle-left"></i>
@@ -244,7 +250,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.country.index') }}" class="nav-link {{ Request::routeIs('superAdmin.country.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.country.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.country.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>
                             Country
@@ -252,7 +259,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.state.index') }}" class="nav-link {{ Request::routeIs('superAdmin.state.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.state.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.state.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>
                             State
@@ -261,7 +269,8 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.city.index') }}" class="nav-link {{ Request::routeIs('superAdmin.city.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.city.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.city.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>
                             City
@@ -269,7 +278,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.educationlevel.index') }}" class="nav-link {{ Request::routeIs('superAdmin.educationlevel.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.educationlevel.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.educationlevel.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>
                             Education level
@@ -278,7 +288,8 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.occupation.index') }}" class="nav-link {{ Request::routeIs('superAdmin.occupation.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.occupation.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.occupation.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>
                             Occupation
@@ -289,10 +300,12 @@
             </ul>
         </li>
 
-        <li class="nav-item {{ Request::routeIs('superAdmin.aboutUs.index')||Request::routeIs('superAdmin.privacy.index')||Request::routeIs('superAdmin.faq.index') ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ Request::routeIs('superAdmin.aboutUs.index')||Request::routeIs('superAdmin.privacy.index')||Request::routeIs('superAdmin.faq.index') ? 'active' : '' }}">
+        <li
+            class="nav-item {{ Request::routeIs('superAdmin.aboutUs.index') || Request::routeIs('superAdmin.privacy.index') || Request::routeIs('superAdmin.faq.index') ? 'menu-open' : '' }}">
+            <a href="#"
+                class="nav-link {{ Request::routeIs('superAdmin.aboutUs.index') || Request::routeIs('superAdmin.privacy.index') || Request::routeIs('superAdmin.faq.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-bullseye" aria-hidden="true"></i>
-                <p >
+                <p>
                     Landing Settings
                     <i class="right fas fa-angle-left"></i>
                 </p>
@@ -314,19 +327,22 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.productpurchase.index') }}" class="nav-link {{ Request::routeIs('superAdmin.productpurchase.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.productpurchase.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.productpurchase.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Product purchase</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.refundpolicy.index') }}" class="nav-link {{ Request::routeIs('superAdmin.refundpolicy.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.refundpolicy.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.refundpolicy.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Refund Policy</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.termscondition.index') }}"  class="nav-link {{ Request::routeIs('superAdmin.termscondition.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.termscondition.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.termscondition.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Terms And Condition</p>
                     </a>
@@ -340,6 +356,15 @@
                 </li>
 
             </ul>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('superAdmin.loveReactPrice.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.loveReactPrice.index') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-edit"></i>
+                <p>
+                    Paid Love React
+                </p>
+            </a>
         </li>
         <li class="nav-item">
             <a href="{{ route('superAdmin.simplePost.index') }}"
@@ -359,7 +384,8 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.liveChat.index') }}" class="nav-link {{ Request::routeIs('superAdmin.liveChat.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.liveChat.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.liveChat.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>All Events</p>
                     </a>
@@ -375,7 +401,8 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.qna.index') }}" class="nav-link {{ Request::routeIs('superAdmin.qna.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.qna.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.qna.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>All Events</p>
                     </a>
@@ -383,7 +410,8 @@
             </ul>
         </li>
         <li class="nav-item {{ Request::routeIs('superAdmin.learningSession.index') ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ Request::routeIs('superAdmin.learningSession.index') ? 'active' : '' }}">
+            <a href="#"
+                class="nav-link {{ Request::routeIs('superAdmin.learningSession.index') ? 'active' : '' }}">
                 <i class="nav-icon fa-solid fa-school"></i>
                 <p>Learning Session
                     <i class="nav-icon right fas fa-angle-left"></i>
@@ -391,7 +419,8 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.learningSession.index') }}" class="nav-link {{ Request::routeIs('superAdmin.learningSession.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.learningSession.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.learningSession.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>All Events</p>
                     </a>
@@ -399,7 +428,8 @@
             </ul>
         </li>
         <li class="nav-item {{ Request::routeIs('superAdmin.meetupEvent.index') ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ Request::routeIs('superAdmin.meetupEvent.index') ? 'active' : '' }}">
+            <a href="#"
+                class="nav-link {{ Request::routeIs('superAdmin.meetupEvent.index') ? 'active' : '' }}">
                 <i class="nav-icon fa-brands fa-meetup"></i>
                 <p>Meetup Events
                     <i class="nav-icon right fas fa-angle-left"></i>
@@ -407,7 +437,8 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.meetupEvent.index') }}" class="nav-link {{ Request::routeIs('superAdmin.meetupEvent.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.meetupEvent.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.meetupEvent.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>All Events</p>
                     </a>
@@ -423,7 +454,8 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.greeting.index') }}" class="nav-link {{ Request::routeIs('superAdmin.greeting.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.greeting.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.greeting.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>All Events</p>
                     </a>
@@ -439,14 +471,15 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.fanGroup.index') }}" class="nav-link {{ Request::routeIs('superAdmin.fanGroup.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.fanGroup.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.fanGroup.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>All Group</p>
                     </a>
                 </li>
             </ul>
         </li>
-{{--
+        {{--
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-shopping-cart"></i>
@@ -455,8 +488,10 @@
                 </p>
             </a>
         </li> --}}
-        <li class="nav-item {{ Request::routeIs('superAdmin.marketplace.dashboard')||Request::routeIs('superAdmin.auction.dashboard')||Request::routeIs('superAdmin.souvenir.dashboard') ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ Request::routeIs('superAdmin.marketplace.dashboard')||Request::routeIs('superAdmin.auction.dashboard')||Request::routeIs('superAdmin.souvenir.dashboard') ? 'active' : '' }}">
+        <li
+            class="nav-item {{ Request::routeIs('superAdmin.marketplace.dashboard') || Request::routeIs('superAdmin.auction.dashboard') || Request::routeIs('superAdmin.souvenir.dashboard') ? 'menu-open' : '' }}">
+            <a href="#"
+                class="nav-link {{ Request::routeIs('superAdmin.marketplace.dashboard') || Request::routeIs('superAdmin.auction.dashboard') || Request::routeIs('superAdmin.souvenir.dashboard') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-id-card" aria-hidden="true"></i>
                 <p>
                     Star Showcase
@@ -464,8 +499,9 @@
                 </p>
             </a>
             <ul class="nav nav-treeview">
-                <li class="nav-item {{ Request::routeIs('superAdmin.marketplace.dashboard') ? 'menu-open' : '' }}" >
-                    <a href="#" class="nav-link {{ Request::routeIs('superAdmin.marketplace.dashboard') ? 'active' : '' }}">
+                <li class="nav-item {{ Request::routeIs('superAdmin.marketplace.dashboard') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ Request::routeIs('superAdmin.marketplace.dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-shopping-cart"></i>
                         <p>
                             Marketplace
@@ -474,7 +510,8 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('superAdmin.marketplace.dashboard') }}" class="nav-link {{ Request::routeIs('superAdmin.marketplace.dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('superAdmin.marketplace.dashboard') }}"
+                                class="nav-link {{ Request::routeIs('superAdmin.marketplace.dashboard') ? 'active' : '' }}">
                                 <i class="fas fa-caret-right nav-icon"></i>
                                 <p>All Events</p>
                             </a>
@@ -484,7 +521,8 @@
             </ul>
             <ul class="nav nav-treeview">
                 <li class="nav-item {{ Request::routeIs('superAdmin.auction.dashboard') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ Request::routeIs('superAdmin.auction.dashboard') ? 'active' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ Request::routeIs('superAdmin.auction.dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-gavel" aria-hidden="true"></i>
                         <p>
                             Auction
@@ -493,7 +531,8 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('superAdmin.auction.dashboard') }}" class="nav-link {{ Request::routeIs('superAdmin.auction.dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('superAdmin.auction.dashboard') }}"
+                                class="nav-link {{ Request::routeIs('superAdmin.auction.dashboard') ? 'active' : '' }}">
                                 <i class="fas fa-caret-right nav-icon"></i>
                                 <p>All Events</p>
                             </a>
@@ -503,7 +542,8 @@
             </ul>
             <ul class="nav nav-treeview">
                 <li class="nav-item {{ Request::routeIs('superAdmin.souvenir.dashboard') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ Request::routeIs('superAdmin.souvenir.dashboard') ? 'active' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ Request::routeIs('superAdmin.souvenir.dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fa-solid fa-gift"></i>
                         <p>
                             Souvenir
@@ -512,7 +552,8 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('superAdmin.souvenir.dashboard') }}" class="nav-link {{ Request::routeIs('superAdmin.souvenir.dashboard') ? 'active' : '' }}">
+                            <a href="{{ route('superAdmin.souvenir.dashboard') }}"
+                                class="nav-link {{ Request::routeIs('superAdmin.souvenir.dashboard') ? 'active' : '' }}">
                                 <i class="fas fa-caret-right nav-icon"></i>
                                 <p>All Events</p>
                             </a>
@@ -522,8 +563,10 @@
             </ul>
         </li>
 
-        <li class="nav-item {{ Request::routeIs('superAdmin.auditionList') ||Request::routeIs('superAdmin.audition-rules.index')||Request::routeIs('superAdmin.superAdmin.audition-rules.edit')||Request::routeIs('superAdmin.audition-round-rules.index')||Request::routeIs('superAdmin.auditionAdmin.index')|| Request::routeIs('superAdmin.jury_groups.index') ||  Request::routeIs('superAdmin.userVoteMark.index')? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ Request::routeIs('superAdmin.auditionList') ||Request::routeIs('superAdmin.audition-rules.index')||Request::routeIs('superAdmin.audition-round-rules.index')||Request::routeIs('superAdmin.auditionAdmin.index')|| Request::routeIs('superAdmin.jury_groups.index') ||  Request::routeIs('superAdmin.userVoteMark.index')? 'active' : '' }}">
+        <li
+            class="nav-item {{ Request::routeIs('superAdmin.auditionList') || Request::routeIs('superAdmin.audition-rules.index') || Request::routeIs('superAdmin.superAdmin.audition-rules.edit') || Request::routeIs('superAdmin.audition-round-rules.index') || Request::routeIs('superAdmin.auditionAdmin.index') || Request::routeIs('superAdmin.jury_groups.index') || Request::routeIs('superAdmin.userVoteMark.index') ? 'menu-open' : '' }}">
+            <a href="#"
+                class="nav-link {{ Request::routeIs('superAdmin.auditionList') || Request::routeIs('superAdmin.audition-rules.index') || Request::routeIs('superAdmin.audition-round-rules.index') || Request::routeIs('superAdmin.auditionAdmin.index') || Request::routeIs('superAdmin.jury_groups.index') || Request::routeIs('superAdmin.userVoteMark.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-bullhorn"></i>
                 <p>
                     Audition
@@ -541,13 +584,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.audition-rules.index') }}" class="nav-link {{ Request::routeIs('superAdmin.audition-rules.index') ? 'active' : '' }} ">
+                    <a href="{{ route('superAdmin.audition-rules.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.audition-rules.index') ? 'active' : '' }} ">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Audition Rules</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.audition-round-rules.index') }}" class="nav-link {{ Request::routeIs('superAdmin.audition-round-rules.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.audition-round-rules.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.audition-round-rules.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Audition Round Rules</p>
                     </a>
@@ -562,13 +607,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.jury_groups.index') }}" class="nav-link {{ Request::routeIs('superAdmin.jury_groups.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.jury_groups.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.jury_groups.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Jury Groups</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.userVoteMark.index') }}" class="nav-link {{ Request::routeIs('superAdmin.userVoteMark.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.userVoteMark.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.userVoteMark.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>User Vote Mark</p>
                     </a>
@@ -585,15 +632,18 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.accounts.index') }}" class="nav-link {{ Request::routeIs('superAdmin.accounts.index') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.accounts.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.accounts.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-caret-right nav-icon"></i>
                         <p>Accounts Dashboard</p>
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="nav-item mb-5 {{ Request::routeIs('superAdmin.report.audition')||Request::routeIs('superAdmin.report.simplePost')||Request::routeIs('superAdmin.report.learningSession')|| Request::routeIs('superAdmin.report.meetup')|| Request::routeIs('superAdmin.report.greeting')|| Request::routeIs('superAdmin.report.liveChat')||Request::routeIs('superAdmin.report.qna')||  Request::routeIs('superAdmin.report.auction')||Request::routeIs('superAdmin.report.marketplace')|| Request::routeIs('superAdmin.report.souvenir')? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ Request::routeIs('superAdmin.report.audition')||Request::routeIs('superAdmin.report.simplePost')||Request::routeIs('superAdmin.report.learningSession')|| Request::routeIs('superAdmin.report.meetup')|| Request::routeIs('superAdmin.report.greeting')|| Request::routeIs('superAdmin.report.liveChat')||Request::routeIs('superAdmin.report.qna')||  Request::routeIs('superAdmin.report.auction')||Request::routeIs('superAdmin.report.marketplace')|| Request::routeIs('superAdmin.report.souvenir')? 'active' : '' }}">
+        <li
+            class="nav-item mb-5 {{ Request::routeIs('superAdmin.report.audition') || Request::routeIs('superAdmin.report.simplePost') || Request::routeIs('superAdmin.report.learningSession') || Request::routeIs('superAdmin.report.meetup') || Request::routeIs('superAdmin.report.greeting') || Request::routeIs('superAdmin.report.liveChat') || Request::routeIs('superAdmin.report.qna') || Request::routeIs('superAdmin.report.auction') || Request::routeIs('superAdmin.report.marketplace') || Request::routeIs('superAdmin.report.souvenir') ? 'menu-open' : '' }}">
+            <a href="#"
+                class="nav-link {{ Request::routeIs('superAdmin.report.audition') || Request::routeIs('superAdmin.report.simplePost') || Request::routeIs('superAdmin.report.learningSession') || Request::routeIs('superAdmin.report.meetup') || Request::routeIs('superAdmin.report.greeting') || Request::routeIs('superAdmin.report.liveChat') || Request::routeIs('superAdmin.report.qna') || Request::routeIs('superAdmin.report.auction') || Request::routeIs('superAdmin.report.marketplace') || Request::routeIs('superAdmin.report.souvenir') ? 'active' : '' }}">
                 </i><i class="nav-icon fa fa-file" aria-hidden="true"></i>
                 <p>All Report
                     <i class="right fas fa-angle-left"></i>
@@ -601,43 +651,50 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.report.audition') }}" class="nav-link {{ Request::routeIs('superAdmin.report.audition') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.report.audition') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.report.audition') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Audition</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.report.simplePost') }}" class="nav-link {{ Request::routeIs('superAdmin.report.simplePost') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.report.simplePost') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.report.simplePost') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Simple Post</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.report.learningSession') }}" class="nav-link {{ Request::routeIs('superAdmin.report.learningSession') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.report.learningSession') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.report.learningSession') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Learning Session</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.report.meetup') }}" class="nav-link {{ Request::routeIs('superAdmin.report.meetup') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.report.meetup') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.report.meetup') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Meetup Event</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.report.greeting') }}" class="nav-link {{ Request::routeIs('superAdmin.report.greeting') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.report.greeting') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.report.greeting') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Greeting</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.report.liveChat') }}" class="nav-link {{ Request::routeIs('superAdmin.report.liveChat') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.report.liveChat') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.report.liveChat') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Live Chat</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.report.qna') }}" class="nav-link {{ Request::routeIs('superAdmin.report.qna') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.report.qna') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.report.qna') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Q&A</p>
                     </a>
@@ -649,19 +706,22 @@
                     </a>
                 </li> --}}
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.report.marketplace') }}" class="nav-link {{ Request::routeIs('superAdmin.report.marketplace') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.report.marketplace') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.report.marketplace') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Marketplace</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.report.auction') }}" class="nav-link {{ Request::routeIs('superAdmin.report.auction') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.report.auction') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.report.auction') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Auction</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.report.souvenir') }}" class="nav-link {{ Request::routeIs('superAdmin.report.souvenir') ? 'active' : '' }}">
+                    <a href="{{ route('superAdmin.report.souvenir') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.report.souvenir') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>Souvenir</p>
                     </a>

@@ -5,17 +5,21 @@ namespace App\Http\Controllers\API\Payment;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\AuditionUploadVideo;
 use App\Models\GeneralPostPayment;
 use App\Models\GreetingsRegistration;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChatRegistration;
+use App\Models\LoveReact;
+use App\Models\LoveReactPayment;
 use App\Models\MarketplaceOrder;
 use App\Models\MeetupEventRegistration;
 use App\Models\QnaRegistration;
 use App\Models\SouvenirApply;
 use App\Models\SouvenirPayment;
 use App\Models\Transaction;
+use Error;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use paytm\paytmchecksum\PaytmChecksum;
@@ -28,6 +32,7 @@ class PaymentController extends Controller
     //get paytm token
     public function paymentNow(Request $request)
     {
+
 
         $user = auth()->user();
 
@@ -51,7 +56,6 @@ class PaymentController extends Controller
     //payment success function
     public function paytmCallback(Request $request, $redirectTo, $user_id, $type, $event_id)
     {
-        // return $request->all();
         $isVerifySignature = PaytmChecksum::verifySignature($request->all(), 'zXhNYVPF4RKIsIIz', $request->CHECKSUMHASH);
         if ($isVerifySignature) {
 
@@ -135,6 +139,9 @@ class PaymentController extends Controller
                 }
                 if ($type == 'generalpost') {
                     $this->generalPostUpdate($event_id, $user_id, "PayTm", $result->body->txnAmount);
+                }
+                if ($type == 'loveReact') {
+                    $this->loveReactPayment($user_id, $request->videoId, $request->reactNum, $type, $result->body->txnAmount);
                 }
             }
             $orderId = $result->body->orderId;
@@ -248,11 +255,15 @@ class PaymentController extends Controller
             if ($request->modelName == 'souvenir') {
                 return $this->souvenirRegUpdate($request->souvenir_apply_id, $request->souvenir_create_id, $request->TXNAMOUNT, "PayTm-mobile");
             }
+            if ($request->modelName == 'generalpost') {
+                return $this->generalPostUpdateMobile($request->eventId, $user->id, "PayTm-mobile", $request->TXNAMOUNT);
+            }
 
 
-            return "success data recived" . "__" . $request->modelName;
+            return "success data received" . "__" . $request->modelName;
         }
     }
+
     //paytem moble end
     //---------------------paytm end--------------------------
 
@@ -260,12 +271,16 @@ class PaymentController extends Controller
     //-------------------stripe start------------------------
     public function stripePaymentMake(Request $request)
     {
-        $public_key = "pk_test_51LtSJLGiXzKYuOYkQjOQcod5ZhxNxnsyIezQUgDHHC5BPSr1JVrOeCrBUwdG1owKJEzFjh9V9CsXtRB9RTzEtaU200Kr8oNp8P";
-        Stripe::setApiKey("sk_test_51LtSJLGiXzKYuOYkMt700dVTWeL5RG1a0e870EDiLRDuzgOkT7S0ylsMKUD2epCiLS5CvZD4imEFR7xDwuiWp7xZ00gQ3CCxeJ");
+        $public_key = "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh";
+        Stripe::setApiKey("sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX");
+
+        // Use an existing Customer ID if this is a returning customer.
+        $customer = \Stripe\Customer::create();
 
         try {
             $paymentIntent = PaymentIntent::create([
-                'amount' =>  $request->amount,
+                'amount' =>  $request->amount * 100,
+                'customer' => $customer->id,
                 'currency' => 'usd',
                 'description' => "This is test payment",
                 'receipt_email' => "srabon.tfp@gmail.com",
@@ -434,6 +449,21 @@ class PaymentController extends Controller
     }
 
     // General post
+    public function generalPostUpdateMobile($event_id, $user_id, $method, $fee)
+    {
+        // return 'hit inside update';
+        try {
+            $generalPostPayment = new GeneralPostPayment();
+            $generalPostPayment->post_id = $event_id;
+            $generalPostPayment->user_id = auth('sanctum')->user()->id;
+            $generalPostPayment->payment_method = $method;
+            $generalPostPayment->amount = $fee;
+            $generalPostPayment->status = 1;
+            $generalPostPayment->save();
+        }  catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
     public function generalPostUpdate($event_id, $user_id, $method, $fee)
     {
         GeneralPostPayment::create([
@@ -444,5 +474,36 @@ class PaymentController extends Controller
             'amount' => $fee,
             'status' => 1,
         ]);
+    }
+    public function loveReactPayment($user_id, $videoId, $reactNum, $type, $fee)
+    {
+        $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $videoId)->first();
+
+
+        if (!LoveReactPayment::where([['user_id', $user_id], ['react_num', $reactNum], ['video_id', $videoId]])->exists()) {
+
+            $loveReactPayment = new LoveReactPayment();
+            $loveReactPayment->user_id = $user_id;
+            $loveReactPayment->video_id = $videoId;
+            $loveReactPayment->react_num = $reactNum;
+            // $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
+            // $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
+            $loveReactPayment->status = 1;
+            $loveReactPayment->type = $type;
+            $loveReactPayment->save();
+            if ($loveReactPayment) {
+                LoveReact::create([
+                    'user_id' => $user_id,
+                    'video_id' => $videoId,
+                    'react_num' => $reactNum,
+                    // 'audition_id' => $auditionRoundInfo->roundInfo->audition_id,
+                    // 'round_info_id' => $auditionRoundInfo->roundInfo->id,
+                    // 'participant_id' => $auditionRoundInfo->user_id,
+                    // 'react_voting_type' => $auditionRoundInfo->roundInfo->has_user_vote_mark == 1 ? 'user_vote' : ($auditionRoundInfo->roundInfo->wildcard == 1 ? 'wildcard' : 'general'),
+                    'status' => 1,
+
+                ]);
+            }
+        }
     }
 }

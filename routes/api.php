@@ -351,6 +351,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/audition/videos/loveReact/payment', [UserController::class, 'userVideoLoveReactPayment']);
     Route::get('/user/audition/getOxygen/videos', [UserController::class, 'getOxygenVideo']);
     Route::post('/user/audition/getOxygenReply/video', [UserController::class, 'oxygenReplyVideo']);
+    Route::get('/user/audition/videofeed/loveReact', [UserController::class, 'getVideoFeedLoveReact']);
     // Promo Videos
     Route::get('/user/PromoVideos', [UserController::class, 'getPromoVideo']);
 
@@ -369,6 +370,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
 
     // User Photos
+
+    Route::get('/user/purchasedPhotos', [UserController::class, 'purchasedPhotos']);
+    Route::get('/user/purchasedVideos', [UserController::class, 'purchasedVideos']);
     Route::get('/user/activitiesData', [UserController::class, 'userActivites']);
     Route::get('/user/activitiesData/with-paginate/{limit}', [UserController::class, 'paginate_userActivites']);
     Route::get('/user/{id}/activitiesData/with-paginate/{limit}', [UserController::class, 'paginate_userActivites_by_id']);

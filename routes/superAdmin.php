@@ -49,6 +49,7 @@ use App\Http\Controllers\SuperAdmin\AuditionUserVoteController;
 use App\Http\Controllers\SuperAdmin\Audition\AuditionController;
 use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
 use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
+use App\Http\Controllers\SuperAdmin\PaidLoveReactPriceController;
 use App\Http\Controllers\SuperAdmin\ProductPurchaseController;
 use App\Http\Controllers\SuperAdmin\TermsConditionController;
 use App\Http\Controllers\SuperAdmin\RefundController;
@@ -161,6 +162,14 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::put('userVoteMark-update/{id}', [AuditionUserVoteController::class, 'userVoteMarkUpdate'])->name('userVoteMark.update');
     Route::delete('userVoteMark-destroy/{id}', [AuditionUserVoteController::class, 'userVoteMarkDestroy'])->name('userVoteMark.destroy');
 
+    // Paid Love React Price Setting
+    Route::get('paid-love-react-price', [PaidLoveReactPriceController::class, 'index'])->name('loveReactPrice.index');
+    Route::get('loveReactPrice-create', [PaidLoveReactPriceController::class, 'loveReactPriceCreate'])->name('loveReactPrice.create');
+    Route::post('loveReactPrice-store', [PaidLoveReactPriceController::class, 'loveReactPriceStore'])->name('loveReactPrice.store');
+    Route::get('loveReactPrice-edit/{id}', [PaidLoveReactPriceController::class, 'loveReactPriceEdit'])->name('loveReactPrice.edit');
+    Route::put('loveReactPrice-update/{id}', [PaidLoveReactPriceController::class, 'loveReactPriceUpdate'])->name('loveReactPrice.update');
+    Route::delete('loveReactPrice-destroy/{id}', [PaidLoveReactPriceController::class, 'loveReactPriceDestroy'])->name('loveReactPrice.destroy');
+
     // Audition Routes ends here
 
     // Auction Routes
@@ -195,7 +204,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // Refund Policy
     Route::resource('refundpolicy', RefundController::class);
 
-    
+
     // Marketplace
     Route::get('marketplace-index', [MarketplaceController::class, 'index'])->name('marketplace.dashboard');
     Route::get('marketplace-list/{id}', [MarketplaceController::class, 'marketplaceList'])->name('marketplace.list');
@@ -283,7 +292,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // Package
     Route::resource('package', PackageController::class);
-    Route::resource('love',LoveReactPriceController::class);
+    Route::resource('love', LoveReactPriceController::class);
 
 
     // Route::resource('love-package', LoveController::class);
@@ -526,7 +535,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/souvenir-report', [ReportController::class, 'souvenirReport'])->name('report.souvenir');
     Route::post('/souvenir-report-filter', [ReportController::class, 'souvenirReportFilter'])->name('report.filter.souvenirReport');
     Route::get('/simplePost-report', [ReportController::class, 'simplePostReport'])->name('report.simplePost');
-    Route::post('/simplePost-report-filter', [ReportController::class, 'simplePostFilter' ])->name('report.filter.simplePost');
+    Route::post('/simplePost-report-filter', [ReportController::class, 'simplePostFilter'])->name('report.filter.simplePost');
     Route::get('/simplePost-report-filter-userType/{name}', [ReportController::class, 'simplePostUserName']);
     Route::get('/fanGroup-report', [ReportController::class, 'fanGroupReport'])->name('report.fanGroup');
 
