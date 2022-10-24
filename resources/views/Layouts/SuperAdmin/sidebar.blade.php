@@ -208,6 +208,15 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
+                    <a href="{{ route('superAdmin.virtual-tour.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.virtual-tour.index') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>
+                            Virtual Tour
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('superAdmin.greeting-type.index') }}"
                         class="nav-link {{ Request::routeIs('superAdmin.greeting-type.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>

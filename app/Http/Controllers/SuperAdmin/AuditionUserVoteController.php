@@ -64,7 +64,7 @@ class AuditionUserVoteController extends Controller
     }
 
     public function userVoteMarkUpdate(Request $request, $id)
-    { {
+    { 
 
             $request->validate([
 
@@ -96,7 +96,7 @@ class AuditionUserVoteController extends Controller
                     'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
                 ]);
             }
-        }
+        
     }
     public function userVoteMarkDestroy($id)
     {

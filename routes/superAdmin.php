@@ -52,6 +52,7 @@ use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
 use App\Http\Controllers\SuperAdmin\ProductPurchaseController;
 use App\Http\Controllers\SuperAdmin\TermsConditionController;
 use App\Http\Controllers\SuperAdmin\RefundController;
+use App\Http\Controllers\SuperAdmin\VirtualtourController;
 
 
 // Super Admin routechange.password
@@ -312,6 +313,9 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::resource('occupation', OccupationController::class);
     Route::post('admin/occupation-active/{id}', [OccupationController::class, 'activeNow'])->name('occupation.activeNow');
     Route::post('admin/occupation-inactive/{id}', [OccupationController::class, 'inactiveNow'])->name('occupation.inactiveNow');
+
+    //Virtual Tour
+    Route::resource('virtual-tour', VirtualtourController::class);
 
     // Interest Type
     Route::resource('interest-type', InterestTypeController::class);
