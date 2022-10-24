@@ -80,4 +80,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
      * tiket for offline meetup
      */
     Route::get('/offlineMeetup/ticketDownload/{id}', [UserMobileAppController::class, 'meetUpTicketDownload']);
+    /**
+     * oxygenReplyVideo
+     */
+    Route::post('/mobile/audition/getOxygenReply/video', [UserMobileAppController::class, 'oxygenReplyVideo']);
 });

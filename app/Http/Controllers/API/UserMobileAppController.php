@@ -49,6 +49,7 @@ use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use App\Models\AuditionOxygenReplyVideo;
 
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
@@ -823,6 +824,67 @@ class UserMobileAppController extends Controller
             ]);
         } catch (\Throwable $th) {
             return $th;
+        }
+    }
+    /**
+     * oxygenReplyVideo
+     */
+    public function oxygenReplyVideo(Request $request) 
+    {
+        try {
+            if ($request->base64) {
+
+                $originalExtension = str_ireplace("video/", "", $request->type);
+
+                $folder_path       = 'uploads/videos/auditions/post/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->base64;
+            }
+            $videoPath = $folder_path . $image_new_name;
+
+            file_put_contents($videoPath, base64_decode($decodedBase64, true));
+            
+            if($videoPath)
+            {
+                // return $request->oxy_audition_id;
+                $oxygenReply = new AuditionOxygenReplyVideo();
+
+                $oxygenReply->audition_id = $request->oxy_audition_id;
+                
+                $oxygenReply->round_info_id = $request->oxy_round_info_id;
+                // return;
+                $oxygenReply->reply_video = $videoPath;
+                $oxygenReply->oxygen_video_id = $request->oxy_video_id;
+                $oxygenReply->user_id = auth('sanctum')->user()->id;
+                $oxygenReply->participant_id = $request->oxy_user_id;
+                $oxygenReply->save();
+
+
+                // $oxygenReply = AuditionOxygenReplyVideo::create([
+                //     'audition_id' => $request->oxy_audition_id,
+                //     'round_info_id' => $request->oxy_round_info_id,
+                //     'reply_video' => $videoPath,
+                //     'oxygen_video_id' => $request->oxy_video_id,
+                //     'user_id' => auth('sanctum')->user()->id,
+                //     'participant_id' => $request->oxy_user_id,
+                // ]);
+
+                return response()->json([
+                    "message" => "uploaded successfully",
+                    "status" => "200",
+                    "path" => $videoPath
+                ]);
+            }
+
+
+            
+        } catch (\Exception $exception) {
+            return response()->json([
+                "message" => "field required, invalid formate !",
+                "error" => $exception->getMessage(),
+                "status" => "0",
+            ]);
         }
     }
 }
