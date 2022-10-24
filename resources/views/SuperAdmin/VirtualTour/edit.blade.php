@@ -26,20 +26,20 @@
         <span class="text-danger" id="type_error"></span>
     </div>
     <br>
-    <div class="col-md-12" id="linksection">
+    <div class="col-md-12" id="upLinksection">
         <label for="link">Video Link</label>
         <input type="text" name="link" class="form-control" id="link">
         <span class="text-danger" id="link_error"></span>
     </div>
     <br>
-    <div class="col-md-12" style="display:none;" id="videosection">
+    <div class="col-md-12" style="display:none;" id="upVideosection">
         <label for="video">Upload Video</label>
         <br>
         <input type="file" name="video"  id="video">
         <span class="text-danger" id="video_error"></span>
     </div>
     <br>
-    <input type="checkbox" id="chooseBtn" name="chooseBtn"> Upload Video
+    <input type="checkbox" id="upChooseBtn" name="chooseBtn"> Upload Video
     <br>
     <br>
 
@@ -50,17 +50,17 @@
 
 <script>
 
-let Checkbox = document.getElementById('chooseBtn');
-    let Linksection = document.getElementById('linksection');
-    let Videosection = document.getElementById('videosection');
+    let UpChooseBtn = document.getElementById('upChooseBtn');
+    let UpLinksection = document.getElementById('upLinksection');
+    let UpVideosection = document.getElementById('upVideosection');
 
-    Checkbox.addEventListener('change', e => {
+    UpChooseBtn.addEventListener('change', e => {
         if(e.target.checked){
-            Linksection.style.display = "none";
-            Videosection.style.display = "block";
+            UpLinksection.style.display = "none";
+            UpVideosection.style.display = "block";
         }else{
-            Linksection.style.display = "block";
-            Videosection.style.display = "none";
+            UpLinksection.style.display = "block";
+            UpVideosection.style.display = "none";
         }
     });
 
