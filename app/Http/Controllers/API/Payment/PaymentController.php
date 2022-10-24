@@ -5,17 +5,21 @@ namespace App\Http\Controllers\API\Payment;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\AuditionUploadVideo;
 use App\Models\GeneralPostPayment;
 use App\Models\GreetingsRegistration;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
 use App\Models\LiveChatRegistration;
+use App\Models\LoveReact;
+use App\Models\LoveReactPayment;
 use App\Models\MarketplaceOrder;
 use App\Models\MeetupEventRegistration;
 use App\Models\QnaRegistration;
 use App\Models\SouvenirApply;
 use App\Models\SouvenirPayment;
 use App\Models\Transaction;
+use Error;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use paytm\paytmchecksum\PaytmChecksum;
@@ -28,6 +32,7 @@ class PaymentController extends Controller
     //get paytm token
     public function paymentNow(Request $request)
     {
+
 
         $user = auth()->user();
 
@@ -51,7 +56,6 @@ class PaymentController extends Controller
     //payment success function
     public function paytmCallback(Request $request, $redirectTo, $user_id, $type, $event_id)
     {
-        // return $request->all();
         $isVerifySignature = PaytmChecksum::verifySignature($request->all(), 'zXhNYVPF4RKIsIIz', $request->CHECKSUMHASH);
         if ($isVerifySignature) {
 
@@ -135,6 +139,9 @@ class PaymentController extends Controller
                 }
                 if ($type == 'generalpost') {
                     $this->generalPostUpdate($event_id, $user_id, "PayTm", $result->body->txnAmount);
+                }
+                if ($type == 'loveReact') {
+                    $this->loveReactPayment($user_id, $request->videoId, $request->reactNum, $type, $result->body->txnAmount);
                 }
             }
             $orderId = $result->body->orderId;
@@ -467,5 +474,36 @@ class PaymentController extends Controller
             'amount' => $fee,
             'status' => 1,
         ]);
+    }
+    public function loveReactPayment($user_id, $videoId, $reactNum, $type, $fee)
+    {
+        $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $videoId)->first();
+
+
+        if (!LoveReactPayment::where([['user_id', $user_id], ['react_num', $reactNum], ['video_id', $videoId]])->exists()) {
+
+            $loveReactPayment = new LoveReactPayment();
+            $loveReactPayment->user_id = $user_id;
+            $loveReactPayment->video_id = $videoId;
+            $loveReactPayment->react_num = $reactNum;
+            // $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
+            // $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
+            $loveReactPayment->status = 1;
+            $loveReactPayment->type = $type;
+            $loveReactPayment->save();
+            if ($loveReactPayment) {
+                LoveReact::create([
+                    'user_id' => $user_id,
+                    'video_id' => $videoId,
+                    'react_num' => $reactNum,
+                    // 'audition_id' => $auditionRoundInfo->roundInfo->audition_id,
+                    // 'round_info_id' => $auditionRoundInfo->roundInfo->id,
+                    // 'participant_id' => $auditionRoundInfo->user_id,
+                    // 'react_voting_type' => $auditionRoundInfo->roundInfo->has_user_vote_mark == 1 ? 'user_vote' : ($auditionRoundInfo->roundInfo->wildcard == 1 ? 'wildcard' : 'general'),
+                    'status' => 1,
+
+                ]);
+            }
+        }
     }
 }
