@@ -67,8 +67,10 @@ use App\Models\SouvenirCreate;
 use App\Models\FanGroup;
 use App\Models\LoveReact;
 use App\Models\LoveReactPayment;
+use App\Models\LoveReactPrice;
 use App\Models\UserInfo;
 use App\Models\Marketplace;
+use App\Models\PaidLoveReactPrice;
 use App\Models\Payment;
 use App\Models\Wallet;
 use PhpParser\Node\Stmt\TryCatch;
@@ -2643,6 +2645,15 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'posts' => $postData
+        ]);
+    }
+    public function getVideoFeedLoveReact()
+    {
+        $loveReact = PaidLoveReactPrice::orderBy('loveReact', 'ASC')->get();
+
+        return response()->json([
+            'status' => 200,
+            'loveReact' => $loveReact
         ]);
     }
 }

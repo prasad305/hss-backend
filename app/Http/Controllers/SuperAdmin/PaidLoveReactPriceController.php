@@ -3,50 +3,33 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Audition\Audition;
-use App\Models\Audition\AuditionUserVoteMark;
+use App\Models\PaidLoveReactPrice;
 use Illuminate\Http\Request;
 
-class AuditionUserVoteController extends Controller
+class PaidLoveReactPriceController extends Controller
 {
     public function index()
     {
-
-        $instruction = AuditionUserVoteMark::orderBy('id', 'DESC')->get();
-        return view('SuperAdmin.AuditionUserVoteMark.index', compact('instruction'));
+        $loveReactData = PaidLoveReactPrice::get();
+        return view('SuperAdmin.PaidLoveReact.index', compact('loveReactData'));
     }
-    public function userVoteMarkCreate()
+    public function loveReactPriceCreate()
     {
-        $data = [
-            'auditions' => Audition::orderBy('id', 'desc')->get(),
-        ];
-
-        return view('SuperAdmin.AuditionUserVoteMark.create', $data);
+        return view('SuperAdmin.PaidLoveReact.create');
     }
-    public function userVoteMarkEdit($id)
+    public function loveReactPriceStore(Request $request)
     {
-        $data = [
-            'auditions' => Audition::orderBy('id', 'desc')->get(),
-            'voteMark' => AuditionUserVoteMark::find($id),
-        ];
-        return view('SuperAdmin.AuditionUserVoteMark.edit', $data);
-    }
-    public function userVoteMarkStore(Request $request)
-    {
-
-
-
         $request->validate([
 
-            'audition_id' => 'required',
-            'total_react' => 'required',
-            'user_mark' => 'required',
+            'gradeName' => 'required',
+            'loveReact' => 'required',
+            'fee' => 'required',
 
 
         ]);
 
         try {
-            $instruction = AuditionUserVoteMark::create(
+            $instruction = PaidLoveReactPrice::create(
                 $request->all()
             );
             if ($instruction) {
@@ -62,25 +45,28 @@ class AuditionUserVoteController extends Controller
             ]);
         }
     }
-
-    public function userVoteMarkUpdate(Request $request, $id)
+    public function loveReactPriceEdit($id)
     {
-
+        $loveReactData = PaidLoveReactPrice::find($id);
+        return view('SuperAdmin.PaidLoveReact.edit', compact('loveReactData'));
+    }
+    public function loveReactPriceUpdate(Request $request, $id)
+    {
         $request->validate([
 
-
-            'audition_id' => 'required',
-            'total_react' => 'required',
-            'user_mark' => 'required',
+            'gradeName' => 'required',
+            'loveReact' => 'required',
+            'fee' => 'required',
 
         ]);
 
         try {
-            $instruction = AuditionUserVoteMark::findOrFail($id)->Update(
+            $instruction = PaidLoveReactPrice::findOrFail($id)->Update(
                 [
-                    'audition_id' => $request->audition_id,
-                    'total_react' => $request->total_react,
-                    'user_mark' => $request->user_mark,
+
+                    'gradeName' => $request->gradeName,
+                    'loveReact' => $request->loveReact,
+                    'fee' => $request->fee,
                 ]
 
             );
@@ -97,9 +83,9 @@ class AuditionUserVoteController extends Controller
             ]);
         }
     }
-    public function userVoteMarkDestroy($id)
+    public function loveReactPriceDestroy($id)
     {
-        $term = AuditionUserVoteMark::findOrfail($id);
+        $term = PaidLoveReactPrice::find($id);
         try {
             $term->delete();
             return response()->json([
