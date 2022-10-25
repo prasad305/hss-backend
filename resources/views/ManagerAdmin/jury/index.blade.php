@@ -57,7 +57,7 @@ Jury Board
                     <div class="info-box shadow-none py-4 d-flex align-items-center">
 
                         <div class="d-flex justify-content-center align-items-center">
-                            <img src="{{ asset($jury['image'] ?? get_static_option('user')) }}" alt="Admin Image"
+                            <img src="{{ asset($jury['assignjuries']['image'] ?? get_static_option('user')) }}" alt="Admin Image"
                                 class="img-fluid AdminImg">
                         </div>
 

@@ -126,10 +126,6 @@
                                         <a class="btn btn btn-info"
                                             onclick="Show('Edit Jury','{{ route('superAdmin.jury.edit', $jury->id) }}')"><i
                                                 class="fa fa-edit text-white"></i></a>
-                                        <button class="btn btn-danger" onclick="delete_function(this)"
-                                            value="{{ route('superAdmin.jury.destroy', $jury->id) }}">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
                                     </td>
                                 </tr>
                             @endforeach
