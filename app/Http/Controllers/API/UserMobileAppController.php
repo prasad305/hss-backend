@@ -32,6 +32,7 @@ use App\Models\MyChatList;
 use App\Models\Notification;
 use App\Models\Occupation;
 use App\Models\QnA;
+use App\Models\Virtualtour;
 use App\Models\QnaMessage;
 use App\Models\QnaRegistration;
 use App\Models\User;
@@ -888,5 +889,20 @@ class UserMobileAppController extends Controller
                 "status" => "0",
             ]);
         }
+    }
+    public function getVirtualTourVideo() {
+        $virtualTourLink = Virtualtour::where('type', 'phone')->first();
+        if($virtualTourLink)
+        {
+            return response()->json([
+                "message" => "Video found",
+                "status" => "200",
+                'videoInfo' => $virtualTourLink,
+            ]);
+        }
+        return response()->json([
+            "message" => "Can not find the video",
+            "status" => "402",
+        ]);
     }
 }
