@@ -521,4 +521,32 @@ class AuthController extends Controller
             ]);
         }
     }
+    public function star_admin_info(Request $request)
+    {
+
+        $user = User::find(auth('sanctum')->user()->id);
+        if ($user->first_name) {
+
+            if ($request->filled('first_name')) {
+                $user->first_name = $request->first_name;
+            }
+            if ($request->filled('last_name')) {
+                $user->last_name = $request->last_name;
+            }
+
+
+            $user->update();
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Your Information Updated Successfully'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 402,
+                'message' => 'Your Information Not Updated'
+            ]);
+        }
+    }
 }

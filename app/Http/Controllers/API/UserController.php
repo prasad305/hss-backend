@@ -67,8 +67,10 @@ use App\Models\SouvenirCreate;
 use App\Models\FanGroup;
 use App\Models\LoveReact;
 use App\Models\LoveReactPayment;
+use App\Models\LoveReactPrice;
 use App\Models\UserInfo;
 use App\Models\Marketplace;
+use App\Models\PaidLoveReactPrice;
 use App\Models\Payment;
 use App\Models\Wallet;
 use PhpParser\Node\Stmt\TryCatch;
@@ -2094,79 +2096,105 @@ class UserController extends Controller
 
     // User Profile Update
 
-    public function updateCover(Request $request)
+    public function updateCover(Request $request, $id)
     {
+        
+        
+        $validator = Validator::make($request->all(), [
+            'cover_photo' => 'required',
+        ]);
 
-
-
-        $userInfo = User::findOrfail(Auth()->User()->id);
-
-
-
-        if ($request->base64) {
-
-            $destination = $userInfo->cover_photo;
-            if (File::exists($destination)) {
-                File::delete($destination);
-            }
-
-            $filename = 'uploads/images/userPhotos/' . time() . '.jpg';
-            file_put_contents($filename, base64_decode($request->base64));
-
-            $userInfo->cover_photo = $filename;
-
-            $userInfo->update();
-
-
-
+        if ($validator->fails()) {
             return response()->json([
-                'status' => 200,
-                'message' => "Image Photo updated"
+                'cover_photo' => $validator->errors(),
             ]);
         } else {
+            $user = User::find($id);
+            if ($request->hasfile('cover_photo')) {
+
+                $destination = $user->cover_photo;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('cover_photo');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/userPhotos/' . time() . 'coverimage.' . $extension;
+                Image::make($file)->resize(900, 400)->save($filename, 50);
+                $user->cover_photo = $filename;
+            }
+
+            $user->save();
+
             return response()->json([
                 'status' => 200,
-                'message' => "Image fild empty"
+                'message' =>  'Cover Photo Updated Successfully',
             ]);
         }
     }
 
 
-    public function updateProfile(Request $request)
+    public function updateProfile(Request $request, $id)
     {
 
+        $validator = Validator::make($request->all(), [
+            'image' => 'required',
+        ]);
 
-
-        $userInfo = User::findOrfail(Auth()->User()->id);
-
-
-
-        if ($request->base64) {
-
-            $destination = $userInfo->image;
-            if (File::exists($destination)) {
-                File::delete($destination);
-            }
-
-            $filename = 'uploads/images/userPhotos/' . time() . '.jpg';
-            file_put_contents($filename, base64_decode($request->base64));
-
-            $userInfo->image = $filename;
-
-            $userInfo->update();
-
-
-
+        if ($validator->fails()) {
             return response()->json([
-                'status' => 200,
-                'message' => "Image Photo updated"
+                'image' => $validator->errors(),
             ]);
         } else {
+            $user = User::find($id);
+            if ($request->hasfile('image')) {
+
+                $destination = $user->image;
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $filename = 'uploads/images/userPhotos/' . time() . 'coverimage.' . $extension;
+                Image::make($file)->resize(900, 400)->save($filename, 50);
+                $user->image = $filename;
+            }
+
+            $user->save();
+
             return response()->json([
                 'status' => 200,
-                'message' => "Image fild empty"
+                'message' =>  'Cover Photo Updated Successfully',
             ]);
         }
+        
+    }
+    public function purchasedPhotos() {
+        $alreadyPaid = GeneralPostPayment::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+        $totalPhotos = [];
+        foreach ($alreadyPaid as $paidPost) {
+            $post = SimplePost::where([['id', $paidPost->post_id], ['status', 1]])->whereNull('video')->latest()->get();
+            array_push($totalPhotos, $post);
+        }
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'photos' => $totalPhotos,
+        ]);
+    }
+    public function purchasedVideos() {
+        $alreadyPaid = GeneralPostPayment::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+        $totalVideos = [];
+        foreach ($alreadyPaid as $paidPost) {
+            $post = SimplePost::where([['id', $paidPost->post_id], ['status', 1]])->whereNull('image')->latest()->get();
+            array_push($totalVideos, $post);
+        }
+        
+        return response()->json([
+            'status' => 200,
+            'message' => 'Ok',
+            'videos' => $totalVideos,
+        ]);
     }
 
     public function userActivites()
@@ -2643,6 +2671,15 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'posts' => $postData
+        ]);
+    }
+    public function getVideoFeedLoveReact()
+    {
+        $loveReact = PaidLoveReactPrice::orderBy('loveReact', 'ASC')->get();
+
+        return response()->json([
+            'status' => 200,
+            'loveReact' => $loveReact
         ]);
     }
 }
