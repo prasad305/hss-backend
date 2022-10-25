@@ -49,6 +49,7 @@ class QnaController extends Controller
             $eventRegistration->payment_method = 'wallet';
             $eventRegistration->payment_date = Carbon::now();
             $eventRegistration->room_id = '-' . Str::random(19);
+            $eventRegistration->publish_status = 1;
             $eventRegistration->qna_date = $event->event_date;
             $eventRegistration->qna_start_time = Carbon::parse($request->start_time)->format('H:i:s');
             $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
@@ -83,6 +84,7 @@ class QnaController extends Controller
             $eventRegistration->card_holder_name = Auth::user()->first_name . " " . Auth::user()->last_name;
             $eventRegistration->amount = $request->fee;
             $eventRegistration->payment_status = 1;
+            $eventRegistration->publish_status = 1;
             $eventRegistration->payment_method = 'wallet';
             $eventRegistration->payment_date = Carbon::now();
             $eventRegistration->room_id = $request->room_id;
@@ -134,7 +136,7 @@ class QnaController extends Controller
             $activity->event_id = $event->id;
             $activity->event_registration_id = $eventRegistration->id;
             $activity->save();
-            
+
             $userWallet = Wallet::where('user_id', Auth::user()->id)->first();
 
             return response()->json([
@@ -148,7 +150,7 @@ class QnaController extends Controller
         if ($request->event_type == 'greeting') {
             $event = Greeting::find($request->eventId);
             $eventRegistration = GreetingsRegistration::where('user_id', Auth::user()->id)->where('id', $request->greetingId)->first();
-            
+
             $walletData = Wallet::where('user_id', Auth::user()->id)->first();
             $walletData->greetings = $walletData->greetings - 1;
             $walletData->save();

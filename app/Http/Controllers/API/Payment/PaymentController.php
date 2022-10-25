@@ -140,9 +140,6 @@ class PaymentController extends Controller
                 if ($type == 'generalpost') {
                     $this->generalPostUpdate($event_id, $user_id, "PayTm", $result->body->txnAmount);
                 }
-                if ($type == 'loveReact') {
-                    $this->loveReactPayment($user_id, $request->videoId, $request->reactNum, $type, $result->body->txnAmount);
-                }
             }
             $orderId = $result->body->orderId;
             $url = "http://localhost:3000/";
@@ -344,6 +341,7 @@ class PaymentController extends Controller
         try {
             $registerEvent = QnaRegistration::where([['qna_id', $event_id], ['user_id', $user_id]])->first();
             $registerEvent->publish_status = 1;
+            $registerEvent->payment_status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
         } catch (\Throwable $th) {
@@ -356,6 +354,7 @@ class PaymentController extends Controller
         try {
             $registerEvent = LearningSessionRegistration::where([['learning_session_id', $event_id], ['user_id', $user_id]])->first();
             $registerEvent->publish_status = 1;
+            $registerEvent->payment_status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
         } catch (\Throwable $th) {
@@ -460,7 +459,7 @@ class PaymentController extends Controller
             $generalPostPayment->amount = $fee;
             $generalPostPayment->status = 1;
             $generalPostPayment->save();
-        }  catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             //throw $th;
         }
     }
@@ -474,36 +473,5 @@ class PaymentController extends Controller
             'amount' => $fee,
             'status' => 1,
         ]);
-    }
-    public function loveReactPayment($user_id, $videoId, $reactNum, $type, $fee)
-    {
-        $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $videoId)->first();
-
-
-        if (!LoveReactPayment::where([['user_id', $user_id], ['react_num', $reactNum], ['video_id', $videoId]])->exists()) {
-
-            $loveReactPayment = new LoveReactPayment();
-            $loveReactPayment->user_id = $user_id;
-            $loveReactPayment->video_id = $videoId;
-            $loveReactPayment->react_num = $reactNum;
-            // $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
-            // $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
-            $loveReactPayment->status = 1;
-            $loveReactPayment->type = $type;
-            $loveReactPayment->save();
-            if ($loveReactPayment) {
-                LoveReact::create([
-                    'user_id' => $user_id,
-                    'video_id' => $videoId,
-                    'react_num' => $reactNum,
-                    // 'audition_id' => $auditionRoundInfo->roundInfo->audition_id,
-                    // 'round_info_id' => $auditionRoundInfo->roundInfo->id,
-                    // 'participant_id' => $auditionRoundInfo->user_id,
-                    // 'react_voting_type' => $auditionRoundInfo->roundInfo->has_user_vote_mark == 1 ? 'user_vote' : ($auditionRoundInfo->roundInfo->wildcard == 1 ? 'wildcard' : 'general'),
-                    'status' => 1,
-
-                ]);
-            }
-        }
     }
 }

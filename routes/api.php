@@ -346,7 +346,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // Video Feed
 
-    Route::get('/user/audition/videofeed/videos', [UserController::class, 'videoFeedVidoes']);
+    Route::get('/user/audition/videofeed/videos', [UserController::class, 'videoFeedVideos']);
     Route::post('/user/audition/videos/loveReact', [UserController::class, 'userVideoLoveReact']);
     Route::post('/user/audition/videos/loveReact/payment', [UserController::class, 'userVideoLoveReactPayment']);
     Route::get('/user/audition/getOxygen/videos', [UserController::class, 'getOxygenVideo']);
