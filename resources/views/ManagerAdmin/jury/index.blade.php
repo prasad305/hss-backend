@@ -57,8 +57,13 @@ Jury Board
                     <div class="info-box shadow-none py-4 d-flex align-items-center">
 
                         <div class="d-flex justify-content-center align-items-center">
+                            @if($jury['assignjuries']['image'])
                             <img src="{{ asset($jury['assignjuries']['image'] ?? get_static_option('user')) }}" alt="Admin Image"
                                 class="img-fluid AdminImg">
+                            @else
+                            <img src="https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg" alt="Admin Image"
+                                class="img-fluid AdminImg">
+                            @endif
                         </div>
 
                         <div class="px-2 p-x-i" style="border-left: 1px solid gray">

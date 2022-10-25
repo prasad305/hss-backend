@@ -84,17 +84,11 @@
                                     <td>{{ $jury->last_name }}</td>
 
                                     <td>
-                                        @if ($jury->image)
+                                        
                                             <a href="{{ asset($jury->image) }}" target="_blank">
-                                                <img height="70px;" src="{{ asset($jury->image) }}" width="70px;"
+                                                <img height="70px;" src="{{ asset($jury->image) }}" width="70px;" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';"
                                                     class="rounded-circle" />
                                             </a>
-                                        @else
-                                            <abbr title="Sorry There in no picture">
-                                                <img class="rounded-circle" height="70px;"
-                                                    src="{{ asset(get_static_option('no_image')) }}" width="70px;" />
-                                            </abbr>
-                                        @endif
                                     </td>
                                     <td>{{ $jury->phone }}</td>
                                     <td>
