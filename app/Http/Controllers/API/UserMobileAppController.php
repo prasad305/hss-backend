@@ -79,6 +79,7 @@ class UserMobileAppController extends Controller
     }
     public function eventRegister(Request $request)
     {
+
         // return $request->all();
         $user = auth('sanctum')->user();
         $eventId = (string)$request->event_id;
