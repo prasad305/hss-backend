@@ -115,7 +115,7 @@ class UserMobileAppController extends Controller
             $create_room_id =  createRoomID();
             $eventRegistration = new LiveChatRegistration();
             $event = LiveChat::find($eventId);
-            $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s');
+            $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->interval)->format('H:i:s');
             $eventRegistration->live_chat_id = $eventId;
             $eventRegistration->amount = $request->fee;
             $eventRegistration->room_id = $create_room_id;
@@ -125,24 +125,25 @@ class UserMobileAppController extends Controller
             $activity->type = 'livechat';
 
 
+
             $event->update();
         }
         if ($modelName == 'qna') {
             $eventRegistration = new QnaRegistration();
-            // if (!QnaRegistration::where([['user_id', auth()->user()->id], ['qna_id', $eventId]])->exists()) {
-            //     $event = QnA::find($eventId);
-            //     $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->time_interval)->format('H:i:s');
-            //     $eventRegistration->qna_id = $eventId;
-            //     $eventRegistration->amount = $request->fee;
-            //     $eventRegistration->room_id = Str::random(20);
-            //     $eventRegistration->qna_date = $event->event_date;
-            //     $eventRegistration->publish_status = 1;
-            //     $eventRegistration->qna_start_time = Carbon::parse($request->start_time)->format('H:i:s');
-            //     $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
-            //     $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
-            //     $activity->type = 'qna';
-            //     $event->update();
-            // }
+            if (!QnaRegistration::where([['user_id', auth()->user()->id], ['qna_id', $eventId]])->exists()) {
+                $event = QnA::find($eventId);
+                $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->time_interval)->format('H:i:s');
+                $eventRegistration->qna_id = $eventId;
+                $eventRegistration->amount = $request->fee;
+                $eventRegistration->room_id = Str::random(20);
+                $eventRegistration->qna_date = $event->event_date;
+                $eventRegistration->publish_status = 1;
+                $eventRegistration->qna_start_time = Carbon::parse($request->start_time)->format('H:i:s');
+                $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
+                $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
+                $activity->type = 'qna';
+                $event->update();
+            }
         }
 
         if ($modelName == 'greeting') {

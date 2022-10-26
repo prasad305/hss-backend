@@ -135,7 +135,7 @@
                                     <label for="start_date" class="form-label">Post Start Date</label>
                                     <input type="calender" class="form-control" id="datepicker"
                                         style="background: coral; position: relative; padding-left: 33px;"
-                                        name="post_start_date" readonly="readonly" value = "{{ old('post_start_date') }}"/>
+                                        name="post_start_date" readonly="readonly" value="{{ old('post_start_date') }}" />
                                     <i class="fa fa-calendar"
                                         style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
                                         aria-hidden="true"></i>
@@ -147,7 +147,7 @@
                                     <label for="end_date" class="form-label">Post End Date</label>
                                     <input type="text" class="form-control" id="datepicker1"
                                         style="background: coral; position: relative; padding-left: 33px;"
-                                        name="post_end_date" readonly="readonly" value = "{{ old('post_end_date') }}">
+                                        name="post_end_date" readonly="readonly" value="{{ old('post_end_date') }}">
                                     <i class="fa fa-calendar"
                                         style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
                                         aria-hidden="true"></i>
@@ -174,7 +174,7 @@
             @if ($event->status == 2)
                 <form action="{{ route('managerAdmin.liveChat.set_publish', [$event->id]) }}" method="post">
                     @csrf
-                    <button type="submit" class="btn btn-outline-danger mr-2">Remove From Publish</button>
+                    <button type="submit" class="btn btnRemove mr-2">Remove From Publish</button>
                 </form>
             @endif
 
