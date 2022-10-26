@@ -579,9 +579,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/winner/auction/{id}', [AuctionController::class, 'makeWinner']);
 
     // audition routes
-    //Route::get('/admin/audition/status', [AuditionController::class, 'starAdminPendingAudtion']);
-    Route::get('/admin/audition/pendings', [AuditionController::class, 'starAdminPendingAudition']);
-    Route::get('/admin/audition/live', [AuditionController::class, 'starAdminLiveAudition']);
+
+    Route::get('/admin/auditions', [AuditionController::class, 'getAdminAuditions']);
     Route::get('/admin/audition/details/{id}', [AuditionController::class, 'starAdminDetailsAudition']);
 
 
