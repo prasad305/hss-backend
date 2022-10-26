@@ -58,7 +58,8 @@
                             Audition Start
                             <h4 class="text-warning"> {{ \Carbon\Carbon::parse($audition->start_date)->format('d F,Y') }}
                                 <span class="text-success">-</span><span class="text-danger"> End
-                                    {{ \Carbon\Carbon::parse($audition->end_date)->format('d F,Y') }}</span></h4>
+                                    {{ \Carbon\Carbon::parse($audition->end_date)->format('d F,Y') }}</span>
+                            </h4>
                         </div>
                     </div>
 
@@ -144,7 +145,7 @@
             @if ($audition->status == 3)
                 <form action="{{ route('managerAdmin.audition.set_publish', [$audition->id]) }}" method="post">
                     @csrf
-                    <button type="submit" class="btn btn-outline-danger mr-2">Remove From Publish</button>
+                    <button type="submit" class="btn btnRemove mr-2">Remove From Publish</button>
                 </form>
             @endif
 
@@ -161,7 +162,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                success ') }}',
+                                                    success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })

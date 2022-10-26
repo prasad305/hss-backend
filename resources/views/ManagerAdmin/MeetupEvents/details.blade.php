@@ -152,8 +152,7 @@
                                     <label for="start_date" class="form-label">Post Start Date</label>
                                     <input type="calender" class="form-control" id="datepicker"
                                         style="background: coral; position: relative; padding-left: 33px;"
-                                        name="post_start_date" readonly="readonly"
-                                        value="{{ old('post_start_date') }}" />
+                                        name="post_start_date" readonly="readonly" value="{{ old('post_start_date') }}" />
                                     <i class="fa fa-calendar"
                                         style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
                                         aria-hidden="true"></i>
@@ -192,7 +191,7 @@
             @if ($meetup->status == 2)
                 <form action="{{ route('managerAdmin.meetupEvent.set_publish', [$meetup->id]) }}" method="post">
                     @csrf
-                    <button type="submit" class="btn btn-outline-danger mr-2">Remove From Publish</button>
+                    <button type="submit" class="btn btnRemove mr-2">Remove From Publish</button>
                 </form>
             @endif
 

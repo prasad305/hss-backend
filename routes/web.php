@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Models\MyChatList;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -41,12 +40,10 @@ Route::get('/test-view', function () {
     return "Please add a view !";
 });
 
-Route::any('stripe/webhook', function () {
-    $mychatList = new MyChatList();
-    $mychatList->user_id = 0;
-    $mychatList->title = "webhook";
-    $mychatList->save();
-});
+/**
+ * stripe web hook
+ */
+Route::stripeWebhooks('stripe-webhook');
 
 
 // For system reboot

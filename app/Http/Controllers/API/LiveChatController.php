@@ -444,7 +444,7 @@ class LiveChatController extends Controller
         return response()->json([
             'status' => 200,
             'greeting' => 45,
-            'message' => 'alredy have',
+            'message' => 'already have',
         ]);
     }
 
