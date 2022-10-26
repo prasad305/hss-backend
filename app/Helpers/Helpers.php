@@ -1,9 +1,21 @@
 <?php
 
+use App\Models\Audition\AuditionParticipant;
 use App\Models\Audition\AuditionUploadVideo;
+use App\Models\GeneralPostPayment;
+use App\Models\GreetingsRegistration;
 use App\Models\JuryGroup;
+use App\Models\LearningSessionRegistration;
+use App\Models\LiveChatRegistration;
+use App\Models\LoveReact;
+use App\Models\LoveReactPayment;
 use App\Models\LoveReactPrice;
+use App\Models\MarketplaceOrder;
+use App\Models\MeetupEventRegistration;
 use App\Models\Package;
+use App\Models\QnaRegistration;
+use App\Models\SouvenirApply;
+use App\Models\SouvenirPayment;
 use App\Models\StaticOption;
 use App\Models\User;
 use App\Models\Wallet;
@@ -321,6 +333,255 @@ if (!function_exists('random_code')) {
                 $wallet->price = $addPackages->price;
                 $wallet->status = 0;
                 $wallet->save();
+            }
+        }
+    }
+
+    /**
+     * after payment table update
+     */
+
+    function resgistationSuccessUpdate($type, $user_id, $event_id, $paymentMethod, $amount = null)
+    {
+        //live chat regupdate
+        if ($type == 'livechat') {
+            LiveChatRegUpdate($user_id, $event_id, $paymentMethod);
+        }
+        // audition regupdate
+        if ($type == 'audition') {
+            AuditionRegUpdate($user_id, $event_id, $paymentMethod);
+        }
+        //qna
+        if ($type == 'qna') {
+            qnaRegUpdate($user_id, $event_id, $paymentMethod);
+        }
+        //learning session
+        if ($type == 'learningSession') {
+            learningSessionRegUpdate($user_id, $event_id, $paymentMethod);
+        }
+        //meetup
+        if ($type == 'meetup') {
+            meetSessionRegUpdate($user_id, $event_id, $paymentMethod);
+        }
+        //souvenir
+        if ($type == 'souvenir') {
+            souvenirUpdate($user_id, $event_id, $paymentMethod);
+        }
+        //marketplace
+        if ($type == 'marketplace') {
+            marketplaceUpdate($user_id, $event_id, $paymentMethod);
+        }
+        //package
+        if ($type == 'package') {
+            packageUpdate($type, $event_id, $user_id);
+        }
+        //lovebundel
+        if ($type == 'lovebundel') {
+            packageUpdate($type, $event_id, $user_id);
+        }
+        //greeting
+        if ($type == 'greeting') {
+            greetingUpdate($user_id, $event_id, $paymentMethod);
+        }
+        //generalpost
+        if ($type == 'generalpost') {
+            generalPostUpdate($event_id, $user_id, "PayTm", $amount);
+        }
+    }
+
+
+
+    // Auditions
+    function AuditionRegUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = AuditionParticipant::where([['audition_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    //for live chat
+    function LiveChatRegUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = LiveChatRegistration::where([['live_chat_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->publish_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    //for qna
+    function qnaRegUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = QnaRegistration::where([['qna_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->publish_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+    //for learning session
+    function learningSessionRegUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = LearningSessionRegistration::where([['learning_session_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->publish_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    //for meetup
+    function meetSessionRegUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = MeetupEventRegistration::where([['meetup_event_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+    // Marketplace
+    function marketplaceUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = MarketplaceOrder::where([['marketplace_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    //for souvenir for mobile
+    function souvenirRegUpdate($souvenir_apply_id, $souvenir_create_id, $total_amount, $payment_method)
+    {
+        try {
+            $statusChangeSouvenir = SouvenirApply::find($souvenir_apply_id);
+            $statusChangeSouvenir->status = 2;
+            $statusChangeSouvenir->save();
+
+            $souvenir = new SouvenirPayment();
+
+            $souvenir->souvenir_create_id = $souvenir_create_id;
+            $souvenir->souvenir_apply_id = $souvenir_apply_id;
+            $souvenir->user_id = auth('sanctum')->user()->id;
+            $souvenir->payment_method = $payment_method;
+            $souvenir->payment_status = 1;
+            $souvenir->total_amount = $total_amount;
+            $souvenir->status = 1;
+            $souvenir->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    //for souvenir for web
+    function souvenirUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $statusChangeSouvenir = SouvenirApply::find($event_id);
+            $statusChangeSouvenir->status = 2;
+            $statusChangeSouvenir->save();
+
+            $registerEvent = SouvenirPayment::where([['souvenir_apply_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    // Package
+    function packageUpdate($type, $event_id, $user_id)
+    {
+        userPackageWalletStore($type, $event_id, $user_id);
+    }
+
+    //greeting update
+    function greetingUpdate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->status = 2;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    // General post
+    function generalPostUpdateMobile($event_id, $user_id, $method, $fee)
+    {
+        // return 'hit inside update';
+        try {
+            $generalPostPayment = new GeneralPostPayment();
+            $generalPostPayment->post_id = $event_id;
+            $generalPostPayment->user_id = auth('sanctum')->user()->id;
+            $generalPostPayment->payment_method = $method;
+            $generalPostPayment->amount = $fee;
+            $generalPostPayment->status = 1;
+            $generalPostPayment->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+    function generalPostUpdate($event_id, $user_id, $method, $fee)
+    {
+        GeneralPostPayment::create([
+
+            'post_id' => $event_id,
+            'user_id' => $user_id,
+            'payment_method' => $method,
+            'amount' => $fee,
+            'status' => 1,
+        ]);
+    }
+    function loveReactPayment($user_id, $videoId, $reactNum, $type, $fee)
+    {
+        $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $videoId)->first();
+
+
+        if (!LoveReactPayment::where([['user_id', $user_id], ['react_num', $reactNum], ['video_id', $videoId]])->exists()) {
+
+            $loveReactPayment = new LoveReactPayment();
+            $loveReactPayment->user_id = $user_id;
+            $loveReactPayment->video_id = $videoId;
+            $loveReactPayment->react_num = $reactNum;
+            // $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
+            // $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
+            $loveReactPayment->status = 1;
+            $loveReactPayment->type = $type;
+            $loveReactPayment->save();
+            if ($loveReactPayment) {
+                LoveReact::create([
+                    'user_id' => $user_id,
+                    'video_id' => $videoId,
+                    'react_num' => $reactNum,
+                    // 'audition_id' => $auditionRoundInfo->roundInfo->audition_id,
+                    // 'round_info_id' => $auditionRoundInfo->roundInfo->id,
+                    // 'participant_id' => $auditionRoundInfo->user_id,
+                    // 'react_voting_type' => $auditionRoundInfo->roundInfo->has_user_vote_mark == 1 ? 'user_vote' : ($auditionRoundInfo->roundInfo->wildcard == 1 ? 'wildcard' : 'general'),
+                    'status' => 1,
+
+                ]);
             }
         }
     }
