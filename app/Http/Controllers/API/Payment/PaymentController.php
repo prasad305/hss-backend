@@ -105,48 +105,50 @@ class PaymentController extends Controller
 
                 ]);
 
-                //live chat regupdate
-                if ($type == 'livechat') {
-                    $this->LiveChatRegUpdate($user_id, $event_id, "PayTm");
-                }
-                // audition regupdate
-                if ($type == 'audition') {
-                    $this->AuditionRegUpdate($user_id, $event_id, "PayTm");
-                }
-                if ($type == 'qna') {
-                    $this->qnaRegUpdate($user_id, $event_id, "PayTm");
-                }
-                if ($type == 'learningSession') {
-                    $this->learningSessionRegUpdate($user_id, $event_id, "PayTm");
-                }
-                if ($type == 'meetup') {
-                    $this->meetSessionRegUpdate($user_id, $event_id, "PayTm");
-                }
-                if ($type == 'souvenir') {
-                    $this->souvenirUpdate($user_id, $event_id, "PayTm");
-                }
-                if ($type == 'marketplace') {
-                    $this->marketplaceUpdate($user_id, $event_id, "PayTm");
-                }
-                if ($type == 'package') {
-                    $this->packageUpdate($type, $event_id, $user_id);
-                }
-                if ($type == 'lovebundel') {
-                    $this->packageUpdate($type, $event_id, $user_id);
-                }
-                if ($type == 'greeting') {
-                    $this->greetingUpdate($user_id, $event_id, "PayTm");
-                }
-                if ($type == 'generalpost') {
-                    $this->generalPostUpdate($event_id, $user_id, "PayTm", $result->body->txnAmount);
-                }
+                // //live chat regupdate
+                // if ($type == 'livechat') {
+                //     $this->LiveChatRegUpdate($user_id, $event_id, "PayTm");
+                // }
+                // // audition regupdate
+                // if ($type == 'audition') {
+                //     $this->AuditionRegUpdate($user_id, $event_id, "PayTm");
+                // }
+                // if ($type == 'qna') {
+                //     $this->qnaRegUpdate($user_id, $event_id, "PayTm");
+                // }
+                // if ($type == 'learningSession') {
+                //     $this->learningSessionRegUpdate($user_id, $event_id, "PayTm");
+                // }
+                // if ($type == 'meetup') {
+                //     $this->meetSessionRegUpdate($user_id, $event_id, "PayTm");
+                // }
+                // if ($type == 'souvenir') {
+                //     $this->souvenirUpdate($user_id, $event_id, "PayTm");
+                // }
+                // if ($type == 'marketplace') {
+                //     $this->marketplaceUpdate($user_id, $event_id, "PayTm");
+                // }
+                // if ($type == 'package') {
+                //     $this->packageUpdate($type, $event_id, $user_id);
+                // }
+                // if ($type == 'lovebundel') {
+                //     $this->packageUpdate($type, $event_id, $user_id);
+                // }
+                // if ($type == 'greeting') {
+                //     $this->greetingUpdate($user_id, $event_id, "PayTm");
+                // }
+                resgistationSuccessUpdate($type, $user_id, $event_id, "paytm", $result->body->txnAmount);
+
+                // if ($type == 'generalpost') {
+                //     $this->generalPostUpdate($event_id, $user_id, "PayTm", $result->body->txnAmount);
+                // }
                 if ($type == 'loveReact') {
                     $this->loveReactPayment($user_id, $request->videoId, $request->reactNum, $type, $result->body->txnAmount);
                 }
             }
             $orderId = $result->body->orderId;
             $url = "http://localhost:3000/";
-            return  redirect()->away($url . $redirectTo);
+            return  redirect()->away($url);
         } else {
             return "Checksum Mismatched";
         }
@@ -274,6 +276,9 @@ class PaymentController extends Controller
         $public_key = "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh";
         Stripe::setApiKey("sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX");
 
+
+        $user = auth()->user();
+
         // Use an existing Customer ID if this is a returning customer.
         $customer = \Stripe\Customer::create();
 
@@ -282,8 +287,8 @@ class PaymentController extends Controller
                 'amount' =>  $request->amount * 100,
                 'customer' => $customer->id,
                 'currency' => 'usd',
-                'description' => "This is test payment",
-                'receipt_email' => "srabon.tfp@gmail.com",
+                'description' =>  $user->id . "_" . $request->event_type . '_' . $request->event_id,
+                'receipt_email' => $user->email,
                 'automatic_payment_methods' => [
                     'enabled' => true,
                 ],
@@ -460,7 +465,7 @@ class PaymentController extends Controller
             $generalPostPayment->amount = $fee;
             $generalPostPayment->status = 1;
             $generalPostPayment->save();
-        }  catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             //throw $th;
         }
     }

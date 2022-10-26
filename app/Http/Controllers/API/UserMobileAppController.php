@@ -79,65 +79,74 @@ class UserMobileAppController extends Controller
     }
     public function eventRegister(Request $request)
     {
+
         // return $request->all();
         $user = auth('sanctum')->user();
         $eventId = (string)$request->event_id;
         $modelName = $request->model_name;
 
-        // New Activity Add For event register
-        $activity = new Activity();
-
 
         if ($modelName == 'meetup') {
-            $eventRegistration = new MeetupEventRegistration();
-            $event = MeetupEvent::find($eventId);
-            $eventRegistration->meetup_event_id = $eventId;
-            $eventRegistration->amount = $event->fee;
-            $activity->type = 'meetup';
+            if (!MeetupEventRegistration::where([['user_id', auth()->user()->id], ['meetup_event_id', $eventId]])->exists()) {
+                $activity = new Activity();
+                $eventRegistration = new MeetupEventRegistration();
+                $event = MeetupEvent::find($eventId);
+                $eventRegistration->meetup_event_id = $eventId;
+                $eventRegistration->amount = $event->fee;
+                $activity->type = 'meetup';
+            }
         }
         if ($modelName == 'learningSession') {
-            $eventRegistration = new LearningSessionRegistration();
-            $event = LearningSession::find($eventId);
-            $eventRegistration->learning_session_id = $eventId;
-            $eventRegistration->amount = $event->fee;
-            $activity->type = 'learningSession';
 
-            if ($event->assignment == 1) {
-                $evaluation = new LearningSessionEvaluation();
-                $evaluation->event_id = $event->id;
-                $evaluation->user_id = $user->id;
-                $evaluation->save();
+            if (!LearningSessionRegistration::where([['user_id', auth()->user()->id], ['learning_session_id', $eventId]])->exists()) {
+                $activity = new Activity();
+                $eventRegistration = new LearningSessionRegistration();
+                $event = LearningSession::find($eventId);
+                $eventRegistration->learning_session_id = $eventId;
+                $eventRegistration->amount = $event->fee;
+                $activity->type = 'learningSession';
+
+                if ($event->assignment == 1) {
+                    $evaluation = new LearningSessionEvaluation();
+                    $evaluation->event_id = $event->id;
+                    $evaluation->user_id = $user->id;
+                    $evaluation->save();
+                }
             }
         }
 
         if ($modelName == 'livechat') {
-
-            $create_room_id =  createRoomID();
-            $eventRegistration = new LiveChatRegistration();
-            $event = LiveChat::find($eventId);
-            $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->interval)->format('H:i:s');
-            $eventRegistration->live_chat_id = $eventId;
-            $eventRegistration->amount = $request->fee;
-            $eventRegistration->room_id = $create_room_id;
-            $eventRegistration->live_chat_start_time = Carbon::parse($request->start_time)->format('H:i:s');
-            $eventRegistration->live_chat_end_time = Carbon::parse($request->end_time)->format('H:i:s');
-            $activity->room_id = $create_room_id;
-            $activity->type = 'livechat';
+            if (!LiveChatRegistration::where([['user_id', auth()->user()->id], ['live_chat_id', $eventId]])->exists()) {
+                $activity = new Activity();
+                $create_room_id =  createRoomID();
+                $eventRegistration = new LiveChatRegistration();
+                $event = LiveChat::find($eventId);
 
 
+                $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->interval)->format('H:i:s');
+                $eventRegistration->live_chat_id = $eventId;
+                $eventRegistration->amount = $request->fee;
+                $eventRegistration->room_id = $create_room_id;
+                $eventRegistration->live_chat_start_time = Carbon::parse($request->start_time)->format('H:i:s');
+                $eventRegistration->live_chat_end_time = Carbon::parse($request->end_time)->format('H:i:s');
+                $activity->room_id = $create_room_id;
+                $activity->type = 'livechat';
 
-            $event->update();
+
+                $event->update();
+            }
         }
         if ($modelName == 'qna') {
-            $eventRegistration = new QnaRegistration();
             if (!QnaRegistration::where([['user_id', auth()->user()->id], ['qna_id', $eventId]])->exists()) {
+                $activity = new Activity();
+                $eventRegistration = new QnaRegistration();
                 $event = QnA::find($eventId);
                 $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->time_interval)->format('H:i:s');
                 $eventRegistration->qna_id = $eventId;
                 $eventRegistration->amount = $request->fee;
                 $eventRegistration->room_id = Str::random(20);
                 $eventRegistration->qna_date = $event->event_date;
-                $eventRegistration->publish_status = 1;
+                // $eventRegistration->publish_status = 1;
                 $eventRegistration->qna_start_time = Carbon::parse($request->start_time)->format('H:i:s');
                 $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
                 $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
@@ -147,17 +156,21 @@ class UserMobileAppController extends Controller
         }
 
         if ($modelName == 'greeting') {
-            $eventRegistration = GreetingsRegistration::find($request->event_registration_id);
-            $event = Greeting::find($eventId);
-            $eventRegistration->status = 1;
-            $eventRegistration->amount = $event->cost;
-            $activity->type = 'greeting';
 
+            if (!LiveChatRegistration::where([['user_id', auth()->user()->id], ['greeting_id', $eventId]])->exists()) {
+                $activity = new Activity();
+                $eventRegistration = GreetingsRegistration::find($request->event_registration_id);
+                $event = Greeting::find($eventId);
+                $eventRegistration->status = 1;
+                $eventRegistration->amount = $event->cost;
+                $activity->type = 'greeting';
+            }
             // $notification = Notification::find($request->notification_id);
             // $notification->view_status = 1;
             // $notification->save();
         }
         if ($modelName == 'auction') {
+            $activity = new Activity();
             $eventRegistration = Bidding::find($request->event_registration_id);
             $event = Auction::find($eventId);
             if ($eventRegistration->applied_status == 0) {
@@ -175,6 +188,7 @@ class UserMobileAppController extends Controller
             $aquired_app->save();
         }
         if ($modelName == 'marketplace') {
+            $activity = new Activity();
             $eventRegistration = MarketplaceOrder::find($request->event_registration_id);
             $event = Marketplace::find($eventId);
 
@@ -188,6 +202,7 @@ class UserMobileAppController extends Controller
             $activity->type = 'marketplace';
         }
         if ($modelName == 'AuditionParticipant') {
+            $activity = new Activity();
             $eventRegistration = new AuditionParticipant();
             $event = Audition::find($eventId);
             $activity->type = 'audition';
@@ -205,12 +220,17 @@ class UserMobileAppController extends Controller
             }
         }
 
-        $eventRegistration->user_id = $user->id;
-        $eventRegistration->card_holder_name = $request->card_holder_name;
-        $eventRegistration->account_no = $request->card_number;
-        $eventRegistration->payment_date = Carbon::now();
-        $eventRegistration->payment_status = 0;
-        $eventRegistration->save();
+        try {
+            $eventRegistration->user_id = $user->id;
+            $eventRegistration->card_holder_name = $request->card_holder_name;
+            $eventRegistration->account_no = $request->card_number;
+            $eventRegistration->payment_date = Carbon::now();
+            $eventRegistration->payment_status = 0;
+            $eventRegistration->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
 
 
 
@@ -230,10 +250,15 @@ class UserMobileAppController extends Controller
             }
         }
 
-        $activity->user_id = $user->id;
-        $activity->event_id = $event->id;
-        $activity->event_registration_id = $eventRegistration->id;
-        $activity->save();
+        try {
+            $activity->user_id = $user->id;
+            $activity->event_id = $event->id;
+            $activity->event_registration_id = $eventRegistration->id;
+            $activity->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
 
         $userWallet = Wallet::where('user_id', Auth::user()->id)->first();
 
