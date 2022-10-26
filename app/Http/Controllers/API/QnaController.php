@@ -53,8 +53,9 @@ class QnaController extends Controller
             $eventRegistration->qna_date = $event->event_date;
             $eventRegistration->qna_start_time = Carbon::parse($request->start_time)->format('H:i:s');
             $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
-            // $activity->type = 'qna';
             $eventRegistration->save();
+            $event->available_start_time = (Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s')) <= Carbon::parse($event->end_time)->format('H:i:s') ? Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s') : Carbon::parse($event->end_time)->format('H:i:s');
+            $event->update();
 
             $activity = new Activity();
             $activity->type = 'qna';
@@ -94,7 +95,7 @@ class QnaController extends Controller
             // $activity->type = 'qna';
             $eventRegistration->save();
 
-            $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s');
+            $event->available_start_time = (Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s')) <= Carbon::parse($event->end_time)->format('H:i:s') ? Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s') : Carbon::parse($event->end_time)->format('H:i:s');
             $event->update();
 
             $activity = new Activity();
