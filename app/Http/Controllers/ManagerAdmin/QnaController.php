@@ -122,7 +122,6 @@ class QnaController extends Controller
         ]);
 
         $qnA = QnA::findOrFail($id);
-        $qnA->fill($request->except('_token'));
 
         $qnA->title = $request->input('title');
         $qnA->description = $request->input('description');
@@ -156,10 +155,10 @@ class QnaController extends Controller
             if ($request->hasFile('video')) {
 
                 $file        = $request->file('video');
-                $path        = 'uploads/videos/qna';
+                $path        = 'uploads/videos/qna/';
                 $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
                 $file->move($path, $file_name);
-                $qnA->video = $path . '/' . $file_name;
+                $qnA->video = $path . $file_name;
             }
 
 

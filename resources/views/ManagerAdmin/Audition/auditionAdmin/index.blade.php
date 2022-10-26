@@ -55,8 +55,7 @@
                         <div class="px-2 mt-3" style="border-left: 1px solid gray">
                             {{-- <a href="{{ route('managerAdmin.audition.auditionAdmin.show', $auditionAdmin->id) }}"> --}}
                             <span class="info-box-text AdminName">
-                                <h5 class="text-light">{{ $auditionAdmin->first_name }}
-                                    {{ $auditionAdmin->last_name }}</h5>
+                                <h5 class="text-light">{{ $auditionAdmin->first_name }} {{ $auditionAdmin->last_name }}</h5>
                             </span>
                             <b class="AdminMusic">{{ $auditionAdmin->auditionCategory->name ?? '' }}</b> <br />
                             <p class="{{ $auditionAdmin->status == 0 ? 'text-danger' : 'text-success' }}">

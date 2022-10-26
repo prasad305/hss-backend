@@ -74,6 +74,7 @@
                                     <td>{{ $admin->first_name . ' ' . $admin->last_name }}</td>
                                     <td>
                                         @if ($admin->image)
+                                        
                                             <a href="{{ asset($admin->image) }}" target="_blank">
                                                 <img height="70px;" src="{{ asset($admin->image) }}" width="70px;"
                                                     class="rounded-circle" />
@@ -84,6 +85,9 @@
                                                     src="{{ asset(get_static_option('no_image')) }}" width="70px;" />
                                             </abbr>
                                         @endif
+                                  
+                                        
+
                                     </td>
                                     <td>{{ $admin->phone }}</td>
                                     <td>
