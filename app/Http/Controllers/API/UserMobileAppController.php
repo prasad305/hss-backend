@@ -125,6 +125,7 @@ class UserMobileAppController extends Controller
             $activity->type = 'livechat';
 
 
+
             $event->update();
         }
         if ($modelName == 'qna') {
