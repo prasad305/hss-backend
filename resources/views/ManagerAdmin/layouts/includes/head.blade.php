@@ -1,5 +1,5 @@
 <meta charset="utf-8" />
-<title> @stack('title') |  {{ config('app.name') }}</title>
+<title> @stack('title') | {{ config('app.name') }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta content="Admin Dashboard" name="description" />
 <meta content="ThemeDesign" name="author" />
@@ -25,5 +25,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-@stack('css')
 
+
+
+@stack('css')

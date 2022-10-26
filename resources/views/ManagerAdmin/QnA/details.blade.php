@@ -115,7 +115,7 @@
 
         <div class="col-md-6">
             @if ($event->status != 2)
-               <div class="card py-3 mx-2">
+                <div class="card py-3 mx-2">
                     <div class="card-header"
                         style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
                         Publish Post in News Feed
@@ -128,7 +128,7 @@
                                     <label for="start_date" class="form-label">Post Start Date</label>
                                     <input type="calender" class="form-control" id="datepicker"
                                         style="background: coral; position: relative; padding-left: 33px;"
-                                        name="post_start_date" readonly="readonly" value = "{{ old('post_start_date') }}"/>
+                                        name="post_start_date" readonly="readonly" value="{{ old('post_start_date') }}" />
                                     <i class="fa fa-calendar"
                                         style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
                                         aria-hidden="true"></i>
@@ -140,7 +140,7 @@
                                     <label for="end_date" class="form-label">Post End Date</label>
                                     <input type="text" class="form-control" id="datepicker1"
                                         style="background: coral; position: relative; padding-left: 33px;"
-                                        name="post_end_date" readonly="readonly" value = "{{ old('post_end_date') }}">
+                                        name="post_end_date" readonly="readonly" value="{{ old('post_end_date') }}">
                                     <i class="fa fa-calendar"
                                         style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
                                         aria-hidden="true"></i>
@@ -167,7 +167,7 @@
             @if ($event->status == 2)
                 <form action="{{ route('managerAdmin.qna.set_publish', [$event->id]) }}" method="post">
                     @csrf
-                    <button type="submit" class="btn btn-outline-danger mr-2">Remove From Publish</button>
+                    <button type="submit" class="btn btnRemove mr-2">Remove From Publish</button>
                 </form>
             @endif
         </div>
