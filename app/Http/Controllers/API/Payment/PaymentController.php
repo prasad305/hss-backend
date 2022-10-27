@@ -141,6 +141,8 @@ class PaymentController extends Controller
                 // }
 
                 resgistationSuccessUpdate($user_id, $type, $event_id, "paytm", $result->body->txnAmount);
+
+
                 // if ($type == 'generalpost') {
                 //     $this->generalPostUpdate($event_id, $user_id, "PayTm", $result->body->txnAmount);
                 // }

@@ -43,10 +43,7 @@ class ChargeSuccessededJob implements ShouldQueue
             'resp_msg' => "done",
 
         ]);
-        resgistationSuccessUpdate($event_type, $user_id, $event_id, "stripe", $charge['amount']);
-
-
-
+        resgistationSuccessUpdate($user_id, $event_type, $event_id, "stripe", $charge['amount']);
 
         // do your work here
 
