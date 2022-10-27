@@ -2482,7 +2482,9 @@ class UserController extends Controller
             $q->where('result_publish_start_date', '>', Carbon::now());
         })->with(['auditionRoundInfoStart' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
             $q->with(['videos' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
-                $q->where([['approval_status', 1], ['type', 'general']])->whereIn('user_id', $generalFailedUsers)->whereNotIn('user_id', $appealWinnerUsers)->whereNotIn('user_id', $appealFailedUsers)->get();
+                $q->with(['totalReact' => function ($q) {
+                    $q->where('user_id', auth('sanctum')->user()->id);
+                }])->where([['approval_status', 1], ['type', 'general']])->whereIn('user_id', $generalFailedUsers)->whereNotIn('user_id', $appealWinnerUsers)->whereNotIn('user_id', $appealFailedUsers)->get();
             }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get();
         }])->where('status', 1)->get()->toArray();
 
@@ -2491,12 +2493,16 @@ class UserController extends Controller
             $q->where('result_publish_start_date', '>', Carbon::now());
         })->with(['auditionRoundInfoStart' => function ($q) use ($appealFailedUsers) {
             $q->with(['videos' => function ($q) use ($appealFailedUsers) {
-                return $q->where([['approval_status', 1], ['type', 'appeal']])->whereIn('user_id', $appealFailedUsers)->get();
+                $q->with(['totalReact' => function ($q) {
+                    $q->where('user_id', auth('sanctum')->user()->id);
+                }])->where([['approval_status', 1], ['type', 'appeal']])->whereIn('user_id', $appealFailedUsers)->get();
             }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get();
         }])->where('status', 1)->get()->toArray();
 
         $userVoteVideos = AuditionRoundInfo::with(['videos' => function ($q) {
-            $q->where([['approval_status', 1], ['type', 'general']])->get();
+            $q->with(['totalReact' => function ($q) {
+                $q->where('user_id', auth('sanctum')->user()->id);
+            }])->where([['approval_status', 1], ['type', 'general']])->get();
         }])->where([['has_user_vote_mark', 1], ['video_feed', 1], ['status', 1]])->latest()->get()->toArray();
 
 
