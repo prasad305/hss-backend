@@ -849,10 +849,12 @@ class UserController extends Controller
             $userInfoTypes->country = $request->country;
             $userInfoTypes->dob = $request->birthday;
             $userInfoTypes->save();
+            $user = User::find(auth('sanctum')->user()->id);
 
             return response()->json([
                 'status' => 200,
-                'message' => 'UserInfo Updated Successfully'
+                'message' => 'UserInfo Updated Successfully',
+                "userInfo" =>  $user
             ]);
         } else {
             $userList->first_name = $request->first_name;

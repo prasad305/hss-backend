@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 
 // Registered & Verified User Middleware
+Route::get('/mobile/getVirtualTourVideo', [UserMobileAppController::class, 'getVirtualTourVideo']);
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::group(['prefix' => 'user/', 'as' => 'user.'], function () {
@@ -84,4 +85,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
      * oxygenReplyVideo
      */
     Route::post('/mobile/audition/getOxygenReply/video', [UserMobileAppController::class, 'oxygenReplyVideo']);
+    /**
+     * Virtual Tour Video
+     */
+    
+    
 });
