@@ -68,7 +68,13 @@
                                 {{ $data->starAdmin->first_name }} {{ $data->starAdmin->last_name }} <span class="badge badge-info">Admin</span>
                                 </td>
                                 <td>
-                                    <img src="{{ asset($data->image)}}" alt="" style=" height: 50px; width: 50px; ">
+                                    @if($data->image)
+                                        <img src="{{ asset($data->image)}}" alt="" style=" height: 50px; width: 50px; ">
+                                    @else
+                                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style=" height: 50px; width: 50px; " />
+                                        </a>
+                                    @endif
                                 </td>
                                 <td>{{ $data->unit_price }}</td>
                                 <td>{{ $data->total_items }}</td>

@@ -2,8 +2,12 @@
    @csrf
 <div class="col-md-10 offset-md-1">
       <div class="row">
-         @if ($round_instruction->image != null)
-         <img src="{{ asset($round_instruction->image) }}" style="width: 100%" class="banner-image" />
+         @if ($round_instruction->image)
+            <img src="{{ asset($round_instruction->image) }}" style="width: 100%" class="banner-image" />
+         @else
+            <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                  <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 100%" class="banner-image"/>
+            </a>
          @endif
       </div>
       

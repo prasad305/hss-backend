@@ -61,7 +61,13 @@
                                 <td>{{ ++$key }}</td>
                                 <td>{{ $data->first_name }} {{ $data->last_name }}</td>
                                 <td>
-                                    <img src="{{ asset($data->image)}}" alt="" style=" height: 50px; width: 50px; ">
+                                    @if($data->image)
+                                        <img src="{{ asset($data->image)}}" alt="" style=" height: 50px; width: 50px; ">
+                                    @else
+                                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style=" height: 50px; width: 50px; " />
+                                        </a>
+                                    @endif
                                 </td>
                                 <td>{{ $data->phone }}</td>
                                 <td>{{ $data->email }}</td>

@@ -53,7 +53,13 @@
                             <td>{{ $user->participant->email }}</td>
                             <td>{{ $user->participant->phone }}</td>
                             <td>
-                                <img src="{{ asset($user->participant->image) }}" alt="" height="50px" width="50px">
+                                @if($user->participant->image)
+                                    <img src="{{ asset($user->participant->image) }}" alt="" height="50px" width="50px">
+                                @else
+                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                        <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" height="50px" width="50px" />
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

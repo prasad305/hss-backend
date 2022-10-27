@@ -49,8 +49,14 @@
 
                             <div class="col-8">
                                 <p class="lead">Banner</p>
+                                @if($data->banner)
+                                    <img src=" {{ asset($data->banner) }}" alt="No-Image">
+                                @else
+                                    <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                        <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"/>
+                                    </a>
+                                @endif
 
-                                <img src=" {{ asset('http://localhost:8000/' . $data->banner) }}" alt="No-Image">
                                 <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
                                     {!! $data->description !!}
                                 </p>

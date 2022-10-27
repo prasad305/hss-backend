@@ -31,10 +31,13 @@
             {{-- <div class="row">
             <div class="col-md-6">
                 @if ($post->image)
-                <img src="{{ asset($post->image) }}" style="width: 100%" />
+                    <img src="{{ asset($post->image) }}" style="width: 100%" />
+                @elseif($post->video)
+                    <iframe width="420" height="315" src="{{ $post->video }}"></iframe>
                 @else
-                <iframe width="420" height="315" src="{{ $post->video }}">
-                </iframe>
+                    <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                        <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 100%"/>
+                    </a>
                 @endif
 
             </div>
@@ -44,8 +47,13 @@
             <div class="row pt-5">
 
                 <div class="col-md-4">
-
-                    <img src="{{ asset($post->image) }}" style="width: 100%; border: 2px solid gold;" />
+                    @if($post->image)
+                        <img src="{{ asset($post->image) }}" style="width: 100%; border: 2px solid gold;" />
+                    @else
+                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 100%; border: 2px solid gold;"/>
+                        </a>
+                    @endif
 
                 </div>
 
@@ -110,7 +118,13 @@
                 <div class="card px-5 py-3">
                     <div class="row">
                         <div class="col-xs-6 content-center">
-                            <img src="{{ asset($post->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                            @if($post->image)
+                                <img src="{{ asset($post->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                            @else
+                                <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                                </a>
+                            @endif
                         </div>
                         <div class="col-xs-6">
                             Star
@@ -119,7 +133,13 @@
                     </div>
                     <div class="row py-3">
                         <div class="col-xs-6 content-center">
-                            <img src="{{ asset($post->admin->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                            @if($post->admin->image)
+                                <img src="{{ asset($post->admin->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                            @else
+                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                                </a>
+                            @endif
                         </div>
                         <div class="col-xs-6">
                             Admin

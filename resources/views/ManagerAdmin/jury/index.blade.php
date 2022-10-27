@@ -58,11 +58,11 @@ Jury Board
 
                         <div class="d-flex justify-content-center align-items-center">
                             @if($jury['assignjuries']['image'])
-                            <img src="{{ asset($jury['assignjuries']['image'] ?? get_static_option('user')) }}" alt="Admin Image"
-                                class="img-fluid AdminImg">
+                                <img src="{{ asset($jury['assignjuries']['image']) }}" alt="Admin Image" class="img-fluid AdminImg">
                             @else
-                            <img src="https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg" alt="Admin Image"
-                                class="img-fluid AdminImg">
+                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="img-fluid AdminImg" />
+                                </a>
                             @endif
                         </div>
 

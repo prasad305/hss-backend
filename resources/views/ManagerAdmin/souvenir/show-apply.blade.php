@@ -62,7 +62,13 @@
                                 <td>{{ ++$key }}</td>
                                 <td>{{ $data->name }}</td>
                                 <td>
-                                    <img src="{{ asset($data->image) }}" style="height: 60px; border-radius: 67%; border: 2px solid #90fd00;" alt="">
+                                    @if($data->image)
+                                        <img src="{{ asset($data->image) }}" style="height: 60px; border-radius: 67%; border: 2px solid #90fd00;" alt="">
+                                    @else
+                                        <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                            <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 60px; border-radius: 67%; border: 2px solid #90fd00;"/>
+                                        </a>
+                                    @endif
                                 </td>
                                 <td>{{ $data->mobile_no }}</td>
                                 <td>{{ $data->area }}, {{ $data->city->name }}

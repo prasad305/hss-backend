@@ -42,9 +42,12 @@
                             <div class="panel panel-primary p-2 text-center">
                                 @if ($val->image)
                                     <img src="{{ asset($val->image) }}" class="card-img" />
+                                @elseif($val->video)
+                                    <video class="card-img" controls src="{{ asset($val->video) }}"></video>
                                 @else
-                                    <video class="card-img" controls src="{{ asset($val->video) }}">
-                                    </video>
+                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="card-img"/>
+                                    </a>
                                 @endif
                                 <div class="panel-body py-3">
                                     <h5 class="text-ellipsis-line-1">{{ $val->title }}</h5>

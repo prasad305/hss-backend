@@ -39,8 +39,13 @@ Manager Admin
             @foreach ($audition as $val)
             <div class="col-sm-6 col-md-4  col-lg-3">
                 <div class=" bg-dark shadow-none pb-4 m-3 BGaB">
-                    <img src="{{ asset($val->banner) }}" class="img-fluid w-100"style="max-height:200px borderRadius: 50% " alt="Admin Image"
-                        class="img-fluid ImgBlue mr-3 mb-2 w-100">
+                    @if($val->banner)
+                        <img src="{{ asset($val->banner) }}" class="img-fluid w-100"style="max-height:200px borderRadius: 50% " alt="Admin Image" class="img-fluid ImgBlue mr-3 mb-2 w-100">
+                    @else
+                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                            <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="img-fluid w-100"style="max-height:200px borderRadius: 50% " class="img-fluid ImgBlue mr-3 mb-2 w-100" />
+                        </a>
+                    @endif
 
                     <div className="">
                         <div>

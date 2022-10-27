@@ -84,11 +84,15 @@
                                     <td>{{ $jury->last_name }}</td>
 
                                     <td>
-                                        
-                                            <a href="{{ asset($jury->image) }}" target="_blank">
-                                                <img height="70px;" src="{{ asset($jury->image) }}" width="70px;" onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';"
-                                                    class="rounded-circle" />
-                                            </a>
+                                            @if($jury->image)
+                                                <a href="{{ asset($jury->image) }}" target="_blank">
+                                                    <img height="70px;" src="{{ asset($jury->image) }}" width="70px;" class="rounded-circle" />
+                                                </a>
+                                            @else
+                                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                                    <img height="70px;" src="{{ asset('demo_image/demo_user.png') }}" width="70px;" class="rounded-circle" />
+                                                </a>
+                                            @endif
                                     </td>
                                     <td>{{ $jury->phone }}</td>
                                     <td>

@@ -67,9 +67,13 @@
                                     <td>
                                         @if ($post->banner)
                                             <img src="{{ asset($post->banner) }}" style="width: 200px; height:100px" />
-                                        @else
+                                        @elseif($post->video)
                                             <video width="200" height="100" src="{{ asset($post->video) }}">
                                             </video>
+                                        @else
+                                            <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                                <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 200px; height:100px" />
+                                            </a>
                                         @endif
                                     </td>
                                     <td>{{ $post->title }}</td>

@@ -66,7 +66,13 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>
-                                        <img src="{{ asset($post->banner) }}" style="width: 200px; height:100px" />
+                                        @if($post->banner)
+                                            <img src="{{ asset($post->banner) }}" style="width: 200px; height:100px" />
+                                        @else
+                                            <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                                <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 200px; height:100px" />
+                                            </a>
+                                        @endif
                                     </td>
                                     <td>{{ $post->group_name }}</td>
                                     <td>{{ $post->my_admin->first_name }} {{ $post->my_admin->last_name }} VS
