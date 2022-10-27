@@ -355,7 +355,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // Video Feed
 
-    Route::get('/user/audition/videofeed/videos', [UserController::class, 'videoFeedVidoes']);
+    Route::get('/user/audition/videofeed/videos', [UserController::class, 'videoFeedVideos']);
     Route::post('/user/audition/videos/loveReact', [UserController::class, 'userVideoLoveReact']);
     Route::post('/user/audition/videos/loveReact/payment', [UserController::class, 'userVideoLoveReactPayment']);
     Route::get('/user/audition/getOxygen/videos', [UserController::class, 'getOxygenVideo']);
@@ -588,9 +588,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/winner/auction/{id}', [AuctionController::class, 'makeWinner']);
 
     // audition routes
-    //Route::get('/admin/audition/status', [AuditionController::class, 'starAdminPendingAudtion']);
-    Route::get('/admin/audition/pendings', [AuditionController::class, 'starAdminPendingAudition']);
-    Route::get('/admin/audition/live', [AuditionController::class, 'starAdminLiveAudition']);
+
+    Route::get('/admin/auditions', [AuditionController::class, 'getAdminAuditions']);
     Route::get('/admin/audition/details/{id}', [AuditionController::class, 'starAdminDetailsAudition']);
 
 
