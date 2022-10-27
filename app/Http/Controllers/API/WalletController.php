@@ -53,7 +53,6 @@ class WalletController extends Controller
         return response()->json([
             'status' => 200,
             'userWallet' => $userWallet,
-            'userWalletId' => $id,
         ]);
     }
 
