@@ -136,12 +136,17 @@ Route::post('paytm-callback/{redirectTo}/{user_id}/{type}/{event_id}', [PaymentC
 //paytm mobile
 Route::get('/txn-token-mobile/{amount}', [PaymentController::class, 'txnTokenGenerate']);
 
+
+
+
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/checkingAuthenticated', function () {
         return response()->json(['message' => 'You are in', 'status' => 200], 200);
     });
+    //stripe mobile
+    Route::post('/stripe-make-mobile-payment', [PaymentController::class, 'stripePaymentMobile']);
 
     //paytm make payment
     Route::post('paytm-payment', [PaymentController::class, 'paymentNow']);
@@ -153,6 +158,10 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //stripe make payment
     Route::post('/stripe-payment-make', [PaymentController::class, 'stripePaymentMake']);
     Route::get('/stripe-payment-success/{event_id}/{event_type}', [PaymentController::class, 'stripePaymentSuccess']);
+
+
+
+
 
     //post search
     Route::get('/search-post/{valu}', [UserController::class, 'searchPost']);

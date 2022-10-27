@@ -141,6 +141,8 @@ class PaymentController extends Controller
                 // }
 
                 resgistationSuccessUpdate($user_id, $type, $event_id, "paytm", $result->body->txnAmount);
+
+
                 // if ($type == 'generalpost') {
                 //     $this->generalPostUpdate($event_id, $user_id, "PayTm", $result->body->txnAmount);
                 // }
@@ -275,8 +277,8 @@ class PaymentController extends Controller
     //-------------------stripe start------------------------
     public function stripePaymentMake(Request $request)
     {
-        $public_key = "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh";
-        Stripe::setApiKey("sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX");
+        $public_key = env('STRIPE_PUBLIC_KEY');
+        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
 
         $user = auth()->user();
@@ -306,6 +308,40 @@ class PaymentController extends Controller
 
             return response()->json(['error' => $e->getMessage()]);
         }
+    }
+
+    //stripe mobile
+    public function stripePaymentMobile(Request $request)
+    {
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        // Use an existing Customer ID if this is a returning customer.
+        $user = auth()->user();
+        $customer = \Stripe\Customer::create();
+        $ephemeralKey = \Stripe\EphemeralKey::create(
+            [
+                'customer' => $customer->id,
+            ],
+            [
+                'stripe_version' => '2022-08-01',
+            ]
+        );
+        $paymentIntent = \Stripe\PaymentIntent::create([
+            'amount' => $request->amount * 100,
+            'currency' => 'usd',
+            'description' => $user->id . "_" . $request->event_type . '_' . $request->event_id,
+            'customer' => $customer->id,
+            'automatic_payment_methods' => [
+                'enabled' => 'true',
+            ],
+        ]);
+
+        return response()->json([
+            'paymentIntent' => $paymentIntent->client_secret,
+            'ephemeralKey' => $ephemeralKey->secret,
+            'customer' => $customer->id,
+            'status' => 200,
+            'publishableKey' => env('STRIPE_PUBLIC_KEY')
+        ]);
     }
 
     public function stripePaymentSuccess($event_id, $event_type)
