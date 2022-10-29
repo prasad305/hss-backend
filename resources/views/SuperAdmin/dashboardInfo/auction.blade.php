@@ -68,11 +68,23 @@
                                 {{ $data->admin->first_name }} {{ $data->admin->last_name }} <span class="badge badge-info">Admin</span>
                                 </td>
                                 <td>
-                                    <img src="{{ asset($data->product_image)}}" alt="" style=" height: 50px; width: 50px; ">
+                                    @if($data->product_image)
+                                        <img src="{{ asset($data->product_image)}}" alt="" style=" height: 50px; width: 50px; ">
+                                    @else
+                                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style=" height: 50px; width: 50px;" />
+                                        </a>
+                                    @endif
                                 </td>
                                 </td>
                                 <td>
-                                    <img src="{{ asset($data->banner)}}" alt="" style=" height: 50px; width: 150px; ">
+                                    @if($data->banner)
+                                        <img src="{{ asset($data->banner)}}" alt="" style=" height: 50px; width: 150px; ">
+                                    @else
+                                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style=" height: 50px; width: 150px; " />
+                                        </a>
+                                    @endif
                                 </td>
                                 <td>{{ $data->base_price }}</td>
                                 <td>{{ date('d M Y', strtotime($data->bid_from)) }} </td>

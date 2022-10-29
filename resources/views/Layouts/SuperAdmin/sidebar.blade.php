@@ -209,7 +209,7 @@
                 class="nav-link {{ Request::routeIs('superAdmin.greeting-type.index') || Request::routeIs('superAdmin.interest-type.index') || Request::routeIs('superAdmin.currency.index') || Request::routeIs('superAdmin.country.index') || Request::routeIs('superAdmin.state.index') || Request::routeIs('superAdmin.city.index') || Request::routeIs('superAdmin.educationlevel.index') || Request::routeIs('superAdmin.occupation.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-sliders" aria-hidden="true"></i>
                 <p>Settings
-                    <i class=" nav-icon right fas fa-angle-left"></i>
+                    <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
@@ -301,7 +301,7 @@
         </li>
 
         <li
-            class="nav-item {{ Request::routeIs('superAdmin.aboutUs.index') || Request::routeIs('superAdmin.privacy.index') || Request::routeIs('superAdmin.faq.index') ? 'menu-open' : '' }}">
+            class="nav-item {{ Request::routeIs('superAdmin.aboutUs.index') || Request::routeIs('superAdmin.privacy.index') || Request::routeIs('superAdmin.faq.index') ? 'menu-open' : '' || Request::routeIs('superAdmin.productpurchase.index') ? 'menu-open' : '' || Request::routeIs('superAdmin.refundpolicy.index') ? 'menu-open' : '' || Request::routeIs('superAdmin.termscondition.index') ? 'menu-open' : '' || Request::routeIs('superAdmin.faq.index') ? 'menu-open' : ''}}">
             <a href="#"
                 class="nav-link {{ Request::routeIs('superAdmin.aboutUs.index') || Request::routeIs('superAdmin.privacy.index') || Request::routeIs('superAdmin.faq.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-bullseye" aria-hidden="true"></i>
@@ -414,7 +414,7 @@
                 class="nav-link {{ Request::routeIs('superAdmin.learningSession.index') ? 'active' : '' }}">
                 <i class="nav-icon fa-solid fa-school"></i>
                 <p>Learning Session
-                    <i class="nav-icon right fas fa-angle-left"></i>
+                    <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
@@ -432,7 +432,7 @@
                 class="nav-link {{ Request::routeIs('superAdmin.meetupEvent.index') ? 'active' : '' }}">
                 <i class="nav-icon fa-brands fa-meetup"></i>
                 <p>Meetup Events
-                    <i class="nav-icon right fas fa-angle-left"></i>
+                    <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">

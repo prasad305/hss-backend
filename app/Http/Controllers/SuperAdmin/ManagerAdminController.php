@@ -72,7 +72,7 @@ class ManagerAdminController extends Controller
                 File::delete(public_path($manager_admin->image)); //Old image delete
             $image             = $request->file('image');
             $folder_path       = 'uploads/managerAdmin/image/';
-            $image_new_name    = Str::random(20).'-'.now()->timestamp.'.'.$image->getClientOriginalExtension();
+            $image_new_name    = Str::random(20).'-image-'.now()->timestamp.'.'.$image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->resize(600,600)->save($folder_path.$image_new_name, 100);
             $manager_admin->image   = $folder_path . $image_new_name;
@@ -80,10 +80,10 @@ class ManagerAdminController extends Controller
 
         if($request->hasFile('cover')){
             if ($manager_admin->category != null)
-                File::delete(public_path($manager_admin->image)); //Old image delete
+                File::delete(public_path($manager_admin->cover_photo)); //Old image delete
             $image             = $request->file('cover');
             $folder_path       = 'uploads/managerAdmin/image/';
-            $image_new_name    = Str::random(20).'-'.now()->timestamp.'.'.$image->getClientOriginalExtension();
+            $image_new_name    = Str::random(20).'-cover-'.now()->timestamp.'.'.$image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->resize(600,600)->save($folder_path.$image_new_name, 100);
             $manager_admin->cover_photo   = $folder_path . $image_new_name;
@@ -151,7 +151,7 @@ class ManagerAdminController extends Controller
                 File::delete(public_path($user->image)); //Old image delete
 
             $image             = $request->file('image');
-            $folder_path       = 'uploads/images/users/';
+            $folder_path       = 'uploads/managerAdmin/image/';
             $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->save($folder_path . $image_new_name);
@@ -161,9 +161,9 @@ class ManagerAdminController extends Controller
         if ($request->hasFile('cover')) {
             if ($user->cover_photo != null)
                 File::delete(public_path($user->cover_photo)); //Old image delete
-
+                
             $image             = $request->file('cover');
-            $folder_path       = 'uploads/images/users/';
+            $folder_path       = 'uploads/managerAdmin/image/';
             $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->save($folder_path . $image_new_name);
@@ -194,6 +194,8 @@ class ManagerAdminController extends Controller
     public function destroy($id)
     {
         $manager_admin = User::findOrfail($id);
+        File::delete(public_path($manager_admin->image)); //Old image delete
+        File::delete(public_path($manager_admin->cover_photo)); //Old cover_photo delete
         try {
             $manager_admin->delete();
             return response()->json([

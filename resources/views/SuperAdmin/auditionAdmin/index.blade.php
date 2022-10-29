@@ -58,7 +58,13 @@
                                     <td>{{ $admin->email }}</td>
                                     <td>{{ $admin->phone }}</td>
                                     <td>
-                                        <img src="{{ asset($admin->image) }}" alt="" height="50px" width="50px">
+                                        @if($admin->image)
+                                            <img src="{{ asset($admin->image) }}" alt="" height="50px" width="50px">
+                                        @else
+                                            <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                                <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" height="50px" width="50px" />
+                                            </a>
+                                        @endif
                                     </td>
                                     <td>
                                         @if ($admin->status == 0)

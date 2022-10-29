@@ -46,16 +46,18 @@ class VirtualtourController extends Controller
 
         $virtualtour = new Virtualtour();
         $virtualtour->title = $request->input('title');
-        $virtualtour->link = $request->input('link');
         $virtualtour->type = $request->input('type');
 
         if ($request->hasFile('video')) {
-
+            $virtualtour->link=null;
             $file        = $request->file('video');
             $path        = 'uploads/videos/virtualtour/';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
             $virtualtour->video = $path . '/' . $file_name;
+        }else{
+            $virtualtour->video=null;
+            $virtualtour->link = $request->input('link');
         }
 
 
@@ -114,7 +116,6 @@ class VirtualtourController extends Controller
 
         $virtualtour = Virtualtour::findOrFail($id);
         $virtualtour->title = $request->input('title');
-        $virtualtour->link = $request->input('link');
         $virtualtour->type = $request->input('type');
 
         $destination = $virtualtour->video;
@@ -123,12 +124,15 @@ class VirtualtourController extends Controller
             }
 
         if ($request->hasFile('video')) {
-
+            $virtualtour->link=null;
             $file        = $request->file('video');
             $path        = 'uploads/videos/virtualtour/';
             $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
             $file->move($path, $file_name);
             $virtualtour->video = $path . '/' . $file_name;
+        }else{
+            $virtualtour->video=null;
+            $virtualtour->link = $request->input('link');
         }
 
         try {

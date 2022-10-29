@@ -450,7 +450,7 @@
 
 
         <li
-            class="nav-item {{ Request::routeIs('managerAdmin.dashboard.audition') || Request::routeIs('managerAdmin.audition.events') || Request::routeIs('managerAdmin.audition.pending')|| Request::routeIs('managerAdmin.audition.all') || Request::routeIs('managerAdmin.audition.published') || Request::routeIs('managerAdmin.audition.registration.rules') || Request::routeIs('managerAdmin.audition..auditionAdmin.index')|| Request::routeIs('managerAdmin.audition.juries')|| Request::routeIs('managerAdmin.audition.videoFeed')|| Request::routeIs('managerAdmin.audition.roundResult')? 'menu-open' : '' }}">
+            class="nav-item {{ Request::routeIs('managerAdmin.dashboard.audition') || Request::routeIs('managerAdmin.audition.events') || Request::routeIs('managerAdmin.audition.pending')|| Request::routeIs('managerAdmin.audition.all') || Request::routeIs('managerAdmin.audition.published') || Request::routeIs('managerAdmin.audition.registration.rules') || Request::routeIs('managerAdmin.audition.auditionAdmin.index') || Request::routeIs('managerAdmin.audition.juries')|| Request::routeIs('managerAdmin.audition.videoFeed')|| Request::routeIs('managerAdmin.audition.roundResult')? 'menu-open' : '' }}">
             <a href="#" class="nav-link">
 
                 <i class="nav-icon fa-solid fa-person-skating"></i>

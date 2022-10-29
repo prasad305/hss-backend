@@ -214,7 +214,13 @@
     </div>
     <div class="m-3">
         <div class="card ">
-            <img src={{ asset($greeting->banner ?? get_static_option('no_image')) }} alt="" class="BannerAGN" />
+            @if($greeting->banner)
+                 <img src="{{ asset($greeting->banner) }}" alt="" class="BannerAGN" />
+            @else
+                <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                    <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="BannerAGN"/>
+                </a>
+            @endif
         </div>
 
         <div class="mt-3 row">
@@ -229,7 +235,7 @@
                     <div class=" col-md-6 bg-dark ">
                         <div class="px-5 py-3 my-auto">
                             <span>
-                                <img src={{ asset('assets/manager-admin/tagPrice.PNG') }} alt="" class="PriceTage" />
+                                <img src="{{asset('assets/manager-admin/tagPrice.PNG') }}" alt="" class="PriceTage" />
                             </span>
                             <div class=" mx-2 ">
                                 <span class="text-light buTon-ab ">Cost</span>
@@ -241,7 +247,7 @@
                         </div>
                         <div class="px-5 py-3 my-auto">
                             <span>
-                                <img src={{ asset('assets/manager-admin/tagPrice.PNG') }} alt="" class="PriceTage" />
+                                <img src="{{ asset('assets/manager-admin/tagPrice.PNG') }}" alt="" class="PriceTage" />
                             </span>
                             <div class=" mx-2 ">
                                 <span class="text-light buTon-ab ">Minimum apply before</span>
@@ -278,8 +284,13 @@
                             </div>
                             <div class="row py-3">
                                 <div class="col-xs-6 content-center">
-                                    <img src="{{ asset($greeting->admin->image ?? get_static_option('no_image')) }}"
-                                        style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                    @if($greeting->admin->image)
+                                        <img src="{{ asset($greeting->admin->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                    @else
+                                        <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                            <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                                        </a>
+                                    @endif
                                 </div>
                                 <div class="col-xs-6">
                                     Admin

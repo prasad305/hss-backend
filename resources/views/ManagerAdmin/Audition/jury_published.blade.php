@@ -106,7 +106,14 @@ extends('Layouts.ManagerAdmin.master')
                         @foreach ($avaiable_juries as $key => $jury)
                             <div class="col-md-4 justify-content-center">
                                 <div class="card bg-light text-center  m-4 p-4">
-                                    <center> <img src="{{ asset($jury->image) }}" alt="" class="ImGCard">
+                                    <center> 
+                                        @if($jury->image)
+                                            <img src="{{ asset($jury->image) }}" alt="" class="ImGCard">
+                                        @else
+                                            <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                                <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="ImGCard" />
+                                            </a>
+                                        @endif
                                     </center>
                                     <b class=" mt-2">{{ $jury->first_name . ' ' . $jury->last_name }}</b>
                                     {{-- <small>Music Specialist</small> --}}
