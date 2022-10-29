@@ -32,6 +32,7 @@ use App\Models\MyChatList;
 use App\Models\Notification;
 use App\Models\Occupation;
 use App\Models\QnA;
+use App\Models\Virtualtour;
 use App\Models\QnaMessage;
 use App\Models\QnaRegistration;
 use App\Models\User;
@@ -91,9 +92,24 @@ class UserMobileAppController extends Controller
                 $activity = new Activity();
                 $eventRegistration = new MeetupEventRegistration();
                 $event = MeetupEvent::find($eventId);
+                $eventRegistration->user_id = $user->id;
                 $eventRegistration->meetup_event_id = $eventId;
                 $eventRegistration->amount = $event->fee;
                 $activity->type = 'meetup';
+                $eventRegistration->save();
+
+                // Wallet start
+                if ($request->payment_method == "wallet") {
+                    $walletMeetup =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('meetup');
+                    Wallet::where('user_id', auth('sanctum')->user()->id)->update(['meetup' => $walletMeetup->meetup - 1]);
+                    MeetupEventRegistration::where([['user_id', auth('sanctum')->user()->id], ['meetup_event_id', $eventId]])->update([
+                        'payment_status' => 1,
+                        'payment_method' => "wallet",
+
+                    ]);
+                }
+
+                // Wallet End
             }
         }
         if ($modelName == 'learningSession') {
@@ -102,6 +118,7 @@ class UserMobileAppController extends Controller
                 $activity = new Activity();
                 $eventRegistration = new LearningSessionRegistration();
                 $event = LearningSession::find($eventId);
+                $eventRegistration->user_id = $user->id;
                 $eventRegistration->learning_session_id = $eventId;
                 $eventRegistration->amount = $event->fee;
                 $activity->type = 'learningSession';
@@ -112,6 +129,21 @@ class UserMobileAppController extends Controller
                     $evaluation->user_id = $user->id;
                     $evaluation->save();
                 }
+
+                $eventRegistration->save();
+                // Wallet start
+                if ($request->payment_method == "wallet") {
+                    $learnigSession =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('meetup');
+                    Wallet::where('user_id', auth('sanctum')->user()->id)->update(['learning_session' => $learnigSession->learning_session - 1]);
+                    LearningSessionRegistration::where([['user_id', auth('sanctum')->user()->id], ['learning_session_id', $eventId]])->update([
+                        'payment_status' => 1,
+                        'publish_status' => 1,
+                        'payment_method' => "wallet",
+
+                    ]);
+                }
+
+                // Wallet End
             }
         }
 
@@ -123,16 +155,30 @@ class UserMobileAppController extends Controller
                 $event = LiveChat::find($eventId);
 
 
-                $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->interval)->format('H:i:s');
+                $eventRegistration->user_id = $user->id;
                 $eventRegistration->live_chat_id = $eventId;
                 $eventRegistration->amount = $request->fee;
                 $eventRegistration->room_id = $create_room_id;
                 $eventRegistration->live_chat_start_time = Carbon::parse($request->start_time)->format('H:i:s');
                 $eventRegistration->live_chat_end_time = Carbon::parse($request->end_time)->format('H:i:s');
+                $eventRegistration->live_chat_date = $event->event_date;
                 $activity->room_id = $create_room_id;
                 $activity->type = 'livechat';
+                $eventRegistration->save();
 
+                // Wallet start
+                if ($request->payment_method == "wallet") {
+                    $walletLiveChat =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('live_chats');
+                    Wallet::where('user_id', auth('sanctum')->user()->id)->update(['live_chats' => $walletLiveChat->live_chats - 1]);
+                    LiveChatRegistration::where([['user_id', auth('sanctum')->user()->id], ['live_chat_id', $eventId]])->update([
+                        'payment_status' => 1,
+                        'publish_status' => 1,
+                        'payment_method' => "wallet",
+                    ]);
+                }
 
+                // Wallet End
+                $event->available_start_time =  (Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s')) <= Carbon::parse($event->end_time)->format('H:i:s') ? Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s') : Carbon::parse($event->end_time)->format('H:i:s');
                 $event->update();
             }
         }
@@ -141,16 +187,33 @@ class UserMobileAppController extends Controller
                 $activity = new Activity();
                 $eventRegistration = new QnaRegistration();
                 $event = QnA::find($eventId);
-                $event->available_start_time = Carbon::parse($request->end_time)->addMinutes($event->time_interval)->format('H:i:s');
+
+
+                $eventRegistration->user_id = $user->id;
                 $eventRegistration->qna_id = $eventId;
                 $eventRegistration->amount = $request->fee;
                 $eventRegistration->room_id = Str::random(20);
                 $eventRegistration->qna_date = $event->event_date;
-                // $eventRegistration->publish_status = 1;
+                $eventRegistration->publish_status = 1;
                 $eventRegistration->qna_start_time = Carbon::parse($request->start_time)->format('H:i:s');
                 $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
-                $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
                 $activity->type = 'qna';
+                $eventRegistration->save();
+
+
+                // Wallet start
+                if ($request->payment_method == "wallet") {
+                    $walletQna =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('live_chats');
+                    Wallet::where('user_id', auth('sanctum')->user()->id)->update(['live_chats' => $walletQna->qna - 1]);
+                    QnaRegistration::where([['user_id', auth('sanctum')->user()->id], ['qna_id', $eventId]])->update([
+                        'payment_status' => 1,
+                        'publish_status' => 1,
+                        'payment_method' => "wallet",
+                    ]);
+                }
+
+                // Wallet End
+                $event->available_start_time = (Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s')) <= Carbon::parse($event->end_time)->format('H:i:s') ? Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s') : Carbon::parse($event->end_time)->format('H:i:s');
                 $event->update();
             }
         }
@@ -164,6 +227,7 @@ class UserMobileAppController extends Controller
                 $eventRegistration->status = 1;
                 $eventRegistration->amount = $event->cost;
                 $activity->type = 'greeting';
+                $eventRegistration->save();
             }
             // $notification = Notification::find($request->notification_id);
             // $notification->view_status = 1;
@@ -200,33 +264,39 @@ class UserMobileAppController extends Controller
             $event->save();
             $eventRegistration->status = 1;
             $activity->type = 'marketplace';
+            $eventRegistration->save();
         }
-        if ($modelName == 'AuditionParticipant') {
+        if ($modelName == 'audition') {
             $activity = new Activity();
+            $activity->type = 'audition';
             $eventRegistration = new AuditionParticipant();
             $event = Audition::find($eventId);
-            $activity->type = 'audition';
             $first_round_info = AuditionRoundInfo::where([['audition_id', $eventId]])->first();
 
             $eventRegistration->user_id = $user->id;
             $eventRegistration->audition_id = $eventId;
             $eventRegistration->round_info_id = $first_round_info->id;
             $eventRegistration->amount = $event->fees;
-            $eventRegistration->payment_method = $request->payment_method;
             $eventRegistration->save();
+
+
             if ($request->payment_method == "wallet") {
                 $walletAuditions =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('auditions');
                 Wallet::where('user_id', auth('sanctum')->user()->id)->update(['auditions' => $walletAuditions->auditions - 1]);
+                AuditionParticipant::where([['user_id', auth('sanctum')->user()->id], ['audition_id', $eventId]])->update([
+                    'payment_status' => 1,
+                    'payment_method' => "wallet"
+
+                ]);
             }
         }
 
         try {
-            $eventRegistration->user_id = $user->id;
-            $eventRegistration->card_holder_name = $request->card_holder_name;
-            $eventRegistration->account_no = $request->card_number;
-            $eventRegistration->payment_date = Carbon::now();
-            $eventRegistration->payment_status = 0;
-            $eventRegistration->save();
+            // $eventRegistration->user_id = $user->id;
+            // $eventRegistration->card_holder_name = $request->card_holder_name;
+            // $eventRegistration->account_no = $request->card_number;
+            // $eventRegistration->payment_date = Carbon::now();
+            // $eventRegistration->save();
         } catch (\Throwable $th) {
             //throw $th;
         }
@@ -914,5 +984,20 @@ class UserMobileAppController extends Controller
                 "status" => "0",
             ]);
         }
+    }
+    public function getVirtualTourVideo() {
+        $virtualTourLink = Virtualtour::where('type', 'phone')->first();
+        if($virtualTourLink)
+        {
+            return response()->json([
+                "message" => "Video found",
+                "status" => "200",
+                'videoInfo' => $virtualTourLink,
+            ]);
+        }
+        return response()->json([
+            "message" => "Can not find the video",
+            "status" => "402",
+        ]);
     }
 }

@@ -849,10 +849,12 @@ class UserController extends Controller
             $userInfoTypes->country = $request->country;
             $userInfoTypes->dob = $request->birthday;
             $userInfoTypes->save();
+            $user = User::find(auth('sanctum')->user()->id);
 
             return response()->json([
                 'status' => 200,
-                'message' => 'UserInfo Updated Successfully'
+                'message' => 'UserInfo Updated Successfully',
+                "userInfo" =>  $user
             ]);
         } else {
             $userList->first_name = $request->first_name;
@@ -2098,8 +2100,8 @@ class UserController extends Controller
 
     public function updateCover(Request $request, $id)
     {
-        
-        
+
+
         $validator = Validator::make($request->all(), [
             'cover_photo' => 'required',
         ]);
@@ -2166,30 +2168,31 @@ class UserController extends Controller
                 'message' =>  'Cover Photo Updated Successfully',
             ]);
         }
-        
     }
-    public function purchasedPhotos() {
+    public function purchasedPhotos()
+    {
         $alreadyPaid = GeneralPostPayment::where('user_id', auth('sanctum')->user()->id)->latest()->get();
         $totalPhotos = [];
         foreach ($alreadyPaid as $paidPost) {
             $post = SimplePost::where([['id', $paidPost->post_id], ['status', 1]])->whereNull('video')->latest()->get();
             array_push($totalPhotos, $post);
         }
-        
+
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
             'photos' => $totalPhotos,
         ]);
     }
-    public function purchasedVideos() {
+    public function purchasedVideos()
+    {
         $alreadyPaid = GeneralPostPayment::where('user_id', auth('sanctum')->user()->id)->latest()->get();
         $totalVideos = [];
         foreach ($alreadyPaid as $paidPost) {
             $post = SimplePost::where([['id', $paidPost->post_id], ['status', 1]])->whereNull('image')->latest()->get();
             array_push($totalVideos, $post);
         }
-        
+
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
@@ -2461,7 +2464,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function videoFeedVidoes()
+    public function videoFeedVideos()
     {
 
 
@@ -2481,7 +2484,9 @@ class UserController extends Controller
             $q->where('result_publish_start_date', '>', Carbon::now());
         })->with(['auditionRoundInfoStart' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
             $q->with(['videos' => function ($q) use ($generalFailedUsers, $appealWinnerUsers, $appealFailedUsers) {
-                $q->where([['approval_status', 1], ['type', 'general']])->whereIn('user_id', $generalFailedUsers)->whereNotIn('user_id', $appealWinnerUsers)->whereNotIn('user_id', $appealFailedUsers)->get();
+                $q->with(['totalReact' => function ($q) {
+                    $q->where('user_id', auth('sanctum')->user()->id);
+                }])->where([['approval_status', 1], ['type', 'general']])->whereIn('user_id', $generalFailedUsers)->whereNotIn('user_id', $appealWinnerUsers)->whereNotIn('user_id', $appealFailedUsers)->get();
             }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get();
         }])->where('status', 1)->get()->toArray();
 
@@ -2490,12 +2495,16 @@ class UserController extends Controller
             $q->where('result_publish_start_date', '>', Carbon::now());
         })->with(['auditionRoundInfoStart' => function ($q) use ($appealFailedUsers) {
             $q->with(['videos' => function ($q) use ($appealFailedUsers) {
-                return $q->where([['approval_status', 1], ['type', 'appeal']])->whereIn('user_id', $appealFailedUsers)->get();
+                $q->with(['totalReact' => function ($q) {
+                    $q->where('user_id', auth('sanctum')->user()->id);
+                }])->where([['approval_status', 1], ['type', 'appeal']])->whereIn('user_id', $appealFailedUsers)->get();
             }])->where([['wildcard', 1], ['videofeed_status', 1], ['round_type', 0]])->latest()->get();
         }])->where('status', 1)->get()->toArray();
 
         $userVoteVideos = AuditionRoundInfo::with(['videos' => function ($q) {
-            $q->where([['approval_status', 1], ['type', 'general']])->get();
+            $q->with(['totalReact' => function ($q) {
+                $q->where('user_id', auth('sanctum')->user()->id);
+            }])->where([['approval_status', 1], ['type', 'general']])->get();
         }])->where([['has_user_vote_mark', 1], ['video_feed', 1], ['status', 1]])->latest()->get()->toArray();
 
 

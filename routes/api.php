@@ -136,12 +136,17 @@ Route::post('paytm-callback/{redirectTo}/{user_id}/{type}/{event_id}', [PaymentC
 //paytm mobile
 Route::get('/txn-token-mobile/{amount}', [PaymentController::class, 'txnTokenGenerate']);
 
+
+
+
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/checkingAuthenticated', function () {
         return response()->json(['message' => 'You are in', 'status' => 200], 200);
     });
+    //stripe mobile
+    Route::post('/stripe-make-mobile-payment', [PaymentController::class, 'stripePaymentMobile']);
 
     //paytm make payment
     Route::post('paytm-payment', [PaymentController::class, 'paymentNow']);
@@ -153,6 +158,10 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //stripe make payment
     Route::post('/stripe-payment-make', [PaymentController::class, 'stripePaymentMake']);
     Route::get('/stripe-payment-success/{event_id}/{event_type}', [PaymentController::class, 'stripePaymentSuccess']);
+
+
+
+
 
     //post search
     Route::get('/search-post/{valu}', [UserController::class, 'searchPost']);
@@ -346,7 +355,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     // Video Feed
 
-    Route::get('/user/audition/videofeed/videos', [UserController::class, 'videoFeedVidoes']);
+    Route::get('/user/audition/videofeed/videos', [UserController::class, 'videoFeedVideos']);
     Route::post('/user/audition/videos/loveReact', [UserController::class, 'userVideoLoveReact']);
     Route::post('/user/audition/videos/loveReact/payment', [UserController::class, 'userVideoLoveReactPayment']);
     Route::get('/user/audition/getOxygen/videos', [UserController::class, 'getOxygenVideo']);
@@ -579,9 +588,8 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/winner/auction/{id}', [AuctionController::class, 'makeWinner']);
 
     // audition routes
-    //Route::get('/admin/audition/status', [AuditionController::class, 'starAdminPendingAudtion']);
-    Route::get('/admin/audition/pendings', [AuditionController::class, 'starAdminPendingAudition']);
-    Route::get('/admin/audition/live', [AuditionController::class, 'starAdminLiveAudition']);
+
+    Route::get('/admin/auditions', [AuditionController::class, 'getAdminAuditions']);
     Route::get('/admin/audition/details/{id}', [AuditionController::class, 'starAdminDetailsAudition']);
 
 
