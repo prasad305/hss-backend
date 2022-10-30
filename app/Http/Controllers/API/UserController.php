@@ -1972,7 +1972,7 @@ class UserController extends Controller
 
     public function enrolledAuditions()
     {
-        $enrolledAuditions = AuditionParticipant::with(['audition'])->where('user_id', auth()->user()->id)->get();
+        $enrolledAuditions = AuditionParticipant::with(['audition'])->where([['user_id', auth()->user()->id], ['payment_status', 1]])->get();
 
         return response()->json([
             'status' => 200,
@@ -1984,7 +1984,7 @@ class UserController extends Controller
     public function enrolledAuditionsPending()
     {
 
-        $enrolledAuditionsPending = AuditionParticipant::with(['auditions'])->where('user_id', auth()->user()->id)->count();
+        $enrolledAuditionsPending = AuditionParticipant::with(['auditions'])->where([['user_id', auth()->user()->id], ['payment_status', 1]])->count();
 
         return response()->json([
             'status' => 200,
