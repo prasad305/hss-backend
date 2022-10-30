@@ -626,8 +626,8 @@ class FanGroupController extends Controller
         if ($userPoints) {
             $userPoints = $userPoints;
         } else {
-            $userPoints = new Wallet();
-            $userPoints->save();
+            // $userPoints = new Wallet();
+            // $userPoints->save();
         }
 
         $fanDetails = FanGroup::where('slug', $slug)->first();
@@ -651,7 +651,7 @@ class FanGroupController extends Controller
         return response()->json([
             'status' => 200,
             'fanDetails' => $fanDetails,
-            'userPoints' => $userPoints,
+            'userPoints' => $userPoints ? $userPoints : 0,
             'fanId' => $fanDetails->id,
             'my_user_join' => $my_user_join,
             'another_user_join' => $another_user_join,
