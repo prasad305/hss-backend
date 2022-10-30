@@ -264,6 +264,9 @@ class PaymentController extends Controller
             if ($request->modelName == 'generalpost') {
                 return $this->generalPostUpdateMobile($request->eventId, $user->id, "PayTm-mobile", $request->TXNAMOUNT);
             }
+            if ($request->modelName == 'videoFeed') {
+                return $this->loveReactPaymentMobile($user->id, $request->videoId, $request->reactNum, $request->modelName, $request->TXNAMOUNT);
+            }
 
 
             return "success data received" . "__" . $request->modelName;
@@ -523,41 +526,78 @@ class PaymentController extends Controller
 
     //   <================================Love React Payment start==================================>
 
-    // public function loveReactPayment($user_id, $videoId, $type, $amount)
-    // {
-    //     $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $videoId)->first();
-    //     $reactNum = 5;
+    public function loveReactPayment($user_id, $videoId, $type, $amount)
+    {
+        $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $videoId)->first();
+        $reactNum = 5;
 
-    //     if (!LoveReactPayment::where([['user_id', $user_id], ['react_num', $reactNum], ['video_id', $videoId]])->exists()) {
+        if (!LoveReactPayment::where([['user_id', $user_id], ['react_num', $reactNum], ['video_id', $videoId]])->exists()) {
 
-    //         $loveReactPayment = new LoveReactPayment();
-    //         $loveReactPayment->user_id = $user_id;
-    //         $loveReactPayment->video_id = $videoId;
-    //         $loveReactPayment->react_num = $reactNum;
-    //         $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
-    //         $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
-    //         $loveReactPayment->status = 1;
-    //         $loveReactPayment->type = $type;
-    //         $loveReactPayment->save();
-    //         if ($type == "wallet") {
-    //             $lovePoints =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('love_points');
-    //             Wallet::where('user_id', auth('sanctum')->user()->id)->update(['love_points' => $lovePoints->love_points - $reactNum]);
-    //         }
-    //         if ($loveReactPayment) {
-    //             LoveReact::create([
-    //                 'user_id' => $user_id,
-    //                 'video_id' => $videoId,
-    //                 'react_num' => $reactNum,
-    //                 'audition_id' => $auditionRoundInfo->roundInfo->audition_id,
-    //                 'round_info_id' => $auditionRoundInfo->roundInfo->id,
-    //                 'participant_id' => $auditionRoundInfo->user_id,
-    //                 'react_voting_type' => $auditionRoundInfo->roundInfo->has_user_vote_mark == 1 ? 'user_vote' : ($auditionRoundInfo->roundInfo->wildcard == 1 ? 'wildcard' : 'general'),
-    //                 'status' => 1,
+            $loveReactPayment = new LoveReactPayment();
+            $loveReactPayment->user_id = $user_id;
+            $loveReactPayment->video_id = $videoId;
+            $loveReactPayment->react_num = $reactNum;
+            $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
+            $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
+            $loveReactPayment->status = 1;
+            $loveReactPayment->type = $type;
+            $loveReactPayment->save();
+            if ($type == "wallet") {
+                $lovePoints =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('love_points');
+                Wallet::where('user_id', auth('sanctum')->user()->id)->update(['love_points' => $lovePoints->love_points - $reactNum]);
+            }
+            if ($loveReactPayment) {
+                LoveReact::create([
+                    'user_id' => $user_id,
+                    'video_id' => $videoId,
+                    'react_num' => $reactNum,
+                    'audition_id' => $auditionRoundInfo->roundInfo->audition_id,
+                    'round_info_id' => $auditionRoundInfo->roundInfo->id,
+                    'participant_id' => $auditionRoundInfo->user_id,
+                    'react_voting_type' => $auditionRoundInfo->roundInfo->has_user_vote_mark == 1 ? 'user_vote' : ($auditionRoundInfo->roundInfo->wildcard == 1 ? 'wildcard' : 'general'),
+                    'status' => 1,
 
-    //             ]);
-    //         }
-    //     }
-    // }
+                ]);
+            }
+        }
+    }
+
+    public function loveReactPaymentMobile($user_id, $videoId, $reactNum, $type, $fee)
+    {
+        $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $videoId)->first();
+
+        if (!LoveReactPayment::where([['user_id', $user_id], ['react_num', $reactNum], ['video_id', $videoId]])->exists()) {
+
+            try {
+                $loveReactPayment = new LoveReactPayment();
+                $loveReactPayment->user_id = $user_id;
+                $loveReactPayment->video_id = $videoId;
+                $loveReactPayment->react_num = $reactNum;
+                $loveReactPayment->status = 1;
+                
+                $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
+                $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
+                $loveReactPayment->type = $type;
+                $loveReactPayment->save();
+                if ($loveReactPayment) {
+                    $loveReact = new LoveReact();
+                    $loveReact->user_id = $user_id;
+                    $loveReact->video_id = $videoId;
+                    $loveReact->react_num = $reactNum;
+                    $loveReact->status = 1;
+                    $loveReact->audition_id = $auditionRoundInfo->roundInfo->audition_id;
+                    $loveReact->round_info_id = $auditionRoundInfo->roundInfo->id;
+                    $loveReact->participant_id = $auditionRoundInfo->user_id;
+                    $loveReact->react_voting_type = $auditionRoundInfo->roundInfo->has_user_vote_mark == 1 ? 'user_vote' : ($auditionRoundInfo->roundInfo->wildcard == 1 ? 'wildcard' : 'general');
+                    $loveReact->save();
+                    
+                }
+            } catch (\Throwable $th) {
+                return $th;
+            }
+            
+        }
+    }
 
     //   <================================Love React Payment end ==================================>
 }

@@ -77,13 +77,19 @@
 
                     <li class="nav-item dropdown user-menu">
                         <a href="" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{asset( Auth::user()->image ?? get_static_option('no_image'))}}" class="user-image img-circle " alt="User Image">
+                            @if(Auth::user()->image)
+                                <img src="{{asset( Auth::user()->image)}}" class="user-image img-circle" alt="User Image">
+                            @else
+                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="user-image img-circle" />
+                                </a>
+                            @endif
                             <span class="d-none d-md-inline"> {{ Auth::user()->name }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                             <!-- User image -->
                             <li class="user-header ">
-                                <img src="{{asset( Auth::user()->logo ?? get_static_option('no_image'))}}" class="img-circle " alt="User Image">
+                                <img src="{{asset( Auth::user()->logo)}}" class="img-circle " alt="User Image">
                                 <p>
                                     {{ Auth::user()->name }}
                                 </p>

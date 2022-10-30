@@ -32,6 +32,10 @@
                 <div class="col-md-6">
                     @if ($product->product_image)
                         <img src="{{ asset($product->product_image) }}" style="width: 40%" />
+                    @else
+                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 40%"/>
+                        </a>
                     @endif
 
                 </div>
@@ -70,8 +74,14 @@
                     <div class="card px-5 py-3">
                         <div class="row">
                             <div class="col-xs-6 content-center">
+                                @if($product->star->image)
                                 <img src="{{ asset($product->star->image) }}"
                                     style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                @else
+                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                                    </a>
+                                @endif
                             </div>
                             <div class="col-xs-6">
                                 Star
@@ -80,8 +90,14 @@
                         </div>
                         <div class="row py-3">
                             <div class="col-xs-6 content-center">
-                                <img src="{{ asset($product->admin->image) }}"
+                                @if($product->admin->image)
+                                    <img src="{{ asset($product->admin->image) }}"
                                     style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                @else
+                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                                    </a>
+                                @endif
                             </div>
                             <div class="col-xs-6">
                                 Admin

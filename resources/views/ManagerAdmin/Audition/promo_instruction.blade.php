@@ -38,9 +38,13 @@
         <div class="container-fluid">
 
             <div class="row">
-                {{-- @if ($event->banner != null) --}}
-                <img src="{{ asset($event->banner) }}" style="width: 100%" class="banner-image" />
-                {{-- @endif --}}
+                @if($event->banner)
+                    <img src="{{ asset($event->banner) }}" style="width: 100%" class="banner-image" />
+                @else
+                    <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                        <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="banner-image" />
+                    </a>
+                @endif
             </div>
 
             <div class="row">

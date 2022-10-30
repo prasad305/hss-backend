@@ -50,13 +50,17 @@
             @foreach ($auditionAdmins as $auditionAdmin)
                 <div class="col-md-3 col-sm-6 col-12">
                     <div class="info-box bg-dark shadow-none pt-4 pb-4 m-3">
-                        <img src="{{ asset($auditionAdmin->image ?? get_static_option('user')) }}" alt="Admin Admin image"
-                            class="img-fluid AdminImg mr-3 mt-4">
+                        @if($auditionAdmin->image)
+                            <img src="{{ asset($auditionAdmin->image) }}" alt="Admin Admin image" class="img-fluid AdminImg mr-3 mt-4">
+                        @else
+                            <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="img-fluid AdminImg mr-3 mt-4"/>
+                            </a>
+                        @endif
                         <div class="px-2 mt-3" style="border-left: 1px solid gray">
                             {{-- <a href="{{ route('managerAdmin.audition.auditionAdmin.show', $auditionAdmin->id) }}"> --}}
                             <span class="info-box-text AdminName">
-                                <h5 class="text-light">{{ $auditionAdmin->first_name }}
-                                    {{ $auditionAdmin->last_name }}</h5>
+                                <h5 class="text-light">{{ $auditionAdmin->first_name }} {{ $auditionAdmin->last_name }}</h5>
                             </span>
                             <b class="AdminMusic">{{ $auditionAdmin->auditionCategory->name ?? '' }}</b> <br />
                             <p class="{{ $auditionAdmin->status == 0 ? 'text-danger' : 'text-success' }}">

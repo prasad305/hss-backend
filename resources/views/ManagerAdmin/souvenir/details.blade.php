@@ -45,8 +45,13 @@
             <div class="row pt-5">
 
                 <div class="col-md-4">
-
-                    <img src="{{ asset($post->banner) }}" style="width: 100%; border: 2px solid gold;" />
+                    @if($post->banner)
+                        <img src="{{ asset($post->banner) }}" style="width: 100%; border: 2px solid gold;" />
+                    @else
+                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 100%; border: 2px solid gold;"/>
+                        </a>
+                    @endif
 
 
                     <!-- <div class="mt-4">

@@ -10,7 +10,7 @@ use App\Models\JuryGroup;
 use App\Models\SubCategory;
 use App\Models\User;
 use App\Models\Audition\AuditionAssignJury;
-use Intervention\Image\ImageManagerStatic as Image;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\File;
 
 class JuryBoardController extends Controller
@@ -96,8 +96,8 @@ class JuryBoardController extends Controller
 
         if ($request->hasFile('image')) {
             $image             = $request->file('image');
-            $folder_path       = 'uploads/images/users/juries/';
-            $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
+            $folder_path       = 'uploads/images/users/';
+            $image_new_name    = time() . 'image.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->save($folder_path . $image_new_name);
             $user->image   = $folder_path . $image_new_name;
@@ -105,8 +105,8 @@ class JuryBoardController extends Controller
 
         if ($request->hasFile('cover')) {
             $image             = $request->file('cover');
-            $folder_path       = 'uploads/images/users/juries/';
-            $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
+            $folder_path       = 'uploads/images/users/';
+            $image_new_name    = time() . 'cover.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->resize(879, 200)->save($folder_path . $image_new_name);
             $user->cover_photo   = $folder_path . $image_new_name;
@@ -190,8 +190,8 @@ class JuryBoardController extends Controller
                 File::delete(public_path($user->image)); //Old image delete
 
             $image             = $request->file('image');
-            $folder_path       = 'uploads/images/users/juries/';
-            $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
+            $folder_path       = 'uploads/images/users/';
+            $image_new_name    = time() . 'image.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->save($folder_path . $image_new_name);
             $user->image   = $folder_path . $image_new_name;
@@ -202,8 +202,8 @@ class JuryBoardController extends Controller
                 File::delete(public_path($user->cover_photo)); //Old image delete
 
             $image             = $request->file('cover');
-            $folder_path       = 'uploads/images/users/juries/';
-            $image_new_name    = time() . '.' . $image->getClientOriginalExtension();
+            $folder_path       = 'uploads/images/users/';
+            $image_new_name    = time() . 'cover.' . $image->getClientOriginalExtension();
             //resize and save to server
             Image::make($image->getRealPath())->resize(879, 200)->save($folder_path . $image_new_name);
             $user->cover_photo   = $folder_path . $image_new_name;

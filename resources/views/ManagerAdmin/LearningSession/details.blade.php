@@ -38,12 +38,16 @@
         <div class="container-fluid">
 
             <div class="row">
-                @if ($event->banner != null)
+                @if ($event->banner)
                     <img src="{{ asset($event->banner) }}" style="width: 100%" class="banner-image" />
-                @else
+                @elseif($event->video)
                     <video controls>
                         <source src="{{ asset($event->video) }}" />
                     </video>
+                @else
+                    <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                        <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 100%" class="banner-image" />
+                    </a>
                 @endif
             </div>
 
@@ -109,8 +113,13 @@
                     <div class="card px-5">
                         <div class="row py-3">
                             <div class="col-xs-6 content-center">
-                                <img src="{{ asset($event->star->image ?? get_static_option('no_image')) }}"
-                                    style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                @if($event->star->image)
+                                <img src="{{ asset($event->star->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                @else
+                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                    </a>
+                                @endif
                             </div>
                             <div class="col-xs-6">
                                 Star
@@ -120,8 +129,14 @@
                         @if ($event->admin)
                             <div class="row py-3">
                                 <div class="col-xs-6 content-center">
-                                    <img src="{{ asset($event->admin->image ?? get_static_option('no_image')) }}"
-                                        style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                    @if($event->admin->image)
+                                        <img src="{{ asset($event->admin->image) }}"
+                                            style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                    @else
+                                        <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                            <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                        </a>
+                                    @endif
                                 </div>
 
                                 <div class="col-xs-6">

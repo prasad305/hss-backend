@@ -30,7 +30,13 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <img src="{{ asset($event->banner) }}" style="width: 100% " />
+                    @if($event->banner)
+                        <img src="{{ asset($event->banner) }}" style="width: 100%" />
+                    @else
+                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 100%"/>
+                        </a>
+                    @endif
                 </div>
                 <div class="col-md-6">
                     <video width="100%" height="360" controls src="{{ asset($event->video) }}">
@@ -177,8 +183,14 @@
             <div class="card px-5 py-3 mx-2">
                 <div class="row">
                     <div class="col-xs-6 content-center">
-                        <img src="{{ asset($event->star->image) }}"
-                            style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                        @if($event->star->image)
+                            <img src="{{ asset($event->star->image) }}"
+                                style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                        @else
+                            <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                            </a>
+                        @endif
                     </div>
                     <div class="col-xs-6">
                         Star
@@ -187,10 +199,15 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-6 content-center mr-2">
-                        <img src="{{ asset($event->admin->image) }}" class="user_image"
-                            style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"
-                            alt="Image not found"
-                            onerror="this.onerror=null;this.src='{{ asset('demo_image/demo_user.png') }}';" />
+                        @if($event->admin->image)
+                            <img src="{{ asset($event->admin->image) }}" class="user_image"
+                                style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"
+                                alt="Image not found" />
+                        @else
+                            <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                            </a>
+                        @endif
                     </div>
                     <div class="col-xs-6">
                         Admin

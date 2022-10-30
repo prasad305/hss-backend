@@ -62,7 +62,13 @@
                                 <td>{{ ++$key }}</td>
                                 <td>{{ $data->marketplace->title }}</td>
                                 <td>
-                                    <img src="{{ asset($data->marketplace->image) }}" style="height: 60px; border-radius: 67%; border: 2px solid #90fd00;" alt="">
+                                    @if($data->marketplace->image)
+                                        <img src="{{ asset($data->marketplace->image) }}" style="height: 60px; border-radius: 67%; border: 2px solid #90fd00;" alt="">
+                                    @else
+                                        <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                            <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 60px; border-radius: 67%; border: 2px solid #90fd00;" />
+                                        </a>
+                                    @endif
                                 </td>
                                 <td>{{ $data->items }}</td>
                                 <td>{{ $data->unit_price }}</td>

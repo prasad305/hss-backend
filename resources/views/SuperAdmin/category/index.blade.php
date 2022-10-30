@@ -65,10 +65,22 @@
                                 <tr>
                                     <td>{{ $data->name }}</td>
                                     <td>
-                                        <img src="{{ asset($data->icon) }}" alt="" height="50" width="50">
+                                        @if($data->icon)
+                                            <img src="{{ asset($data->icon) }}" alt="" height="50" width="50">
+                                        @else
+                                            <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                                <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" height="50" width="50" />
+                                            </a>
+                                        @endif
                                     </td>
                                     <td>
-                                        <img src="{{ asset($data->image) }}" alt="" height="50" width="50">
+                                        @if($data->image)
+                                            <img src="{{ asset($data->image) }}" alt="" height="50" width="50">
+                                        @else
+                                            <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                                <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" height="50" width="50" />
+                                            </a>
+                                        @endif
                                     </td>
                                     <td style="width: 150px">
                                         <a class="btn btn-sm btn-info"

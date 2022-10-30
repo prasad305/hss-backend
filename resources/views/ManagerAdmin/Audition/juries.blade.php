@@ -99,7 +99,7 @@
                 <div class="card m-3" style=" backgroundColor: black;">
                     <div class="card-body">
                         <div class="text-center d-flex justify-content-center">
-                            <img src={{ asset('assets/manager-admin/events/person-2.png') }} alt=""   class="img-fluid ImgBlue mr-3 mb-2 w-100">
+                            <img src="{{ asset('assets/manager-admin/events/person-2.png') }}" alt=""   class="img-fluid ImgBlue mr-3 mb-2 w-100">
                                   
                         </div>
                         <h5 class="text-muted text-center">Oni Hasan</h5>
@@ -116,7 +116,7 @@
                 <div class="card m-3" style="  backgroundColor: black;  ">
                     <div class="card-body">
                         <div class="text-center d-flex justify-content-center">
-                            <img src={{ asset('assets/manager-admin/events/person-3.png') }} alt="" height="150"
+                            <img src="{{ asset('assets/manager-admin/events/person-3.png') }}" alt="" height="150"
                                 width="150" style=" borderRadius: 50% " />
                         </div>
                         <h5 class="text-muted text-center">Oni Hasan</h5>

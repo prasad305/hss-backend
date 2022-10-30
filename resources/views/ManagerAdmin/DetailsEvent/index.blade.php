@@ -36,7 +36,13 @@
                                         class="ion-chevron-left"></i>&nbsp; Back</a>
                             </div> --}}
                         </div>
-                        <img src="{{ asset($eventsDetails->banner) }}" height="200px" width="100%" alt="sdad">
+                        @if($eventsDetails->banner)
+                            <img src="{{ asset($eventsDetails->banner) }}" height="200px" width="100%" alt="sdad">
+                        @else
+                            <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" height="200px" width="100%"/>
+                            </a>
+                        @endif
                         <div class="panel-body">
                             <h2>{{ $eventsDetails->title }}</h2>
 

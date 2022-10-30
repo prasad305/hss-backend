@@ -205,10 +205,13 @@ class QnaController extends Controller
             $activity->event_id = $event->id;
             $activity->event_registration_id = $eventRegistration->id;
             $activity->save();
+            
+            $userWallet = Wallet::where('user_id', Auth::user()->id)->first();
 
             return response()->json([
                 'status' => 200,
                 'message' => 'Meetup Events Successfully Registered',
+                'waletInfo' => $userWallet,
             ]);
         }
     }
