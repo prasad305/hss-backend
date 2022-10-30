@@ -364,9 +364,15 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     // Promo Videos
     Route::get('/user/PromoVideos', [UserController::class, 'getPromoVideo']);
 
+     // Jury Profile
+     Route::post('/jury/juryUpdateCover/{id}', [UserController::class, 'juryUpdateCover']);
+     Route::post('/jury/juryUpdateProfile/{id}', [UserController::class, 'juryUpdateProfile']);
+
     // User Profile
-    Route::post('/user/coverUpdate/{id}', [UserController::class, 'updateCover']);
-    Route::post('/user/profileUpdate/{id}', [UserController::class, 'updateProfile']);
+    Route::post('/user/coverUpdate', [UserController::class, 'updateCover']);
+    Route::post('/user/profileUpdate', [UserController::class, 'updateProfile']);
+    
+   
 
     // Souviner Section
     Route::get('/user/souviner/view/{starId}', [SouvinerController::class, 'getUserSouvenir']);
