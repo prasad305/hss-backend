@@ -273,6 +273,24 @@ class PaymentController extends Controller
         }
     }
 
+    /**
+     * video feed reeact buy
+     */
+    public function videoFeedReactStripe(Request $request)
+    {
+        $user = auth()->user();
+        // return loveReactPaymentMobile($user->id, $request->videoId, $request->reactNum, $request->modelName, $request->TXNAMOUNT);
+        return $this->loveReactPaymentMobile(
+            $user->id,
+            $request->videoId,
+            $request->reactNum,
+            $request->modelName,
+            $request->amount
+        );
+    }
+
+
+
     //paytem moble end
     //---------------------paytm end--------------------------
 
