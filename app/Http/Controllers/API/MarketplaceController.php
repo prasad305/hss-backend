@@ -263,9 +263,10 @@ class MarketplaceController extends Controller
 
     public function viewMarketplaceActivities()
     {
-        $data = MarketplaceOrder::where('user_id', Auth::user()->id)
-            ->latest()
-            ->get();
+        $data = Activity::where('user_id',Auth::user()->id)->where('type', 'marketplace')->latest()->get();
+        // $data = MarketplaceOrder::where('user_id', Auth::user()->id)
+        //     ->latest()
+        //     ->get();
 
         return response()->json([
             'status' => 200,
