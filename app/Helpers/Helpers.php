@@ -385,7 +385,7 @@ if (!function_exists('random_code')) {
         }
         //generalpost
         if ($type == 'generalpost') {
-            generalPostUpdate($event_id, $user_id, "PayTm", $amount);
+            generalPostUpdate($event_id, $user_id, $paymentMethod, $amount);
         }
     }
 
@@ -397,7 +397,7 @@ if (!function_exists('random_code')) {
         // try {
         $registerEvent = AuditionParticipant::where([['audition_id', $event_id], ['user_id', $user_id]])->first();
         $registerEvent->payment_status = 1;
-        $registerEvent->payment_method = "paytm";
+        $registerEvent->payment_method = $method;
         $registerEvent->update();
         // } catch (\Throwable $th) {
         //     //throw $th;

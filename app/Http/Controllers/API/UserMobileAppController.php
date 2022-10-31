@@ -87,6 +87,8 @@ class UserMobileAppController extends Controller
         $modelName = $request->model_name;
 
 
+        // return $modelName;
+
         if ($modelName == 'meetup') {
             if (!MeetupEventRegistration::where([['user_id', auth()->user()->id], ['meetup_event_id', $eventId]])->exists()) {
                 $activity = new Activity();
@@ -267,6 +269,7 @@ class UserMobileAppController extends Controller
             $eventRegistration->save();
         }
         if ($modelName == 'audition') {
+
             $activity = new Activity();
             $activity->type = 'audition';
             $eventRegistration = new AuditionParticipant();
@@ -985,10 +988,10 @@ class UserMobileAppController extends Controller
             ]);
         }
     }
-    public function getVirtualTourVideo() {
+    public function getVirtualTourVideo()
+    {
         $virtualTourLink = Virtualtour::where('type', 'phone')->first();
-        if($virtualTourLink)
-        {
+        if ($virtualTourLink) {
             return response()->json([
                 "message" => "Video found",
                 "status" => "200",

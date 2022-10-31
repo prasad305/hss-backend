@@ -18,8 +18,8 @@ class Activity extends Model
         'souvenir_id',
 
     ];
-
-    protected $with = ['user', 'meetup', 'meetupRegistration', 'marketPlace', 'marketPlaceOrder', 'souvenirApply' ,'livechat','livechatRegistration', 'learningSession','learningSessionRegistration','greetingRegistration','greeting','qna','qnaRegistration','auction'];
+    //, 'marketPlaceOrder', 'marketPlace'
+    protected $with = ['user', 'meetup', 'meetupRegistration', 'souvenirApply', 'livechat', 'livechatRegistration', 'learningSession', 'learningSessionRegistration', 'greetingRegistration', 'greeting', 'qna', 'qnaRegistration', 'auction'];
 
 
     public function user()
@@ -73,17 +73,20 @@ class Activity extends Model
     {
         return $this->belongsTo(Auction::class, 'event_id');
     }
-    public function marketPlace(){
-        return $this->belongsTo(marketPlace::class,'event_id');
+    public function marketPlace()
+    {
+        return $this->belongsTo(marketPlace::class, 'event_id');
     }
-    public function marketPlaceOrder(){
+    public function marketPlaceOrder()
+    {
         return $this->belongsTo(MarketPlaceOrder::class, 'event_registration_id');
     }
-    public function souvenirApply(){
+    public function souvenirApply()
+    {
         return $this->belongsTo(SouvenirApply::class, 'event_registration_id');
     }
-    public function audition(){
+    public function audition()
+    {
         return $this->belongsTo(audition::class, 'event_id');
     }
-
 }
