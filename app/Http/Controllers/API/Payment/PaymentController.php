@@ -267,6 +267,9 @@ class PaymentController extends Controller
             if ($request->modelName == 'videoFeed') {
                 return $this->loveReactPaymentMobile($user->id, $request->videoId, $request->reactNum, $request->modelName, $request->TXNAMOUNT);
             }
+            if ($request->modelName == 'marketplace') {
+                return $this->marketplaceUpdate($user->id, $request->eventId, "PayTm-mobile");
+            }
 
 
             return "success data received" . "__" . $request->modelName;

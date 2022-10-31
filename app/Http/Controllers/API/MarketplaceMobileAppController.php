@@ -46,9 +46,9 @@ class MarketplaceMobileAppController extends Controller
         $marketplace = Marketplace::find($marketplaceOrder->marketplace_id);
 
         if ($marketplace->total_items >= $marketplace->total_selling + $marketplaceOrder->items) {
-            $marketplaceOrder->country_id = $request->country;
-            $marketplaceOrder->state_id = $request->state;
-            $marketplaceOrder->city_id = $request->city;
+            $marketplaceOrder->country_id = $request->country_id;
+            $marketplaceOrder->state_id = $request->state_id;
+            $marketplaceOrder->city_id = $request->city_id;
             $marketplaceOrder->area = $request->area;
             $marketplaceOrder->phone = $request->phone;
             $marketplaceOrder->update();
