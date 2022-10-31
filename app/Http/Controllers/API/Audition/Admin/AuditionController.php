@@ -2536,6 +2536,7 @@ class AuditionController extends Controller
         $auditionCertificationContent = new AuditionCertificationContent();
         $auditionCertificationContent->audition_id = $request->audition_id;
         $auditionCertificationContent->title = $request->title;
+        $auditionCertificationContent->fee = $request->fee;
         $auditionCertificationContent->sub_title = $request->sub_title;
         $auditionCertificationContent->main_content = $request->main_content;
 
