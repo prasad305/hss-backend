@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionUploadVideo;
+use App\Models\AuditionCertification;
 use App\Models\GeneralPostPayment;
 use App\Models\GreetingsRegistration;
 use App\Models\JuryGroup;
@@ -388,6 +390,9 @@ if (!function_exists('random_code')) {
         if ($type == 'generalpost') {
             generalPostUpdate($event_id, $user_id, "PayTm", $amount);
         }
+        if ($type == 'auditionCertificate') {
+            auditionCertificateUpdate($user_id, $event_id, "PayTm", $amount);
+        }
     }
 
 
@@ -398,8 +403,28 @@ if (!function_exists('random_code')) {
         // try {
         $registerEvent = AuditionParticipant::where([['audition_id', $event_id], ['user_id', $user_id]])->first();
         $registerEvent->payment_status = 1;
-        $registerEvent->payment_method = "paytm";
+        $registerEvent->payment_method =  $method;
         $registerEvent->update();
+        // } catch (\Throwable $th) {
+        //     //throw $th;
+        // }
+    }
+
+    //auditionCertificateUpdate
+    function auditionCertificateUpdate($user_id, $round_info_id, $method, $fee)
+    {
+
+        $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
+        // try {
+        AuditionCertification::create([
+            'participant_id' =>  $user_id,
+            'audition_id' =>  $auditionRoundInfo->audition_id,
+            'round_info_id' =>  $round_info_id,
+            'fee' =>  $fee,
+            'payment_status' =>  1,
+            'payment_method' => $method
+        ]);
+
         // } catch (\Throwable $th) {
         //     //throw $th;
         // }
