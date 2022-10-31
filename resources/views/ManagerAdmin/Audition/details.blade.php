@@ -33,6 +33,10 @@
                 <div class="col-md-6">
                     @if ($audition->banner)
                         <img src="{{ asset($audition->banner) }}" style="width: 40%" />
+                    @else
+                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                            <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"  style="width: 40%" />
+                        </a>
                     @endif
 
                 </div>
@@ -84,8 +88,13 @@
                         @foreach ($judges as $star)
                             <div class="row">
                                 <div class="col-xs-6 content-center">
-                                    <img src="{{ asset($star->user->image ?? get_static_option('no_image')) }}"
-                                        style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                    @if($star->user->image)
+                                        <img src="{{ asset($star->user->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                    @else
+                                        <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                            <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                        </a>
+                                    @endif
                                 </div>
                                 <div class="col-xs-6">
                                     <h3>{{ $star->user ? $star->user->first_name : '' }}

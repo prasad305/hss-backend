@@ -2,7 +2,13 @@
     <div class="sidebar-inner slimscrollleft">
         <div class="user-details">
             <div class="text-center content-center">
-                <img src="{{ asset(Auth::user()->image ?? get_static_option('user')) }}" alt="" class="img-circle">
+                @if(Auth::user()->image)
+                    <img src="{{ asset(Auth::user()->image) }}" alt="" class="img-circle">
+                @else
+                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="img-circle" />
+                    </a>
+                @endif
             </div>
             <div class="user-info">
                 <div class="dropdown">

@@ -31,11 +31,14 @@
             {{-- <div class="row">
             <div class="col-md-6">
                 @if ($post->image)
-                <img src="{{ asset($post->image) }}" style="width: 100%" />
-        @else
-        <iframe width="420" height="315" src="{{ $post->video }}">
-        </iframe>
-        @endif
+                    <img src="{{ asset($post->image) }}" style="width: 100%" />
+                @elseif($post->video)
+                    <iframe width="420" height="315" src="{{ $post->video }}"> </iframe>
+                @else
+                    <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                        <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"  style="width: 100%"/>
+                    </a>
+                @endif
 
     </div>
 </div> --}}
@@ -44,9 +47,13 @@
             <div class="row pt-5">
 
                 <div class="col-md-4">
-
-                    <img src="{{ asset($post->banner) }}"
-                        style="width: 100%; border: 3px solid #fff; border-radius: 10px;" />
+                    @if($post->banner)
+                        <img src="{{ asset($post->banner) }}" style="width: 100%; border: 3px solid #fff; border-radius: 10px;" />
+                    @else
+                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                            <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"  style="width: 100%; border: 3px solid #fff; border-radius: 10px;"/>
+                        </a>
+                    @endif
 
                     <br>
                     <br>
@@ -55,10 +62,13 @@
                     <div class="row">
                         <div class="col-md-6 col-12">
                             <div class="card">
-                                {{-- <img class="card-img-top" src="..." alt="Card image cap"> --}}
-                                <img src="{{ asset($star_one->image) }}"
-                                    style=" height: 210px; border-radius: 50%; text-align: center; border: 3px solid #59df06; "
-                                    alt="">
+                                @if($star_one->image)
+                                    <img src="{{ asset($star_one->image) }}" style=" height: 210px; border-radius: 50%; text-align: center; border: 3px solid #59df06;" alt="">
+                                @else
+                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                        <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style=" height: 210px; border-radius: 50%; text-align: center; border: 3px solid #59df06;"/>
+                                    </a>
+                                @endif
                                 <div class="card-body">
                                     <h2 class="card-title" style="font-weight: 600; font-size: 20px; color: #55e51b; ">
                                         {{ $star_one->first_name }} {{ $star_one->last_name }} </h2>&nbsp;&nbsp
@@ -77,10 +87,15 @@
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="card">
-                                {{-- <img class="card-img-top" src="..." alt="Card image cap"> --}}
-                                <img src="{{ asset($another_star->image) }}"
+                                if($another_star->image)
+                                    <img src="{{ asset($another_star->image) }}"
                                     style=" height: 210px; border-radius: 50%; text-align: center; border: 3px solid #59df06; "
                                     alt="">
+                                @else
+                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                        <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style=" height: 210px; border-radius: 50%; text-align: center; border: 3px solid #59df06;"/>
+                                    </a>
+                                @endif
                                 <div class="card-body">
                                     <h2 class="card-title" style="font-weight: 600; font-size: 20px; color: #55e51b; ">
                                         {{ $another_star->first_name }} {{ $another_star->last_name }} </h2>&nbsp;&nbsp
@@ -189,29 +204,39 @@
             </div>
 
             {{-- <div class="col-md-4">
-                <div class="card px-5 py-3">
-                    <div class="row">
+                    <div class="card px-5 py-3">
+                        <div class="row">
+                            <div class="col-xs-6 content-center">
+                                @if($post->image)
+                                    <img src="{{ asset($post->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                @else
+                                    <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                        <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                                    </a>
+                                @endif
+                    </div>
+                    <div class="col-xs-6">
+                        Star
+                        <h3>{{ $post->star->first_name }} {{ $post->star->last_name }}</h3>
+                    </div>
+                    </div>
+                    <div class="row py-3">
                         <div class="col-xs-6 content-center">
-                            <img src="{{ asset($post->image) }}" style="height: 80px; width: 80px; border-radius: 50%;
-border: 2px solid gray" />
-</div>
-<div class="col-xs-6">
-    Star
-    <h3>{{ $post->star->first_name }} {{ $post->star->last_name }}</h3>
-</div>
-</div>
-<div class="row py-3">
-    <div class="col-xs-6 content-center">
-        <img src="{{ asset($post->admin->image) }}"
-            style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
-    </div>
-    <div class="col-xs-6">
-        Admin
-        <h3>{{ $post->admin->first_name }} {{ $post->admin->last_name }}</h3>
-    </div>
-</div>
-</div>
-</div> --}}
+                            @if($post->admin->image)
+                                <img src="{{ asset($post->admin->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                            @else
+                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                    <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                                </a>
+                            @endif
+                        </div>
+                        <div class="col-xs-6">
+                            Admin
+                            <h3>{{ $post->admin->first_name }} {{ $post->admin->last_name }}</h3>
+                        </div>
+                    </div>
+                    </div>
+                </div> --}}
 
         </div>
 

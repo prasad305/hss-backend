@@ -45,8 +45,13 @@ Admin
             @foreach ($admins as $admin)
             <div class="col-md-3 col-sm-6 col-12">
                 <div class="info-box shadow-none bg-light pt-4 pb-4">
-                    <img src="{{ asset($admin->image ?? get_static_option('user')) }}" alt="Admin Image"
-                        class="img-fluid AdminImg mr-3 mt-4">
+                    @if($admin->image)
+                    <img src="{{ asset($admin->image) }}" alt="Admin Image" class="img-fluid AdminImg mr-3 mt-4">
+                    @else
+                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="img-fluid AdminImg mr-3 mt-4"/>
+                        </a>
+                    @endif
 
                     <div class="px-2" style="border-left: 1px solid gray">
 

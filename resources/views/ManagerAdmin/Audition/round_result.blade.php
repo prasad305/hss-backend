@@ -98,8 +98,13 @@
         @foreach ($auditions as $audition)
         <div class="col-md-3 col-sm-6 col-12 ">
             <div class="card bg-gray BGaB m-3">
-                <img src="{{ asset($audition->banner ?? get_static_option('audition_demo_image')) }}" alt="Admin Image"
-                class="img-fluid ImgBlue  mb-2 ">
+                @if($audition->banner)
+                    <img src="{{ asset($audition->banner) }}" alt="Admin Image" class="img-fluid ImgBlue  mb-2">
+                @else
+                    <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                        <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="img-fluid ImgBlue  mb-2"/>
+                    </a>
+                @endif
                 <h5 class="text-center text-bold mb-4">{{ $audition->title }}</h5> 
                  <a href="{{ route('managerAdmin.audition.showRoundResult', $audition->id) }}"
                     class="btn  mb-2 view-rslt ">View Round Result</a>

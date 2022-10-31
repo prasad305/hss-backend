@@ -79,8 +79,13 @@
                                     <td>{{ $data->phone }}</td>
                                     <td>{{ $data->email }}</td>
                                     <td>
-                                        <img src="{{ asset($data->image) }}" alt="" height="50" width="50"
-                                            onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';">
+                                        @if($data->image)
+                                            <img src="{{ asset($data->image) }}" alt="" height="50" width="50" />
+                                        @else
+                                            <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                                <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" height="50" width="50" />
+                                            </a>
+                                        @endif
                                     </td>
 
                                     <td>{{ $data->category->name ?? '' }}</td>

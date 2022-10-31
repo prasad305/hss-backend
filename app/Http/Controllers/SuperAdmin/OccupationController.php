@@ -93,12 +93,16 @@ class OccupationController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required',
+        ]);
+        
         $occupation = Occupation::findOrFail($id);
         $occupation->title = $request->input('name');
         $occupation->status = $request->input('status');
 
         try {
-            $occupation->save();
+            $occupation->update();
             return response()->json([
                 'success' => 'success',
                 'message' => 'Occupation Updated Successfully'

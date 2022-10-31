@@ -42,7 +42,13 @@
                     <div class="card px-3 py-3">
                         <div class="d-flex mb-3 align-content-center  ">
                             <div class="">
-                                <img src="{{ asset($promoVideo->star->image) }}" class="star-img" />
+                                @if($promoVideo->star->image)
+                                    <img src="{{ asset($promoVideo->star->image) }}" class="star-img" />
+                                @else
+                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="star-img"/>
+                                    </a>
+                                @endif
                             </div>
                             <div class="px-3">
                                 Star
@@ -52,7 +58,13 @@
 
                         <div class="d-flex mb-3 align-content-center  ">
                             <div class="">
-                                <img src="{{ asset($promoVideo->admin->image) }}"class="star-img" />
+                                @if($promoVideo->admin->image)
+                                    <img src="{{ asset($promoVideo->admin->image) }}" class="star-img" />
+                                @else
+                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="star-img"/>
+                                    </a>
+                                @endif
                             </div>
                             <div class="px-3">
                                 Admin

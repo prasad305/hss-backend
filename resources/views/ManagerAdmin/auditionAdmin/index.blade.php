@@ -47,8 +47,13 @@ Audition Admin
                 <div class="info-box shadow-none py-4 d-flex align-items-center">
 
                     <div class="d-flex justify-content-center align-items-center">
-                        <img src="{{ asset($auditionAdmin->image ?? get_static_option('user')) }}" alt="Admin Image"
-                            class="img-fluid AdminImg">
+                        @if($auditionAdmin->image)
+                            <img src="{{ asset($auditionAdmin->image) }}" alt="Admin Image" class="img-fluid AdminImg">
+                        @else
+                            <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="img-fluid AdminImg"/>
+                            </a>
+                        @endif
                     </div>
 
                     <div class="px-2 p-x-i" style="border-left: 1px solid gray">

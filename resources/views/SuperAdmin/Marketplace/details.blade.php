@@ -31,10 +31,13 @@
             {{-- <div class="row">
             <div class="col-md-6">
                 @if ($post->image)
-                <img src="{{ asset($post->image) }}" style="width: 100%" />
+                    <img src="{{ asset($post->image) }}" style="width: 100%" />
+                @elseif($post->video)
+                    <iframe width="420" height="315" src="{{ $post->video }}"> </iframe>
                 @else
-                <iframe width="420" height="315" src="{{ $post->video }}">
-                </iframe>
+                    <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                        <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 100%" />
+                    </a>
                 @endif
 
             </div>
@@ -44,8 +47,13 @@
             <div class="row pt-5">
 
                 <div class="col-md-4">
-
-                    <img src="{{ asset($post->image) }}" style="width: 100%; border: 2px solid gold;" />
+                    @if($post->image)
+                        <img src="{{ asset($post->image) }}" style="width: 100%; border: 2px solid gold;" />
+                    @else
+                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 100%; border: 2px solid gold;"/>
+                        </a>
+                    @endif
 
                 </div>
 

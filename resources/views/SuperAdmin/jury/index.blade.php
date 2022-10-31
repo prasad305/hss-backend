@@ -84,17 +84,15 @@
                                     <td>{{ $jury->last_name }}</td>
 
                                     <td>
-                                        @if ($jury->image)
-                                            <a href="{{ asset($jury->image) }}" target="_blank">
-                                                <img height="70px;" src="{{ asset($jury->image) }}" width="70px;"
-                                                    class="rounded-circle" />
-                                            </a>
-                                        @else
-                                            <abbr title="Sorry There in no picture">
-                                                <img class="rounded-circle" height="70px;"
-                                                    src="{{ asset(get_static_option('no_image')) }}" width="70px;" />
-                                            </abbr>
-                                        @endif
+                                            @if($jury->image)
+                                                <a href="{{ asset($jury->image) }}" target="_blank">
+                                                    <img height="70px;" src="{{ asset($jury->image) }}" width="70px;" class="rounded-circle" />
+                                                </a>
+                                            @else
+                                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                                    <img height="70px;" src="{{ asset('demo_image/demo_user.png') }}" width="70px;" class="rounded-circle" />
+                                                </a>
+                                            @endif
                                     </td>
                                     <td>{{ $jury->phone }}</td>
                                     <td>
@@ -126,10 +124,6 @@
                                         <a class="btn btn btn-info"
                                             onclick="Show('Edit Jury','{{ route('superAdmin.jury.edit', $jury->id) }}')"><i
                                                 class="fa fa-edit text-white"></i></a>
-                                        <button class="btn btn-danger" onclick="delete_function(this)"
-                                            value="{{ route('superAdmin.jury.destroy', $jury->id) }}">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
                                     </td>
                                 </tr>
                             @endforeach
