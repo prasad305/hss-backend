@@ -429,10 +429,10 @@ class AuthController extends Controller
         $user_info->subject = $request->subject;
         $user_info->position = $request->position;
         // $user_info->company = $request->company;
-        if ($user_info->salery_range != 0) {
+        // if ($user_info->salery_range != 0) {
 
             $user_info->salery_range = $request->salery_range;
-        }
+        // }
 
         $user_info->save();
 

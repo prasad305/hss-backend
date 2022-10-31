@@ -53,6 +53,9 @@ use App\Models\SuperStar;
 use App\Models\AuditionCertification;
 use App\Models\AuditionCertificationContent;
 use App\Models\Fan_Group_Join;
+use App\Models\Country;
+use App\Models\Educationlevel;
+use App\Models\Occupation;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
@@ -900,7 +903,33 @@ class UserController extends Controller
             ]);
         }
     }
+    public function allCountry()
+    {
+        $country = Country::get();
 
+        return response()->json([
+            'status' => 200,
+            'country' => $country,
+        ]);
+    }
+    public function educationLavel()
+    {
+        $education = Educationlevel::get();
+
+        return response()->json([
+            'status' => 200,
+            'education' => $education,
+        ]);
+    }
+    public function occupationList()
+    {
+        $occupation = Occupation::get();
+
+        return response()->json([
+            'status' => 200,
+            'occupation' => $occupation,
+        ]);
+    }
 
     public function registeredLivechat()
     {

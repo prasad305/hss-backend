@@ -103,6 +103,10 @@ Route::get('/user/employment/list/check', [UserController::class, 'userEmploymen
 Route::get('/user/personal/list/check', [UserController::class, 'userPersonalList']);
 Route::post('/user/password/changes', [UserController::class, 'userPasswordChanges']);
 
+Route::get('/user/allCountry', [UserController::class, 'allCountry']);
+Route::get('/user/educationlavel', [UserController::class, 'educationLavel']);
+Route::get('/user/occupation', [UserController::class, 'occupationList']);
+
 
 //Star Photo and videos
 Route::get('/star_photos/{id}', [UserController::class, 'star_photo']);
