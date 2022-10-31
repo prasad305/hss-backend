@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\Models\Audition\Audition;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +19,7 @@ class Activity extends Model
 
     ];
 
-    protected $with = ['user', 'meetup', 'meetupRegistration', 'marketPlace', 'marketPlaceOrder', 'souvenirApply' ,'livechat','livechatRegistration', 'learningSession','learningSessionRegistration','greetingRegistration','greeting','qna','qnaRegistration','auction'];
+    protected $with = ['user', 'meetup', 'meetupRegistration', 'marketPlace', 'marketPlaceOrder', 'souvenirApply' ,'livechat','livechatRegistration', 'learningSession','learningSessionRegistration','greetingRegistration','greeting','qna','qnaRegistration','auction', 'audition'];
 
 
     public function user()
@@ -83,7 +83,7 @@ class Activity extends Model
         return $this->belongsTo(SouvenirApply::class, 'event_registration_id');
     }
     public function audition(){
-        return $this->belongsTo(audition::class, 'event_id');
+        return $this->belongsTo(Audition::class, 'event_id');
     }
 
 }

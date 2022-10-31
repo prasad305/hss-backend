@@ -21,6 +21,7 @@ use App\Models\User;
 use App\Models\Wallet;
 use App\Models\WalletHistory;
 use App\Models\WalletPayment;
+use App\Models\Activity;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -460,14 +461,18 @@ if (!function_exists('random_code')) {
     // Marketplace
     function marketplaceUpdate($user_id, $event_id, $method)
     {
-        try {
             $registerEvent = MarketplaceOrder::where([['marketplace_id', $event_id], ['user_id', $user_id]])->first();
             $registerEvent->payment_status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
+            
+            $activity = new Activity();
+            $activity->user_id = $user_id;
+            $activity->event_id = $event_id;
+            $activity->event_registration_id = $registerEvent->id;
+            $activity->type = 'marketplace';
+            $activity->save();
+        
     }
 
     //for souvenir for mobile

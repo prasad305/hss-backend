@@ -10,7 +10,7 @@ class Auction extends Model
     protected $guarded = [];
 
     use HasFactory;
-
+    protected $with = ['star'];
     public function star()
     {
         return $this->belongsTo(User::class, 'star_id');
