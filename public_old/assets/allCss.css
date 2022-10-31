@@ -1,0 +1,332 @@
+.title {
+    border-radius: 10px;
+    background-color: #343434;
+}
+
+.divClass {
+    position: relative;
+}
+
+.banner__overlay {
+    position: absolute;
+    top: 80%;
+    left: 24%;
+    /* display: flex;
+    justify-content: center; */
+    /* align-items: end; */
+    /* height: 100%; */
+}
+
+.boldOverlay {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 32px;
+    text-align: center;
+}
+
+.underLineWhite {
+    border-bottom: 2px solid white;
+}
+
+.videoIcon {
+    font-size: 50px;
+    color: #ff0;
+    margin: 20px;
+}
+
+.showMessage {
+    font-size: 25px;
+    font-weight: bold;
+    color: #000;
+    margin: 20px;
+}
+
+.home-demo .item {
+    margin: 20px;
+    padding: 20px;
+}
+
+.home-demo h2 {
+    color: #fff;
+    text-align: center;
+    padding: 5rem 0;
+    margin: 0;
+    font-style: italic;
+    font-weight: 300;
+}
+
+.roundTitle {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.videoText {
+    font-size: 45px;
+    font-weight: bold;
+}
+
+.cardT {
+    background: #2d2d2d;
+    width: 300px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.card__title {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 65px;
+    line-height: 83px;
+}
+
+.card__footer {
+    color: #000;
+    font-size: 20px;
+    font-weight: bold;
+    background: linear-gradient(270deg,
+            #ffad00 0%,
+            #ffd273 18.7%,
+            #e19a04 42.13%,
+            #facf75 68.82%,
+            #e7a725 85.94%,
+            #ffad00 100%);
+    border-radius: 5px;
+    padding: 20px;
+    text-transform: capitalize;
+    margin-top: 15px;
+    min-height: 100px;
+}
+
+.comment__section {
+    display: flex;
+    flex-direction: row;
+    margin: 20px;
+    justify-content: end;
+    gap: 40px;
+}
+
+.comment {
+    background: #2d2d2d;
+    width: 300px;
+    border-radius: 5px;
+    color: #fff;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 50px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+.comment__icon {
+    font-size: 18px;
+    color: #45d1ca;
+    padding: 5px 0px;
+}
+
+.completeRoundMsg {
+    height: 160px;
+    background-color: #ffd910;
+}
+
+.bgWarning {
+    background: linear-gradient(102.45deg,
+            #f5ea45 28.52%,
+            #dda336 52.38%,
+            #e7a725 72.31%);
+    font-weight: bold;
+    color: #000;
+    font-size: 20px;
+}
+
+.borderWarning {
+    border: 1px solid #ff0;
+    border-radius: 10px;
+}
+
+.roundOneText {
+    color: #000;
+}
+
+.btnGradient {
+    background: linear-gradient(270deg,
+            #ffad00 0%,
+            #ffd273 18.7%,
+            #e19a04 42.13%,
+            #facf75 68.82%,
+            #e7a725 85.94%,
+            #ffad00 100%);
+
+}
+
+.rules-edit {
+    background: linear-gradient(90deg, rgba(86, 231, 215, 1) 0%, rgba(2, 242, 58, 1) 100%);
+}
+
+.create-rules-btn {
+    background: linear-gradient(270deg, #ffad00, #ffd273 18.7%, #e19a04 42.13%, #facf75 68.82%, #e7a725 85.94%, #ffad00);
+    color: #000 !important;
+    font: bold !important;
+}
+
+
+
+.btnPublish {
+    font-weight: 600;
+    color: rgb(85, 201, 195);
+    border: 1px solid rgb(85, 201, 195);
+}
+
+.btnPublish:hover {
+    font-weight: 600;
+    background: linear-gradient(90deg, rgb(85, 201, 195) 0%, rgba(61, 163, 170, 0.87) 100%);
+}
+
+
+
+.btnEdit {
+    font-weight: 600;
+
+    color: whitesmoke !important;
+    background: linear-gradient(90deg, rgb(4, 105, 163) 0%, rgba(7, 17, 102, 0.74) 100%);
+}
+
+.btnEdit:hover {
+    font-weight: 600;
+    color: black !important;
+    background: linear-gradient(90deg, rgb(252, 252, 252) 0%, rgba(2, 162, 255, 0.699) 100%);
+}
+
+
+.btnCreate {
+    font-weight: 600;
+    background: linear-gradient(270deg, #ffad00, #ffd273 18.7%, #e19a04 42.13%, #facf75 68.82%, #e7a725 85.94%, #ffad00);
+    color: #000 !important;
+}
+
+.btnUpdate {
+    font-weight: 600;
+    background: linear-gradient(90deg, rgba(86, 231, 215, 1) 0%, rgba(2, 242, 58, 1) 100%);
+}
+
+.btnRemove {
+    font-weight: 600;
+    border: .2px solid red;
+
+}
+
+.btnRemove:hover {
+    background: linear-gradient(90deg, rgb(199, 65, 65) 0%, rgb(247, 61, 61) 100%);
+}
+
+.btnRemove:hover {
+    font-weight: 600;
+}
+
+.btnDetails {
+    background: linear-gradient(90deg, rgb(66, 187, 181) 0%, rgb(0, 235, 125) 100%);
+}
+
+.btnDetails:hover {
+    font-weight: 600;
+    background: linear-gradient(90deg, rgb(66, 187, 181) 0%, rgb(231, 245, 238) 100%);
+}
+
+.btnPending {
+    font-weight: 600;
+    background: linear-gradient(90deg, rgb(230, 121, 20) 0%, rgb(235, 153, 0) 100%);
+    color: #000 !important;
+}
+
+.btnPending:hover {
+    font-weight: 600;
+    background: linear-gradient(90deg, rgb(212, 212, 212) 0%, rgb(202, 200, 197) 100%);
+    color: #000 !important;
+}
+
+
+
+
+
+.card-img {
+    width: 100%;
+    min-height: 200px !important;
+    border: .2px solid rgb(235, 153, 0);
+    max-height: 450px;
+}
+
+
+.text-ellipsis-line-1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 30px;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    display: block;
+    display: -webkit-box;
+}
+
+
+.title-text {
+    font-size: 1.2rem;
+    border-bottom: 1px solid black;
+}
+
+.description-text {
+    padding-top: 10px !important;
+}
+
+.star-img {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    border: 2px solid gray
+}
+
+.input-post {
+    background: rgb(0, 0, 0) !important;
+    position: relative;
+    padding-left: 33px;
+}
+
+@media screen and (max-width: 600px) {
+    .banner__overlay h4 {
+        font-size: 10px !important;
+        margin-right: 5px !important;
+
+
+    }
+
+    .select-name {
+        font-size: 20px !important;
+    }
+
+    .unselect-name {
+        font-size: 20px !important;
+    }
+
+    .feed-name {
+        font-size: 20px !important;
+    }
+
+    .rst-publish-btn {
+        width: 200px;
+    }
+
+    .card-img {
+        width: 100% !important;
+        min-height: 150px;
+    }
+}
+
+
+
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+    .card-img {
+        width: 100% !important;
+        min-height: 100px;
+    }
+}

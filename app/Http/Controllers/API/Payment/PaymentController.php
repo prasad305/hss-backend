@@ -143,12 +143,12 @@ class PaymentController extends Controller
                 resgistationSuccessUpdate($user_id, $type, $event_id, "paytm", $result->body->txnAmount);
 
 
-                // if ($type == 'generalpost') {
-                //     $this->generalPostUpdate($event_id, $user_id, "PayTm", $result->body->txnAmount);
-                // }
-                // if ($type == 'loveReact') {
-                //     $this->loveReactPayment($user_id, $event_id, $type, $result->body->txnAmount);
-                // }
+                if ($type == 'generalpost') {
+                    $this->generalPostUpdate($event_id, $user_id, "PayTm", $result->body->txnAmount);
+                }
+                if ($type == 'loveReact') {
+                    $this->loveReactPayment($user_id, $event_id, $type, $result->body->txnAmount);
+                }
             }
             $orderId = $result->body->orderId;
             $url = "http://localhost:3000/";
@@ -275,6 +275,24 @@ class PaymentController extends Controller
             return "success data received" . "__" . $request->modelName;
         }
     }
+
+    /**
+     * video feed reeact buy
+     */
+    public function videoFeedReactStripe(Request $request)
+    {
+        $user = auth()->user();
+        // return loveReactPaymentMobile($user->id, $request->videoId, $request->reactNum, $request->modelName, $request->TXNAMOUNT);
+        return $this->loveReactPaymentMobile(
+            $user->id,
+            $request->videoId,
+            $request->reactNum,
+            $request->modelName,
+            $request->amount
+        );
+    }
+
+
 
     //paytem moble end
     //---------------------paytm end--------------------------
@@ -577,7 +595,7 @@ class PaymentController extends Controller
                 $loveReactPayment->video_id = $videoId;
                 $loveReactPayment->react_num = $reactNum;
                 $loveReactPayment->status = 1;
-                
+
                 $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
                 $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
                 $loveReactPayment->type = $type;
@@ -593,12 +611,10 @@ class PaymentController extends Controller
                     $loveReact->participant_id = $auditionRoundInfo->user_id;
                     $loveReact->react_voting_type = $auditionRoundInfo->roundInfo->has_user_vote_mark == 1 ? 'user_vote' : ($auditionRoundInfo->roundInfo->wildcard == 1 ? 'wildcard' : 'general');
                     $loveReact->save();
-                    
                 }
             } catch (\Throwable $th) {
                 return $th;
             }
-            
         }
     }
 
