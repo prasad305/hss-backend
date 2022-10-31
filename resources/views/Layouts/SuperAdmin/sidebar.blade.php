@@ -204,7 +204,7 @@
         </li>
 
         <li
-            class="nav-item {{ Request::routeIs('superAdmin.greeting-type.index') || Request::routeIs('superAdmin.interest-type.index') || Request::routeIs('superAdmin.currency.index') || Request::routeIs('superAdmin.country.index') || Request::routeIs('superAdmin.state.index') || Request::routeIs('superAdmin.city.index') || Request::routeIs('superAdmin.educationlevel.index') || Request::routeIs('superAdmin.occupation.index') ? 'menu-open' : '' }}">
+            class="nav-item {{ Request::routeIs('superAdmin.virtual-tour.index') || Request::routeIs('superAdmin.greeting-type.index') || Request::routeIs('superAdmin.interest-type.index') || Request::routeIs('superAdmin.currency.index') || Request::routeIs('superAdmin.country.index') || Request::routeIs('superAdmin.state.index') || Request::routeIs('superAdmin.city.index') || Request::routeIs('superAdmin.educationlevel.index') || Request::routeIs('superAdmin.occupation.index') ? 'menu-open' : '' }}">
             <a href="#"
                 class="nav-link {{ Request::routeIs('superAdmin.greeting-type.index') || Request::routeIs('superAdmin.interest-type.index') || Request::routeIs('superAdmin.currency.index') || Request::routeIs('superAdmin.country.index') || Request::routeIs('superAdmin.state.index') || Request::routeIs('superAdmin.city.index') || Request::routeIs('superAdmin.educationlevel.index') || Request::routeIs('superAdmin.occupation.index') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-sliders" aria-hidden="true"></i>
@@ -301,9 +301,9 @@
         </li>
 
         <li
-            class="nav-item {{ Request::routeIs('superAdmin.aboutUs.index') || Request::routeIs('superAdmin.privacy.index') || Request::routeIs('superAdmin.faq.index') ? 'menu-open' : '' || Request::routeIs('superAdmin.productpurchase.index') ? 'menu-open' : '' || Request::routeIs('superAdmin.refundpolicy.index') ? 'menu-open' : '' || Request::routeIs('superAdmin.termscondition.index') ? 'menu-open' : '' || Request::routeIs('superAdmin.faq.index') ? 'menu-open' : ''}}">
+            class="nav-item {{ Request::routeIs('superAdmin.aboutUs.index') || Request::routeIs('superAdmin.privacy.index') || Request::routeIs('superAdmin.faq.index') || Request::routeIs('superAdmin.productpurchase.index') || Request::routeIs('superAdmin.refundpolicy.index') || Request::routeIs('superAdmin.termscondition.index') || Request::routeIs('superAdmin.faq.index') ? 'menu-open' : ''}}">
             <a href="#"
-                class="nav-link {{ Request::routeIs('superAdmin.aboutUs.index') || Request::routeIs('superAdmin.privacy.index') || Request::routeIs('superAdmin.faq.index') ? 'active' : '' }}">
+                class="nav-link">
                 <i class="nav-icon fa fa-bullseye" aria-hidden="true"></i>
                 <p>
                     Landing Settings

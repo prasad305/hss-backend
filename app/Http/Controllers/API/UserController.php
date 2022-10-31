@@ -1973,7 +1973,7 @@ class UserController extends Controller
 
     public function enrolledAuditions()
     {
-        $enrolledAuditions = AuditionParticipant::with(['audition'])->where('user_id', auth()->user()->id)->get();
+        $enrolledAuditions = AuditionParticipant::with(['audition'])->where([['user_id', auth()->user()->id], ['payment_status', 1]])->get();
 
         return response()->json([
             'status' => 200,
@@ -1985,7 +1985,7 @@ class UserController extends Controller
     public function enrolledAuditionsPending()
     {
 
-        $enrolledAuditionsPending = AuditionParticipant::with(['auditions'])->where('user_id', auth()->user()->id)->count();
+        $enrolledAuditionsPending = AuditionParticipant::with(['auditions'])->where([['user_id', auth()->user()->id], ['payment_status', 1]])->count();
 
         return response()->json([
             'status' => 200,
@@ -2097,9 +2097,9 @@ class UserController extends Controller
         ]);
     }
 
-    // User Profile Update
+    // Jury Profile Update
 
-    public function updateCover(Request $request, $id)
+    public function juryUpdateCover(Request $request, $id)
     {
 
 
@@ -2136,7 +2136,7 @@ class UserController extends Controller
     }
 
 
-    public function updateProfile(Request $request, $id)
+    public function juryUpdateProfile(Request $request, $id)
     {
 
         $validator = Validator::make($request->all(), [
@@ -2170,6 +2170,81 @@ class UserController extends Controller
             ]);
         }
     }
+
+    // User profile update
+
+    public function updateCover(Request $request)
+    {
+        $userInfo = User::findOrfail(Auth()->User()->id);
+
+
+
+        if ($request->base64) {
+
+            $destination = $userInfo->cover_photo;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+
+            $filename = 'uploads/images/userPhotos/' . time() . '.jpg';
+            file_put_contents($filename, base64_decode($request->base64));
+
+            $userInfo->cover_photo = $filename;
+
+            $userInfo->update();
+
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => "Image Photo updated"
+            ]);
+        } else {
+            return response()->json([
+                'status' => 200,
+                'message' => "Image fild empty"
+            ]);
+        }
+    }
+
+
+    public function updateProfile(Request $request)
+    {
+
+
+
+        $userInfo = User::findOrfail(Auth()->User()->id);
+
+
+
+        if ($request->base64) {
+
+            $destination = $userInfo->image;
+            if (File::exists($destination)) {
+                File::delete($destination);
+            }
+
+            $filename = 'uploads/images/userPhotos/' . time() . '.jpg';
+            file_put_contents($filename, base64_decode($request->base64));
+
+            $userInfo->image = $filename;
+
+            $userInfo->update();
+
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => "Image Photo updated"
+            ]);
+        } else {
+            return response()->json([
+                'status' => 200,
+                'message' => "Image fild empty"
+            ]);
+        }
+    }
+
     public function purchasedPhotos()
     {
         $alreadyPaid = GeneralPostPayment::where('user_id', auth('sanctum')->user()->id)->latest()->get();
