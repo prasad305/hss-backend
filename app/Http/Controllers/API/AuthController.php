@@ -423,12 +423,12 @@ class AuthController extends Controller
         $interest_info->user_id = $user->id;
         $interest_info->interest_topic_id = $request->interest_topic_id;
         $interest_info->save();
-
+        
 
 
         return response()->json([
             'status' => 200,
-            'message' => $interest_info,
+            'message' => 'Your Information Updatedd Successfully'
         ]);
     }
 
