@@ -12,6 +12,7 @@ use App\Models\LiveChatRegistration;
 use App\Models\LiveChat;
 use App\Models\QnaRegistration;
 use App\Models\SuperStar;
+use App\Models\UserInterest;
 //use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -394,22 +395,40 @@ class AuthController extends Controller
         $user->save();
 
         $user_info = UserInfo::where('user_id', $user->id)->first();
-
         if (empty($user_info)) {
             $user_info = new UserInfo;
         }
+
+
 
         $user_info->user_id = $user->id;
         if ($request->dob != 0) {
             $user_info->dob = $request->dob;
         }
         $user_info->country = $request->country;
+        $user_info->occupation = $request->occupation;
+        $user_info->edu_level = $request->edu_level;
+        $user_info->institute = $request->institute;
+        $user_info->subject = $request->subject;
+        $user_info->position = $request->position;
+        $user_info->company = $request->company;
+        $user_info->salery_range = $request->salery_range;
+
         $user_info->save();
+
+        $interest_info = UserInterest::where('user_id', $user->id)->first();
+        if (empty($interest_info)) {
+            $interest_info = new UserInterest;
+        }
+        $interest_info->user_id = $user->id;
+        $interest_info->interest_topic_id = $request->interest_topic_id;
+        $interest_info->save();
+
 
 
         return response()->json([
             'status' => 200,
-            'message' => 'Your Information Updatedd Successfully'
+            'message' => $interest_info,
         ]);
     }
 
@@ -428,7 +447,7 @@ class AuthController extends Controller
         $user_info->institute = $request->institute;
         $user_info->subject = $request->subject;
         $user_info->position = $request->position;
-        // $user_info->company = $request->company;
+        $user_info->company = $request->company;
         // if ($user_info->salery_range != 0) {
 
             $user_info->salery_range = $request->salery_range;

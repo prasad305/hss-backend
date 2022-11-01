@@ -17,8 +17,12 @@ class UserInfo extends Model
         'gender',
         'country',
         'dob',
-        // 'company',
+        'company',
         'salery_range',
+        'edu_level',
+        'institute',
+        'subject',
+        'position',
     ];
 
     public function user()
