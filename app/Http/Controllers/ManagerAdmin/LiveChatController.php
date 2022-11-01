@@ -24,7 +24,7 @@ class LiveChatController extends Controller
 
     public function all()
     {
-        $events = LiveChat::where([['status', '>', 0], ['category_id', auth()->user()->category_id]])->latest()->get();
+        $events = LiveChat::where([['status', '>', 0], ['status', '!=', 11], ['category_id', auth()->user()->category_id]])->latest()->get();
         return view('ManagerAdmin.LiveChat.index', compact('events'));
     }
 

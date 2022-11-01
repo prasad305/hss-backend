@@ -266,8 +266,8 @@ class SimplePostController extends Controller
 
     public function count()
     {
-        $pending = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 0]])->count();
-        $approved = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 1]])->count();
+        $pending = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 0], ['star_approval', '!=', 2]])->count();
+        $approved = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 1], ['star_approval', '!=', 2]])->count();
 
         return response()->json([
             'status' => 200,
@@ -292,8 +292,8 @@ class SimplePostController extends Controller
 
     public function pending_list()
     {
-        $post = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 0]])->latest()->get();
-        $count = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 0]])->count();
+        $post = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 0], ['star_approval', '!=', 2]])->latest()->get();
+        $count = SimplePost::where([['admin_id', auth('sanctum')->user()->id], ['status', 0], ['star_approval', '!=', 2]])->count();
 
         return response()->json([
             'status' => 200,

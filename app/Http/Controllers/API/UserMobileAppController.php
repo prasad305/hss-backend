@@ -205,8 +205,8 @@ class UserMobileAppController extends Controller
 
                 // Wallet start
                 if ($request->payment_method == "wallet") {
-                    $walletQna =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('live_chats');
-                    Wallet::where('user_id', auth('sanctum')->user()->id)->update(['live_chats' => $walletQna->qna - 1]);
+                    $walletQna =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('qna');
+                    Wallet::where('user_id', auth('sanctum')->user()->id)->update(['qna' => $walletQna->qna - 1]);
                     QnaRegistration::where([['user_id', auth('sanctum')->user()->id], ['qna_id', $eventId]])->update([
                         'payment_status' => 1,
                         'publish_status' => 1,
@@ -215,7 +215,7 @@ class UserMobileAppController extends Controller
                 }
 
                 // Wallet End
-                $event->available_start_time = (Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s')) <= Carbon::parse($event->end_time)->format('H:i:s') ? Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s') : Carbon::parse($event->end_time)->format('H:i:s');
+                $event->available_start_time = (Carbon::parse($request->end_time)->addMinutes($event->time_interval + 1)->format('H:i:s')) <= Carbon::parse($event->end_time)->format('H:i:s') ? Carbon::parse($request->end_time)->addMinutes($event->time_interval + 1)->format('H:i:s') : Carbon::parse($event->end_time)->format('H:i:s');
                 $event->update();
             }
         }
