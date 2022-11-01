@@ -22,6 +22,7 @@ class CreateAuditionCertificationContentsTable extends Migration
             $table->string('company_logo')->nullable();
             $table->string('brand_logo')->nullable();
             $table->string('frame')->nullable();
+            $table->double('fee', 8, 2)->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();
         });

@@ -131,7 +131,7 @@ Route::get('/guest/PromoVideos', [GuestController::class, 'getPromoVideo']);
 Route::get('/user/star_list', [UserController::class, 'star_list']);
 
 //after payTM redirect
-Route::post('paytm-callback/{redirectTo}/{user_id}/{type}/{event_id}', [PaymentController::class, 'paytmCallback']);
+Route::post('paytm-callback/{redirectTo}/{user_id}/{type}/{event_id}/{reactNum?}', [PaymentController::class, 'paytmCallback']);
 
 //paytm mobile
 Route::get('/txn-token-mobile/{amount}', [PaymentController::class, 'txnTokenGenerate']);
@@ -159,8 +159,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/stripe-payment-make', [PaymentController::class, 'stripePaymentMake']);
     Route::get('/stripe-payment-success/{event_id}/{event_type}', [PaymentController::class, 'stripePaymentSuccess']);
 
+    //stripe videoFeedReactStripe
 
-
+    Route::post('/stripe-stripe-video-react', [PaymentController::class, 'videoFeedReactStripe']);
 
 
     //post search
@@ -364,15 +365,15 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     // Promo Videos
     Route::get('/user/PromoVideos', [UserController::class, 'getPromoVideo']);
 
-     // Jury Profile
-     Route::post('/jury/juryUpdateCover/{id}', [UserController::class, 'juryUpdateCover']);
-     Route::post('/jury/juryUpdateProfile/{id}', [UserController::class, 'juryUpdateProfile']);
+    // Jury Profile
+    Route::post('/jury/juryUpdateCover/{id}', [UserController::class, 'juryUpdateCover']);
+    Route::post('/jury/juryUpdateProfile/{id}', [UserController::class, 'juryUpdateProfile']);
 
     // User Profile
     Route::post('/user/coverUpdate', [UserController::class, 'updateCover']);
     Route::post('/user/profileUpdate', [UserController::class, 'updateProfile']);
-    
-   
+
+
 
     // Souviner Section
     Route::get('/user/souviner/view/{starId}', [SouvinerController::class, 'getUserSouvenir']);

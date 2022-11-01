@@ -87,6 +87,8 @@ class UserMobileAppController extends Controller
         $modelName = $request->model_name;
 
 
+        // return $modelName;
+
         if ($modelName == 'meetup') {
             if (!MeetupEventRegistration::where([['user_id', auth()->user()->id], ['meetup_event_id', $eventId]])->exists()) {
                 $activity = new Activity();
@@ -203,8 +205,8 @@ class UserMobileAppController extends Controller
 
                 // Wallet start
                 if ($request->payment_method == "wallet") {
-                    $walletQna =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('live_chats');
-                    Wallet::where('user_id', auth('sanctum')->user()->id)->update(['live_chats' => $walletQna->qna - 1]);
+                    $walletQna =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('qna');
+                    Wallet::where('user_id', auth('sanctum')->user()->id)->update(['qna' => $walletQna->qna - 1]);
                     QnaRegistration::where([['user_id', auth('sanctum')->user()->id], ['qna_id', $eventId]])->update([
                         'payment_status' => 1,
                         'publish_status' => 1,
@@ -213,7 +215,7 @@ class UserMobileAppController extends Controller
                 }
 
                 // Wallet End
-                $event->available_start_time = (Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s')) <= Carbon::parse($event->end_time)->format('H:i:s') ? Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s') : Carbon::parse($event->end_time)->format('H:i:s');
+                $event->available_start_time = (Carbon::parse($request->end_time)->addMinutes($event->time_interval + 1)->format('H:i:s')) <= Carbon::parse($event->end_time)->format('H:i:s') ? Carbon::parse($request->end_time)->addMinutes($event->time_interval + 1)->format('H:i:s') : Carbon::parse($event->end_time)->format('H:i:s');
                 $event->update();
             }
         }
@@ -267,6 +269,7 @@ class UserMobileAppController extends Controller
             $eventRegistration->save();
         }
         if ($modelName == 'audition') {
+
             $activity = new Activity();
             $activity->type = 'audition';
             $eventRegistration = new AuditionParticipant();
@@ -985,10 +988,10 @@ class UserMobileAppController extends Controller
             ]);
         }
     }
-    public function getVirtualTourVideo() {
+    public function getVirtualTourVideo()
+    {
         $virtualTourLink = Virtualtour::where('type', 'phone')->first();
-        if($virtualTourLink)
-        {
+        if ($virtualTourLink) {
             return response()->json([
                 "message" => "Video found",
                 "status" => "200",

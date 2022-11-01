@@ -37,6 +37,20 @@ class PaymentController extends Controller
 
         $user = auth()->user();
 
+        // set Extra parameters
+        switch ($request->type) {
+            case ('loveReact'):
+
+                $value = $request->reactNum;
+
+                break;
+
+            default:
+                $value = 0;
+        }
+
+
+
         $paytmParams = array();
         $paytmParams["MID"] = "iELVJt50414347554560";
         $paytmParams["ORDER_ID"] = Str::orderedUuid();
@@ -45,7 +59,7 @@ class PaymentController extends Controller
         $paytmParams['CHANNEL_ID'] = 'WEB';
         $paytmParams['INDUSTRY_TYPE_ID'] = 'Retail';
         $paytmParams['TXN_AMOUNT'] = $request->amount;
-        $paytmParams['CALLBACK_URL'] = 'http://localhost:8000/api/paytm-callback/' . $request->redirectTo . "/" . $user->id . "/" . $request->type . "/" . $request->event_id;
+        $paytmParams['CALLBACK_URL'] = 'http://localhost:8000/api/paytm-callback/' . $request->redirectTo . "/" . $user->id . "/" . $request->type . "/" . $request->event_id . "/" . $value;
         $paytmParams['EMAIL'] = $user->email;
 
 
@@ -55,7 +69,7 @@ class PaymentController extends Controller
     }
 
     //payment success function
-    public function paytmCallback(Request $request, $redirectTo, $user_id, $type, $event_id)
+    public function paytmCallback(Request $request, $redirectTo, $user_id, $type, $event_id, $value)
     {
 
         // return  $redirectTo . "-------" . $user_id . "---------" . $type . "-------" . $event_id;
@@ -141,15 +155,7 @@ class PaymentController extends Controller
                 //     $this->greetingUpdate($user_id, $event_id, "PayTm");
                 // }
 
-                resgistationSuccessUpdate($user_id, $type, $event_id, "paytm", $result->body->txnAmount);
-
-
-                // if ($type == 'generalpost') {
-                //     $this->generalPostUpdate($event_id, $user_id, "PayTm", $result->body->txnAmount);
-                // }
-                // if ($type == 'loveReact') {
-                //     $this->loveReactPayment($user_id, $event_id, $type, $result->body->txnAmount);
-                // }
+                resgistationSuccessUpdate($user_id, $type, $event_id, "paytm", $result->body->txnAmount, $value);
             }
             $orderId = $result->body->orderId;
             $url = "http://localhost:3001/";
@@ -280,6 +286,24 @@ class PaymentController extends Controller
         }
     }
 
+    /**
+     * video feed reeact buy
+     */
+    public function videoFeedReactStripe(Request $request)
+    {
+        $user = auth()->user();
+        // return loveReactPaymentMobile($user->id, $request->videoId, $request->reactNum, $request->modelName, $request->TXNAMOUNT);
+        return $this->loveReactPaymentMobile(
+            $user->id,
+            $request->videoId,
+            $request->reactNum,
+            $request->modelName,
+            $request->amount
+        );
+    }
+
+
+
     //paytem moble end
     //---------------------paytm end--------------------------
 
@@ -293,6 +317,18 @@ class PaymentController extends Controller
 
         $user = auth()->user();
 
+        // set Extra parameters
+        switch ($request->event_type) {
+            case ('loveReact'):
+
+                $value = $request->reactNum;
+
+                break;
+
+            default:
+                $value = 0;
+        }
+
         // Use an existing Customer ID if this is a returning customer.
         $customer = \Stripe\Customer::create();
 
@@ -301,7 +337,7 @@ class PaymentController extends Controller
                 'amount' =>  $request->amount * 100,
                 'customer' => $customer->id,
                 'currency' => 'usd',
-                'description' =>  $user->id . "_" . $request->event_type . '_' . $request->event_id,
+                'description' =>  $user->id . "_" . $request->event_type . '_' . $request->event_id . '_' . "value" .  '_' . $value,
                 'receipt_email' => $user->email,
                 'automatic_payment_methods' => [
                     'enabled' => true,
@@ -527,55 +563,6 @@ class PaymentController extends Controller
             //throw $th;
         }
     }
-    public function generalPostUpdate($event_id, $user_id, $method, $fee)
-    {
-        GeneralPostPayment::create([
-
-            'post_id' => $event_id,
-            'user_id' => $user_id,
-            'payment_method' => $method,
-            'amount' => $fee,
-            'status' => 1,
-        ]);
-    }
-
-    //   <================================Love React Payment start==================================>
-
-    public function loveReactPayment($user_id, $videoId, $type, $amount)
-    {
-        $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $videoId)->first();
-        $reactNum = 5;
-
-        if (!LoveReactPayment::where([['user_id', $user_id], ['react_num', $reactNum], ['video_id', $videoId]])->exists()) {
-
-            $loveReactPayment = new LoveReactPayment();
-            $loveReactPayment->user_id = $user_id;
-            $loveReactPayment->video_id = $videoId;
-            $loveReactPayment->react_num = $reactNum;
-            $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
-            $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
-            $loveReactPayment->status = 1;
-            $loveReactPayment->type = $type;
-            $loveReactPayment->save();
-            if ($type == "wallet") {
-                $lovePoints =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('love_points');
-                Wallet::where('user_id', auth('sanctum')->user()->id)->update(['love_points' => $lovePoints->love_points - $reactNum]);
-            }
-            if ($loveReactPayment) {
-                LoveReact::create([
-                    'user_id' => $user_id,
-                    'video_id' => $videoId,
-                    'react_num' => $reactNum,
-                    'audition_id' => $auditionRoundInfo->roundInfo->audition_id,
-                    'round_info_id' => $auditionRoundInfo->roundInfo->id,
-                    'participant_id' => $auditionRoundInfo->user_id,
-                    'react_voting_type' => $auditionRoundInfo->roundInfo->has_user_vote_mark == 1 ? 'user_vote' : ($auditionRoundInfo->roundInfo->wildcard == 1 ? 'wildcard' : 'general'),
-                    'status' => 1,
-
-                ]);
-            }
-        }
-    }
 
     public function loveReactPaymentMobile($user_id, $videoId, $reactNum, $type, $fee)
     {
@@ -589,7 +576,7 @@ class PaymentController extends Controller
                 $loveReactPayment->video_id = $videoId;
                 $loveReactPayment->react_num = $reactNum;
                 $loveReactPayment->status = 1;
-                
+
                 $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
                 $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
                 $loveReactPayment->type = $type;
@@ -605,12 +592,10 @@ class PaymentController extends Controller
                     $loveReact->participant_id = $auditionRoundInfo->user_id;
                     $loveReact->react_voting_type = $auditionRoundInfo->roundInfo->has_user_vote_mark == 1 ? 'user_vote' : ($auditionRoundInfo->roundInfo->wildcard == 1 ? 'wildcard' : 'general');
                     $loveReact->save();
-                    
                 }
             } catch (\Throwable $th) {
                 return $th;
             }
-            
         }
     }
 

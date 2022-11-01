@@ -51,7 +51,7 @@ class MarketplaceMobileAppController extends Controller
             $marketplaceOrder->city_id = $request->city_id;
             $marketplaceOrder->area = $request->area;
             $marketplaceOrder->phone = $request->phone;
-            $marketplaceOrder->save();
+            $marketplaceOrder->update();
 
             return response()->json([
                 'status' => 200,
@@ -65,14 +65,15 @@ class MarketplaceMobileAppController extends Controller
         }
     }
 
-    public function checkPaymentUncompletedOrder($marketplace_id ,Marketplace $marketplace){
+    public function checkPaymentUncompletedOrder($marketplace_id, Marketplace $marketplace)
+    {
         $marketplace = $marketplace->find($marketplace_id);
 
-        $marketplaceOrder = MarketplaceOrder::where([['status', null],['marketplace_id',$marketplace_id],['user_id', $Auth::user()->id]])->first();
+        $marketplaceOrder = MarketplaceOrder::where([['status', null], ['marketplace_id', $marketplace_id], ['user_id', $Auth::user()->id]])->first();
         $isHavePaymentUncompletedOrder = false;
-        if($marketplaceOrder){
+        if ($marketplaceOrder) {
             $isHavePaymentUncompletedOrder = true;
-        }else{
+        } else {
             $isHavePaymentUncompletedOrder = false;
         }
 

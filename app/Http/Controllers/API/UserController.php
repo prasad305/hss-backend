@@ -337,7 +337,8 @@ class UserController extends Controller
             ->whereIn('type', ['fangroup', 'audition'])
             ->orWhereIn('star_id', $selectedSubSubCat)
             ->orWhereIn('sub_category_id', $selectedSubCat)
-            ->orderBy('id', 'DESC')->paginate($limit);
+            ->orderBy('id', 'DESC')->paginate($limit)
+            ->whereIn('category_id', $selectedCat);
 
         // if (isset($selectedSubCat)) {
         //     $sub_cat_post = Post::select("*")
@@ -1836,6 +1837,9 @@ class UserController extends Controller
 
         $auditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'general'], ['round_info_id', $round_info_id]])->orWhere([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'wildcard'], ['round_info_id', $round_info_id]])->orWhere([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'rejected'], ['round_info_id', $round_info_id]])->orWhere([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'oxygen'], ['round_info_id', $round_info_id]])->first();
         $appealAuditionRoundMarkTracking = AuditionRoundMarkTracking::where([['user_id', auth()->user()->id], ['audition_id', $audition_id], ['type', 'appeal'], ['round_info_id', $round_info_id]])->orWhere([['user_id', auth()->user()->id], ['audition_id', $audition_id],  ['type', 'appeal_rejected'], ['round_info_id', $round_info_id]])->first();
+        $certificateFee = AuditionCertificationContent::where('audition_id', $audition_id)->first();
+        $isPaymentCompleted = AuditionCertification::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['participant_id', auth('sanctum')->user()->id], ['payment_status', 1]])->first();
+
 
         return response()->json([
             'status' => 200,
@@ -1843,6 +1847,8 @@ class UserController extends Controller
             'auditionRoundMarkTracking' => $auditionRoundMarkTracking,
             'appealAuditionRoundMarkTracking' => $appealAuditionRoundMarkTracking,
             'appeal_videos' => $appeal_videos,
+            'certificateFee' => $certificateFee,
+            'isPaymentCompleted' => $isPaymentCompleted,
             'message' => 'Success!',
         ]);
     }

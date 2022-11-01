@@ -17,7 +17,7 @@ class MeetupEventController extends Controller
 {
     public function manager_all()
     {
-        $upcommingEvent = MeetupEvent::where([['status', '>', 0], ['category_id', auth()->user()->category_id]])->latest()->get();
+        $upcommingEvent = MeetupEvent::where([['status', '>', 0], ['status', '!=', 11], ['category_id', auth()->user()->category_id]])->latest()->get();
 
         return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
     }
