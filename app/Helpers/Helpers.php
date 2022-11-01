@@ -594,9 +594,16 @@ if (!function_exists('random_code')) {
         try {
             $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id]])->first();
             $registerEvent->payment_status = 1;
-            $registerEvent->status = 2;
+            $registerEvent->status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
+
+            $activity = new Activity();
+            $activity->type = 'greeting';
+            $activity->user_id = $user_id;
+            $activity->event_id = $event_id;
+            $activity->event_registration_id = $registerEvent->id;
+            $activity->save();
         } catch (\Throwable $th) {
             //throw $th;
         }

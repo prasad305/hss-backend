@@ -20,6 +20,7 @@ use App\Models\SouvenirApply;
 use App\Models\SouvenirPayment;
 use App\Models\Transaction;
 use App\Models\Wallet;
+use App\Models\Activity;
 use Error;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -157,7 +158,7 @@ class PaymentController extends Controller
                 resgistationSuccessUpdate($user_id, $type, $event_id, "paytm", $result->body->txnAmount, $value);
             }
             $orderId = $result->body->orderId;
-            $url = "http://localhost:3000/";
+            $url = "http://localhost:3001/";
             return  redirect()->away($url . $redirectTo);
         } else {
             return "Checksum Mismatched";
@@ -275,6 +276,9 @@ class PaymentController extends Controller
             }
             if ($request->modelName == 'marketplace') {
                 return $this->marketplaceUpdate($user->id, $request->eventId, "PayTm-mobile");
+            }
+            if ($request->modelName == 'greeting') {
+                return $this->greetingUpdate($user->id, $request->eventId, "PayTm-mobile");
             }
 
 
@@ -525,11 +529,19 @@ class PaymentController extends Controller
     public function greetingUpdate($user_id, $event_id, $method)
     {
         try {
-            $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent = GreetingsRegistration::where([['id', $event_id], ['user_id', $user_id]])->first();
+            // $eventRegistration = GreetingsRegistration::where('user_id', Auth::user()->id)->where('id', $request->greetingId)->first();
             $registerEvent->payment_status = 1;
-            $registerEvent->status = 2;
+            $registerEvent->status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
+            
+            $activity = new Activity();
+            $activity->type = 'greeting';
+            $activity->user_id = $user_id;
+            $activity->event_id = $registerEvent->greeting_id;
+            $activity->event_registration_id = $registerEvent->id;
+            $activity->save();
         } catch (\Throwable $th) {
             //throw $th;
         }
