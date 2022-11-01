@@ -31,6 +31,7 @@ class ChargeSuccessededJob implements ShouldQueue
         $event_id = $user_event[2];
         $event_type = $user_event[1];
         $user_id = $user_event[0];
+        $value = $user_event[3];
 
         Transaction::create([
             'user_id' => $user_id,
@@ -39,11 +40,11 @@ class ChargeSuccessededJob implements ShouldQueue
             'event' => $event_type,
             'event_id' => $event_id,
             'currency' => "usd",
-            'bank_name' => "strip",
+            'bank_name' => "stripe",
             'resp_msg' => "done",
 
         ]);
-        resgistationSuccessUpdate($user_id, $event_type, $event_id, "stripe", $charge['amount']);
+        resgistationSuccessUpdate($user_id, $event_type, $event_id, "stripe", $charge['amount'], $value);
 
         // do your work here
 
