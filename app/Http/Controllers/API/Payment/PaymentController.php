@@ -301,8 +301,8 @@ class PaymentController extends Controller
     //-------------------stripe start------------------------
     public function stripePaymentMake(Request $request)
     {
-        $public_key = env('STRIPE_PUBLIC_KEY');
-        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        $public_key = "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh";
+        Stripe::setApiKey('sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX');
 
 
         $user = auth()->user();
@@ -337,7 +337,7 @@ class PaymentController extends Controller
     //stripe mobile
     public function stripePaymentMobile(Request $request)
     {
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        \Stripe\Stripe::setApiKey("sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX");
         // Use an existing Customer ID if this is a returning customer.
         $user = auth()->user();
         $customer = \Stripe\Customer::create();
@@ -364,7 +364,7 @@ class PaymentController extends Controller
             'ephemeralKey' => $ephemeralKey->secret,
             'customer' => $customer->id,
             'status' => 200,
-            'publishableKey' => env('STRIPE_PUBLIC_KEY')
+            'publishableKey' => "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh"
         ]);
     }
 
