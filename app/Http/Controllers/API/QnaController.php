@@ -382,7 +382,7 @@ class QnaController extends Controller
     }
     public function pendingQna()
     {
-        $events = QnA::where([['admin_id', auth('sanctum')->user()->id], ['status', '<', 2]]);
+        $events = QnA::where([['admin_id', auth('sanctum')->user()->id], ['status', '<', 2], ['star_approval', '!=', 2]]);
 
         return response()->json([
             'status' => 200,
@@ -393,7 +393,7 @@ class QnaController extends Controller
     public function count()
     {
         $approved = QnA::where([['admin_id', auth('sanctum')->user()->id], ['status', 2]])->count();
-        $pending = QnA::where([['admin_id', auth('sanctum')->user()->id], ['status', '<', 2]])->count();
+        $pending = QnA::where([['admin_id', auth('sanctum')->user()->id], ['status', '<', 2],['star_approval', '!=', 2]])->count();
 
         return response()->json([
             'status' => 200,
