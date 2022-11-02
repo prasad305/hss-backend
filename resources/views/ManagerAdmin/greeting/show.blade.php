@@ -39,9 +39,9 @@
         }
 
         /* .active{
-                        background-color: goldenrod !important;
-                        color: white !important;
-                    } */
+                                            background-color: goldenrod !important;
+                                            color: white !important;
+                                        } */
 
         .clockNOte {
             background-color: rgb(29, 29, 29);
@@ -71,8 +71,8 @@
         }
 
         /* .Notifytdx:hover, .lNTS:hover, .rNTS:hover{
-                     background-color: rgb(255, 153, 0);
-                    } */
+                                         background-color: rgb(255, 153, 0);
+                                        } */
 
 
 
@@ -214,11 +214,11 @@
     </div>
     <div class="m-3">
         <div class="card ">
-            @if($greeting->banner)
-                 <img src="{{ asset($greeting->banner) }}" alt="" class="BannerAGN" />
+            @if ($greeting->banner)
+                <img src="{{ asset($greeting->banner) }}" alt="" class="BannerAGN" />
             @else
                 <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                    <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="BannerAGN"/>
+                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="BannerAGN" />
                 </a>
             @endif
         </div>
@@ -235,7 +235,8 @@
                     <div class=" col-md-6 bg-dark ">
                         <div class="px-5 py-3 my-auto">
                             <span>
-                                <img src="{{asset('assets/manager-admin/tagPrice.PNG') }}" alt="" class="PriceTage" />
+                                <img src="{{ asset('assets/manager-admin/tagPrice.PNG') }}" alt=""
+                                    class="PriceTage" />
                             </span>
                             <div class=" mx-2 ">
                                 <span class="text-light buTon-ab ">Cost</span>
@@ -247,7 +248,8 @@
                         </div>
                         <div class="px-5 py-3 my-auto">
                             <span>
-                                <img src="{{ asset('assets/manager-admin/tagPrice.PNG') }}" alt="" class="PriceTage" />
+                                <img src="{{ asset('assets/manager-admin/tagPrice.PNG') }}" alt=""
+                                    class="PriceTage" />
                             </span>
                             <div class=" mx-2 ">
                                 <span class="text-light buTon-ab ">Minimum apply before</span>
@@ -284,11 +286,13 @@
                             </div>
                             <div class="row py-3">
                                 <div class="col-xs-6 content-center">
-                                    @if($greeting->admin->image)
-                                        <img src="{{ asset($greeting->admin->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                    @if ($greeting->admin->image)
+                                        <img src="{{ asset($greeting->admin->image) }}"
+                                            style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                     @else
                                         <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                            <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                                            <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                                style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                         </a>
                                     @endif
                                 </div>
@@ -327,10 +331,9 @@
                     <a type="button" class="btn btn-outline-warning px-5"
                         onclick="Show('Edit Post','{{ route('managerAdmin.greeting.edit', $greeting->id) }}')">Edit</a>
                 @else
-                    <button disabled class="btn"
-                        style="background: #FFCE00; border-radius: 8px; font-weight: bold;">Published <i
+                    <button value="{{ route('managerAdmin.greeting.publish', $greeting->id) }}" onclick="unPublish(this)"
+                        class="btn btnRemove mr-2" style=" border-radius: 8px; font-weight: bold;">Remove Form Publish <i
                             class="fas fa-eye"></i></button>
-                    <button type="button" disabled class="btn btn-outline-warning px-5">Edit</button>
                 @endif
 
             </div>
@@ -364,6 +367,49 @@
                                 Swal.fire(
                                     'Published !',
                                     'This greeting has been published. ' + data.message,
+                                    'success'
+                                )
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 800);
+                            } else {
+                                Swal.fire(
+                                    'Wrong !',
+                                    'Something going wrong. ' + data.message,
+                                    'warning'
+                                )
+                            }
+                        },
+                    })
+                }
+            })
+        }
+
+        function unPublish(objButton) {
+            var url = objButton.value;
+            // alert(objButton.value)
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, UnPublish !'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        method: 'POST',
+                        url: url,
+                        headers: {
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        },
+                        success: function(data) {
+                            if (data.type == 'success') {
+                                Swal.fire(
+                                    'UnPublished !',
+                                    'This greeting has been unpublished. ' + data.message,
                                     'success'
                                 )
                                 setTimeout(function() {

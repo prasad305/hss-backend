@@ -47,11 +47,13 @@
             <div class="row pt-5">
 
                 <div class="col-md-4">
-                    @if($post->banner)
-                        <img src="{{ asset($post->banner) }}" style="width: 100%; border: 3px solid #fff; border-radius: 10px;" />
+                    @if ($post->banner)
+                        <img src="{{ asset($post->banner) }}"
+                            style="width: 100%; border: 3px solid #fff; border-radius: 10px;" />
                     @else
                         <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                            <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"  style="width: 100%; border: 3px solid #fff; border-radius: 10px;"/>
+                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"
+                                style="width: 100%; border: 3px solid #fff; border-radius: 10px;" />
                         </a>
                     @endif
 
@@ -62,11 +64,14 @@
                     <div class="row">
                         <div class="col-md-6 col-12">
                             <div class="card">
-                                @if($star_one->image)
-                                    <img src="{{ asset($star_one->image) }}" style=" height: 210px; border-radius: 50%; text-align: center; border: 3px solid #59df06;" alt="">
+                                @if ($star_one->image)
+                                    <img src="{{ asset($star_one->image) }}"
+                                        style=" height: 210px; border-radius: 50%; text-align: center; border: 3px solid #59df06;"
+                                        alt="">
                                 @else
                                     <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                        <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style=" height: 210px; border-radius: 50%; text-align: center; border: 3px solid #59df06;"/>
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                            style=" height: 210px; border-radius: 50%; text-align: center; border: 3px solid #59df06;" />
                                     </a>
                                 @endif
                                 <div class="card-body">
@@ -87,13 +92,14 @@
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="card">
-                                if($another_star->image)
+                                @if ($another_star->image)
                                     <img src="{{ asset($another_star->image) }}"
-                                    style=" height: 210px; border-radius: 50%; text-align: center; border: 3px solid #59df06; "
-                                    alt="">
+                                        style=" height: 210px; border-radius: 50%; text-align: center; border: 3px solid #59df06; "
+                                        alt="">
                                 @else
                                     <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                        <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style=" height: 210px; border-radius: 50%; text-align: center; border: 3px solid #59df06;"/>
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                            style=" height: 210px; border-radius: 50%; text-align: center; border: 3px solid #59df06;" />
                                     </a>
                                 @endif
                                 <div class="card-body">
@@ -207,7 +213,7 @@
                     <div class="card px-5 py-3">
                         <div class="row">
                             <div class="col-xs-6 content-center">
-                                @if($post->image)
+                                @if ($post->image)
                                     <img src="{{ asset($post->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                 @else
                                     <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
@@ -222,7 +228,7 @@
                     </div>
                     <div class="row py-3">
                         <div class="col-xs-6 content-center">
-                            @if($post->admin->image)
+                            @if ($post->admin->image)
                                 <img src="{{ asset($post->admin->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                             @else
                                 <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
@@ -257,7 +263,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                            success ') }}',
+                                                                                                                                                                        success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })

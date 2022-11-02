@@ -344,7 +344,7 @@ if (!function_exists('random_code')) {
      * after payment table update
      */
 
-    function resgistationSuccessUpdate($user_id, $type, $event_id, $paymentMethod, $amount = null)
+    function resgistationSuccessUpdate($user_id, $type, $event_id, $paymentMethod, $amount = null, $value)
     {
         //live chat regupdate
         if ($type == 'livechat') {
@@ -393,6 +393,9 @@ if (!function_exists('random_code')) {
         if ($type == 'auditionCertificate') {
             auditionCertificateUpdate($user_id, $event_id, "PayTm", $amount);
         }
+        if ($type == 'loveReact') {
+            loveReactPayment($user_id, $event_id, $paymentMethod, $value, $amount);
+        }
     }
 
 
@@ -417,20 +420,58 @@ if (!function_exists('random_code')) {
     {
 
         $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
-        // try {
-        AuditionCertification::create([
-            'participant_id' =>  $user_id,
-            'audition_id' =>  $auditionRoundInfo->audition_id,
-            'round_info_id' =>  $round_info_id,
-            'fee' =>  $fee,
-            'payment_status' =>  1,
-            'payment_method' => $method
-        ]);
-
-        // } catch (\Throwable $th) {
-        //     //throw $th;
-        // }
+        try {
+            AuditionCertification::create([
+                'participant_id' =>  $user_id,
+                'audition_id' =>  $auditionRoundInfo->audition_id,
+                'round_info_id' =>  $round_info_id,
+                'fee' =>  $fee,
+                'payment_status' =>  1,
+                'payment_method' => $method
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
+
+    //   <================================Love React Payment start==================================>
+
+    function loveReactPayment($user_id, $videoId, $paymentMethod, $reactNum, $amount)
+    {
+        $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $videoId)->first();
+
+        if (!LoveReactPayment::where([['user_id', $user_id], ['react_num', $reactNum], ['video_id', $videoId]])->exists()) {
+
+            $loveReactPayment = new LoveReactPayment();
+            $loveReactPayment->user_id = $user_id;
+            $loveReactPayment->video_id = $videoId;
+            $loveReactPayment->react_num = $reactNum;
+            $loveReactPayment->fee = $amount;
+            $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
+            $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
+            $loveReactPayment->status = 1;
+            $loveReactPayment->type = $paymentMethod;
+            $loveReactPayment->save();
+            if ($paymentMethod == "wallet") {
+                $lovePoints =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('love_points');
+                Wallet::where('user_id', auth('sanctum')->user()->id)->update(['love_points' => $lovePoints->love_points - $reactNum]);
+            }
+            if ($loveReactPayment) {
+                LoveReact::create([
+                    'user_id' => $user_id,
+                    'video_id' => $videoId,
+                    'react_num' => $reactNum,
+                    'audition_id' => $auditionRoundInfo->roundInfo->audition_id,
+                    'round_info_id' => $auditionRoundInfo->roundInfo->id,
+                    'participant_id' => $auditionRoundInfo->user_id,
+                    'react_voting_type' => $auditionRoundInfo->roundInfo->has_user_vote_mark == 1 ? 'user_vote' : ($auditionRoundInfo->roundInfo->wildcard == 1 ? 'wildcard' : 'general'),
+                    'status' => 1,
+
+                ]);
+            }
+        }
+    }
+
 
     //for live chat
     function LiveChatRegUpdate($user_id, $event_id, $method)
@@ -488,18 +529,17 @@ if (!function_exists('random_code')) {
     // Marketplace
     function marketplaceUpdate($user_id, $event_id, $method)
     {
-            $registerEvent = MarketplaceOrder::where([['marketplace_id', $event_id], ['user_id', $user_id]])->first();
-            $registerEvent->payment_status = 1;
-            $registerEvent->payment_method = $method;
-            $registerEvent->update();
-            
-            $activity = new Activity();
-            $activity->user_id = $user_id;
-            $activity->event_id = $event_id;
-            $activity->event_registration_id = $registerEvent->id;
-            $activity->type = 'marketplace';
-            $activity->save();
-        
+        $registerEvent = MarketplaceOrder::where([['marketplace_id', $event_id], ['user_id', $user_id]])->first();
+        $registerEvent->payment_status = 1;
+        $registerEvent->payment_method = $method;
+        $registerEvent->update();
+
+        $activity = new Activity();
+        $activity->user_id = $user_id;
+        $activity->event_id = $event_id;
+        $activity->event_registration_id = $registerEvent->id;
+        $activity->type = 'marketplace';
+        $activity->save();
     }
 
     //for souvenir for mobile
@@ -554,9 +594,16 @@ if (!function_exists('random_code')) {
         try {
             $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id]])->first();
             $registerEvent->payment_status = 1;
-            $registerEvent->status = 2;
+            $registerEvent->status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
+
+            $activity = new Activity();
+            $activity->type = 'greeting';
+            $activity->user_id = $user_id;
+            $activity->event_id = $event_id;
+            $activity->event_registration_id = $registerEvent->id;
+            $activity->save();
         } catch (\Throwable $th) {
             //throw $th;
         }

@@ -135,7 +135,7 @@ Route::get('/guest/PromoVideos', [GuestController::class, 'getPromoVideo']);
 Route::get('/user/star_list', [UserController::class, 'star_list']);
 
 //after payTM redirect
-Route::post('paytm-callback/{redirectTo}/{user_id}/{type}/{event_id}', [PaymentController::class, 'paytmCallback']);
+Route::post('paytm-callback/{redirectTo}/{user_id}/{type}/{event_id}/{reactNum?}', [PaymentController::class, 'paytmCallback']);
 
 //paytm mobile
 Route::get('/txn-token-mobile/{amount}', [PaymentController::class, 'txnTokenGenerate']);

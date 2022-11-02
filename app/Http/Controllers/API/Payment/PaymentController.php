@@ -20,6 +20,7 @@ use App\Models\SouvenirApply;
 use App\Models\SouvenirPayment;
 use App\Models\Transaction;
 use App\Models\Wallet;
+use App\Models\Activity;
 use Error;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -36,6 +37,20 @@ class PaymentController extends Controller
 
         $user = auth()->user();
 
+        // set Extra parameters
+        switch ($request->type) {
+            case ('loveReact'):
+
+                $value = $request->reactNum;
+
+                break;
+
+            default:
+                $value = 0;
+        }
+
+
+
         $paytmParams = array();
         $paytmParams["MID"] = "iELVJt50414347554560";
         $paytmParams["ORDER_ID"] = Str::orderedUuid();
@@ -44,7 +59,7 @@ class PaymentController extends Controller
         $paytmParams['CHANNEL_ID'] = 'WEB';
         $paytmParams['INDUSTRY_TYPE_ID'] = 'Retail';
         $paytmParams['TXN_AMOUNT'] = $request->amount;
-        $paytmParams['CALLBACK_URL'] = 'http://localhost:8000/api/paytm-callback/' . $request->redirectTo . "/" . $user->id . "/" . $request->type . "/" . $request->event_id;
+        $paytmParams['CALLBACK_URL'] = 'http://localhost:8000/api/paytm-callback/' . $request->redirectTo . "/" . $user->id . "/" . $request->type . "/" . $request->event_id . "/" . $value;
         $paytmParams['EMAIL'] = $user->email;
 
 
@@ -54,7 +69,7 @@ class PaymentController extends Controller
     }
 
     //payment success function
-    public function paytmCallback(Request $request, $redirectTo, $user_id, $type, $event_id)
+    public function paytmCallback(Request $request, $redirectTo, $user_id, $type, $event_id, $value)
     {
 
         // return  $redirectTo . "-------" . $user_id . "---------" . $type . "-------" . $event_id;
@@ -140,18 +155,10 @@ class PaymentController extends Controller
                 //     $this->greetingUpdate($user_id, $event_id, "PayTm");
                 // }
 
-                resgistationSuccessUpdate($user_id, $type, $event_id, "paytm", $result->body->txnAmount);
-
-
-                if ($type == 'generalpost') {
-                    $this->generalPostUpdate($event_id, $user_id, "PayTm", $result->body->txnAmount);
-                }
-                if ($type == 'loveReact') {
-                    $this->loveReactPayment($user_id, $event_id, $type, $result->body->txnAmount);
-                }
+                resgistationSuccessUpdate($user_id, $type, $event_id, "paytm", $result->body->txnAmount, $value);
             }
             $orderId = $result->body->orderId;
-            $url = "http://localhost:3000/";
+            $url = "http://localhost:3001/";
             return  redirect()->away($url . $redirectTo);
         } else {
             return "Checksum Mismatched";
@@ -270,6 +277,9 @@ class PaymentController extends Controller
             if ($request->modelName == 'marketplace') {
                 return $this->marketplaceUpdate($user->id, $request->eventId, "PayTm-mobile");
             }
+            if ($request->modelName == 'greeting') {
+                return $this->greetingUpdate($user->id, $request->eventId, "PayTm-mobile");
+            }
 
 
             return "success data received" . "__" . $request->modelName;
@@ -301,11 +311,23 @@ class PaymentController extends Controller
     //-------------------stripe start------------------------
     public function stripePaymentMake(Request $request)
     {
-        $public_key = env('STRIPE_PUBLIC_KEY');
-        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        $public_key = "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh";
+        Stripe::setApiKey('sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX');
 
 
         $user = auth()->user();
+
+        // set Extra parameters
+        switch ($request->event_type) {
+            case ('loveReact'):
+
+                $value = $request->reactNum;
+
+                break;
+
+            default:
+                $value = 0;
+        }
 
         // Use an existing Customer ID if this is a returning customer.
         $customer = \Stripe\Customer::create();
@@ -315,7 +337,7 @@ class PaymentController extends Controller
                 'amount' =>  $request->amount * 100,
                 'customer' => $customer->id,
                 'currency' => 'usd',
-                'description' =>  $user->id . "_" . $request->event_type . '_' . $request->event_id,
+                'description' =>  $user->id . "_" . $request->event_type . '_' . $request->event_id . '_' . "value" .  '_' . $value,
                 'receipt_email' => $user->email,
                 'automatic_payment_methods' => [
                     'enabled' => true,
@@ -337,7 +359,7 @@ class PaymentController extends Controller
     //stripe mobile
     public function stripePaymentMobile(Request $request)
     {
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        \Stripe\Stripe::setApiKey("sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX");
         // Use an existing Customer ID if this is a returning customer.
         $user = auth()->user();
         $customer = \Stripe\Customer::create();
@@ -364,7 +386,7 @@ class PaymentController extends Controller
             'ephemeralKey' => $ephemeralKey->secret,
             'customer' => $customer->id,
             'status' => 200,
-            'publishableKey' => env('STRIPE_PUBLIC_KEY')
+            'publishableKey' => "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh"
         ]);
     }
 
@@ -507,11 +529,19 @@ class PaymentController extends Controller
     public function greetingUpdate($user_id, $event_id, $method)
     {
         try {
-            $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent = GreetingsRegistration::where([['id', $event_id], ['user_id', $user_id]])->first();
+            // $eventRegistration = GreetingsRegistration::where('user_id', Auth::user()->id)->where('id', $request->greetingId)->first();
             $registerEvent->payment_status = 1;
-            $registerEvent->status = 2;
+            $registerEvent->status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
+            
+            $activity = new Activity();
+            $activity->type = 'greeting';
+            $activity->user_id = $user_id;
+            $activity->event_id = $registerEvent->greeting_id;
+            $activity->event_registration_id = $registerEvent->id;
+            $activity->save();
         } catch (\Throwable $th) {
             //throw $th;
         }
@@ -531,55 +561,6 @@ class PaymentController extends Controller
             $generalPostPayment->save();
         } catch (\Throwable $th) {
             //throw $th;
-        }
-    }
-    public function generalPostUpdate($event_id, $user_id, $method, $fee)
-    {
-        GeneralPostPayment::create([
-
-            'post_id' => $event_id,
-            'user_id' => $user_id,
-            'payment_method' => $method,
-            'amount' => $fee,
-            'status' => 1,
-        ]);
-    }
-
-    //   <================================Love React Payment start==================================>
-
-    public function loveReactPayment($user_id, $videoId, $type, $amount)
-    {
-        $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $videoId)->first();
-        $reactNum = 5;
-
-        if (!LoveReactPayment::where([['user_id', $user_id], ['react_num', $reactNum], ['video_id', $videoId]])->exists()) {
-
-            $loveReactPayment = new LoveReactPayment();
-            $loveReactPayment->user_id = $user_id;
-            $loveReactPayment->video_id = $videoId;
-            $loveReactPayment->react_num = $reactNum;
-            $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
-            $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
-            $loveReactPayment->status = 1;
-            $loveReactPayment->type = $type;
-            $loveReactPayment->save();
-            if ($type == "wallet") {
-                $lovePoints =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('love_points');
-                Wallet::where('user_id', auth('sanctum')->user()->id)->update(['love_points' => $lovePoints->love_points - $reactNum]);
-            }
-            if ($loveReactPayment) {
-                LoveReact::create([
-                    'user_id' => $user_id,
-                    'video_id' => $videoId,
-                    'react_num' => $reactNum,
-                    'audition_id' => $auditionRoundInfo->roundInfo->audition_id,
-                    'round_info_id' => $auditionRoundInfo->roundInfo->id,
-                    'participant_id' => $auditionRoundInfo->user_id,
-                    'react_voting_type' => $auditionRoundInfo->roundInfo->has_user_vote_mark == 1 ? 'user_vote' : ($auditionRoundInfo->roundInfo->wildcard == 1 ? 'wildcard' : 'general'),
-                    'status' => 1,
-
-                ]);
-            }
         }
     }
 
