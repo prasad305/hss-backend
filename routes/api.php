@@ -50,6 +50,7 @@ Route::post('/uplad-video', [HomeController::class, 'video_upload']);
 Route::get('aboutus', [SettingsController::class, 'aboutus']);
 Route::get('policy', [SettingsController::class, 'policy']);
 Route::get('faq', [SettingsController::class, 'faq']);
+Route::get('refund', [SettingsController::class, 'refund']);
 Route::get('product-purchase', [SettingsController::class, 'productPurchase']);
 Route::get('terms-condition', [SettingsController::class, 'termsCondition']);
 
