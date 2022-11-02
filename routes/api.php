@@ -774,7 +774,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     //<======================== Auction Route ========================>
 
     Route::post('/star/add/auction/product', [AuctionController::class, 'star_addProduct']);
-    Route::get('/star/editOrConfirm/auction/editOrConfirm', [AuctionController::class, 'star_editOrConfirm']);
+    Route::get('/star/editOrConfirm/auction/editOrConfirm/{id}', [AuctionController::class, 'star_editOrConfirm']);
     Route::get('/star/edit/auction/{id}', [AuctionController::class, 'star_editProduct']);
     Route::get('/star/approvedOrDecline/auction/{id}', [AuctionController::class, 'star_approvedOrDecline']);
     Route::put('/star/approved/auction/{id}', [AuctionController::class, 'star_approved']);
