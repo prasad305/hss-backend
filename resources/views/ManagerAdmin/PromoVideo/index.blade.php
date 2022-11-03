@@ -42,7 +42,7 @@
                                 <div class="panel-body py-3">
                                     <h5 class="text-ellipsis-line-1">{{ $val->title }}</h5>
 
-                                    @if ($val->status == 0)
+                                    @if ($val->status < 2)
                                         <a type="button" class="btn btnPending waves-effect waves-light"><i
                                                 class="icon-record"></i>
                                             Pending</a>
