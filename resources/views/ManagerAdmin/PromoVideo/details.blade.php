@@ -31,7 +31,7 @@
             <div class="row">
                 <div class="col-md-8 mb-3">
                     <div class="card p-2">
-                        <video class="card-img video-card" controls>
+                        <video class="card-img " controls>
                             <source src="{{ asset($promoVideo->video_url) }}" />
                         </video>
                     </div>

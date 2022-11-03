@@ -36,7 +36,7 @@
                             <div class="panel panel-primary p-2 text-center">
 
 
-                                <video class="card-img" controls src="{{ asset($val->video_url) }}">
+                                <video class="card-img video-card" controls src="{{ asset($val->video_url) }}">
                                 </video>
 
                                 <div class="panel-body py-3">
