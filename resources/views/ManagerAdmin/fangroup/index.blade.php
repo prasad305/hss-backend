@@ -8,57 +8,56 @@
 
 
 @section('content')
-
-<!-- Content Header (Page header) -->
-<div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0">FanGroup {{ $fanstatus }}</h1>
-        </div><!-- /.col -->
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">FanGroup</li>
-          </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-  </div>
-  <!-- /.content-header -->
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">FanGroup {{ $fanstatus }}</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">FanGroup</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
 
 
 
     <div class="content">
         <div class="container-fluid">
 
-
-            <div class="row">
+            <div class="row mb-3">
                 @foreach ($post as $val)
                     <!--card-->
 
-                    <div class="col-sm-6 col-lg-4">
+                    <div class="col-sm-12 col-md-4 col-lg-3">
                         <div class="card">
-                            <div class="panel panel-primary text-center">
-                                <div class="">
-                                    <img width="100%" src="{{ asset($val->banner) }}" alt="">
-                                </div>
+                            <div class="panel panel-primary p-2 text-center">
+
+
+                                <img src="{{ asset($val->banner) }}" class="card-img" />
+
                                 <div class="panel-body py-3">
-                                    <h3 class="text-ellipsis-line-1">{{ $val->title }}</h3>
+                                    <h5 class="text-ellipsis-line-1">{{ $val->title }}</h5>
+
 
                                     @if ($val->status == 1)
-                                        <button type="button" class="btn btn-success waves-effect waves-light"><i
+                                        <button type="button" class="btn btnPublish waves-effect waves-light"><i
                                                 class="icon-checkmark-round"></i> Published</button>
                                     @else
-                                    <a type="button" class="btn btn-warning waves-effect waves-light"><i
+                                        <a type="button" class="btn btnPending waves-effect waves-light"><i
                                                 class="icon-record"></i>
                                             Pending</a>
                                     @endif
 
                                     <a href="{{ route('managerAdmin.fangroup.details', [$val->id]) }}" type="button"
-                                        class="btn btn-info waves-effect waves-light">Details <i
+                                        class="btn btnDetails waves-effect fw-bold waves-light">Details <i
                                             class="fa fa-angle-double-right"></i></a>
-
                                 </div>
                             </div>
 
@@ -67,7 +66,7 @@
                     <!--card end-->
                 @endforeach
             </div>
-
+           
 
         </div> <!-- container -->
     </div> <!-- content -->

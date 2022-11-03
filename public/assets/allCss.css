@@ -256,6 +256,18 @@
     min-height: 150px;
 }
 
+.star-img-card {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: .2px solid rgb(235, 153, 0);
+}
+
+.star-text-name {
+    font-weight: 600;
+    color: #d3770d;
+}
+
 
 
 
