@@ -39,9 +39,9 @@
         }
 
         /* .active{
-                                                                                                                        background-color: goldenrod !important;
-                                                                                                                        color: white !important;
-                                                                                                                    } */
+                                                                                                                                                        background-color: goldenrod !important;
+                                                                                                                                                        color: white !important;
+                                                                                                                                                    } */
 
         .clockNOte {
             background-color: rgb(29, 29, 29);
@@ -71,8 +71,8 @@
         }
 
         /* .Notifytdx:hover, .lNTS:hover, .rNTS:hover{
-                                                                                                                     background-color: rgb(255, 153, 0);
-                                                                                                                    } */
+                                                                                                                                                     background-color: rgb(255, 153, 0);
+                                                                                                                                                    } */
 
 
 
@@ -342,42 +342,27 @@
 
             </div>
 
-            <div class="container row my-3">
-                @if ($greeting->status == 1)
-                    <a type="button" class="btn btnPublish mr-2"
-                        href="{{ route('managerAdmin.greeting.publish', $greeting->id) }}">Publish Now</a>
 
-                    <a type="button" class="btn btnEdit px-5"
-                        onclick="Show('Edit Post','{{ route('managerAdmin.greeting.edit', $greeting->id) }}')">Edit</a>
-                @else
-                    <a type="button" class="btn btnRemove mr-2"
-                        href="{{ route('managerAdmin.greeting.publish', $greeting->id) }}">Remove From Published</a>
-                @endif
+            <div class="container row mb-5 mt-2">
+                <div class="text-center">
+                    @if ($greeting->status == 1)
+                        <button value="{{ route('managerAdmin.greeting.publish', $greeting->id) }}" onclick="publish(this)"
+                            class="btn btnPublish mr-2">Publish
+                            Now </button>
+                        <a type="button" class="btn btnEdit px-5"
+                            onclick="Show('Edit Post','{{ route('managerAdmin.greeting.edit', $greeting->id) }}')">Edit</a>
+                    @else
+                        <button value="{{ route('managerAdmin.greeting.publish', $greeting->id) }}"
+                            onclick="unPublish(this)" class="btn btnRemove mr-2">Remove Form Publish </button>
+                    @endif
+
+                </div>
+
             </div>
 
         </div> <!-- container -->
     </div> <!-- content -->
 
-    {{-- <div class="m-3">
-
-        <div class="container row mt-5">
-            <div class="text-center">
-                @if ($greeting->status == 1)
-                    <button value="{{ route('managerAdmin.greeting.publish', $greeting->id) }}" onclick="publish(this)"
-                        class="btn" style="background: #FFCE00; border-radius: 8px; font-weight: bold;">Publish
-                        Now <i class="fas fa-eye"></i></button>
-                    <a type="button" class="btn btn-outline-warning px-5"
-                        onclick="Show('Edit Post','{{ route('managerAdmin.greeting.edit', $greeting->id) }}')">Edit</a>
-                @else
-                    <button value="{{ route('managerAdmin.greeting.publish', $greeting->id) }}" onclick="unPublish(this)"
-                        class="btn btnRemove mr-2" style=" border-radius: 8px; font-weight: bold;">Remove Form Publish <i
-                            class="fas fa-eye"></i></button>
-                @endif
-
-            </div>
-
-        </div>
-    </div> --}}
 
     <script>
         function publish(objButton) {
