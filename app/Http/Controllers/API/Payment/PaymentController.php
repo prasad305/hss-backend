@@ -21,6 +21,8 @@ use App\Models\SouvenirPayment;
 use App\Models\Transaction;
 use App\Models\Wallet;
 use App\Models\Activity;
+use App\Models\AuditionCertification;
+use App\Models\Audition\AuditionRoundInfo;
 use Error;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -279,6 +281,10 @@ class PaymentController extends Controller
             }
             if ($request->modelName == 'greeting') {
                 return $this->greetingUpdate($user->id, $request->eventId, "PayTm-mobile");
+            }
+            if ($request->modelName == 'auditionCertificate') {
+                return $this->auditionCertificateUpdate($user->id, $request->eventId, "PayTm-mobile", $request->TXNAMOUNT);
+                // $user_id, $round_info_id, $method, $fee
             }
 
 
@@ -597,6 +603,22 @@ class PaymentController extends Controller
                 return $th;
             }
         }
+    }
+
+    //auditionCertificateUpdate
+    function auditionCertificateUpdate($user_id, $round_info_id, $method, $fee)
+    {
+
+        $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
+       
+            AuditionCertification::create([
+                'participant_id' =>  $user_id,
+                'audition_id' =>  $auditionRoundInfo->audition_id,
+                'round_info_id' =>  $round_info_id,
+                'fee' =>  $fee,
+                'payment_status' =>  1,
+                'payment_method' => $method
+            ]);
     }
 
     //   <================================Love React Payment end ==================================>

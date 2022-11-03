@@ -843,7 +843,7 @@ class UserMobileAppController extends Controller
         ])->first();
 
         if ($auditionRoundMarkTracking) {
-            $certificate = AuditionCertification::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['participant_id', auth()->user()->id]])->first();
+            $certificate = AuditionCertification::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['participant_id', auth()->user()->id]])->whereNotNull('certificate')->first();
             if ($certificate) {
                 return response()->json([
                     'status' => 200,
@@ -889,13 +889,11 @@ class UserMobileAppController extends Controller
                 return $th;
             }
 
-            $auditionCertification = new AuditionCertification();
-            $auditionCertification->audition_id = $audition_id;
-            $auditionCertification->round_info_id = $round_info_id;
-            $auditionCertification->participant_id = $userInfo->id;
+            $auditionCertification = AuditionCertification::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['participant_id', auth()->user()->id]])->first();
+            
+            
             $auditionCertification->certificate = $filename;
-            $auditionCertification->status = 1;
-            $auditionCertification->save();
+            $auditionCertification->update();
             if ($auditionCertification) {
                 return response()->json([
                     'status' => 200,
