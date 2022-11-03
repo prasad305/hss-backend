@@ -46,7 +46,7 @@
 
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-3">
                     <div class="card px-3 py-3">
                         <div class="d-flex mb-3 align-content-center  ">
                             <div class="">
@@ -98,7 +98,7 @@
 
                             <div class="description-text">{!! $post->description !!}</div>
 
-                            <div class="col-md-4 card p-3">
+                            <div class="col-md-4 card p-3 mt-3">
                                 <label for="Date">Date</label>
                                 <h4 class="text-warning">{{ \Carbon\Carbon::parse($post->date)->format('d F,Y') }}</h4>
                             </div>

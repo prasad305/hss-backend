@@ -39,9 +39,9 @@
         }
 
         /* .active{
-                                            background-color: goldenrod !important;
-                                            color: white !important;
-                                        } */
+                                                                                                                        background-color: goldenrod !important;
+                                                                                                                        color: white !important;
+                                                                                                                    } */
 
         .clockNOte {
             background-color: rgb(29, 29, 29);
@@ -71,8 +71,8 @@
         }
 
         /* .Notifytdx:hover, .lNTS:hover, .rNTS:hover{
-                                         background-color: rgb(255, 153, 0);
-                                        } */
+                                                                                                                     background-color: rgb(255, 153, 0);
+                                                                                                                    } */
 
 
 
@@ -206,101 +206,135 @@
             }
         }
     </style>
-    <div class="row">
-        <div class="col-md-12 mx-2 mt-3">
-            <h4>Greeting Details</h4>
-            <div style="border-bottom: 2px solid white;"></div>
-        </div>
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Greeting </h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Greeting Details</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
     </div>
-    <div class="m-3">
-        <div class="card ">
-            @if ($greeting->banner)
-                <img src="{{ asset($greeting->banner) }}" alt="" class="BannerAGN" />
-            @else
-                <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="BannerAGN" />
-                </a>
-            @endif
-        </div>
+    <!-- /.content-header -->
 
-        <div class="mt-3 row">
-            <div class="col-md-8 ">
-                <div class="card bg-dark px-3 py-4">
-                    <h4 class="text-light">{{ $greeting->title }}</h4>
-                    <p class="text-light pt-1">
-                        {!! $greeting->instruction !!}
-                    </p>
-                </div>
-                <div class="row">
-                    <div class=" col-md-6 bg-dark ">
-                        <div class="px-5 py-3 my-auto">
-                            <span>
-                                <img src="{{ asset('assets/manager-admin/tagPrice.PNG') }}" alt=""
-                                    class="PriceTage" />
-                            </span>
-                            <div class=" mx-2 ">
-                                <span class="text-light buTon-ab ">Cost</span>
-                                <br>
-                                <span class="text-light buTon-abc">
-                                    {{ $greeting->cost }} BDT
-                                </span>
-                            </div>
-                        </div>
-                        <div class="px-5 py-3 my-auto">
-                            <span>
-                                <img src="{{ asset('assets/manager-admin/tagPrice.PNG') }}" alt=""
-                                    class="PriceTage" />
-                            </span>
-                            <div class=" mx-2 ">
-                                <span class="text-light buTon-ab ">Minimum apply before</span>
-                                <br>
-                                <span class="text-light buTon-abc">
-                                    {{ $greeting->user_required_day }} Day
-                                </span>
-                            </div>
-                        </div>
-                        {{-- <div class="text-center">
-                            @if ($greeting->status === 1)
-                                <button  value="{{ route('managerAdmin.greeting.publish', $greeting->id) }}" onclick="publish(this)" class="btn"
-                                    style="background: #FFCE00; border-radius: 8px; font-weight: bold;">Publish Now <i
-                                        class="fas fa-eye"></i></button>
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8 mb-3">
+                    <div class="card p-2">
+                        <div class="center">
+                            @if ($greeting->banner)
+                                <img src="{{ asset($greeting->banner) }}" class="card-img" />
                             @else
-                                <button disabled  class="btn"
-                                    style="background: #FFCE00; border-radius: 8px; font-weight: bold;">Published  <i
-                                        class="fas fa-eye"></i></button>
+                                <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="card-img" />
+                                </a>
                             @endif
-                        </div> --}}
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card px-5 py-3">
-                            <div class="row">
-                                <div class="col-xs-6 content-center">
-                                    <img src="{{ asset($greeting->star->image ?? get_static_option('no_image')) }}"
-                                        style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
-                                </div>
-                                <div class="col-xs-6">
-                                    Star
-                                    <h3>{{ $greeting->star->first_name ?? '' }} {{ $greeting->star->last_name ?? '' }}
-                                    </h3>
-                                </div>
+
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card p-2 mb-3">
+                        <video width="100%" src="{{ asset($greeting->video) }}" type="video/mp4" controls
+                            class="img-fluid">
+
+                        </video>
+                    </div>
+                    <div class="card px-3 py-3">
+                        <div class="d-flex mb-3 align-content-center  ">
+                            <div class="">
+                                @if ($greeting->star->image)
+                                    <img src="{{ asset($greeting->star->image) }}" class="star-img" />
+                                @else
+                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                            class="star-img" />
+                                    </a>
+                                @endif
                             </div>
-                            <div class="row py-3">
-                                <div class="col-xs-6 content-center">
-                                    @if ($greeting->admin->image)
-                                        <img src="{{ asset($greeting->admin->image) }}"
-                                            style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
-                                    @else
-                                        <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                            <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
-                                                style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
-                                        </a>
-                                    @endif
+                            <div class="px-3">
+                                Star
+                                <h4>{{ $greeting->star->first_name }} {{ $greeting->star->last_name }}</h4>
+                            </div>
+                        </div>
+
+                        <div class="d-flex mb-3 align-content-center  ">
+                            <div class="">
+                                @if ($greeting->admin->image)
+                                    <img src="{{ asset($greeting->admin->image) }}"class="star-img" />
+                                @else
+                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                            class="star-img" />
+                                    </a>
+                                @endif
+                            </div>
+                            <div class="px-3">
+                                Admin
+                                <h4>{{ $greeting->admin->first_name }} {{ $greeting->admin->last_name }}</h4>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-between">
+
+                <div class="col-md-12 ">
+                    <div class=" card px-3 py-3">
+                        <div>
+                            <h4>{{ $greeting->title }}</h4>
+                            <div class="title-text text-warning">Instruction</div>
+
+                            <div class="description-text">{!! $greeting->instruction !!}</div>
+
+                            <div class="row">
+                                <div class="col-md-3   mt-3">
+                                    <div class="card py-3 pl-3 pr-1">
+                                        <div class="d-flex align-items-center">
+                                            <span>
+                                                <img src="{{ asset('assets/manager-admin/tagPrice.PNG') }}" alt=""
+                                                    class="PriceTage" />
+                                            </span>
+                                            <div class=" mx-2 ">
+                                                <span class="text-light buTon-ab ">Cost</span>
+                                                <br>
+                                                <span class="text-light buTon-abc">
+                                                    {{ $greeting->cost }} BDT
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-xs-6">
-                                    Admin
-                                    <h3>{{ $greeting->admin->first_name ?? '' }}
-                                        {{ $greeting->admin->last_name ?? '' }}</h3>
+
+                                <div class="col-md-3   mt-3">
+                                    <div class="card py-3 pl-3 pr-1">
+                                        <div class="d-flex align-items-center">
+                                            <span>
+                                                <img src="{{ asset('assets/manager-admin/tagPrice.PNG') }}" alt=""
+                                                    class="PriceTage" />
+                                            </span>
+                                            <div class=" mx-2 ">
+                                                <span class="text-light buTon-ab ">Minimum apply before</span>
+                                                <br>
+                                                <span class="text-light buTon-abc">
+                                                    {{ $greeting->user_required_day }} Day
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -308,19 +342,23 @@
 
             </div>
 
-            <div class="col-md-4 mt-4">
+            <div class="container row my-3">
+                @if ($greeting->status == 1)
+                    <a type="button" class="btn btnPublish mr-2"
+                        href="{{ route('managerAdmin.greeting.publish', $greeting->id) }}">Publish Now</a>
 
-                <video width="100%" controls class="img-fluid">
-                    <source src="{{ asset($greeting->video) }}" type="video/mp4">
-                </video>
-                <div>
-                </div>
+                    <a type="button" class="btn btnEdit px-5"
+                        onclick="Show('Edit Post','{{ route('managerAdmin.greeting.edit', $greeting->id) }}')">Edit</a>
+                @else
+                    <a type="button" class="btn btnRemove mr-2"
+                        href="{{ route('managerAdmin.greeting.publish', $greeting->id) }}">Remove From Published</a>
+                @endif
             </div>
 
-            <div class="col-md-4">
+        </div> <!-- container -->
+    </div> <!-- content -->
 
-            </div>
-        </div>
+    {{-- <div class="m-3">
 
         <div class="container row mt-5">
             <div class="text-center">
@@ -339,7 +377,7 @@
             </div>
 
         </div>
-    </div>
+    </div> --}}
 
     <script>
         function publish(objButton) {
