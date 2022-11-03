@@ -50,7 +50,7 @@
                             <div class="col-8">
                                 <p class="lead">Banner</p>
                                 @if ($data->banner)
-                                    <img src=" {{ asset($data->banner) }}" alt="No-Image">
+                                    <img src=" {{ asset($data->banner) }}" alt="No-Image" class="card-img-details">
                                 @else
                                     <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
                                         <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" />

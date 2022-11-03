@@ -24,141 +24,125 @@
     </div>
     <!-- /.content-header -->
 
-
     <div class="content">
         <div class="container-fluid">
+            <div class="row">
 
-            {{-- <div class="row">
-            <div class="col-md-6">
-                @if ($post->image)
-                    <img src="{{ asset($post->image) }}" style="width: 100%" />
-                @elseif($post->video)
-                    <iframe width="420" height="315" src="{{ $post->video }}"></iframe>
-                @else
-                    <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                        <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 100%"/>
-                    </a>
-                @endif
-
-            </div>
-        </div> --}}
-
-
-            <div class="row pt-5">
-
-                <div class="col-md-4">
-                    @if($post->image)
-                        <img src="{{ asset($post->image) }}" style="width: 100%; border: 2px solid gold;" />
-                    @else
-                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 100%; border: 2px solid gold;"/>
-                        </a>
-                    @endif
-
-                </div>
-
-                <div class="col-md-8 ">
-                    <div class="row card p-5">
-                        <h3>{{ $post->title }}</h3>
-                        <p>
-                            <b style="color: gold;">Description : </b>{!! $post->description !!}
-                        </p>
-                        <p>
-                            <b style="color: gold;">Terms Conditions : </b>{!! $post->terms_conditions !!}
-                        </p>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 card py-3">
-                            Date
-                            <h4 class="text-warning">{{ \Carbon\Carbon::parse($post->created_at)->format('d F,Y') }}</h4>
-                        </div>
-                        <div class="col-md-6 card py-3">
-                            Time
-                            <h4 class="text-warning">{{ \Carbon\Carbon::parse($post->created_at)->format('h:i A') }}</h4>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3 card py-3">
-                            Unit Price
-                            <h4 class="text-warning">{{ $post->unit_price }}</h4>
-                        </div>
-                        <div class="col-md-3 card py-3">
-                            Total Items
-                            <h4 class="text-warning">{{ $post->total_items }}</< /h4>
-                        </div>
-                        <div class="col-md-3 card py-3">
-                            Delivery Charge
-                            <h4 class="text-warning">{{ $post->delivery_charge }}</h4>
-                        </div>
-                        <div class="col-md-3 card py-3">
-                            Tax
-                            <h4 class="text-warning">{{ $post->tax }}</< /h4>
-                        </div>
-                    </div>
-
-                    <div class="container row">
-                        @if ($post->status != 1)
-                            <a type="button" class="btn btn-outline-success mr-2"
-                                href="{{ route('managerAdmin.marketplace.set_publish', [$post->id]) }}">Publish Now</a>
-                        @elseif($post->status != 0)
-                            <a type="button" class="btn btnRemove mr-2"
-                                href="{{ route('managerAdmin.marketplace.set_publish', [$post->id]) }}">Remove From
-                                Publish</a>
-                        @endif
-                        @if ($post->status == 0)
-                            <a type="button" class="btn btn-outline-warning px-5"
-                                onclick="Show('Edit Marketplace','{{ route('managerAdmin.marketplace.edit', $post->id) }}')">Edit</a>
-                        @endif
-                    </div>
-
-                </div>
-
-                {{-- <div class="col-md-4">
-                <div class="card px-5 py-3">
-                    <div class="row">
-                        <div class="col-xs-6 content-center">
-                            @if($post->image)
-                                <img src="{{ asset($post->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                <div class="col-md-4 mb-3">
+                    <div class="card p-2">
+                        <div class="center">
+                            @if ($post->image)
+                                <img src="{{ asset($post->image) }}" class="card-img-details" />
                             @else
                                 <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="card-img" />
                                 </a>
                             @endif
-                        </div>
-                        <div class="col-xs-6">
-                            Star
-                            <h3>{{ $post->star->first_name }} {{ $post->star->last_name }}</h3>
-                        </div>
-                    </div>
-                    <div class="row py-3">
-                        <div class="col-xs-6 content-center">
-                            @if($post->admin->image)
-                                <img src="{{ asset($post->admin->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
-                            @else
-                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                    <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
-                                </a>
-                            @endif
-                        </div>
-                        <div class="col-xs-6">
-                            Admin
-                            <h3>{{ $post->admin->first_name }} {{ $post->admin->last_name }}</h3>
                         </div>
                     </div>
                 </div>
-            </div> --}}
+
+                <div class="col-md-8 mb-3">
+                    <div class=" card px-3 py-3">
+                        <div class="row ">
+                            <div class="col-md-4 mb-3">
+                                <div class="card p-3">
+                                    <h5>Date</h5>
+                                    <h6 class="text-warning">{{ \Carbon\Carbon::parse($post->date)->format('d F,Y') }}</h6>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4 mb-3">
+                                <div class="card p-3">
+                                    <h5>Time</h5>
+                                    <h6 class="text-warning">{{ \Carbon\Carbon::parse($post->created_at)->format('h:i A') }}
+                                    </h6>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <div class="card p-3">
+                                    <h5>Unit Price</h5>
+                                    <h6 class="text-warning">{{ $post->unit_price }}</h6>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <div class="card p-3">
+                                    <h5> Total Items</h5>
+                                    <h6 class="text-warning">{{ $post->total_items }}</h6>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <div class="card p-3">
+                                    <h5> Delivery Charge</h5>
+                                    <h6 class="text-warning">{{ $post->delivery_charge }}</h6>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <div class="card p-3">
+                                    <h5> Tax</h5>
+                                    <h6 class="text-warning">{{ $post->tax }}</h6>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12 mb-3">
+                    <div class=" card px-3 py-3">
+                        <div>
+                            <h5>{{ $post->title }}</h5>
+                            <div class="title-text text-warning">Description</div>
+                            <div class="description-text">{!! $post->description !!}</div>
+                            <div class="title-text text-warning">Terms and Conditions</div>
+                            <div class="description-text">{!! $post->terms_conditions !!}</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="container row my-3">
+                    @if ($post->status != 1)
+                        <a type="button" class="btn btnPublish mr-2"
+                            href="{{ route('managerAdmin.marketplace.set_publish', [$post->id]) }}">Publish Now</a>
+                    @elseif($post->status != 0)
+                        <a type="button" class="btn btnRemove mr-2"
+                            href="{{ route('managerAdmin.marketplace.set_publish', [$post->id]) }}">Remove From
+                            Published</a>
+                    @endif
+                    @if ($post->status < 1)
+                        <a type="button" class="btn btnEdit px-5"
+                            onclick="Show('Edit Marketplace','{{ route('managerAdmin.marketplace.edit', $post->id) }}')">Edit</a>
+                    @endif
+                </div>
 
             </div>
-
-
-
-
 
         </div> <!-- container -->
     </div> <!-- content -->
 
 
+    {{-- <div class="container row">
+        @if ($post->status != 1)
+            <a type="button" class="btn btn-outline-success mr-2"
+                href="{{ route('managerAdmin.marketplace.set_publish', [$post->id]) }}">Publish Now</a>
+        @elseif($post->status != 0)
+            <a type="button" class="btn btnRemove mr-2"
+                href="{{ route('managerAdmin.marketplace.set_publish', [$post->id]) }}">Remove From
+                Publish</a>
+        @endif
+        @if ($post->status == 0)
+            <a type="button" class="btn btn-outline-warning px-5"
+                onclick="Show('Edit Marketplace','{{ route('managerAdmin.marketplace.edit', $post->id) }}')">Edit</a>
+        @endif
+    </div> --}}
 
     @if (session()->has('success'))
         <script type="text/javascript">
@@ -168,7 +152,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                            success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })

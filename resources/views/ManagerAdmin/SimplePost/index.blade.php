@@ -43,7 +43,7 @@
                                 @if ($val->image)
                                     <img src="{{ asset($val->image) }}" class="card-img" />
                                 @elseif($val->video)
-                                    <video class="card-img" controls src="{{ asset($val->video) }}"></video>
+                                    <video class="card-img card" controls src="{{ asset($val->video) }}"></video>
                                 @else
                                     <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
                                         <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="card-img"/>

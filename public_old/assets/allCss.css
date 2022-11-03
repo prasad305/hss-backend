@@ -255,7 +255,7 @@
     width: 100%;
     min-height: 200px !important;
     border: .2px solid rgb(235, 153, 0);
-    max-height: 450px;
+    max-height: 250px !important;
 }
 
 

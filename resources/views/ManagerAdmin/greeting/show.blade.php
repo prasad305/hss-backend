@@ -232,10 +232,10 @@
                     <div class="card p-2">
                         <div class="center">
                             @if ($greeting->banner)
-                                <img src="{{ asset($greeting->banner) }}" class="card-img" />
+                                <img src="{{ asset($greeting->banner) }}" class="card-img-details" />
                             @else
                                 <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="card-img" />
+                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="card-img-details" />
                                 </a>
                             @endif
                         </div>

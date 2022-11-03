@@ -33,7 +33,7 @@
                     <div class="card p-2">
                         <div class="center">
                             @if ($post->image)
-                                <img src="{{ asset($post->image) }}" class="card-img" />
+                                <img src="{{ asset($post->image) }}" class="card-img-details" />
                             @elseif($post->video)
                                 <video class="card-img" controls src="{{ asset($post->video) }}"></video>
                             @else
