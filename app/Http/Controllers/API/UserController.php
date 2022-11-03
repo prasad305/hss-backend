@@ -53,6 +53,9 @@ use App\Models\SuperStar;
 use App\Models\AuditionCertification;
 use App\Models\AuditionCertificationContent;
 use App\Models\Fan_Group_Join;
+use App\Models\Country;
+use App\Models\Educationlevel;
+use App\Models\Occupation;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
@@ -740,13 +743,13 @@ class UserController extends Controller
         $userId = auth('sanctum')->user()->id;
         // return gettype($userId);
 
-        $educationTypes = UserEducation::where('user_id', $userId)->first();
+        $educationTypes = UserInfo::where('user_id', $userId)->first();
 
         if ($educationTypes) {
 
             $educationTypes->subject = $request->subject;
             $educationTypes->institute = $request->institute;
-            $educationTypes->grade = $request->degree;
+            $educationTypes->edu_level = $request->edu_level;
             $educationTypes->save();
 
             return response()->json([
@@ -754,7 +757,7 @@ class UserController extends Controller
                 'message' => 'Education Updated Successfully'
             ]);
         } else {
-            $newEducation = new UserEducation();
+            $newEducation = new UserInfo();
             $newEducation->user_id = $userId;
             $newEducation->subject = $request->subject;
             $newEducation->institute = $request->institute;
@@ -790,26 +793,26 @@ class UserController extends Controller
         $userId = auth('sanctum')->user()->id;
         // return gettype($userId);
 
-        $educationTypes = UserEmployment::where('user_id', $userId)->first();
+        $employmentTypes = UserInfo::where('user_id', $userId)->first();
 
-        if ($educationTypes) {
+        if ($employmentTypes) {
 
-            $educationTypes->occupation = $request->position;
-            $educationTypes->company = $request->company;
-            $educationTypes->salary = $request->salary;
-            $educationTypes->save();
+            $employmentTypes->occupation = $request->position;
+            $employmentTypes->company = $request->company;
+            $employmentTypes->salery_range = $request->salery_range;
+            $employmentTypes->save();
 
             return response()->json([
                 'status' => 200,
                 'message' => 'Employment Updated Successfully'
             ]);
         } else {
-            $newEducation = new UserEmployment();
-            $newEducation->user_id = $userId;
-            $newEducation->occupation = $request->position;
-            $newEducation->company = $request->company;
-            $newEducation->salary = $request->salary;
-            $newEducation->save();
+            $newEmployment = new UserInfo();
+            $newEmployment->user_id = $userId;
+            $newEmployment->occupation = $request->position;
+            $newEmployment->company = $request->company;
+            $newEmployment->salery_range = $request->salery_range;
+            $newEmployment->save();
 
             return response()->json([
                 'status' => 200,
@@ -901,7 +904,33 @@ class UserController extends Controller
             ]);
         }
     }
+    public function allCountry()
+    {
+        $country = Country::get();
 
+        return response()->json([
+            'status' => 200,
+            'country' => $country,
+        ]);
+    }
+    public function educationLavel()
+    {
+        $education = Educationlevel::get();
+
+        return response()->json([
+            'status' => 200,
+            'education' => $education,
+        ]);
+    }
+    public function occupationList()
+    {
+        $occupation = Occupation::get();
+
+        return response()->json([
+            'status' => 200,
+            'occupation' => $occupation,
+        ]);
+    }
 
     public function registeredLivechat()
     {
