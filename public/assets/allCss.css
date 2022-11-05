@@ -219,6 +219,7 @@
 }
 
 .btnRemove:hover {
+    font-weight: 600;
     background: linear-gradient(90deg, rgb(199, 65, 65) 0%, rgb(247, 61, 61) 100%);
 }
 
@@ -227,6 +228,7 @@
 }
 
 .btnDetails {
+    font-weight: 600;
     background: linear-gradient(90deg, rgb(66, 187, 181) 0%, rgb(0, 235, 125) 100%);
 }
 

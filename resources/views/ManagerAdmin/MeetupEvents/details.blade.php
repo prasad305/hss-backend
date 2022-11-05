@@ -206,7 +206,7 @@
             @if ($meetup->status == 2)
                 <form action="{{ route('managerAdmin.meetupEvent.set_publish', [$meetup->id]) }}" method="post">
                     @csrf
-                    <button type="submit" class="btn btnRemove mr-2">Remove From Publish</button>
+                    <button type="submit" class="btn btnRemove mr-2 mb-4">Remove From Publish</button>
                 </form>
             @endif
 

@@ -32,6 +32,44 @@
         <div class="container-fluid">
 
 
+
+            <div class="row mb-3">
+                @foreach ($events as $val)
+                    <!--card-->
+
+                    <div class="col-sm-12 col-md-4 col-lg-3">
+                        <div class="card">
+                            <div class="panel panel-primary p-2 text-center">
+
+
+                                <img src="{{ asset($val->banner) }}" class="img-fluid card-img" />
+
+                                <div class="panel-body py-3">
+                                    <h5 class="text-ellipsis-line-1">{{ $val->title }}</h5>
+
+
+                                    @if ($val->status == 2)
+                                        <button type="button" class="btn btnPublish waves-effect waves-light"><i
+                                                class="icon-checkmark-round"></i> Published</button>
+                                    @else
+                                        <a type="button" class="btn btnPending waves-effect waves-light"><i
+                                                class="icon-record"></i>
+                                            Pending</a>
+                                    @endif
+
+                                    <a href="{{ route('managerAdmin.meetupEvent.details', [$val->id]) }}" type="button"
+                                        class="btn btnDetails waves-effect fw-bold waves-light">Details <i
+                                            class="fa fa-angle-double-right"></i></a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--card end-->
+                @endforeach
+            </div>
+
+
             <div class="row">
                 @foreach ($events as $event)
                     <!--card-->
