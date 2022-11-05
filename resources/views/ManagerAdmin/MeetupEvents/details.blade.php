@@ -39,11 +39,12 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    @if($meetup->banner)
+                    @if ($meetup->banner)
                         <img src="{{ asset($meetup->banner) }}" style="width: 100%" class="banner-image" />
                     @else
                         <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 100%" class="banner-image" />
+                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 100%"
+                                class="banner-image" />
                         </a>
                     @endif
                 </div>
@@ -85,12 +86,13 @@
                     <div class="card px-5">
                         <div class="row py-3">
                             <div class="col-xs-6 content-center">
-                                @if($meetup->star->image)
+                                @if ($meetup->star->image)
                                     <img src="{{ asset($meetup->star->image) }}"
-                                    style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                        style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                 @else
                                     <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                            style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                     </a>
                                 @endif
                             </div>
@@ -102,13 +104,14 @@
 
                         <div class="row">
                             <div class="col-xs-6 content-center mr-2">
-                                @if($meetup->admin->image)
+                                @if ($meetup->admin->image)
                                     <img src="{{ asset($meetup->admin->image) }}" class="user_image"
                                         style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"
                                         alt="Image not found" />
                                 @else
                                     <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                            style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                     </a>
                                 @endif
                             </div>
@@ -155,6 +158,12 @@
             </div>
 
 
+
+
+
+
+
+
             @if ($meetup->status != 2)
                 <div class="card row">
                     <div class="card-header"
@@ -165,11 +174,12 @@
                         <form action="{{ route('managerAdmin.meetupEvent.set_publish', [$meetup->id]) }}" method="post">
                             @csrf
                             <div class="row">
-                                <div class="mb-3 col-md-6 col-6">
+                                <div class="mb-3 col-md-3 mb-2">
                                     <label for="start_date" class="form-label">Post Start Date</label>
-                                    <input type="calender" class="form-control" id="datepicker"
-                                        style="background: coral; position: relative; padding-left: 33px;"
-                                        name="post_start_date" readonly="readonly" value="{{ old('post_start_date') }}" />
+                                    <input type="calender" class="form-control input-post" id="datepicker"
+
+                                        name="post_start_date" readonly="readonly"
+                                        value="{{ old('post_start_date') }}" />
                                     <i class="fa fa-calendar"
                                         style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
                                         aria-hidden="true"></i>
@@ -177,10 +187,9 @@
                                         <span class="text-danger">{{ $errors->first('post_start_date') }}</span>
                                     @endif
                                 </div>
-                                <div class="mb-3 col-md-6 col-6">
+                                <div class="mb-3 col-md-3 mb-2">
                                     <label for="end_date" class="form-label">Post End Date</label>
-                                    <input type="text" class="form-control" id="datepicker1"
-                                        style="background: coral; position: relative; padding-left: 33px;"
+                                    <input type="text" class="form-control input-post" id="datepicker1"
                                         name="post_end_date" readonly="readonly" value="{{ old('post_end_date') }}">
                                     <i class="fa fa-calendar"
                                         style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
@@ -192,8 +201,9 @@
                             </div>
 
 
-                            <button type="submit" class="btn btn-outline-success mr-2" href="">Publish Now</button>
-                            <a type="button" class="btn btn-outline-warning px-5"
+                            <button type="submit" class="btn btnPublish  mr-2" href="">Publish
+                                Now</button>
+                            <a type="button" class="btn btnEdit px-5"
                                 onclick="Show('Edit Live Chat Event','{{ route('managerAdmin.meetupEvent.edit', $meetup->id) }}')">Edit</a>
 
 
