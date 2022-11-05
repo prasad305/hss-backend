@@ -66,7 +66,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date">Fees</label>
                         <h4 class="text-warning">
@@ -74,7 +74,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date">Registration Start Date</label>
                         <h4 class="text-warning">
@@ -82,7 +82,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date">Registration End Date</label>
                         <h4 class="text-warning">
@@ -90,7 +90,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date"> Event Date</label>
                         <h4 class="text-warning">
@@ -98,7 +98,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date"> Event Start Time</label>
                         <h4 class="text-warning">
@@ -106,7 +106,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date"> Event End Time</label>
                         <h4 class="text-warning">
@@ -114,7 +114,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date"> Minimum Time</label>
                         <h4 class="text-warning">
@@ -122,7 +122,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date"> Maximum Time</label>
                         <h4 class="text-warning">
