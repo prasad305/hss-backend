@@ -8,24 +8,23 @@
 
 
 @section('content')
-
-<!-- Content Header (Page header) -->
-<div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0">QnA Events</h1>
-        </div><!-- /.col -->
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">QnA Events</li>
-          </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-  </div>
-  <!-- /.content-header -->
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">QnA Events</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">QnA Events</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
 
 
 
@@ -34,33 +33,38 @@
 
 
             <div class="row">
-                @foreach ($upcommingEvent as $val)
+                @foreach ($upcommingEvent as $event)
                     <!--card-->
-
-                    <div class="col-sm-6 col-lg-4">
+                    <div class="col-sm-12 col-md-4 col-lg-3">
                         <div class="card">
-                            <div class="panel panel-primary text-center">
-                                <div class="">
-                                    <img width="100%" src="{{ asset($val->banner) }}" alt="">
-                                </div>
+                            <div class="panel panel-primary p-2 text-center">
+                                @if ($event->banner != null)
+                                    <img src="{{ asset($event->banner) }}" class="img-fluid card-img" />
+                                @else
+                                    @if ($event->banner != null)
+                                        <img width="100%" src="{{ asset($event->banner) }}" alt="">
+                                    @else
+                                        <video src={{ asset($event->video) }} class="img-fluid card-img" controls>
+
+                                        </video>
+                                    @endif
+                                @endif
                                 <div class="panel-body py-3">
-                                    <h3 class="text-ellipsis-line-1">{{ $val->title }}</h3>
+                                    <h5 class="text-ellipsis-line-1">{{ $event->title }}</h5>
 
-                                    @if ($val->status == 0)
 
-                                        <a type="button" class="btn btn-warning waves-effect waves-light"><i
+                                    @if ($event->status == 2)
+                                        <button type="button" class="btn btnPublish waves-effect waves-light"><i
+                                                class="icon-checkmark-round"></i> Published</button>
+                                    @else
+                                        <a type="button" class="btn btnPending waves-effect waves-light"><i
                                                 class="icon-record"></i>
                                             Pending</a>
-                                    @else
-
-                                        <button type="button" class="btn btn-success waves-effect waves-light"><i
-                                                class="icon-checkmark-round"></i> Published</button>
                                     @endif
 
-                                    <a href="{{ route('managerAdmin.qna.details', [$val->id]) }}" type="button"
-                                        class="btn btn-info waves-effect waves-light">Details <i
+                                    <a href="{{ route('managerAdmin.qna.details', [$event->id]) }}" type="button"
+                                        class="btn btnDetails waves-effect fw-bold waves-light">Details <i
                                             class="fa fa-angle-double-right"></i></a>
-
                                 </div>
                             </div>
 
