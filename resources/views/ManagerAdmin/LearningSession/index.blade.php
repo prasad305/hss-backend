@@ -9,24 +9,23 @@
 @endpush
 
 @section('content')
-
-<!-- Content Header (Page header) -->
-<div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0">Learning Session</h1>
-        </div><!-- /.col -->
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Learning Session</li>
-          </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-  </div>
-  <!-- /.content-header -->
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Learning Session</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Learning Session</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
 
 
     <div class="content">
@@ -35,41 +34,36 @@
             <div class="row">
                 @foreach ($learningSessions as $event)
                     <!--card-->
-
-                    <div class="col-sm-6 col-lg-4">
+                    <div class="col-sm-12 col-md-4 col-lg-3">
                         <div class="card">
-                            <div class="panel panel-primary text-center">
-                                <div class="">
+                            <div class="panel panel-primary p-2 text-center">
+                                @if ($event->banner != null)
+                                    <img src="{{ asset($event->banner) }}" class="img-fluid card-img" />
+                                @else
                                     @if ($event->banner != null)
-                                        <img width="100%" src="{{ asset($event->banner) }}" alt=""> 
-                                        @else
-                                        <video width="312" height="200px" controls>
-                                            <source src="{{asset($event->video)}}" />
-                                        </video> 
-                                    @endif
-                                   
-                                </div>
-                            
-                                <div class="panel-body py-3">
-                                    <h3 class="text-ellipsis-line-1">{{ $event->title }}</h3>
-                                   @if ($event->status == 11)
-                                   <a type="button" class="btn btn-danger waves-effect waves-light"><i
-                                    class="ion-record"></i>
-                                    Rejected</a>
-                                       @else
-                                       @if ($event->status < 2)
-                                       <a type="button" class="btn btn-warning waves-effect waves-light"><i
-                                           class="ion-record"></i>
-                                           Pending</a>
-                                   @else
-                                       <button type="button" class="btn btn-success waves-effect waves-light"><i
-                                           class="ion-checkmark-round"></i> Published</button>
-                                   @endif
+                                        <img width="100%" src="{{ asset($event->banner) }}" alt="">
+                                    @else
+                                        <video src={{ asset($event->video) }} class="img-fluid card-img" controls>
 
-                                   <a href="{{ route('managerAdmin.learningSession.details', [$event->id]) }}" type="button"
-                                       class="btn btn-info waves-effect waves-light">Details <i
-                                           class="fa fa-angle-double-right"></i></a>
-                                   @endif
+                                        </video>
+                                    @endif
+                                @endif
+                                <div class="panel-body py-3">
+                                    <h5 class="text-ellipsis-line-1">{{ $event->title }}</h5>
+
+
+                                    @if ($event->status == 2)
+                                        <button type="button" class="btn btnPublish waves-effect waves-light"><i
+                                                class="icon-checkmark-round"></i> Published</button>
+                                    @else
+                                        <a type="button" class="btn btnPending waves-effect waves-light"><i
+                                                class="icon-record"></i>
+                                            Pending</a>
+                                    @endif
+
+                                    <a href="{{ route('managerAdmin.learningSession.details', [$event->id]) }}"
+                                        type="button" class="btn btnDetails waves-effect fw-bold waves-light">Details <i
+                                            class="fa fa-angle-double-right"></i></a>
                                 </div>
                             </div>
 
@@ -99,13 +93,4 @@
             });
         </script>
     @endif
-
-
-
 @endsection
-
-
-
-
-
-
