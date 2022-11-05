@@ -24,7 +24,7 @@
 
 
 
-    
+
     <div class="content">
         <div class="container-fluid">
             <div class="row mb-3">
@@ -36,7 +36,7 @@
                             <div class="panel panel-primary p-2 text-center">
 
 
-                                <img src="{{ asset($greeting->banner) }}" class="card-img" />
+                                <img src="{{ asset($greeting->banner) }}" class="img-fluid card-img" />
 
                                 <div class="panel-body py-3">
                                     <h5 class="text-ellipsis-line-1">{{ $greeting->title }}</h5>

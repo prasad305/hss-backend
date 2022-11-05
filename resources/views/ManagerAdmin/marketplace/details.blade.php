@@ -35,7 +35,8 @@
                                 <img src="{{ asset($post->image) }}" class="card-img-details" />
                             @else
                                 <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="card-img" />
+                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"
+                                        class="img-fluid card-img" />
                                 </a>
                             @endif
                         </div>
@@ -152,7 +153,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                                                                                                                                                                                                                                                                                                                                                                                            success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })

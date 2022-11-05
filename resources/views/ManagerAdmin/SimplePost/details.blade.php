@@ -35,10 +35,11 @@
                             @if ($post->image)
                                 <img src="{{ asset($post->image) }}" class="card-img-details" />
                             @elseif($post->video)
-                                <video class="card-img" controls src="{{ asset($post->video) }}"></video>
+                                <video class="img-fluid card-img" controls src="{{ asset($post->video) }}"></video>
                             @else
                                 <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="card-img"/>
+                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"
+                                        class="img-fluid card-img" />
                                 </a>
                             @endif
                         </div>
@@ -50,11 +51,12 @@
                     <div class="card px-3 py-3">
                         <div class="d-flex mb-3 align-content-center  ">
                             <div class="">
-                                @if($post->star->image)
+                                @if ($post->star->image)
                                     <img src="{{ asset($post->star->image) }}" class="star-img" />
                                 @else
                                     <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="star-img"/>
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                            class="star-img" />
                                     </a>
                                 @endif
                             </div>
@@ -66,11 +68,12 @@
 
                         <div class="d-flex mb-3 align-content-center  ">
                             <div class="">
-                                @if($post->admin->image)
+                                @if ($post->admin->image)
                                     <img src="{{ asset($post->admin->image) }}"class="star-img" />
                                 @else
                                     <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="star-img"/>
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                            class="star-img" />
                                     </a>
                                 @endif
                             </div>
@@ -136,7 +139,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })

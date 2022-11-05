@@ -252,7 +252,7 @@
     width: 100% !important;
     min-height: 200px !important;
     border: .2px solid rgb(235, 153, 0);
-    max-height: 450px;
+    max-height: 450px !important;
     min-height: 150px;
 }
 
@@ -275,7 +275,6 @@
 
 .card-img {
     width: 100%;
-    min-height: 200px !important;
     border: .2px solid rgb(235, 153, 0);
     min-height: 150px;
     max-height: 220px !important;

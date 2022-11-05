@@ -41,12 +41,13 @@
                         <div class="card">
                             <div class="panel panel-primary p-2 text-center">
                                 @if ($val->image)
-                                    <img src="{{ asset($val->image) }}" class="card-img" />
+                                    <img src="{{ asset($val->image) }}" class="img-fluid card-img" />
                                 @elseif($val->video)
                                     <video class="card-img card" controls src="{{ asset($val->video) }}"></video>
                                 @else
                                     <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="card-img"/>
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                            class="img-fluid card-img" />
                                     </a>
                                 @endif
                                 <div class="panel-body py-3">

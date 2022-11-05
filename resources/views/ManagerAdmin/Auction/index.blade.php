@@ -8,7 +8,6 @@
 
 
 @section('content')
-
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
@@ -38,7 +37,7 @@
                             <div class="panel panel-primary p-2 text-center">
 
 
-                                <img src="{{ asset($val->product_image) }}" class="card-img" />
+                                <img src="{{ asset($val->product_image) }}" class="img-fluid card-img" />
 
                                 <div class="panel-body py-3">
                                     <h5 class="text-ellipsis-line-1">{{ $val->name }}</h5>
