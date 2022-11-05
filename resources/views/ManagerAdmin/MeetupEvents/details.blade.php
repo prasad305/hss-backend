@@ -195,7 +195,7 @@
                                 <form action="{{ route('managerAdmin.meetupEvent.set_publish', [$meetup->id]) }}"
                                     method="post">
                                     @csrf
-                                    <button type="submit" class="btn btnRemove mr-2 mt- mb-4">Remove From Publish</button>
+                                    <button type="submit" class="btn btnRemove mr-2 mt-3 mb-4">Remove From Publish</button>
                                 </form>
                             @endif
 
