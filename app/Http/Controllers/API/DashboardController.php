@@ -28,6 +28,7 @@ use App\Models\SouvenirCreate;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 use function PHPSTORM_META\type;
 
@@ -353,7 +354,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function starProfitShare()
+    public function profitShare()
     {
         $profitShare = ProfitShare::with('withdrawHistory')->where('user_id', auth('sanctum')->user()->id)->first();
         $profitShareHistory = ProfitWalletWithdrawHistory::where('user_id', auth('sanctum')->user()->id)->sum('withdraw_amount');
@@ -363,14 +364,31 @@ class DashboardController extends Controller
             'profitShareHistory' => $profitShareHistory,
         ]);
     }
-    public function starWithdraw(Request $request)
+    public function profitWithdraw(Request $request)
     {
+
+        // return $request->all();
+
+
+        $validator = Validator::make($request->all(), [
+            'withdraw_amount' => 'required',
+        ], [
+            "withdraw_amount.required" => "Please Enter Amount"
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->errors(),
+            ]);
+        }
 
         ProfitWalletWithdrawHistory::create([
             'user_id' => auth('sanctum')->user()->id,
             'profit_share_id' => $request->profit_share_id,
-            'user_type' => "star",
-            'withdraw_amount' => $request->withdrawAmount,
+            'user_type' =>  auth()->user()->user_type,
+            'withdraw_id' => uniqid(),
+            'withdraw_amount' => $request->withdraw_amount,
             'status' => 0
         ]);
 

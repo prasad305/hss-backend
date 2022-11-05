@@ -9,4 +9,8 @@ class ProfitWalletWithdrawHistory extends Model
 {
     protected $guarded = [];
     use HasFactory;
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

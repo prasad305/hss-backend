@@ -18,6 +18,8 @@ class CreateProfitWalletWithdrawHistoriesTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('profit_share_id')->nullable();
             $table->string('user_type')->nullable();
+            $table->longText('withdraw_id')->nullable();
+            $table->longText('bank_txn_id')->nullable();
             $table->double('withdraw_amount', 8, 2)->nullable();
             $table->integer('status')->nullable()->comment('0=pending,1=processing, 2=success,3=failed');
             $table->timestamps();
