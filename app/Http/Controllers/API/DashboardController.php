@@ -18,6 +18,8 @@ use App\Models\Marketplace;
 use App\Models\MarketplaceOrder;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
+use App\Models\ProfitShare;
+use App\Models\ProfitWalletWithdrawHistory;
 use App\Models\QnA;
 use App\Models\QnaRegistration;
 use App\Models\SimplePost;
@@ -185,7 +187,7 @@ class DashboardController extends Controller
         //     $q->where([['superstar_admin_id', auth()->user()->id]]);
         // })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('total_price');
 
-            // Income Statement Marketplace
+        // Income Statement Marketplace
 
         $marketplace['marketplaceTotalIncome'] = MarketplaceOrder::whereHas('marketplace', function ($q) {
             $q->where([['superstar_admin_id', auth()->user()->id]])->orWhere([['superstar_id', auth()->user()->id]]);
@@ -348,6 +350,33 @@ class DashboardController extends Controller
             'status' => 200,
             'post' => $post,
             'participant' => $participant
+        ]);
+    }
+
+    public function starProfitShare()
+    {
+        $profitShare = ProfitShare::with('withdrawHistory')->where('user_id', auth('sanctum')->user()->id)->first();
+        $profitShareHistory = ProfitWalletWithdrawHistory::where('user_id', auth('sanctum')->user()->id)->sum('withdraw_amount');
+        return response()->json([
+            'status' => 200,
+            'profitShare' => $profitShare,
+            'profitShareHistory' => $profitShareHistory,
+        ]);
+    }
+    public function starWithdraw(Request $request)
+    {
+
+        ProfitWalletWithdrawHistory::create([
+            'user_id' => auth('sanctum')->user()->id,
+            'profit_share_id' => $request->profit_share_id,
+            'user_type' => "star",
+            'withdraw_amount' => $request->withdrawAmount,
+            'status' => 0
+        ]);
+
+        return response()->json([
+            'status' => 200,
+
         ]);
     }
 }

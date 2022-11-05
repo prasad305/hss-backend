@@ -630,6 +630,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('star/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('/livechat', [LiveChatController::class, 'livechat']);
     Route::get('/sinlgeLiveChat/{id}', [LiveChatController::class, 'sinlgeLiveChat']);
+    Route::get('star/ProfitShare', [DashboardController::class, 'starProfitShare']);
+    Route::post('/star/profit/withdraw', [DashboardController::class, 'starWithdraw']);
 
     // schdedule
     Route::post('/star/add_schedule/', [StarScheduleController::class, 'add_schedule']);
