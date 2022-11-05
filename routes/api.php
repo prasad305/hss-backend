@@ -50,6 +50,7 @@ Route::post('/uplad-video', [HomeController::class, 'video_upload']);
 Route::get('aboutus', [SettingsController::class, 'aboutus']);
 Route::get('policy', [SettingsController::class, 'policy']);
 Route::get('faq', [SettingsController::class, 'faq']);
+Route::get('refund', [SettingsController::class, 'refund']);
 Route::get('product-purchase', [SettingsController::class, 'productPurchase']);
 Route::get('terms-condition', [SettingsController::class, 'termsCondition']);
 
@@ -778,7 +779,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     //<======================== Auction Route ========================>
 
     Route::post('/star/add/auction/product', [AuctionController::class, 'star_addProduct']);
-    Route::get('/star/editOrConfirm/auction/editOrConfirm', [AuctionController::class, 'star_editOrConfirm']);
+    Route::get('/star/editOrConfirm/auction/editOrConfirm/{id}', [AuctionController::class, 'star_editOrConfirm']);
     Route::get('/star/edit/auction/{id}', [AuctionController::class, 'star_editProduct']);
     Route::get('/star/approvedOrDecline/auction/{id}', [AuctionController::class, 'star_approvedOrDecline']);
     Route::put('/star/approved/auction/{id}', [AuctionController::class, 'star_approved']);
