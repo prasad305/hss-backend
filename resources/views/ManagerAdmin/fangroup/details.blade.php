@@ -165,9 +165,6 @@
 
             </div>
 
-
-
-
             <div class="card  col-md-12">
                 <div class="card-header"
                     style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
@@ -218,16 +215,7 @@
                 </div>
             </div>
 
-
-
-
         </div>
-
-
-
-
-
-    </div> <!-- container -->
     </div> <!-- content -->
 
 
@@ -240,7 +228,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })
