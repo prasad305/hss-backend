@@ -30,15 +30,61 @@
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-md-6">
-                    @if($event->banner)
-                        <img src="{{ asset($event->banner) }}" style="width: 100%" />
-                    @else
-                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 100%"/>
-                        </a>
-                    @endif
+
+                <div class="col-md-8 mb-2">
+                    <div class="card p-2">
+                        @if ($event->banner)
+                            <img src="{{ asset($event->banner) }}" class="card-img-details" />
+                        @else
+                            <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                <img src="{{ asset('demo_image/banner.jpg') }}" class="card-img-details" alt="Demo Image" />
+                            </a>
+                        @endif
+                    </div>
                 </div>
+
+                <div class="col-md-4 mb-2">
+
+                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center rounded-3">
+                        <div class="">
+                            @if (false)
+                                <img src="{{ asset($event->star->image) }}" class="img-star-x" alt="Demo Image" />
+                            @else
+                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
+                                        alt="Demo Image" />
+                                </a>
+                            @endif
+                        </div>
+                        <div class="mx-2">
+                            <label for="">Star</label>
+                            <h5>{{ $event->star->first_name }} {{ $event->star->last_name }}</h5>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center">
+                        <div class="">
+                            @if (false)
+                                <img src="{{ asset($event->star->image) }}" class="img-star-x" alt="Demo Image" />
+                            @else
+                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
+                                        alt="Demo Image" />
+                                </a>
+                            @endif
+                        </div>
+                        <div class="mx-2">
+                            <label for="">Admin</label>
+                            <h5>{{ $event->admin->first_name }} {{ $event->admin->last_name }}</h5>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
             </div>
 
 
@@ -72,12 +118,13 @@
                     <div class="card px-5 py-4">
                         <div class="row">
                             <div class="col-xs-6 content-center mr-2">
-                                @if($event->star->image)
+                                @if ($event->star->image)
                                     <img src="{{ asset($event->star->image) }}"
                                         style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                 @else
                                     <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                            style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                     </a>
                                 @endif
                             </div>
@@ -88,14 +135,15 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-6 content-center mr-2">
-                                @if($event->admin->image)
+                                @if ($event->admin->image)
                                     <img src="{{ asset($event->admin->image) }}" class="user_image"
                                         style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"
                                         alt="Image not found" />
                                 @else
                                     <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="user_image"
-                                        style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray"/>
+                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                            class="user_image"
+                                            style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                     </a>
                                 @endif
                             </div>
@@ -176,7 +224,8 @@
                             </div>
 
 
-                            <button type="submit" class="btn btn-outline-success mr-2" href="">Publish Now</button>
+                            <button type="submit" class="btn btn-outline-success mr-2" href="">Publish
+                                Now</button>
                             <a type="button" class="btn btn-outline-warning px-5"
                                 onclick="Show('Edit Live Chat Event','{{ route('managerAdmin.liveChat.edit', $event->id) }}')">Edit</a>
 
