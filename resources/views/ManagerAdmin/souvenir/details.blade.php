@@ -28,81 +28,83 @@
     <div class="content">
         <div class="container-fluid">
 
-            {{-- <div class="row">
-            <div class="col-md-6">
-                @if ($post->banner)
-                <img src="{{ asset($post->banner) }}" style="width: 100%" />
-                @endif
-                @if ($post->video)
-                <iframe width="420" height="315" src="{{ asset($post->video) }}">
-                </iframe>
-                @endif
-
-            </div>
-        </div> --}}
-
-
-            <div class="row pt-5">
-
-                <div class="col-md-4">
-                    @if($post->banner)
-                        <img src="{{ asset($post->banner) }}" style="width: 100%; border: 2px solid gold;" />
-                    @else
-                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 100%; border: 2px solid gold;"/>
-                        </a>
-                    @endif
-
-
-                    <!-- <div class="mt-4">
-                   <iframe width="530" height="315" src="{{ asset($post->video) }}" title="Souvenir Video" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                   </div> -->
-
-                    <div class="mt-4">
-                        <iframe width="530" height="315" src="{{ asset($post->video) }}" title="Souvenir Video"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
+            <div class="row">
+                <div class="col-md-8 mb-2">
+                    <div class="card p-2">
+                        <video class="card-img-details" controls src="{{ asset($post->video) }}"></video>
                     </div>
-
-
+                </div>
+                <div class="col-md-4 mb-2">
+                    <div class="card p-2">
+                        <div class="center">
+                            @if ($post->banner)
+                                <img src="{{ asset($post->banner) }}" class="card-img-details" />
+                            @else
+                                <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"
+                                        class="card-img-details" />
+                                </a>
+                            @endif
+                        </div>
+                    </div>
                 </div>
 
-                <div class="col-md-8 ">
-                    <div class="row card p-5">
-                        <h3>{{ $post->title }}</h3>
-                        <p>
-                            <b style="color: gold;">Description : </b>{!! $post->description !!}
-                        </p>
-                        <p>
-                            <b style="color: gold;">Instruction : </b>{!! $post->instruction !!}
-                        </p>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 card py-3">
-                            Date
-                            <h4 class="text-warning">{{ \Carbon\Carbon::parse($post->created_at)->format('d F,Y') }},
-                                {{ \Carbon\Carbon::parse($post->created_at)->format('h:i A') }}</h4>
-                        </div>
-                        <div class="col-md-6 card py-3">
-                            Price
-                            <h4 class="text-warning">{{ $post->price }}</h4>
-                        </div>
-                        <div class="col-md-6 card py-3">
-                            Delivery Charge
-                            <h4 class="text-warning">{{ $post->delivery_charge }}</h4>
-                        </div>
-                        <div class="col-md-6 card py-3">
-                            Tax
-                            <h4 class="text-warning">{{ $post->tax }}</h4>
+                <div class="col-md-12 mb-2">
+                    <div class=" card px-3 py-3">
+                        <div>
+                            <h4>{{ $post->title }}</h4>
+                            <div class="title-text text-warning">Description</div>
+
+                            <div class="description-text">{!! $post->description !!}</div>
+
+                            <div class="title-text text-warning">Instruction</div>
+
+                            <div class="description-text">{!! $post->instruction !!}</div>
                         </div>
                     </div>
+                </div>
 
 
+                <div class="col-sm-12 col-md-4 col-lg-3 mb-2">
+                    <div class="card p-3">
+                        <h5>Date</h5>
+                        <h6 class="text-warning">{{ \Carbon\Carbon::parse($post->created_at)->format('d F,Y') }},
+                            {{ \Carbon\Carbon::parse($post->created_at)->format('h:i A') }}
+                        </h6>
+                    </div>
+                </div>
 
-                    <div class="container row">
+
+                <div class="col-sm-12 col-md-4 col-lg-3 mb-2">
+                    <div class="card p-3">
+                        <h5> Price</h5>
+                        <h6 class="text-warning">{{ $post->price }}
+                        </h6>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-4 col-lg-3 mb-2">
+                    <div class="card p-3">
+                        <h5> Delivery Charge</h5>
+                        <h6 class="text-warning">{{ $post->delivery_charge }} </h6>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-4 col-lg-3 mb-2">
+                    <div class="card p-3">
+                        <h5> Tax</h5>
+                        <h6 class="text-warning">{{ $post->tax }} </h6>
+                    </div>
+                </div>
+
+                <div class="card col-md-12">
+                    <div class="card-header"
+                        style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
+                        Publish Post in News Feed
+                    </div>
+                    <div class="card-body">
                         @if ($post->status != 1)
-                            <a type="button" class="btn btn-outline-success mr-2"
+                            <a type="button" class="btn btnPublish mr-2"
                                 href="{{ route('managerAdmin.souvenir.set_publish', [$post->id]) }}">Publish Now</a>
                         @elseif($post->status != 0)
                             <a type="button" class="btn btnRemove mr-2"
@@ -110,7 +112,7 @@
                                 Publish</a>
                         @endif
                         @if ($post->status == 0)
-                            <a type="button" class="btn btn-outline-warning px-5"
+                            <a type="button" class="btn btnEdit px-5"
                                 onclick="Show('Edit Souvenir','{{ route('managerAdmin.souvenir.edit', $post->id) }}')">Edit</a>
                         @endif
                     </div>
@@ -119,12 +121,8 @@
 
             </div>
 
-
-
-
-
-        </div> <!-- container -->
-    </div> <!-- content -->
+        </div>
+    </div> <!-- container -->
 
 
 
@@ -136,7 +134,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })

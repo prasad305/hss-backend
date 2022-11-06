@@ -1,136 +1,127 @@
 @extends('Layouts.ManagerAdmin.master')
 
 @push('title')
-Admin
+    Admin
 @endpush
 
 @section('content')
-<style>
-    .completedMeetupBlack {
-        background-color: #151515 !important;
-        border-radius: 10px;
-    }
+    <style>
+        .completedMeetupBlack {
+            background-color: #151515 !important;
+            border-radius: 10px;
+        }
 
-    .BGa {
-        border: 1px solid rgb(255, 217, 0);
-    }
+        .BGa {
+            border: 1px solid rgb(255, 217, 0);
+        }
 
-    .BGaB {
-        border: 1px solid goldenrod;
-    }
+        .BGaB {
+            border: 1px solid goldenrod;
+        }
 
-    .GoldBtn {
-        background: linear-gradient(90deg, #FFCE00 0%, #DFA434 100%) !important;
-        border-radius: 25px;
-    }
+        .GoldBtn {
+            background: linear-gradient(90deg, #FFCE00 0%, #DFA434 100%) !important;
+            border-radius: 25px;
+        }
 
-    .GoldBtn:hover {
-        background: rgb(16, 20, 29) !important;
-        color: white;
-        border: 1px solid #FFCE00 !important;
-    }
+        .GoldBtn:hover {
+            background: rgb(16, 20, 29) !important;
+            color: white;
+            border: 1px solid #FFCE00 !important;
+        }
 
-    .BlueBtn {
-        background: linear-gradient(90deg, #22AADD 0%, #3A8FF2 100%);
-        border-radius: 25px;
-    }
+        .BlueBtn {
+            background: linear-gradient(90deg, #22AADD 0%, #3A8FF2 100%);
+            border-radius: 25px;
+        }
 
-    .BlueBtn:hover {
-        background: rgb(16, 20, 29) !important;
-        color: white;
-        border: 1px solid rgb(0, 183, 255) !important;
-    }
+        .BlueBtn:hover {
+            background: rgb(16, 20, 29) !important;
+            color: white;
+            border: 1px solid rgb(0, 183, 255) !important;
+        }
 
-    .bottomBlackLine {
-        border-bottom: 2px solid white;
-    }
+        .bottomBlackLine {
+            border-bottom: 2px solid white;
+        }
 
-    .displaySide {
-        display: flex;
-        justify-content: center
-    }
+        .displaySide {
+            display: flex;
+            justify-content: center
+        }
 
-    .fontBold {
-        font-size: 40px;
-        font-weight: 800;
-    }
-</style>
+        .fontBold {
+            font-size: 40px;
+            font-weight: 800;
+        }
+    </style>
 
-<!-- Content Header (Page header) -->
-<div class="content-header BorderRpo">
-    <div class="container-fluid">
-        <div class="row ">
-            <div class="col-sm-6">
-                <h1 class="m-0">Audition List</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    {{-- <a href="{{ route('superAdmin.events.edit',1) }}"> <li class="breadcrumb-item active">Events
+    <!-- Content Header (Page header) -->
+    <div class="content-header BorderRpo">
+        <div class="container-fluid">
+            <div class="row ">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Audition List</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        {{-- <a href="{{ route('superAdmin.events.edit',1) }}"> <li class="breadcrumb-item active">Events
                         List</li></a> --}}
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active"> Audition List</li>
-                </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-</div>
-@include('ManagerAdmin.Audition.includes.audition-sub-nav')
-<div class="bg-gray mx-2 my-3">
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="row bg-black-custom">
-                <h4 class="mx-3">Events list</h4>
-                <a class="btn btn-success btn-sm mr-4 " style="margin-bottom: 10px; margin-left: auto;"
-                    href="{{ route('managerAdmin.audition.create') }}">
-                    <i class=" fa fa-plus"></i>&nbsp;Add New
-                </a>
-            </div>
-        </div>
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active"> Audition List</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
     </div>
-    <div class="row">
-        @foreach ($auditions as $audition)
-            <div class=" col-sm-6 col-md-6 col-lg-3 new-list ">
-                <div class="p-4 bg-dark shadow-none pb-4 m-3 BGaB">
-                    <img src="@if ( isset($audition->banner))
-                    {{ asset($audition->banner) }}
-                    @else {{ asset('assets/manager-admin/clock.png') }}
-                    @endif"
-                     alt="Admin Image"
-                        class="img-fluid ImgBlue mr-3 mb-2 w-100 ARRimg pt-2">
+    @include('ManagerAdmin.Audition.includes.audition-sub-nav')
+    <div class="bg-gray mx-2 my-3">
 
-                <div className="">
-                    <div>
-                        <h4 class="text-center text-bold mb-5 text-warning">{{ $audition->title }}</h4>
-
-                        {{-- <a href="{{ route('managerAdmin.audition.promoInstruction', $audition->id) }}" class="btn a-bg-color mb-2">Promo Instruction</a>
-                        <a href="{{ route('managerAdmin.audition.roundInstruction', $audition->id) }}" class="btn a-bg-color mb-2">Round Instruction</a> --}}
-                        <a href="{{ route('managerAdmin.audition.registerUser', $audition->id) }}" class="btn a-bg-color text-light">Register User</a>
-
-                                {{-- <span class="text-center btn btn-info px-4 text-bold">Done</span> --}}
-                                {{-- <a href="{{ route('managerAdmin.audition.promoInstruction', $audition->id) }}"
-                                    class="btn btn-warning">Promo Instruction</a><br>
-
-                                <a href="{{ route('managerAdmin.audition.roundInstruction', $audition->id) }}"
-                                    class="btn btn-warning">Round Instruction</a><br> --}}
-
-
-                                @if ($audition->audition_admin_id == null)
-                                    <a href="{{ route('managerAdmin.audition.assignManpower', $audition->id) }}"
-                                        class="btn mx-2 manpower-but ">Assign Manpower</a>
-                                @else
-                                    <a href="{{ route('managerAdmin.audition.registerUser', $audition->id) }}"
-                                        class="btn btn-warning a-bg-color text-light">Register User</a>
-                                @endif
-
-                    </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row bg-black-custom">
+                    <h4 class="mx-3">Events list</h4>
+                    <a class="btn btn-success btn-sm mr-4 " style="margin-bottom: 10px; margin-left: auto;"
+                        href="{{ route('managerAdmin.audition.create') }}">
+                        <i class=" fa fa-plus"></i>&nbsp;Add New
+                    </a>
                 </div>
             </div>
         </div>
-        @endforeach
+
+
+        <div class="row mt-3 mx-2">
+            @foreach ($auditions as $audition)
+                <!--card-->
+                <div class="col-sm-12 col-md-4 col-lg-3">
+                    <div class="card">
+                        <div class="panel panel-primary p-2 text-center">
+
+                            <img src="@if (isset($audition->banner)) {{ asset($audition->banner) }}
+                @else {{ asset('assets/manager-admin/clock.png') }} @endif"
+                                alt="Admin Image" class="img-fluid card-img">
+
+                            <div class="panel-body pt-1">
+                                <h5 class="text-ellipsis-line-1">{{ $audition->title }}</h5>
+
+                                <a href="{{ route('managerAdmin.audition.registerUser', $audition->id) }}"
+                                    class="btn btnPublish waves-effect waves-light mb-2">Register User</a>
+
+                                @if ($audition->audition_admin_id == null)
+                                    <a href="{{ route('managerAdmin.audition.assignManpower', $audition->id) }}"
+                                        class="btn btnPending waves-effect fw-bold waves-light mb-2">Assign Manpower</a>
+                                @else
+                                @endif
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--card end-->
+            @endforeach
+        </div>
+
+
     </div>
 
-</div>
-
-</div>
+    </div>
 @endsection

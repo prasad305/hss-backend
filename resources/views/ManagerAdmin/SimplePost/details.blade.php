@@ -29,16 +29,18 @@
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-md-8 mb-3">
+
+                <div class="col-md-8 mb-2">
                     <div class="card p-2">
                         <div class="center">
                             @if ($post->image)
-                                <img src="{{ asset($post->image) }}" class="card-img" />
+                                <img src="{{ asset($post->image) }}" class="card-img-details" />
                             @elseif($post->video)
-                                <video class="card-img" controls src="{{ asset($post->video) }}"></video>
+                                <video class="img-fluid card-img-details" controls src="{{ asset($post->video) }}"></video>
                             @else
                                 <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="card-img"/>
+                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"
+                                        class="img-fluid card-img" />
                                 </a>
                             @endif
                         </div>
@@ -46,81 +48,87 @@
 
                 </div>
 
-                <div class="col-md-4">
-                    <div class="card px-3 py-3">
-                        <div class="d-flex mb-3 align-content-center  ">
-                            <div class="">
-                                @if($post->star->image)
-                                    <img src="{{ asset($post->star->image) }}" class="star-img" />
-                                @else
-                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="star-img"/>
-                                    </a>
-                                @endif
-                            </div>
-                            <div class="px-3">
-                                Star
-                                <h4>{{ $post->star->first_name }} {{ $post->star->last_name }}</h4>
-                            </div>
+                <div class="col-md-4 mb-2">
+                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
+                        <div class="">
+                            @if (false)
+                                <img src="{{ asset($post->star->image) }}" class="img-star-x" alt="Demo Image" />
+                            @else
+                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
+                                        alt="Demo Image" />
+                                </a>
+                            @endif
                         </div>
+                        <div class="mx-2">
+                            <label for="">Star</label>
+                            <h5>{{ $post->star->first_name }} {{ $post->star->last_name }}</h5>
 
-                        <div class="d-flex mb-3 align-content-center  ">
-                            <div class="">
-                                @if($post->admin->image)
-                                    <img src="{{ asset($post->admin->image) }}"class="star-img" />
-                                @else
-                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="star-img"/>
-                                    </a>
-                                @endif
-                            </div>
-                            <div class="px-3">
-                                Admin
-                                <h4>{{ $post->admin->first_name }} {{ $post->admin->last_name }}</h4>
-                            </div>
                         </div>
-
-
                     </div>
+                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
+                        <div class="">
+                            @if (false)
+                                <img src="{{ asset($post->star->image) }}" class="img-star-x" alt="Demo Image" />
+                            @else
+                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
+                                        alt="Demo Image" />
+                                </a>
+                            @endif
+                        </div>
+                        <div class="mx-2">
+                            <label for="">Admin</label>
+                            <h5>{{ $post->admin->first_name }} {{ $post->admin->last_name }}</h5>
+
+                        </div>
+                    </div>
+
                 </div>
 
-
-            </div>
-
-
-            <div class="row pt-5 justify-content-between">
-
-                <div class="col-md-12 ">
+                <div class="col-md-12 mb-2 ">
                     <div class=" card px-3 py-3">
                         <div>
                             <h4>{{ $post->title }}</h4>
                             <div class="title-text text-warning">Description</div>
-
                             <div class="description-text">{!! $post->description !!}</div>
-
-                            <div class="col-md-4 card p-3">
-                                <label for="Date">Date</label>
-                                <h4 class="text-warning">{{ \Carbon\Carbon::parse($post->date)->format('d F,Y') }}</h4>
-                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-3  mb-2">
+                    <div class="card px-3 p-2">
+                        <label for="Date">Date</label>
+                        <h4 class="text-warning">
+                            {{ \Carbon\Carbon::parse($post->date)->format('d F,Y') }}</h4>
+                    </div>
+                </div>
+
+                <div class="card col-md-12">
+                    <div class="card-header"
+                        style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
+                        Publish Post in News Feed
+                    </div>
+
+                    <div class="card-body">
+                        @if ($post->status != 1)
+                            <a type="button" class="btn btnPublish mr-2"
+                                href="{{ route('managerAdmin.simplePost.set_publish', [$post->id]) }}">Publish Now</a>
+                        @elseif($post->status != 0)
+                            <a type="button" class="btn btnRemove mr-2"
+                                href="{{ route('managerAdmin.simplePost.set_publish', [$post->id]) }}">Remove From
+                                Published</a>
+                        @endif
+                        @if ($post->status < 1)
+                            <a type="button" class="btn btnEdit px-5"
+                                onclick="Show('Edit Post','{{ route('managerAdmin.simplePost.edit', $post->id) }}')">Edit</a>
+                        @endif
+
+                    </div>
+
+                </div>
             </div>
 
-
-            <div class="container row my-3">
-                @if ($post->status != 1)
-                    <a type="button" class="btn btnPublish mr-2"
-                        href="{{ route('managerAdmin.simplePost.set_publish', [$post->id]) }}">Publish Now</a>
-                @elseif($post->status != 0)
-                    <a type="button" class="btn btnRemove mr-2"
-                        href="{{ route('managerAdmin.simplePost.set_publish', [$post->id]) }}">Remove From Published</a>
-                @endif
-                @if ($post->status < 1)
-                    <a type="button" class="btn btnEdit px-5"
-                        onclick="Show('Edit Post','{{ route('managerAdmin.simplePost.edit', $post->id) }}')">Edit</a>
-                @endif
-            </div>
 
 
         </div> <!-- container -->
@@ -136,7 +144,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })

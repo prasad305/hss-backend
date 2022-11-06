@@ -30,12 +30,54 @@
         <div class="container-fluid">
 
             <div class="row">
+
+                <div class="col-md-8 mb-2">
+                    <div class="card p-2">
+                        @if (false)
+                            <img src="{{ asset($audition->banner) }}" class="card-img-details" />
+                        @else
+                            <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                <img src="{{ asset('demo_image/banner.jpg') }}" class="card-img-details" alt="Demo Image" />
+                            </a>
+                        @endif
+                    </div>
+                </div>
+
+
+                <div class="col-md-4 mb-2 ">
+                    <div class="bg-gray px-2 pb-2 card-rounded">
+                        <h3 class="text-warning py-2"> Judge Panel</h3>
+                        @foreach ($judges as $star)
+                            <div class="col-md-12 d-flex mt-2 p-2 bg-dark align-items-center card-rounded">
+                                <div class="">
+                                    @if (false)
+                                        <img src="{{ asset($star->user->image) }}" class="img-star-x" alt="Demo Image" />
+                                    @else
+                                        <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                            <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
+                                                alt="Demo Image" />
+                                        </a>
+                                    @endif
+                                </div>
+                                <div class="mx-2">
+                                    <label for="">Star</label>
+                                    <h5>{{ $star->user ? $star->user->first_name : '' }}
+                                        {{ $star->user ? $star->user->last_name : '' }}</h5>
+
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                </div>
+
+
                 <div class="col-md-6">
                     @if ($audition->banner)
                         <img src="{{ asset($audition->banner) }}" style="width: 40%" />
                     @else
                         <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                            <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"  style="width: 40%" />
+                            <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 40%" />
                         </a>
                     @endif
 
@@ -88,11 +130,13 @@
                         @foreach ($judges as $star)
                             <div class="row">
                                 <div class="col-xs-6 content-center">
-                                    @if($star->user->image)
-                                        <img src="{{ asset($star->user->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                    @if ($star->user->image)
+                                        <img src="{{ asset($star->user->image) }}"
+                                            style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                     @else
                                         <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                            <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                            <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                                style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                         </a>
                                     @endif
                                 </div>
@@ -171,7 +215,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                    success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                            success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })

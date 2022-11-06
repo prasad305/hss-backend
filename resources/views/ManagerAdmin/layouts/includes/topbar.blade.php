@@ -2,9 +2,12 @@
     <!-- LOGO -->
     <div class="topbar-left">
         <div class="text-center">
-            <a href="{{ route('managerAdmin.dashboard') }}" class="logo"><img src="{{ asset('assets/manager-admin/images/manager-admin-1.png') }}" style="width: 100%; height: 55px;" height="28"></a>
+            <a href="{{ route('managerAdmin.dashboard') }}" class="logo"><img
+                    src="{{ asset('assets/manager-admin/images/manager-admin-1.png') }}"
+                    style="width: 100%; height: 55px;" height="28"></a>
             {{-- <a href="{{ route('managerAdmin.dashboard') }}" class="logo"><img src="{{ asset('assets/manager-admin/images/manager-admin-2.png') }}" style="width: 100%; height: 55px;" height="28"></a> --}}
-            <a href="{{ route('managerAdmin.dashboard') }}" class="logo-sm"><img src="{{ asset('assets/manager-admin/images/logo_sm.png') }}" height="36"></a>
+            <a href="{{ route('managerAdmin.dashboard') }}" class="logo-sm"><img
+                    src="{{ asset('assets/manager-admin/images/logo_sm.png') }}" height="36"></a>
         </div>
     </div>
     <!-- Button mobile view to collapse sidebar menu -->
@@ -12,7 +15,7 @@
         <div class="container">
             <div class="">
                 <div class="pull-left">
-                    <button type="button" class="button-menu-mobile open-left waves-effect waves-light">
+                    <button type="button" class="button-menu-mobile open-left waves-effect waves-light mb-2">
                         <i class="ion-navicon"></i>
                     </button>
                     <span class="clearfix"></span>
@@ -26,11 +29,13 @@
 
                 <ul class="nav navbar-nav navbar-right pull-right">
                     <li class="dropdown hidden-xs">
-                        <a href="#" data-target="#" class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="true">
+                        <a href="#" data-target="#" class="dropdown-toggle waves-effect waves-light mb-2"
+                            data-toggle="dropdown" aria-expanded="true">
                             <i class="fa fa-bell"></i> <span class="badge badge-xs badge-danger">3</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-lg">
-                            <li class="text-center notifi-title">Notification <span class="badge badge-xs badge-success">3</span></li>
+                            <li class="text-center notifi-title">Notification <span
+                                    class="badge badge-xs badge-success">3</span></li>
                             <li class="list-group">
                                 <!-- list item-->
                                 <a href="javascript:void(0);" class="list-group-item">
@@ -71,17 +76,20 @@
                         </ul>
                     </li>
                     <li class="hidden-xs">
-                        <a href="#" id="btn-fullscreen" class="waves-effect waves-light"><i class="fa fa-crosshairs"></i></a>
+                        <a href="#" id="btn-fullscreen" class="waves-effect waves-light mb-2"><i
+                                class="fa fa-crosshairs"></i></a>
                     </li>
 
 
                     <li class="nav-item dropdown user-menu">
                         <a href="" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                            @if(Auth::user()->image)
-                                <img src="{{asset( Auth::user()->image)}}" class="user-image img-circle" alt="User Image">
+                            @if (Auth::user()->image)
+                                <img src="{{ asset(Auth::user()->image) }}" class="user-image img-circle"
+                                    alt="User Image">
                             @else
                                 <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                    <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="user-image img-circle" />
+                                    <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                        class="user-image img-circle" />
                                 </a>
                             @endif
                             <span class="d-none d-md-inline"> {{ Auth::user()->name }}</span>
@@ -89,7 +97,7 @@
                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                             <!-- User image -->
                             <li class="user-header ">
-                                <img src="{{asset( Auth::user()->logo)}}" class="img-circle " alt="User Image">
+                                <img src="{{ asset(Auth::user()->logo) }}" class="img-circle " alt="User Image">
                                 <p>
                                     {{ Auth::user()->name }}
                                 </p>
@@ -99,13 +107,15 @@
                             <li class="user-footer">
                                 <div class="left">
                                     <a href="{{ route('managerAdmin.profile') }}">
-                                        <img src="https://img.icons8.com/external-kiranshastry-lineal-color-kiranshastry/64/000000/external-user-management-kiranshastry-lineal-color-kiranshastry-10.png" />
+                                        <img
+                                            src="https://img.icons8.com/external-kiranshastry-lineal-color-kiranshastry/64/000000/external-user-management-kiranshastry-lineal-color-kiranshastry-10.png" />
                                     </a>
                                 </div>
                                 <div class="right">
                                     <div class="log logout-btn">
                                         <a class="dropdown-item">
-                                            <img src="https://img.icons8.com/fluency/48/000000/sign-in-form-password.png" alt="user-img" class="img-circle img-fluid text-center" />
+                                            <img src="https://img.icons8.com/fluency/48/000000/sign-in-form-password.png"
+                                                alt="user-img" class="img-circle img-fluid text-center" />
                                         </a>
                                     </div>
                                 </div>
