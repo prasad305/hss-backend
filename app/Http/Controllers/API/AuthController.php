@@ -251,7 +251,7 @@ class AuthController extends Controller
 
     public function activity_count()
     {
-        $activity = Activity::where('user_id', auth('sanctum')->user()->id)->count();
+        $activity = Activity::where('user_id', auth('sanctum')->user()->id)->whereNot('type', 'audition')->count();
 
         return response()->json([
             'status' => 200,
