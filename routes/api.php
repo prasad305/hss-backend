@@ -428,6 +428,9 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('admin/star_list', [CategoryController::class, 'star_list']);
     Route::get('admin/agreement_paper/{star_id}', [CategoryController::class, 'agreement_paper']);
 
+    Route::get('/admin/profitShare', [DashboardController::class, 'profitShare']);
+    Route::post('/admin/profit/withdraw', [DashboardController::class, 'profitWithdraw']);
+
     // Fan Group Section
     Route::post('admin/fan-group/store', [FanGroupController::class, 'fanGroupStore']);
     Route::get('/admin/fan-group/star/list', [FanGroupController::class, 'allStarList']);
@@ -634,6 +637,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('star/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('/livechat', [LiveChatController::class, 'livechat']);
     Route::get('/sinlgeLiveChat/{id}', [LiveChatController::class, 'sinlgeLiveChat']);
+    Route::get('star/profitShare', [DashboardController::class, 'profitShare']);
+    Route::post('/star/profit/withdraw', [DashboardController::class, 'profitWithdraw']);
 
     // schdedule
     Route::post('/star/add_schedule/', [StarScheduleController::class, 'add_schedule']);
