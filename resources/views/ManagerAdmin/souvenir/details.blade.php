@@ -29,12 +29,12 @@
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-md-8 mb-3">
+                <div class="col-md-8 mb-2">
                     <div class="card p-2">
                         <video class="card-img-details" controls src="{{ asset($post->video) }}"></video>
                     </div>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4 mb-2">
                     <div class="card p-2">
                         <div class="center">
                             @if ($post->banner)
@@ -48,10 +48,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row ">
-                <div class="col-md-12 ">
+                <div class="col-md-12 mb-2">
                     <div class=" card px-3 py-3">
                         <div>
                             <h4>{{ $post->title }}</h4>
@@ -65,11 +63,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
 
-                <div class="col-md-3 mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3 mb-2">
                     <div class="card p-3">
                         <h5>Date</h5>
                         <h6 class="text-warning">{{ \Carbon\Carbon::parse($post->created_at)->format('d F,Y') }},
@@ -79,7 +75,7 @@
                 </div>
 
 
-                <div class="col-md-3 mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3 mb-2">
                     <div class="card p-3">
                         <h5> Price</h5>
                         <h6 class="text-warning">{{ $post->price }}
@@ -87,35 +83,42 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3 mb-2">
                     <div class="card p-3">
                         <h5> Delivery Charge</h5>
                         <h6 class="text-warning">{{ $post->delivery_charge }} </h6>
                     </div>
                 </div>
 
-                <div class="col-md-3 mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3 mb-2">
                     <div class="card p-3">
                         <h5> Tax</h5>
                         <h6 class="text-warning">{{ $post->tax }} </h6>
                     </div>
                 </div>
 
-            </div>
+                <div class="card col-md-12">
+                    <div class="card-header"
+                        style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
+                        Publish Post in News Feed
+                    </div>
+                    <div class="card-body">
+                        @if ($post->status != 1)
+                            <a type="button" class="btn btnPublish mr-2"
+                                href="{{ route('managerAdmin.souvenir.set_publish', [$post->id]) }}">Publish Now</a>
+                        @elseif($post->status != 0)
+                            <a type="button" class="btn btnRemove mr-2"
+                                href="{{ route('managerAdmin.souvenir.set_publish', [$post->id]) }}">Remove From
+                                Publish</a>
+                        @endif
+                        @if ($post->status == 0)
+                            <a type="button" class="btn btnEdit px-5"
+                                onclick="Show('Edit Souvenir','{{ route('managerAdmin.souvenir.edit', $post->id) }}')">Edit</a>
+                        @endif
+                    </div>
 
-            <div class="container row mb-5 mt-2">
-                @if ($post->status != 1)
-                    <a type="button" class="btn btnPublish mr-2"
-                        href="{{ route('managerAdmin.souvenir.set_publish', [$post->id]) }}">Publish Now</a>
-                @elseif($post->status != 0)
-                    <a type="button" class="btn btnRemove mr-2"
-                        href="{{ route('managerAdmin.souvenir.set_publish', [$post->id]) }}">Remove From
-                        Publish</a>
-                @endif
-                @if ($post->status == 0)
-                    <a type="button" class="btn btnEdit px-5"
-                        onclick="Show('Edit Souvenir','{{ route('managerAdmin.souvenir.edit', $post->id) }}')">Edit</a>
-                @endif
+                </div>
+
             </div>
 
         </div>
@@ -131,7 +134,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })
