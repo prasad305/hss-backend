@@ -823,6 +823,27 @@ class LearningSessionController extends Controller
         ]);
     }
 
+    public function allInOneMobileLearning(){
+        $allEvents = LearningSession::where('star_id', auth('sanctum')->user()->id)->latest()->get();
+        $pendingEvents = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', '<', 1]])->latest()->get();
+        $approvedEvents = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0], ['status', '<', 10]])->latest()->get();
+        $RejectedEvents = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 11]])->latest()->get();
+        $EvaluatedEvents = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 2], ['status', '<', 9]])->latest()->get();
+        $CompletedEvents = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 9]])->latest()->get();
+        $ResultEvent = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 9], ['assignment', 1]])->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'allEvents' => $allEvents,
+            'pendingEvents' => $pendingEvents,
+            'approvedEvents' => $approvedEvents,
+            'RejectedEvents' => $RejectedEvents,
+            'EvaluatedEvents'=> $EvaluatedEvents,
+            'CompletedEvents' => $CompletedEvents,
+            'ResultEvent' => $ResultEvent,
+            'message' => 'Success',
+        ]);
+    }
+
 
     public function star_all()
     {
