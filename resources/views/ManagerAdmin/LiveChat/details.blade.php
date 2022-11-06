@@ -45,7 +45,7 @@
 
                 <div class="col-md-4 mb-2">
 
-                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center rounded-3">
+                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
                             @if (false)
                                 <img src="{{ asset($event->star->image) }}" class="img-star-x" alt="Demo Image" />
@@ -62,7 +62,8 @@
 
                         </div>
                     </div>
-                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center">
+
+                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
                             @if (false)
                                 <img src="{{ asset($event->star->image) }}" class="img-star-x" alt="Demo Image" />
@@ -91,7 +92,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date">Registration Start Date</label>
                         <h4 class="text-warning">
@@ -99,7 +100,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date">Registration End Date</label>
                         <h4 class="text-warning">
@@ -107,7 +108,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date">Minimum Time</label>
                         <h4 class="text-warning">
@@ -115,7 +116,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date">Maximum Time</label>
                         <h4 class="text-warning">
@@ -123,7 +124,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date">Interval</label>
                         <h4 class="text-warning">
@@ -131,7 +132,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date">Event Date</label>
                         <h4 class="text-warning">
@@ -139,7 +140,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date">Event Time</label>
                         <h4 class="text-warning">
@@ -148,69 +149,57 @@
                     </div>
                 </div>
 
-
-                <div class="card col-md-12 ">
-                    <div class="card-header"
-                        style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
-                        Publish Post in News Feed
-                    </div>
-                    <div class="card-body">
-                        <form action="{{ route('managerAdmin.liveChat.set_publish', [$event->id]) }}" method="post">
-                            @csrf
-                            @if ($event->status != 2)
-                                <div class="row">
-                                    <div class="mb-3 col-md-3 mb-2">
-                                        <label for="start_date" class="form-label">Post Start Date</label>
-                                        <input type="calender" class="form-control input-post" id="datepicker"
-                                            name="post_start_date" readonly="readonly"
-                                            value="{{ old('post_start_date') }}" />
-                                        <i class="fa fa-calendar"
-                                            style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
-                                            aria-hidden="true"></i>
-                                        @if ($errors->has('post_start_date'))
-                                            <span class="text-danger">{{ $errors->first('post_start_date') }}</span>
-                                        @endif
-                                    </div>
-                                    <div class="mb-3 col-md-3 mb-2">
-                                        <label for="end_date" class="form-label">Post End Date</label>
-                                        <input type="text" class="form-control input-post" id="datepicker1"
-                                            name="post_end_date" readonly="readonly" value="{{ old('post_end_date') }}">
-                                        <i class="fa fa-calendar"
-                                            style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
-                                            aria-hidden="true"></i>
-                                        @if ($errors->has('post_end_date'))
-                                            <span class="text-danger">{{ $errors->first('post_end_date') }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btnPublish mr-2" href="">Publish
-                                    Now</button>
-                                <a type="button" class="btn btnEdit px-5"
-                                    onclick="Show('Edit Live Chat Event','{{ route('managerAdmin.liveChat.edit', $event->id) }}')">Edit</a>
-                            @endif
-                            @if ($event->status == 2)
-                                <form action="{{ route('managerAdmin.liveChat.set_publish', [$event->id]) }}"
-                                    method="post">
-                                    @csrf
-                                    <button type="submit" class="btn btnRemove mr-2 mt- mb-4">Remove From
-                                        Publish</button>
-                                </form>
-                            @endif
-
-                        </form>
-                    </div>
-                </div>
-
-
-
             </div>
 
+            <div class="card col-md-12 ">
+                <div class="card-header"
+                    style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
+                    Publish Post in News Feed
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('managerAdmin.liveChat.set_publish', [$event->id]) }}" method="post">
+                        @csrf
+                        @if ($event->status != 2)
+                            <div class="row">
+                                <div class="mb-3 col-md-3 mb-2">
+                                    <label for="start_date" class="form-label">Post Start Date</label>
+                                    <input type="calender" class="form-control input-post" id="datepicker"
+                                        name="post_start_date" readonly="readonly" value="{{ old('post_start_date') }}" />
+                                    <i class="fa fa-calendar"
+                                        style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
+                                        aria-hidden="true"></i>
+                                    @if ($errors->has('post_start_date'))
+                                        <span class="text-danger">{{ $errors->first('post_start_date') }}</span>
+                                    @endif
+                                </div>
+                                <div class="mb-3 col-md-3 mb-2">
+                                    <label for="end_date" class="form-label">Post End Date</label>
+                                    <input type="text" class="form-control input-post" id="datepicker1"
+                                        name="post_end_date" readonly="readonly" value="{{ old('post_end_date') }}">
+                                    <i class="fa fa-calendar"
+                                        style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
+                                        aria-hidden="true"></i>
+                                    @if ($errors->has('post_end_date'))
+                                        <span class="text-danger">{{ $errors->first('post_end_date') }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btnPublish mr-2" href="">Publish
+                                Now</button>
+                            <a type="button" class="btn btnEdit px-5"
+                                onclick="Show('Edit Live Chat Event','{{ route('managerAdmin.liveChat.edit', $event->id) }}')">Edit</a>
+                        @endif
+                        @if ($event->status == 2)
+                            <form action="{{ route('managerAdmin.liveChat.set_publish', [$event->id]) }}" method="post">
+                                @csrf
+                                <button type="submit" class="btn btnRemove mr-2 mt- mb-4">Remove From
+                                    Publish</button>
+                            </form>
+                        @endif
 
-
-
-
-
-
+                    </form>
+                </div>
+            </div>
 
         </div>
     </div>

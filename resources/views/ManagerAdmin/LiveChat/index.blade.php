@@ -32,7 +32,6 @@
         <div class="container-fluid">
 
 
-
             <div class="row mb-3">
                 @foreach ($events as $val)
                     <!--card-->

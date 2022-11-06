@@ -156,9 +156,8 @@
                     </div>
                 </div>
 
-
             </div>
-
+            
             <div class="card  col-md-12">
                 <div class="card-header"
                     style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">

@@ -32,53 +32,41 @@
 
     <div class="content">
         <div class="container-fluid">
-            <div class="row">
+
+            <div class="row mb-3">
                 @foreach ($audition as $val)
-                    <div class="col-sm-6 col-md-4  col-lg-3">
-                        <div class=" bg-dark shadow-none pb-4 m-3 BGaB">
-                            @if ($val->banner)
-                                <img src="{{ asset($val->banner) }}"
-                                    class="img-fluid w-100"style="max-height:200px borderRadius: 50% " alt="Admin Image"
-                                    class="img-fluid ImgBlue mr-3 mb-2 w-100">
-                            @else
-                                <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"
-                                        class="img-fluid w-100"style="max-height:200px borderRadius: 50% "
-                                        class="img-fluid ImgBlue mr-3 mb-2 w-100" />
-                                </a>
-                            @endif
+                    <!--card-->
 
-                            <div className="">
-                                <div>
-                                    <h5 class="text-center text-bold mt-4">{{ $val->name }}</h5>
+                    <div class="col-sm-12 col-md-4 col-lg-3">
+                        <div class="card">
+                            <div class="panel panel-primary p-2 text-center">
 
-                                    <center>
 
-                                        {{-- @if ($val->star_approval == 1)
+                                <img src="{{ asset($val->banner) }}" class="img-fluid card-img" />
 
-                            <a type="button" class="btn btn-warning waves-effect  waves-light mb-2"><i class="icon-record"></i>
-                                Pending</a>
-                            @else
+                                <div class="panel-body pt-1">
+                                    <h5 class="text-ellipsis-line-1">{{ $val->title }}</h5>
 
-                            <button type="button" class="btn btn-success waves-effect  waves-light mb-2"><i class="icon-checkmark-round"></i> Published</button>
-                            @endif --}}
 
-                                        <a href="{{ route('managerAdmin.audition.details', [$val->id]) }}" type="button"
-                                            class="btn waves-effect  waves-light mb-2 detail-btn-use text-light">Details <i
-                                                class="fa fa-angle-double-right"></i></a>
 
-                                        @if ($val->status >= 3)
-                                            <a href="{{ route('managerAdmin.audition.registerUser', $val->id) }}"
-                                                class="btn  reg-btn-user  mx-1">Register User</a>
-                                        @endif
-                                    </center>
+                                    @if ($val->status >= 3)
+                                        <a href="{{ route('managerAdmin.audition.registerUser', $val->id) }}"
+                                            class="btn btnPublish waves-effect waves-light mb-2">Register User</a>
+                                    @endif
 
+                                    <a href="{{ route('managerAdmin.audition.details', [$val->id]) }}"type="button"
+                                        class="btn btnDetails waves-effect fw-bold waves-light mb-2">Details <i
+                                            class="fa fa-angle-double-right"></i></a>
                                 </div>
                             </div>
+
                         </div>
                     </div>
+                    <!--card end-->
                 @endforeach
             </div>
+
+           
         </div> <!-- container -->
     </div> <!-- content -->
 
