@@ -50,7 +50,7 @@
 
                                 </div>
 
-                                <div class="panel-body py-3">
+                                <div class="panel-body pt-1">
                                     <h3 class="text-ellipsis-line-1">{{ $event->title }}</h3>
                                     <a href="{{ route('managerAdmin.learningSession.evaluationDetails', [$event->id]) }}"
                                         type="button" class="btn btn-info waves-effect waves-light mb-2">Details <i

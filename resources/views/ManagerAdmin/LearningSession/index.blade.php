@@ -48,7 +48,7 @@
                                         </video>
                                     @endif
                                 @endif
-                                <div class="panel-body py-3">
+                                <div class="panel-body pt-1">
                                     <h5 class="text-ellipsis-line-1">{{ $event->title }}</h5>
 
 

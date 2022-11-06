@@ -272,7 +272,9 @@
 
 
 
-
+.card-rounded {
+    border-radius: 5px;
+}
 
 
 .card-img {

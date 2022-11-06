@@ -54,7 +54,7 @@
 
                 <div class="col-md-4 mb-2">
 
-                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center crad-rounded">
+                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
                             @if (false)
                                 <img src="{{ asset($meetup->star->image) }}" class="img-star-x" alt="Demo Image" />
@@ -71,7 +71,7 @@
 
                         </div>
                     </div>
-                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center crad-rounded">
+                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
                             @if (false)
                                 <img src="{{ asset($meetup->star->image) }}" class="img-star-x" alt="Demo Image" />

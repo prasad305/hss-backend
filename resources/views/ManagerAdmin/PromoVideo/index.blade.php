@@ -39,7 +39,7 @@
                                 <video class="card-img video-card" controls src="{{ asset($val->video_url) }}">
                                 </video>
 
-                                <div class="panel-body py-3">
+                                <div class="panel-body pt-1">
                                     <h5 class="text-ellipsis-line-1">{{ $val->title }}</h5>
 
                                     @if ($val->status < 2)
@@ -77,7 +77,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                                                                                success ') }}',
+                                                                                                                                                        success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })

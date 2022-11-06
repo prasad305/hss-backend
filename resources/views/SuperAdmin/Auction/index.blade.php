@@ -49,7 +49,7 @@
                                 <div class="">
                                     <img width="50%" src="{{ asset($val->product_image) }}" alt="">
                                 </div>
-                                <div class="panel-body py-3">
+                                <div class="panel-body pt-1">
                                     <h3 class="text-ellipsis-line-1">{{ $val->name }}</h3>
 
                                     @if ($val->status == 0)
