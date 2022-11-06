@@ -28,7 +28,7 @@
         <div class="container-fluid">
             <div class="row">
 
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4 mb-2">
                     <div class="card p-2">
                         <div class="center">
                             @if ($post->image)
@@ -43,10 +43,10 @@
                     </div>
                 </div>
 
-                <div class="col-md-8 mb-3">
-                    <div class=" card px-3 py-3">
+                <div class="col-md-8 mb-2">
+                    <div class=" card px-3 pt-3">
                         <div class="row ">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-sm-12 col-md-6 col-lg-3 mb-2">
                                 <div class="card p-3">
                                     <h5>Date</h5>
                                     <h6 class="text-warning">{{ \Carbon\Carbon::parse($post->date)->format('d F,Y') }}</h6>
@@ -54,7 +54,7 @@
                             </div>
 
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-sm-12 col-md-6 col-lg-3 mb-2">
                                 <div class="card p-3">
                                     <h5>Time</h5>
                                     <h6 class="text-warning">{{ \Carbon\Carbon::parse($post->created_at)->format('h:i A') }}
@@ -62,28 +62,28 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-sm-12 col-md-6 col-lg-3 mb-2">
                                 <div class="card p-3">
                                     <h5>Unit Price</h5>
                                     <h6 class="text-warning">{{ $post->unit_price }}</h6>
                                 </div>
                             </div>
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-sm-12 col-md-6 col-lg-3 mb-2">
                                 <div class="card p-3">
                                     <h5> Total Items</h5>
                                     <h6 class="text-warning">{{ $post->total_items }}</h6>
                                 </div>
                             </div>
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-sm-12 col-md-6 col-lg-3 mb-2">
                                 <div class="card p-3">
                                     <h5> Delivery Charge</h5>
                                     <h6 class="text-warning">{{ $post->delivery_charge }}</h6>
                                 </div>
                             </div>
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-sm-12 col-md-6 col-lg-3 mb-2">
                                 <div class="card p-3">
                                     <h5> Tax</h5>
                                     <h6 class="text-warning">{{ $post->tax }}</h6>
@@ -96,7 +96,7 @@
                 </div>
 
 
-                <div class="col-md-12 mb-3">
+                <div class="col-md-12 mb-2">
                     <div class=" card px-3 py-3">
                         <div>
                             <h5>{{ $post->title }}</h5>
@@ -108,20 +108,26 @@
                     </div>
                 </div>
 
+                <div class="card col-md-12">
+                    <div class="card-header"
+                        style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
+                        Publish Post in News Feed
+                    </div>
+                    <div class="card-body">
+                        @if ($post->status != 1)
+                            <a type="button" class="btn btnPublish mr-2"
+                                href="{{ route('managerAdmin.marketplace.set_publish', [$post->id]) }}">Publish Now</a>
+                        @elseif($post->status != 0)
+                            <a type="button" class="btn btnRemove mr-2"
+                                href="{{ route('managerAdmin.marketplace.set_publish', [$post->id]) }}">Remove From
+                                Published</a>
+                        @endif
+                        @if ($post->status < 1)
+                            <a type="button" class="btn btnEdit px-5"
+                                onclick="Show('Edit Marketplace','{{ route('managerAdmin.marketplace.edit', $post->id) }}')">Edit</a>
+                        @endif
+                    </div>
 
-                <div class="container row my-3">
-                    @if ($post->status != 1)
-                        <a type="button" class="btn btnPublish mr-2"
-                            href="{{ route('managerAdmin.marketplace.set_publish', [$post->id]) }}">Publish Now</a>
-                    @elseif($post->status != 0)
-                        <a type="button" class="btn btnRemove mr-2"
-                            href="{{ route('managerAdmin.marketplace.set_publish', [$post->id]) }}">Remove From
-                            Published</a>
-                    @endif
-                    @if ($post->status < 1)
-                        <a type="button" class="btn btnEdit px-5"
-                            onclick="Show('Edit Marketplace','{{ route('managerAdmin.marketplace.edit', $post->id) }}')">Edit</a>
-                    @endif
                 </div>
 
             </div>
@@ -130,20 +136,6 @@
     </div> <!-- content -->
 
 
-    {{-- <div class="container row">
-        @if ($post->status != 1)
-            <a type="button" class="btn btn-outline-success mr-2"
-                href="{{ route('managerAdmin.marketplace.set_publish', [$post->id]) }}">Publish Now</a>
-        @elseif($post->status != 0)
-            <a type="button" class="btn btnRemove mr-2"
-                href="{{ route('managerAdmin.marketplace.set_publish', [$post->id]) }}">Remove From
-                Publish</a>
-        @endif
-        @if ($post->status == 0)
-            <a type="button" class="btn btn-outline-warning px-5"
-                onclick="Show('Edit Marketplace','{{ route('managerAdmin.marketplace.edit', $post->id) }}')">Edit</a>
-        @endif
-    </div> --}}
 
     @if (session()->has('success'))
         <script type="text/javascript">
@@ -153,7 +145,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })
