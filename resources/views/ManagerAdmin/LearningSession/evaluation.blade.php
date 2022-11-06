@@ -40,23 +40,23 @@
                             <div class="panel panel-primary text-center">
                                 <div class="">
                                     @if ($event->video != null)
-                                    <video width="
+                                        <video width="
                                     " height="200" controls>
-                                        <source src="{{ asset('http://localhost:8000/' . $event->video) }}" />
-                                    </video>
+                                            <source src="{{ asset('http://localhost:8000/' . $event->video) }}" />
+                                        </video>
                                     @else
-                                    <img width="100%" src="{{ asset($event->banner) }}" alt="">
+                                        <img width="100%" src="{{ asset($event->banner) }}" alt="">
                                     @endif
-                                    
+
                                 </div>
 
                                 <div class="panel-body py-3">
                                     <h3 class="text-ellipsis-line-1">{{ $event->title }}</h3>
                                     <a href="{{ route('managerAdmin.learningSession.evaluationDetails', [$event->id]) }}"
-                                        type="button" class="btn btn-info waves-effect waves-light">Details <i
+                                        type="button" class="btn btn-info waves-effect waves-light mb-2">Details <i
                                             class="fa fa-angle-double-right"></i></a>
                                     <a href="{{ route('managerAdmin.learningSession.evaluationResult', [$event->id]) }}"
-                                        type="button" class="btn btn-info waves-effect waves-light">Show Result <i
+                                        type="button" class="btn btn-info waves-effect waves-light mb-2">Show Result <i
                                             class="fa fa-eye"></i></a>
 
                                 </div>

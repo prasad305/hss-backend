@@ -53,16 +53,16 @@
                                     <h3 class="text-ellipsis-line-1">{{ $val->name }}</h3>
 
                                     @if ($val->status == 0)
-                                        <a type="button" class="btn btn-warning waves-effect waves-light"><i
+                                        <a type="button" class="btn btn-warning waves-effect waves-light mb-2"><i
                                                 class="icon-record"></i>
                                             Pending</a>
                                     @else
-                                        <button type="button" class="btn btn-success waves-effect waves-light"><i
+                                        <button type="button" class="btn btn-success waves-effect waves-light mb-2"><i
                                                 class="icon-checkmark-round"></i> Published</button>
                                     @endif
 
                                     <a href="{{ route('managerAdmin.auctionProduct.details', [$val->id]) }}" type="button"
-                                        class="btn btn-info waves-effect waves-light">Details <i
+                                        class="btn btn-info waves-effect waves-light mb-2">Details <i
                                             class="fa fa-angle-double-right"></i></a>
 
                                 </div>

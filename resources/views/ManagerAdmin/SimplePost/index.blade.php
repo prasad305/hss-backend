@@ -43,7 +43,7 @@
                                 @if ($val->image)
                                     <img src="{{ asset($val->image) }}" class="img-fluid card-img" />
                                 @elseif($val->video)
-                                    <video class="card-img card" controls src="{{ asset($val->video) }}"></video>
+                                    <video class="card-img card " controls src="{{ asset($val->video) }}"></video>
                                 @else
                                     <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
                                         <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
@@ -54,16 +54,16 @@
                                     <h5 class="text-ellipsis-line-1">{{ $val->title }}</h5>
 
                                     @if ($val->status == 0)
-                                        <a type="button" class="btn btnPending waves-effect waves-light"><i
+                                        <a type="button" class="btn btnPending waves-effect waves-light mb-2"><i
                                                 class="icon-record"></i>
                                             Pending</a>
                                     @else
-                                        <button type="button" class="btn btnPublish waves-effect waves-light"><i
+                                        <button type="button" class="btn btnPublish waves-effect waves-light mb-2"><i
                                                 class="icon-checkmark-round"></i> Published</button>
                                     @endif
 
                                     <a href="{{ route('managerAdmin.simplePost.details', [$val->id]) }}" type="button"
-                                        class="btn btnDetails waves-effect waves-light">Details <i
+                                        class="btn btnDetails waves-effect waves-light mb-2">Details <i
                                             class="fa fa-angle-double-right"></i></a>
 
                                 </div>

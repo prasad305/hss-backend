@@ -49,16 +49,16 @@
 
 
                                     @if ($val->status == 2)
-                                        <button type="button" class="btn btnPublish waves-effect waves-light"><i
+                                        <button type="button" class="btn btnPublish waves-effect waves-light mb-2"><i
                                                 class="icon-checkmark-round"></i> Published</button>
                                     @else
-                                        <a type="button" class="btn btnPending waves-effect waves-light"><i
+                                        <a type="button" class="btn btnPending waves-effect waves-light mb-2"><i
                                                 class="icon-record"></i>
                                             Pending</a>
                                     @endif
 
                                     <a href="{{ route('managerAdmin.liveChat.details', [$val->id]) }}" type="button"
-                                        class="btn btnDetails waves-effect fw-bold waves-light">Details <i
+                                        class="btn btnDetails waves-effect fw-bold waves-light mb-2">Details <i
                                             class="fa fa-angle-double-right"></i></a>
                                 </div>
                             </div>

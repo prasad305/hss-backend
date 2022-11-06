@@ -36,11 +36,12 @@
                                         class="ion-chevron-left"></i>&nbsp; Back</a>
                             </div> --}}
                         </div>
-                        @if($eventsDetails->banner)
+                        @if ($eventsDetails->banner)
                             <img src="{{ asset($eventsDetails->banner) }}" height="200px" width="100%" alt="sdad">
                         @else
                             <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                                <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" height="200px" width="100%"/>
+                                <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" height="200px"
+                                    width="100%" />
                             </a>
                         @endif
                         <div class="panel-body">
@@ -81,14 +82,12 @@
                         <div style="padding: 10px;">
 
                             @if ($eventsDetails->publish_status == null)
-
                                 <a href="{{ route('managerAdmin.approvedEvent', [$eventsDetails->id, $categoryId]) }}"
-                                    type="button" class="btn btn-warning waves-effect waves-light"><i
+                                    type="button" class="btn btn-warning waves-effect waves-light mb-2"><i
                                         class="ion-record"></i>
                                     Pending</a>
                             @else
-
-                                <button type="button" class="btn btn-success waves-effect waves-light"><i
+                                <button type="button" class="btn btn-success waves-effect waves-light mb-2"><i
                                         class="ion-checkmark-round"></i> Published</button>
                             @endif
                         </div>

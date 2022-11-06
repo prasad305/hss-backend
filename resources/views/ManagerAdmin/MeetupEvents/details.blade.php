@@ -54,7 +54,7 @@
 
                 <div class="col-md-4 mb-2">
 
-                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center rounded-3">
+                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center crad-rounded">
                         <div class="">
                             @if (false)
                                 <img src="{{ asset($meetup->star->image) }}" class="img-star-x" alt="Demo Image" />
@@ -71,7 +71,7 @@
 
                         </div>
                     </div>
-                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center">
+                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center crad-rounded">
                         <div class="">
                             @if (false)
                                 <img src="{{ asset($meetup->star->image) }}" class="img-star-x" alt="Demo Image" />
@@ -195,7 +195,8 @@
                                 <form action="{{ route('managerAdmin.meetupEvent.set_publish', [$meetup->id]) }}"
                                     method="post">
                                     @csrf
-                                    <button type="submit" class="btn btnRemove mr-2 mt-3 mb-4">Remove From Publish</button>
+                                    <button type="submit" class="btn btnRemove mr-2 mt-3 mb-4">Remove From
+                                        Publish</button>
                                 </form>
                             @endif
 

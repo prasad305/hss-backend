@@ -43,16 +43,16 @@
                                     <h5 class="text-ellipsis-line-1">{{ $val->title }}</h5>
 
                                     @if ($val->status < 2)
-                                        <a type="button" class="btn btnPending waves-effect waves-light"><i
+                                        <a type="button" class="btn btnPending waves-effect waves-light mb-2"><i
                                                 class="icon-record"></i>
                                             Pending</a>
                                     @else
-                                        <button type="button" class="btn btnPublish waves-effect waves-light"><i
+                                        <button type="button" class="btn btnPublish waves-effect waves-light mb-2"><i
                                                 class="icon-checkmark-round"></i> Published</button>
                                     @endif
 
                                     <a href="{{ route('managerAdmin.promoVideo.details', [$val->id]) }}" type="button"
-                                        class="btn btnDetails waves-effect waves-light">Details <i
+                                        class="btn btnDetails waves-effect waves-light mb-2">Details <i
                                             class="fa fa-angle-double-right"></i></a>
 
                                 </div>
@@ -77,7 +77,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                                                            success ') }}',
+                                                                                                                success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })

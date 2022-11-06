@@ -280,6 +280,7 @@
     border: .2px solid rgb(235, 153, 0);
     min-height: 150px;
     max-height: 220px !important;
+    margin-bottom: 0px !important;
 }
 
 .video-card {

@@ -44,7 +44,7 @@
                                     <p class="card-text text-center">Cost : {{ $greeting->cost }} BDT</p>
 
                                     <a href="{{ route('managerAdmin.greeting.show', $greeting->id) }}" type="button"
-                                        class="btn btnDetails waves-effect waves-light">Details <i
+                                        class="btn btnDetails waves-effect waves-light mb-2">Details <i
                                             class="fa fa-angle-double-right"></i></a>
 
                                 </div>
