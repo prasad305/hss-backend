@@ -30,7 +30,7 @@
 
 
             <div class="row">
-                <div class="col-md-6 mb-2">
+                <div class="col-sm-12 col-md-12 col-lg-6 mb-2">
                     <div class="card p-2">
 
                         @if ($post->banner)
@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <div class="row col-md-6 mb-2">
+                <div class="row col-sm-12 col-md-12 col-lg-6 mb-2">
                     <div class="col-md-6 mb-2">
                         <div class="card p-2">
 
@@ -109,10 +109,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row pt-5 justify-content-between">
-                <div class="col-md-12 ">
+                <div class="col-md-12 mb-2">
                     <div class=" card px-3 py-3">
                         <div>
                             <h3>{{ $post->group_name }}</h3>
@@ -125,10 +123,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row mt-3">
-                <div class="col-md-3  mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date">Start Date</label>
                         <h4 class="text-warning">
@@ -136,7 +132,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date">End Date</label>
                         <h4 class="text-warning">
@@ -144,9 +140,7 @@
                     </div>
                 </div>
 
-
-
-                <div class="col-md-3  mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date">Minimum Member</label>
                         <h4 class="text-warning">
@@ -154,7 +148,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3  mb-2">
+                <div class="col-sm-12 col-md-4 col-lg-3  mb-2">
                     <div class="card px-3 p-2">
                         <label for="Date">Maximum Member</label>
                         <h4 class="text-warning">
