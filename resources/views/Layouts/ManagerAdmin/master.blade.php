@@ -38,15 +38,36 @@
 
     @stack('css')
     <style>
+        
+
         .BannerAGN {
             border: 3px solid rgb(255, 174, 0);
             object-fit: cover;
             max-height: 330px;
         }
 
+        .filterBtn {
+            margin-top: 2px;
+            width: 150px;
+            border-radius: 10px;
+            color: #ffffff;
+            border: 1px solid gray;
+        }
+
+        .sxBtn {
+            margin-top: 2px;
+            border-radius: 10px;
+            color: #ffffff;
+            border: 1px solid gray;
+        }
 
         .NotifyTable {
             color: white;
+        }
+
+
+        .borderBottom {
+            border: .2px solid gray;
         }
 
         .LeftGNA {
