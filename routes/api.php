@@ -50,6 +50,7 @@ Route::post('/uplad-video', [HomeController::class, 'video_upload']);
 Route::get('aboutus', [SettingsController::class, 'aboutus']);
 Route::get('policy', [SettingsController::class, 'policy']);
 Route::get('faq', [SettingsController::class, 'faq']);
+Route::get('refund', [SettingsController::class, 'refund']);
 Route::get('product-purchase', [SettingsController::class, 'productPurchase']);
 Route::get('terms-condition', [SettingsController::class, 'termsCondition']);
 
@@ -102,6 +103,10 @@ Route::get('/user/educational/list/check', [UserController::class, 'userEducatio
 Route::get('/user/employment/list/check', [UserController::class, 'userEmploymentCheck']);
 Route::get('/user/personal/list/check', [UserController::class, 'userPersonalList']);
 Route::post('/user/password/changes', [UserController::class, 'userPasswordChanges']);
+
+Route::get('/user/allCountry', [UserController::class, 'allCountry']);
+Route::get('/user/educationlavel', [UserController::class, 'educationLavel']);
+Route::get('/user/occupation', [UserController::class, 'occupationList']);
 
 
 //Star Photo and videos
@@ -423,6 +428,9 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('admin/star_list', [CategoryController::class, 'star_list']);
     Route::get('admin/agreement_paper/{star_id}', [CategoryController::class, 'agreement_paper']);
 
+    Route::get('/admin/profitShare', [DashboardController::class, 'profitShare']);
+    Route::post('/admin/profit/withdraw', [DashboardController::class, 'profitWithdraw']);
+
     // Fan Group Section
     Route::post('admin/fan-group/store', [FanGroupController::class, 'fanGroupStore']);
     Route::get('/admin/fan-group/star/list', [FanGroupController::class, 'allStarList']);
@@ -629,6 +637,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('star/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('/livechat', [LiveChatController::class, 'livechat']);
     Route::get('/sinlgeLiveChat/{id}', [LiveChatController::class, 'sinlgeLiveChat']);
+    Route::get('star/profitShare', [DashboardController::class, 'profitShare']);
+    Route::post('/star/profit/withdraw', [DashboardController::class, 'profitWithdraw']);
 
     // schdedule
     Route::post('/star/add_schedule/', [StarScheduleController::class, 'add_schedule']);

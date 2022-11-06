@@ -4,10 +4,10 @@
         <label for="first_name">Select Sub Category</label>
         <select name="sub_category_id" id="sub_category_id" class="form-control">
             <option value="">Select One</option>
-            @if(isset($sub_categories[0]))
-            @foreach ($sub_categories as $key => $subCategory)
-            <option value="{{$subCategory->id}}">{{$subCategory->name}}</option>
-            @endforeach
+            @if (isset($sub_categories[0]))
+                @foreach ($sub_categories as $key => $subCategory)
+                    <option value="{{ $subCategory->id }}">{{ $subCategory->name }}</option>
+                @endforeach
             @endif
         </select>
         <span class="text-danger" id="sub_category_error"></span>
@@ -39,6 +39,14 @@
             <span class="text-danger" id="email_error"></span>
         </div>
     </div>
+    <div class="form-group row">
+        <div class="col-md-6">
+            <label for="profit">Profit Share (%)</label>
+            <input type="text" class="form-control" id="profit" name="profit"
+                placeholder="Enter  Profit Share in percentage">
+            <span class="text-danger" id="profit_error"></span>
+        </div>
+    </div>
     <span class="row">
         <div class="form-group col-md-6">
             <label for="image">Image</label>
@@ -54,7 +62,7 @@
         <div class="form-group col-md-6">
             <label for="image">Cover</label>
             <br><img id="image2" onchange="validateMultipleImage('image2')" alt="icon"
-                src="{{asset(get_static_option('no_image'))}}" height="180px" width="180px"
+                src="{{ asset(get_static_option('no_image')) }}" height="180px" width="180px"
                 onerror="this.onerror=null;this.src='{{ asset(get_static_option('no_image')) }}';" required />
 
             <br><br>
@@ -71,52 +79,50 @@
 </form>
 
 <script>
-    $(document).on('click','#btnSendData',function (event) {
-    event.preventDefault();
-    ErrorMessageClear(); // clear previous error message
-    var form = $('#create-form')[0];
-    var formData = new FormData(form);
+    $(document).on('click', '#btnSendData', function(event) {
+        event.preventDefault();
+        ErrorMessageClear(); // clear previous error message
+        var form = $('#create-form')[0];
+        var formData = new FormData(form);
 
-    // Set header if need any otherwise remove setup part
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
-        }
-    });
-    $.ajax({
-        url: "{{route('managerAdmin.admin.store')}}",// your request url
-        data: formData,
-        processData: false,
-        contentType: false,
-        type: 'POST',
-        success: function (res) {
-            if (res.type === 'success') {
-                Swal.fire(
-                    'Success!',
-                    res.message,
-                    'success'
-                )
-                setTimeout(function() {
-                    location.reload();
-                }, 1000);
+        // Set header if need any otherwise remove setup part
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="token"]').attr('value')
             }
+        });
+        $.ajax({
+            url: "{{ route('managerAdmin.admin.store') }}", // your request url
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function(res) {
+                if (res.type === 'success') {
+                    Swal.fire(
+                        'Success!',
+                        res.message,
+                        'success'
+                    )
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                }
 
-            if (res.type === 'error') {
-                Swal.fire(
-                    'Error!',
-                    res.message,
-                    'error'
-                )
+                if (res.type === 'error') {
+                    Swal.fire(
+                        'Error!',
+                        res.message,
+                        'error'
+                    )
+                }
+
+            },
+            error: function(data) {
+                $.each(data.responseJSON.errors, function(key, value) {
+                    ErrorMessage(key, value); // validation message show
+                });
             }
-            
-        },
-        error: function (data) {
-            $.each(data.responseJSON.errors, function(key, value) {
-                ErrorMessage(key,value); // validation message show
-            });
-        }
+        });
     });
-});
-
-
 </script>

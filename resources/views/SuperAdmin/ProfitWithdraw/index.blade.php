@@ -6,7 +6,6 @@
 
 @section('content')
     <!-- Content Header (Page header) -->
-
     <style>
         .head-line {
             border-top: 1px solid #ffad00 !important;
@@ -24,7 +23,7 @@
         <div class="container-fluid">
             <div class="card card-bg head-line mt-4 mb-2">
                 <div class="text-light d-flex p-2">
-                    <h4 class="mx-3 text-white p-2">Admin List</h4>
+                    <h4 class="mx-3 text-white p-2">Withdraw History</h4>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -46,99 +45,100 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">List</h3>
+                    <h3 class="card-title">Withdraw List</h3>
 
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <table id="example1" class="table table-bordered table-striped">
+                    <div class="category-filter mb-3">
+                        <select id="categoryFilter" class="form-control">
+                            <option value="">Show All</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Processing">Processing</option>
+                            <option value="Success">Success</option>
+                            <option value="Failed">Failed</option>
+                        </select>
+                    </div>
+                    <table id="myTable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>SL</th>
-                                <th>Category</th>
-                                <th>Sub Category</th>
                                 <th>Name</th>
-                                <th>Photo</th>
-                                <th>Phone</th>
-                                <th>Active Status</th>
-                                <th>Approve Status</th>
+                                <th>User Type</th>
+                                <th>Amount</th>
+                                <th>Withdraw Id</th>
+                                <th>Bank Txn ID</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($admins as $admin)
+                            @foreach ($withdrawHistory as $data)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $admin->category ? $admin->category->name : '' }}</td>
-                                    <td>{{ $admin->subCategory ? $admin->subCategory->name : '' }}</td>
-                                    <td>{{ $admin->first_name . ' ' . $admin->last_name }}</td>
+                                    <td>{{ $data->users ? $data->users->first_name : '' }}</td>
+                                    <td>{{ $data->users ? $data->users->user_type : '' }}</td>
+                                    <td>{{ $data->withdraw_amount }}</td>
+                                    <td>{{ $data->withdraw_id }}</td>
                                     <td>
-                                        @if ($admin->image)
-                                            <a href="{{ asset($admin->image) }}" target="_blank">
-                                                <img height="70px;" src="{{ asset($admin->image) }}" width="70px;"
-                                                    class="rounded-circle" />
-                                            </a>
+                                        @if ($data->bank_txn_id !== null)
+                                            {{ $data->bank_txn_id }}
                                         @else
-                                            <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                                <img height="70px;" src="{{ asset('demo_image/demo_user.png') }}"
-                                                    width="70px;" class="rounded-circle" />
-                                            </a>
-                                        @endif
-
-
-
-                                    </td>
-                                    <td>{{ $admin->phone }}</td>
-                                    <td>
-                                        @if ($admin->active_status == 0)
-                                            <span class="badge badge-danger">Unactive</span>
-                                        @elseif($admin->active_status == 1)
-                                            <span class="badge badge-success">Active</span>
+                                            <form action="{{ route('superAdmin.bankTxnId.store', $data->id) }}"
+                                                method="post">
+                                                @csrf
+                                                @method('put')
+                                                <input type="text" name="bank_txn_id" value="{{ $data->bank_txn_id }}"
+                                                    placeholder="Enter Bank Txn Id"> <button type="submit"
+                                                    class="btn btn-sm btn-success">
+                                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                                </button>
+                                            </form>
                                         @endif
                                     </td>
                                     <td>
-                                        @if ($admin->status == 0)
-                                            <span class="badge badge-danger">Unapproved</span>
-                                        @elseif($admin->status == 1)
-                                            <span class="badge badge-success">Approved</span>
-                                        @endif
+                                        @switch($data->status)
+                                            @case(1)
+                                                <span class="badge badge-warning">Processing</span>
+                                            @break
+
+                                            @case(2)
+                                                <span class="badge badge-success">Success</span>
+                                            @break
+
+                                            @case(3)
+                                                <span class="badge badge-danger">Failed</span>
+                                            @break
+
+                                            @default
+                                                <span class="badge badge-primary">Pending</span>
+                                        @endswitch
+
                                     </td>
+
                                     <td style="width: 150px">
-                                        @if ($admin->status == 0)
+                                        @if ($data->status == 0)
                                             <button class="btn btn-success" onclick="activeNow(this)"
-                                                value="{{ route('superAdmin.admin.activeNow', $admin->id) }}">
+                                                value="{{ route('superAdmin.admin.activeNow', $data->id) }}">
                                                 <i class="fa fa-check" aria-hidden="true"></i>
                                             </button>
-                                        @elseif($admin->status == 1)
+                                        @elseif($data->status == 1)
                                             <button class="btn btn-danger" onclick="inactiveNow(this)"
-                                                value="{{ route('superAdmin.admin.inactiveNow', $admin->id) }}">
+                                                value="{{ route('superAdmin.admin.inactiveNow', $data->id) }}">
                                                 <i class="fa fa-close"></i>
                                             </button>
                                         @endif
                                         <a class="btn btn btn-info"
-                                            onclick="Show('Edit Admin','{{ route('superAdmin.admin.edit', $admin->id) }}')"><i
+                                            onclick="Show('Edit Admin','{{ route('superAdmin.admin.edit', $data->id) }}')"><i
                                                 class="fa fa-edit text-white"></i></a>
                                         <button class="btn btn-danger" onclick="delete_function(this)"
-                                            value="{{ route('superAdmin.admin.destroy', $admin->id) }}">
+                                            value="{{ route('superAdmin.admin.destroy', $data->id) }}">
                                             <i class="fa fa-trash"></i>
                                         </button>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>SL</th>
-                                <th>Name</th>
-                                <th>Category</th>
-                                <th>Sub Category</th>
-                                <th>Photo</th>
-                                <th>Phone</th>
-                                <th>Active Status</th>
-                                <th>Approve Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -150,6 +150,8 @@
     <script>
         function activeNow(objButton) {
             var url = objButton.value;
+            var txnId = $("#bank_txn_id").val(),
+                alert(txnId)
             // alert(objButton.value)
             Swal.fire({
                 title: 'Are you sure?',
@@ -193,6 +195,7 @@
 
         function inactiveNow(objButton) {
             var url = objButton.value;
+
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -232,5 +235,51 @@
                 }
             })
         }
+    </script>
+
+    {{-- Datatable --}}
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script>
+        $("document").ready(function() {
+
+            $("#myTable").dataTable({
+                "searching": true,
+                dom: 'Bfrtip',
+                buttons: true,
+                responsive: true,
+                autoWidth: false
+
+            });
+
+            var table = $('#myTable').DataTable();
+
+            $("#filterTable_filter.dataTables_filter").append($("#categoryFilter"));
+
+            var categoryIndex = 0;
+            $("#myTable th").each(function(i) {
+                if ($($(this)).html() == "Status") {
+                    categoryIndex = i;
+                    return false;
+                }
+            });
+
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    var selectedItem = $('#categoryFilter').val()
+                    var status = data[categoryIndex];
+                    if (selectedItem === "" || status.includes(selectedItem)) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+
+            $("#categoryFilter").change(function(e) {
+                table.draw();
+            });
+
+            table.draw();
+        });
     </script>
 @endsection

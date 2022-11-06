@@ -51,6 +51,7 @@ use App\Http\Controllers\SuperAdmin\AuditionDashboardController;
 use App\Http\Controllers\SuperAdmin\AuditionRoundRulesController;
 use App\Http\Controllers\SuperAdmin\PaidLoveReactPriceController;
 use App\Http\Controllers\SuperAdmin\ProductPurchaseController;
+use App\Http\Controllers\SuperAdmin\ProfitWithdrawController;
 use App\Http\Controllers\SuperAdmin\TermsConditionController;
 use App\Http\Controllers\SuperAdmin\RefundController;
 use App\Http\Controllers\SuperAdmin\VirtualtourController;
@@ -61,6 +62,8 @@ use App\Http\Controllers\SuperAdmin\VirtualtourController;
 Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin', 'prevent-back-history']], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    Route::get('/withdraw', [ProfitWithdrawController::class, 'index'])->name('withdraw.index');
+    Route::put('/txn-store/{id}', [ProfitWithdrawController::class, 'store'])->name('bankTxnId.store');
 
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
     Route::post('/profile/change/store', [DashboardController::class, 'changeProfile'])->name('change.profile');

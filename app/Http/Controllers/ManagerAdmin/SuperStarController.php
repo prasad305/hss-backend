@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProfitShare;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -14,29 +15,31 @@ class SuperStarController extends Controller
 {
     public function index()
     {
-        $stars = User::where([['category_id',auth()->user()->category_id],['user_type', 'star']])->orderBy('id', 'DESC')->get();
+        $stars = User::with('profitShare')->where([['category_id', auth()->user()->category_id], ['user_type', 'star']])->orderBy('id', 'DESC')->get();
         return view('ManagerAdmin.stars.index', compact('stars'));
     }
 
     public function create()
     {
         $data = [
-            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBY('id','desc')->get(),
+            'sub_categories' => SubCategory::where('category_id', auth()->user()->category_id)->orderBY('id', 'desc')->get(),
         ];
-        return view('ManagerAdmin.stars.create',$data);
+        return view('ManagerAdmin.stars.create', $data);
     }
 
-   
+
     public function store(Request $request)
     {
-        
+
         $request->validate(
             [
                 'sub_category_id' => 'required',
                 'first_name' => 'required',
                 'last_name' => 'required',
+                'profit' => 'required',
                 'dob' => 'required',
-            ],[
+            ],
+            [
                 'dob.required' => 'Date Of Birth Field Required',
                 'sub_category_id.required' => 'Please Select Sub Category'
             ]
@@ -54,6 +57,11 @@ class SuperStarController extends Controller
         try {
             $user->save();
             if ($user) {
+                ProfitShare::create([
+                    'user_id' => $user->id,
+                    'user_type' => $user->user_type,
+                    'profit' => $request->profit,
+                ]);
                 return response()->json([
                     'success' => true,
                     'message' => 'Star Added Successfully'
@@ -67,19 +75,19 @@ class SuperStarController extends Controller
         }
     }
 
-  
+
     public function show(User $star)
     {
- 
+
         return view('ManagerAdmin.stars.details')->with('auditionAdmin', $star);
     }
 
- 
+
     public function edit(User $star)
     {
         $data = [
             'star' => $star,
-            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBY('id','desc')->get(),
+            'sub_categories' => SubCategory::where('category_id', auth()->user()->category_id)->orderBY('id', 'desc')->get(),
         ];
         return view('ManagerAdmin.stars.edit', $data);
     }
@@ -91,6 +99,7 @@ class SuperStarController extends Controller
             'sub_category_id' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
+            'profit' => 'required',
             'dob' => 'required',
         ]);
 
@@ -105,6 +114,9 @@ class SuperStarController extends Controller
         try {
             $user->save();
             if ($user) {
+                ProfitShare::where('user_id', $id)->update([
+                    'profit' => $request->profit
+                ]);
                 return response()->json([
                     'success' => true,
                     'message' => 'Star Updated Successfully'
@@ -118,19 +130,19 @@ class SuperStarController extends Controller
         }
     }
 
-    
+
     public function destroy(User $star)
     {
         try {
             if ($star->cover_photo != null)
-                File::delete(public_path($star->cover_photo)); 
+                File::delete(public_path($star->cover_photo));
 
             if ($star->image != null)
-                File::delete(public_path($star->image)); 
+                File::delete(public_path($star->image));
 
-            
+            ProfitShare::where('user_id', $star->id)->delete();
             $star->delete();
-            
+
             return response()->json([
                 'type' => 'success',
                 'message' => 'Successfully Deleted'

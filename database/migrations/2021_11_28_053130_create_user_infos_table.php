@@ -23,6 +23,7 @@ class CreateUserInfosTable extends Migration
             $table->string('country')->nullable();
             $table->date('dob')->nullable();
             $table->text('occupation')->nullable();
+            $table->text('company')->nullable();
             $table->text('edu_level')->nullable();
             $table->text('institute')->nullable();
             $table->text('subject')->nullable();
