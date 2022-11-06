@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auction;
+use App\Models\Audition\Audition;
+use App\Models\Audition\AuditionUploadVideo;
 use App\Models\Bidding;
 use App\Models\Fan_Group_Join;
 use App\Models\FanGroup;
@@ -254,7 +256,7 @@ class DashboardController extends Controller
             'totalIncomeStatementStarShowcase' => $totalIncomeStatementStarShowcase
         ]);
     }
-    public function adminPost($type)
+    public function dashboardPosts($type)
     {
         if ($type == "Simple-Post") {
             $post = SimplePost::where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();
@@ -276,6 +278,8 @@ class DashboardController extends Controller
             $post = Marketplace::with('marketplace_order')->where('superstar_admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Souvenir") {
             $post = SouvenirCreate::with('souvenirApply')->where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();
+        } elseif ($type == "Audition") {
+            $post = Audition::with('participant')->where('audition_admin_id', auth('sanctum')->user()->id)->latest()->get();
         } else {
             return response()->json([
                 'status' => 403,
@@ -341,6 +345,10 @@ class DashboardController extends Controller
 
             $participant = json_decode($post->my_user_join);
             $another_user = json_decode($post->another_user_join);
+        } elseif ($type == "Audition") {
+            $post = Audition::find($id);
+            $uploadedVideo = AuditionUploadVideo::where('audition_id', $id)->count();
+            $participant = $uploadedVideo ? $uploadedVideo : 0;
         } else {
             return response()->json([
                 'status' => 403,
@@ -395,6 +403,19 @@ class DashboardController extends Controller
         return response()->json([
             'status' => 200,
 
+        ]);
+    }
+
+    public function auditionCount()
+    {
+        $audition = Audition::where('audition_admin_id', auth('sanctum')->user()->id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'totalAudition' => $audition->count(),
+            'pendingAudition' => $audition->where('status', 0)->count(),
+            'liveAudition' => $audition->where('status', 3)->count(),
+            'completedAudition' => $audition->where('status', 4)->count(),
         ]);
     }
 }
