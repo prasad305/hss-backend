@@ -23,6 +23,10 @@
             </a>
         </li>
 
+
+        <li class="mt-3 px-2 mb-1" style="border-bottom: 1px solid rgb(112, 112, 112); color:rgb(112, 112, 112)">
+            <h6>Star & Admin Assign</h6>
+        </li>
         <li class="nav-item">
             <a href="{{ route('managerAdmin.admin.index') }}"
                 class="nav-link {{ Request::routeIs('managerAdmin.admin.index') ? 'active' : '' }}">
@@ -55,6 +59,10 @@
             </a>
         </li>
 
+
+        <li class="mt-3 px-2 mb-1" style="border-bottom: 1px solid rgb(112, 112, 112); color:rgb(112, 112, 112)">
+            <h6>Promo Videos</h6>
+        </li>
         {{-- Promo Videos --}}
         <li
             class="nav-item {{ Request::routeIs('managerAdmin.promoVideo.published') || Request::routeIs('managerAdmin.promoVideo.pending') || Request::routeIs('managerAdmin.promoVideo.all') ? 'menu-open' : '' }}">
