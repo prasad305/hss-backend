@@ -866,8 +866,10 @@ Route::middleware(['auth:sanctum', 'isAPIAuditionAdmin'])->group(function () {
     });
 
     Route::get('audition-admin/dashboard/posts/{type}', [DashboardController::class, 'dashboardPosts']);
+    Route::get('audition-admin/dashboard/total-income', [DashboardController::class, 'auditionIncome']);
     Route::get('audition-admin/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
     Route::get('audition-admin/dashboard/audition/count', [DashboardController::class, 'auditionCount']);
+    Route::get('audition-admin/dashboard/audition/roundInfo/{id}', [DashboardController::class, 'auditionRoundInfos']);
 
     Route::get('/audition-admin/audition/events', [AuditionController::class, 'events']);
     Route::post('/audition-admin/audition/status/update', [AuditionController::class, 'statusUpdate']);
@@ -953,6 +955,9 @@ Route::middleware(['auth:sanctum', 'isAPIJuryBoard'])->group(function () {
         return response()->json(['message' => 'You are in as Jury Audition', 'status' => 200], 200);
     });
 
+    Route::get('/jury-board/dashboard/posts/{type}', [DashboardController::class, 'juryDashboard']);
+    Route::get('/jury/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
+    Route::get('/jury/dashboard/audition/roundInfo/{id}', [DashboardController::class, 'auditionRoundInfos']);
     Route::get('/jury/audition/lives', [JuryAuditionController::class, 'live']);
     Route::post('/jury/audition/mark-assessment', [JuryAuditionController::class, 'markAssessment']);
     Route::post('/jury/audition/mark-assessment-as-main-group', [JuryAuditionController::class, 'markAssessmentAsMainGroup']);

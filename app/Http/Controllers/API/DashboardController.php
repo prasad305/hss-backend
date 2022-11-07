@@ -5,7 +5,11 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Auction;
 use App\Models\Audition\Audition;
+use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\AuditionRoundInfo;
+use App\Models\Audition\AuditionRoundMarkTracking;
 use App\Models\Audition\AuditionUploadVideo;
+use App\Models\AuditionCertification;
 use App\Models\Bidding;
 use App\Models\Fan_Group_Join;
 use App\Models\FanGroup;
@@ -416,6 +420,72 @@ class DashboardController extends Controller
             'pendingAudition' => $audition->where('status', 0)->count(),
             'liveAudition' => $audition->where('status', 3)->count(),
             'completedAudition' => $audition->where('status', 4)->count(),
+        ]);
+    }
+    public function auditionRoundInfos($id)
+    {
+        $auditionRoundInfos = AuditionRoundInfo::find($id);
+        $roundParticipant = AuditionUploadVideo::where('round_info_id', $id)->distinct()->count('user_id');
+        $roundAppeal = AuditionUploadVideo::where([['round_info_id', $id], ['type', 'appeal']])->distinct()->count('user_id');
+        $roundCertification = AuditionCertification::where('round_info_id', $id)->distinct()->count('participant_id');
+        $roundWinner = AuditionRoundMarkTracking::where([['round_info_id', $id], ['wining_status', 1]])->distinct()->count('user_id');
+        $roundFailed = AuditionRoundMarkTracking::where([['round_info_id', $id], ['wining_status', 0]])->distinct()->count('user_id');
+        $roundCertification = AuditionCertification::where('round_info_id', $id)->distinct()->count('participant_id');
+
+
+
+        return response()->json([
+            'status' => 200,
+            'auditionRoundInfos' => $auditionRoundInfos,
+            'roundParticipant' => $roundParticipant,
+            'roundCertification' => $roundCertification,
+            'roundAppeal' => $roundAppeal,
+            'roundWinner' => $roundWinner,
+            'roundFailed' => $roundFailed,
+
+
+
+
+
+
+        ]);
+    }
+
+    public function auditionIncome()
+    {
+
+        // Income Statement Audition
+
+        $auditionIncome['auditionTotalIncome'] = AuditionParticipant::whereHas('audition', function ($q) {
+            $q->where([['audition_admin_id', auth()->user()->id]]);
+        })->sum('amount');
+        $auditionIncome['auditionDailyIncome'] = AuditionParticipant::whereHas('audition', function ($q) {
+            $q->where([['audition_admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
+        $auditionIncome['auditionWeeklyIncome'] = AuditionParticipant::whereHas('audition', function ($q) {
+            $q->where([['audition_admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $auditionIncome['auditionMonthlyIncome'] = AuditionParticipant::whereHas('audition', function ($q) {
+            $q->where([['audition_admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $auditionIncome['auditionYearlyIncome'] = AuditionParticipant::whereHas('audition', function ($q) {
+            $q->where([['audition_admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+        return response()->json([
+            'status' => 200,
+            'auditionIncome' => $auditionIncome
+        ]);
+    }
+
+    public function juryDashboard()
+    {
+        $audition = Audition::with('participant')->whereHas('assignedJuries', function ($q) {
+            return $q->distinct('audition_id')->where('jury_id', auth('sanctum')->user()->id);
+        })->get();
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
         ]);
     }
 }
