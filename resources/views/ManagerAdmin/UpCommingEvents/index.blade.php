@@ -40,19 +40,17 @@
                                     <h3 class=""><b>{{ $val->title }}</b></h3>
 
                                     @if ($val->publish_status == null)
-
                                         <a href="{{ route('managerAdmin.approvedEvent', [$val->id, 'null']) }}"
-                                            type="button" class="btn btn-warning waves-effect waves-light"><i
+                                            type="button" class="btn btn-warning waves-effect waves-light mb-2"><i
                                                 class="ion-record"></i>
                                             Pending</a>
                                     @else
-
-                                        <button type="button" class="btn btn-success waves-effect waves-light"><i
+                                        <button type="button" class="btn btn-success waves-effect waves-light mb-2"><i
                                                 class="ion-checkmark-round"></i> Published</button>
                                     @endif
 
                                     <a href="{{ route('managerAdmin.detailsEvent', [$val->id, 'null']) }}" type="button"
-                                        class="btn btn-info waves-effect waves-light">Details <i
+                                        class="btn btn-info waves-effect waves-light mb-2">Details <i
                                             class="fa fa-angle-double-right"></i></a>
 
                                 </div>

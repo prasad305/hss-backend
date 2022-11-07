@@ -9,12 +9,13 @@
 
 .banner__overlay {
     position: absolute;
-    top: 80%;
-    left: 24%;
-    /* display: flex;
-    justify-content: center; */
-    /* align-items: end; */
-    /* height: 100%; */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.banner__overlay h4 {
+    font-size: 1.5rem !important;
 }
 
 .boldOverlay {
@@ -219,6 +220,7 @@
 }
 
 .btnRemove:hover {
+    font-weight: 600;
     background: linear-gradient(90deg, rgb(199, 65, 65) 0%, rgb(247, 61, 61) 100%);
 }
 
@@ -227,6 +229,7 @@
 }
 
 .btnDetails {
+    font-weight: 600;
     background: linear-gradient(90deg, rgb(66, 187, 181) 0%, rgb(0, 235, 125) 100%);
 }
 
@@ -248,14 +251,50 @@
 }
 
 
+.card-img-details {
+    width: 100% !important;
+    min-height: 200px !important;
+    border: .2px solid rgb(235, 153, 0);
+    max-height: 450px !important;
+    min-height: 150px;
+}
 
+.star-img-card {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: .2px solid rgb(235, 153, 0);
+}
+
+.star-text-name {
+    font-weight: 600;
+    color: #d3770d;
+}
+
+
+
+.card-rounded {
+    border-radius: 5px;
+}
 
 
 .card-img {
     width: 100%;
-    min-height: 200px !important;
     border: .2px solid rgb(235, 153, 0);
-    max-height: 450px;
+    min-height: 150px;
+    max-height: 220px !important;
+    margin-bottom: 0px !important;
+}
+
+.video-card {
+    max-height: 200px !important;
+}
+
+.img-star-x {
+    width: 80px;
+    height: 80px;
+    border: .2px solid rgb(235, 153, 0);
+    border-radius: 50%;
 }
 
 
@@ -330,3 +369,6 @@
         min-height: 100px;
     }
 }
+
+
+

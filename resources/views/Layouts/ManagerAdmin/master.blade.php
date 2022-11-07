@@ -38,6 +38,227 @@
 
     @stack('css')
     <style>
+        
+
+        .BannerAGN {
+            border: 3px solid rgb(255, 174, 0);
+            object-fit: cover;
+            max-height: 330px;
+        }
+
+        .filterBtn {
+            margin-top: 2px;
+            width: 150px;
+            border-radius: 10px;
+            color: #ffffff;
+            border: 1px solid gray;
+        }
+
+        .sxBtn {
+            margin-top: 2px;
+            border-radius: 10px;
+            color: #ffffff;
+            border: 1px solid gray;
+        }
+
+        .NotifyTable {
+            color: white;
+        }
+
+
+        .borderBottom {
+            border: .2px solid gray;
+        }
+
+        .LeftGNA {
+            background-color: #252525;
+            padding-left: 5px;
+            border-radius: 5px;
+            padding-right: 10px;
+            margin-right: 20px !important;
+        }
+
+        .letfNotRe {
+            border-radius: 10px 0px 0px 10px;
+        }
+
+        .rightNotRe {
+            border-radius: 0px 10px 10px 0px;
+        }
+
+        .btnRecNot {
+            background-color: #7A7A7A !important;
+            color: white !important;
+        }
+
+        /* .active{
+                                                                                                                                                        background-color: goldenrod !important;
+                                                                                                                                                        color: white !important;
+                                                                                                                                                    } */
+
+        .clockNOte {
+            background-color: rgb(29, 29, 29);
+            font-size: 15px;
+            font-weight: 100;
+
+        }
+
+        .NotifyTabletdRec {
+            border-radius: 5px !important;
+        }
+
+        .datNotify {
+            background-color: grey;
+        }
+
+        .Notifytdx {
+            background-color: #3A3A3A;
+        }
+
+        .lNTS {
+            border-radius: 10px 0px 0px 10px;
+        }
+
+        .rNTS {
+            border-radius: 0px 10px 10px 0;
+        }
+
+        /* .Notifytdx:hover, .lNTS:hover, .rNTS:hover{
+                                                                                                                                                     background-color: rgb(255, 153, 0);
+                                                                                                                                                    } */
+
+
+
+        .NotifyTabletd {
+            padding: 8px;
+
+        }
+
+        .NotifyOver {
+            overflow-x: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 5px;
+            padding-left: 10px;
+        }
+
+        .NotifyAimg {
+            width: 40px;
+            border-radius: 50%;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            -ms-border-radius: 50%;
+            -o-border-radius: 50%;
+            margin-right: 5px;
+        }
+
+
+
+        .rightGNA {
+            background-color: #252525 !important;
+            margin-right: 10px;
+            border-radius: 10px;
+            width: 90%;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            -ms-border-radius: 10px;
+            -o-border-radius: 10px;
+        }
+
+        .ReactNAv {
+            border: 2px solid rgb(255, 187, 0);
+            border-radius: 10px;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            -ms-border-radius: 10px;
+            -o-border-radius: 10px;
+        }
+
+        .SpBannera {
+            width: 100%;
+        }
+
+        .NotifyTp {
+
+            font-family: Arial;
+            margin-top: 15px;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 26px;
+            color: #FFFFFF;
+        }
+
+        .NotifyTpx {
+            color: white;
+            font-family: Arial;
+            font-weight: 500;
+        }
+
+        .PriceTage {
+            width: 35px;
+        }
+
+        .buTon-a {
+            background-color: rgb(85, 83, 81);
+            border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            -ms-border-radius: 5px;
+            -o-border-radius: 5px;
+        }
+
+        .buTon-a:hover {
+            background-color: goldenrod;
+        }
+
+        .buTon-ab {
+            font-size: 18px;
+            padding: 10px;
+        }
+
+        .buTon-abc {
+            font-size: 16px;
+            padding: 10px;
+        }
+
+        .NotifyBtn {
+            background-color: rgb(131, 130, 130) !important;
+            color: black;
+            width: 100px;
+        }
+
+        .NotifyBtn:hover {
+            background-color: rgb(247, 211, 6) !important;
+            color: white !important;
+        }
+
+        .CostWith {
+            width: 170px !important;
+        }
+
+
+        @media only screen and (max-width: 600px) {
+            .LeftGNA {
+                flex: 0 0 auto;
+                width: 90% !important;
+            }
+
+            .rightGNA {
+                flex: 0 0 auto;
+                width: 90% !important;
+            }
+        }
+
         .my-link {
             text-decoration: none;
             font-size: 12px;
@@ -101,16 +322,17 @@
             background: linear-gradient(90deg, #22AADD 0%, #3A8FF2 100%);
             border-radius: 25px;
         }
-       
-        .head-line{
-     border-top: 1px solid #ffad00!important;
-     border-left: 8px solid #ffad00!important;
-     border-bottom: 1px solid #ffad00!important;
-     border-right: 8px solid #ffad00!important;
-   }
+
+        .head-line {
+            border-top: 1px solid #ffad00 !important;
+            border-left: 8px solid #ffad00 !important;
+            border-bottom: 1px solid #ffad00 !important;
+            border-right: 8px solid #ffad00 !important;
+        }
+
         .card-bg {
-                 background-color: black !important;
-             }  
+            background-color: black !important;
+        }
 
 
         .BlueBtn:hover {
@@ -118,40 +340,44 @@
             color: white;
             border: 1px solid rgb(0, 183, 255) !important;
         }
-        .feed-name{
+
+        .feed-name {
             text-transform: uppercase;
-	      background: linear-gradient(to right,  #FFCE00 0%, #a2e431 100%);
-	      -webkit-background-clip: text;
-	      -webkit-text-fill-color: transparent;
-	      
+            background: linear-gradient(to right, #FFCE00 0%, #a2e431 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
             font-size: 1.5vw;
             font-family: $font;
-            font-weight:bold;
+            font-weight: bold;
         }
-        .select-name{
+
+        .select-name {
             text-transform: uppercase;
-	      background: linear-gradient(to right,  #FFCE00 0%, #a2e431 100%);
-	      -webkit-background-clip: text;
-	      -webkit-text-fill-color: transparent;
-	      
+            background: linear-gradient(to right, #FFCE00 0%, #a2e431 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
             font-size: 1.5vw;
             font-family: $font;
-            font-weight:bold;
+            font-weight: bold;
         }
-        .unselect-name{
+
+        .unselect-name {
             text-transform: uppercase;
-	      background: linear-gradient(to right,  #ef1515 0%, #a2e431 100%);
-	      -webkit-background-clip: text;
-	      -webkit-text-fill-color: transparent;
-	      
+            background: linear-gradient(to right, #ef1515 0%, #a2e431 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
             font-size: 1.5vw;
             font-family: $font;
-            font-weight:bold;
+            font-weight: bold;
         }
-        .feed-title{
+
+        .feed-title {
             font-style: normal;
-           font-weight:bold;
-           color: #fbec77;
+            font-weight: bold;
+            color: #fbec77;
         }
 
         .bottomBlackLine {
@@ -212,46 +438,52 @@
 
         .a-bg-color {
             width: 40%;
-            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,79,121,1) 0%, rgba(0,212,255,1) 100%);
+            background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 79, 121, 1) 0%, rgba(0, 212, 255, 1) 100%);
             border-radius: 30px;
         }
 
         .a-bg-color:hover {
             width: 40%;
-            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(40,126,167,1) 0%, rgba(0,212,255,1) 100%);
+            background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(40, 126, 167, 1) 0%, rgba(0, 212, 255, 1) 100%);
             border-radius: 30px;
         }
-        .manpower-but{
+
+        .manpower-but {
             width: 50%;
             background: linear-gradient(102.45deg, #F5EA45 28.52%, #DDA336 52.38%, #E7A725 72.31%);
             border-radius: 30px;
         }
-        .reg-btn-user{
+
+        .reg-btn-user {
             background-image: linear-gradient(to right, #84fab0 0%, #8fd3f4 51%, #84fab0 100%);
             color: #000000 !important;
         }
-        .reg-btn-user:hover { 
+
+        .reg-btn-user:hover {
             background-position: left center !important;
         }
-        .detail-btn-use{
+
+        .detail-btn-use {
             background-image: linear-gradient(to right, #f6d365 0%, #fda085 51%, #f6d365 100%);
             border-radius: 5%;
             color: #000000 !important;
-           
+
         }
-        .detail-btn-use:hover{
+
+        .detail-btn-use:hover {
             background-position: right center !important;
         }
-        .card-bg-event{
-         background-color: rgb(0, 0, 0) !important;
-         }
+
+        .card-bg-event {
+            background-color: rgb(0, 0, 0) !important;
+        }
 
         @media only screen and (min-width: 768px) {
-           .new-list {
-            width: 500px !important;
-           }
-           
-           
+            .new-list {
+                width: 500px !important;
+            }
+
+
         }
     </style>
 
@@ -325,7 +557,7 @@
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu" role="menu">
-                            <a class="dropdown-item" href="{{route('managerAdmin.settings')}}">Settings</a>
+                            <a class="dropdown-item" href="{{ route('managerAdmin.settings') }}">Settings</a>
                             {{-- <a class="dropdown-item" href="#">Another action</a>
                             <a class="dropdown-item" href="#">Something else here</a> --}}
                             <div class="dropdown-divider"></div>
@@ -447,7 +679,7 @@
         </nav>
         <!-- /.navbar -->
 
-        
+
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <a href="{{ route('managerAdmin.dashboard') }}" class="brand-link">
@@ -459,11 +691,12 @@
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        @if(Auth::user()->image)
-                        <img src="{{ asset(Auth::user()->image) }}"
-                            class="img-circle" alt="User Image" style="width:50px; height:50px;">
+                        @if (Auth::user()->image)
+                            <img src="{{ asset(Auth::user()->image) }}" class="img-circle" alt="User Image"
+                                style="width:50px; height:50px;">
                         @else
-                            <img src="{{asset('uploads/images/users/manager-admin-avatar.png')}}" class="img-circle" alt="User Image" style="width:50px; height:50px;">
+                            <img src="{{ asset('uploads/images/users/manager-admin-avatar.png') }}"
+                                class="img-circle" alt="User Image" style="width:50px; height:50px;">
                         @endif
                     </div>
                     <div class="info">

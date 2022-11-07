@@ -49,20 +49,20 @@
                                 <div class="">
                                     <img width="50%" src="{{ asset($val->product_image) }}" alt="">
                                 </div>
-                                <div class="panel-body py-3">
+                                <div class="panel-body pt-1">
                                     <h3 class="text-ellipsis-line-1">{{ $val->name }}</h3>
 
                                     @if ($val->status == 0)
-                                        <a type="button" class="btn btn-warning waves-effect waves-light"><i
+                                        <a type="button" class="btn btn-warning waves-effect waves-light mb-2"><i
                                                 class="icon-record"></i>
                                             Pending</a>
                                     @else
-                                        <button type="button" class="btn btn-success waves-effect waves-light"><i
+                                        <button type="button" class="btn btn-success waves-effect waves-light mb-2"><i
                                                 class="icon-checkmark-round"></i> Published</button>
                                     @endif
 
                                     <a href="{{ route('managerAdmin.auctionProduct.details', [$val->id]) }}" type="button"
-                                        class="btn btn-info waves-effect waves-light">Details <i
+                                        class="btn btn-info waves-effect waves-light mb-2">Details <i
                                             class="fa fa-angle-double-right"></i></a>
 
                                 </div>

@@ -49,11 +49,11 @@
 
                             <div class="col-8">
                                 <p class="lead">Banner</p>
-                                @if($data->banner)
-                                    <img src=" {{ asset($data->banner) }}" alt="No-Image">
+                                @if ($data->banner)
+                                    <img src=" {{ asset($data->banner) }}" alt="No-Image" class="card-img-details">
                                 @else
                                     <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                                        <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"/>
+                                        <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" />
                                     </a>
                                 @endif
                                 <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
@@ -98,8 +98,8 @@
                             <div class="col-12">
                                 <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i
                                         class="fas fa-print"></i> Print</a>
-                                <a href="{{ route('managerAdmin.dashboard.qna') }}"
-                                    class=" btn btn-success float-right"><i class="far fa-credit-card"></i> Go Back
+                                <a href="{{ route('managerAdmin.dashboard.qna') }}" class=" btn btn-success float-right"><i
+                                        class="far fa-credit-card"></i> Go Back
                                 </a>
                                 <a href="{{ route('managerAdmin.dashboard.qna') }}" class="btn btn-primary float-right"
                                     style="margin-right: 5px;">

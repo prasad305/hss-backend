@@ -183,7 +183,7 @@ class StarGreetingController extends Controller
     {
         $greeting = Greeting::find($greeting_id);
         $greeting->star_approve_status = 1;
-        $greeting->status = 1;
+        // $greeting->status = 1;
         $greeting->save();
         return response()->json([
             'status' => 200,
