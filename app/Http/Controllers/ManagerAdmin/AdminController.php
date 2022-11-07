@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ManagerAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProfitShare;
 use Illuminate\Http\Request;
 use App\Models\SubCategory;
 use App\Models\User;
@@ -14,16 +15,17 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $admins = User::where([['category_id',auth()->user()->category_id],['user_type', 'admin']])->orderBy('id', 'DESC')->get();
+        $admins = User::with('profitShare')->where([['category_id', auth()->user()->category_id], ['user_type', 'admin']])->orderBy('id', 'DESC')->get();
 
         return view('ManagerAdmin.admins.index', compact('admins'));
     }
 
     public function create()
-    {   $data = [
-            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBY('id','desc')->get(),
+    {
+        $data = [
+            'sub_categories' => SubCategory::where('category_id', auth()->user()->category_id)->orderBY('id', 'desc')->get(),
         ];
-        return view('ManagerAdmin.admins.create',$data);
+        return view('ManagerAdmin.admins.create', $data);
     }
 
 
@@ -34,6 +36,7 @@ class AdminController extends Controller
             'sub_category_id' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
+            'profit' => 'required',
             'email' => 'required|unique:users',
             'phone' => 'required|numeric|min:11|unique:users',
             'image' => 'mimes:jpeg,jpg,png,gif|max:2000',
@@ -43,7 +46,7 @@ class AdminController extends Controller
 
 
         $user = new User();
-        $user->fill($request->except(['_token','image','cover']));
+        $user->fill($request->except(['_token', 'image', 'cover']));
         $user->password = Hash::make('12345');
         $user->user_type = 'admin'; // Admin user_type == 'admin'
         $user->otp = rand(100000, 999999);
@@ -71,9 +74,15 @@ class AdminController extends Controller
             Image::make($image->getRealPath())->resize(879, 200)->save($folder_path . $image_new_name);
             $user->cover_photo   = $folder_path . $image_new_name;
         }
+
         try {
             $user->save();
             if ($user) {
+                ProfitShare::create([
+                    'user_id' => $user->id,
+                    'user_type' => $user->user_type,
+                    'profit' => $request->profit,
+                ]);
                 return response()->json([
                     'type' => 'success',
                     'message' => 'Admin Added Successfully'
@@ -99,7 +108,7 @@ class AdminController extends Controller
     {
         $data = [
             'admin' => $admin,
-            'sub_categories' => SubCategory::where('category_id',auth()->user()->category_id)->orderBY('id','desc')->get(),
+            'sub_categories' => SubCategory::where('category_id', auth()->user()->category_id)->orderBY('id', 'desc')->get(),
         ];
         return view('ManagerAdmin.admins.edit', $data);
     }
@@ -118,6 +127,7 @@ class AdminController extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required',
+            'profit' => 'required',
             'phone' => 'required',
         ]);
 
@@ -152,7 +162,11 @@ class AdminController extends Controller
 
         try {
             $user->save();
+
             if ($user) {
+                ProfitShare::where('user_id', $id)->update([
+                    'profit' => $request->profit
+                ]);
                 return response()->json([
                     'success' => true,
                     'message' => 'Admin Updated Successfully'
@@ -180,7 +194,7 @@ class AdminController extends Controller
 
             if ($admin->image != null)
                 File::delete(public_path($admin->image));
-
+            ProfitShare::where('user_id', $admin->id)->delete();
 
             $admin->delete();
 
