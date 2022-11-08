@@ -241,6 +241,22 @@ class MeetupEventController extends Controller
         ]);
     }
 
+    public function star_meetup_list_count(){
+        $allEvents = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0]])->count();
+        $pendingEvents = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '<', 1]])->count();
+        $approvedEvents = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0], ['status', '<', 10]])->count();
+        $completedEvents = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', 9]])->count();
+        $rejectedEvents = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', 11]])->count();
+        return response()->json([
+            'status' => 200,
+            'allEvents' => $allEvents,
+            'pendingEvents' => $pendingEvents,
+            'approvedEvents' => $approvedEvents,
+            'completedEvents' => $completedEvents,
+            'rejectedEvents' => $rejectedEvents,
+        ]);
+    }
+
     public function star_meetup_list($type)
     {
         if ($type == 'all')

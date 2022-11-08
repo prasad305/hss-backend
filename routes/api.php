@@ -760,6 +760,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
 
     // Meetup Event Section
+    Route::get('/star/meetup_event/mobile/count', [MeetupEventController::class, 'star_meetup_list_count']);
     Route::get('/star/meetup_event/{type}', [MeetupEventController::class, 'star_meetup_list']);
     Route::post('/star/add_meetup', [MeetupEventController::class, 'star_add_meetup']);
     Route::get('/star/meetup_event/details/{slug}', [MeetupEventController::class, 'details']);
