@@ -4,6 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auction;
+use App\Models\Audition\Audition;
+use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\AuditionRoundInfo;
+use App\Models\Audition\AuditionRoundMarkTracking;
+use App\Models\Audition\AuditionUploadVideo;
+use App\Models\AuditionCertification;
 use App\Models\Bidding;
 use App\Models\Fan_Group_Join;
 use App\Models\FanGroup;
@@ -254,7 +260,7 @@ class DashboardController extends Controller
             'totalIncomeStatementStarShowcase' => $totalIncomeStatementStarShowcase
         ]);
     }
-    public function adminPost($type)
+    public function dashboardPosts($type)
     {
         if ($type == "Simple-Post") {
             $post = SimplePost::where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();
@@ -276,6 +282,8 @@ class DashboardController extends Controller
             $post = Marketplace::with('marketplace_order')->where('superstar_admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();
         } elseif ($type == "Souvenir") {
             $post = SouvenirCreate::with('souvenirApply')->where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();
+        } elseif ($type == "Audition") {
+            $post = Audition::with('participant')->where('audition_admin_id', auth('sanctum')->user()->id)->latest()->get();
         } else {
             return response()->json([
                 'status' => 403,
@@ -341,6 +349,10 @@ class DashboardController extends Controller
 
             $participant = json_decode($post->my_user_join);
             $another_user = json_decode($post->another_user_join);
+        } elseif ($type == "Audition") {
+            $post = Audition::find($id);
+            $uploadedVideo = AuditionUploadVideo::where('audition_id', $id)->count();
+            $participant = $uploadedVideo ? $uploadedVideo : 0;
         } else {
             return response()->json([
                 'status' => 403,
@@ -395,6 +407,102 @@ class DashboardController extends Controller
         return response()->json([
             'status' => 200,
 
+        ]);
+    }
+
+    public function auditionCount()
+    {
+        $audition = Audition::where('audition_admin_id', auth('sanctum')->user()->id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'totalAudition' => $audition->count(),
+            'pendingAudition' => $audition->where('status', 0)->count(),
+            'liveAudition' => $audition->where('status', 3)->count(),
+            'completedAudition' => $audition->where('status', 4)->count(),
+        ]);
+    }
+    public function auditionRoundInfos($id)
+    {
+        $auditionRoundInfos = AuditionRoundInfo::find($id);
+        $roundParticipant = AuditionUploadVideo::where('round_info_id', $id)->distinct()->count('user_id');
+        $roundParticipantVideos = AuditionUploadVideo::where('round_info_id', $id)->count();
+        $roundAppeal = AuditionUploadVideo::where([['round_info_id', $id], ['type', 'appeal']])->distinct()->count('user_id');
+        $roundCertification = AuditionCertification::where('round_info_id', $id)->distinct()->count('participant_id');
+        $roundWinner = AuditionRoundMarkTracking::where([['round_info_id', $id], ['wining_status', 1]])->distinct()->count('user_id');
+        $roundFailed = AuditionRoundMarkTracking::where([['round_info_id', $id], ['wining_status', 0]])->distinct()->count('user_id');
+        $roundCertification = AuditionCertification::where('round_info_id', $id)->distinct()->count('participant_id');
+
+        return response()->json([
+            'status' => 200,
+            'auditionRoundInfos' => $auditionRoundInfos,
+            'roundParticipant' => $roundParticipant,
+            'roundCertification' => $roundCertification,
+            'roundAppeal' => $roundAppeal,
+            'roundWinner' => $roundWinner,
+            'roundFailed' => $roundFailed,
+            'roundParticipantVideos' => $roundParticipantVideos,
+
+
+        ]);
+    }
+
+    public function auditionIncome()
+    {
+
+        // Income Statement Audition
+
+        $auditionIncome['auditionTotalIncome'] = AuditionParticipant::whereHas('audition', function ($q) {
+            $q->where([['audition_admin_id', auth()->user()->id]]);
+        })->sum('amount');
+        $auditionIncome['auditionDailyIncome'] = AuditionParticipant::whereHas('audition', function ($q) {
+            $q->where([['audition_admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfDay())->where('created_at', '<', Carbon::now()->endOfDay())->sum('amount');
+        $auditionIncome['auditionWeeklyIncome'] = AuditionParticipant::whereHas('audition', function ($q) {
+            $q->where([['audition_admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $auditionIncome['auditionMonthlyIncome'] = AuditionParticipant::whereHas('audition', function ($q) {
+            $q->where([['audition_admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $auditionIncome['auditionYearlyIncome'] = AuditionParticipant::whereHas('audition', function ($q) {
+            $q->where([['audition_admin_id', auth()->user()->id]]);
+        })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+        return response()->json([
+            'status' => 200,
+            'auditionIncome' => $auditionIncome
+        ]);
+    }
+
+    public function juryDashboard()
+    {
+        $audition = Audition::with('participant')->whereHas('assignedJuries', function ($q) {
+            return $q->distinct('audition_id')->where('jury_id', auth('sanctum')->user()->id);
+        })->get();
+        return response()->json([
+            'status' => 200,
+            'audition' => $audition,
+        ]);
+    }
+
+    public function auditionRoundInfosJury($id)
+    {
+        $auditionRoundInfos = AuditionRoundInfo::find($id);
+        $roundParticipant = AuditionUploadVideo::where('round_info_id', $id)->distinct()->count('user_id');
+
+        $groupB_Videos = AuditionUploadVideo::where('round_info_id', $id)->where('group_b_jury_id', auth()->user()->id)->count();
+        $groupC_Videos = AuditionUploadVideo::where('round_info_id', $id)->where('group_c_jury_id', auth()->user()->id)->count();
+        $groupA_Random_Videos = AuditionUploadVideo::where('round_info_id', $id)->where('group_a_ran_jury_id', auth()->user()->id)->count();
+        $groupA_Per_Videos = AuditionUploadVideo::where('round_info_id', $id)->where('group_a_per_jury_id', auth()->user()->id)->count();
+
+        return response()->json([
+            'status' => 200,
+            'auditionRoundInfos' => $auditionRoundInfos,
+            'roundParticipant' => $roundParticipant,
+            'groupB_Videos' => $groupB_Videos,
+            'groupC_Videos' => $groupC_Videos,
+            'groupA_Random_Videos' => $groupA_Random_Videos,
+            'groupA_Per_Videos' => $groupA_Per_Videos,
         ]);
     }
 }

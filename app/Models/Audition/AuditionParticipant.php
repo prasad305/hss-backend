@@ -13,7 +13,7 @@ class AuditionParticipant extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $with = ['videos'];
+    protected $with = ['videos', 'participant'];
 
     public function audition()
     {
