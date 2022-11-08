@@ -150,6 +150,13 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/checkingAuthenticated', function () {
         return response()->json(['message' => 'You are in', 'status' => 200], 200);
     });
+
+    //shurjoy pay
+    Route::post('/initiata-shurjo-payment', [PaymentController::class, 'initiataShurjoPayment']);
+    //shurjoy pay status
+    Route::get('/shurjo-payment-status/{order_id}', [PaymentController::class, 'shurjoPaymentStatus']);
+
+
     //stripe mobile
     Route::post('/stripe-make-mobile-payment', [PaymentController::class, 'stripePaymentMobile']);
 
@@ -165,8 +172,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/stripe-payment-success/{event_id}/{event_type}', [PaymentController::class, 'stripePaymentSuccess']);
 
     //stripe videoFeedReactStripe
-
     Route::post('/stripe-stripe-video-react', [PaymentController::class, 'videoFeedReactStripe']);
+
 
 
     //post search
