@@ -426,13 +426,12 @@ class DashboardController extends Controller
     {
         $auditionRoundInfos = AuditionRoundInfo::find($id);
         $roundParticipant = AuditionUploadVideo::where('round_info_id', $id)->distinct()->count('user_id');
+        $roundParticipantVideos = AuditionUploadVideo::where('round_info_id', $id)->count();
         $roundAppeal = AuditionUploadVideo::where([['round_info_id', $id], ['type', 'appeal']])->distinct()->count('user_id');
         $roundCertification = AuditionCertification::where('round_info_id', $id)->distinct()->count('participant_id');
         $roundWinner = AuditionRoundMarkTracking::where([['round_info_id', $id], ['wining_status', 1]])->distinct()->count('user_id');
         $roundFailed = AuditionRoundMarkTracking::where([['round_info_id', $id], ['wining_status', 0]])->distinct()->count('user_id');
         $roundCertification = AuditionCertification::where('round_info_id', $id)->distinct()->count('participant_id');
-
-
 
         return response()->json([
             'status' => 200,
@@ -442,10 +441,7 @@ class DashboardController extends Controller
             'roundAppeal' => $roundAppeal,
             'roundWinner' => $roundWinner,
             'roundFailed' => $roundFailed,
-
-
-
-
+            'roundParticipantVideos' => $roundParticipantVideos,
 
 
         ]);
@@ -486,6 +482,27 @@ class DashboardController extends Controller
         return response()->json([
             'status' => 200,
             'audition' => $audition,
+        ]);
+    }
+
+    public function auditionRoundInfosJury($id)
+    {
+        $auditionRoundInfos = AuditionRoundInfo::find($id);
+        $roundParticipant = AuditionUploadVideo::where('round_info_id', $id)->distinct()->count('user_id');
+
+        $groupB_Videos = AuditionUploadVideo::where('round_info_id', $id)->where('group_b_jury_id', auth()->user()->id)->count();
+        $groupC_Videos = AuditionUploadVideo::where('round_info_id', $id)->where('group_c_jury_id', auth()->user()->id)->count();
+        $groupA_Random_Videos = AuditionUploadVideo::where('round_info_id', $id)->where('group_a_ran_jury_id', auth()->user()->id)->count();
+        $groupA_Per_Videos = AuditionUploadVideo::where('round_info_id', $id)->where('group_a_per_jury_id', auth()->user()->id)->count();
+
+        return response()->json([
+            'status' => 200,
+            'auditionRoundInfos' => $auditionRoundInfos,
+            'roundParticipant' => $roundParticipant,
+            'groupB_Videos' => $groupB_Videos,
+            'groupC_Videos' => $groupC_Videos,
+            'groupA_Random_Videos' => $groupA_Random_Videos,
+            'groupA_Per_Videos' => $groupA_Per_Videos,
         ]);
     }
 }

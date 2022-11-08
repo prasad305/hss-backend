@@ -957,7 +957,7 @@ Route::middleware(['auth:sanctum', 'isAPIJuryBoard'])->group(function () {
 
     Route::get('/jury-board/dashboard/posts/{type}', [DashboardController::class, 'juryDashboard']);
     Route::get('/jury/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
-    Route::get('/jury/dashboard/audition/roundInfo/{id}', [DashboardController::class, 'auditionRoundInfos']);
+    Route::get('/jury/dashboard/audition/roundInfo/{id}', [DashboardController::class, 'auditionRoundInfosJury']);
     Route::get('/jury/audition/lives', [JuryAuditionController::class, 'live']);
     Route::post('/jury/audition/mark-assessment', [JuryAuditionController::class, 'markAssessment']);
     Route::post('/jury/audition/mark-assessment-as-main-group', [JuryAuditionController::class, 'markAssessmentAsMainGroup']);
