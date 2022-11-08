@@ -27,6 +27,7 @@ use Illuminate\Support\Str;
 use paytm\paytmchecksum\PaytmChecksum;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
+use shurjopayv2\ShurjopayLaravelPackage8\Http\Controllers\ShurjopayController;
 
 class PaymentController extends Controller
 {
@@ -49,7 +50,7 @@ class PaymentController extends Controller
     protected $STRIPE_API_KEY = "sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX";
     protected $STRIPE_PUBLIC_KEY = "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh";
 
-    //---------------------paytm start--------------------------
+    //---------------------paytm start----------
     //get paytm token
     public function paymentNow(Request $request)
     {
@@ -153,7 +154,6 @@ class PaymentController extends Controller
     }
 
     //paytem for mobile start
-
     public function txnTokenGenerate($amount)
     {
 
@@ -264,29 +264,11 @@ class PaymentController extends Controller
         }
     }
 
-    /**
-     * video feed reeact buy
-     */
-    public function videoFeedReactStripe(Request $request)
-    {
-        $user = auth()->user();
-        // return loveReactPaymentMobile($user->id, $request->videoId, $request->reactNum, $request->modelName, $request->TXNAMOUNT);
-        return $this->loveReactPaymentMobile(
-            $user->id,
-            $request->videoId,
-            $request->reactNum,
-            $request->modelName,
-            $request->amount
-        );
-    }
-
-
 
     //paytem moble end
-    //---------------------paytm end--------------------------
+    //---------------------paytm end-------------------
 
-
-    //-------------------stripe start------------------------
+    //-------------------stripe start------------------
     public function stripePaymentMake(Request $request)
     {
 
@@ -368,9 +350,113 @@ class PaymentController extends Controller
         ]);
     }
 
+    /**
+     * video feed reeact buy
+     */
+    public function videoFeedReactStripe(Request $request)
+    {
+        $user = auth()->user();
+        // return loveReactPaymentMobile($user->id, $request->videoId, $request->reactNum, $request->modelName, $request->TXNAMOUNT);
+        return $this->loveReactPaymentMobile(
+            $user->id,
+            $request->videoId,
+            $request->reactNum,
+            $request->modelName,
+            $request->amount
+        );
+    }
+    //--------------------stripe end------------------------
 
 
-    //--------------------stripe end---------------------------
+    //--------------------shurjo pay------------------------
+    public function initiataShurjoPayment(Request $request)
+    {
+        $user = auth()->user();
+        $shurjopay_service = new ShurjopayController();
+
+
+        $info = array(
+            'currency' => "BDT",
+            'amount' => $request->amount,
+            'order_id' => Str::orderedUuid(),
+            'discsount_amount' => 0,
+            'disc_percent' => 0,
+            'client_ip' => "192.168.0.1",
+            'customer_name' => "dad",
+            'customer_phone' => "04545674654",
+            'email' => "dadad@gaml.com",
+            'customer_address' => "dhaka",
+            'customer_city' => "dhaka",
+            'customer_state' => "dhaka",
+            'customer_postcode' => "1230",
+            'customer_country' => "bangladesh",
+            'value1' =>  $user->id,
+            'value2' => $request->event_type,
+            'value3' => $request->event_id,
+            'value4' => 0,
+        );
+
+
+        // return 'hello';
+        return $shurjopay_service->checkout($info);
+    }
+
+
+
+    public function successShurjoPayment(Request $request)
+    {
+
+        $shurjopay_service = new ShurjopayController();
+
+        $data = json_decode($shurjopay_service->verify($request->order_id));
+        $paymentData = $data[0];
+
+        Transaction::create([
+            'user_id' => $paymentData->value1,
+            'order_id' => $paymentData->order_id,
+            'event' => $paymentData->value2,
+            'event_id' => $paymentData->value3,
+            'txn_id' => $paymentData->order_id,
+            'txn_amount' => $paymentData->payable_amount,
+            'amount' => $paymentData->payable_amount,
+            'currency' => "BDT",
+            'bank_name' => $paymentData->method,
+            'resp_msg' => "shurjo-Payment",
+            'status' => $paymentData->transaction_status,
+
+        ]);
+
+
+        resgistationSuccessUpdate(
+            $paymentData->value1,
+            $paymentData->value2,
+            $paymentData->value3,
+            "shurjo-Payment",
+            $paymentData->amount,
+            $paymentData->value4
+        );
+
+        return view("Others.Payment.shurjoPaymentSuccess", compact('paymentData'));
+
+        return $paymentData;
+    }
+
+    public function shurjoPaymentStatus($order_id)
+    {
+
+        $shurjopay_service = new ShurjopayController();
+
+        $data = json_decode($shurjopay_service->verify($order_id));
+        $paymentData = $data[0];
+
+
+
+        return $paymentData;
+    }
+
+
+
+
     // Auditions
     public function AuditionRegUpdate($user_id, $event_id, $method)
     {
