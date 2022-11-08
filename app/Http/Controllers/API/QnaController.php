@@ -215,6 +215,30 @@ class QnaController extends Controller
             ]);
         }
     }
+    public function allInOneMobileQna(){
+        
+        try{
+            $rejected = QnA::where([['admin_id', auth('sanctum')->user()->id], ['star_approval', 2]])->count();
+            $completed = QnA::where([['star_id', auth('sanctum')->user()->id], ['status', 9]])->count();
+            $pending = QnA::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 0]])->count();
+            $live = QnA::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 1]])->count();
+            $all = QnA::where([['star_id', auth('sanctum')->user()->id]])->count();
+        }
+        catch (\Throwable $th) {
+            return $th;
+        }
+
+
+        return response()->json([
+            'status' => 200,
+            'all' => $all,
+            'rejected' => $rejected,
+            'completed' => $completed,
+            'pending' => $pending,
+            'live' => $live,
+            'message' => 'Success',
+        ]);
+    }
     public function add_qna(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -454,6 +478,59 @@ class QnaController extends Controller
 
 
     // Star Section
+
+    public function star_add_qna_mobile(Request $request){
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|unique:live_chats,title',
+            'event_date' => 'required',
+            'instruction' => 'required|min:5',
+            'description' => 'required|min:5',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'registration_start_date' => 'required',
+            'registration_end_date' => 'required',
+            'fee' => 'required',
+            'min_time' => 'required|min:1',
+            'max_time' => 'required|min:1',
+            'time_interval' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+
+            $qna = new QnA();
+            $qna->title = $request->input('title');
+            $qna->slug = Str::slug($request->input('title'));
+            $qna->star_id = auth('sanctum')->user()->id;
+            $qna->category_id =  auth()->user()->category_id;
+            $qna->sub_category_id =  auth()->user()->sub_category_id;
+            $qna->admin_id = auth()->user()->parent_user;
+            $qna->created_by_id = auth('sanctum')->user()->id;
+            $qna->description = $request->input('description');
+            $qna->instruction = $request->input('instruction');
+            $qna->event_date = Carbon::parse($request->input('event_date'));
+            $qna->start_time = Carbon::parse($request->input('start_time'));
+            $qna->end_time = Carbon::parse($request->input('end_time'));
+            $qna->registration_start_date = Carbon::parse($request->input('registration_start_date'));
+            $qna->registration_end_date = Carbon::parse($request->input('registration_end_date'));
+            $qna->fee = $request->input('fee');
+            $qna->star_approval = 1;
+            $qna->min_time = $request->input('min_time');
+            $qna->max_time = $request->input('max_time');
+            $qna->time_interval = $request->input('time_interval');
+
+            $qna->save();
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'QnA Successfully Added ',
+            ]);
+        }
+    }
 
     public function star_add_qna(Request $request)
     {

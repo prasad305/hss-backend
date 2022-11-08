@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class LearningSessionController extends Controller
 {
@@ -602,7 +603,138 @@ class LearningSessionController extends Controller
     }
 
 
+
+    // For Mobile app learning session add
+
+    public function star_add_mobile(Request $request){
+        
+        if ($request->banner_or_video == 'Banner') {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|unique:learning_sessions',
+                'description' => 'required|min:5',
+                'instruction' => 'required|min:5',
+                'registration_start_date' => 'required',
+                'registration_end_date' => 'required',
+                'event_date' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+                'assignment' => 'required',
+                'fee' => 'required',
+                'participant_number' => 'required',
+            ], [
+                'title.unique' => 'This title already exist',
+                'star_id.required' => 'Please Select One Star',
+            ]);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|unique:learning_sessions',
+                'description' => 'required|min:5',
+                'instruction' => 'required|min:5',
+                'registration_start_date' => 'required',
+                'registration_end_date' => 'required',
+                'event_date' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+                'assignment' => 'required',
+                'fee' => 'required',
+                'participant_number' => 'required',
+            ], [
+                'title.unique' => 'This title already exist',
+                'star_id.required' => 'Please Select One Star',
+            ]);
+        }
+
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->errors(),
+            ]);
+        } else {
+            try {
+                $learningSession = new LearningSession();
+                $learningSession->title = $request->title;
+                $learningSession->slug = Str::slug($request->title);
+                $learningSession->category_id = auth('sanctum')->user()->category_id;
+                $learningSession->sub_category_id = auth('sanctum')->user()->sub_category_id;
+                $learningSession->created_by_id = auth('sanctum')->user()->id;
+                $learningSession->admin_id = auth('sanctum')->user()->parent_user;
+                $learningSession->star_id = auth('sanctum')->user()->id;
+                $learningSession->description = $request->description;
+                $learningSession->instruction = $request->instruction;
+
+                $learningSession->registration_start_date = Carbon::parse($request->registration_start_date);
+                $learningSession->registration_end_date = Carbon::parse($request->registration_end_date);
+                $learningSession->event_date = Carbon::parse($request->end_time);
+                $learningSession->start_time = Carbon::parse($request->start_time);
+                $learningSession->end_time = Carbon::parse($request->end_time);
+
+                $learningSession->assignment = $request->assignment;
+                $learningSession->fee = $request->fee;
+                $learningSession->participant_number = $request->participant_number;
+                // $learningSession->room_id = $request->input('room_id');
+                $learningSession->status = 1;
+                
+            } catch (\Throwable $th) {
+                return $th;
+            }
+            if($request->banner_or_video == 'Banner')
+            {
+                try{
+                    $originalExtension = str_ireplace("image/", "", $request->img['type']);
+
+                    $folder_path       = 'uploads/images/learning_session/';
+
+                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                    $decodedBase64 = $request->img['data'];
+                
+                    Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                    $location = $folder_path . $image_new_name;
+                    $learningSession->banner = $location;
+                    $learningSession->save();
+                }
+
+                catch (\Exception $exception) {
+                    return response()->json([
+                        "error" => $exception->getMessage(),
+                        "status" => "0",
+                    ]);
+                }
+            }
+
+            else
+            {
+                try{
+                    $originalExtension = str_ireplace("video/", "", $request->video['type']);
+
+                    $folder_path       = 'uploads/videos/learning_session/';
+
+                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                    $decodedBase64 = $request->video['data'];
+                
+                    Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                    $location = $folder_path . $image_new_name;
+                    $learningSession->video = $location;
+                    $learningSession->save();
+                }
+
+                catch (\Exception $exception) {
+                    return response()->json([
+                        "error" => $exception->getMessage(),
+                        "status" => "0",
+                    ]);
+                }
+            }
+            return response()->json([
+                'status' => 200,
+                'message' => 'Learning Session Added',
+            ]);
+        }
+    }
+
     /// For Super Star ///
+
 
     public function star_add(Request $request)
     {

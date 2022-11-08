@@ -721,10 +721,14 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/learning_session/result', [LearningSessionController::class, 'starShowLearninSessionResult']);
     Route::get('/star/learning_session/showResult/{eventId}', [LearningSessionController::class, 'starShowLearninSessionResultData']);
 
+    //Learning Session For Mobile
+    Route::post('/star/mobile/learning_session/create', [LearningSessionController::class, 'star_add_mobile']);
+
 
 
     // Question and Answers
-
+    Route::get('/star/qna/allInOneMobile', [QnaController::class, 'allInOneMobileQna']);
+    Route::post('/star/qna/add_qna_mobile', [QnaController::class, 'star_add_qna_mobile']);
     Route::post('/star/add_qna', [QnaController::class, 'star_add_qna']);
     Route::get('/star/pending/qna', [QnaController::class, 'star_pendingQna']);
     Route::get('/star/qna/count', [QnaController::class, 'star_count']);
