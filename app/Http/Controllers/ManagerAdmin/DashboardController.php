@@ -65,9 +65,10 @@ class DashboardController extends Controller
         return view('ManagerAdmin.profile.settings', compact('user'));
     }
 
-    public function updateProfile(Request $request){
+    public function updateProfile(Request $request)
+    {
         $userId = auth('sanctum')->user()->id;
-        $users =User::find($userId);
+        $users = User::find($userId);
 
         if ($request->hasFile('profile')) {
             if ($users->image != null)
@@ -82,17 +83,18 @@ class DashboardController extends Controller
             $users->save();
         }
 
-        if ($users->first_name){
+        if ($users->first_name) {
             $users->first_name = $request->first_name;
             $users->last_name = $request->last_name;
             $users->save();
             return redirect()->back()->with('success', 'Profile update Successfully');
-        }else{
+        } else {
             return redirect()->back()->with('success', 'Profile Not update');
         }
     }
 
-    public function changePassword(Request $request){
+    public function changePassword(Request $request)
+    {
 
         $request->validate([
             'oldPassword' => 'required',
@@ -101,18 +103,18 @@ class DashboardController extends Controller
         ]);
 
         $userId = auth('sanctum')->user()->id;
-        $users =User::find($userId);
-        
+        $users = User::find($userId);
+
         // oldPassword);
         // formData.append("newPassword", newPassword);
 
-        if (\Hash::check($request->oldPassword , $users->password )){
+        if (Hash::check($request->oldPassword, $users->password)) {
             $users->password = bcrypt($request->password);
             $users->save();
             Auth::logout();
 
             return redirect()->back()->with('success', 'Changed Successfully');
-        }else{
+        } else {
             return redirect()->back()->with('success', 'Not Changed');
         }
     }
