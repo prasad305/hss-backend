@@ -555,7 +555,7 @@ class QnaController extends Controller
                 try{
                     $originalExtension = str_ireplace("video/", "", $request->video['type']);
 
-                    $folder_path       = 'uploads/videos/learning_session/';
+                    $folder_path       = 'uploads/videos/qna/';
 
                     $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                     $decodedBase64 = $request->video['data'];
