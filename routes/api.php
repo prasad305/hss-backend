@@ -634,6 +634,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     });
     Route::get('star/dashboard/posts/{type}', [DashboardController::class, 'adminPost']);
     Route::get('star/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
+    Route::get('star/dashboard/mobile', [DashboardController::class, 'starDashboardCount']);
     Route::get('star/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('/livechat', [LiveChatController::class, 'livechat']);
     Route::get('/sinlgeLiveChat/{id}', [LiveChatController::class, 'sinlgeLiveChat']);

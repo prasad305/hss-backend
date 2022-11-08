@@ -254,6 +254,26 @@ class DashboardController extends Controller
             'totalIncomeStatementStarShowcase' => $totalIncomeStatementStarShowcase
         ]);
     }
+    public function starDashboardCount(){
+        $post = SimplePost::where('star_id', auth('sanctum')->user()->id)->count();
+        $liveChat = LiveChat::where('star_id', auth('sanctum')->user()->id)->count();
+        $qna = QnA::where('star_id', auth('sanctum')->user()->id)->count();
+        $meetupEvent = MeetupEvent::where('star_id', auth('sanctum')->user()->id)->count();
+        $learningSession = LearningSession::where('star_id', auth('sanctum')->user()->id)->count();
+        $greeting = Greeting::where('star_id', auth('sanctum')->user()->id)->count();
+        $fanGroup = FanGroup::where('my_star', auth('sanctum')->user()->id)->orWhere('another_star', auth('sanctum')->user()->id)->count();
+
+        return response()->json([
+            'status' => 200,
+            'post' => $post,
+            'liveChat' => $liveChat,
+            'qna' => $qna,
+            'meetupEvent' => $meetupEvent,
+            'learningSession' => $learningSession,
+            'greeting' => $greeting,
+            'fanGroup' => $fanGroup,
+        ]);
+    }
     public function adminPost($type)
     {
         if ($type == "Simple-Post") {
