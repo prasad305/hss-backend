@@ -522,7 +522,63 @@ class QnaController extends Controller
             $qna->max_time = $request->input('max_time');
             $qna->time_interval = $request->input('time_interval');
 
+            // Upload Banner started 
+            
+            if($request->banner['type']){
+                try{
+                    $originalExtension = str_ireplace("image/", "", $request->banner['type']);
+    
+                    $folder_path       = 'uploads/images/qna/';
+    
+                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                    $decodedBase64 = $request->banner['data'];
+                
+                    Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                    $location = $folder_path . $image_new_name;
+                    $qna->banner = $location;
+                }
+    
+                catch (\Exception $exception) {
+                    return response()->json([
+                        "error" => $exception->getMessage(),
+                        "status" => "from image",
+                    ]);
+                }
+            }
+            
+            // Upload Banner ended
+
+
+            // Upload Video started 
+
+            if($request->video['type']){
+                try{
+                    $originalExtension = str_ireplace("video/", "", $request->video['type']);
+
+                    $folder_path       = 'uploads/videos/learning_session/';
+
+                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                    $decodedBase64 = $request->video['data'];
+                    $videoPath = $folder_path . $image_new_name;
+                    file_put_contents($videoPath, base64_decode($decodedBase64, true));
+                    
+                    $qna->video = $videoPath;
+                }
+    
+                catch (\Exception $exception) {
+                    return response()->json([
+                        "error" => $exception->getMessage(),
+                        "status" => "from video",
+                    ]);
+                }
+            }
+            
+            // Upload Video ended
+            
             $qna->save();
+
+
+            
 
 
             return response()->json([

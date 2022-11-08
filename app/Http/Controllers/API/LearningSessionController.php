@@ -712,9 +712,10 @@ class LearningSessionController extends Controller
 
                     $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                     $decodedBase64 = $request->video['data'];
-                
-                    Image::make($decodedBase64)->save($folder_path . $image_new_name);
                     $location = $folder_path . $image_new_name;
+                
+                    file_put_contents($location, base64_decode($decodedBase64, true));
+                    
                     $learningSession->video = $location;
                     $learningSession->save();
                 }
