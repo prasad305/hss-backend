@@ -1637,7 +1637,7 @@ class UserController extends Controller
     }
     public function maxBid($id)
     {
-        $maxBid = Bidding::orderBy('amount', 'DESC')->where('auction_id', $id)->where('user_id', auth()->user()->id)->first();
+        $maxBid = Bidding::orderBy('amount', 'DESC')->where([['auction_id', $id], ['notify_status', 1]])->where('user_id', auth()->user()->id)->first();
         return response()->json([
             'status' => 200,
             'maxBid' => $maxBid,

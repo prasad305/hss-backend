@@ -312,7 +312,7 @@ class PaymentController extends Controller
 
             $output = [
                 'clientSecret' => $paymentIntent->client_secret,
-                'public_key' => $this->STRIPE_API_KEY
+                'public_key' => $this->STRIPE_PUBLIC_KEY
             ];
 
             return response()->json($output);
@@ -666,15 +666,15 @@ class PaymentController extends Controller
     {
 
         $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
-       
-            AuditionCertification::create([
-                'participant_id' =>  $user_id,
-                'audition_id' =>  $auditionRoundInfo->audition_id,
-                'round_info_id' =>  $round_info_id,
-                'fee' =>  $fee,
-                'payment_status' =>  1,
-                'payment_method' => $method
-            ]);
+
+        AuditionCertification::create([
+            'participant_id' =>  $user_id,
+            'audition_id' =>  $auditionRoundInfo->audition_id,
+            'round_info_id' =>  $round_info_id,
+            'fee' =>  $fee,
+            'payment_status' =>  1,
+            'payment_method' => $method
+        ]);
     }
 
     //   <================================Love React Payment end ==================================>

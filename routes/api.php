@@ -605,9 +605,11 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/live/allProduct', [AuctionController::class, 'allLiveProduct']);
     Route::get('/admin/liveBidding/auction/{auction_id}', [AuctionController::class, 'liveBidding']);
     Route::get('/admin/topBidder/auction/{auction_id}', [AuctionController::class, 'topBidder']);
-    Route::get('/admin/topBidder/auction/notify/{id}', [AuctionController::class, 'notify_bidder']);
+    Route::post('/admin/topBidder/auction/notify', [AuctionController::class, 'notify_bidder']);
     Route::get('/admin/allBidderList/auction/{id}', [AuctionController::class, 'allBidderList']);
     Route::post('/admin/winner/auction/{id}', [AuctionController::class, 'makeWinner']);
+    Route::post('/admin/topBidder/auction/reject/{id}', [AuctionController::class, 'rejectBidder']);
+    Route::get('/admin/bidderInfo/auction/{id}', [AuctionController::class, 'bidderInfo']);
 
     // audition routes
 

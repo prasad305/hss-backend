@@ -27,7 +27,7 @@ class CreateBiddingsTable extends Migration
 
 
             $table->boolean('payment_status')->nullable();
-            $table->string('payment_date')->nullable();
+            $table->timestamp('payment_last_date')->nullable();
             $table->string('card_holder_name')->nullable();
             $table->string('account_no')->nullable();
 
