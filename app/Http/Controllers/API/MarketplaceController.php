@@ -21,6 +21,20 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class MarketplaceController extends Controller
 {
+    public function MarketplaceProductMobile(){
+
+        $pending = Marketplace::orderBy('id', 'DESC')->where('status', 0)
+            ->where('superstar_id', Auth::user()->id)
+            ->get();
+        $approved = Marketplace::orderBy('id', 'DESC')->where('status', 1)
+        ->where('superstar_id', Auth::user()->id)
+        ->get();
+        return response()->json([
+            'status' => 200,
+            'pending' => $pending,
+            'approved' => $approved,
+        ]);
+    }
     // Marketplace Homepage
 
     public function marketplaceAll()
@@ -520,6 +534,91 @@ class MarketplaceController extends Controller
 
 
     // SuperStar For Marketplace
+
+    //mobile
+    public function starMarketplaceStoreMobile(Request $request)
+    {
+        // return $request->all();
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'description' => 'required',
+            'keywords' => 'required',
+            'terms_conditions' => 'required',
+            'unit_price' => 'required',
+            'total_items' => 'required',
+            'tax' => 'required',
+            'delivery_charge' => 'required',
+
+        ], [
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'keywords.required' => 'Keywords Field Is Required',
+            'image.required' => "Image Field Is Required",
+            'unit_price.required' => "Unit Price Field Is Required",
+            'total_items.required' => "Total Item Field Is Required",
+            'tax.required' => "Tax Field Is Required",
+            'delivery_charge.required' => "Delivery Charge Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
+        $id = Auth::user()->id;
+        $parent_id = User::find($id);
+
+        $marketplace = new Marketplace();
+
+        $marketplace->title = $request->title;
+        $marketplace->slug = Str::slug($request->input('title') . '-' . rand(9999, 99999));
+        $marketplace->description = $request->description;
+        $marketplace->terms_conditions = $request->terms_conditions;
+        $marketplace->delivery_charge = $request->delivery_charge;
+        $marketplace->tax = $request->tax;
+        $marketplace->unit_price = $request->unit_price;
+        $marketplace->total_items = $request->total_items;
+        $marketplace->keywords = $request->keywords;
+        $marketplace->status = 0;
+        $marketplace->post_status = 1;
+        $marketplace->total_selling = 0;
+        $marketplace->superstar_admin_id = $parent_id->parent_user;
+        $marketplace->superstar_id = $id;
+        $marketplace->created_by_id = $id;
+        $marketplace->category_id = Auth::user()->category_id;
+        $marketplace->subcategory_id = Auth::user()->sub_category_id;
+
+
+        if($request->image['type']){
+            try{
+                $originalExtension = str_ireplace("image/", "", $request->image['type']);
+
+                $folder_path       = 'uploads/images/marketplace/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->image['data'];
+            
+                Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                $location = $folder_path . $image_new_name;
+                $marketplace->image = $location;
+                $marketplace->save();
+            }
+
+            catch (\Exception $exception) {
+                return response()->json([
+                    "error" => $exception->getMessage(),
+                    "status" => "from image",
+                ]);
+            }
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Marketplace Added Successfully',
+        ]);
+    }
 
     public function starMarketplaceStore(Request $request)
     {

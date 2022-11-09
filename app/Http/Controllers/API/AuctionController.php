@@ -589,6 +589,22 @@ class AuctionController extends Controller
         ]);
     }
 
+    public function auctionHomeMobile()
+    {
+        $pendingProducts = Auction::orderBy('id', 'DESC')->where('star_approval', 0)->where('star_id', auth()->user()->id)->get();
+        $unsoldProducts = Auction::orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->where('star_id', auth()->user()->id)->get();
+        $soldProducts = Auction::where('product_status', 1)->where('star_id', auth()->user()->id)->get();
+        $liveProducts = Auction::with('bidding')->orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->where('star_id', auth()->user()->id)->get();
+
+        return response()->json([
+            'status' => '200',
+            'liveProducts' => $liveProducts,
+            'pendingProducts' => $pendingProducts,
+            'soldProducts' => $soldProducts,
+            'unsoldProducts' => $unsoldProducts
+        ]);
+    }
+
     public function star_totalProduct()
     {
 

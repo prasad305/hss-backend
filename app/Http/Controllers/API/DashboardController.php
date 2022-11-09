@@ -254,6 +254,17 @@ class DashboardController extends Controller
             'totalIncomeStatementStarShowcase' => $totalIncomeStatementStarShowcase
         ]);
     }
+    public function starShowCaseProductsCount(){
+        $auction = Auction::where('star_id', auth('sanctum')->user()->id)->count();
+        $marketplace = Marketplace::where('superstar_id', auth('sanctum')->user()->id)->count();
+        $souvenirCreate = SouvenirCreate::where('star_id', auth('sanctum')->user()->id)->count();
+        return response()->json([
+            'status' => 200,
+            'auction' => $auction,
+            'marketplace' => $marketplace,
+            'souvenirCreate' => $souvenirCreate,
+        ]);
+    }
     public function starDashboardCount(){
         $post = SimplePost::where('star_id', auth('sanctum')->user()->id)->count();
         $liveChat = LiveChat::where('star_id', auth('sanctum')->user()->id)->count();

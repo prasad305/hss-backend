@@ -667,6 +667,11 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/fan/group/analytics/{slug}', [FanGroupController::class, 'showFanGroupAnalytics']);
     Route::post('/star/fan/group/deline/nofification/{postId}', [FanGroupController::class, 'declineFanPostNotification']);
 
+    // StarShowCase API for Mobile count
+    Route::get('/star/showcase/count/mobile', [DashboardController::class, 'starShowCaseProductsCount']);
+    Route::get('/star/showcase/MarketplaceProductMobile/mobile', [MarketplaceController::class, 'MarketplaceProductMobile']);
+    Route::post('star/marketplace/store/mobile', [MarketplaceController::class, 'starMarketplaceStoreMobile']);
+
     // Marketplace Section
     Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);
     Route::get('/star/marketplace/product-list/approved', [MarketplaceController::class, 'allStarProductList']);
@@ -791,6 +796,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     //<======================== Auction Route ========================>
 
+    Route::get('/star/add/auction/product/mobile', [AuctionController::class, 'auctionHomeMobile']);
     Route::post('/star/add/auction/product', [AuctionController::class, 'star_addProduct']);
     Route::get('/star/editOrConfirm/auction/editOrConfirm/{id}', [AuctionController::class, 'star_editOrConfirm']);
     Route::get('/star/edit/auction/{id}', [AuctionController::class, 'star_editProduct']);
