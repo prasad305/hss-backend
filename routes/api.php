@@ -671,6 +671,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/showcase/count/mobile', [DashboardController::class, 'starShowCaseProductsCount']);
     Route::get('/star/showcase/MarketplaceProductMobile/mobile', [MarketplaceController::class, 'MarketplaceProductMobile']);
     Route::post('star/marketplace/store/mobile', [MarketplaceController::class, 'starMarketplaceStoreMobile']);
+    Route::get('/star/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
+    Route::get('/star/liveBidding/auction/{auction_id}', [AuctionController::class, 'liveBidding']);
 
     // Marketplace Section
     Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);
