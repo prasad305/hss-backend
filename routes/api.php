@@ -781,6 +781,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/live_chat/count', [LiveChatController::class, 'count2']);
 
     // star greeting related list
+    Route::post('/star/add_greetings/mobile', [StarGreetingController::class, 'add_greetings_mobile']);
     Route::post('/star/add_greetings', [StarGreetingController::class, 'add_greetings']);
     Route::post('/star/edit_greetings', [StarGreetingController::class, 'edit_greetings']);
     Route::get('/star/approve_greeting/{greeting_id}', [StarGreetingController::class, 'approve_greeting']);
