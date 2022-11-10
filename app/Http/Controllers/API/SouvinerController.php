@@ -154,6 +154,105 @@ class SouvinerController extends Controller
             ]);
         }
     }
+    public function souvinerStarStoreMobile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'description' => 'required',
+            'instruction' => 'required',
+            'price' => 'required',
+            'delivery_charge' => 'required',
+            'tax' => 'required',
+            'banner' => 'required',
+            'video' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $id = auth('sanctum')->user()->id;
+            $user = User::find($id);
+
+            $souvenir = new SouvenirCreate();
+            $souvenir->title = $request->title;
+            $souvenir->slug = Str::slug($request->input('title'));
+            $souvenir->description = $request->description;
+            $souvenir->instruction = $request->instruction;
+            $souvenir->price = $request->price;
+            $souvenir->delivery_charge = $request->delivery_charge;
+            $souvenir->tax = $request->tax;
+
+            $souvenir->category_id = $user->category_id;
+            $souvenir->sub_category_id = $user->sub_category_id;
+
+            $souvenir->admin_id = $user->parent_user;
+            $souvenir->star_id = $id;
+
+            // Upload Banner started 
+            
+            if($request->banner['type']){
+                try{
+                    $originalExtension = str_ireplace("image/", "", $request->banner['type']);
+    
+                    $folder_path       = 'uploads/images/souviner/apply/';
+    
+                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                    $decodedBase64 = $request->banner['data'];
+                
+                    Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                    $location = $folder_path . $image_new_name;
+                    $souvenir->banner = $location;
+                }
+    
+                catch (\Exception $exception) {
+                    return response()->json([
+                        "error" => $exception->getMessage(),
+                        "status" => "from image",
+                    ]);
+                }
+            }
+            
+            // Upload Banner ended
+
+
+            // Upload Video started 
+
+            if($request->video['type']){
+                try{
+                    $originalExtension = str_ireplace("video/", "", $request->video['type']);
+
+                    $folder_path       = 'uploads/videos/souviner/';
+
+                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                    $decodedBase64 = $request->video['data'];
+                    $videoPath = $folder_path . $image_new_name;
+                    file_put_contents($videoPath, base64_decode($decodedBase64, true));
+                    
+                    $souvenir->video = $videoPath;
+                }
+    
+                catch (\Exception $exception) {
+                    return response()->json([
+                        "error" => $exception->getMessage(),
+                        "status" => "from video",
+                    ]);
+                }
+            }
+            
+            // Upload Video ended
+
+            $souvenir->approval_status = 1;
+
+            $souvenir->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Souvenir Added Successfully',
+            ]);
+        }
+    }
 
     public function souvinerCheck()
     {

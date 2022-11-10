@@ -697,6 +697,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/decline_post/{id}', [SimplePostController::class, 'decline_post']);
 
     // Souviner Section
+    Route::post('/star/souviner/store/mobile', [SouvinerController::class, 'souvinerStarStoreMobile']);
     Route::post('/star/souviner/store', [SouvinerController::class, 'souvinerStarStore']);
     Route::get('/star/souviner/check', [SouvinerController::class, 'souvinerStarCheck']);
     Route::get('/star/souviner/edit/{id}', [SouvinerController::class, 'souvinerStarEdit']);
@@ -799,6 +800,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     //<======================== Auction Route ========================>
 
     Route::get('/star/add/auction/product/mobile', [AuctionController::class, 'auctionHomeMobile']);
+    Route::post('/star/add/auction/mobile', [AuctionController::class, 'star_addProduct_mobile']);
     Route::post('/star/add/auction/product', [AuctionController::class, 'star_addProduct']);
     Route::get('/star/editOrConfirm/auction/editOrConfirm/{id}', [AuctionController::class, 'star_editOrConfirm']);
     Route::get('/star/edit/auction/{id}', [AuctionController::class, 'star_editProduct']);
