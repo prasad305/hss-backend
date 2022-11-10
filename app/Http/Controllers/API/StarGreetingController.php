@@ -211,6 +211,22 @@ class StarGreetingController extends Controller
     //         'list' => $register_list
     //     ]);
     // }
+    
+    public function allGreetingInfo(){
+        $greeting = auth('sanctum')->user()->asStarGreeting;
+        $forwarded_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 3]])->get();
+
+        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 1]])->get();
+
+        $completed_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 2]])->get();
+
+        return response()->json([
+            'status' => 200,
+            'forwarded_list' => $forwarded_list,
+            'register_list' => $register_list,
+            'completed_list' => $completed_list,
+        ]);
+    }
 
     public function registerListWithPaymentComplete()
     {

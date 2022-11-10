@@ -791,6 +791,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     // Route::get('/star/greetings_reg_list/{greetings_id}', [StarGreetingController::class, 'greetingsRegisterListByGreetingsId']);
     // Route::get('/star/greetings_reg_payment_list', [StarGreetingController::class, 'greetingsRegisterWithPaymentList']);
     // Route::get('/star/greetings', [StarGreetingController::class, 'view_star_greeting']);
+    Route::get('/star/allGreetingInfo/mobile', [StarGreetingController::class, 'allGreetingInfo']);
     Route::get('/star/greetings_register_list_with_payment_complete', [StarGreetingController::class, 'registerListWithPaymentComplete']);
     Route::get('/star/greetings_video_uploaded_list', [StarGreetingController::class, 'greetingsVideoUploadedList']);
     Route::get('/star/greetings_forwarded_to_user_list', [StarGreetingController::class, 'greetingsForwardedToUserList']);
