@@ -63,34 +63,34 @@ class AuctionController extends Controller
     }
 
     public function termsUpdate(Request $request, $id)
-    { 
-            $request->validate([
-                'acquired_instruction' => 'required',
+    {
+        $request->validate([
+            'acquired_instruction' => 'required',
 
-            ], [
-                'acquired_instruction.required' => 'Instruction Field Is Required',
+        ], [
+            'acquired_instruction.required' => 'Instruction Field Is Required',
 
-            ]);
+        ]);
 
-            try {
-                $instruction = AuctionTerms::findOrFail($id)->Update(
-                    [
-                        'acquired_instruction' => $request->acquired_instruction
-                    ]
+        try {
+            $instruction = AuctionTerms::findOrFail($id)->Update(
+                [
+                    'acquired_instruction' => $request->acquired_instruction
+                ]
 
-                );
-                if ($instruction) {
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Instruction Updated Successfully'
-                    ]);
-                }
-            } catch (\Exception $exception) {
+            );
+            if ($instruction) {
                 return response()->json([
-                    'type' => 'error',
-                    'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+                    'success' => true,
+                    'message' => 'Instruction Updated Successfully'
                 ]);
             }
+        } catch (\Exception $exception) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+            ]);
+        }
     }
     public function termsDestroy($id)
     {
@@ -116,7 +116,7 @@ class AuctionController extends Controller
     public function auctionList($categoryId)
     {
         $postList = Auction::where('category_id', $categoryId)->latest()->get();
-        return view('SuperAdmin.Auction.PostList', compact('postList'));
+        return view('SuperAdmin.Auction.postList', compact('postList'));
     }
     public function auctionDetails($postId)
     {

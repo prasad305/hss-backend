@@ -246,7 +246,7 @@ class LearningSessionController extends Controller
 
     public function manager_all()
     {
-        $learningSessions = LearningSession::where([['status', '>', 0], ['category_id', auth()->user()->category_id]])->orderBy('updated_at', 'desc')->get();
+        $learningSessions = LearningSession::where([['status', '>', 0], ['status', '!=', 11], ['category_id', auth()->user()->category_id]])->orderBy('updated_at', 'desc')->get();
 
         return view('ManagerAdmin.LearningSession.index', compact('learningSessions'));
     }
