@@ -294,7 +294,7 @@ class AuctionController extends Controller
     public function topBidder($auction_id)
     {
         $topBidder = Bidding::with('user')->orderBy('amount', 'DESC')->where('auction_id', $auction_id)->where('notify_status', 1)->get();
-        $bidding = Bidding::with('user')->orderBy('amount', 'DESC')->where('auction_id', $auction_id)->take(1)->get();
+        $bidding = Bidding::with('user')->orderBy('amount', 'DESC')->where([['auction_id', $auction_id], ['applied_status', '!=', 2]])->take(1)->get();
         return response()->json([
             'status' => 200,
             'bidding' => $bidding,
@@ -319,10 +319,11 @@ class AuctionController extends Controller
     }
 
 
-    public function notify_bidder($id)
+    public function notify_bidder(Request $request)
     {
-        $bidding = Bidding::find($id);
+        $bidding = Bidding::find($request->bidding_id);
         $bidding->notify_status = 1;
+        $bidding->payment_last_date = Carbon::parse($request->payment_last_date);
         $bidding->update();
 
         //Create New Notification
@@ -669,6 +670,28 @@ class AuctionController extends Controller
         return response()->json([
             'status' => 200,
             'winner' => $winner,
+        ]);
+    }
+    public function rejectBidder($id)
+    {
+
+        $rejected = Bidding::where('user_id', $id)->update([
+            'applied_status' => 2,
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'rejected' => $rejected,
+        ]);
+    }
+    public function bidderInfo($id)
+    {
+
+        $bidderInfo = Bidding::find($id);
+
+        return response()->json([
+            'status' => 200,
+            'bidderInfo' => $bidderInfo,
         ]);
     }
 }

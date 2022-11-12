@@ -252,7 +252,7 @@ class AuthController extends Controller
 
     public function activity_count()
     {
-        $activity = Activity::where('user_id', auth('sanctum')->user()->id)->whereNot('type', 'audition')->count();
+        $activity = Activity::where('user_id', auth('sanctum')->user()->id)->where('type', '!=', 'audition')->count();
 
         return response()->json([
             'status' => 200,
@@ -423,7 +423,7 @@ class AuthController extends Controller
         $interest_info->user_id = $user->id;
         $interest_info->interest_topic_id = $request->interest_topic_id;
         $interest_info->save();
-        
+
 
 
         return response()->json([
@@ -450,7 +450,7 @@ class AuthController extends Controller
         $user_info->company = $request->company;
         // if ($user_info->salery_range != 0) {
 
-            $user_info->salery_range = $request->salery_range;
+        $user_info->salery_range = $request->salery_range;
         // }
 
         $user_info->save();

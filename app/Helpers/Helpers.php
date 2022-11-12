@@ -24,6 +24,7 @@ use App\Models\Wallet;
 use App\Models\WalletHistory;
 use App\Models\WalletPayment;
 use App\Models\Activity;
+use App\Models\Bidding;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -396,6 +397,9 @@ if (!function_exists('random_code')) {
         if ($type == 'loveReact') {
             loveReactPayment($user_id, $event_id, $paymentMethod, $value, $amount);
         }
+        if ($type == 'auction') {
+            auctionPayment($user_id, $event_id, $paymentMethod);
+        }
     }
 
 
@@ -470,6 +474,14 @@ if (!function_exists('random_code')) {
                 ]);
             }
         }
+    }
+
+    function auctionPayment($user_id, $event_id, $method)
+    {
+        $biddingInfo = Bidding::where([['auction_id', $event_id], ['user_id', $user_id], ['notify_status', 1]])->update([
+            'payment_status' => 1,
+            'applied_status' => 1
+        ]);
     }
 
 
