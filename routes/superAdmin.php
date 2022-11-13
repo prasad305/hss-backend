@@ -146,15 +146,19 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('audition-admin-income', [AccountsController::class, 'auditionAdminIncome'])->name('auditionAdmin.income');
     Route::get('setMark/{id}', [AuditionController::class, 'setMark'])->name('audition.setMark');
     Route::put('setMark/{id}', [AuditionController::class, 'setMarkUpdate'])->name('audition.setMarkUpdate');
+
+    // audition dashboard
     Route::get('/audition-events-dashboard', [DashboardController::class, 'auditionEventsDashboard'])->name('auditionEvents.dashboard');
+    Route::get('/audition-list/{id}', [DashboardController::class, 'auditionList'])->name('auditionEvent.list');
+    Route::get('/audition-data-list/{type}', [DashboardController::class, 'auditionDataList'])->name('auditionEvents.auditionDataList');
     Route::get('/audition-manager-list', [DashboardController::class, 'auditionManagerAdminList'])->name('auditionEvents.managerAdminList');
-    Route::get('/audition-manager-events', [DashboardController::class, 'auditionManagerAdminEvents'])->name('auditionEvents.managerAdminEvents');
+    Route::get('/audition-manager-events/{id}', [DashboardController::class, 'auditionManagerAdminEvents'])->name('auditionEvents.managerAdminEvents');
     Route::get('/audition-admin-list', [DashboardController::class, 'adminList'])->name('auditionEvents.adminList');
-    Route::get('/audition-admin-events', [DashboardController::class, 'adminEvents'])->name('auditionEvents.adminEvents');
+    Route::get('/audition-admin-events/{id}', [DashboardController::class, 'adminEvents'])->name('auditionEvents.adminEvents');
     Route::get('/audition-superstar-list', [DashboardController::class, 'auditionSuperstarList'])->name('auditionEvents.superstarList');
-    Route::get('/audition-superstar-events', [DashboardController::class, 'auditionSuperstarEvents'])->name('auditionEvents.superstarEvents');
+    Route::get('/audition-superstar-events/{id}', [DashboardController::class, 'auditionSuperstarEvents'])->name('auditionEvents.superstarEvents');
     Route::get('/auditionAdmin-list', [DashboardController::class, 'auditionAdminList'])->name('auditionEvents.auditionAdminList');
-    Route::get('/audition-Admin-events', [DashboardController::class, 'auditionAdminEvents'])->name('auditionEvents.auditionAdminEvents');
+    Route::get('/audition-Admin-events/{id}', [DashboardController::class, 'auditionAdminEvents'])->name('auditionEvents.auditionAdminEvents');
 
     // UserVoteMarkSetting
 
