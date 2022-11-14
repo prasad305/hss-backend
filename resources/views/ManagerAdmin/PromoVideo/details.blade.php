@@ -29,60 +29,56 @@
         <div class="container-fluid mb-4">
 
             <div class="row">
-                <div class="col-md-8 mb-3">
+
+                <div class="col-md-8 mb-2">
                     <div class="card p-2">
-                        <video class="card-img" controls>
+                        <video class="card-img-details " controls>
                             <source src="{{ asset($promoVideo->video_url) }}" />
                         </video>
                     </div>
-
                 </div>
 
-                <div class="col-md-4 mb-3">
-                    <div class="card px-3 py-3">
-                        <div class="d-flex mb-3 align-content-center  ">
-                            <div class="">
-                                @if($promoVideo->star->image)
-                                    <img src="{{ asset($promoVideo->star->image) }}" class="star-img" />
-                                @else
-                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="star-img"/>
-                                    </a>
-                                @endif
-                            </div>
-                            <div class="px-3">
-                                Star
-                                <h4>{{ $promoVideo->star->first_name }} {{ $promoVideo->star->last_name }}</h4>
-                            </div>
+                <div class="col-md-4 mb-2">
+
+                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
+                        <div class="">
+                            @if (false)
+                                <img src="{{ asset($promoVideo->star->image) }}" class="img-star-x" alt="Demo Image" />
+                            @else
+                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
+                                        alt="Demo Image" />
+                                </a>
+                            @endif
                         </div>
+                        <div class="mx-2">
+                            <label for="">Star</label>
+                            <h5>{{ $promoVideo->star->first_name }} {{ $promoVideo->star->last_name }}</h5>
 
-                        <div class="d-flex mb-3 align-content-center  ">
-                            <div class="">
-                                @if($promoVideo->admin->image)
-                                    <img src="{{ asset($promoVideo->admin->image) }}" class="star-img" />
-                                @else
-                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                        <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" class="star-img"/>
-                                    </a>
-                                @endif
-                            </div>
-                            <div class="px-3">
-                                Admin
-                                <h4>{{ $promoVideo->admin->first_name }} {{ $promoVideo->admin->last_name }}</h4>
-                            </div>
                         </div>
-
-
                     </div>
+                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
+                        <div class="">
+                            @if (false)
+                                <img src="{{ asset($promoVideo->star->image) }}" class="img-star-x" alt="Demo Image" />
+                            @else
+                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
+                                        alt="Demo Image" />
+                                </a>
+                            @endif
+                        </div>
+                        <div class="mx-2">
+                            <label for="">Admin</label>
+                            <h5>{{ $promoVideo->admin->first_name }} {{ $promoVideo->admin->last_name }}</h5>
+
+                        </div>
+                    </div>
+
+
                 </div>
 
-
-            </div>
-
-
-            <div class="row pt-5 justify-content-between">
-
-                <div class="col-md-12 ">
+                <div class="col-md-12 mb-2">
                     <div class=" card px-3 py-3">
                         <div>
                             <h4>{{ $promoVideo->title }}</h4>
@@ -90,28 +86,35 @@
 
                             <div class="description-text">{!! $promoVideo->description !!}</div>
 
-                            <div class="col-md-4 card p-3">
-                                <label for="Date">Date</label>
-                                <h4 class="text-warning">{{ \Carbon\Carbon::parse($promoVideo->date)->format('d F,Y') }}
-                                </h4>
-                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-3  mb-2">
+                    <div class="card px-3 p-2">
+                        <label for="Date">Date</label>
+                        <h4 class="text-warning">
+                            {{ \Carbon\Carbon::parse($promoVideo->date)->format('d F,Y') }}</h4>
+                    </div>
+                </div>
+
             </div>
 
 
+            <div class="card row mx-1">
 
+                <div class="card-header"
+                    style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
+                    Publish in News Feed
+                </div>
 
-            @if ($promoVideo->status != 2)
-                <div class="card row mx-1">
-                    <div class="card-header"
-                        style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
-                        Publish in News Feed
-                    </div>
-                    <div class="card-body">
-                        <form action="{{ route('managerAdmin.promoVideo.set_publish', [$promoVideo->id]) }}" method="post">
+                <div class="card-body">
+
+                    <form action="{{ route('managerAdmin.promoVideo.set_publish', [$promoVideo->id]) }}" method="post">
+
+                        @if ($promoVideo->status != 2)
                             @csrf
+
                             <div class="row">
                                 <div class="mb-3 col-md-3">
                                     <label for="start_date" class="form-label">Post Start Date</label>
@@ -138,26 +141,23 @@
                                 </div>
                             </div>
 
+                            <button type="submit" class="btn btnPublish mr-2" href="">Publish Now</button>
+                        @endif
 
-                            <button type="submit" class="btn btnPublish mr-2" href="">Publish
-                                Now</button>
-                            {{-- <a type="button" class="btn btn-outline-warning px-5"
-                        onclick="Show('Edit Live Chat Event','{{ route('managerAdmin.promoVideo.edit', $promoVideo->id) }}')">Edit</a> --}}
-
-
-
-                        </form>
-
-                    </div>
+                        @if ($promoVideo->status == 2)
+                            <form action="{{ route('managerAdmin.promoVideo.set_publish', [$promoVideo->id]) }}"
+                                method="post">
+                                @csrf
+                                <button type="submit" class="btn btnRemove mr-2 mb-2">Remove From Publish</button>
+                            </form>
+                        @endif
+                    </form>
 
                 </div>
-            @endif
-            @if ($promoVideo->status == 2)
-                <form action="{{ route('managerAdmin.promoVideo.set_publish', [$promoVideo->id]) }}" method="post">
-                    @csrf
-                    <button type="submit" class="btn btnRemove mr-2 mb-4">Remove From Publish</button>
-                </form>
-            @endif
+
+            </div>
+
+
         </div> <!-- container -->
     </div> <!-- content -->
 
@@ -171,7 +171,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })

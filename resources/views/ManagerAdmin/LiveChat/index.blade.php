@@ -32,32 +32,33 @@
         <div class="container-fluid">
 
 
-            <div class="row">
-                @foreach ($events as $event)
+            <div class="row mb-3">
+                @foreach ($events as $val)
                     <!--card-->
 
-                    <div class="col-sm-6 col-lg-4 col-xl-3">
+                    <div class="col-sm-12 col-md-4 col-lg-3">
                         <div class="card">
-                            <div class="panel panel-primary text-center">
-                                <div class="">
-                                    <img width="100%" src="{{ asset($event->banner) }}" alt="">
-                                </div>
-                                <div class="panel-body py-3">
-                                    <h3 class="text-ellipsis-line-1">{{ $event->title }}</h3>
+                            <div class="panel panel-primary p-2 text-center">
 
-                                    @if ($event->status == 2)
-                                        <button type="button" class="btn btn-success waves-effect waves-light"><i
+
+                                <img src="{{ asset($val->banner) }}" class="img-fluid card-img" />
+
+                                <div class="panel-body pt-1">
+                                    <h5 class="text-ellipsis-line-1">{{ $val->title }}</h5>
+
+
+                                    @if ($val->status == 2)
+                                        <button type="button" class="btn btnPublish waves-effect waves-light mb-2"><i
                                                 class="icon-checkmark-round"></i> Published</button>
-                                    @elseif($event->status < 2)
-                                        <a type="button" class="btn btn-warning waves-effect waves-light"><i
+                                    @else
+                                        <a type="button" class="btn btnPending waves-effect waves-light mb-2"><i
                                                 class="icon-record"></i>
                                             Pending</a>
                                     @endif
 
-                                    <a href="{{ route('managerAdmin.liveChat.details', [$event->id]) }}" type="button"
-                                        class="btn btn-info waves-effect waves-light">Details <i
+                                    <a href="{{ route('managerAdmin.liveChat.details', [$val->id]) }}" type="button"
+                                        class="btn btnDetails waves-effect fw-bold waves-light mb-2">Details <i
                                             class="fa fa-angle-double-right"></i></a>
-
                                 </div>
                             </div>
 
@@ -66,7 +67,6 @@
                     <!--card end-->
                 @endforeach
             </div>
-
 
         </div> <!-- container -->
     </div> <!-- content -->

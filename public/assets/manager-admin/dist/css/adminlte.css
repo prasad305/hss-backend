@@ -14250,6 +14250,7 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
   background-color: transparent;
 }
 
+
 [class*="sidebar-light-"] .nav-header {
   background-color: inherit;
   color: #292d32;

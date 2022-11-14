@@ -24,7 +24,6 @@
             transition: background-color 5000s ease-in-out 0s;
             -webkit-text-fill-color: #fff !important;
         }
-
     </style>
 
 
@@ -68,7 +67,8 @@
 
                     <div class="form-group text-center m-t-20">
                         <div class="col-xs-12">
-                            <button class="btn btn-block btn-warning w-md waves-effect waves-light" type="submit">Sign
+                            <button class="btn btn-block btn-warning w-md waves-effect waves-light mb-2"
+                                type="submit">Sign
                                 In</button>
                         </div>
                     </div>

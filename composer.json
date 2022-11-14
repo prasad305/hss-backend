@@ -22,6 +22,7 @@
         "paytm/paytmchecksum": "^1.1",
         "pusher/pusher-php-server": "~3.0",
         "realrashid/sweet-alert": "^4.1",
+        "shurjopayv2/laravel8": "dev-master",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-stripe-webhooks": "^2.6",
         "stevebauman/location": "^6.5",

@@ -181,7 +181,8 @@ return [
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
 
-
+        //shurjo pay
+        shurjopayv2\ShurjopayLaravelPackage8\ShurjopayServiceProvider::class
     ],
 
     /*

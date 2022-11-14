@@ -30,98 +30,105 @@
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-md-6">
-                    @if ($audition->banner)
-                        <img src="{{ asset($audition->banner) }}" style="width: 40%" />
-                    @else
-                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                            <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"  style="width: 40%" />
-                        </a>
-                    @endif
 
-                </div>
-            </div>
-
-
-            <div class="row pt-5">
-
-                <div class="col-md-8 ">
-                    <div class="row card p-5">
-                        <h3>{{ $audition->name }}</h3>
-                        <h4>Description</h4>
-                        <p>
-                            {!! $audition->description !!}
-                        </p>
-                        <h4>Instruction</h4>
-                        <p>
-                            {!! $audition->instruction !!}
-                        </p>
+                <div class="col-md-8 mb-2">
+                    <div class="card p-2">
+                        @if ($audition->banner)
+                            <img src="{{ asset($audition->banner) }}" class="card-img-details" />
+                        @else
+                            <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                <img src="{{ asset('demo_image/banner.jpg') }}" class="card-img-details" alt="Demo Image" />
+                            </a>
+                        @endif
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 card py-3 mr-1">
-                            Audition Start
-                            <h4 class="text-warning"> {{ \Carbon\Carbon::parse($audition->start_date)->format('d F,Y') }}
-                                <span class="text-success">-</span><span class="text-danger"> End
-                                    {{ \Carbon\Carbon::parse($audition->end_date)->format('d F,Y') }}</span>
-                            </h4>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 card py-3 mr-1">
-                            Audition Registration Start
-                            <h4 class="text-warning">
-                                {{ \Carbon\Carbon::parse($audition->user_reg_start_date)->format('d F,Y') }} <span
-                                    class="text-success">-</span><span class="text-danger"> End
-                                    {{ \Carbon\Carbon::parse($audition->user_reg_end_date)->format('d F,Y') }}</span></h4>
-                        </div>
-                    </div>
-
-                    <h4 class="px-2 pt-2 mt-3">Instructions</h4>
-                    <div class="under-line-x"></div>
-                    <div class="px-2 pb-2"> {!! $audition->instruction !!} </div>
                 </div>
 
-                <div class="col-md-4">
-                    <div class="card px-5 py-3">
-                        <h3> Judge Panel</h3>
+                <div class="col-md-4 mb-2 ">
+                    <div class=" px-2  pb-2 card-rounded" style="border: .2px solid rgb(235, 153, 0);">
+                        <h3 class="text-warning py-2"> Judge Panel</h3>
                         @foreach ($judges as $star)
-                            <div class="row">
-                                <div class="col-xs-6 content-center">
-                                    @if($star->user->image)
-                                        <img src="{{ asset($star->user->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                            <div class="col-md-12 d-flex mt-2 p-2 bg-dark align-items-center card-rounded">
+                                <div class="">
+                                    @if ($star->user->image)
+                                        <img src="{{ asset($star->user->image) }}" class="img-star-x" alt="Demo Image" />
                                     @else
                                         <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                            <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                            <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
+                                                alt="Demo Image" />
                                         </a>
                                     @endif
                                 </div>
-                                <div class="col-xs-6">
-                                    <h3>{{ $star->user ? $star->user->first_name : '' }}
-                                        {{ $star->user ? $star->user->last_name : '' }}</h3>
+                                <div class="mx-2">
+                                    <label for="">Star</label>
+                                    <h5>{{ $star->user ? $star->user->first_name : '' }}
+                                        {{ $star->user ? $star->user->last_name : '' }}</h5>
+
                                 </div>
                             </div>
                         @endforeach
+                    </div>
 
+                </div>
+
+                <div class="col-md-12 mb-2">
+                    <div class=" card px-3 py-3">
+                        <h3>{{ $audition->title }}</h3>
+                        <div class="title-text text-warning mt-2">Description</div>
+                        <div class="description-text"> {!! $audition->description !!}</div>
+                        <div class="title-text text-warning mt-2">Instruction</div>
+                        <div class="description-text"> {!! $audition->instruction !!}</div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-3  mb-2">
+                    <div class="card px-3 p-2">
+                        <label for="Date">Registration Start Date</label>
+                        <h4 class="text-warning">
+                            {{ \Carbon\Carbon::parse($audition->user_reg_start_date)->format('d F,Y') }} </h4>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-3  mb-2">
+                    <div class="card px-3 p-2">
+                        <label for="Date">Registration End Date</label>
+                        <h4 class="text-warning">
+                            {{ \Carbon\Carbon::parse($audition->user_reg_end_date)->format('d F,Y') }}</h4>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-3  mb-2">
+                    <div class="card px-3 p-2">
+                        <label for="Date"> Audition Start Date</label>
+                        <h4 class="text-warning">
+                            {{ \Carbon\Carbon::parse($audition->start_date)->format('d F,Y') }}</h4>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-3  mb-2">
+                    <div class="card px-3 p-2">
+                        <label for="Date"> Audition End Date</label>
+                        <h4 class="text-warning">
+                            {{ \Carbon\Carbon::parse($audition->end_date)->format('d F,Y') }}</h4>
                     </div>
                 </div>
 
             </div>
 
-            @if ($audition->status == 2)
-                <div class="card row">
-                    <div class="card-header"
-                        style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
-                        Publish Post in News Feed
-                    </div>
-                    <div class="card-body">
-                        <form action="{{ route('managerAdmin.audition.set_publish', [$audition->id]) }}" method="post">
-                            @csrf
+
+
+            <div class="card row">
+                <div class="card-header"
+                    style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
+                    Publish Post in News Feed
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('managerAdmin.audition.set_publish', [$audition->id]) }}" method="post">
+                        @csrf
+                        @if ($audition->status == 2)
                             <div class="row">
-                                <div class="mb-3 col-md-6 col-6">
+                                <div class="mb-3 col-md-3 mb-2">
                                     <label for="start_date" class="form-label">Post Start Date</label>
-                                    <input type="calender" class="form-control" id="datepicker"
-                                        style="background: coral; position: relative; padding-left: 33px;"
+                                    <input type="calender" class="form-control input-post" id="datepicker"
                                         name="post_start_date" readonly="readonly" value="{{ old('post_start_date') }}" />
                                     <i class="fa fa-calendar"
                                         style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
@@ -130,10 +137,9 @@
                                         <span class="text-danger">{{ $errors->first('post_start_date') }}</span>
                                     @endif
                                 </div>
-                                <div class="mb-3 col-md-6 col-6">
+                                <div class="mb-3 col-md-3 mb-2">
                                     <label for="end_date" class="form-label">Post End Date</label>
-                                    <input type="text" class="form-control" id="datepicker1"
-                                        style="background: coral; position: relative; padding-left: 33px;"
+                                    <input type="text" class="form-control input-post" id="datepicker1"
                                         name="post_end_date" readonly="readonly" value="{{ old('post_end_date') }}">
                                     <i class="fa fa-calendar"
                                         style="position: absolute; top: 41px; left: 18px; font-size: 20px;"
@@ -143,20 +149,22 @@
                                     @endif
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-outline-success mr-2">Publish Now</button>
-                        </form>
+                            <button type="submit" class="btn btnPublish mr-2">Publish Now</button>
+                        @endif
 
-                    </div>
+                        @if ($audition->status == 3)
+                            <form action="{{ route('managerAdmin.audition.set_publish', [$audition->id]) }}"
+                                method="post">
+                                @csrf
+                                <button type="submit" class="btn btnRemove mr-2">Remove From Publish</button>
+                            </form>
+                        @endif
+                    </form>
 
                 </div>
-            @endif
 
-            @if ($audition->status == 3)
-                <form action="{{ route('managerAdmin.audition.set_publish', [$audition->id]) }}" method="post">
-                    @csrf
-                    <button type="submit" class="btn btnRemove mr-2">Remove From Publish</button>
-                </form>
-            @endif
+            </div>
+
 
         </div> <!-- container -->
     </div> <!-- content -->
@@ -171,7 +179,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                    success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })

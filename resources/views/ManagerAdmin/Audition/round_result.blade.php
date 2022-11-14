@@ -17,8 +17,8 @@
 
         .BGaB {
             border: 1px solid goldenrod;
-            
-           
+
+
         }
 
         .GoldBtn {
@@ -56,23 +56,24 @@
             font-size: 40px;
             font-weight: 800;
         }
-        .view-rslt{
-            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,79,121,1) 0%, rgba(0,212,255,1) 100%);
+
+        .view-rslt {
+            background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 79, 121, 1) 0%, rgba(0, 212, 255, 1) 100%);
         }
 
         .view-rslt:hover {
-            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(40,126,167,1) 0%, rgba(0,212,255,1) 100%);
+            background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(40, 126, 167, 1) 0%, rgba(0, 212, 255, 1) 100%);
         }
 
-        .apel-rslt{
-            background: linear-gradient(270deg,#ffad00,#ffd273 18.7%,#e19a04 42.13%,#facf75 68.82%,#e7a725 85.94%,#ffad00); 
+        .apel-rslt {
+            background: linear-gradient(270deg, #ffad00, #ffd273 18.7%, #e19a04 42.13%, #facf75 68.82%, #e7a725 85.94%, #ffad00);
             /* color: #000 !important;     */
-           }
-           .apel-rslt:hover{
+        }
+
+        .apel-rslt:hover {
             background: linear-gradient(to bottom, #ffcc00 0%, #ffff66 100%);
-            
-           }
-           
+
+        }
     </style>
 
     <!-- Content Header (Page header) -->
@@ -94,29 +95,37 @@
         </div><!-- /.container-fluid -->
     </div>
 
-    <div class="row ">
-        @foreach ($auditions as $audition)
-        <div class="col-md-3 col-sm-6 col-12 ">
-            <div class="card bg-gray BGaB m-3">
-                @if($audition->banner)
-                    <img src="{{ asset($audition->banner) }}" alt="Admin Image" class="img-fluid ImgBlue  mb-2">
-                @else
-                    <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                        <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" class="img-fluid ImgBlue  mb-2"/>
-                    </a>
-                @endif
-                <h5 class="text-center text-bold mb-4">{{ $audition->title }}</h5> 
-                 <a href="{{ route('managerAdmin.audition.showRoundResult', $audition->id) }}"
-                    class="btn  mb-2 view-rslt ">View Round Result</a>
 
-                    @if ($audition->activeRoundInfo->appeal == 1)
-                    <a href="{{ route('managerAdmin.audition.viewRoundAppealResult', $audition->id) }}"
-                        class="btn text-dark apel-rslt  ">View Round Appeal Result</a>
-                @endif
+    <div class="row m-3">
+        @foreach ($auditions as $val)
+            <!--card-->
 
+            <div class="col-sm-12 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="panel panel-primary p-2 text-center">
+
+
+                        <img src="{{ asset($val->banner) }}" class="img-fluid card-img" />
+
+                        <div class="panel-body pt-1">
+                            <h5 class="text-ellipsis-line-1">{{ $val->title }}</h5>
+
+                            <a href="{{ route('managerAdmin.audition.showRoundResult', $val->id) }}" type="button"
+                                class="btn btnPublish waves-effect waves-light mb-2">Round Result</a>
+                            @if ($val->activeRoundInfo->appeal == 1)
+                                <a href="{{ route('managerAdmin.audition.viewRoundAppealResult', $val->id) }}"
+                                    type="button" class="btn btnDetails waves-effect fw-bold waves-light mb-2">Appeal
+                                    Result</a>
+                            @endif
+                        </div>
+                    </div>
+
+                </div>
             </div>
-        </div>
-        
+            <!--card end-->
         @endforeach
     </div>
+
+
+   
 @endsection

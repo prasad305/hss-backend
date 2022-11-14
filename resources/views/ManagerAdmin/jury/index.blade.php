@@ -44,16 +44,16 @@ Jury Board
         <h4 class="mb-2">Jury Board List</h4>
 
         <hr>
-        @php 
+        @php
             $totalgroup = count($group);
-            for ($i=0; $i <$totalgroup ; $i++) { 
+            for ($i=0; $i <$totalgroup ; $i++) {
         @endphp
         <div class="bg-gray-c mb-3">
             <h4 class="px-2 py-2 co-gradient-warning text-center">{{ $group[$i]['name'] }}</h4>
             <div class="row p-2">
-                
+
                 @foreach ($group[$i]['board'] as $key => $jury)
-                <div class="col-md-3 col-sm-6 col-12">
+                <div class="col-sm-12 col-md-6 col-lg-3 mb-3">
                     <div class="info-box shadow-none py-4 d-flex align-items-center">
 
                         <div class="d-flex justify-content-center align-items-center">
@@ -92,29 +92,33 @@ Jury Board
                                     {{ $jury['assignjuries']['active_status'] == 0 ? 'Inactive' : 'Active' }}</p>
 
                                 <p class="text-light text-bold">{{ $jury['qr_code'] ? $jury['qr_code'] : '' }}</p>
+
                                 {{-- for active and inactive --}}
+
                                 @if ($jury['assignjuries']['active_status'] == 0)
-                                <button class="btn btn-sm btn-success" onclick="activeNow(this)"
+                                <button class="btn mb-2 btn-sm btn-success" onclick="activeNow(this)"
                                     value="{{ route('managerAdmin.jury.activeNow', $jury['assignjuries']['id']) }}">
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 </button>
                                 @elseif($jury['assignjuries']['active_status'] == 1)
-                                <button class="btn btn-sm btn-danger" onclick="inactiveNow(this)"
+                                <button class="btn mb-2 btn-sm btn-danger" onclick="inactiveNow(this)"
                                     value="{{ route('managerAdmin.jury.inactiveNow', $jury['assignjuries']['id']) }}">
                                     <i class="fa fa-close"></i>
                                 </button>
                                 @endif
-                                <a class="btn btn-sm btn-info"
+
+
+                                <a class="btn mb-2 btn-sm btn-info"
                                     onclick="Show('Edit Jury Board','{{ route('managerAdmin.jury.edit', $jury['id']) }}')">
                                     <i class="fa fa-edit text-white"></i>
                                 </a>
 
                                 <a href="{{ route('managerAdmin.jury.views',$jury['id']) }}"
-                                    class="btn btn-sm btn-success">
+                                    class="btn mb-2 btn-sm btn-success">
                                     <i class="fa-solid fa-eye text-white"></i>
                                 </a>
 
-                                <button class="btn btn-sm btn-warning" onclick="delete_function(this)"
+                                <button class="btn mb-2 btn-sm btn-warning" onclick="delete_function(this)"
                                     value="{{ route('managerAdmin.jury.destroy', $jury['id']) }}"><i
                                         class="fa fa-trash"></i>
                                 </button>

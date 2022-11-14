@@ -11,7 +11,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Auction Product</h1>
+                    <h1 class="m-0">Auction</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -25,105 +25,151 @@
     <!-- /.content-header -->
 
 
+
+
+
+
     <div class="content">
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-md-6">
-                    @if ($product->product_image)
-                        <img src="{{ asset($product->product_image) }}" style="width: 40%" />
-                    @else
-                        <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                            <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"  style="width: 40%" />
-                        </a>
-                    @endif
 
-                </div>
-            </div>
-
-
-            <div class="row pt-5">
-
-                <div class="col-md-8 ">
-                    <div class="row card p-5">
-                        <h3>{{ $product->title }}</h3>
-                        <p>
-                            {!! $product->details !!}
-                        </p>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 card py-3 mr-1">
-                            Date
-                            <h4 class="text-warning">{{ \Carbon\Carbon::parse($product->created_at)->format('d F,Y') }}</h4>
-                        </div>
-                        <div class="col-md-3 card py-3 mr-1">
-                            Time
-                            <h4 class="text-warning">BID {{ \Carbon\Carbon::parse($product->bid_from)->format('h:i A') }} -
-                                End {{ \Carbon\Carbon::parse($product->bid_to)->format('h:i A') }}</h4>
-                        </div>
-                        <div class="col-md-3 card py-3">
-                            Base Price
-                            <h4 class="text-warning">$ {{ $product->base_price }}</h4>
+                <div class="col-md-8 mb-2">
+                    <div class="card p-2">
+                        <div class="center">
+                            @if ($product->banner)
+                                <img src="{{ asset($product->banner) }}" class="card-img-details" />
+                            @else
+                                <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"
+                                        class="img-fluid card-img" />
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-4">
-                    <div class="card px-5 py-3">
-                        <div class="row">
-                            <div class="col-xs-6 content-center">
-                                @if($product->star->image)
-                                <img src="{{ asset($product->star->image) }}"  style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
-                                @else
-                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                        <img  src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"  style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
-                                    </a>
-                                @endif
-                            </div>
-                            <div class="col-xs-6">
-                                Star
-                                <h3>{{ $product->star->first_name }} {{ $product->star->last_name }}</h3>
-                            </div>
-                        </div>
-                        <div class="row py-3">
-                            <div class="col-xs-6 content-center">
-                                @if($product->admin->image)
-                                    <img src="{{ asset($product->admin->image) }}" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
-                                @else
-                                    <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                                        <img  src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"  style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
-                                    </a>
-                                @endif
-                            </div>
-                            <div class="col-xs-6">
-                                Admin
-                                <h3>{{ $product->admin->first_name }} {{ $product->admin->last_name }}</h3>
-                            </div>
+                <div class="col-md-4 mb-2">
+                    <div class="card p-2">
+                        <div class="center">
+                            @if ($product->product_image)
+                                <img src="{{ asset($product->product_image) }}" class="card-img-details" />
+                            @else
+                                <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"
+                                        class="img-fluid card-img" />
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
 
-            </div>
+                <div class="col-md-12 mb-2">
+                    <div class=" card px-3 py-3">
+                        <div>
+                            <h4>{{ $product->title }}</h4>
+                            <div class="title-text text-warning">Description</div>
+
+                            <div class="description-text">{!! $product->details !!}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row col-md-8 mb-2">
+                    <div class="col-sm-12 col-md-6 col-lg-4 mb-2">
+                        <div class="card p-3">
+                            <h5>Date</h5>
+                            <h6 class="text-warning">{{ \Carbon\Carbon::parse($product->created_at)->format('d F,Y') }}
+                            </h6>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4 mb-2">
+                        <div class="card p-3">
+                            <h5>Time</h5>
+                            <h6 class="text-warning">BID
+                                {{ \Carbon\Carbon::parse($product->bid_from)->format('h:i A') }} -
+                                End {{ \Carbon\Carbon::parse($product->bid_to)->format('h:i A') }}
+                            </h6>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4 mb-2">
+                        <div class="card p-3">
+                            <h5>Base Price</h5>
+                            <h6 class="text-warning">$ {{ $product->base_price }}
+                            </h6>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
+                        <div class="">
+                            @if (false)
+                                <img src="{{ asset($product->star->image) }}" class="img-star-x" alt="Demo Image" />
+                            @else
+                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
+                                        alt="Demo Image" />
+                                </a>
+                            @endif
+                        </div>
+                        <div class="mx-2">
+                            <label for="">Star</label>
+                            <h5>{{ $product->star->first_name }} {{ $product->star->last_name }}</h5>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
+                        <div class="">
+                            @if (false)
+                                <img src="{{ asset($product->star->image) }}" class="img-star-x" alt="Demo Image" />
+                            @else
+                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
+                                        alt="Demo Image" />
+                                </a>
+                            @endif
+                        </div>
+                        <div class="mx-2">
+                            <label for="">Admin</label>
+                            <h5>{{ $product->admin->first_name }} {{ $product->admin->last_name }}</h5>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card col-md-12">
+                    <div class="card-header"
+                        style="color: gold; letter-spacing: .01rem; font-size: 18px; border-bottom: 1px solid #000;">
+                        Publish Post in News Feed
+                    </div>
+
+                    <div class="card-body">
+
+                        @if ($product->status == 0)
+                            <a type="button" class="btn btnPublish mr-2"
+                                href="{{ route('managerAdmin.auctionProduct.set_publish', [$product->id]) }}">Publish
+                                Now</a>
+                        @elseif($product->status == 1)
+                            <a type="button" class="btn btnRemove mr-2"
+                                href="{{ route('managerAdmin.auctionProduct.set_publish', [$product->id]) }}">Remove From
+                                Publish</a>
+                        @endif
+                        @if ($product->status == 0)
+                            <a type="button" class="btn btnEdit px-5"
+                                onclick="Show('Edit product','{{ route('managerAdmin.auctionProduct.edit', $product->id) }}')">Edit</a>
+                        @endif
+
+                    </div>
+                </div>
 
 
-            <div class="container row">
-                @if ($product->status == 0)
-                    <a type="button" class="btn btn-outline-success mr-2"
-                        href="{{ route('managerAdmin.auctionProduct.set_publish', [$product->id]) }}">Publish Now</a>
-                @elseif($product->status == 1)
-                    <a type="button" class="btn btnRemove mr-2"
-                        href="{{ route('managerAdmin.auctionProduct.set_publish', [$product->id]) }}">Remove From
-                        Publish</a>
-                @endif
-                @if ($product->status == 0)
-                    <a type="button" class="btn btn-outline-warning px-5"
-                        onclick="Show('Edit Post','{{ route('managerAdmin.auctionProduct.edit', $product->id) }}')">Edit</a>
-                @endif
-            </div>
 
-
-            <div class="row mt-5">
-                <div class="col-12">
+                <div class="col-12 mt-4">
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Bidder List - {{ $totalBidders }}</h3>
@@ -175,7 +221,10 @@
                     </div>
 
                 </div>
+
             </div>
+
+
         </div> <!-- container -->
     </div> <!-- content -->
 
@@ -189,7 +238,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })

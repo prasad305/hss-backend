@@ -17,7 +17,10 @@ class ProfitWithdrawController extends Controller
     public function store(Request $request, $id)
     {
 
-        $withdrawHistory = ProfitWalletWithdrawHistory::find($id)->update(['bank_txn_id' => $request->bank_txn_id]);
+        ProfitWalletWithdrawHistory::find($id)->update([
+            'bank_txn_id' => $request->bank_txn_id,
+            'status' => 2
+        ]);
 
         return redirect()->back();
     }

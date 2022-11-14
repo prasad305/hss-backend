@@ -29,10 +29,30 @@ use Illuminate\Support\Str;
 use paytm\paytmchecksum\PaytmChecksum;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
+use shurjopayv2\ShurjopayLaravelPackage8\Http\Controllers\ShurjopayController;
 
 class PaymentController extends Controller
 {
-    //---------------------paytm start--------------------------
+    /**
+     * paytm info
+     */
+    protected $PAYTM_MERCHENT_ID = "iELVJt50414347554560";
+    protected $PAYTM_MERCHENT_KEY = "zXhNYVPF4RKIsIIz";
+    protected $PAYTM_STAGING_MODE = true;
+    protected $PAYTM_WEBSITE_NAME = "WEBSTAGING";
+    protected $PAYTM_CALLBACK_URL_WEB = "http://localhost:8000/api/paytm-callback/";
+    protected $PAYTM_CALLBACK_URL_MOBILE = "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=";
+    protected $PAYTM_URL_MOBILE = "https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid=";
+    protected $PAYTM_URL_WEB = "https://securegw-stage.paytm.in/v3/order/status";
+
+
+    /**
+     * stripe info
+     */
+    protected $STRIPE_API_KEY = "sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX";
+    protected $STRIPE_PUBLIC_KEY = "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh";
+
+    //---------------------paytm start----------
     //get paytm token
     public function paymentNow(Request $request)
     {
@@ -54,18 +74,18 @@ class PaymentController extends Controller
 
 
         $paytmParams = array();
-        $paytmParams["MID"] = "iELVJt50414347554560";
+        $paytmParams["MID"] = $this->PAYTM_MERCHENT_ID;
         $paytmParams["ORDER_ID"] = Str::orderedUuid();
         $paytmParams['CUST_ID'] = "CUST_001";
         $paytmParams['WEBSITE'] = 'WEBSTAGING';
         $paytmParams['CHANNEL_ID'] = 'WEB';
         $paytmParams['INDUSTRY_TYPE_ID'] = 'Retail';
         $paytmParams['TXN_AMOUNT'] = $request->amount;
-        $paytmParams['CALLBACK_URL'] = 'http://localhost:8000/api/paytm-callback/' . $request->redirectTo . "/" . $user->id . "/" . $request->type . "/" . $request->event_id . "/" . $value;
+        $paytmParams['CALLBACK_URL'] = $this->PAYTM_CALLBACK_URL_WEB . $request->redirectTo . "/" . $user->id . "/" . $request->type . "/" . $request->event_id . "/" . $value;
         $paytmParams['EMAIL'] = $user->email;
 
 
-        $paytmParams['CHECKSUMHASH'] = PaytmChecksum::generateSignature($paytmParams, 'zXhNYVPF4RKIsIIz');
+        $paytmParams['CHECKSUMHASH'] = PaytmChecksum::generateSignature($paytmParams, $this->PAYTM_MERCHENT_KEY);
 
         return response()->json($paytmParams);
     }
@@ -75,18 +95,18 @@ class PaymentController extends Controller
     {
 
         // return  $redirectTo . "-------" . $user_id . "---------" . $type . "-------" . $event_id;
-        $isVerifySignature = PaytmChecksum::verifySignature($request->all(), 'zXhNYVPF4RKIsIIz', $request->CHECKSUMHASH);
+        $isVerifySignature = PaytmChecksum::verifySignature($request->all(), $this->PAYTM_MERCHENT_KEY, $request->CHECKSUMHASH);
         if ($isVerifySignature) {
 
 
             $paytmParams = array();
 
             $paytmParams["body"] = array(
-                "mid" => "iELVJt50414347554560",
+                "mid" => $this->PAYTM_MERCHENT_ID,
                 "orderId" => $request->ORDERID,
             );
 
-            $checksum = PaytmChecksum::generateSignature(json_encode($paytmParams["body"]), "zXhNYVPF4RKIsIIz");
+            $checksum = PaytmChecksum::generateSignature(json_encode($paytmParams["body"]), $this->PAYTM_MERCHENT_KEY);
 
 
             $paytmParams["head"] = array(
@@ -97,12 +117,12 @@ class PaymentController extends Controller
             $post_data = json_encode($paytmParams);
 
             /* for Staging */
-            $url = "https://securegw-stage.paytm.in/v3/order/status";
+            // $url = "https://securegw-stage.paytm.in/v3/order/status";
 
             /* for Production */
             // $url = "https://securegw.paytm.in/v3/order/status";
 
-            $ch = curl_init($url);
+            $ch = curl_init($this->PAYTM_URL_WEB);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -124,38 +144,6 @@ class PaymentController extends Controller
 
                 ]);
 
-                // //live chat regupdate
-                // if ($type == 'livechat') {
-                //     $this->LiveChatRegUpdate($user_id, $event_id, "PayTm");
-                // }
-                // // audition regupdate
-                // if ($type == 'audition') {
-                //     $this->AuditionRegUpdate($user_id, $event_id, "PayTm");
-                // }
-                // if ($type == 'qna') {
-                //     $this->qnaRegUpdate($user_id, $event_id, "PayTm");
-                // }
-                // if ($type == 'learningSession') {
-                //     $this->learningSessionRegUpdate($user_id, $event_id, "PayTm");
-                // }
-                // if ($type == 'meetup') {
-                //     $this->meetSessionRegUpdate($user_id, $event_id, "PayTm");
-                // }
-                // if ($type == 'souvenir') {
-                //     $this->souvenirUpdate($user_id, $event_id, "PayTm");
-                // }
-                // if ($type == 'marketplace') {
-                //     $this->marketplaceUpdate($user_id, $event_id, "PayTm");
-                // }
-                // if ($type == 'package') {
-                //     $this->packageUpdate($type, $event_id, $user_id);
-                // }
-                // if ($type == 'lovebundel') {
-                //     $this->packageUpdate($type, $event_id, $user_id);
-                // }
-                // if ($type == 'greeting') {
-                //     $this->greetingUpdate($user_id, $event_id, "PayTm");
-                // }
 
                 resgistationSuccessUpdate($user_id, $type, $event_id, "paytm", $result->body->txnAmount, $value);
             }
@@ -168,29 +156,18 @@ class PaymentController extends Controller
     }
 
     //paytem for mobile start
-
     public function txnTokenGenerate($amount)
     {
-        $mid = "iELVJt50414347554560";
-        $websiteName = "WEBSTAGING";
-        $mkey = "zXhNYVPF4RKIsIIz";
-
-        //for Staging Environment
-        $callBackUrl = "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=";
-
-        //for Production Environment
-        // $callBackUrl = "https://securegw.paytm.in/theia/paytmCallback?ORDER_ID=";
-
 
         $paytmParams = array();
         $orderId = Str::orderedUuid();
 
         $paytmParams["body"] = array(
             "requestType"   => "Payment",
-            "mid"           =>  $mid,
-            "websiteName"   =>  $websiteName,
+            "mid"           =>   $this->PAYTM_MERCHENT_ID,
+            "websiteName"   =>  $this->PAYTM_WEBSITE_NAME,
             "orderId"       => $orderId,
-            "callbackUrl"   => "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=" . $orderId,
+            "callbackUrl"   => $this->PAYTM_CALLBACK_URL_MOBILE . $orderId,
             "txnAmount"     => array(
                 "value"     =>  $amount . ".00",
                 "currency"  => "INR",
@@ -200,7 +177,7 @@ class PaymentController extends Controller
             ),
         );
 
-        $checksum = PaytmChecksum::generateSignature(json_encode($paytmParams["body"]), $mkey);
+        $checksum = PaytmChecksum::generateSignature(json_encode($paytmParams["body"]), $this->PAYTM_MERCHENT_KEY);
 
 
         $paytmParams["head"] = array(
@@ -210,7 +187,7 @@ class PaymentController extends Controller
         $post_data = json_encode($paytmParams);
 
         /* for Staging */
-        $url = "https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid=" .  $mid  . "&orderId=" . $orderId;
+        $url = $this->PAYTM_URL_MOBILE .   $this->PAYTM_MERCHENT_ID  . "&orderId=" . $orderId;
 
         /* for Production */
         // $url = "https://securegw.paytm.in/theia/api/v1/initiateTransaction?mid=YOUR_MID_HERE&orderId=ORDERID_98765";
@@ -224,9 +201,10 @@ class PaymentController extends Controller
         return response()->json([
             "Token_data" => json_decode($response),
             "orderId" => $orderId,
-            "mid" =>  $mid,
+            "mid" =>   $this->PAYTM_MERCHENT_ID,
             "amount" => $amount . ".00",
-            "callBackUrl" => $callBackUrl
+            "callBackUrl" => $this->PAYTM_CALLBACK_URL_MOBILE,
+            "takePaymentMode" => $this->PAYTM_STAGING_MODE
         ]);
     }
 
@@ -292,33 +270,15 @@ class PaymentController extends Controller
         }
     }
 
-    /**
-     * video feed reeact buy
-     */
-    public function videoFeedReactStripe(Request $request)
-    {
-        $user = auth()->user();
-        // return loveReactPaymentMobile($user->id, $request->videoId, $request->reactNum, $request->modelName, $request->TXNAMOUNT);
-        return $this->loveReactPaymentMobile(
-            $user->id,
-            $request->videoId,
-            $request->reactNum,
-            $request->modelName,
-            $request->amount
-        );
-    }
-
-
 
     //paytem moble end
-    //---------------------paytm end--------------------------
+    //---------------------paytm end-------------------
 
-
-    //-------------------stripe start------------------------
+    //-------------------stripe start------------------
     public function stripePaymentMake(Request $request)
     {
-        $public_key = "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh";
-        Stripe::setApiKey('sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX');
+
+        Stripe::setApiKey($this->STRIPE_API_KEY);
 
 
         $user = auth()->user();
@@ -352,7 +312,7 @@ class PaymentController extends Controller
 
             $output = [
                 'clientSecret' => $paymentIntent->client_secret,
-                'public_key' => $public_key
+                'public_key' => $this->STRIPE_PUBLIC_KEY
             ];
 
             return response()->json($output);
@@ -365,7 +325,7 @@ class PaymentController extends Controller
     //stripe mobile
     public function stripePaymentMobile(Request $request)
     {
-        \Stripe\Stripe::setApiKey("sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX");
+        \Stripe\Stripe::setApiKey($this->STRIPE_API_KEY);
         // Use an existing Customer ID if this is a returning customer.
         $user = auth()->user();
         $customer = \Stripe\Customer::create();
@@ -392,21 +352,117 @@ class PaymentController extends Controller
             'ephemeralKey' => $ephemeralKey->secret,
             'customer' => $customer->id,
             'status' => 200,
-            'publishableKey' => "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh"
+            'publishableKey' => $this->STRIPE_PUBLIC_KEY
         ]);
     }
 
-    public function stripePaymentSuccess($event_id, $event_type)
+    /**
+     * video feed reeact buy
+     */
+    public function videoFeedReactStripe(Request $request)
     {
-        Transaction::create([
-            'user_id' => auth()->user()->id,
-            'resp_msg' => "stripe-payment",
-            'status' => "paid",
-        ]);
+        $user = auth()->user();
+        // return loveReactPaymentMobile($user->id, $request->videoId, $request->reactNum, $request->modelName, $request->TXNAMOUNT);
+        return $this->loveReactPaymentMobile(
+            $user->id,
+            $request->videoId,
+            $request->reactNum,
+            $request->modelName,
+            $request->amount
+        );
+    }
+    //--------------------stripe end------------------------
+
+
+    //--------------------shurjo pay------------------------
+    public function initiataShurjoPayment(Request $request)
+    {
+        $user = auth()->user();
+        $shurjopay_service = new ShurjopayController();
+
+
+        $info = array(
+            'currency' => "BDT",
+            'amount' => $request->amount,
+            'order_id' => Str::orderedUuid(),
+            'discsount_amount' => 0,
+            'disc_percent' => 0,
+            'client_ip' => "192.168.0.1",
+            'customer_name' => "dad",
+            'customer_phone' => "04545674654",
+            'email' => "dadad@gaml.com",
+            'customer_address' => "dhaka",
+            'customer_city' => "dhaka",
+            'customer_state' => "dhaka",
+            'customer_postcode' => "1230",
+            'customer_country' => "bangladesh",
+            'value1' =>  $user->id,
+            'value2' => $request->event_type,
+            'value3' => $request->event_id,
+            'value4' => 0,
+        );
+
+
+        // return 'hello';
+        return $shurjopay_service->checkout($info);
     }
 
 
-    //--------------------stripe end---------------------------
+
+    public function successShurjoPayment(Request $request)
+    {
+
+        $shurjopay_service = new ShurjopayController();
+
+        $data = json_decode($shurjopay_service->verify($request->order_id));
+        $paymentData = $data[0];
+
+        Transaction::create([
+            'user_id' => $paymentData->value1,
+            'order_id' => $paymentData->order_id,
+            'event' => $paymentData->value2,
+            'event_id' => $paymentData->value3,
+            'txn_id' => $paymentData->order_id,
+            'txn_amount' => $paymentData->payable_amount,
+            'amount' => $paymentData->payable_amount,
+            'currency' => "BDT",
+            'bank_name' => $paymentData->method,
+            'resp_msg' => "shurjo-Payment",
+            'status' => $paymentData->transaction_status,
+
+        ]);
+
+
+        resgistationSuccessUpdate(
+            $paymentData->value1,
+            $paymentData->value2,
+            $paymentData->value3,
+            "shurjo-Payment",
+            $paymentData->amount,
+            $paymentData->value4
+        );
+
+        return view("Others.Payment.shurjoPaymentSuccess", compact('paymentData'));
+
+        return $paymentData;
+    }
+
+    public function shurjoPaymentStatus($order_id)
+    {
+
+        $shurjopay_service = new ShurjopayController();
+
+        $data = json_decode($shurjopay_service->verify($order_id));
+        $paymentData = $data[0];
+
+
+
+        return $paymentData;
+    }
+
+
+
+
     // Auditions
     public function AuditionRegUpdate($user_id, $event_id, $method)
     {
@@ -541,7 +597,7 @@ class PaymentController extends Controller
             $registerEvent->status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
-            
+
             $activity = new Activity();
             $activity->type = 'greeting';
             $activity->user_id = $user_id;
@@ -610,15 +666,15 @@ class PaymentController extends Controller
     {
 
         $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
-       
-            AuditionCertification::create([
-                'participant_id' =>  $user_id,
-                'audition_id' =>  $auditionRoundInfo->audition_id,
-                'round_info_id' =>  $round_info_id,
-                'fee' =>  $fee,
-                'payment_status' =>  1,
-                'payment_method' => $method
-            ]);
+
+        AuditionCertification::create([
+            'participant_id' =>  $user_id,
+            'audition_id' =>  $auditionRoundInfo->audition_id,
+            'round_info_id' =>  $round_info_id,
+            'fee' =>  $fee,
+            'payment_status' =>  1,
+            'payment_method' => $method
+        ]);
     }
 
     //   <================================Love React Payment end ==================================>

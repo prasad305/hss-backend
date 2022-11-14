@@ -5,30 +5,55 @@
 @endpush
 
 @section('content')
-    <div class="row">
-        <div class="col-md-12 mx-2 mt-3">
-            <h4>Greeting Published List </h4>
-            <div style="border-bottom: 2px solid white;"></div>
-        </div>
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Greeting</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Greeting Published List</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
     </div>
 
-    <div class="row">
-        @foreach ($greetings as $key => $greeting)
-            <div class="col-md-4">
-                <div class="card" style="width: 100%; margin: 10px; border:2px solid #FFCE00; padding: 10px;">
-                    <img class="card-img-top" height="250px"
-                        src="{{ asset($greeting->banner ?? get_static_option('no_image')) }}" alt="Greeting Banner">
-                    <div class="card-body">
-                        <h5 class="text-center">{{ $greeting->title }}</h5>
-                        <p class="card-text text-center">Cost : {{ $greeting->cost }} BDT</p>
-                        <div class="text-center">
-                            <a href="{{ route('managerAdmin.greeting.show', $greeting->id) }}" class="btn"
-                                style="background: #FFCE00; border-radius: 8px; font-weight: bold;">View <i
-                                    class="fas fa-eye"></i></a>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row mb-3">
+                @foreach ($greetings as $key => $greeting)
+                    <!--card-->
+
+                    <div class="col-sm-12 col-md-4 col-lg-3">
+                        <div class="card">
+                            <div class="panel panel-primary p-2 text-center">
+
+
+                                <img src="{{ asset($greeting->banner) }}" class="img-fluid card-img" />
+
+                                <div class="panel-body pt-1">
+                                    <h5 class="text-ellipsis-line-1">{{ $greeting->title }}</h5>
+
+                                    <p class="card-text text-center">Cost : {{ $greeting->cost }} BDT</p>
+
+                                    <a href="{{ route('managerAdmin.greeting.show', $greeting->id) }}" type="button"
+                                        class="btn btnDetails waves-effect waves-light mb-2">Details <i
+                                            class="fa fa-angle-double-right"></i></a>
+
+                                </div>
+                            </div>
+
                         </div>
                     </div>
-                </div>
+                    <!--card end-->
+                @endforeach
             </div>
-        @endforeach
+
+        </div> <!-- container -->
     </div>
 @endsection

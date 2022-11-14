@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\Payment\PaymentController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -44,7 +45,10 @@ Route::get('/test-view', function () {
  * stripe web hook
  */
 Route::stripeWebhooks('stripe-webhook');
-
+/**
+ * shurjo pay
+ */
+Route::get('/initiata-shurjo-payment-success', [PaymentController::class, 'successShurjoPayment']);
 
 // For system reboot
 // Route::get('/reboot', [HomeController::class, 'reboot']);
@@ -61,7 +65,9 @@ Route::get('/reboot', function () {
 
 
 
-
+Route::get('/shurjo', function () {
+    return view("Others.Payment.shurjoPaymentSuccess");
+});
 
 
 

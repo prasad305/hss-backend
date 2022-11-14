@@ -65,12 +65,14 @@
                                     <td>{{ $key + 1 }}</td>
                                     <td>
                                         @if ($post->product_image)
-                                            <img src="{{ asset($post->product_image) }}"  style="width: 200px; height:100px" />
+                                            <img src="{{ asset($post->product_image) }}"
+                                                style="width: 200px; height:100px" />
                                         @elseif($post->video)
                                             <video width="200" height="100" src="{{ asset($post->video) }}"></video>
                                         @else
                                             <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
-                                                <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image" style="width: 200px; height:100px" />
+                                                <img src="{{ asset('demo_image/banner.jpg') }}" alt="Demo Image"
+                                                    style="width: 200px; height:100px" />
                                             </a>
                                         @endif
                                     </td>
