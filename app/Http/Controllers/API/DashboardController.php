@@ -280,6 +280,12 @@ class DashboardController extends Controller
         $greeting = Greeting::where('star_id', auth('sanctum')->user()->id)->count();
         $fanGroup = FanGroup::where('my_star', auth('sanctum')->user()->id)->orWhere('another_star', auth('sanctum')->user()->id)->count();
 
+        $auction = Auction::where('star_id', auth('sanctum')->user()->id)->count();
+        $marketplace = Marketplace::where('superstar_id', auth('sanctum')->user()->id)->count();
+        $souvenirCreate = SouvenirCreate::where('star_id', auth('sanctum')->user()->id)->count();
+
+        $totalShowCase = $auction + $marketplace + $souvenirCreate;
+
         return response()->json([
             'status' => 200,
             'post' => $post,
@@ -289,6 +295,7 @@ class DashboardController extends Controller
             'learningSession' => $learningSession,
             'greeting' => $greeting,
             'fanGroup' => $fanGroup,
+            'totalShowCase' => $totalShowCase,
         ]);
     }
     public function adminPost($type)

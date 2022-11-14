@@ -697,6 +697,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
 
     // Simple Post Section
+    Route::get('/star/simple_post/all/mobile', [SimplePostController::class, 'star_all_mobile']);
+    Route::post('/star/add_simple_post/mobile', [SimplePostController::class, 'star_add_mobile']);
     Route::post('/star/add_simple_post', [SimplePostController::class, 'star_add']);
     Route::get('/star/simple_post/all', [SimplePostController::class, 'star_all']);
     Route::get('/star/simple_post/count', [SimplePostController::class, 'star_count']);

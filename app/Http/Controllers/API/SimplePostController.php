@@ -355,6 +355,23 @@ class SimplePostController extends Controller
         ]);
     }
 
+    public function star_all_mobile()
+    {
+        $pending = SimplePost::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 0]])->latest()->get();
+        $approved = SimplePost::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 1]])->latest()->get();
+        $rejected = SimplePost::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 2]])->latest()->get();
+        $all = SimplePost::where([['star_id', auth('sanctum')->user()->id]])->latest()->get();
+
+        return response()->json([
+            'status' => 200,
+            'pending' => $pending,
+            'approved' => $approved,
+            'rejected' => $rejected,
+            'all' => $all,
+        ]);
+
+    }
+
 
     public function star_all()
     {
@@ -461,6 +478,135 @@ class SimplePostController extends Controller
             'status' => 200,
             'message' => 'Success',
         ]);
+    }
+
+    public function star_add_mobile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'description' => 'required',
+            'type' => 'required',
+
+
+        ], [
+            'title.required' => 'Title Field Is Required',
+            'description.required' => 'Description Field Is Required',
+            'type.required' => "This  Field Is Required",
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
+
+        $post = new SimplePost();
+        $post->title = $request->title;
+        $post->created_by_id = auth('sanctum')->user()->id;
+        $post->admin_id = auth('sanctum')->user()->parent_user;
+        $post->star_id = auth('sanctum')->user()->id;
+        $post->category_id = auth('sanctum')->user()->category_id;
+        $post->subcategory_id = auth('sanctum')->user()->sub_category_id;
+        $post->description = $request->description;
+        $post->fee = $request->fee > 0  ? $request->fee : 0;
+        $post->type = $request->type;
+        $post->star_approval = 1;
+        if ($request->type == 'free') {
+            $post->status = 1;
+        }
+
+        if($request->image['type']){
+            try{
+                $originalExtension = str_ireplace("image/", "", $request->image['type']);
+
+                $folder_path       = 'uploads/images/post/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->image['data'];
+            
+                Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                $location = $folder_path . $image_new_name;
+                $post->image = $location;
+            }
+
+            catch (\Exception $exception) {
+                return response()->json([
+                    "error" => $exception->getMessage(),
+                    "status" => "from image",
+                ]);
+            }
+        }
+        if($request->video['type']){
+            try{
+                $originalExtension = str_ireplace("image/", "", $request->video['type']);
+
+                $folder_path       = 'uploads/videos/post/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->video['data'];
+            
+                Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                $location = $folder_path . $image_new_name;
+                $post->video = $location;
+            }
+
+            catch (\Exception $exception) {
+                return response()->json([
+                    "error" => $exception->getMessage(),
+                    "status" => "from video",
+                ]);
+            }
+        }
+        if($request->thumbnail['type']){
+            try{
+                $originalExtension = str_ireplace("image/", "", $request->thumbnail['type']);
+
+                $folder_path       = 'uploads/images/post/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->thumbnail['data'];
+            
+                Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                $location = $folder_path . $image_new_name;
+                $post->thumbnail = $location;
+            }
+
+            catch (\Exception $exception) {
+                return response()->json([
+                    "error" => $exception->getMessage(),
+                    "status" => "from thumbnail",
+                ]);
+            }
+        }
+
+
+
+        $post->save();
+
+        if ($request->input('type') == 'free') {
+
+            // Create New post //
+            $npost = new Post();
+            $npost->type = 'general';
+            $npost->user_id = auth('sanctum')->user()->id;
+            $npost->star_id = auth('sanctum')->user()->id;
+            $npost->category_id = auth('sanctum')->user()->category_id;
+            $npost->sub_category_id = auth('sanctum')->user()->sub_category_id;
+            $npost->event_id = $post->id;
+            $npost->title = $post->title;
+            $npost->status = 1;
+            $npost->details = $post->description;
+            $npost->save();
+        }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Post Added',
+        ]);
+
+
     }
 
     public function star_add(Request $request)
