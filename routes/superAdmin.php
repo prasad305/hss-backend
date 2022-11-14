@@ -158,7 +158,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/audition-superstar-list', [DashboardController::class, 'auditionSuperstarList'])->name('auditionEvents.superstarList');
     Route::get('/audition-superstar-events/{id}', [DashboardController::class, 'auditionSuperstarEvents'])->name('auditionEvents.superstarEvents');
     Route::get('/auditionAdmin-list', [DashboardController::class, 'auditionAdminList'])->name('auditionEvents.auditionAdminList');
-    Route::get('/audition-Admin-events/{id}', [DashboardController::class, 'auditionAdminEvents'])->name('auditionEvents.auditionAdminEvents');
+    Route::get('/audition-events/{id}', [DashboardController::class, 'auditionAdminEvents'])->name('auditionEvents.auditionAdminEvents');
+    Route::get('/audition-events/details/{id}', [DashboardController::class, 'auditionDetails'])->name('audition.details');
+    Route::get('/audition-events/edit/{id}', [DashboardController::class, 'auditionEdit'])->name('audition.edit');
+    Route::put('/audition-events/update/{id}', [DashboardController::class, 'auditionUpdate'])->name('audition.update');
+    Route::delete('/audition-events/destroy/{id}', [DashboardController::class, 'auditionDestroy'])->name('audition.destroy');
 
     // UserVoteMarkSetting
 

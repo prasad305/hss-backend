@@ -91,13 +91,13 @@
                                         @endif
                                     </td>
                                     <td style="width: 150px">
-                                        <a href="{{ route('superAdmin.meetupEvent.details', [$post->id]) }}"
+                                        <a href="{{ route('superAdmin.audition.details', [$post->id]) }}"
                                             class="btn btn-sm btn-success"> <i class="fa fa-eye"></i></a>
                                         <a class="btn btn-sm btn-info"
-                                            onclick="Show('Edit Post','{{ route('superAdmin.meetupEvent.edit', $post->id) }}')"><i
+                                            onclick="Show('Edit Post','{{ route('superAdmin.audition.edit', $post->id) }}')"><i
                                                 class="fa fa-edit text-white"></i></a>
                                         <button class="btn btn-sm btn-danger" onclick="delete_function(this)"
-                                            value="{{ route('superAdmin.meetupEvent.destroy', $post->id) }}"><i
+                                            value="{{ route('superAdmin.audition.destroy', $post->id) }}"><i
                                                 class="fa fa-trash"></i> </button>
                                     </td>
                                 </tr>
