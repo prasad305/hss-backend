@@ -167,7 +167,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/stripe-payment-success/{event_id}/{event_type}', [PaymentController::class, 'stripePaymentSuccess']);
 
     //stripe videoFeedReactStripe
-    Route::post('/stripe-stripe-video-react', [PaymentController::class, 'videoFeedReactStripe']);
+    Route::post('/buy-video-feed-react', [PaymentController::class, 'videoFeedReactBuy']);
 
 
 
