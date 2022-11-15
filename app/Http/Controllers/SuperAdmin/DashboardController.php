@@ -58,6 +58,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 use PhpParser\Node\Expr\FuncCall;
 
@@ -127,11 +128,15 @@ class DashboardController extends Controller
   {
     // dd($request);
     $user = User::find(Auth::user()->id);
-
-    if ($request['image']) {
-      $file_Name = time() . '.' . $request->file('image')->getClientOriginalExtension();
-      $user->image = $request->file('image')->storeAs('uploads', $file_Name, 'public');
-    }
+    if($request->hasFile('image')){
+      File::delete(public_path($user->image)); //Old image delete
+      $image             = $request->file('image');
+      $folder_path       = 'uploads/managerAdmin/image/';
+      $image_new_name    = Str::random(20).'-super-admin-'.now()->timestamp.'.'.$image->getClientOriginalExtension();
+      //resize and save to server
+      Image::make($image->getRealPath())->resize(600,600)->save($folder_path.$image_new_name, 100);
+      $user->image   = $folder_path . $image_new_name;
+  }
     //  dd($user);
     $user->first_name = $request->first_name;
     $user->last_name = $request->last_name;
