@@ -29,6 +29,8 @@ class AuditionRoundInfo extends Model
         'wildcard_status',
         'wildcard_round',
         'appeal',
+        'appeal_fee',
+        'round_fee',
         'video_feed',
         'video_duration',
         'video_slot_num',
