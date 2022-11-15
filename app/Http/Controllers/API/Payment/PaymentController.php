@@ -359,7 +359,7 @@ class PaymentController extends Controller
     /**
      * video feed reeact buy
      */
-    public function videoFeedReactStripe(Request $request)
+    public function videoFeedReactBuy(Request $request)
     {
         $user = auth()->user();
         // return loveReactPaymentMobile($user->id, $request->videoId, $request->reactNum, $request->modelName, $request->TXNAMOUNT);
@@ -399,7 +399,7 @@ class PaymentController extends Controller
             'value1' =>  $user->id,
             'value2' => $request->event_type,
             'value3' => $request->event_id,
-            'value4' => 0,
+            'value4' =>  $request->reactNum ? $request->reactNum : 0,
         );
 
 

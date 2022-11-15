@@ -20,7 +20,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: rgb(145, 141, 141);
+            background-color: #fff;
             font-family: 'Roboto', sans-serif;
 
         }
@@ -64,7 +64,7 @@
 
         @media only screen and (max-width: 600px) {
             .mainCard {
-                width: 90%;
+                width: 100%;
             }
 
             body {
@@ -75,7 +75,7 @@
 
         @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
             .mainCard {
-                width: 90%;
+                width: 100%;
             }
 
             body {
@@ -94,29 +94,34 @@
             </div>
             <div class="status">Payment Received</div>
 
-            <p>Hi, name</p>
+            <p>Hi, {{ $paymentData->name }}</p>
             <span>Your transaction was successfull !</span>
 
             <p>Payment Details:</p>
-            <span>Amount: €$moneyFormatter.format(${amount})</span>
+            <span>Amount: <b> {{ $paymentData->amount }}</b> ট</span>
             </br>
-            <span>Account: ${accountNumber}.</span>
+            <span>Account: <b> {{ $paymentData->method }}</b></span>
             </br>
-            <span>We advise to keep this email for future reference.</span>
+            <span>Date: <b> {{ $paymentData->date_time }}</b>
+                <p id="demo"></p>
+            </span>
+            </br>
 
 
             <div class="border"></div>
 
             <b class="id">
-                Transaction reference 2349048902348
+                Reference id : <p id='eventType'>{{ $paymentData->value2 }}</p>{{ $paymentData->order_id }}
             </b>
 
             <div style="display: flex;justify-content: center;">
                 <div style="display:flex;margin: 10px;">
 
-                    <div><img src="http://www.hadecoration.gift/public/images/ajax-loader-green.gif" height="20px"
-                            width="20px"></div>
-                    <div style="display: flex;justify-content: center;"> <span>Automatic redirect in 10 second</span>
+                    <div><img
+                            src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/585d0331234507.564a1d239ac5e.gif"
+                            height="20px" width="20px"></div>
+                    <div style="display: flex;justify-content: center;"> <span>Automatic redirect in <b
+                                id="seconds-counter"></b> seconds</span>
                     </div>
 
                 </div>
@@ -125,7 +130,7 @@
 
 
             <div style="display: flex;justify-content: center;">
-                <button
+                <button onclick="goBack()"
                     style="background-color: green; border:none; padding:5px 10px 5px 10px;color: white; border-radius: 10px; ">Go
                     Back</button>
             </div>
@@ -136,6 +141,52 @@
     </div>
 
 </body>
-</body>
+<script>
+    var eventType = document.getElementById('eventType').value;
+
+    window.onload = setTimeout(function() {
+        webSuccessRedirect();
+        window.ReactNativeWebView.postMessage('go-back');
+        window.ReactNativeWebView.postMessage(eventType);
+        window.top.postMessage(
+            JSON.stringify({
+                error: false,
+                message: "Hello-World"
+            }),
+            '*'
+        );
+    }, 10000);
+
+    function goBack() {
+        webSuccessRedirect();
+        window.ReactNativeWebView.postMessage('go-back');
+        window.ReactNativeWebView.postMessage(eventType);
+        window.top.postMessage(
+            JSON.stringify({
+                error: false,
+                message: "Hello-World"
+            }),
+            '*'
+        );
+    }
+
+
+    function webSuccessRedirect() {
+        window.parent.postMessage({
+            message: 'go-back'
+        }, "*");
+
+    }
+
+    var seconds = 10;
+    var el = document.getElementById('seconds-counter');
+
+    function incrementSeconds() {
+        seconds -= 1;
+        el.innerText = seconds;
+    }
+
+    var cancel = setInterval(incrementSeconds, 1000);
+</script>
 
 </html>
