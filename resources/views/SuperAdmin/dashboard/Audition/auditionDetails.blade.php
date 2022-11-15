@@ -139,7 +139,7 @@
                         <div class="col-md-2 card py-3 mr-3">
                             Total Participant
                             <h4 class="text-warning">
-                                00
+                                {{ $audition->auditionParticipant->count() }}
                             </h4>
                         </div>
                     </div>
@@ -192,8 +192,8 @@
 
                         <div class="col-md-6">
                             @foreach ($audition->admin as $admin)
-                                @if ($admin->user->image)
-                                    <img src="{{ asset($admin->user->image) }}"
+                                @if ($admin->admin->image)
+                                    <img src="{{ asset($admin->admin->image) }}"
                                         style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                 @else
                                     <a href="{{ asset('demo_image/demo_user.png') }}">
@@ -204,7 +204,7 @@
 
 
 
-                                <h3>{{ $admin->user->first_name }} {{ $admin->user->last_name }}</h3>
+                                <h3>{{ $admin->admin->first_name }} {{ $admin->admin->last_name }}</h3>
                             @endforeach
                         </div>
                     </div>

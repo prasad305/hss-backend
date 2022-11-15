@@ -82,7 +82,7 @@
                                     </td>
 
                                     <td>
-                                        @if ($post->status == 2)
+                                        @if ($post->status == 3)
                                             <span class="badge badge-success">Published<span>
                                                 @elseif ($post->status == 11)
                                                     <span class="badge badge-danger">Rejected<span>

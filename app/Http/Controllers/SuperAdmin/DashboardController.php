@@ -899,7 +899,7 @@ class DashboardController extends Controller
 
     $categories = Category::get();
     $total = Audition::count();
-    $published = Audition::where('status', 2)->count();
+    $published = Audition::where('status', 3)->count();
     $pending = Audition::where('status', '<', 2)->count();
     $rejected = Audition::where('status', 11)->count();
     // Registered User

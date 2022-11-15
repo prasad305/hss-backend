@@ -45,10 +45,10 @@
 
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
-                                            href="{{ route('superAdmin.meetupEvent.details', $post->id) }}">See
+                                            href="{{ route('superAdmin.audition.details', $post->audition->id) }}">See
                                             All</a></small>
                                 </span>
-                                @if ($post->audition->status == 2)
+                                @if ($post->audition->status == 3)
                                     <span class="badge badge-success">Published<span>
                                         @elseif ($post->status == 11)
                                             <span class="badge badge-danger">Rejected<span>
