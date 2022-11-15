@@ -13,8 +13,7 @@
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a
-                                href="{{ route('superAdmin.auditionEvents.superstarEvents') }}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('superAdmin.auditionEvents.dashboard') }}">Home</a></li>
                         <li class="breadcrumb-item active">Audition Events</li>
                     </ol>
                 </div><!-- /.col -->
@@ -36,64 +35,27 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Superstar</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning"
-                                        href="{{ route('superAdmin.auditionEvents.superstarEvents') }}">See
-                                        All</a></small>
-                            </span>
+                @foreach ($users as $judge)
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3 text-center border border-warning">
+                            <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
+                                    aria-hidden="true"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Category : {{ $judge->user->category->name }}</span>
+                                <span class="info-box-text">{{ $judge->user->first_name }}
+                                    {{ $judge->user->last_name }}</span>
+                                <span class="info-box-number">{{ $judge->user->category->audition->count() }}</span>
+                                <span class="info-box-number">
+                                    <small><a class="text-warning"
+                                            href="{{ route('superAdmin.auditionEvents.superstarEvents', $judge->user->id) }}">
+                                            See
+                                            All</a></small>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Superstar</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning"
-                                        href="{{ route('superAdmin.auditionEvents.superstarEvents') }}">See
-                                        All</a></small>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Superstar</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning" href="#">See
-                                        All</a></small>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3 text-center border border-warning">
-                        <span class="info-box-icon bg-primary elevation-1"><i class="fa fa-users"
-                                aria-hidden="true"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Superstar</span>
-                            <span class="info-box-number">410</span>
-                            <span class="info-box-number">
-                                <small><a class="text-warning" href="#">See
-                                        All</a></small>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
+
             </div>
         </div>
     </div>

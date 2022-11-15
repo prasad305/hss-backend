@@ -25,9 +25,24 @@ use App\Models\LiveChatRegistration;
 use App\Models\LearningSessionRegistration;
 use App\Models\Marketplace;
 use App\Models\Auction;
+use App\Models\Audition\Audition;
+use App\Models\Audition\AuditionAssignJudge;
+use App\Models\Audition\AuditionAssignJury;
+use App\Models\Audition\AuditionInfo;
+use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\AuditionRoundInfo;
+use App\Models\Audition\AuditionRoundMarkTracking;
+use App\Models\Audition\AuditionUploadVideo;
+use App\Models\Audition\AuditionUserVoting;
+use App\Models\auditionJudgeMark;
+use App\Models\AuditionOxygenReplyVideo;
+use App\Models\AuditionOxygenVideo;
+use App\Models\AuditionRoundInstruction;
 use App\Models\Bidding;
 use App\Models\GeneralPostPayment;
 use App\Models\GreetingsRegistration;
+use App\Models\LoveReact;
+use App\Models\LoveReactPrice;
 use App\Models\MarketplaceOrder;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
@@ -37,11 +52,15 @@ use App\Models\SimplePost;
 use App\Models\SouvenirApply;
 use App\Models\SouvenirCreate;
 use App\Models\Vaccination;
+use App\Models\WildCard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Image;
+use Intervention\Image\ImageManagerStatic as Image;
+use PhpParser\Node\Expr\FuncCall;
+
 
 class DashboardController extends Controller
 {
@@ -99,53 +118,54 @@ class DashboardController extends Controller
   }
 
   public function settings()
-    {
-        $user = User::find(Auth::user()->id);
-        // dd($user);
-        return view('SuperAdmin.profile.settings', compact('user'));
-    }
-    public function changeProfile(Request $request){
-// dd($request);
+  {
+    $user = User::find(Auth::user()->id);
+    // dd($user);
+    return view('SuperAdmin.profile.settings', compact('user'));
+  }
+  public function changeProfile(Request $request)
+  {
+    // dd($request);
     $user = User::find(Auth::user()->id);
 
     if ($request['image']) {
       $file_Name = time() . '.' . $request->file('image')->getClientOriginalExtension();
       $user->image = $request->file('image')->storeAs('uploads', $file_Name, 'public');
     }
-  //  dd($user);
+    //  dd($user);
     $user->first_name = $request->first_name;
     $user->last_name = $request->last_name;
     $user->update();
     return redirect()->back()->with('success', 'Changed Successfully');
+  }
+  public function changePassword(Request $request)
+  {
+    // return $request->all();
+    $request->validate([
+      'oldPassword' => 'required',
+      'password' => 'required',
+      'confirmPassword' => ['same:password'],
+    ]);
 
+    $userId = auth('sanctum')->user()->id;
+    $users = User::find($userId);
+
+
+    // oldPassword);
+    // formData.append("newPassword", newPassword);
+
+    if (Hash::check($request->oldPassword, $users->password)) {
+
+
+      $users->password = bcrypt($request->password);
+      $users->save();
+      Auth::logout();
+
+      return redirect()->back()->with('success', 'Changed Successfully');
+    } else {
+      return redirect()->back()->with('success', 'Not Changed');
     }
-    public function changePassword(Request $request){
-        // return $request->all();
-        $request->validate([
-            'oldPassword' => 'required',
-            'password' => 'required',
-            'confirmPassword' => ['same:password'],
-        ]);
-
-        $userId = auth('sanctum')->user()->id;
-        $users =User::find($userId);
-
-
-        // oldPassword);
-        // formData.append("newPassword", newPassword);
-
-        if (Hash::check($request->oldPassword , $users->password )){
-
-
-            $users->password = bcrypt($request->password);
-            $users->save();
-            Auth::logout();
-
-            return redirect()->back()->with('success', 'Changed Successfully');
-        }else{
-            return redirect()->back()->with('success', 'Not Changed');
-        }
-    }
+  }
 
 
   public function auditions()
@@ -871,42 +891,204 @@ class DashboardController extends Controller
     $posts = SimplePost::where('star_id', $id)->get();
     return view('SuperAdmin.dashboard.SimplePost.Superstar.superstar_events', compact('posts'));
   }
+
+
   // Dashboard Audition
   public function auditionEventsDashboard()
   {
-    return view('SuperAdmin.dashboard.Audition.dashboard');
+
+    $categories = Category::get();
+    $total = Audition::count();
+    $published = Audition::where('status', 3)->count();
+    $pending = Audition::where('status', '<', 2)->count();
+    $rejected = Audition::where('status', 11)->count();
+    // Registered User
+
+    $weeklyUser = AuditionParticipant::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+    $monthlyUser = AuditionParticipant::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+    $yearlyUser = AuditionParticipant::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
+
+    // Income Statement
+
+    $weeklyIncome = AuditionParticipant::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+    $monthlyIncome = AuditionParticipant::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+    $yearlyIncome = AuditionParticipant::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+
+    $labels = AuditionParticipant::get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+      return Carbon::parse($date->created_at)->format('M');
+    });
+
+    $months = [];
+    $amountCount = [];
+    foreach ($labels as $month => $values) {
+      $months[] = $month;
+      $amountCount[] = $values->sum('amount');
+    }
+    return view('SuperAdmin.dashboard.Audition.dashboard', compact('categories', 'total', 'published', 'pending', 'rejected', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome'))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
+  }
+  public function auditionList($id)
+  {
+
+    $postList = Audition::orderBy('id', 'DESC')->where('category_id', $id)->get();
+
+    return view('SuperAdmin.dashboard.Audition.postList', compact('postList'));
+  }
+  public function auditionDataList($type)
+  {
+    if ($type == 'total') {
+      $postList = Audition::with(['star', 'category'])->get();
+    } elseif ($type == 'published') {
+      $postList = Audition::with(['star', 'category'])->where('status', 2)->get();
+    } elseif ($type == 'pending') {
+      $postList = Audition::with(['star', 'category'])->where('status', '<', 2)->get();
+    } else {
+      $postList = Audition::with(['star', 'category'])->where('status', 11)->get();
+    }
+    return view('SuperAdmin.dashboard.Audition.postDataList', compact('postList'));
   }
   public function auditionManagerAdminList()
   {
-    return view('SuperAdmin.dashboard.Audition.ManagerAdmin.manager_admin');
+    $users = User::where('user_type', 'manager-admin')->latest()->get();
+    return view('SuperAdmin.dashboard.Audition.ManagerAdmin.manager_admin', compact('users'));
   }
-  public function auditionManagerAdminEvents()
+  public function auditionManagerAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.Audition.ManagerAdmin.manager_admin_events');
+    $posts = Audition::where('category_id', $id)->get();
+    return view('SuperAdmin.dashboard.Audition.ManagerAdmin.manager_admin_events', compact('posts'));
   }
   public function adminList()
   {
-    return view('SuperAdmin.dashboard.Audition.Admin.admin');
+    $users = AuditionAssignJudge::orderBy('id', 'DESC')->latest()->get();
+    return view('SuperAdmin.dashboard.Audition.Admin.admin', compact('users'));
   }
-  public function adminEvents()
+  public function adminEvents($id)
   {
-    return view('SuperAdmin.dashboard.Audition.Admin.admin_events');
+    $posts = AuditionAssignJudge::withOnly('audition')->where('judge_admin_id', $id)->get();
+    return view('SuperAdmin.dashboard.Audition.Admin.admin_events', compact('posts'));
   }
   public function auditionAdminList()
   {
-    return view('SuperAdmin.dashboard.Audition.AuditionAdmin.audition_admin');
+    $users = User::where('user_type', 'audition-admin')->latest()->get();
+    return view('SuperAdmin.dashboard.Audition.AuditionAdmin.audition_admin', compact('users'));
   }
-  public function auditionAdminEvents()
+  public function auditionAdminEvents($id)
   {
-    return view('SuperAdmin.dashboard.Audition.AuditionAdmin.audition_admin_events');
+    $posts = Audition::where('audition_admin_id', $id)->get();
+    return view('SuperAdmin.dashboard.Audition.AuditionAdmin.audition_admin_events', compact('posts'));
   }
   public function auditionSuperstarList()
   {
-    return view('SuperAdmin.dashboard.Audition.Superstar.superstar');
+    $users = AuditionAssignJudge::orderBy('id', 'DESC')->latest()->get();
+    return view('SuperAdmin.dashboard.Audition.Superstar.superstar', compact('users'));
   }
-  public function auditionSuperstarEvents()
+  public function auditionSuperstarEvents($id)
   {
-    return view('SuperAdmin.dashboard.Audition.Superstar.superstar_events');
+    $posts = AuditionAssignJudge::withOnly('audition')->where('judge_id', $id)->get();
+    return view('SuperAdmin.dashboard.Audition.Superstar.superstar_events', compact('posts'));
+  }
+  public function auditionDetails($id)
+  {
+    $audition = Audition::find($id);
+    // return $audition;
+    // return $audition['participant'];
+    // dd($audition);
+    return view('SuperAdmin.dashboard.Audition.auditionDetails', compact('audition'));
+  }
+  public function auditionEdit($id)
+  {
+    $event = Audition::find($id);
+    return view('SuperAdmin.dashboard.Audition.edit', compact('event'));
+  }
+  public function auditionUpdate(Request $request, $id)
+  {
+
+    $request->validate([
+      'title' => 'required',
+      'description' => 'required|min:5',
+      'instruction' => 'required|min:5',
+      'banner' => 'mimes:png,jpg,jpeg,webP',
+    ], [
+      'title.required' => 'This Field Is Required',
+      'description.required' => 'This Field Is Required',
+      'instruction.required' => 'This Field Is Required',
+    ]);
+
+    $audition = Audition::find($id);
+    $audition->fill($request->except('_token', 'image'));
+
+    $audition->title = $request->input('title');
+    $audition->description = $request->input('description');
+    $audition->instruction = $request->input('instruction');
+
+
+    if ($request->hasfile('image')) {
+      $destination = $audition->banner;
+      if (File::exists($destination)) {
+        File::delete($destination);
+      }
+      $file = $request->file('image');
+      $extension = $file->getClientOriginalExtension();
+      $filename = 'uploads/images/auditions/post/' . time() . '.' . $extension;
+
+      Image::make($file)->resize(900, 400)->save($filename, 50);
+      $audition->banner = $filename;
+    }
+
+    try {
+      $audition->update();
+      if ($audition) {
+        return response()->json([
+          'success' => true,
+          'message' => 'Meetup Event Updated Successfully'
+        ]);
+      }
+    } catch (\Exception $exception) {
+      return response()->json([
+        'type' => 'error',
+        'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+      ]);
+    }
+  }
+  public function auditionDestroy($id)
+  {
+
+    $audition = Audition::find($id);
+
+    try {
+      if ($audition->banner != null)
+        File::delete(public_path($audition->banner)); //Old image delete
+      if ($audition->video != null)
+        File::delete(public_path($audition->video)); //Old cover_photo delete
+      AuditionRoundInfo::where('audition_id', $id)->delete();
+      AuditionAssignJudge::where('audition_id', $id)->delete();
+      AuditionAssignJury::where('audition_id', $id)->delete();
+      AuditionUploadVideo::where('audition_id', $id)->delete();
+      AuditionOxygenVideo::where('audition_id', $id)->delete();
+      AuditionOxygenReplyVideo::where('audition_id', $id)->delete();
+      AuditionRoundMarkTracking::where('audition_id', $id)->delete();
+      AuditionRoundInstruction::where('audition_id', $id)->delete();
+      WildCard::where('audition_id', $id)->delete();
+      AuditionUserVoting::where('audition_id', $id)->delete();
+      AuditionParticipant::where('audition_id', $id)->delete();
+      AuditionInfo::where('audition_id', $id)->delete();
+      LoveReact::where('audition_id', $id)->delete();
+      auditionJudgeMark::where('audition_id', $id)->delete();
+
+      $audition->delete();
+      return response()->json([
+        'type' => 'success',
+        'message' => 'Successfully Deleted'
+      ]);
+    } catch (\Exception $exception) {
+      return response()->json([
+        'type' => 'error',
+        'message' => $exception->getMessage()
+      ]);
+    }
+    $audition = Audition::find($id);
+
+    return view('SuperAdmin.dashboard.Audition.auditionDetails', compact('audition'));
   }
 
   // Auction
