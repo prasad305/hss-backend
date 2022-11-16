@@ -59,7 +59,7 @@
                             @if($user->image)
                                     <img src="{{asset($user->image)}}" class="img-circle" style="width:150px; height:150px; border:3px solid #FFD700" alt="Image not found">
                                     <br>
-                                    <input type="file" name="profile" style="width:93px;">
+                                    <input type="file" name="profile" style="width:93px;" onChange="PreviewImage(this)">
 
                             @else
                                 <img src="{{asset('uploads/images/users/manager-admin-avatar.png')}}" class="img-circle" style="width:150px; height:150px; border:3px solid #FFD700" alt="Image not found">
