@@ -58,8 +58,12 @@ Super Admin
                             @csrf
                             <div class="panel panel-primary">
                                 <div style="text-align: center;">
-                                    <img src="{{$user->image ? asset($user->image) : asset('demo_image/demo_user.png')}}" id="show-image" class="rounded-circle" style="width: 150px;height:150px; border: 1px solid gold;" alt="Avatar" /><br>
-                                    <input type="file" name="image" style="text-align: center;padding-left:70px;" id="customFile" onChange="PreviewImage(this)"/>
+                                    <div style="position:relative;width: 150px;height:150px; display:inline-block;">
+                                        <img src="{{$user->image ? asset($user->image) : asset('demo_image/demo_user.png')}}" id="show-image" class="rounded-circle" style="width: 150px;height:150px; border: 1px solid gold;" alt="Avatar" />
+
+                                        <label for="customFile" class="btn btn-warning" style="border-radius:50%; position:absolute; top:90%; left:65%; transform: translate(-90%, -50%);"><i class="fa fa-camera" aria-hidden="true"></i></label>
+                                        <input type="file"  name="image" style="display:none;" id="customFile" onChange="PreviewImage(this)"/>
+                                    </div>
                                 </div>
 
                                 <div class="panel-heading">

@@ -373,7 +373,6 @@
         function PreviewImage(event){
             let file = URL.createObjectURL(event.files[0]);
             document.getElementById('show-image').src = file;
-            console.log(file)
         }
     </script>
 
