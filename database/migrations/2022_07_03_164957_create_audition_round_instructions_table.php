@@ -22,6 +22,8 @@ class CreateAuditionRoundInstructionsTable extends Migration
             $table->string('video')->nullable();
             $table->string('image')->nullable();
             $table->string('document')->nullable();
+            $table->double('round_fee', 8, 2)->default(0);
+            $table->double('appeal_fee', 8, 2)->default(0);
             $table->date('submission_end_date')->nullable();
             $table->integer('send_to_user')->default(0)->comment('0= not send, 1= send');
             $table->integer('send_to_judge')->default(0)->comment('0= not send, 1= send');

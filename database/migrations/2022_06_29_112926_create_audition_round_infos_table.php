@@ -29,6 +29,8 @@ class CreateAuditionRoundInfosTable extends Migration
             $table->integer('videofeed_status')->default(0)->comment('0 = unpublished , 1 = published from manager admin');
             $table->integer('wildcard_round')->nullable();
             $table->integer('appeal')->nullable()->comment('0 = no, 1= yes');
+            $table->double('round_fee', 8, 2)->default(0);
+            $table->double('appeal_fee', 8, 2)->default(0);
             $table->integer('video_feed')->nullable()->comment('0 = no, 1= yes');
             $table->integer('oxygen_feed')->nullable()->comment('0 = no, 1= yes');
             $table->integer('video_duration')->nullable();

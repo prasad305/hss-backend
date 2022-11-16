@@ -35,7 +35,6 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
@@ -53,9 +52,10 @@
         type="text/css" />
     <link href="{{ asset('assets/super-admin/plugins/datatables/scroller.bootstrap.min.css') }}" rel="stylesheet"
         type="text/css" />
-
+    <link href="{{ asset('assets/new-main.css') }}" rel="stylesheet" type="text/css" />
     @stack('datatableCSS')
     @stack('css')
+
 
 </head>
 
@@ -83,10 +83,6 @@
                     <a href="#" class="nav-link">Contact</a>
                 </li>
             </ul>
-
-
-
-
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
