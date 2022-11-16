@@ -350,65 +350,34 @@
 
                 <div class="viewMb">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li class=" nav-item custom-nav-item m-2 mt-4 TextBH">
-                            <a class="nav-link border-warning text-warning font-weight-bold" data-toggle="tab"
-                                href="" role="tab">
-                                <center class="mb-2">
-                                    <h2 class="roundText">Round</h2>
-                                    <span class="text-warning roundIndex p-1">1
-                                    </span>
-                                </center>
-                                <a onclick="showRules(1)" class="btn border-warning btn-act" data-toggle="tab"
-                                    href="" role="tab">Rules</a>
-                            </a>
-                        </li>
 
-                        <li class=" nav-item custom-nav-item m-2 mt-4 TextBH">
-                            <a class="nav-link border-warning text-warning font-weight-bold" data-toggle="tab"
-                                href="" role="tab">
-                                <center class="mb-2">
-                                    <h2 class="roundText">Round</h2>
-                                    <span class="text-warning roundIndex p-1">2
-                                    </span>
-                                </center>
-                                <a onclick="showRules(2)" class="btn border-warning btn-act" data-toggle="tab"
-                                    href="" role="tab">Rules</a>
-                            </a>
-                        </li>
+                        @foreach ($audition->auditionRound as $key => $round)
+                            <li class=" nav-item custom-nav-item m-2 mt-4 TextBH">
+                                <a class="nav-link border-warning text-warning font-weight-bold" data-toggle="tab"
+                                    href="" role="tab">
+                                    <center class="mb-2">
+                                        <h2 class="roundText">Round</h2>
+                                        <span class="text-warning roundIndex p-1">{{ $key + 1 }}
+                                        </span>
+                                    </center>
+                                    <a onclick="showData({{ $round->id }})" class="btn border-warning btn-act"
+                                        data-toggle="tab" href="" role="tab">Show</a>
+                                </a>
+                            </li>
+                        @endforeach
 
-                        <li class=" nav-item custom-nav-item m-2 mt-4 TextBH">
-                            <a class="nav-link border-warning text-warning font-weight-bold" data-toggle="tab"
-                                href="" role="tab">
-                                <center class="mb-2">
-                                    <h2 class="roundText">Round</h2>
-                                    <span class="text-warning roundIndex p-1">3
-                                    </span>
-                                </center>
-                                <a onclick="showRules(3)" class="btn border-warning btn-act" data-toggle="tab"
-                                    href="" role="tab">Rules</a>
-                            </a>
-                        </li>
+
+
                     </ul>
 
 
                     {{-- Tab Components --}}
-                    <div class="my-3 col-md-12" id="show-views" style="display:none">
+                    <div class="my-3 col-md-12 col-lg-12" id="show-views" style="display:none">
 
-                        {{-- Show ====> Id :mycode --}}
+                        {{-- show code here --}}
 
-                    </div>
-                    {{-- Tab Components --}}
-
-                    {{-- Show ====> Id :Show-views in  --}}
-                    <div class="col-md-4 col-lg-4 mb-1" id="mycode" style="display:none">
-
-                        <div class="card p-2">
-                            <h4 class="text-light">Srabaon's Marriage</h4>
-                            <span class="text-light text-mute">Lorem ipsum dolor sit amet, consectetur adip</span>
-                        </div>
 
                     </div>
-                    {{-- Show ====> Id :Show-views --}}
 
                 </div>
 
@@ -416,12 +385,53 @@
             </div>
         </div>
     @endsection
-    <script>
-        function showRules(round_id) {
-            var tabcode = $('#mycode').html();
 
-            $('#show-views').html(tabcode);
-            $('#show-views').attr("style", "display:block");
+
+    <script>
+        function showData(round_id) {
+            var url = "{{ url('super-admin/audition-events/round/details/') }}";
+
+            $.ajax({
+                url: url + "/" + round_id, // your request url
+                type: 'GET',
+                success: function(data) {
+                    console.log(data);
+
+
+                    var htmlcode =
+                        `<div class="row">
+                            <div class=" col-md-3 col-lg-3 ">
+                                <div class='card mx-1'> <h3 class='text-warning p-4'>Total Participant :&nbsp${data.roundParticipant}</h3></div>
+
+                                </div>
+                            <div class="col-md-3 col-lg-3">
+     
+                                <div class='card mx-1'> <h3 class='mx-2 text-warning p-4'>Total Videos :&nbsp${data.roundParticipantVideos}</h3></div>
+                                
+                                </div>
+                            <div class="col-md-3 col-lg-3"> 
+                                <div class='card mx-1'>  <h3 class='text-warning p-4'>Total Appeal :&nbsp${data.roundAppeal}</h3></div>
+          
+                                </div>
+                            <div class="col-md-3 col-lg-3">
+                                <div class='card mx-1'>    <h3 class='text-warning p-4'>Total Certification :&nbsp${data.roundCertification}</h3></div>
+                 
+                                </div>
+                            <div class="col-md-3 col-lg-3">
+                                <div class='card mx-1'>      <h3 class='text-warning p-4'>Total Winner :&nbsp${data.roundWinner}</h3></div>
+        
+                                </div>
+                            <div class="col-md-3 col-lg-3">
+                                <div class='card mx-1'> <h3 class='text-warning p-4'>Total Failed :&nbsp${data.roundFailed}</h3></div>
+                      
+                                </div>
+
+                        </div>`
+
+                    $('#show-views').html(htmlcode);
+                    $('#show-views').attr("style", "display:block");
+                }
+            })
 
         }
     </script>

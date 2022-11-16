@@ -34,6 +34,7 @@ use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundMarkTracking;
 use App\Models\Audition\AuditionUploadVideo;
 use App\Models\Audition\AuditionUserVoting;
+use App\Models\AuditionCertification;
 use App\Models\auditionJudgeMark;
 use App\Models\AuditionOxygenReplyVideo;
 use App\Models\AuditionOxygenVideo;
@@ -128,15 +129,15 @@ class DashboardController extends Controller
   {
     // dd($request);
     $user = User::find(Auth::user()->id);
-    if($request->hasFile('image')){
+    if ($request->hasFile('image')) {
       File::delete(public_path($user->image)); //Old image delete
       $image             = $request->file('image');
       $folder_path       = 'uploads/managerAdmin/image/';
-      $image_new_name    = Str::random(20).'-super-admin-'.now()->timestamp.'.'.$image->getClientOriginalExtension();
+      $image_new_name    = Str::random(20) . '-super-admin-' . now()->timestamp . '.' . $image->getClientOriginalExtension();
       //resize and save to server
-      Image::make($image->getRealPath())->resize(600,600)->save($folder_path.$image_new_name, 100);
+      Image::make($image->getRealPath())->resize(600, 600)->save($folder_path . $image_new_name, 100);
       $user->image   = $folder_path . $image_new_name;
-  }
+    }
     //  dd($user);
     $user->first_name = $request->first_name;
     $user->last_name = $request->last_name;
@@ -1000,6 +1001,30 @@ class DashboardController extends Controller
     // dd($audition);
     return view('SuperAdmin.dashboard.Audition.auditionDetails', compact('audition'));
   }
+  public function roundDetails($id)
+  {
+    $auditionRoundInfos = AuditionRoundInfo::find($id);
+    $roundParticipant = AuditionUploadVideo::where('round_info_id', $id)->distinct()->count('user_id');
+    $roundParticipantVideos = AuditionUploadVideo::where('round_info_id', $id)->count();
+    $roundAppeal = AuditionUploadVideo::where([['round_info_id', $id], ['type', 'appeal']])->distinct()->count('user_id');
+    $roundCertification = AuditionCertification::where('round_info_id', $id)->distinct()->count('participant_id');
+    $roundWinner = AuditionRoundMarkTracking::where([['round_info_id', $id], ['wining_status', 1]])->distinct()->count('user_id');
+    $roundFailed = AuditionRoundMarkTracking::where([['round_info_id', $id], ['wining_status', 0]])->distinct()->count('user_id');
+
+
+    return response()->json([
+      'status' => 200,
+      'auditionRoundInfos' => $auditionRoundInfos,
+      'roundParticipant' => $roundParticipant,
+      'roundCertification' => $roundCertification,
+      'roundAppeal' => $roundAppeal,
+      'roundWinner' => $roundWinner,
+      'roundFailed' => $roundFailed,
+      'roundParticipantVideos' => $roundParticipantVideos,
+
+
+    ]);
+  }
   public function auditionEdit($id)
   {
     $event = Audition::find($id);
@@ -1091,9 +1116,9 @@ class DashboardController extends Controller
         'message' => $exception->getMessage()
       ]);
     }
-    $audition = Audition::find($id);
 
-    return view('SuperAdmin.dashboard.Audition.auditionDetails', compact('audition'));
+
+    return redirect()->back();
   }
 
   // Auction
