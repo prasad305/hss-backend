@@ -348,6 +348,7 @@ class FanGroupController extends Controller
             ->where('status', 1)
             ->orderBy('id', 'DESC')
             ->get();
+        $allFanGroup = FanGroup::where([['my_star', $id], ['status', 1]])->orWhere([['another_star', $id], ['status', 1]])->get();
 
         // return $star;
 
@@ -357,6 +358,7 @@ class FanGroupController extends Controller
             'starApproved' => $starApproved,
             'starRejected' => $starRejected,
             'starLiveGroup' => $starLiveGroup,
+            'allFanGroup' => $allFanGroup,
             'id' => $id,
         ]);
     }
