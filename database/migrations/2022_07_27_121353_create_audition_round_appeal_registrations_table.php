@@ -22,6 +22,7 @@ class CreateAuditionRoundAppealRegistrationsTable extends Migration
             $table->integer('status')->default(0)->comment('0 = default');
 
             $table->boolean('payment_status')->nullable();
+            $table->string('payment_method')->nullable();
             $table->timestamp('payment_date')->nullable();
             $table->float('amount')->nullable();
             $table->string('card_holder_name')->nullable();
