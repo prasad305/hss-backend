@@ -5,6 +5,10 @@ use App\Http\Controllers\API\MarketplaceMobileAppController;
 use App\Http\Controllers\API\AuthController;
 use Illuminate\Support\Facades\Route;
 
+/**
+ *  Download learning session certificate
+ */
+Route::post('mobile/audition/getLearningSessionCertificate/{slug}', [UserMobileAppController::class, 'getLearningSessionCertificate']);
 
 // Registered & Verified User Middleware
 Route::get('/mobile/getVirtualTourVideo', [UserMobileAppController::class, 'getVirtualTourVideo']);
@@ -73,10 +77,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
      */
     Route::get('mobile/audition/getAuditionCertificate/{audition_id}/{round_info_id}', [UserMobileAppController::class, 'getCertificate']);
 
-    /**
-     *  Download learning session certificate
-     */
-    Route::post('mobile/audition/getLearningSessionCertificate/{slug}', [UserMobileAppController::class, 'getLearningSessionCertificate']);
+
     /**
      * tiket for offline meetup
      */
@@ -88,6 +89,4 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     /**
      * Virtual Tour Video
      */
-    
-    
 });

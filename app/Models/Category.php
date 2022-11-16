@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Audition\Audition;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -70,5 +71,9 @@ class Category extends Model
     public function souvenir()
     {
         return $this->hasMany(SouvenirCreate::class, 'category_id');
+    }
+    public function audition()
+    {
+        return $this->hasMany(Audition::class, 'category_id');
     }
 }

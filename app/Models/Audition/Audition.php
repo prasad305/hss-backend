@@ -13,7 +13,7 @@ class Audition extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $with = ['assignedJudges', 'info', 'category', 'participant', 'activeRoundInfo', 'auditionRules', 'assignedJuries', 'uploadedVideos', 'admin', 'auditionAdmin', 'auditionRound'];
+    protected $with = ['auditionParticipant', 'assignedJudges', 'info', 'category', 'participant', 'activeRoundInfo', 'auditionRules', 'assignedJuries', 'uploadedVideos', 'admin', 'auditionAdmin', 'auditionRound'];
 
     public function category()
     {
@@ -95,5 +95,9 @@ class Audition extends Model
     public function activeRoundInfo()
     {
         return $this->hasOne(AuditionRoundInfo::class, 'id', 'active_round_info_id');
+    }
+    public function auditionParticipant()
+    {
+        return $this->hasMany(AuditionParticipant::class, 'audition_id', 'id');
     }
 }
