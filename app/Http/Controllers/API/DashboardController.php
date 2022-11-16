@@ -271,6 +271,29 @@ class DashboardController extends Controller
             'souvenirCreate' => $souvenirCreate,
         ]);
     }
+    public function notification()
+    {
+        $pendingLearningSessions = LearningSession::where([['star_id', auth('sanctum')->user()->id],['status', 0]])->get();
+        $pendingQna = QnA::where([['star_id', auth('sanctum')->user()->id],['star_approval', 0]])->get();
+        $pendingMeetupEvent = MeetupEvent::where([['star_id', auth('sanctum')->user()->id],['status', 0]])->get();
+        $pendingPost = SimplePost::where([['star_id', auth('sanctum')->user()->id],['star_approval', 0]])->get();
+        $pendingGreeting = Greeting::where([['star_id', auth('sanctum')->user()->id], ['star_approve_status', 0]])->get();
+        $pendingFanGroup = FanGroup::where([['my_star', auth('sanctum')->user()->id],['my_star_status', 0]])->orWhere([['another_star', auth('sanctum')->user()->id],['another_star_status', 0]])->get();
+        $pendingAuction = Auction::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 0]])->get();
+        $pendingSouvenir = SouvenirCreate::where([['star_id', auth('sanctum')->user()->id], ['approval_status', 0]])->get();
+        return response()->json([
+            'status' => 200,
+            'pendingLearningSessions' => $pendingLearningSessions,
+            'pendingQna' => $pendingQna,
+            'pendingMeetupEvent' => $pendingMeetupEvent,
+            'pendingPost' => $pendingPost,
+            'pendingGreeting' => $pendingGreeting,
+            'pendingFanGroup' => $pendingFanGroup,
+            'pendingAuction' => $pendingAuction,
+            'pendingSouvenir' => $pendingSouvenir,
+        ]);
+
+    }
     public function starDashboardCount(){
         $post = SimplePost::where('star_id', auth('sanctum')->user()->id)->count();
         $liveChat = LiveChat::where('star_id', auth('sanctum')->user()->id)->count();
