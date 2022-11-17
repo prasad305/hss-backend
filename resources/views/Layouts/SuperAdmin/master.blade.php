@@ -370,6 +370,13 @@
     @stack('js')
 
     <script>
+        function PreviewImage(event){
+            let file = URL.createObjectURL(event.files[0]);
+            document.getElementById('show-image').src = file;
+        }
+    </script>
+
+    <script>
         $(function() {
             $("#example1").DataTable({
                 "responsive": true,
