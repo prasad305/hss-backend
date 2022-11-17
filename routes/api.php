@@ -641,6 +641,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/checkingSuperStar', function () {
         return response()->json(['message' => 'You are in as Superstar', 'status' => 200], 200);
     });
+    Route::get('star/dashboard/posts/{type}', [DashboardController::class, 'adminPost']);
+    Route::get('star/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
+    Route::get('star/dashboard/mobile', [DashboardController::class, 'starDashboardCount']);
     Route::get('star/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('star/dashboard/posts/{type}', [DashboardController::class, 'dashboardPosts']);
     Route::get('star/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
@@ -675,6 +678,13 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/fan/group/analytics/{slug}', [FanGroupController::class, 'showFanGroupAnalytics']);
     Route::post('/star/fan/group/deline/nofification/{postId}', [FanGroupController::class, 'declineFanPostNotification']);
 
+    // StarShowCase API for Mobile count
+    Route::get('/star/showcase/count/mobile', [DashboardController::class, 'starShowCaseProductsCount']);
+    Route::get('/star/showcase/MarketplaceProductMobile/mobile', [MarketplaceController::class, 'MarketplaceProductMobile']);
+    Route::post('star/marketplace/store/mobile', [MarketplaceController::class, 'starMarketplaceStoreMobile']);
+    Route::get('/star/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
+    Route::get('/star/liveBidding/auction/{auction_id}', [AuctionController::class, 'liveBidding']);
+
     // Marketplace Section
     Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);
     Route::get('/star/marketplace/product-list/approved', [MarketplaceController::class, 'allStarProductList']);
@@ -687,6 +697,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
 
     // Simple Post Section
+    Route::get('/star/simple_post/all/mobile', [SimplePostController::class, 'star_all_mobile']);
+    Route::post('/star/add_simple_post/mobile', [SimplePostController::class, 'star_add_mobile']);
     Route::post('/star/add_simple_post', [SimplePostController::class, 'star_add']);
     Route::get('/star/simple_post/all', [SimplePostController::class, 'star_all']);
     Route::get('/star/simple_post/count', [SimplePostController::class, 'star_count']);
@@ -698,6 +710,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/decline_post/{id}', [SimplePostController::class, 'decline_post']);
 
     // Souviner Section
+    Route::post('/star/souviner/store/mobile', [SouvinerController::class, 'souvinerStarStoreMobile']);
     Route::post('/star/souviner/store', [SouvinerController::class, 'souvinerStarStore']);
     Route::get('/star/souviner/check', [SouvinerController::class, 'souvinerStarCheck']);
     Route::get('/star/souviner/edit/{id}', [SouvinerController::class, 'souvinerStarEdit']);
@@ -710,6 +723,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
 
     // Learning Session Section
+    Route::get('/star/learning_session/allInOneMobile', [LearningSessionController::class, 'allInOneMobileLearning']);
     Route::post('/star/learning_session/create', [LearningSessionController::class, 'star_add']);
     Route::post('/star/update_learning_session/{id}', [LearningSessionController::class, 'update']);
     Route::get('/star/learning_session/all', [LearningSessionController::class, 'star_all']);
@@ -729,10 +743,14 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/learning_session/result', [LearningSessionController::class, 'starShowLearninSessionResult']);
     Route::get('/star/learning_session/showResult/{eventId}', [LearningSessionController::class, 'starShowLearninSessionResultData']);
 
+    //Learning Session For Mobile
+    Route::post('/star/mobile/learning_session/create', [LearningSessionController::class, 'star_add_mobile']);
+
 
 
     // Question and Answers
-
+    Route::get('/star/qna/allInOneMobile', [QnaController::class, 'allInOneMobileQna']);
+    Route::post('/star/qna/add_qna_mobile', [QnaController::class, 'star_add_qna_mobile']);
     Route::post('/star/add_qna', [QnaController::class, 'star_add_qna']);
     Route::get('/star/pending/qna', [QnaController::class, 'star_pendingQna']);
     Route::get('/star/qna/count', [QnaController::class, 'star_count']);
@@ -764,7 +782,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
 
     // Meetup Event Section
+    Route::get('/star/meetup_event/mobile/count', [MeetupEventController::class, 'star_meetup_list_count']);
     Route::get('/star/meetup_event/{type}', [MeetupEventController::class, 'star_meetup_list']);
+    Route::post('/star/add_meetup/mobile', [MeetupEventController::class, 'star_add_meetup_mobile']);
     Route::post('/star/add_meetup', [MeetupEventController::class, 'star_add_meetup']);
     Route::get('/star/meetup_event/details/{slug}', [MeetupEventController::class, 'details']);
     Route::get('/star/meetup_event/set_approve/{id}', [MeetupEventController::class, 'set_approve']);
@@ -774,6 +794,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/live_chat/count', [LiveChatController::class, 'count2']);
 
     // star greeting related list
+    Route::post('/star/add_greetings/mobile', [StarGreetingController::class, 'add_greetings_mobile']);
     Route::post('/star/add_greetings', [StarGreetingController::class, 'add_greetings']);
     Route::post('/star/edit_greetings', [StarGreetingController::class, 'edit_greetings']);
     Route::get('/star/approve_greeting/{greeting_id}', [StarGreetingController::class, 'approve_greeting']);
@@ -784,6 +805,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     // Route::get('/star/greetings_reg_list/{greetings_id}', [StarGreetingController::class, 'greetingsRegisterListByGreetingsId']);
     // Route::get('/star/greetings_reg_payment_list', [StarGreetingController::class, 'greetingsRegisterWithPaymentList']);
     // Route::get('/star/greetings', [StarGreetingController::class, 'view_star_greeting']);
+    Route::get('/star/allGreetingInfo/mobile', [StarGreetingController::class, 'allGreetingInfo']);
     Route::get('/star/greetings_register_list_with_payment_complete', [StarGreetingController::class, 'registerListWithPaymentComplete']);
     Route::get('/star/greetings_video_uploaded_list', [StarGreetingController::class, 'greetingsVideoUploadedList']);
     Route::get('/star/greetings_forwarded_to_user_list', [StarGreetingController::class, 'greetingsForwardedToUserList']);
@@ -792,6 +814,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     //<======================== Auction Route ========================>
 
+    Route::get('/star/add/auction/product/mobile', [AuctionController::class, 'auctionHomeMobile']);
+    Route::post('/star/add/auction/mobile', [AuctionController::class, 'star_addProduct_mobile']);
     Route::post('/star/add/auction/product', [AuctionController::class, 'star_addProduct']);
     Route::get('/star/editOrConfirm/auction/editOrConfirm/{id}', [AuctionController::class, 'star_editOrConfirm']);
     Route::get('/star/edit/auction/{id}', [AuctionController::class, 'star_editProduct']);
@@ -814,6 +838,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
 
     // Super Star Audition Routes
+    Route::get('superstar/audition/mobile', [JudgeAuditionController::class, 'auditionDashboardMobile']);
     Route::get('superstar/audition/promo-instruction-pending', [JudgeAuditionController::class, 'starPromoInstructionPending']);
     Route::get('superstar/audition/by-promo-instruction-pending/{id}', [JudgeAuditionController::class, 'starAuditionByPromoInstructionPending']);
     Route::get('superstar/audition/get-round-instruction-by-judge/{audition_id}/{round_id}', [JudgeAuditionController::class, 'getRoundInstructionByJudge']);

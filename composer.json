@@ -24,6 +24,7 @@
         "realrashid/sweet-alert": "^4.1",
         "shurjopayv2/laravel8": "dev-master",
         "simplesoftwareio/simple-qrcode": "^4.2",
+        "smukhidev/shurjopay-laravel-package": "dev-master",
         "spatie/laravel-stripe-webhooks": "^2.6",
         "stevebauman/location": "^6.5",
         "stripe/stripe-php": "7.51",
