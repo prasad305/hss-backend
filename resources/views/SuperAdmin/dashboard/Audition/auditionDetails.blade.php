@@ -389,7 +389,7 @@
 
     <script>
         function showData(round_id) {
-            var url = "{{ url('super-admin/audition-events/round/details/') }}";
+            var url = "{{ url('super-admin/audition-events/round/details') }}";
 
             $.ajax({
                 url: url + "/" + round_id, // your request url
