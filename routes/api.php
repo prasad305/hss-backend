@@ -141,6 +141,12 @@ Route::post('paytm-callback/{redirectTo}/{user_id}/{type}/{event_id}/{reactNum?}
 //paytm mobile
 Route::get('/txn-token-mobile/{amount}', [PaymentController::class, 'txnTokenGenerate']);
 
+//pocket get token
+Route::get('/pocket-token', [PaymentController::class, 'pocketToken']);
+
+Route::post('/pocket-signature', [PaymentController::class, 'getPocketSignature']);
+
+
 
 
 
@@ -150,6 +156,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/checkingAuthenticated', function () {
         return response()->json(['message' => 'You are in', 'status' => 200], 200);
     });
+
+    //delete account
+    Route::post('/delet-user', [UserController::class, 'deleteUser']);
 
     //shurjoy pay
     Route::post('/initiata-shurjo-payment', [PaymentController::class, 'initiataShurjoPayment']);
