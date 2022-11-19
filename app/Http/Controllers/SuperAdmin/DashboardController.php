@@ -52,6 +52,7 @@ use App\Models\QnaRegistration;
 use App\Models\SimplePost;
 use App\Models\SouvenirApply;
 use App\Models\SouvenirCreate;
+use App\Models\SouvenirPayment;
 use App\Models\Vaccination;
 use App\Models\WildCard;
 use Illuminate\Http\Request;
@@ -106,8 +107,13 @@ class DashboardController extends Controller
     $data['totalLearningAmount'] = LearningSessionRegistration::sum('amount');
     $data['totalPostAmount'] = GeneralPostPayment::sum('amount');
     $data['totalLiveChatAmount'] = LiveChatRegistration::sum('amount');
+    $data['totalQnaAmount'] = QnaRegistration::sum('amount');
     $data['totalGreetingAmount'] = GreetingsRegistration::sum('amount');
     $data['totalMeetUpAmount'] = MeetupEventRegistration::sum('amount');
+    $data['totalAuditionAmount'] = AuditionParticipant::sum('amount');
+    $data['totalSouvenirAmount'] = SouvenirPayment::sum('total_amount');
+    $data['totalMarketplaceAmount'] = MarketplaceOrder::sum('total_price');
+    $data['totalAuctionAmount'] = Bidding::where('win_status', 1)->sum('amount');
 
     return view('SuperAdmin.dashboard.index', $data);
   }
