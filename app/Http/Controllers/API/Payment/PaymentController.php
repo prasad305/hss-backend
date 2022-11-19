@@ -374,7 +374,7 @@ class PaymentController extends Controller
     //--------------------stripe end------------------------
 
 
-    //--------------------shurjo pay------------------------
+    //--------------------shurjo pay start------------------------
     public function initiataShurjoPayment(Request $request)
     {
         $user = auth()->user();
@@ -461,6 +461,64 @@ class PaymentController extends Controller
     }
 
 
+    //--------------------shurjo pay end------------------------
+
+    public function pocketToken()
+    {
+
+
+        $paytmParams = array();
+        $orderId = Str::orderedUuid();
+
+        $paytmParams = array(
+            "userId" => env('POCKET_USER_ID'),
+            "password" => env('POCKET_PASSWORD'),
+            "requestId" =>  $orderId,
+            "requestDateTime" => "1625928048482",
+            "clientToken" => env('POCKET_CLIENT_TOKEN')
+        );
+
+
+        $post_data = json_encode($paytmParams);
+
+
+        $ch = curl_init(env('POCKET_ENGINE_URL') . "token");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        $response = curl_exec($ch);
+
+        return  json_decode($response);
+    }
+
+
+    public function getPocketSignature()
+    {
+
+
+
+        $message = "fasfafaf";
+        $privet_key_fil = file_get_contents(public_path('/paymentSecurity/private.pem'));
+
+
+
+
+        $privet_key = openssl_get_privatekey($privet_key_fil, "");
+
+        return $privet_key;
+
+        $signature;
+        openssl_free_key($privet_key);
+        $result = openssl_sign($message, $signature, $privet_key);
+
+        if (!$result) {
+            return "error";
+        } else {
+
+            return base64_encode($signature);
+        }
+    }
 
 
     // Auditions

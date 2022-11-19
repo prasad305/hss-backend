@@ -95,6 +95,37 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * delet user account
+     */
+    public function deleteUser(Request $request)
+    {
+        $user = auth()->user();
+        $userData = User::find($user->id);
+
+        if (Hash::check($request->password, $user->password)) {
+
+
+
+            $userData->user_type = 'deleted';
+            $userData->status = 0;
+            $userData->active_status = 0;
+            $userData->email  = null;
+            $userData->phone   = null;
+            $userData->update();
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Ok',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 202,
+                'message' => 'password not match !',
+            ]);
+        }
+    }
 
     public function star_list()
     {
