@@ -1841,7 +1841,7 @@ class UserController extends Controller
     public function isAppealForThisRound($audition_id, $round_info_id)
     {
         $user = User::find(auth()->user()->id);
-        $appealedRegistration  = AuditionRoundAppealRegistration::where([['user_id', $user->id], ['audition_id', $audition_id], ['round_info_id', $round_info_id]])->first();
+        $appealedRegistration  = AuditionRoundAppealRegistration::where([['user_id', $user->id], ['audition_id', $audition_id], ['round_info_id', $round_info_id], ['payment_status', 1]])->first();
 
         if ($appealedRegistration) {
             $isAppealedForThisRound = true;

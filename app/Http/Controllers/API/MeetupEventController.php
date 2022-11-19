@@ -241,6 +241,22 @@ class MeetupEventController extends Controller
         ]);
     }
 
+    public function star_meetup_list_count(){
+        $allEvents = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0]])->count();
+        $pendingEvents = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '<', 1]])->count();
+        $approvedEvents = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0], ['status', '<', 10]])->count();
+        $completedEvents = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', 9]])->count();
+        $rejectedEvents = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', 11]])->count();
+        return response()->json([
+            'status' => 200,
+            'allEvents' => $allEvents,
+            'pendingEvents' => $pendingEvents,
+            'approvedEvents' => $approvedEvents,
+            'completedEvents' => $completedEvents,
+            'rejectedEvents' => $rejectedEvents,
+        ]);
+    }
+
     public function star_meetup_list($type)
     {
         if ($type == 'all')
@@ -488,6 +504,89 @@ class MeetupEventController extends Controller
             return response()->json([
                 'type' => 'error',
                 'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
+            ]);
+        }
+    }
+
+    public function star_add_meetup_mobile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|unique:meetup_events,title',
+            'description' => 'required|min:8',
+            'instruction' => 'required|min:8',
+            'event_date' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'reg_start_date' => 'required',
+            'reg_end_date' => 'required',
+            'fee' => 'required',
+            'slots' => 'required',
+            'venue' => 'required_if:meetup_type,"Offline"',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'validation_errors' => $validator->errors(),
+            ]);
+        } else {
+            $superStar = SuperStar::where('star_id', auth('sanctum')->user()->id)->first();
+
+            $meetup = new MeetupEvent();
+
+            $meetup->created_by_id = auth('sanctum')->user()->id;
+            $meetup->star_id = auth('sanctum')->user()->id;
+            $meetup->admin_id = auth('sanctum')->user()->parent_user;
+            $meetup->category_id = $superStar->category_id;
+            $meetup->sub_category_id = $superStar->sub_category_id;
+            $meetup->title = $request->input('title');
+            $meetup->slug = Str::slug($request->input('title'));
+            $meetup->event_link = $request->input('event_link');
+            $meetup->venue = $request->input('venue');
+            $meetup->meetup_type = $request->input('meetup_type');
+
+            $meetup->event_date = Carbon::parse($request->input('event_date'));
+            $meetup->start_time = Carbon::parse($request->input('start_time'));
+            $meetup->end_time = Carbon::parse($request->input('end_time'));
+
+            $meetup->description = $request->input('description');
+            $meetup->instruction = $request->input('instruction');
+            $meetup->total_seat = $request->input('slots');
+
+            $meetup->reg_start_date = Carbon::parse($request->input('reg_start_date'));
+            $meetup->reg_end_date = Carbon::parse($request->input('reg_end_date'));
+
+            $meetup->fee = $request->input('fee');
+            $meetup->status = 1;
+
+            if($request->banner['type']){
+                try{
+                    $originalExtension = str_ireplace("image/", "", $request->banner['type']);
+    
+                    $folder_path       = 'uploads/images/meetup/';
+    
+                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                    $decodedBase64 = $request->banner['data'];
+                
+                    Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                    $location = $folder_path . $image_new_name;
+                    $meetup->banner = $location;
+                    $meetup->save();
+                }
+    
+                catch (\Exception $exception) {
+                    return response()->json([
+                        "error" => $exception->getMessage(),
+                        "status" => "from image",
+                    ]);
+                }
+            }
+
+            
+
+            return response()->json([
+                'status' => 200,
+                'meetup_id' => $meetup->id,
+                'message' => 'Meetup Event Added',
             ]);
         }
     }

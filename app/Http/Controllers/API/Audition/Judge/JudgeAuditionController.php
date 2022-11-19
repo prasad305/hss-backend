@@ -187,6 +187,28 @@ class JudgeAuditionController extends Controller
             }
         }
     }
+    public function auditionDashboardMobile()
+    {
+        $liveAuditions = Audition::with('judge')
+            ->whereHas('judge', function ($q) {
+                $q->where([['judge_id', auth('sanctum')->user()->id]]);
+            })->where('status', 3)->get();
+            $pendingAuditions = Audition::with('judge')
+            ->whereHas('judge', function ($q) {
+                $q->where([['judge_id', auth('sanctum')->user()->id], ['approved_by_judge', 0]]);
+            })->where('status', 1)
+            ->get();
+        $allAuditions = Audition::with('judge')
+        ->whereHas('judge', function ($q) {
+            $q->where([['judge_id', auth('sanctum')->user()->id]]);
+        })->get();
+        return response()->json([
+            'status' => 200,
+            'liveAuditions' =>  $liveAuditions,
+            'pendingAuditions' =>  $pendingAuditions,
+            'allAuditions' =>  $allAuditions,
+        ]);
+    }
 
     public function starLiveAudtion()
     {

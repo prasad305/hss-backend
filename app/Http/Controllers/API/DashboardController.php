@@ -260,7 +260,45 @@ class DashboardController extends Controller
             'totalIncomeStatementStarShowcase' => $totalIncomeStatementStarShowcase
         ]);
     }
-    public function dashboardPosts($type)
+    public function starShowCaseProductsCount(){
+        $auction = Auction::where('star_id', auth('sanctum')->user()->id)->count();
+        $marketplace = Marketplace::where('superstar_id', auth('sanctum')->user()->id)->count();
+        $souvenirCreate = SouvenirCreate::where('star_id', auth('sanctum')->user()->id)->count();
+        return response()->json([
+            'status' => 200,
+            'auction' => $auction,
+            'marketplace' => $marketplace,
+            'souvenirCreate' => $souvenirCreate,
+        ]);
+    }
+    public function starDashboardCount(){
+        $post = SimplePost::where('star_id', auth('sanctum')->user()->id)->count();
+        $liveChat = LiveChat::where('star_id', auth('sanctum')->user()->id)->count();
+        $qna = QnA::where('star_id', auth('sanctum')->user()->id)->count();
+        $meetupEvent = MeetupEvent::where('star_id', auth('sanctum')->user()->id)->count();
+        $learningSession = LearningSession::where('star_id', auth('sanctum')->user()->id)->count();
+        $greeting = Greeting::where('star_id', auth('sanctum')->user()->id)->count();
+        $fanGroup = FanGroup::where('my_star', auth('sanctum')->user()->id)->orWhere('another_star', auth('sanctum')->user()->id)->count();
+
+        $auction = Auction::where('star_id', auth('sanctum')->user()->id)->count();
+        $marketplace = Marketplace::where('superstar_id', auth('sanctum')->user()->id)->count();
+        $souvenirCreate = SouvenirCreate::where('star_id', auth('sanctum')->user()->id)->count();
+
+        $totalShowCase = $auction + $marketplace + $souvenirCreate;
+
+        return response()->json([
+            'status' => 200,
+            'post' => $post,
+            'liveChat' => $liveChat,
+            'qna' => $qna,
+            'meetupEvent' => $meetupEvent,
+            'learningSession' => $learningSession,
+            'greeting' => $greeting,
+            'fanGroup' => $fanGroup,
+            'totalShowCase' => $totalShowCase,
+        ]);
+    }
+    public function adminPost($type)
     {
         if ($type == "Simple-Post") {
             $post = SimplePost::where('admin_id', auth('sanctum')->user()->id)->orWhere('star_id', auth('sanctum')->user()->id)->latest()->get();

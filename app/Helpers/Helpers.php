@@ -24,6 +24,7 @@ use App\Models\Wallet;
 use App\Models\WalletHistory;
 use App\Models\WalletPayment;
 use App\Models\Activity;
+use App\Models\Audition\AuditionRoundAppealRegistration;
 use App\Models\Bidding;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
@@ -400,6 +401,9 @@ if (!function_exists('random_code')) {
         if ($type == 'auction') {
             auctionPayment($user_id, $event_id, $paymentMethod);
         }
+        if ($type == 'auditionAppeal') {
+            auditionAppealPayment($user_id, $event_id, $paymentMethod, $amount);
+        }
     }
 
 
@@ -435,6 +439,33 @@ if (!function_exists('random_code')) {
             ]);
         } catch (\Throwable $th) {
             //throw $th;
+        }
+    }
+    function auditionAppealPayment($user_id, $round_info_id, $method, $fee)
+    {
+
+        $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
+
+
+        if (AuditionRoundAppealRegistration::where([['user_id', $user_id], ['audition_id',  $auditionRoundInfo->audition_id], ['round_info_id', $round_info_id]])->first()) {
+            return response()->json([
+                'status' => 200,
+                'appealedRegistration' => AuditionRoundAppealRegistration::where([['user_id', $user_id], ['audition_id',  $auditionRoundInfo->audition_id], ['round_info_id', $round_info_id]])->first(),
+                'message' => 'User already Registered for this round'
+            ]);
+        } else {
+
+            $appealedRegistration = AuditionRoundAppealRegistration::create([
+                'audition_id' =>  $auditionRoundInfo->audition_id,
+                'round_info_id' => $round_info_id,
+                'user_id' => $user_id,
+                'payment_status' => 1,
+                'amount' => $fee,
+            ]);
+            return response()->json([
+                'status' => 200,
+                'appealedRegistration' => $appealedRegistration,
+            ]);
         }
     }
 

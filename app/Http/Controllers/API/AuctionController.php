@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
-
+use Illuminate\Support\Str;
 class AuctionController extends Controller
 {
 
@@ -344,18 +344,123 @@ class AuctionController extends Controller
     //<========================= Star Section ==============================>
 
 
+    public function star_addProduct_mobile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required',
+            'keyword' => 'required',
+            'bid_from' => 'required',
+            'bid_to' => 'required',
+            // 'product_image' => 'required|image',
+            // 'banner' => 'required|image',
+            'details' => 'required|min:10',
+            'base_price' => 'required',
+
+        ], [
+            'title.required' => 'Title Field Is Required',
+            'keyword.required' => 'Keyword Field Is Required',
+            'bid_from.required' => 'Date Field Is Required',
+            'bid_to.required' => 'Date Field Is Required',
+            'details.required' => 'Description Field Is Required',
+            // 'product_image.required' => "Image Field Is Required",
+            // 'banner.required' => "Image Field Is Required",
+            'base_price.required' => "Price Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
+
+        $auction = new Auction();
+
+        $auction->title = $request->title;
+        $auction->keyword = $request->keyword;
+        $auction->bid_from = Carbon::parse($request->bid_from);
+        $auction->bid_to = Carbon::parse($request->bid_to);
+        $auction->result_date = Carbon::parse($request->result_date);
+        $auction->product_delivery_date = Carbon::parse($request->product_delivery_date);
+        $auction->details = $request->details;
+        $auction->base_price = $request->base_price;
+        $auction->star_approval = 1;
+        $auction->star_id = Auth::user()->id;
+        $auction->created_by_id = Auth::user()->id;
+        $auction->admin_id = Auth::user()->parent_user;
+        $auction->category_id = Auth::user()->category_id;
+        $auction->subcategory_id = Auth::user()->sub_category_id;
+
+        //Upload Banner
+        if($request->bannerImage['type']){
+            try{
+                $originalExtension = str_ireplace("image/", "", $request->bannerImage['type']);
+
+                $folder_path       = 'uploads/images/auction/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->bannerImage['data'];
+            
+                Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                $location = $folder_path . $image_new_name;
+                $auction->banner = $location;
+            }
+
+            catch (\Exception $exception) {
+                return response()->json([
+                    "error" => $exception->getMessage(),
+                    "status" => "from image banner",
+                ]);
+            }
+        }
+        //Upload Product_image
+        if($request->productImage['type']){
+            try{
+                $originalExtension = str_ireplace("image/", "", $request->productImage['type']);
+
+                $folder_path       = 'uploads/images/auction/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->productImage['data'];
+            
+                Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                $location = $folder_path . $image_new_name;
+                $auction->product_image = $location;
+                
+            }
+
+            catch (\Exception $exception) {
+                return response()->json([
+                    "error" => $exception->getMessage(),
+                    "status" => "from image productImage",
+                ]);
+            }
+        }
+
+      
+        $auction->save();
+
+
+        
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Marketplace Added Successfully',
+        ]);
+    }
+
+
 
     public function star_addProduct(Request $request)
 
     {
 
-        // $data = $request->only('name','email','mobile_number');
-        // $test['token'] = time();
-        // $test['name'] = json_encode($data);
-        // Auction::insert($test);
-        // return response()->json('Great! Successfully store data in json format in datbase');
 
-        //return response()->json($request->all());
+
+
+
+
 
 
 
@@ -587,6 +692,22 @@ class AuctionController extends Controller
         return response()->json([
             'status' => '200',
             'product' => $product
+        ]);
+    }
+
+    public function auctionHomeMobile()
+    {
+        $pendingProducts = Auction::orderBy('id', 'DESC')->where('star_approval', 0)->where('star_id', auth()->user()->id)->get();
+        $unsoldProducts = Auction::orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->where('star_id', auth()->user()->id)->get();
+        $soldProducts = Auction::where('product_status', 1)->where('star_id', auth()->user()->id)->get();
+        $liveProducts = Auction::with('bidding')->orderBy('id', 'DESC')->where('star_approval', 1)->where('product_status', 0)->where('star_id', auth()->user()->id)->get();
+
+        return response()->json([
+            'status' => '200',
+            'liveProducts' => $liveProducts,
+            'pendingProducts' => $pendingProducts,
+            'soldProducts' => $soldProducts,
+            'unsoldProducts' => $unsoldProducts
         ]);
     }
 
