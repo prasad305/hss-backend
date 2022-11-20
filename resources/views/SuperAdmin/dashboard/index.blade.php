@@ -290,7 +290,7 @@
                         <div class="card-footer">
                             <div class="row">
                                 <div class="col-sm-3 col-6">
-                                    <div class="description-block border-right">
+                                    <div class="description-block border-right text-warning">
                                         <h5 class="description-header">${{ $totalLearningAmount }}</h5>
                                         <span class="description-text">Learning Session</span><br>
                                         {{-- <a href="{{ route('superAdmin.learningSessions') }}">
@@ -302,7 +302,7 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-3 col-6">
-                                    <div class="description-block border-right">
+                                    <div class="description-block border-right text-warning">
 
                                         <h5 class="description-header">${{ $totalMeetUpAmount }}</h5>
                                         <span class="description-text">Meetup Events</span><br>
@@ -315,7 +315,7 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-3 col-6">
-                                    <div class="description-block border-right">
+                                    <div class="description-block border-right text-warning text-warning">
 
                                         <h5 class="description-header">${{ $totalAuditionAmount }}</h5>
                                         <span class="description-text">Auditions</span><br>
@@ -328,7 +328,7 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-3 col-6">
-                                    <div class="description-block">
+                                    <div class="description-block text-warning">
 
                                         <h5 class="description-header">${{ $totalLiveChatAmount }}</h5>
                                         <span class="description-text">Live Chat</span><br>
@@ -348,7 +348,7 @@
                         <div class="card-footer">
                             <div class="row">
                                 <div class="col-sm-3 col-6">
-                                    <div class="description-block border-right">
+                                    <div class="description-block border-right text-warning">
                                         <h5 class="description-header">$35,210.43</h5>
                                         <span class="description-text">Fan Group</span><br>
                                         {{-- <a href="{{ route('superAdmin.fanGroup') }}">
@@ -360,7 +360,7 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-3 col-6">
-                                    <div class="description-block border-right">
+                                    <div class="description-block border-right text-warning">
 
                                         <h5 class="description-header">${{ $totalGreetingAmount }}</h5>
                                         <span class="description-text">Greetings</span><br>
@@ -373,7 +373,7 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-3 col-6">
-                                    <div class="description-block border-right">
+                                    <div class="description-block border-right text-warning">
                                         <h5 class="description-header">${{ $totalPostAmount }}</h5>
                                         <span class="description-text">User Posts</span><br>
                                         {{-- <a href="{{ route('superAdmin.userPosts') }}">
@@ -385,7 +385,7 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-3 col-6">
-                                    <div class="description-block">
+                                    <div class="description-block text-warning">
 
                                         <h5 class="description-header">$1200</h5>
                                         <span class="description-text">Wallet</span><br>
@@ -404,7 +404,7 @@
                         <div class="card-footer">
                             <div class="row">
                                 <div class="col-sm-3 col-6">
-                                    <div class="description-block border-right">
+                                    <div class="description-block border-right text-warning">
                                         <h5 class="description-header">${{ $totalSouvenirAmount }}</h5>
                                         <span class="description-text">Souvenir</span><br>
                                         {{-- <a href="#">
@@ -416,7 +416,7 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-3 col-6">
-                                    <div class="description-block border-right">
+                                    <div class="description-block border-right text-warning">
 
                                         <h5 class="description-header">${{ $totalMarketplaceAmount }}</h5>
                                         <span class="description-text">Marketplace</span><br>
@@ -429,7 +429,7 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-3 col-6">
-                                    <div class="description-block border-right">
+                                    <div class="description-block border-right text-warning">
                                         <h5 class="description-header">${{ $totalPostAmount }}</h5>
                                         <span class="description-text">Auction</span><br>
                                         {{-- <a href="{{ route('superAdmin.userPosts') }}">
@@ -441,7 +441,7 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-3 col-6">
-                                    <div class="description-block">
+                                    <div class="description-block text-warning">
 
                                         <h5 class="description-header">${{ $totalQnaAmount }}</h5>
                                         <span class="description-text">QnA</span><br>

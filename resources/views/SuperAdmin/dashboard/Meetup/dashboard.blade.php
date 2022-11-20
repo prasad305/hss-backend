@@ -45,7 +45,7 @@
                                     aria-hidden="true"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">{{ $category->name }}</span>
-                                <span class="info-box-number">{{ $category->meetup->count() }}</span>
+                                <span class="info-box-number">{{ $category->meetup_count }}</span>
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
                                             href="{{ route('superAdmin.meetupEvent.list', $category->id) }}">See

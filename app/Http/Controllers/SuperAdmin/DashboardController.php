@@ -366,8 +366,11 @@ class DashboardController extends Controller
   public function meetupEventsDashboard()
   {
 
-    $categories = Category::get();
+    $categories = Category::withCount('meetup')->get();
+
     $total = MeetupEvent::count();
+
+
     $published = MeetupEvent::where('status', 2)->count();
     $pending = MeetupEvent::where('status', '<', 2)->count();
     $rejected = MeetupEvent::where('status', 11)->count();
@@ -445,7 +448,7 @@ class DashboardController extends Controller
   // Dashboard Learning Session
   public function learningSessionEventsDashboard()
   {
-    $categories = Category::get();
+    $categories = Category::withCount('learningSession')->get();
     $total = LearningSession::count();
     $published = LearningSession::where('status', 2)->count();
     $pending = LearningSession::where('status', '<', 2)->count();
