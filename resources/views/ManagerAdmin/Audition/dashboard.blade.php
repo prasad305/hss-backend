@@ -104,13 +104,9 @@
                 <div class="col-12 col-sm-6 col-md-4">
                     <div class="info-box mb-3">
                         <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-users"></i></span>
-
                         <div class="info-box-content">
                             <span class="info-box-text">Total Judge</span>
                             <span class="info-box-number">{{ $totalJudge }}</span>
-                            <a href="#">
-                                <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
-                            </a>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -128,9 +124,6 @@
                         <div class="info-box-content">
                             <span class="info-box-text">Total Jury</span>
                             <span class="info-box-number">{{ $totalJury }}</span>
-                            <a href="#">
-                                <span class="my-link"><i class="fas fa-eye"> View All </i> </span>
-                            </a>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -281,32 +274,23 @@
 @push('js')
     <script>
         $(function() {
-            /* ChartJS
-             * -------
-             * Here we will create a few charts using ChartJS
-             */
 
-            //--------------
-            //- AREA CHART -
-            //--------------
-
-            // Get context with jQuery - using jQuery's .get() method.
+            var labels = <?php echo $months; ?>;
+            var data = <?php echo $amountCount; ?>;
 
             var areaChartData = {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: labels,
                 datasets: [{
-                        label: 'Auditions',
-                        backgroundColor: 'rgba(94, 103, 112)',
-                        borderColor: 'rgba(60,141,188,0.8)',
-                        pointRadius: false,
-                        pointColor: '#3b8bba',
-                        pointStrokeColor: 'rgba(60,141,188,1)',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(60,141,188,1)',
-                        data: [28, 48, 40, 19, 86, 27, 90]
-                    },
-
-                ]
+                    label: 'Revenue',
+                    backgroundColor: 'rgba(60,141,188,0.9)',
+                    borderColor: 'rgba(60,141,188,0.8)',
+                    pointRadius: false,
+                    pointColor: '#3b8bba',
+                    pointStrokeColor: 'rgba(60,141,188,1)',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                    data: data
+                }, ]
             }
 
 
