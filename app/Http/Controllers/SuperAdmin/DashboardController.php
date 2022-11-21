@@ -525,7 +525,7 @@ class DashboardController extends Controller
   // Dashboard Live Chat
   public function liveChatEventsDashboard()
   {
-    $categories = Category::get();
+    $categories = Category::withCount('liveEvents')->get();
     $total = LiveChat::count();
     $published = LiveChat::where('status', 2)->count();
     $pending = LiveChat::where('status', '<', 2)->count();
@@ -604,7 +604,7 @@ class DashboardController extends Controller
   // Dashboard Greeting
   public function greetingEventsDashboard()
   {
-    $categories = Category::get();
+    $categories = Category::withCount('greeting')->get();
     $total = Greeting::count();
     $published = Greeting::where('status', 2)->count();
     $pending = Greeting::where('status', '<', 2)->count();
@@ -681,7 +681,7 @@ class DashboardController extends Controller
   // Dashboard Fan Group
   public function fanGroupEventsDashboard()
   {
-    $categories = Category::get();
+    $categories = Category::withCount('fanGroup')->get();
     $total = FanGroup::count();
     $published = FanGroup::where('status', 1)->count();
     $pending = FanGroup::where('status', 0)->count();
@@ -754,7 +754,7 @@ class DashboardController extends Controller
 
   public function qnaEventsDashboard()
   {
-    $categories = Category::get();
+    $categories = Category::withCount('qna')->get();
     $total = QnA::count();
     $published = QnA::where('status', 2)->count();
     $pending = QnA::where('status', '<', 2)->count();
@@ -834,7 +834,7 @@ class DashboardController extends Controller
   // Dashboard simple post
   public function simplePostEventsDashboard()
   {
-    $categories = Category::get();
+    $categories = Category::withCount('simplePosts')->get();
     $total = SimplePost::count();
     $published = SimplePost::where('status', ">=", 1)->count();
     $pending = SimplePost::where('status', 0)->where('star_approval', 1)->count();
