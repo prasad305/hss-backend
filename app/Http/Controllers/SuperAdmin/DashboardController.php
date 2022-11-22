@@ -912,7 +912,7 @@ class DashboardController extends Controller
   public function auditionEventsDashboard()
   {
 
-    $categories = Category::get();
+    $categories = Category::with('audition')->get();
     $total = Audition::count();
     $published = Audition::where('status', 3)->count();
     $pending = Audition::where('status', '<', 2)->count();
@@ -1134,7 +1134,7 @@ class DashboardController extends Controller
 
   public function auctionEventsDashboard()
   {
-    $categories = Category::get();
+    $categories = Category::withCount('auction')->get();
     $total = Auction::count();
     $published = Auction::where('product_status', 1)->count();
     $pending = Auction::where('product_status', 0)->count();
@@ -1213,7 +1213,7 @@ class DashboardController extends Controller
 
   public function marketplaceEventsDashboard()
   {
-    $categories = Category::get();
+    $categories = Category::withCount('marketplace')->get();
     $total = Marketplace::sum('total_items');
     $soldItem = Marketplace::sum('total_selling');
     // Registered User
@@ -1286,7 +1286,7 @@ class DashboardController extends Controller
 
   public function souvenirEventsDashboard()
   {
-    $categories = Category::get();
+    $categories = Category::withCount('souvenir')->get();
     $total = SouvenirCreate::count();
     $published = SouvenirCreate::where('status', 1)->count();
     $pending = SouvenirCreate::where('status', 0)->count();

@@ -20,7 +20,7 @@ class LearningSessionController extends Controller
     }
     public function learningSessionList($categoryId)
     {
-        $postList = LearningSession::where('category_id', $categoryId)->latest()->get();
+        $postList = LearningSession::with('admin')->where('category_id', $categoryId)->latest()->get();
         return view('SuperAdmin.LearningSession.LearningSessionList', compact('postList'));
     }
     public function learningSessionDetails($postId)
