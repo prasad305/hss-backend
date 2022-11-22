@@ -170,6 +170,7 @@ class SimplePostController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Post Added',
+            'post' => $post,
         ]);
     }
     public function simplePostUpdate(Request $request, $id)

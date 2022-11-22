@@ -273,6 +273,7 @@ class DashboardController extends Controller
     }
     public function notification()
     {
+        $pendingLiveChat = LiveChat::where([['star_id', auth('sanctum')->user()->id], ['status' , 0]])->get();
         $pendingLearningSessions = LearningSession::where([['star_id', auth('sanctum')->user()->id],['status', 0]])->get();
         $pendingQna = QnA::where([['star_id', auth('sanctum')->user()->id],['star_approval', 0]])->get();
         $pendingMeetupEvent = MeetupEvent::where([['star_id', auth('sanctum')->user()->id],['status', 0]])->get();
@@ -283,6 +284,7 @@ class DashboardController extends Controller
         $pendingSouvenir = SouvenirCreate::where([['star_id', auth('sanctum')->user()->id], ['approval_status', 0]])->get();
         return response()->json([
             'status' => 200,
+            'pendingLiveChat' => $pendingLiveChat,
             'pendingLearningSessions' => $pendingLearningSessions,
             'pendingQna' => $pendingQna,
             'pendingMeetupEvent' => $pendingMeetupEvent,
