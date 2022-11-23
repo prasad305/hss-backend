@@ -56,14 +56,12 @@
                         <div class="panel panel-primary">
                             <div class="panel-heading text-center">
                             <h2 style="color:#FFD700;border-bottom:1px solid #FFD700;">UPDATE YOUR PROFILE</h2>
-                            @if($user->image)
-                                    <img src="{{asset($user->image)}}" class="img-circle" style="width:150px; height:150px; border:3px solid #FFD700" alt="Image not found">
+                                <div style="position:relative;width: 150px;height:150px; display:inline-block;">
+                                    <img src="{{$user->image ? asset($user->image) : asset('demo_image/demo_user.png')}}" class="img-circle" id="show-image" style="width:150px; height:150px; border:3px solid #FFD700" alt="Image not found">
                                     <br>
-                                    <input type="file" name="profile" style="width:93px;">
-
-                            @else
-                                <img src="{{asset('uploads/images/users/manager-admin-avatar.png')}}" class="img-circle" style="width:150px; height:150px; border:3px solid #FFD700" alt="Image not found">
-                            @endif
+                                    <label for="manager-image" class="btn btn-warning" style="border-radius:50%; position:absolute; top:90%; left:65%; transform: translate(-90%, -50%);"><i class="fa fa-camera" aria-hidden="true"></i></label>
+                                    <input type="file" name="profile" id="manager-image" style="display:none;" onChange="PreviewImage(this)">
+                                </div>
                             </div>
                             <div class="panel-body">
                                 <div class="row">
