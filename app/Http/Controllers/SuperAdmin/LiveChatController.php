@@ -20,7 +20,7 @@ class LiveChatController extends Controller
     }
     public function livechatList($categoryId)
     {
-        $postList = LiveChat::where('category_id', $categoryId)->latest()->get();
+        $postList = LiveChat::with(['star', 'admin'])->where('category_id', $categoryId)->latest()->get();
         return view('SuperAdmin.LiveChat.LiveChatList', compact('postList'));
     }
     public function livechatDetails($postId)
