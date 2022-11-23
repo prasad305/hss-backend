@@ -280,6 +280,7 @@ class DashboardController extends Controller
         $pendingPost = SimplePost::where([['star_id', auth('sanctum')->user()->id],['star_approval', 0]])->get();
         $pendingGreeting = Greeting::where([['star_id', auth('sanctum')->user()->id], ['star_approve_status', 0]])->get();
         $pendingFanGroup = FanGroup::where([['my_star', auth('sanctum')->user()->id],['my_star_status', 0]])->orWhere([['another_star', auth('sanctum')->user()->id],['another_star_status', 0]])->get();
+        $pendingMarketplace = Marketplace::where([['superstar_id', auth('sanctum')->user()->id], ['post_status', 0]])->get();
         $pendingAuction = Auction::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 0]])->get();
         $pendingSouvenir = SouvenirCreate::where([['star_id', auth('sanctum')->user()->id], ['approval_status', 0]])->get();
         return response()->json([
@@ -291,6 +292,7 @@ class DashboardController extends Controller
             'pendingPost' => $pendingPost,
             'pendingGreeting' => $pendingGreeting,
             'pendingFanGroup' => $pendingFanGroup,
+            'pendingMarketplace' => $pendingMarketplace,
             'pendingAuction' => $pendingAuction,
             'pendingSouvenir' => $pendingSouvenir,
         ]);
