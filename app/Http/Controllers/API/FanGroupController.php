@@ -163,6 +163,7 @@ class FanGroupController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Fan Group Added Successfully',
+                'fanGroupId' => $fangroup->id,
             ]);
         }
     }
