@@ -106,6 +106,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('auditions', [DashboardController::class, 'auditions'])->name('dashboard.audition');
     Route::get('auditions-data/{type}', [DashboardController::class, 'auditionsData'])->name('dashboard.auditionData');
     Route::get('auditions-details/{id}', [DashboardController::class, 'auditionsDetails'])->name('dashboard.auditionDetails');
+    Route::get('audition-events/round/details/{id}', [DashboardController::class, 'auditionsRoundDetails'])->name('audition.roundDetails');
     Route::get('auditions-manager-list', [DashboardController::class, 'auditionManagerList'])->name('dashboard.auditionManagerList');
     Route::resource('auditionAdmin', AuditionAdminController::class);
     Route::post('auditionAdmin/active/{id}', [AuditionAdminController::class, 'activeNow'])->name('auditionAdmin.activeNow');

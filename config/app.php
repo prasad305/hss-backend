@@ -182,7 +182,9 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
 
         //shurjo pay
-        shurjopayv2\ShurjopayLaravelPackage8\ShurjopayServiceProvider::class
+        shurjopayv2\ShurjopayLaravelPackage8\ShurjopayServiceProvider::class,
+        // Debugbar
+        Barryvdh\Debugbar\ServiceProvider::class
     ],
 
     /*
@@ -242,6 +244,7 @@ return [
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Location' => Stevebauman\Location\Facades\Location::class,
+        'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
     ],
 
 ];
