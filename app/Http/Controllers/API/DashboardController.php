@@ -321,17 +321,19 @@ class DashboardController extends Controller
 
     }
     public function starDashboardCount(){
-        $post = SimplePost::where('star_id', auth('sanctum')->user()->id)->count();
-        $liveChat = LiveChat::where('star_id', auth('sanctum')->user()->id)->count();
-        $qna = QnA::where('star_id', auth('sanctum')->user()->id)->count();
-        $meetupEvent = MeetupEvent::where('star_id', auth('sanctum')->user()->id)->count();
-        $learningSession = LearningSession::where('star_id', auth('sanctum')->user()->id)->count();
-        $greeting = Greeting::where('star_id', auth('sanctum')->user()->id)->count();
-        $fanGroup = FanGroup::where('my_star', auth('sanctum')->user()->id)->orWhere('another_star', auth('sanctum')->user()->id)->count();
-
-        $auction = Auction::where('star_id', auth('sanctum')->user()->id)->count();
-        $marketplace = Marketplace::where('superstar_id', auth('sanctum')->user()->id)->count();
-        $souvenirCreate = SouvenirCreate::where('star_id', auth('sanctum')->user()->id)->count();
+        $post = SimplePost::where([['star_id', auth('sanctum')->user()->id],['star_approval', 0]])->count();
+        $liveChat = LiveChat::where([['star_id', auth('sanctum')->user()->id], ['status' , 0]])->count();
+        $qna = QnA::where([['star_id', auth('sanctum')->user()->id],['star_approval', 0]])->count();
+        $meetupEvent = MeetupEvent::where([['star_id', auth('sanctum')->user()->id],['status', 0]])->count();
+        $learningSession = LearningSession::where([['star_id', auth('sanctum')->user()->id],['status', 0]])->count();
+        $greeting = Greeting::where([['star_id', auth('sanctum')->user()->id], ['star_approve_status', 0]])->count();
+        $fanGroup = FanGroup::where([['my_star', auth('sanctum')->user()->id],['my_star_status', 0]])->orWhere([['another_star', auth('sanctum')->user()->id],['another_star_status', 0]])->count();
+        $allAuditions = Audition::with('judge')->whereHas('judge', function ($q) {
+            $q->where([['judge_id', auth('sanctum')->user()->id]]);
+        })->count();
+        $auction = Auction::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 0]])->count();
+        $marketplace = Marketplace::where([['superstar_id', auth('sanctum')->user()->id], ['post_status', 0]])->count();
+        $souvenirCreate = SouvenirCreate::where([['star_id', auth('sanctum')->user()->id], ['approval_status', 0]])->count();
 
         $totalShowCase = $auction + $marketplace + $souvenirCreate;
 
@@ -345,6 +347,7 @@ class DashboardController extends Controller
             'greeting' => $greeting,
             'fanGroup' => $fanGroup,
             'totalShowCase' => $totalShowCase,
+            'allAuditions' => $allAuditions,
         ]);
     }
     public function adminPost($type)
