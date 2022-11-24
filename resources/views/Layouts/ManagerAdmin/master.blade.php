@@ -34,12 +34,11 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
         integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="{{ asset('assets/new-main.css') }}" rel="stylesheet" type="text/css" />
 
 
     @stack('css')
     <style>
-        
-
         .BannerAGN {
             border: 3px solid rgb(255, 174, 0);
             object-fit: cover;
@@ -807,7 +806,13 @@
         </script>
     @endif
 
-
+    <script>
+        function PreviewImage(event){
+            let file = URL.createObjectURL(event.files[0]);
+            document.getElementById('show-image').src = file;
+        }
+    </script>
+    
     <script>
         function Show(title, link, style = '') {
 

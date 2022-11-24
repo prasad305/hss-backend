@@ -35,7 +35,6 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
@@ -53,9 +52,10 @@
         type="text/css" />
     <link href="{{ asset('assets/super-admin/plugins/datatables/scroller.bootstrap.min.css') }}" rel="stylesheet"
         type="text/css" />
-
+    <link href="{{ asset('assets/new-main.css') }}" rel="stylesheet" type="text/css" />
     @stack('datatableCSS')
     @stack('css')
+
 
 </head>
 
@@ -83,10 +83,6 @@
                     <a href="#" class="nav-link">Contact</a>
                 </li>
             </ul>
-
-
-
-
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
@@ -260,7 +256,7 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="{{ Auth::user()->image? asset(Auth::user()->image): asset('demo_image/demo_user.png')}}"
+                        <img src="{{ Auth::user()->image ? asset(Auth::user()->image) : asset('demo_image/demo_user.png') }}"
                             style="width: 50px;height:50px; border: 1px solid gold;" class="img-circle elevation-2"
                             alt="User Image">
                     </div>
@@ -372,6 +368,13 @@
     <!-- Summernote -->
     <script src="{{ asset('assets/manager-admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
     @stack('js')
+
+    <script>
+        function PreviewImage(event){
+            let file = URL.createObjectURL(event.files[0]);
+            document.getElementById('show-image').src = file;
+        }
+    </script>
 
     <script>
         $(function() {

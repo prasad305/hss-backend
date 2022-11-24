@@ -45,7 +45,7 @@
                                     aria-hidden="true"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">{{ $category->name }}</span>
-                                <span class="info-box-number">{{ $category->greeting->count() }}</span>
+                                <span class="info-box-number">{{ $category->greeting_count }}</span>
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
                                             href="{{ route('superAdmin.greeting.list', $category->id) }}">See

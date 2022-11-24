@@ -45,7 +45,7 @@
                                     aria-hidden="true"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">{{ $category->name }}</span>
-                                <span class="info-box-number">{{ $category->souvenir->count() }}</span>
+                                <span class="info-box-number">{{ $category->souvenir_count }}</span>
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
                                             href="{{ route('superAdmin.souvenir.list', $category->id) }}">See

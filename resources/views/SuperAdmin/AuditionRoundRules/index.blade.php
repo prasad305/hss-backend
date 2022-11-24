@@ -36,211 +36,7 @@
             color: #000;
         }
 
-        .fixedHeight {
-            height: 100% !important;
-        }
 
-        .displayNine {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .audition__mark {
-            background: #242424;
-            border: 1px solid #B7AEAE;
-            border-radius: 4px;
-            width: 160px;
-            height: 37px;
-            text-align: left;
-            padding: 5px 8px;
-        }
-
-        .audition__mark input {
-            border: 2px solid #fdd700;
-            appearance: none;
-            border-radius: 50%;
-            width: 14px;
-            height: 14px;
-            transition: all ease-in 0.2s;
-        }
-
-        .audition__mark span {
-            padding-left: 1px;
-        }
-
-        .audition__mark input[type='radio']:checked {
-            border: 1px solid #FFD910;
-            background: #FFD910;
-        }
-
-        .wildcard__title {
-            padding-top: 10px;
-        }
-
-        .wildcard__title p {
-            font-weight: 500;
-            font-size: 20px;
-            letter-spacing: 0.5px;
-        }
-
-        .wildcard__title hr {
-            height: 0.3px;
-            background: #a7a7a7;
-        }
-
-        .wild_card__one {
-            background: #242424;
-            border: 1px solid #B7AEAE;
-            border-radius: 4px;
-            width: 50%;
-            /* height: 37px; */
-            text-align: left;
-            padding: 5px 15px;
-        }
-
-        .wild_card__one input {
-            border: 2px solid #fdd700;
-            appearance: none;
-            border-radius: 50%;
-            width: 14px;
-            height: 14px;
-            transition: all ease-in 0.2s;
-        }
-
-        .wild_card__one input[type='radio']:checked {
-            border: 1px solid #FFD910;
-            background: #FFD910;
-        }
-
-        .wild_card__one span {
-            padding-left: 10px;
-        }
-
-        .wild_card__two {
-            background: #242424;
-            border: 1px solid #B7AEAE;
-            border-radius: 10px;
-            width: 125px;
-            height: 36px;
-            text-align: left;
-            padding: 5px 10px;
-            margin: 0 10px;
-        }
-
-
-        .wild_card__two input {
-            border: 2px solid #fdd700;
-            appearance: none;
-            border-radius: 50%;
-            width: 14px;
-            height: 14px;
-            transition: all ease-in 0.2s;
-        }
-
-        .wild_card__two input[type='radio']:checked {
-            border: 1px solid #FFD910;
-            background: #FFD910;
-        }
-
-        .wild_card__two span {
-            padding-left: 10px;
-        }
-
-        /* .availableBanner {
-                                                                                                                                                                                                                                    background: linear-gradient(270deg, #FFAD00 0%, #FFD273 18.7%, #E19A04 42.13%, #FACF75 68.82%, #E7A725 85.94%, #FFAD00 100%);
-                                                                                                                                                                                                                                    width: 40%;
-                                                                                                                                                                                                                                    display: flex;
-                                                                                                                                                                                                                                    height: 130px;
-                                                                                                                                                                                                                                    justify-content: center;
-                                                                                                                                                                                                                                    border-radius: 80px;
-                                                                                                                                                                                                                                } */
-
-        .availableBanner {
-            background: linear-gradient(270deg, #FFAD00 0%, #FFD273 18.7%, #E19A04 42.13%, #FACF75 68.82%, #E7A725 85.94%, #FFAD00 100%);
-            /* width: 29%; */
-            width: 410px;
-            display: flex;
-            /* height: 130px; */
-            height: 90px;
-            justify-content: center;
-            border-radius: 80px;
-        }
-
-        .clockBg {
-            background-color: #000;
-            display: inline-block;
-            border-radius: 50%;
-            width: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center
-        }
-
-        .textFontBold {
-            font-size: 25px;
-            color: #000;
-            /* font-weight: bold; */
-            font-family: 'Bebas Neue', cursive;
-        }
-
-        .textFontBolder {
-            font-size: 35px;
-
-            color: #000;
-            /* font-weight: bold; */
-            font-family: 'Bebas Neue', cursive;
-        }
-
-        .textDark {
-            color: #000;
-            font-weight: bold
-        }
-
-        .bottomDiv {
-            border-bottom: 1px solid #fff
-        }
-
-        .flexRow {
-            background-color: #242424;
-            padding: 10px;
-            border-radius: 15px;
-        }
-
-        .roundedYesNo {
-            border-radius: 15px
-        }
-
-        .imgWidth {
-            width: 100% !important;
-        }
-
-        .pbSetTime {
-            margin-top: -44px;
-        }
-
-        .roundIndex {
-            font-size: 30px;
-            font-weight: bold;
-        }
-
-        .roundText {
-            font-weight: bold;
-        }
-
-        .head-line {
-            border-top: 1px solid #ffad00 !important;
-            border-left: 8px solid #ffad00 !important;
-            border-bottom: 1px solid #ffad00 !important;
-            border-right: 8px solid #ffad00 !important;
-        }
-
-        .card-bg {
-            background-color: black;
-        }
-
-        .wildCardRounds {
-            margin-left: 11.5rem;
-        }
     </style>
 
     <!-- Content Header (Page header) -->
@@ -530,8 +326,8 @@
                         </div>
 
                         {{-- <div class="d-flex flex-row">
-                            
-                    
+
+
                             <span class="text-danger" id="round_type_error"></span>
                         </div> --}}
 
@@ -788,7 +584,7 @@
                     {{-- <div class="row p-3  my-5 bg-dark rounded-lg">
 
 
-                     
+
                     </div> --}}
 
 

@@ -4,7 +4,7 @@
 @section('content')
     <div class="card">
         <div class="card-header border-transparent">
-            <h3 class="card-title">All Data</h3>
+            <h3 class="card-title">All Data Check</h3>
             <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                     <i class="fas fa-minus"></i>
@@ -38,11 +38,21 @@
                                 <td>{{ $data->category->name }}</td>
                                 <td>{!! date('d-m-y', strtotime($data->created_at)) !!}</td>
                                 <td>
-                                    @if ($data->status === 10)
-                                        <span class="badge badge-success">Completed</span>
-                                    @else
-                                        <span class="badge badge-warning">Upcoming</span>
-                                    @endif
+                                    @switch($data->status)
+                                        @case(4)
+                                            <span class="badge badge-success">Completed</span>
+                                        @break
+
+                                        @case(3)
+                                            <span class="badge badge-warning">Running</span>
+                                        @break
+
+                                        @case(2)
+                                            <span class="badge badge-warning">Upcoming</span>
+                                        @break
+
+                                        @default
+                                    @endswitch
                                 </td>
                                 <td>
                                     <div class="sparkbar" data-color="#00a65a" data-height="20">

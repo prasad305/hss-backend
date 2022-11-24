@@ -5,6 +5,12 @@ namespace App\Http\Controllers\ManagerAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Auction;
 use App\Models\Audition\Audition;
+use App\Models\Audition\AuditionAssignJudge;
+use App\Models\Audition\AuditionParticipant;
+use App\Models\Audition\AuditionRoundInfo;
+use App\Models\Audition\AuditionRoundMarkTracking;
+use App\Models\Audition\AuditionUploadVideo;
+use App\Models\AuditionCertification;
 use App\Models\Bidding;
 use App\Models\Category;
 use App\Models\Fan_Group_Join;
@@ -468,7 +474,7 @@ class DashboardController extends Controller
             $amountCount[] = $values->sum('amount');
         }
 
-        return view('ManagerAdmin.LiveChat.dashboard', compact(['total', 'running', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));;
+        return view('ManagerAdmin.LiveChat.dashboard', compact(['total', 'running', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'categories', 'admin', 'superstar']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
     }
     public function liveChatsData($type)
     {
@@ -520,62 +526,108 @@ class DashboardController extends Controller
     public function auditions()
     {
         // Total
-        $total = 0;
-        $upcoming = 0;
-        $running = 0;
-        $complete = 0;
-        $totalJudge = 0;
-        $totalJury = 0;
+
+        $auditions = Audition::withonly('assignedJudges', 'assignedJuries')->where('category_id', auth()->user()->category_id)->get();
+
+        $total = Audition::where('category_id', auth()->user()->category_id)->count();
+        $upcoming = Audition::where([['category_id', auth()->user()->category_id], ['status', 2]])->count();
+        $running = Audition::where([['category_id', auth()->user()->category_id], ['status', 3]])->count();
+        $complete =  Audition::where([['category_id', auth()->user()->category_id], ['status', 4]])->count();
+
+
+
+        $judges = [];
+
+        foreach ($auditions as $key => $audition) {
+            foreach ($audition->assignedJudges as $key => $judge) {
+                array_push($judges, $judge->id);
+            }
+        }
+
+        $totalJudge = count($judges);
+
+        $juries = [];
+
+        foreach ($auditions as $key => $audition) {
+            foreach ($audition->assignedJuries as $key => $jury) {
+                array_push($juries, $jury->id);
+            }
+        }
+
+        $totalJury = count($juries);
+
 
 
         // Registered User
 
-        // $weeklyUser = AuditionEventRegistration::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
-        // $monthlyUser = AuditionEventRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
-        // $yearlyUser = AuditionEventRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
-
-        // // Income Statement
-
-        // $weeklyIncome = AuditionEventRegistration::where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
-        // $monthlyIncome = AuditionEventRegistration::where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
-        // $yearlyIncome = AuditionEventRegistration::where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
-
-
-        // those data will take from AuditionParticipant model
-        $weeklyUser     =  0;
-        $monthlyUser    =  0;
-        $yearlyUser     =  0;
+        $weeklyUser = AuditionParticipant::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
+        $monthlyUser = AuditionParticipant::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
+        $yearlyUser = AuditionParticipant::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
         // Income Statement
-        $weeklyIncome   =  0;
-        $monthlyIncome  =  0;
-        $yearlyIncome   =  0;
 
-        return view('ManagerAdmin.Audition.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'running', 'totalJudge', 'totalJury']));
+        $weeklyIncome = AuditionParticipant::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
+        $monthlyIncome = AuditionParticipant::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
+        $yearlyIncome = AuditionParticipant::where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
+
+
+        $labels = AuditionParticipant::whereHas('Audition', function ($q) {
+            $q->where([['category_id', auth()->user()->category_id]]);
+        })->get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('M');
+        });
+
+        $months = [];
+        $amountCount = [];
+        foreach ($labels as $month => $values) {
+            $months[] = $month;
+            $amountCount[] = $values->sum('amount');
+        }
+
+        return view('ManagerAdmin.Audition.dashboard', compact(['total', 'upcoming', 'complete', 'weeklyUser', 'monthlyUser', 'yearlyUser', 'weeklyIncome', 'monthlyIncome', 'yearlyIncome', 'running', 'totalJudge', 'totalJury']))->with('months', json_encode($months, JSON_NUMERIC_CHECK))->with('amountCount', json_encode($amountCount, JSON_NUMERIC_CHECK));
     }
     public function auditionsData($type)
     {
         if ($type == 'total') {
             $portalData = Audition::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->get();
         } elseif ($type == 'upcoming') {
-            $portalData = Audition::with(['star', 'category'])->where('status', 0)->where('category_id', auth()->user()->category_id)->get();
+            $portalData = Audition::with(['star', 'category'])->where('status', 2)->where('category_id', auth()->user()->category_id)->get();
         } elseif ($type == 'complete') {
-            $portalData = Audition::with(['star', 'category'])->where('status', 10)->where('category_id', auth()->user()->category_id)->get();
+            $portalData = Audition::with(['star', 'category'])->where('status', 4)->where('category_id', auth()->user()->category_id)->get();
         } else {
-            $portalData = Audition::with(['star', 'category'])->where('status', 1)->where('category_id', auth()->user()->category_id)->get();
+            $portalData = Audition::with(['star', 'category'])->where('status', 3)->where('category_id', auth()->user()->category_id)->get();
         }
         return view('ManagerAdmin.Audition.auditionsData', compact('portalData'));
     }
     public function auditionsDetails($id)
     {
-        $judges = [];
-        $totalJudge = 0;;
-        $totalJury = 0;
-        $totalParticipant = 0;
-        $totalFee = 0;
-        $data = Audition::with(['star', 'category'])->where('category_id', auth()->user()->category_id)->find($id);
+        $data = Audition::find($id);
 
-        return view('ManagerAdmin.Audition.auditionsDetails', compact(['totalParticipant', 'totalFee', 'data', 'totalJudge', 'totalJury', 'judges']));
+        return view('ManagerAdmin.Audition.auditionsDetails', compact('data'));
+    }
+    public function auditionsRoundDetails($id)
+    {
+        $auditionRoundInfos = AuditionRoundInfo::find($id);
+        $roundParticipant = AuditionUploadVideo::where('round_info_id', $id)->distinct()->count('user_id');
+        $roundParticipantVideos = AuditionUploadVideo::where('round_info_id', $id)->count();
+        $roundAppeal = AuditionUploadVideo::where([['round_info_id', $id], ['type', 'appeal']])->distinct()->count('user_id');
+        $roundCertification = AuditionCertification::where('round_info_id', $id)->distinct()->count('participant_id');
+        $roundWinner = AuditionRoundMarkTracking::where([['round_info_id', $id], ['wining_status', 1]])->distinct()->count('user_id');
+        $roundFailed = AuditionRoundMarkTracking::where([['round_info_id', $id], ['wining_status', 0]])->distinct()->count('user_id');
+
+
+        return response()->json([
+            'status' => 200,
+            'auditionRoundInfos' => $auditionRoundInfos,
+            'roundParticipant' => $roundParticipant,
+            'roundCertification' => $roundCertification,
+            'roundAppeal' => $roundAppeal,
+            'roundWinner' => $roundWinner,
+            'roundFailed' => $roundFailed,
+            'roundParticipantVideos' => $roundParticipantVideos,
+
+
+        ]);
     }
     public function fanGroups()
     {

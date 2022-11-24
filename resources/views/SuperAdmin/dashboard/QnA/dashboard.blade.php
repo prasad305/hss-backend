@@ -45,7 +45,7 @@
                                     aria-hidden="true"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">{{ $category->name }}</span>
-                                <span class="info-box-number">{{ $category->qna->count() }}</span>
+                                <span class="info-box-number">{{ $category->qna_count }}</span>
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
                                             href="{{ route('superAdmin.qna.list', $category->id) }}">See

@@ -14,7 +14,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Greeting</li>
+                        <li class="breadcrumb-item active">FanGroup</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -45,7 +45,7 @@
                                     aria-hidden="true"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">{{ $category->name }}</span>
-                                <span class="info-box-number">{{ $category->fanGroup->count() }}</span>
+                                <span class="info-box-number">{{ $category->fan_group_count }}</span>
                                 <span class="info-box-number">
                                     <small><a class="text-warning"
                                             href="{{ route('superAdmin.fanGroup.list', $category->id) }}">See
