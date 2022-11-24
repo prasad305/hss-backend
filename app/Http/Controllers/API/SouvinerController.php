@@ -84,6 +84,7 @@ class SouvinerController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Souvenir Added Successfully',
+                'souvenirId' => $souvenir->id,
             ]);
         }
     }

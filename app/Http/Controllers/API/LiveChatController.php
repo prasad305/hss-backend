@@ -203,6 +203,7 @@ class LiveChatController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Live Session Added',
+                'liveChat' => $liveChat,
             ]);
         }
     }

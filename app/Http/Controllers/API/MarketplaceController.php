@@ -367,6 +367,7 @@ class MarketplaceController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Marketplace Added Successfully',
+            'marketplaceId' => $marketplace->id,
         ]);
     }
 
