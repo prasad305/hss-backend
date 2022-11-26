@@ -229,6 +229,10 @@ class PaymentController extends Controller
 
 
 
+            if($request->modelName == 'audition')
+            {
+                return $this->AuditionRegUpdate($user->id, $request->eventId, "PayTm-mobile");
+            }
 
             //live chat regupdate
             if ($request->modelName == 'livechat') {
