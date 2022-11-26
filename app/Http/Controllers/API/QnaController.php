@@ -319,6 +319,7 @@ class QnaController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'QnA Successfully Added ',
+                'qna' => $qna,
             ]);
         }
     }

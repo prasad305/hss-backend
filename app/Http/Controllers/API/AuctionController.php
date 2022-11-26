@@ -83,8 +83,11 @@ class AuctionController extends Controller
         }
 
         $product = Auction::create($data);
-
-        return response()->json($product);
+        return response()->json([
+            'status' => 200,
+            'productId' => $product->id, 
+        ]);
+        // return response()->json($product);
     }
     public function editOrConfirm()
     {

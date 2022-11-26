@@ -661,6 +661,10 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('star/profitShare', [DashboardController::class, 'profitShare']);
     Route::post('/star/profit/withdraw', [DashboardController::class, 'profitWithdraw']);
 
+    //notification
+    Route::get('star/notification', [DashboardController::class, 'notification']);
+    Route::get('star/notificationCount', [DashboardController::class, 'notificationCount']);
+
     // schdedule
     Route::post('/star/add_schedule/', [StarScheduleController::class, 'add_schedule']);
     Route::get('/star/schedule', [StarScheduleController::class, 'selected_schedule']);

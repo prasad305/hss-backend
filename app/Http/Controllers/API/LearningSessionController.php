@@ -126,6 +126,7 @@ class LearningSessionController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Learning Session Added',
+                'learningSessionId' => $learningSession->id,
             ]);
         }
     }
