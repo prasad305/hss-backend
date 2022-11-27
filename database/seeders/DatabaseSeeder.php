@@ -29,6 +29,19 @@ class DatabaseSeeder extends Seeder
         $this->call(SuperStartSeeder::class);
         $this->call(PaymentSeeder::class);
         $this->call(GreetingTypeSeeder::class);
+        $this->call(MarketPlaceSeeder::class);
+        $this->call(SouvenirSeeder::class);
+        $this->call(AuctionSeeder::class);
+        $this->call(InterestTypeSeeder::class);
+        $this->call(CountrySeeder::class);
+        $this->call(CurrencySeeder::class);
+        $this->call(EducationLevelSeeder::class);
+        $this->call(AboutUsSeeder::class);
+        $this->call(PrivacyPolicySeeder::class);
+        $this->call(ProductPurchaseSeeder::class);
+        $this->call(RefundPolicySeeder::class);
+        $this->call(TermsAndConditionSeeder::class);
+        $this->call(FaqSeeder::class);
 
         // audition related seeder
         // $this->call(Audition\AuditionSeeder::class);

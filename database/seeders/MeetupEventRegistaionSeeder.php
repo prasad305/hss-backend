@@ -6,7 +6,6 @@ use App\Models\MeetupEventRegistration;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Faker\Generator as Faker;
-use App\Models\User;
 
 class MeetupEventRegistaionSeeder extends Seeder
 {
@@ -17,9 +16,6 @@ class MeetupEventRegistaionSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        $user = User::where('user_type','user')->get();
-        $totalUser = User::where('user_type','user')->count();
-
         for ($i = 1; $i <$totalUser; $i++) {
             $MeetUpReg = new MeetupEventRegistration();
             $MeetUpReg->meetup_event_id =  $faker->numberBetween(1, 20);
