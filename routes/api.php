@@ -736,6 +736,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
 
     // Learning Session Section
+    Route::get('/star/learning_session/registered_user/{slug}', [LearningSessionController::class, 'registured_user']);
     Route::get('/star/learning_session/allInOneMobile', [LearningSessionController::class, 'allInOneMobileLearning']);
     Route::post('/star/learning_session/create', [LearningSessionController::class, 'star_add']);
     Route::post('/star/update_learning_session/{id}', [LearningSessionController::class, 'update']);
