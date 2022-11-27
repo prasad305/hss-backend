@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\MeetupEvent;
+use App\Models\MeetupEventRegistration;
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 use Faker\Generator as Faker;
@@ -16,23 +19,38 @@ class MeetupEventSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        for ($i = 1; $i < 21; $i++) {
-            $MeetEvent = new MeetupEvent();
-            $MeetEvent->created_by_id =  $faker->numberBetween(1, 4);
-            $MeetEvent->star_id =  $faker->numberBetween(4, 5);
-            $MeetEvent->meetup_type =  'Offline';
-            $MeetEvent->title =  $faker->text(10);
-            $MeetEvent->end_time =  Carbon::now()->addDays(-2);
-            $MeetEvent->start_time =  Carbon::now()->addDays(-10);
-            $MeetEvent->description =  $faker->text(50);
-            $MeetEvent->venue =  $faker->country();
-            $MeetEvent->total_seat =  $faker->numberBetween(200, 500);
-            $MeetEvent->banner =  $faker->imageUrl($width = 300, $height = 200);
-            $MeetEvent->video =  "https://youtu.be/lyXjeJN9lyg";
-            // $MeetEvent->time =  Carbon::now()->setTime(22, 32, 5);
-            $MeetEvent->fee =  $faker->numberBetween(400, 500);
-            $MeetEvent->status = 1;
-            $MeetEvent->save();
-        }
+        MeetupEvent::factory(2)->create([
+            'category_id' => 2,
+            'sub_category_id' => 5,
+            'created_by_id' => 20,
+            'admin_id' => 20,
+            'star_id' => 38,
+        ])->each(function ($event) {
+            if ($event->id % 2 == 0) {
+                MeetupEvent::where('id', $event->id)->update([
+                    'meetup_type' => "Online",
+                    'event_link' => "asdfghgddddg",
+
+                ]);
+            }
+            Post::create([
+
+                'type' => 'meetup',
+                'user_id' => $event->star_id,
+                'star_id' => $event->star_id,
+                'event_id' =>  $event->id,
+                'category_id' =>  $event->category_id,
+                'sub_category_id' =>  $event->sub_category_id,
+                'title' =>  $event->title,
+                'details' =>  $event->description,
+
+            ]);
+            User::factory(5)->create()->each(function ($user) use ($event) {
+                MeetupEventRegistration::factory(1)->create([
+                    'meetup_event_id' => $event->id,
+                    'user_id' => $user->id,
+                ]);
+            });
+        });
     }
 }
