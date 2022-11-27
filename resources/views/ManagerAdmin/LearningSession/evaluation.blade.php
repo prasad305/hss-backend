@@ -49,6 +49,9 @@
                                         </video>
                                     @endif
                                 @endif
+                                {{-- <video width="320" height="240" controls>
+                                    <source src={{ asset($event->video) }} type="video/mp4">
+                                </video> --}}
 
                                 <div class="panel-body pt-1">
                                     <h3 class="text-ellipsis-line-1">{{ $event->title }}</h3>
