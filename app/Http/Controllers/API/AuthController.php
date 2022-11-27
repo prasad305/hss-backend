@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ForgetPassword;
 use App\Models\Activity;
 use App\Models\AuditionParticipant;
 use App\Models\GreetingsRegistration;
@@ -23,6 +24,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 //use Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 
@@ -74,6 +76,13 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+
+
+        // Mail::to('apurboka@gmail.com')->send(new ForgetPassword());
+
+
+
+
         $validator = Validator::make($request->all(), [
             'email' => 'required',
             'password' => 'required|min:4'
@@ -174,6 +183,59 @@ class AuthController extends Controller
                     'message' => 'Logged In Successfully',
                 ]);
             }
+        }
+    }
+
+    /**
+     * user forget password
+     */
+    public function UserForgetPassword(Request $request)
+    {
+
+        $userData = User::where('email', $request->email)->first();
+
+
+        if (isset($userData)) {
+            $userData->otp = rand(100000, 999999);
+            $userData->update();
+
+
+            Mail::to($request->email)->send(new ForgetPassword($userData->otp));
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Verified' .  $userData->otp,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 201,
+                'message' => 'user not found',
+            ]);
+        }
+    }
+
+    /**
+     * forget password store
+     */
+    public function UserForgetPasswordStore(Request $request)
+    {
+        $userData = User::where('email', $request->email)->first();
+
+        if ($userData->otp ==  $request->code) {
+
+            $userData->password = Hash::make($request->password);
+            $userData->otp = rand(100000, 999999);
+            $userData->update();
+            return response()->json([
+                'status' => 200,
+                'message' => 'password change successful',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 201,
+                'message' => 'code not match',
+            ]);
         }
     }
 
