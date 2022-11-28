@@ -66,6 +66,8 @@ Route::post('user_forget_password', [AuthController::class, 'UserForgetPassword'
 Route::post('user_forget_password_store', [AuthController::class, 'UserForgetPasswordStore']);
 Route::post('user_authentication', [AuthController::class, 'user_authentication']);
 Route::post('logout', [AuthController::class, 'logout']);
+//
+Route::get('getStarInfo/data/{star_id}', [AuthController::class, 'getStarData']);
 
 // OTP Verification API
 Route::post('otp_verify', [AuthController::class, 'otp_verify']);

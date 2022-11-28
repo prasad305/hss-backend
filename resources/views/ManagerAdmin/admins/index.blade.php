@@ -72,7 +72,7 @@
                                             </a>
                                         @endif
                                     </td>
-                                    <td>{{ $admin->profitShare->profit }}</td>
+                                    <td>{{ $admin->profitShare ? $admin->profitShare->profit : 00 }}</td>
                                     <td>
                                         @if ($admin->status == 0)
                                             <span class="badge badge-danger">Pending</span>
