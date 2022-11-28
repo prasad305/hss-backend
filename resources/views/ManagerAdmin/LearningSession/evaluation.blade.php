@@ -35,28 +35,31 @@
                 @foreach ($events as $event)
                     <!--card-->
 
-                    <div class="col-sm-6 col-lg-4">
+                    <div class="col-sm-12 col-md-4 col-lg-3">
                         <div class="card">
                             <div class="panel panel-primary text-center">
-                                <div class="">
-                                    @if ($event->video != null)
-                                        <video width="
-                                    " height="200" controls>
-                                            <source src="{{ asset('http://localhost:8000/' . $event->video) }}" />
-                                        </video>
-                                    @else
+                                @if ($event->banner != null)
+                                    <img src="{{ asset($event->banner) }}" class="img-fluid card-img" />
+                                @else
+                                    @if ($event->banner != null)
                                         <img width="100%" src="{{ asset($event->banner) }}" alt="">
-                                    @endif
+                                    @else
+                                        <video src={{ asset($event->video) }} class="img-fluid card-img" controls>
 
-                                </div>
+                                        </video>
+                                    @endif
+                                @endif
+                                {{-- <video width="320" height="240" controls>
+                                    <source src={{ asset($event->video) }} type="video/mp4">
+                                </video> --}}
 
                                 <div class="panel-body pt-1">
                                     <h3 class="text-ellipsis-line-1">{{ $event->title }}</h3>
                                     <a href="{{ route('managerAdmin.learningSession.evaluationDetails', [$event->id]) }}"
-                                        type="button" class="btn btn-info waves-effect waves-light mb-2">Details <i
-                                            class="fa fa-angle-double-right"></i></a>
+                                        type="button" class="btn btnDetails waves-effect fw-bold waves-light mb-2">Details
+                                        <i class="fa fa-angle-double-right"></i></a>
                                     <a href="{{ route('managerAdmin.learningSession.evaluationResult', [$event->id]) }}"
-                                        type="button" class="btn btn-info waves-effect waves-light mb-2">Show Result <i
+                                        type="button" class="btn btnPublish waves-effect waves-light mb-2">Show Result <i
                                             class="fa fa-eye"></i></a>
 
                                 </div>
