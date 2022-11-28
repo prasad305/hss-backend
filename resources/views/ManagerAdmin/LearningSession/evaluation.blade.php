@@ -38,20 +38,17 @@
                     <div class="col-sm-12 col-md-4 col-lg-3">
                         <div class="card">
                             <div class="panel panel-primary text-center">
-                                @if ($event->banner != null)
-                                    <img src="{{ asset($event->banner) }}" class="img-fluid card-img" />
-                                @else
-                                    @if ($event->banner != null)
-                                        <img width="100%" src="{{ asset($event->banner) }}" alt="">
-                                    @else
-                                        <video src={{ asset($event->video) }} class="img-fluid card-img" controls>
 
-                                        </video>
-                                    @endif
+
+                                @if ($event->video != null)
+                                    <video controls class="img-fluid card-img">
+                                        <source src="{{ asset('http://localhost:8000/' . $event->video) }}" />
+                                    </video>
+                                @else
+                                    <img width="100%" src="{{ asset($event->banner) }}" alt=""
+                                        class="img-fluid card-img">
                                 @endif
-                                {{-- <video width="320" height="240" controls>
-                                    <source src={{ asset($event->video) }} type="video/mp4">
-                                </video> --}}
+
 
                                 <div class="panel-body pt-1">
                                     <h3 class="text-ellipsis-line-1">{{ $event->title }}</h3>
