@@ -55,13 +55,17 @@ class AuthController extends Controller
                 'phone' => $request->phone,
                 'password' => Hash::make($request->password),
                 // 'otp' => rand(100000, 999999)
-                'otp' => 123456
+                'otp' => 123456,
+
+                //for temporary
+                'otp_verified_at' => Carbon::now(),
+                'user_type' => 'user'
             ]);
 
             $token = $user->createToken($user->email . '_Token')->plainTextToken;
 
             // send sms via helper function
-            send_sms('Welcome to Hello Super Stars, Your otp is : ' . $user->otp, $user->phone);
+            // send_sms('Welcome to Hello Super Stars, Your otp is : ' . $user->otp, $user->phone);
 
 
             return response()->json([
