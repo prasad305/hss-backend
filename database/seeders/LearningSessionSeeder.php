@@ -2,7 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Activity;
 use App\Models\LearningSession;
+use App\Models\LearningSessionRegistration;
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 use Faker\Generator as Faker;
@@ -16,24 +20,43 @@ class LearningSessionSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        for ($i = 1; $i < 21; $i++) {
-            $LearningSession = new LearningSession();
-            $LearningSession->created_by_id =  $faker->numberBetween(1, 4);
-            $LearningSession->star_id =  $faker->numberBetween(4, 5);
-            $LearningSession->title =  $faker->text(10);
-            $LearningSession->registration_end_date =  Carbon::now()->addDays(20);
-            $LearningSession->registration_start_date =  Carbon::now();
-            $LearningSession->description =  $faker->text(50);
-            $LearningSession->banner =  $faker->imageUrl($width = 300, $height = 200);;
-            $LearningSession->participant_number =  $faker->numberBetween(100, 200);
-            $LearningSession->video =  "https://youtu.be/lyXjeJN9lyg";
-            $LearningSession->event_date =  Carbon::now();
-            $LearningSession->start_time =  Carbon::now()->setTime(22, 32, 5);
-            $LearningSession->end_time =  Carbon::now()->setTime(24, 32, 5);
-            $LearningSession->fee =  $faker->numberBetween(400, 500);
-            $LearningSession->status = 1;
-            $LearningSession->total_amount = $faker->numberBetween(100, 150);
-            $LearningSession->save();
-        }
+        LearningSession::factory(2)->create([
+            'category_id' => 2,
+            'sub_category_id' => 5,
+            'created_by_id' => 20,
+            'admin_id' => 20,
+            'star_id' => 38,
+        ])->each(function ($event) use ($faker) {
+            if ($event->id % 2 == 0) {
+                LearningSession::where('id', $event->id)->update([
+                    'assignment' => 1,
+                    'assignment_fee' => 700,
+                    'assignment_instruction' => $faker->paragraph(),
+                    'assignment_video_slot_number' => 1,
+                    'assignment_reg_start_date' => Carbon::now()->addDay(10),
+                    'assignment_reg_end_date' => Carbon::now()->addDay(30),
+                ]);
+            }
+            Post::create([
+
+                'type' => 'learningSession',
+                'user_id' => $event->star_id,
+                'star_id' => $event->star_id,
+                'event_id' =>  $event->id,
+                'category_id' =>  $event->category_id,
+                'sub_category_id' =>  $event->sub_category_id,
+                'title' =>  $event->title,
+                'details' =>  $event->description,
+
+            ]);
+            User::factory(5)->create()->each(function ($user) use ($event) {
+                LearningSessionRegistration::factory(1)->create([
+                    'learning_session_id' => $event->id,
+                    'user_id' => $user->id,
+                ])->each(function ($registerInfo) {
+                    createSeederActivity("learningSession", $registerInfo->id, $registerInfo->user_id, $registerInfo->learning_session_id);
+                });
+            });
+        });
     }
 }
