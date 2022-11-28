@@ -15,6 +15,10 @@ class EducationLevelSeeder extends Seeder
     public function run()
     {
         $educationlevel = new Educationlevel;
+        $educationlevel->name = 'JSC';
+        $educationlevel->status = 1;
+        $educationlevel->save();
+        $educationlevel = new Educationlevel;
         $educationlevel->name = 'SSC';
         $educationlevel->status = 1;
         $educationlevel->save();

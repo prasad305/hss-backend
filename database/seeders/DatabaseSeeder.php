@@ -40,8 +40,9 @@ class DatabaseSeeder extends Seeder
         $this->call(PrivacyPolicySeeder::class);
         $this->call(ProductPurchaseSeeder::class);
         $this->call(RefundPolicySeeder::class);
-        $this->call(TermsAndConditionSeeder::class);
+        $this->call(TermAndConditionSeeder::class);
         $this->call(FaqSeeder::class);
+
 
         // audition related seeder
         // $this->call(Audition\AuditionSeeder::class);

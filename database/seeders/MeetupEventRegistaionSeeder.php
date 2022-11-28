@@ -16,17 +16,17 @@ class MeetupEventRegistaionSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        for ($i = 1; $i <$totalUser; $i++) {
-            $MeetUpReg = new MeetupEventRegistration();
-            $MeetUpReg->meetup_event_id =  $faker->numberBetween(1, 20);
-            $MeetUpReg->user_id =  $user[$i]->id;
-            $MeetUpReg->payment_method =  $faker->text(10);
-            $MeetUpReg->payment_status =  1;
-            $MeetUpReg->payment_date =  Carbon::now();
-            $MeetUpReg->amount =  $faker->numberBetween(500, 1000);
-            $MeetUpReg->card_holder_name =  $faker->name();
-            $MeetUpReg->account_no =  $faker->phoneNumber();
-            $MeetUpReg->save();
-        };
+        // for ($i = 1; $i <$totalUser; $i++) {
+        //     $MeetUpReg = new MeetupEventRegistration();
+        //     $MeetUpReg->meetup_event_id =  $faker->numberBetween(1, 20);
+        //     $MeetUpReg->user_id =  $user[$i]->id;
+        //     $MeetUpReg->payment_method =  $faker->text(10);
+        //     $MeetUpReg->payment_status =  1;
+        //     $MeetUpReg->payment_date =  Carbon::now();
+        //     $MeetUpReg->amount =  $faker->numberBetween(500, 1000);
+        //     $MeetUpReg->card_holder_name =  $faker->name();
+        //     $MeetUpReg->account_no =  $faker->phoneNumber();
+        //     $MeetUpReg->save();
+        // };
     }
 }

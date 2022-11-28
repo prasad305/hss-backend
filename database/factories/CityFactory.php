@@ -3,8 +3,9 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\State;
 
-class TermsAndConditionFactory extends Factory
+class CityFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -13,9 +14,9 @@ class TermsAndConditionFactory extends Factory
      */
     public function definition()
     {
+    
         return [
-            'title' => $this->faker->sentence(),
-            'details' => $this->faker->text(150),
+            'name' => $this->faker->city(),
             'status' => 1,
         ];
     }
