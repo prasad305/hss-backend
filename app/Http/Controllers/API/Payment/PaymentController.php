@@ -23,6 +23,7 @@ use App\Models\Wallet;
 use App\Models\Activity;
 use App\Models\AuditionCertification;
 use App\Models\Audition\AuditionRoundInfo;
+use App\Models\Audition\AuditionRoundAppealRegistration;
 use Error;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -229,6 +230,10 @@ class PaymentController extends Controller
 
 
 
+            if($request->modelName == 'audition')
+            {
+                return $this->AuditionRegUpdate($user->id, $request->eventId, "PayTm-mobile");
+            }
 
             //live chat regupdate
             if ($request->modelName == 'livechat') {
@@ -264,6 +269,15 @@ class PaymentController extends Controller
                 return $this->auditionCertificateUpdate($user->id, $request->eventId, "PayTm-mobile", $request->TXNAMOUNT);
                 // $user_id, $round_info_id, $method, $fee
             }
+            
+            if ($request->modelName == 'auditionAppeal') {
+                // return $request->eventId();
+                
+                return $this->auditionAppealPayment($user->id, $request->eventId, "PayTm-mobile", $request->TXNAMOUNT);
+                // $user_id, $round_info_id, $method, $fee
+            }
+            
+            
 
 
             return "success data received" . "__" . $request->modelName;
@@ -733,6 +747,41 @@ class PaymentController extends Controller
             'payment_status' =>  1,
             'payment_method' => $method
         ]);
+    }
+
+    function auditionAppealPayment($user_id, $round_info_id, $method, $fee)
+    {
+        // return response()->json([
+        //     'status' => 200,
+        //     'round_info_id' => $round_info_id,
+        //     'fee' => $fee,
+        // ]);
+
+        $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
+
+        
+
+
+        if (AuditionRoundAppealRegistration::where([['user_id', $user_id], ['audition_id',  $auditionRoundInfo->audition_id], ['round_info_id', $round_info_id]])->first()) {
+            return response()->json([
+                'status' => 200,
+                'appealedRegistration' => AuditionRoundAppealRegistration::where([['user_id', $user_id], ['audition_id',  $auditionRoundInfo->audition_id], ['round_info_id', $round_info_id]])->first(),
+                'message' => 'User already Registered for this round'
+            ]);
+        } else {
+
+            $appealedRegistration = AuditionRoundAppealRegistration::create([
+                'audition_id' =>  $auditionRoundInfo->audition_id,
+                'round_info_id' => $round_info_id,
+                'user_id' => $user_id,
+                'payment_status' => 1,
+                'amount' => $fee,
+            ]);
+            return response()->json([
+                'status' => 200,
+                'appealedRegistration' => $appealedRegistration,
+            ]);
+        }
     }
 
     //   <================================Love React Payment end ==================================>

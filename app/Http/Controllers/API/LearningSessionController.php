@@ -126,6 +126,7 @@ class LearningSessionController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Learning Session Added',
+                'learningSessionId' => $learningSession->id,
             ]);
         }
     }
@@ -281,6 +282,18 @@ class LearningSessionController extends Controller
         }
     }
 
+    public function registured_user_star($slug)
+    {
+        $event = LearningSession::where('slug', $slug)->first();
+        $users = LearningSessionRegistration::where('learning_session_id', $event->id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'users' => $users,
+            'event' => $event,
+            'message' => 'Success',
+        ]);
+    }
     public function registured_user($slug)
     {
         $event = LearningSession::where('slug', $slug)->first();
@@ -606,8 +619,9 @@ class LearningSessionController extends Controller
 
     // For Mobile app learning session add
 
-    public function star_add_mobile(Request $request){
-        
+    public function star_add_mobile(Request $request)
+    {
+
         if ($request->banner_or_video == 'Banner') {
             $validator = Validator::make($request->all(), [
                 'title' => 'required|unique:learning_sessions',
@@ -675,37 +689,30 @@ class LearningSessionController extends Controller
                 $learningSession->participant_number = $request->participant_number;
                 // $learningSession->room_id = $request->input('room_id');
                 $learningSession->status = 1;
-                
             } catch (\Throwable $th) {
                 return $th;
             }
-            if($request->banner_or_video == 'Banner')
-            {
-                try{
+            if ($request->banner_or_video == 'Banner') {
+                try {
                     $originalExtension = str_ireplace("image/", "", $request->img['type']);
 
                     $folder_path       = 'uploads/images/learning_session/';
 
                     $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                     $decodedBase64 = $request->img['data'];
-                
+
                     Image::make($decodedBase64)->save($folder_path . $image_new_name);
                     $location = $folder_path . $image_new_name;
                     $learningSession->banner = $location;
                     $learningSession->save();
-                }
-
-                catch (\Exception $exception) {
+                } catch (\Exception $exception) {
                     return response()->json([
                         "error" => $exception->getMessage(),
                         "status" => "0",
                     ]);
                 }
-            }
-
-            else
-            {
-                try{
+            } else {
+                try {
                     $originalExtension = str_ireplace("video/", "", $request->video['type']);
 
                     $folder_path       = 'uploads/videos/learning_session/';
@@ -713,14 +720,12 @@ class LearningSessionController extends Controller
                     $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                     $decodedBase64 = $request->video['data'];
                     $location = $folder_path . $image_new_name;
-                
+
                     file_put_contents($location, base64_decode($decodedBase64, true));
-                    
+
                     $learningSession->video = $location;
                     $learningSession->save();
-                }
-
-                catch (\Exception $exception) {
+                } catch (\Exception $exception) {
                     return response()->json([
                         "error" => $exception->getMessage(),
                         "status" => "0",
@@ -956,7 +961,8 @@ class LearningSessionController extends Controller
         ]);
     }
 
-    public function allInOneMobileLearning(){
+    public function allInOneMobileLearning()
+    {
         $allEvents = LearningSession::where('star_id', auth('sanctum')->user()->id)->latest()->get();
         $pendingEvents = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', '<', 1]])->latest()->get();
         $approvedEvents = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0], ['status', '<', 10]])->latest()->get();
@@ -970,7 +976,7 @@ class LearningSessionController extends Controller
             'pendingEvents' => $pendingEvents,
             'approvedEvents' => $approvedEvents,
             'RejectedEvents' => $RejectedEvents,
-            'EvaluatedEvents'=> $EvaluatedEvents,
+            'EvaluatedEvents' => $EvaluatedEvents,
             'CompletedEvents' => $CompletedEvents,
             'ResultEvent' => $ResultEvent,
             'message' => 'Success',

@@ -803,7 +803,7 @@ class UserSeeder extends Seeder
             $user->email = 'user' . $i . '@gmail.com';
             $user->image = null;
             $user->cover_photo = null;
-            $user->phone = '017001000' . $i;
+            $user->phone = '01700100012' . $i;
             $user->password = Hash::make('12345');
             $user->user_type = 'user';
             $user->status = 1;

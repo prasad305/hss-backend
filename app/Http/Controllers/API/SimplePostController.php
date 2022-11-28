@@ -170,6 +170,7 @@ class SimplePostController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Post Added',
+            'post' => $post,
         ]);
     }
     public function simplePostUpdate(Request $request, $id)
@@ -518,7 +519,7 @@ class SimplePostController extends Controller
             $post->status = 1;
         }
 
-        if($request->image['type']){
+        if($request->image != null){
             try{
                 $originalExtension = str_ireplace("image/", "", $request->image['type']);
 
@@ -539,7 +540,7 @@ class SimplePostController extends Controller
                 ]);
             }
         }
-        if($request->video['type']){
+        if($request->video != null){
             try{
                 $originalExtension = str_ireplace("image/", "", $request->video['type']);
 
@@ -560,7 +561,7 @@ class SimplePostController extends Controller
                 ]);
             }
         }
-        if($request->thumbnail['type']){
+        if($request->thumbnail != null){
             try{
                 $originalExtension = str_ireplace("image/", "", $request->thumbnail['type']);
 

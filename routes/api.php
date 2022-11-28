@@ -62,6 +62,8 @@ Route::get('virtualtourforphone', [VirtualtourController::class, 'virtualtourfor
 // Authentication API
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('user_forget_password', [AuthController::class, 'UserForgetPassword']);
+Route::post('user_forget_password_store', [AuthController::class, 'UserForgetPasswordStore']);
 Route::post('user_authentication', [AuthController::class, 'user_authentication']);
 Route::post('logout', [AuthController::class, 'logout']);
 
@@ -661,6 +663,10 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('star/profitShare', [DashboardController::class, 'profitShare']);
     Route::post('/star/profit/withdraw', [DashboardController::class, 'profitWithdraw']);
 
+    //notification
+    Route::get('star/notification', [DashboardController::class, 'notification']);
+    Route::get('star/notificationCount', [DashboardController::class, 'notificationCount']);
+
     // schdedule
     Route::post('/star/add_schedule/', [StarScheduleController::class, 'add_schedule']);
     Route::get('/star/schedule', [StarScheduleController::class, 'selected_schedule']);
@@ -732,6 +738,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
 
     // Learning Session Section
+    Route::get('/star/learning_session/registered_user/{slug}', [LearningSessionController::class, 'registured_user']);
     Route::get('/star/learning_session/allInOneMobile', [LearningSessionController::class, 'allInOneMobileLearning']);
     Route::post('/star/learning_session/create', [LearningSessionController::class, 'star_add']);
     Route::post('/star/update_learning_session/{id}', [LearningSessionController::class, 'update']);

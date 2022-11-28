@@ -271,18 +271,69 @@ class DashboardController extends Controller
             'souvenirCreate' => $souvenirCreate,
         ]);
     }
-    public function starDashboardCount(){
-        $post = SimplePost::where('star_id', auth('sanctum')->user()->id)->count();
-        $liveChat = LiveChat::where('star_id', auth('sanctum')->user()->id)->count();
-        $qna = QnA::where('star_id', auth('sanctum')->user()->id)->count();
-        $meetupEvent = MeetupEvent::where('star_id', auth('sanctum')->user()->id)->count();
-        $learningSession = LearningSession::where('star_id', auth('sanctum')->user()->id)->count();
-        $greeting = Greeting::where('star_id', auth('sanctum')->user()->id)->count();
-        $fanGroup = FanGroup::where('my_star', auth('sanctum')->user()->id)->orWhere('another_star', auth('sanctum')->user()->id)->count();
+    
+    public function notificationCount()
+    {
+        $pendingLiveChat = LiveChat::where([['star_id', auth('sanctum')->user()->id], ['status' , 0]])->count();
+        $pendingLearningSessions = LearningSession::where([['star_id', auth('sanctum')->user()->id],['status', 0]])->count();
+        $pendingQna = QnA::where([['star_id', auth('sanctum')->user()->id],['star_approval', 0]])->count();
+        $pendingMeetupEvent = MeetupEvent::where([['star_id', auth('sanctum')->user()->id],['status', 0]])->count();
+        $pendingPost = SimplePost::where([['star_id', auth('sanctum')->user()->id],['star_approval', 0]])->count();
+        $pendingGreeting = Greeting::where([['star_id', auth('sanctum')->user()->id], ['star_approve_status', 0]])->count();
+        $pendingFanGroup = FanGroup::where([['my_star', auth('sanctum')->user()->id],['my_star_status', 0]])->orWhere([['another_star', auth('sanctum')->user()->id],['another_star_status', 0]])->count();
+        $pendingMarketplace = Marketplace::where([['superstar_id', auth('sanctum')->user()->id], ['post_status', 0]])->count();
+        $pendingAuction = Auction::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 0]])->count();
+        $pendingSouvenir = SouvenirCreate::where([['star_id', auth('sanctum')->user()->id], ['approval_status', 0]])->count();
 
-        $auction = Auction::where('star_id', auth('sanctum')->user()->id)->count();
-        $marketplace = Marketplace::where('superstar_id', auth('sanctum')->user()->id)->count();
-        $souvenirCreate = SouvenirCreate::where('star_id', auth('sanctum')->user()->id)->count();
+        $totalNotification = $pendingLiveChat + $pendingLearningSessions + $pendingQna + $pendingMeetupEvent + $pendingPost + $pendingGreeting + $pendingFanGroup + $pendingMarketplace + $pendingAuction + $pendingSouvenir;
+
+        return response()->json([
+            'status' => 200,
+            'totalNotification' => $totalNotification,
+        ]);
+    }
+
+    public function notification()
+    {
+        $pendingLiveChat = LiveChat::where([['star_id', auth('sanctum')->user()->id], ['status' , 0]])->get();
+        $pendingLearningSessions = LearningSession::where([['star_id', auth('sanctum')->user()->id],['status', 0]])->get();
+        $pendingQna = QnA::where([['star_id', auth('sanctum')->user()->id],['star_approval', 0]])->get();
+        $pendingMeetupEvent = MeetupEvent::where([['star_id', auth('sanctum')->user()->id],['status', 0]])->get();
+        $pendingPost = SimplePost::where([['star_id', auth('sanctum')->user()->id],['star_approval', 0]])->get();
+        $pendingGreeting = Greeting::where([['star_id', auth('sanctum')->user()->id], ['star_approve_status', 0]])->get();
+        $pendingFanGroup = FanGroup::where([['my_star', auth('sanctum')->user()->id],['my_star_status', 0]])->orWhere([['another_star', auth('sanctum')->user()->id],['another_star_status', 0]])->get();
+        $pendingMarketplace = Marketplace::where([['superstar_id', auth('sanctum')->user()->id], ['post_status', 0]])->get();
+        $pendingAuction = Auction::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 0]])->get();
+        $pendingSouvenir = SouvenirCreate::where([['star_id', auth('sanctum')->user()->id], ['approval_status', 0]])->get();
+        return response()->json([
+            'status' => 200,
+            'pendingLiveChat' => $pendingLiveChat,
+            'pendingLearningSessions' => $pendingLearningSessions,
+            'pendingQna' => $pendingQna,
+            'pendingMeetupEvent' => $pendingMeetupEvent,
+            'pendingPost' => $pendingPost,
+            'pendingGreeting' => $pendingGreeting,
+            'pendingFanGroup' => $pendingFanGroup,
+            'pendingMarketplace' => $pendingMarketplace,
+            'pendingAuction' => $pendingAuction,
+            'pendingSouvenir' => $pendingSouvenir,
+        ]);
+
+    }
+    public function starDashboardCount(){
+        $post = SimplePost::where([['star_id', auth('sanctum')->user()->id],['star_approval', 0]])->count();
+        $liveChat = LiveChat::where([['star_id', auth('sanctum')->user()->id], ['status' , 0]])->count();
+        $qna = QnA::where([['star_id', auth('sanctum')->user()->id],['star_approval', 0]])->count();
+        $meetupEvent = MeetupEvent::where([['star_id', auth('sanctum')->user()->id],['status', 0]])->count();
+        $learningSession = LearningSession::where([['star_id', auth('sanctum')->user()->id],['status', 0]])->count();
+        $greeting = Greeting::where([['star_id', auth('sanctum')->user()->id], ['star_approve_status', 0]])->count();
+        $fanGroup = FanGroup::where([['my_star', auth('sanctum')->user()->id],['my_star_status', 0]])->orWhere([['another_star', auth('sanctum')->user()->id],['another_star_status', 0]])->count();
+        $allAuditions = Audition::with('judge')->whereHas('judge', function ($q) {
+            $q->where([['judge_id', auth('sanctum')->user()->id]]);
+        })->count();
+        $auction = Auction::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 0]])->count();
+        $marketplace = Marketplace::where([['superstar_id', auth('sanctum')->user()->id], ['post_status', 0]])->count();
+        $souvenirCreate = SouvenirCreate::where([['star_id', auth('sanctum')->user()->id], ['approval_status', 0]])->count();
 
         $totalShowCase = $auction + $marketplace + $souvenirCreate;
 
@@ -296,6 +347,7 @@ class DashboardController extends Controller
             'greeting' => $greeting,
             'fanGroup' => $fanGroup,
             'totalShowCase' => $totalShowCase,
+            'allAuditions' => $allAuditions,
         ]);
     }
     public function adminPost($type)

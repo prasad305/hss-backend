@@ -50,6 +50,7 @@
                                             class="img-fluid card-img" />
                                     </a>
                                 @endif
+                                
                                 <div class="panel-body pt-1">
                                     <h5 class="text-ellipsis-line-1">{{ $val->title }}</h5>
 
