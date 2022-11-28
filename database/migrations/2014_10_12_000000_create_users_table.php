@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('parent_user')->nullable()->comment('this is for star admin id'); 
+            $table->unsignedBigInteger('parent_user')->nullable()->comment('this is for star admin id');
             $table->unsignedBigInteger('created_by')->nullable()->comment('this is for creator or manager admin id');
             $table->unsignedBigInteger('updated_by')->nullable()->comment('this is for updated by');
             $table->unsignedBigInteger('category_id')->nullable();
@@ -23,7 +23,9 @@ class CreateUsersTable extends Migration
             $table->string('username')->nullable()->unique();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
+            $table->string('country_code')->unique()->nullable();
             $table->string('phone')->unique()->nullable();
+            $table->string('calling_code')->unique()->nullable();
             $table->longText('details')->nullable();
             $table->text('address')->nullable();
             $table->date('dob')->nullable();

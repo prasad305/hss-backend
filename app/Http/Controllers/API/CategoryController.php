@@ -248,6 +248,9 @@ class CategoryController extends Controller
         $category = json_decode($request->category);
 
         $cat = ChoiceList::where('user_id', $id)->first();
+        $userData = User::find($id);
+        $userData->status = 1;
+        $userData->update();
 
         if (!isset($cat)) {
             $cat = new ChoiceList();

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\ForgetPassword;
 use App\Models\Activity;
 use App\Models\AuditionParticipant;
+use App\Models\ChoiceList;
 use App\Models\GreetingsRegistration;
 use App\Models\LearningSessionRegistration;
 use App\Models\MeetupEventRegistration;
@@ -47,6 +48,8 @@ class AuthController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
+
+
             $user = User::create([
                 'username' => $request->first_name . now()->timestamp,
                 'first_name' => $request->first_name,
@@ -56,6 +59,9 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
                 // 'otp' => rand(100000, 999999)
                 'otp' => 123456,
+                'country_code' => $request->countryCode,
+                'calling_code' => $request->callingCode,
+                'status' => 1,
 
                 //for temporary
                 'otp_verified_at' => Carbon::now(),
@@ -63,6 +69,15 @@ class AuthController extends Controller
             ]);
 
             $token = $user->createToken($user->email . '_Token')->plainTextToken;
+
+            $choiseList = ChoiceList::create([
+                "user_id" => $user->id,
+                "category" => "[]",
+                "subcategory" => "[]",
+                "star_id" => "[]"
+            ]);
+
+
 
             // send sms via helper function
             // send_sms('Welcome to Hello Super Stars, Your otp is : ' . $user->otp, $user->phone);
