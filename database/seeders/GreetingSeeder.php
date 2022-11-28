@@ -21,6 +21,7 @@ class GreetingSeeder extends Seeder
             'category_id' => 2,
             'sub_category_id' => 5,
         ]);
+
         Greeting::factory(1)->create([
             'created_by_id' => 22,
             'admin_id' => 22,

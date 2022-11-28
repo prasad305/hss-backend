@@ -17,6 +17,22 @@ class DatabaseSeeder extends Seeder
             SimplePostSeeder::class,
             LearningSessionSeeder::class,
             MeetupEventSeeder::class,
+            LiveChatSeeder::class,
+            QnASeeder::class,
+            GreetingSeeder::class,
+            MarketPlaceSeeder::class,
+            SouvenirSeeder::class,
+            AuctionSeeder::class,
+            InterestTypeSeeder::class,
+            CountrySeeder::class,
+            CurrencySeeder::class,
+            EducationLevelSeeder::class,
+            AboutUsSeeder::class,
+            PrivacyPolicySeeder::class,
+            ProductPurchaseSeeder::class,
+            RefundPolicySeeder::class,
+            TermAndConditionSeeder::class,
+            FaqSeeder::class,
         ]);
 
 

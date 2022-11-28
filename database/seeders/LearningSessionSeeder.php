@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Activity;
 use App\Models\LearningSession;
 use App\Models\LearningSessionRegistration;
 use App\Models\Post;
@@ -52,7 +53,9 @@ class LearningSessionSeeder extends Seeder
                 LearningSessionRegistration::factory(1)->create([
                     'learning_session_id' => $event->id,
                     'user_id' => $user->id,
-                ]);
+                ])->each(function ($registerInfo) {
+                    createSeederActivity("learningSession", $registerInfo->id, $registerInfo->user_id, $registerInfo->learning_session_id);
+                });
             });
         });
     }

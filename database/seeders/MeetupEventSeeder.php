@@ -49,7 +49,9 @@ class MeetupEventSeeder extends Seeder
                 MeetupEventRegistration::factory(1)->create([
                     'meetup_event_id' => $event->id,
                     'user_id' => $user->id,
-                ]);
+                ])->each(function ($registerInfo) {
+                    createSeederActivity("meetup", $registerInfo->id, $registerInfo->user_id, $registerInfo->meetup_event_id);
+                });;
             });
         });
     }
