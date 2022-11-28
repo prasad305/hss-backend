@@ -62,6 +62,8 @@ Route::get('virtualtourforphone', [VirtualtourController::class, 'virtualtourfor
 // Authentication API
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('user_forget_password', [AuthController::class, 'UserForgetPassword']);
+Route::post('user_forget_password_store', [AuthController::class, 'UserForgetPasswordStore']);
 Route::post('user_authentication', [AuthController::class, 'user_authentication']);
 Route::post('logout', [AuthController::class, 'logout']);
 
