@@ -34,7 +34,7 @@ Route::get('/', function () {
 
 
 Route::get('/chat', function () {
-    return view('chatroom');
+    return view('Others.MailView.forgetPassword');
 });
 Route::get('/test-view', function () {
 
