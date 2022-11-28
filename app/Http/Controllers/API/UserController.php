@@ -882,7 +882,7 @@ class UserController extends Controller
             $userList->save();
 
             $userInfoTypes->country = $request->country;
-            $userInfoTypes->dob = $request->birthday;
+            $userInfoTypes->dob = Carbon::parse($request->birthday);
             $userInfoTypes->save();
             $user = User::find(auth('sanctum')->user()->id);
 

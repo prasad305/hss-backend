@@ -404,7 +404,7 @@ class AuctionController extends Controller
 
                 $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                 $decodedBase64 = $request->bannerImage['data'];
-            
+
                 Image::make($decodedBase64)->save($folder_path . $image_new_name);
                 $location = $folder_path . $image_new_name;
                 $auction->banner = $location;
@@ -426,11 +426,11 @@ class AuctionController extends Controller
 
                 $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                 $decodedBase64 = $request->productImage['data'];
-            
+
                 Image::make($decodedBase64)->save($folder_path . $image_new_name);
                 $location = $folder_path . $image_new_name;
                 $auction->product_image = $location;
-                
+
             }
 
             catch (\Exception $exception) {
@@ -441,11 +441,11 @@ class AuctionController extends Controller
             }
         }
 
-      
+
         $auction->save();
 
 
-        
+
 
         return response()->json([
             'status' => 200,
