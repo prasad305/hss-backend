@@ -33,8 +33,8 @@ class AuctionSeeder extends Seeder
             $auction->owner_id = $userInfoForFootball[$i]->id;
             $auction->base_price = $faker->numberBetween(100, 200);
             $auction->details = $faker->text(25);
-            $auction->product_image = 'uploads/images/souvenir/demoforseeder.jpg';
-            $auction->banner = 'uploads/images/souvenir/demoforseeder.jpg';
+            $auction->product_image = 'seeder_media/image/live-chat.jpg';
+            $auction->banner = 'seeder_media/image/live-chat.jpg';
             $auction->bid_from = Carbon::now();
             $auction->bid_to = Carbon::now()->addDays(15);
             $auction->result_date = Carbon::now()->addDays(20);
@@ -61,8 +61,8 @@ class AuctionSeeder extends Seeder
             $auction->owner_id = $userInfoForCricket[$i]->id;
             $auction->base_price = $faker->numberBetween(100, 200);
             $auction->details = $faker->text(25);
-            $auction->product_image = 'uploads/images/souvenir/demoforseeder.jpg';
-            $auction->banner = 'uploads/images/souvenir/demoforseeder.jpg';
+            $auction->product_image = 'seeder_media/image/live-chat.jpg';
+            $auction->banner = 'seeder_media/image/live-chat.jpg';
             $auction->bid_from = Carbon::now();
             $auction->bid_to = Carbon::now()->addDays(15);
             $auction->result_date = Carbon::now()->addDays(20);

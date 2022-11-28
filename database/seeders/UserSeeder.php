@@ -253,7 +253,7 @@ class UserSeeder extends Seeder
         $user->username = $faker->userName();
         $user->first_name = 'Shakib  ';
         $user->last_name = 'Admin';
-        $user->email = 'shakib-khanadmin@gmail.com';
+        $user->email = 'shakibkhanadmin@gmail.com';
         $user->image = null;
         $user->phone = '0171008017';
         $user->password = Hash::make('12345');
@@ -301,7 +301,7 @@ class UserSeeder extends Seeder
         $user->username = $faker->userName();
         $user->first_name = 'Shakib';
         $user->last_name = 'Admin';
-        $user->email = 'shakib75admin@gmail.com';
+        $user->email = 'shakibadmin@gmail.com';
         $user->image = null;
         $user->phone = '01713000020';
         $user->password = Hash::make('12345');
@@ -548,7 +548,7 @@ class UserSeeder extends Seeder
         $user->username = $faker->userName();
         $user->first_name = 'Shakib  ';
         $user->last_name = 'Khan';
-        $user->email = 'shakib-khan@gmail.com';
+        $user->email = 'shakibkhan@gmail.com';
         $user->image = null;
         $user->phone = '01700000017';
         $user->password = Hash::make('12345');
@@ -599,7 +599,7 @@ class UserSeeder extends Seeder
         $user->username = $faker->userName();
         $user->first_name = 'Shakib';
         $user->last_name = 'Al Hasan';
-        $user->email = 'shakib75@gmail.com';
+        $user->email = 'shakib@gmail.com';
         $user->image = null;
         $user->phone = '01700000020';
         $user->password = Hash::make('12345');
@@ -752,12 +752,12 @@ class UserSeeder extends Seeder
             $user->username = $faker->userName();
             $user->first_name = 'Mr. Audition';
             $user->last_name = 'Admin ' . $i;
-            $user->email = 'audition-admin' . $i . '@gmail.com';
+            $user->email = 'auditionadmin' . $i . '@gmail.com';
             $user->image = null;
             $user->cover_photo = null;
             $user->phone = '016000000' . $i;
             $user->password = Hash::make('12345');
-            $user->user_type = 'audition-admin';
+            $user->user_type = 'auditionadmin';
             // $user->status = $faker->numberBetween(0, 1);
             $user->status = 1;
             // $user->category_id = $faker->numberBetween(1, 8);
