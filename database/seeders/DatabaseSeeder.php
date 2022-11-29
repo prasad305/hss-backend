@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             TermAndConditionSeeder::class,
             FaqSeeder::class,
             OccupationSeeder::class,
+            PackageSeeder::class,
         ]);
 
 
