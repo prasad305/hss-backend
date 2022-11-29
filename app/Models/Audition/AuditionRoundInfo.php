@@ -34,6 +34,7 @@ class AuditionRoundInfo extends Model
         'video_feed',
         'video_duration',
         'video_slot_num',
+        'appeal_video_slot_num',
         'round_start_date',
         'round_end_date',
         'instruction_prepare_start_date',

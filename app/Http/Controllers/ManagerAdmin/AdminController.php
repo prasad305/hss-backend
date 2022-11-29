@@ -49,7 +49,8 @@ class AdminController extends Controller
         $user->fill($request->except(['_token', 'image', 'cover']));
         $user->password = Hash::make('12345');
         $user->user_type = 'admin'; // Admin user_type == 'admin'
-        $user->otp = rand(100000, 999999);
+        // $user->otp = rand(100000, 999999);
+        $user->otp = 123456;
         $user->category_id = auth()->user()->category_id;
         $user->sub_category_id = $request->sub_category_id;
         $user->created_by = createdBy();
