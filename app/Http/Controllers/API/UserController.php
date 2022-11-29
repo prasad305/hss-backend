@@ -1520,6 +1520,13 @@ class UserController extends Controller
         $notification = Notification::where('user_id', auth('sanctum')->user()->id)->orderBy('updated_at', 'DESC')->get();
         $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
 
+        $biddingReg = Bidding::where('user_id', auth('sanctum')->user()->id)->first();
+        
+        if($biddingReg)
+        {
+            $auctionInfo = Auction::where('id', $biddingReg->auction_id)->first();
+        }
+
         if ($greeting_reg)
             $greeting_info = Greeting::find($greeting_reg->greeting_id);
         else
@@ -1530,6 +1537,7 @@ class UserController extends Controller
             'user_id' => auth('sanctum')->user()->id,
             'notifiction' => $notification,
             'greeting_info' => $greeting_info,
+            'auctionInfo' => $auctionInfo,
         ]);
     }
 
@@ -1595,6 +1603,27 @@ class UserController extends Controller
     {
 
         $product = Auction::with('star', 'bidding', 'bidding.user')->orderBy('id', 'DESC')->where('star_id', $star_id)->where('status', 1)->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+            'message' => 'okay',
+        ]);
+    }
+
+    public function getAuctionByBidding($bidding_id)
+    {
+        $bidding = Bidding::where('id', $bidding_id)->first();
+        $product = Auction::where('id', $bidding->auction_id)->first();
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+            'message' => 'okay',
+        ]);
+    }
+    public function starAuctionProductMobile($product_id)
+    {
+        $product = Auction::with('star')->where('id', $product_id)->first();
+        // $product = Auction::with(['star', 'bidding.user'])->where('id', $product_id)->get();
         return response()->json([
             'status' => 200,
             'product' => $product,

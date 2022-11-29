@@ -276,6 +276,11 @@ class PaymentController extends Controller
                 return $this->auditionAppealPayment($user->id, $request->eventId, "PayTm-mobile", $request->TXNAMOUNT);
                 // $user_id, $round_info_id, $method, $fee
             }
+
+            if($request->modelName == 'auction')
+            {
+                return $this->auctionPayment($user->id, $request->eventId, "PayTm-mobile");
+            }
             
             
 
@@ -782,6 +787,14 @@ class PaymentController extends Controller
                 'appealedRegistration' => $appealedRegistration,
             ]);
         }
+    }
+
+    function auctionPayment($user_id, $event_id, $method)
+    {
+        $biddingInfo = Bidding::where([['auction_id', $event_id], ['user_id', $user_id], ['notify_status', 1]])->update([
+            'payment_status' => 1,
+            'applied_status' => 1
+        ]);
     }
 
     //   <================================Love React Payment end ==================================>

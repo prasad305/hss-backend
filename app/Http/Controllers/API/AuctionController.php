@@ -8,6 +8,7 @@ use App\Models\Bidding;
 use App\Models\Notification;
 use App\Models\SuperStar;
 use App\Models\User;
+use App\Models\NotificationText;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -330,10 +331,20 @@ class AuctionController extends Controller
         $bidding->update();
 
         //Create New Notification
+
+        $text = new NotificationText();
+        $text->text = 'Please Make Payment';
+        $text->type = "auction";
+        $text->save();
+
+
         $notification = new Notification();
-        $notification->notification_id = 3;
+        $notification->notification_id = $text->id;
         $notification->user_id = $bidding->user_id;
+        $notification->event_id = $bidding->id;
         $notification->save();
+
+        
 
         return $notification;
 
