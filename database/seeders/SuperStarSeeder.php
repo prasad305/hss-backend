@@ -22,7 +22,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 1;
         $superStar->sub_category_id = 1;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -32,7 +32,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 1;
         $superStar->sub_category_id = 1;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/tamim.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -42,7 +42,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 1;
         $superStar->sub_category_id = 1;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/musfiqur.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -52,7 +52,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 1;
         $superStar->sub_category_id = 3;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -62,7 +62,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 1;
         $superStar->sub_category_id = 3;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -72,7 +72,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 1;
         $superStar->sub_category_id = 3;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -82,7 +82,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 1;
         $superStar->sub_category_id = 2;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -92,7 +92,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 1;
         $superStar->sub_category_id = 2;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -102,7 +102,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 1;
         $superStar->sub_category_id = 2;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -112,7 +112,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 2;
         $superStar->sub_category_id = 5;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -122,7 +122,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 2;
         $superStar->sub_category_id = 5;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -132,7 +132,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 2;
         $superStar->sub_category_id = 5;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -142,7 +142,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 2;
         $superStar->sub_category_id = 4;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -152,7 +152,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 2;
         $superStar->sub_category_id = 4;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -162,7 +162,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 2;
         $superStar->sub_category_id = 4;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -172,7 +172,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 3;
         $superStar->sub_category_id = 7;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -182,7 +182,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 3;
         $superStar->sub_category_id = 8;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
 
@@ -192,7 +192,7 @@ class SuperStarSeeder extends Seeder
         $superStar->category_id = 3;
         $superStar->sub_category_id = 8;
         $superStar->description = $faker->text;
-        $superStar->image = "uploads/images/star/sakib.png";
+        $superStar->image = "seeder_media/image/avatar.png";
         $superStar->status = 1;
         $superStar->save();
     }

@@ -33,8 +33,8 @@ class SouvenirSeeder extends Seeder
             $souvenir->tax = $faker->numberBetween(150, 250);
             $souvenir->admin_id = $userInfoForFootball[$i]->parent_user;
             $souvenir->star_id = $userInfoForFootball[$i]->id;
-            $souvenir->banner = 'uploads/images/souvenir/demoforseeder.jpg';
-            $souvenir->video = 'uploads/images/souvenir/demovideoforseeder.mp4';
+            $souvenir->banner = 'seeder_media/image/post.png';
+            $souvenir->video = 'seeder_media/video/post.mp4';
             $souvenir->approval_status = 1;
             $souvenir->status = 1;
             $souvenir->save();
@@ -56,8 +56,8 @@ class SouvenirSeeder extends Seeder
             $souvenir->tax = $faker->numberBetween(150, 250);
             $souvenir->admin_id = $userInfoForCricket[$i]->parent_user;
             $souvenir->star_id = $userInfoForCricket[$i]->id;
-            $souvenir->banner = 'uploads/images/souvenir/demoforseeder.jpg';
-            $souvenir->video = 'uploads/images/souvenir/demovideoforseeder.mp4';
+            $souvenir->banner = 'seeder_media/image/post.png';
+            $souvenir->video = 'seeder_media/video/post.mp4';
             $souvenir->approval_status = 1;
             $souvenir->status = 1;
             $souvenir->save();

@@ -20,7 +20,7 @@ class SimplePostFactory extends Factory
             'star_id' => 20,
             'category_id' => 2,
             'subcategory_id' => 5,
-            'image' => 'uploads/images/post/shakib_simple_post_photo.jpg',
+            'image' => 'seeder_media/image/post.png',
             'description' => $this->faker->paragraph(),
             'star_approval' => 1,
             'status' => 1,
