@@ -456,6 +456,10 @@ class CategoryController extends Controller
         $subCategories = SubCategory::whereIn('category_id', $req->cat)->get();
 
 
+        $userInfo = User::find(auth('sanctum')->user()->id);
+        $userInfo->status = 1;
+        $userInfo->update();
+
         $user = ChoiceList::where('user_id', auth('sanctum')->user()->id)->first();
 
         $wallet = Wallet::where('user_id', auth('sanctum')->user()->id)->first();

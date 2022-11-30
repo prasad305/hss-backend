@@ -53,15 +53,14 @@ class AuthController extends Controller
             $user = User::create([
                 'username' => $request->first_name . now()->timestamp,
                 'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
+                'last_name' => "",
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'password' => Hash::make($request->password),
                 // 'otp' => rand(100000, 999999)
                 'otp' => 123456,
-                'country_code' => $request->countryCode,
-                'calling_code' => $request->callingCode,
-                'status' => 1,
+                //'country_code' => $request->countryCode,
+                'status' => 0,
 
                 //for temporary
                 'otp_verified_at' => Carbon::now(),
@@ -445,7 +444,7 @@ class AuthController extends Controller
         $user = User::find(auth('sanctum')->user()->id);
 
         $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
+        // $user->last_name = $request->last_name;
         $user->email = $request->email;
         $user->phone = $request->phone;
         // $user->password = Hash::make($request->new_password);
@@ -486,7 +485,7 @@ class AuthController extends Controller
         if ($request->dob != 0) {
             $user_info->dob = $request->dob;
         }
-        $user_info->country = $request->country;
+        $user_info->country = $request->country ? $request->country : null;
         $user_info->occupation = $request->occupation;
         $user_info->edu_level = $request->edu_level;
         $user_info->institute = $request->institute;

@@ -39,7 +39,6 @@ class User extends Authenticatable
         'parent_user',
         'category_id',
         'country_code',
-        'calling_code'
 
     ];
 
