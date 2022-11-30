@@ -1521,6 +1521,8 @@ class UserController extends Controller
         $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
 
         $biddingReg = Bidding::where('user_id', auth('sanctum')->user()->id)->first();
+
+        $auctionInfo = '';
         
         if($biddingReg)
         {
@@ -1610,10 +1612,9 @@ class UserController extends Controller
         ]);
     }
 
-    public function getAuctionByBidding($bidding_id)
+    public function getAuctionByBidding($auctionId)
     {
-        $bidding = Bidding::where('id', $bidding_id)->first();
-        $product = Auction::where('id', $bidding->auction_id)->first();
+        $product = Auction::where('id', $auctionId)->first();
         return response()->json([
             'status' => 200,
             'product' => $product,
