@@ -21,7 +21,7 @@ class Activity extends Model
     ];
 
     //, 'marketPlaceOrder', 'marketPlace'
-    protected $with = ['user', 'meetup', 'meetupRegistration', 'souvenirApply', 'livechat', 'livechatRegistration', 'learningSession', 'learningSessionRegistration', 'greetingRegistration', 'greeting', 'qna', 'qnaRegistration', 'auction', 'audition'];
+    protected $with = ['marketPlace','marketPlaceOrder','user', 'meetup', 'meetupRegistration', 'souvenirApply', 'livechat', 'livechatRegistration', 'learningSession', 'learningSessionRegistration', 'greetingRegistration', 'greeting', 'qna', 'qnaRegistration', 'auction', 'audition'];
 
 
 
