@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TarmsCondition extends Model
+class TermAndCondition extends Model
 {
     use HasFactory;
+    protected $table='terms_and_conditions';
     protected $guarded = [];
 }

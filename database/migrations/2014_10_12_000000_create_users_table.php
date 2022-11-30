@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->date('dob')->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('otp')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('otp_verified_at')->nullable();
             $table->string('image')->nullable();
             $table->string('cover_photo')->nullable();

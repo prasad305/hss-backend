@@ -17,7 +17,7 @@ class PostVideoSeeder extends Seeder
         for ($i = 1; $i < 21; $i++) {
             $PostVideo = new PostVideo();
             $PostVideo->post_id =  $i;
-            $PostVideo->video =  "https://youtu.be/lyXjeJN9lyg";
+            $PostVideo->video =  "seeder_media/image/post.mp4";
             $PostVideo->status = 1;
             $PostVideo->save();
         }
