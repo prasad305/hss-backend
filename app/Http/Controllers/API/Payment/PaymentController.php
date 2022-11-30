@@ -24,6 +24,7 @@ use App\Models\Activity;
 use App\Models\AuditionCertification;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundAppealRegistration;
+use App\Models\Bidding;
 use Error;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -785,15 +786,31 @@ class PaymentController extends Controller
             return response()->json([
                 'status' => 200,
                 'appealedRegistration' => $appealedRegistration,
-            ]);
+            ]); 
         }
     }
 
     function auctionPayment($user_id, $event_id, $method)
     {
-        $biddingInfo = Bidding::where([['auction_id', $event_id], ['user_id', $user_id], ['notify_status', 1]])->update([
-            'payment_status' => 1,
-            'applied_status' => 1
+
+
+
+        $biddingInfo = Bidding::where([['auction_id', $event_id], ['user_id', $user_id], ['notify_status', 1]])->first();
+
+       
+
+        $biddingInfo->payment_status = 1;
+        $biddingInfo->applied_status = 1;
+        $biddingInfo->update();
+
+        
+        // ->update([
+        //     'payment_status' => 1,
+        //     'applied_status' => 1
+        // ]);
+        return response()->json([
+            'status' => 200,
+            'biddingInfo' => $biddingInfo,
         ]);
     }
 

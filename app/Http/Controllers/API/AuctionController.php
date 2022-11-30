@@ -341,7 +341,7 @@ class AuctionController extends Controller
         $notification = new Notification();
         $notification->notification_id = $text->id;
         $notification->user_id = $bidding->user_id;
-        $notification->event_id = $bidding->id;
+        $notification->event_id = $bidding->auction_id;
         $notification->save();
 
         
