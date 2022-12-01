@@ -33,6 +33,8 @@ class DatabaseSeeder extends Seeder
             RefundPolicySeeder::class,
             TermAndConditionSeeder::class,
             FaqSeeder::class,
+            OccupationSeeder::class,
+            PackageSeeder::class,
         ]);
 
 

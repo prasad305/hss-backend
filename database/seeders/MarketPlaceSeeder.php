@@ -39,7 +39,7 @@ class MarketPlaceSeeder extends Seeder
             $marketplace->keywords = 'football';
             $marketplace->post_status = 1;
             $marketplace->status = 1;
-            $marketplace->image = 'uploads/images/marketplace/demofroseeder.png';
+            $marketplace->image = 'seeder_media/image/post.png';
             $marketplace->approved_date = Carbon::now();;
             $marketplace->save();
         }
@@ -65,7 +65,7 @@ class MarketPlaceSeeder extends Seeder
             $marketplace->keywords = 'cricket';
             $marketplace->post_status = 1;
             $marketplace->status = 1;
-            $marketplace->image = 'uploads/images/marketplace/demofroseeder.png';
+            $marketplace->image = 'seeder_media/image/post.png';
             $marketplace->approved_date = Carbon::now();;
             $marketplace->save();
         }
