@@ -648,4 +648,12 @@ class AuthController extends Controller
             ]);
         }
     }
+    public function getStarData($id)
+    {
+        $starInfo =  SuperStar::where('star_id', $id)->first();
+        return response()->json([
+            'status' => 200,
+            'starInfo' => $starInfo,
+        ]);
+    }
 }

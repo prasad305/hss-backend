@@ -50,7 +50,7 @@ class UserSeeder extends Seeder
         $user->username = $faker->userName();
         $user->first_name = 'Manager Admin ';
         $user->last_name = ' (sports)';
-        $user->email = 'sports@gmail.com';
+        $user->email = 'managersports@gmail.com';
         $user->phone = '01700000002';
         $user->password = Hash::make('12345');
         $user->user_type = 'manager-admin'; // Manager Admin user_type == 'manager-admin'
@@ -761,7 +761,8 @@ class UserSeeder extends Seeder
             // $user->status = $faker->numberBetween(0, 1);
             $user->status = 1;
             // $user->category_id = $faker->numberBetween(1, 8);
-            $user->category_id = 1;
+            $user->category_id = 2;
+            $user->sub_category_id = 5;
             $user->otp = '123456';
             $user->save();
         }
@@ -782,7 +783,8 @@ class UserSeeder extends Seeder
             $user->status = 1;
             // $user->status = $faker->numberBetween(0, 1);
             // $user->category_id = $faker->numberBetween(1, 8);
-            $user->category_id = 1;
+            $user->category_id = 2;
+            $user->sub_category_id = 5;
             $user->otp = '123456';
             $user->save();
 
