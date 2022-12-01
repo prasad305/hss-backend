@@ -61,7 +61,7 @@
 
                     <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
-                            @if (false)
+                            @if ($event->star->image !== null)
                                 <img src="{{ asset($event->star->image) }}" class="img-star-x" alt="Demo Image" />
                             @else
                                 <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
@@ -79,8 +79,8 @@
 
                     <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
-                            @if (false)
-                                <img src="{{ asset($event->star->image) }}" class="img-star-x" alt="Demo Image" />
+                            @if ($event->starAdmin->image !== null)
+                                <img src="{{ asset($event->starAdmin->image) }}" class="img-star-x" alt="Demo Image" />
                             @else
                                 <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
                                     <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
@@ -90,7 +90,7 @@
                         </div>
                         <div class="mx-2">
                             <label for="">Admin</label>
-                            <h5>{{ $event->admin->first_name }} {{ $event->admin->last_name }}</h5>
+                            <h5>{{ $event->starAdmin->first_name }} {{ $event->starAdmin->last_name }}</h5>
 
                         </div>
                     </div>
@@ -108,7 +108,7 @@
                         <div class="card mb-2 col-md-3 mb-3 py-2 px-2">
                             @if ($event->assignment === 0)
                                 <div class="d-flex ">
-                                    <span>Type :</span>&nbsp;&nbsp; <span class="text-danger">Withouit Assignment</span>
+                                    <span>Type :</span>&nbsp;&nbsp; <span class="text-danger">Without Assignment</span>
                                 </div>
                             @else
                                 <div class="d-flex ">
@@ -184,7 +184,7 @@
                     <form action="{{ route('managerAdmin.learningSession.set_publish', [$event->id]) }}" method="post">
                         @csrf
 
-                        @if ($event->status != 2)
+                        @if ($event->status <= 2)
                             <div class="row">
                                 <div class="mb-3 col-md-3 mb-2">
                                     <label for="start_date" class="form-label">Post Start Date</label>
@@ -217,7 +217,7 @@
                                 onclick="Show('Edit Live Chat Event','{{ route('managerAdmin.learningSession.edit', $event->id) }}')">Edit</a>
                         @endif
 
-                        @if ($event->status == 2)
+                        @if ($event->status >= 2)
                             <form action="{{ route('managerAdmin.learningSession.set_publish', [$event->id]) }}"
                                 method="post">
                                 @csrf

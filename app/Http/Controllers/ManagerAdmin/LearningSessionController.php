@@ -281,7 +281,7 @@ class LearningSessionController extends Controller
 
     public function manager_event_details($id)
     {
-        $event = LearningSession::find($id);
+        $event = LearningSession::with('starAdmin')->find($id);
 
         return view('ManagerAdmin.LearningSession.details', compact('event'));
     }
