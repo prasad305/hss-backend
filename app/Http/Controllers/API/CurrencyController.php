@@ -29,10 +29,10 @@ class CurrencyController extends Controller
             $clientIp = $remote;
         }
 
-        $clientIp = '103.101.36.0'; //nepal
+        //$clientIp = '103.101.36.0'; //nepal
         //$clientIp = '162.210.194.38'; // usa
         //$clientIp = '104.44.7.192'; // arab amerates
-        //$clientIp = '103.91.229.182'; // Bangladesh
+        $clientIp = '103.91.229.182'; // Bangladesh
         $locationData = \Location::get($clientIp);
         // dd($locationData->countryCode);
 
