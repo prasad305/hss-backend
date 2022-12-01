@@ -1380,7 +1380,6 @@ class UserController extends Controller
             $greeting_reg->name = $request->name;
             $greeting_reg->greeting_context = $request->greeting_context;
             $greeting_reg->additional_message = $request->additional_message;
-            $greeting_reg->status = 1;
             $greeting_reg->save();
 
             return response()->json([
