@@ -58,7 +58,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $star->subCategory ? $star->subCategory->name : '' }}</td>
                                     <td>{{ $star->first_name . ' ' . $star->last_name }}</td>
-                                    <td>{{ $star->profitShare->profit }}</td>
+                                    <td>{{ $star->profitShare !== null ? $star->profitShare->profit : 00 }}</td>
                                     <td>{{ date('Y-m-d', strtotime($star->dob)) }}</td>
                                     <td>
                                         @if ($star->status == 0)

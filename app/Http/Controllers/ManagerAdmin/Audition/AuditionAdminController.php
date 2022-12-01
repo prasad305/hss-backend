@@ -21,7 +21,7 @@ class AuditionAdminController extends Controller
 {
     public function index()
     {
-        $auditionAdmins = User::where([['user_type', 'audition-admin'],['category_id', Auth::user()->category_id]])->orderBy('id', 'DESC')->get();
+        $auditionAdmins = User::where([['user_type', 'audition-admin'], ['category_id', Auth::user()->category_id]])->orderBy('id', 'DESC')->get();
         return view('ManagerAdmin.Audition.auditionAdmin.index', compact('auditionAdmins'));
     }
 
@@ -47,13 +47,13 @@ class AuditionAdminController extends Controller
             array_push($userIds, $assignAdmin->audition_admin_id);
         }
         $auditionAdmins = User::whereNotIn('id', $userIds)->where('user_type', 'audition-admin')->orderBy('id', 'DESC')->get();
-         return view('ManagerAdmin.Audition.auditionAdmin.index', compact('auditionAdmins'));
+        return view('ManagerAdmin.Audition.auditionAdmin.index', compact('auditionAdmins'));
     }
 
 
     public function create()
     {
-        $categories = Category::orderBy('name','ASC')->get();
+        $categories = Category::orderBy('name', 'ASC')->get();
         return view('ManagerAdmin.Audition.auditionAdmin.create', compact('categories'));
     }
 
@@ -75,7 +75,8 @@ class AuditionAdminController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make('12345');
         $user->user_type = 'audition-admin'; // Admin user_type == 'audition-admin'
-        $user->otp = rand(100000, 999999);
+        // $user->otp = rand(100000, 999999);
+        $user->otp = 123456;
         $user->status = 0;
         $user->category_id = Auth::user()->category_id;
 
@@ -119,7 +120,7 @@ class AuditionAdminController extends Controller
             return redirect()->back();
         }
 
-        $auditionRule = AuditionRules::where('category_id', Auth::user()->category_id)->orderBy('id','DESC')->first();
+        $auditionRule = AuditionRules::where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->first();
         if ($auditionRule->jury_groups !== null) {
             $jurry_group = json_decode($auditionRule->jury_groups);
             $group_data = $jurry_group->{'group_members'};
@@ -129,32 +130,32 @@ class AuditionAdminController extends Controller
         // for not assigned judge
         $judges = User::whereNotIn('id', $auditionAssignJudges)->where('user_type', 'star')->where('category_id', Auth::user()->category_id)->orderBy('id', 'DESC')->get();
 
-        $groups = JuryGroup::where([['status',1],['category_id', Auth::user()->category_id]])->orderBy('name','asc')->get();
+        $groups = JuryGroup::where([['status', 1], ['category_id', Auth::user()->category_id]])->orderBy('name', 'asc')->get();
 
         $auditionAssignJurys = AuditionAssignJury::pluck('jury_id');
         // for not assigned juries
         $juries = User::whereNotIn('id', $auditionAssignJurys)
-                          ->where('user_type', 'jury')
-                          ->where('category_id', Auth::user()->category_id)
-                          ->orderBy('id', 'DESC')
-                          ->get();
+            ->where('user_type', 'jury')
+            ->where('category_id', Auth::user()->category_id)
+            ->orderBy('id', 'DESC')
+            ->get();
 
-          $data = [
-                'auditionAdmin' => $auditionAdmin,
-                'juries' => $juries,
-                'judges' => $judges,
-                'auditionRule' => $auditionRule,
-                'groups' => $groups,
-                'group_data' => isset($group_data) && count($group_data) > 0 ? $group_data : null,
-          ];
+        $data = [
+            'auditionAdmin' => $auditionAdmin,
+            'juries' => $juries,
+            'judges' => $judges,
+            'auditionRule' => $auditionRule,
+            'groups' => $groups,
+            'group_data' => isset($group_data) && count($group_data) > 0 ? $group_data : null,
+        ];
 
-        return view('ManagerAdmin.Audition.auditionAdmin.show',$data);
+        return view('ManagerAdmin.Audition.auditionAdmin.show', $data);
     }
 
     public function edit(User $auditionAdmin)
     {
-        $categories = Category::orderBy('name','ASC')->get();
-        return view('ManagerAdmin.Audition.auditionAdmin.edit', compact('auditionAdmin','categories'));
+        $categories = Category::orderBy('name', 'ASC')->get();
+        return view('ManagerAdmin.Audition.auditionAdmin.edit', compact('auditionAdmin', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -162,8 +163,8 @@ class AuditionAdminController extends Controller
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required|unique:users,email,'.$id,
-            'phone' => 'required|unique:users,phone,'.$id,
+            'email' => 'required|unique:users,email,' . $id,
+            'phone' => 'required|unique:users,phone,' . $id,
         ]);
 
         $user = User::find($id);
@@ -174,7 +175,7 @@ class AuditionAdminController extends Controller
         // $user->category_id = $request->category;
 
         if ($request->hasFile('image')) {
-            if($user->image != null){
+            if ($user->image != null) {
                 File::delete(public_path($user->image));
             }
             $image             = $request->file('image');
@@ -186,7 +187,7 @@ class AuditionAdminController extends Controller
         }
 
         if ($request->hasFile('cover_photo')) {
-            if($user->cover_photo != null){
+            if ($user->cover_photo != null) {
                 File::delete(public_path($user->cover_photo));
             }
             $image             = $request->file('cover_photo');

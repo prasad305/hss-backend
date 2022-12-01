@@ -19,7 +19,7 @@ class CreateAuditionOxygenVideosTable extends Migration
             $table->unsignedBigInteger('round_info_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('video')->nullable();
-            $table->integer('status')->default(0);
+            $table->integer('status')->default(0)->comment('2=winner');
             $table->timestamps();
         });
     }
