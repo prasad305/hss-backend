@@ -20,8 +20,8 @@ class CategorySeeder extends Seeder
         $category = new Category();
         $category->name = 'Flim Stars';
         $category->slug = 'flim-stars';
-        $category->icon = $faker->imageUrl($width = 200, $height = 200);
-        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->icon = 'seeder_media/image/category-icon.png';
+        $category->image = 'seeder_media/image/category-image.jpeg';
         $category->status = true;
         $category->save();
 
@@ -32,8 +32,8 @@ class CategorySeeder extends Seeder
         $category = new Category();
         $category->name = 'Sports';
         $category->slug = 'sports';
-        $category->icon = $faker->imageUrl($width = 200, $height = 200);
-        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->icon = 'seeder_media/image/category-icon.png';
+        $category->image = 'seeder_media/image/category-image.jpeg';
         $category->status = true;
         $category->save();
 
@@ -44,8 +44,8 @@ class CategorySeeder extends Seeder
         $category = new Category();
         $category->name = 'Musician';
         $category->slug = 'musician';
-        $category->icon = $faker->imageUrl($width = 200, $height = 200);
-        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->icon = 'seeder_media/image/category-icon.png';
+        $category->image = 'seeder_media/image/category-image.jpeg';
         $category->status = true;
         $category->save();
 
@@ -56,8 +56,8 @@ class CategorySeeder extends Seeder
         $category = new Category();
         $category->name = 'Dancers';
         $category->slug = 'dancers';
-        $category->icon = $faker->imageUrl($width = 200, $height = 200);
-        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->icon = 'seeder_media/image/category-icon.png';
+        $category->image = 'seeder_media/image/category-image.jpeg';
         $category->status = true;
         $category->save();
 
@@ -68,8 +68,8 @@ class CategorySeeder extends Seeder
         $category = new Category();
         $category->name = 'Chefs';
         $category->slug = 'chefs';
-        $category->icon = $faker->imageUrl($width = 200, $height = 200);
-        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->icon = 'seeder_media/image/category-icon.png';
+        $category->image = 'seeder_media/image/category-image.jpeg';
         $category->status = true;
         $category->save();
 
@@ -80,8 +80,8 @@ class CategorySeeder extends Seeder
         $category = new Category();
         $category->name = 'Drama';
         $category->slug = 'drama';
-        $category->icon = $faker->imageUrl($width = 200, $height = 200);
-        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->icon = 'seeder_media/image/category-icon.png';
+        $category->image = 'seeder_media/image/category-image.jpeg';
         $category->status = true;
         $category->save();
 
@@ -92,8 +92,8 @@ class CategorySeeder extends Seeder
         $category = new Category();
         $category->name = 'Tech';
         $category->slug = 'tech';
-        $category->icon = $faker->imageUrl($width = 200, $height = 200);
-        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->icon = 'seeder_media/image/category-icon.png';
+        $category->image = 'seeder_media/image/category-image.jpeg';
         $category->status = true;
         $category->save();
 
@@ -104,8 +104,8 @@ class CategorySeeder extends Seeder
         $category = new Category();
         $category->name = 'Motivational Speaker';
         $category->slug = 'motivational-speaker';
-        $category->icon = $faker->imageUrl($width = 200, $height = 200);
-        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->icon = 'seeder_media/image/category-icon.png';
+        $category->image = 'seeder_media/image/category-image.jpeg';
         $category->status = true;
         $category->save();
 
@@ -116,8 +116,8 @@ class CategorySeeder extends Seeder
         $category = new Category();
         $category->name = 'Religion';
         $category->slug = 'religion';
-        $category->icon = $faker->imageUrl($width = 200, $height = 200);
-        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->icon = 'seeder_media/image/category-icon.png';
+        $category->image = 'seeder_media/image/category-image.jpeg';
         $category->status = true;
         $category->save();
 
@@ -128,8 +128,8 @@ class CategorySeeder extends Seeder
         $category = new Category();
         $category->name = 'Comedians';
         $category->slug = 'comedians';
-        $category->icon = $faker->imageUrl($width = 200, $height = 200);
-        $category->image = $faker->imageUrl($width = 300, $height = 200);
+        $category->icon = 'seeder_media/image/category-icon.png';
+        $category->image = 'seeder_media/image/category-image.jpeg';
         $category->status = true;
         $category->save();
 

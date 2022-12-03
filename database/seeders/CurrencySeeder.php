@@ -14,13 +14,13 @@ class CurrencySeeder extends Seeder
      */
     public function run()
     {
-        DB::insert("INSERT INTO `currencies` (`id`, `country`, `currency`, `code`, `symbol`, `currency_status`, `status`, `created_at`, `updated_at`) VALUES
-            (1, 'Bahrain', 'Dinar', 'BHD', 'فلس', 0, 1, NULL, NULL),
-            (2, 'India', 'Rupees', 'INR', 'Rp', 0, 1, NULL, NULL),
-            (3, 'Kuwait', 'Dinar', 'KWD', 'KD', 1, 1, NULL, NULL),
-            (4, 'UAE', 'Dirham', 'AED', 'DH', 0, 1, NULL, NULL),
-            (5, 'Malaysia', 'Ringgits', 'MYR', 'RM', 0, 1, NULL, NULL),
-            (6, 'United States of America', 'Dollars', 'USD', '$', 1, 1, NULL, '2020-05-12 15:55:30'),
-            (7, 'Bangladesh', 'Taka', 'BDT', '৳', 0, 1, '2020-02-03 00:38:33', '2020-05-12 15:55:30')");
+        DB::insert("INSERT INTO `currencies` (`country`, `currency`, `currency_code`, `symbol`, `country_code`,`currency_value`,`currency_status`, `status`) VALUES
+            ('Bahrain', 'Dinar', 'BHD', 'فلس','BH','0.377', 1, 1),
+            ('India', 'Rupees', 'INR', 'Rp','IN','79.630', 1, 1),
+            ('Kuwait', 'Dinar', 'KWD', 'KD','KW','0.307', 1, 1),
+            ('UAE', 'Dirham', 'AED', 'DH','AE','3.673', 1, 1),
+            ('Malaysia', 'Ringgits', 'MYR', 'RM','MY','4.445', 1, 1),
+            ('United States of America', 'Dollars', 'USD', '$','US','1.000', 1, 1),
+            ('Bangladesh', 'Taka', 'BDT', '৳','BD','94.992', 1, 1)");
     }
 }

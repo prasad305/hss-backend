@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\LiveChat;
+use App\Models\LiveChatRegistration;
+use App\Models\Post;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Faker\Generator as Faker;
@@ -16,30 +19,42 @@ class LiveChatSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        $demoDate = Carbon::now();
+        LiveChat::factory(2)->create([
+            'category_id' => 2,
+            'sub_category_id' => 5,
+            'created_by_id' => 20,
+            'admin_id' => 20,
+            'star_id' => 38,
+        ])->each(function ($event) {
 
-        for ($i = 1; $i <= 10; $i++) {
-            $liveChat = new LiveChat();
-            $liveChat->created_by_id = $faker->numberBetween(1, 10);
-            $liveChat->category_id = $faker->numberBetween(1, 6);
-            $liveChat->star_id =  $faker->numberBetween(5, 7);
-            $liveChat->admin_id = 3;
-            $liveChat->title = 'Demo live chat title -' . $i;
-            $liveChat->description = "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution";
-            $liveChat->event_date = Carbon::now()->addDays(5);
-            $liveChat->start_time = Carbon::now()->addDays(5)->addMinutes(10);
-            $liveChat->end_time =  Carbon::now()->addDays(5)->addMinutes(40);
-            $liveChat->banner = 'demo_image/banner.jpg';
-            $liveChat->video = 'https://youtu.be/gvyUuxdRdR4';
-            $liveChat->total_seat = 40;
-            $liveChat->fee = $faker->numberBetween(100, 5000);;
-            // $liveChat->participant_number = 20;
-            $liveChat->registration_end_date =  Carbon::now()->addDays(20);
-            $liveChat->registration_start_date =  Carbon::now();
-            // $liveChat->max_time_per_person = 90;
-            // $liveChat->publish_status = 10;
-            $liveChat->status = true;
-            $liveChat->save();
-        }
+            Post::create([
+                'type' => 'liveChat',
+                'user_id' => $event->star_id,
+                'star_id' => $event->star_id,
+                'event_id' =>  $event->id,
+                'category_id' =>  $event->category_id,
+                'sub_category_id' =>  $event->sub_category_id,
+                'title' =>  $event->title,
+                'details' =>  $event->description,
+
+            ]);
+            User::factory(5)->create()->each(function ($user) use ($event) {
+
+                $liveChat = LiveChat::find($event->id);
+
+                LiveChatRegistration::factory(1)->create([
+                    'live_chat_id' => $event->id,
+                    'user_id' => $user->id,
+                    'live_chat_start_time' => (Carbon::parse($liveChat->available_start_time)->format('H:i:s')),
+                    'live_chat_end_time' => (Carbon::parse($liveChat->available_start_time)->addMinutes(7)->format('H:i:s')),
+                    'live_chat_date' => $event->event_date,
+                ])->each(function ($registerInfo) use ($event) {
+                    LiveChat::where('id', $event->id)->update([
+                        'available_start_time' => (Carbon::parse($registerInfo->live_chat_end_time)->addMinutes($event->interval)->format('H:i:s')),
+                    ]);
+                    createSeederActivity("liveChat", $registerInfo->id, $registerInfo->user_id, $registerInfo->live_chat_id);
+                });
+            });
+        });
     }
 }

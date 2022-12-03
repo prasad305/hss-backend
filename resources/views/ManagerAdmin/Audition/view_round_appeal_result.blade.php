@@ -53,7 +53,7 @@
                                         <span class=" p-1 btn round-nmbr font-weight-bold "> {{ $round->round_num }} </span>
                                     </center>
                                     <a class="btn border-warning nav-link font-weight-bold text-light" data-toggle="tab"
-                                        href="" role="tab">Rules</a>
+                                        href="" role="tab">Show</a>
                                 </a>
                             </li>
                         </ul>

@@ -679,4 +679,13 @@ if (!function_exists('random_code')) {
             'status' => 1,
         ]);
     }
+    function createSeederActivity($type, $event_registration_id, $user_id, $event_id)
+    {
+        Activity::create([
+            'type' => $type,
+            'event_registration_id' => $event_registration_id,
+            'user_id' => $user_id,
+            'event_id' => $event_id,
+        ]);
+    }
 }

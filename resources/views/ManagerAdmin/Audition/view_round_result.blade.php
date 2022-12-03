@@ -8,12 +8,12 @@
                     </div>
                 </div>
                 <div>
-                    <h5 class="text-muted mt-3">Submitted Account</h5>
+                    <h5 class="text-muted mt-3">Audition Result</h5>
                 </div>
                 <div class="underLineWhite"></div>
                 <div class="divClass my-3">
-                    <img class='w-100 img-fluid' style="max-height: 400px;"
-                        src="{{ asset($audition->banner) }}" alt="">
+                    <img class='w-100 img-fluid' style="max-height: 400px;" src="{{ asset($audition->banner) }}"
+                        alt="">
                     <div class='banner__overlay'>
                         <h4 class='boldOverlay'>{{ $round_result->round_num }} round time duration
                             {{ date('d F Y', strtotime($round_result->round_start_date)) }} -

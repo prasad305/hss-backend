@@ -77,7 +77,8 @@ class AuditionAdminController extends Controller
         $user->fill($request->except(['_token', 'image', 'cover']));
         $user->password = Hash::make('12345');
         $user->user_type = 'audition-admin'; // Admin user_type == 'audition-admin'
-        $user->otp = rand(100000, 999999);
+        // $user->otp = rand(100000, 999999);
+        $user->otp = 123456;
         $user->category_id = auth()->user()->category_id;
         $user->sub_category_id = $request->sub_category_id;
         $user->created_by = createdBy();
@@ -414,13 +415,13 @@ class AuditionAdminController extends Controller
     public function auditionEvents()
     {
         $auditions =  Audition::where('category_id', auth()->user()->category_id)->get();
-        
-     
+
+
         $auditionsStatus = Audition::where('category_id', auth()->user()->category_id)->first();
         $live = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 3]])->count();
         $pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 0]])->count();
         $request_approval_pending = Audition::where([['manager_admin_id', auth()->user()->id], ['status', 2]])->count();
-        return view('ManagerAdmin.Audition.events', compact('auditions','live','pending','request_approval_pending','auditionsStatus'));
+        return view('ManagerAdmin.Audition.events', compact('auditions', 'live', 'pending', 'request_approval_pending', 'auditionsStatus'));
     }
 
     public function getPromoInstruction($audition_id)

@@ -1180,6 +1180,7 @@ class AuditionController extends Controller
             $auditionRoundInfo->video_duration         = $request->video_time_duration;
             $auditionRoundInfo->video_slot_num         = $request->video_slot;
             $auditionRoundInfo->appeal_video_duration  = $request->appeal_video_time_duration;
+            $auditionRoundInfo->appeal_video_slot_num  = $request->appeal_video_slot_num;
             $auditionRoundInfo->appeal_fee  = $request->appeal_fee;
             $auditionRoundInfo->status  = 1;
             $auditionRoundInfo->save();
@@ -1193,7 +1194,7 @@ class AuditionController extends Controller
             $instruction->round_info_id = $request->round_info_id;
             $instruction->audition_id = $request->audition_id;
             $instruction->instruction = $request->instruction;
-            $instruction->round_fee = $request->round_fee;
+            // $instruction->round_fee = $request->round_fee;
             $instruction->appeal_fee = $request->appeal_fee;
 
             try {
@@ -1287,7 +1288,7 @@ class AuditionController extends Controller
             $instruction->round_info_id = $request->round_info_id;
             $instruction->audition_id = $request->audition_id;
             $instruction->instruction = $request->instruction;
-            $instruction->round_fee = $request->round_fee;
+            // $instruction->round_fee = $request->round_fee;
             $instruction->appeal_fee = $request->appeal_fee;
             $instruction->submission_end_date = Carbon::parse($request->submission_date);
 
