@@ -54,7 +54,7 @@
 
                     <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
-                            @if (false)
+                            @if ($greeting->star->image)
                                 <img src="{{ asset($greeting->star->image) }}" class="img-star-x" alt="Demo Image" />
                             @else
                                 <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
@@ -72,8 +72,8 @@
 
                     <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
-                            @if (false)
-                                <img src="{{ asset($greeting->star->image) }}" class="img-star-x" alt="Demo Image" />
+                            @if ($greeting->admin->image)
+                                <img src="{{ asset($greeting->admin->image) }}" class="img-star-x" alt="Demo Image" />
                             @else
                                 <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
                                     <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
