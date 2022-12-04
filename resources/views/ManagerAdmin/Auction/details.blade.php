@@ -107,7 +107,7 @@
                 <div class="col-md-4 mb-2">
                     <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
-                            @if (false)
+                            @if ($product->star->image)
                                 <img src="{{ asset($product->star->image) }}" class="img-star-x" alt="Demo Image" />
                             @else
                                 <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
@@ -124,8 +124,8 @@
                     </div>
                     <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
-                            @if (false)
-                                <img src="{{ asset($product->star->image) }}" class="img-star-x" alt="Demo Image" />
+                            @if ($product->admin->image)
+                                <img src="{{ asset($product->admin->image) }}" class="img-star-x" alt="Demo Image" />
                             @else
                                 <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
                                     <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
@@ -238,7 +238,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })
