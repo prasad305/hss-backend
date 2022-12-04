@@ -40,19 +40,15 @@
                                 @if ($event->banner != null)
                                     <img src="{{ asset($event->banner) }}" class="img-fluid card-img" />
                                 @else
-                                    @if ($event->banner != null)
-                                        <img width="100%" src="{{ asset($event->banner) }}" alt="">
-                                    @else
-                                        <video src={{ asset($event->video) }} class="img-fluid card-img" controls>
-
-                                        </video>
-                                    @endif
+                                    <video controls class="img-fluid card-img-details">
+                                        <source src="{{ asset($event->video) }}" />
+                                    </video>
                                 @endif
                                 <div class="panel-body pt-1">
                                     <h5 class="text-ellipsis-line-1">{{ $event->title }}</h5>
 
 
-                                    @if ($event->status == 2)
+                                    @if ($event->status >= 2)
                                         <button type="button" class="btn btnPublish waves-effect waves-light mb-2"><i
                                                 class="icon-checkmark-round"></i> Published</button>
                                     @else

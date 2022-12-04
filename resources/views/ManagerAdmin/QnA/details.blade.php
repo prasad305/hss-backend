@@ -130,10 +130,9 @@
                 </div>
 
                 <div class="col-md-4 mb-2">
-
                     <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
-                            @if (false)
+                            @if ($event->star->image !== null)
                                 <img src="{{ asset($event->star->image) }}" class="img-star-x" alt="Demo Image" />
                             @else
                                 <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
@@ -151,8 +150,8 @@
 
                     <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
-                            @if (false)
-                                <img src="{{ asset($event->star->image) }}" class="img-star-x" alt="Demo Image" />
+                            @if ($event->admin->image !== null)
+                                <img src="{{ asset($event->admin->image) }}" class="img-star-x" alt="Demo Image" />
                             @else
                                 <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
                                     <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
@@ -166,6 +165,7 @@
 
                         </div>
                     </div>
+
 
                 </div>
 
@@ -265,9 +265,10 @@
                                             <td>{{ \Carbon\Carbon::parse($register->created_at)->format('d F,Y') }}
                                             </td>
                                             <td>{{ \Carbon\Carbon::parse($register->qna_date)->format('d F,Y') }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($register->start_time)->format('h:m a') }}
+                                            <td>{{ \Carbon\Carbon::parse($register->qna_start_time)->toTimeString() }}
                                             </td>
-                                            <td>{{ \Carbon\Carbon::parse($register->end_time)->format('h:m a') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($register->qna_end_time)->toTimeString() }}
+                                            </td>
                                         </tr>
                                     @endforeach
 
