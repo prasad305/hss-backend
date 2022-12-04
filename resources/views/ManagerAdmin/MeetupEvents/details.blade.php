@@ -56,7 +56,7 @@
 
                     <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
-                            @if (false)
+                            @if ($meetup->star->image !== null)
                                 <img src="{{ asset($meetup->star->image) }}" class="img-star-x" alt="Demo Image" />
                             @else
                                 <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
@@ -71,10 +71,11 @@
 
                         </div>
                     </div>
+
                     <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
-                            @if (false)
-                                <img src="{{ asset($meetup->star->image) }}" class="img-star-x" alt="Demo Image" />
+                            @if ($meetup->admin->image !== null)
+                                <img src="{{ asset($meetup->admin->image) }}" class="img-star-x" alt="Demo Image" />
                             @else
                                 <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
                                     <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
@@ -102,7 +103,7 @@
                         <div class="card mb-2 col-md-3 mb-3 py-2 px-2">
                             <div class="d-flex ">
                                 <span>Type :</span>&nbsp;&nbsp; <span
-                                    class="text-success">{{ $meetup->meetup_type }}</span>
+                                    class="text-warning">{{ $meetup->meetup_type }}</span>
                             </div>
                             @if ($meetup->meetup_type == 'Offline')
                                 <div class="d-flex ">

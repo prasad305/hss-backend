@@ -241,7 +241,8 @@ class MeetupEventController extends Controller
         ]);
     }
 
-    public function star_meetup_list_count(){
+    public function star_meetup_list_count()
+    {
         $allEvents = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0]])->count();
         $pendingEvents = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '<', 1]])->count();
         $approvedEvents = MeetupEvent::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0], ['status', '<', 10]])->count();
@@ -558,22 +559,20 @@ class MeetupEventController extends Controller
             $meetup->fee = $request->input('fee');
             $meetup->status = 1;
 
-            if($request->banner['type']){
-                try{
+            if ($request->banner['type']) {
+                try {
                     $originalExtension = str_ireplace("image/", "", $request->banner['type']);
-    
+
                     $folder_path       = 'uploads/images/meetup/';
-    
+
                     $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                     $decodedBase64 = $request->banner['data'];
-                
+
                     Image::make($decodedBase64)->save($folder_path . $image_new_name);
                     $location = $folder_path . $image_new_name;
                     $meetup->banner = $location;
                     $meetup->save();
-                }
-    
-                catch (\Exception $exception) {
+                } catch (\Exception $exception) {
                     return response()->json([
                         "error" => $exception->getMessage(),
                         "status" => "from image",
@@ -581,7 +580,7 @@ class MeetupEventController extends Controller
                 }
             }
 
-            
+
 
             return response()->json([
                 'status' => 200,
@@ -717,7 +716,7 @@ class MeetupEventController extends Controller
             $meetup->end_time = Carbon::parse($request->end_time);
             $meetup->description = $request->description;
             $meetup->instruction = $request->instruction;
-            $meetup->total_seat = $request->slots;
+            $meetup->total_seat = $request->total_seat;
             $meetup->reg_start_date = Carbon::parse($request->reg_start_date);
             $meetup->reg_end_date = Carbon::parse($request->reg_end_date);
             $meetup->fee = $request->fee;
