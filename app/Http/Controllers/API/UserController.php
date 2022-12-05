@@ -1520,7 +1520,7 @@ class UserController extends Controller
      */
     public function checkUserNotifiaction()
     {
-        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->orderBy('updated_at', 'DESC')->get();
+        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->latest()->get();
         $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
 
         $biddingReg = Bidding::where('user_id', auth('sanctum')->user()->id)->first();
