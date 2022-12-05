@@ -583,17 +583,21 @@ class UserController extends Controller
     public function learningSeesionResult($slug)
     {
         // return $slug;
+
         $learnigSession = LearningSession::where('slug', $slug)->first();
 
         $marked_videos = LearningSessionAssignment::where([['event_id', $learnigSession->id], ['user_id', auth()->user()->id], ['send_to_user', 1], ['mark', '>', 0]])->get();
 
         $rejected_videos = LearningSessionAssignment::where([['event_id', $learnigSession->id], ['user_id', auth()->user()->id], ['status', 2], ['send_to_user', 1]])->get();
-
+        $paymentForCertificate = LearningSessionCertificate::where([['event_id', $learnigSession->id], ['user_id', auth()->user()->id], ['payment_status', 1]])->exists();
+        $appliedForCertificate = LearningSessionCertificate::where([['event_id', $learnigSession->id], ['user_id', auth()->user()->id]])->exists();
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
             'markedVideos' => $marked_videos,
             'rejectedVideos' => $rejected_videos,
+            'paymentForCertificate' => $paymentForCertificate,
+            'appliedForCertificate' => $appliedForCertificate,
         ]);
     }
 
@@ -1522,9 +1526,8 @@ class UserController extends Controller
         $biddingReg = Bidding::where('user_id', auth('sanctum')->user()->id)->first();
 
         $auctionInfo = '';
-        
-        if($biddingReg)
-        {
+
+        if ($biddingReg) {
             $auctionInfo = Auction::where('id', $biddingReg->auction_id)->first();
         }
 
