@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             OccupationSeeder::class,
             PackageSeeder::class,
             ProfitShareSeeder::class,
+            GreetingTypeSeeder::class,
         ]);
 
 
