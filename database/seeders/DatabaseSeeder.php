@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             FaqSeeder::class,
             OccupationSeeder::class,
             PackageSeeder::class,
+            ProfitShareSeeder::class,
         ]);
 
 
