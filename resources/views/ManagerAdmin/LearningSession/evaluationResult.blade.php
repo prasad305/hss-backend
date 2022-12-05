@@ -139,10 +139,17 @@
                         </tfoot>
                     </table>
                 </div>
+                @if ($event->status < 9)
+                    <div class="col-md-2 mx-2 mb-4"><a
+                            href="{{ route('managerAdmin.learningSession.evaluationResultPublished', $event->id) }}"
+                            class="btn btn-outline-success btn-success text-light"> Send To User</a>
+                    </div>
+                @else
+                    <div class="col-md-2 mx-2 mb-4"><a class="btn btn-outline-success btn-success text-light"> Result
+                            Published</a>
+                    </div>
+                @endif
 
-                <div class="col-md-2 mx-2 mb-4"><a
-                        href="{{ route('managerAdmin.learningSession.evaluationResultPublished', $event->id) }}"
-                        class="btn btn-outline-success btn-success text-light"> Send To User</a></div>
 
 
             </div>
