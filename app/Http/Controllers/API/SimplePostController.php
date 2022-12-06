@@ -370,7 +370,6 @@ class SimplePostController extends Controller
             'rejected' => $rejected,
             'all' => $all,
         ]);
-
     }
 
 
@@ -519,63 +518,57 @@ class SimplePostController extends Controller
             $post->status = 1;
         }
 
-        if($request->image != null){
-            try{
+        if ($request->image != null) {
+            try {
                 $originalExtension = str_ireplace("image/", "", $request->image['type']);
 
                 $folder_path       = 'uploads/images/post/';
 
                 $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                 $decodedBase64 = $request->image['data'];
-            
+
                 Image::make($decodedBase64)->save($folder_path . $image_new_name);
                 $location = $folder_path . $image_new_name;
                 $post->image = $location;
-            }
-
-            catch (\Exception $exception) {
+            } catch (\Exception $exception) {
                 return response()->json([
                     "error" => $exception->getMessage(),
                     "status" => "from image",
                 ]);
             }
         }
-        if($request->video != null){
-            try{
+        if ($request->video != null) {
+            try {
                 $originalExtension = str_ireplace("image/", "", $request->video['type']);
 
                 $folder_path       = 'uploads/videos/post/';
 
                 $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                 $decodedBase64 = $request->video['data'];
-            
+
                 Image::make($decodedBase64)->save($folder_path . $image_new_name);
                 $location = $folder_path . $image_new_name;
                 $post->video = $location;
-            }
-
-            catch (\Exception $exception) {
+            } catch (\Exception $exception) {
                 return response()->json([
                     "error" => $exception->getMessage(),
                     "status" => "from video",
                 ]);
             }
         }
-        if($request->thumbnail != null){
-            try{
+        if ($request->thumbnail != null) {
+            try {
                 $originalExtension = str_ireplace("image/", "", $request->thumbnail['type']);
 
                 $folder_path       = 'uploads/images/post/';
 
                 $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                 $decodedBase64 = $request->thumbnail['data'];
-            
+
                 Image::make($decodedBase64)->save($folder_path . $image_new_name);
                 $location = $folder_path . $image_new_name;
                 $post->thumbnail = $location;
-            }
-
-            catch (\Exception $exception) {
+            } catch (\Exception $exception) {
                 return response()->json([
                     "error" => $exception->getMessage(),
                     "status" => "from thumbnail",
@@ -606,8 +599,6 @@ class SimplePostController extends Controller
             'status' => 200,
             'message' => 'Post Added',
         ]);
-
-
     }
 
     public function star_add(Request $request)
@@ -618,11 +609,13 @@ class SimplePostController extends Controller
             'title' => 'required',
             'description' => 'required',
             'type' => 'required',
+            'post_type' => 'required',
 
 
         ], [
             'title.required' => 'Title Field Is Required',
             'description.required' => 'Description Field Is Required',
+            'post_type.required' => "This  Field Is Required",
             'type.required' => "This  Field Is Required",
 
         ]);

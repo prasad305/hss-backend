@@ -222,7 +222,7 @@ class UserMobileAppController extends Controller
 
         if ($modelName == 'greeting') {
 
-            if (!LiveChatRegistration::where([['user_id', auth()->user()->id], ['greeting_id', $eventId]])->exists()) {
+            if (!GreetingsRegistration::where([['user_id', auth()->user()->id], ['greeting_id', $eventId], ['payment_status', 1]])->exists()) {
                 $activity = new Activity();
                 $eventRegistration = GreetingsRegistration::find($request->event_registration_id);
                 $event = Greeting::find($eventId);
@@ -230,7 +230,19 @@ class UserMobileAppController extends Controller
                 $eventRegistration->amount = $event->cost;
                 $activity->type = 'greeting';
                 $eventRegistration->save();
+
+                if ($request->payment_method == "wallet") {
+                    $greeting =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('greetings');
+                    Wallet::where('user_id', auth('sanctum')->user()->id)->update(['greetings' => $greeting->greetings - 1]);
+                    GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id], ['greeting_id', $eventId]])->update([
+                        'payment_status' => 1,
+                        'status' => 1,
+                        'payment_method' => "wallet",
+
+                    ]);
+                }
             }
+
             // $notification = Notification::find($request->notification_id);
             // $notification->view_status = 1;
             // $notification->save();

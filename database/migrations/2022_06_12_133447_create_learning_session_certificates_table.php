@@ -19,6 +19,8 @@ class CreateLearningSessionCertificatesTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('name')->nullable();
             $table->string('father_name')->nullable();
+            $table->integer('payment_status')->default(0);
+            $table->string('payment_method')->nullable();
             $table->integer('status')->default(0);
             $table->timestamps();
         });
