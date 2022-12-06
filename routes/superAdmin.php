@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\HomeController;
 use App\Models\Slider;
 use App\Models\PaymentMethod;
 use Illuminate\Cache\Repository;
@@ -60,6 +60,13 @@ use App\Http\Controllers\SuperAdmin\VirtualtourController;
 // Super Admin routechange.password
 
 Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin', 'prevent-back-history']], function () {
+
+
+    /**
+     * quize view
+     */
+    Route::get('/quiz-result', [HomeController::class, 'viewAllQuize'])->name('showAllQuiz');
+
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/withdraw', [ProfitWithdrawController::class, 'index'])->name('withdraw.index');

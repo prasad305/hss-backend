@@ -37,7 +37,9 @@ class User extends Authenticatable
         'user_type',
         'password',
         'parent_user',
-        'category_id'
+        'category_id',
+        'country_code',
+
     ];
 
     /**
