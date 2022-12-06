@@ -180,7 +180,7 @@ class UserMobileAppController extends Controller
                 }
 
                 // Wallet End
-                $event->available_start_time =  (Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s')) <= Carbon::parse($event->end_time)->format('H:i:s') ? Carbon::parse($request->end_time)->addMinutes($event->interval + 1)->format('H:i:s') : Carbon::parse($event->end_time)->format('H:i:s');
+                $event->available_start_time =  (Carbon::parse($request->end_time)->addMinutes($event->interval)->format('H:i:s')) <= Carbon::parse($event->end_time)->format('H:i:s') ? Carbon::parse($request->end_time)->addMinutes($event->interval)->format('H:i:s') : Carbon::parse($event->end_time)->format('H:i:s');
                 $event->update();
             }
         }
@@ -215,7 +215,7 @@ class UserMobileAppController extends Controller
                 }
 
                 // Wallet End
-                $event->available_start_time = (Carbon::parse($request->end_time)->addMinutes($event->time_interval + 1)->format('H:i:s')) <= Carbon::parse($event->end_time)->format('H:i:s') ? Carbon::parse($request->end_time)->addMinutes($event->time_interval + 1)->format('H:i:s') : Carbon::parse($event->end_time)->format('H:i:s');
+                $event->available_start_time = (Carbon::parse($request->end_time)->addMinutes($event->time_interval)->format('H:i:s')) <= Carbon::parse($event->end_time)->format('H:i:s') ? Carbon::parse($request->end_time)->addMinutes($event->time_interval)->format('H:i:s') : Carbon::parse($event->end_time)->format('H:i:s');
                 $event->update();
             }
         }
@@ -890,8 +890,8 @@ class UserMobileAppController extends Controller
             }
 
             $auditionCertification = AuditionCertification::where([['audition_id', $audition_id], ['round_info_id', $round_info_id], ['participant_id', auth()->user()->id]])->first();
-            
-            
+
+
             $auditionCertification->certificate = $filename;
             $auditionCertification->update();
             if ($auditionCertification) {

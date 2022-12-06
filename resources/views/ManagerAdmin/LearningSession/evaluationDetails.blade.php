@@ -112,7 +112,7 @@
                         <div class="card mb-2 col-md-3 mb-3 py-2 px-2">
                             @if ($event->assignment === 0)
                                 <div class="d-flex ">
-                                    <span>Type :</span>&nbsp;&nbsp; <span class="text-danger">Withouit Assignment</span>
+                                    <span>Type :</span>&nbsp;&nbsp; <span class="text-danger">Without Assignment</span>
                                 </div>
                             @else
                                 <div class="d-flex ">
@@ -144,28 +144,28 @@
             </div>
 
 
-                <div class="container row mb-4">
+            <div class="container row mb-4">
 
-                    {{-- <a type="button" class="btn btn-outline-success px-5 mr-2" onclick="Show('Edit Learning Session','{{ route('managerAdmin.learningSession.accept', $event->id) }}')">Accept</a> --}}
-                    @if ($event->status < 5)
-                        <button class="btn btn-outline-success px-5 mr-2" onclick="Accept(this)"
-                            value="{{ route('managerAdmin.learningSession.evaluationAccept', $event->id) }}">
-                            Accept
-                        </button>
-                        <button class="btn btnRemove px-5 mr-2" onclick="Reject(this)"
-                            value="{{ route('managerAdmin.learningSession.evaluationReject', $event->id) }}">
-                            Reject
-                        </button>
-                    @endif
+                {{-- <a type="button" class="btn btn-outline-success px-5 mr-2" onclick="Show('Edit Learning Session','{{ route('managerAdmin.learningSession.accept', $event->id) }}')">Accept</a> --}}
+                @if ($event->status < 5)
+                    <button class="btn btn-outline-success px-5 mr-2" onclick="Accept(this)"
+                        value="{{ route('managerAdmin.learningSession.evaluationAccept', $event->id) }}">
+                        Accept
+                    </button>
+                    <button class="btn btnRemove px-5 mr-2" onclick="Reject(this)"
+                        value="{{ route('managerAdmin.learningSession.evaluationReject', $event->id) }}">
+                        Reject
+                    </button>
+                @endif
 
-                    @if ($event->status == 5)
-                        <span class="btn btn-outline-success">Accepted</span>
-                    @endif
-                    @if ($event->status == 55)
-                        <span class="btn btnRemove">Rejected</span>
-                    @endif
+                @if ($event->status == 5)
+                    <span class="btn btn-outline-success">Accepted</span>
+                @endif
+                @if ($event->status == 55)
+                    <span class="btn btnRemove">Rejected</span>
+                @endif
 
-                </div>
+            </div>
 
 
 

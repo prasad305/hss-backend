@@ -18,7 +18,7 @@ class LiveChatController extends Controller
 
     public function show($id)
     {
-        $event = LiveChat::find($id);
+        $event = LiveChat::with('admin')->find($id);
         return view('ManagerAdmin.LiveChat.details', compact('event'));
     }
 

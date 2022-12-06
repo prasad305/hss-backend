@@ -688,7 +688,7 @@ class UserController extends Controller
         }
         if ($type == 'all') {
             // $post = Post::select("*")->where('user_id', $id)->latest()->paginate($limit);
-            $post = Post::where('type', '!=', null)->where('star_id', $star_id)->orWhereJsonContains('star_id', [$int_value])->latest()->get();
+            $post = Post::where('type', '!=', null)->where('star_id', $star_id)->orWhereJsonContains('star_id', [$int_value])->latest()->paginate($limit);
         }
 
 
@@ -1380,7 +1380,6 @@ class UserController extends Controller
             $greeting_reg->name = $request->name;
             $greeting_reg->greeting_context = $request->greeting_context;
             $greeting_reg->additional_message = $request->additional_message;
-            $greeting_reg->status = 1;
             $greeting_reg->save();
 
             return response()->json([
@@ -1520,6 +1519,15 @@ class UserController extends Controller
         $notification = Notification::where('user_id', auth('sanctum')->user()->id)->orderBy('updated_at', 'DESC')->get();
         $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
 
+        $biddingReg = Bidding::where('user_id', auth('sanctum')->user()->id)->first();
+
+        $auctionInfo = '';
+        
+        if($biddingReg)
+        {
+            $auctionInfo = Auction::where('id', $biddingReg->auction_id)->first();
+        }
+
         if ($greeting_reg)
             $greeting_info = Greeting::find($greeting_reg->greeting_id);
         else
@@ -1530,6 +1538,7 @@ class UserController extends Controller
             'user_id' => auth('sanctum')->user()->id,
             'notifiction' => $notification,
             'greeting_info' => $greeting_info,
+            'auctionInfo' => $auctionInfo,
         ]);
     }
 
@@ -1595,6 +1604,26 @@ class UserController extends Controller
     {
 
         $product = Auction::with('star', 'bidding', 'bidding.user')->orderBy('id', 'DESC')->where('star_id', $star_id)->where('status', 1)->latest()->get();
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+            'message' => 'okay',
+        ]);
+    }
+
+    public function getAuctionByBidding($auctionId)
+    {
+        $product = Auction::where('id', $auctionId)->first();
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+            'message' => 'okay',
+        ]);
+    }
+    public function starAuctionProductMobile($product_id)
+    {
+        $product = Auction::with('star')->where('id', $product_id)->first();
+        // $product = Auction::with(['star', 'bidding.user'])->where('id', $product_id)->get();
         return response()->json([
             'status' => 200,
             'product' => $product,

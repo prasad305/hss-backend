@@ -41,21 +41,21 @@ class QnaController extends Controller
 
     public function all()
     {
-        $upcommingEvent = QnA::where('category_id',auth()->user()->category_id)->where([['star_approval',1],['status','<',10]])->latest()->get();
+        $upcommingEvent = QnA::where('category_id', auth()->user()->category_id)->where([['star_approval', 1], ['status', '<', 10]])->latest()->get();
 
         return view('ManagerAdmin.QnA.index', compact('upcommingEvent'));
     }
 
     public function manager_event_details($id)
     {
-        $event = QnA::find($id);
+        $event = QnA::with('admin')->find($id);
 
-        $allRegistered = collect(QnaRegistration::with('user')->where('qna_id',$id)->orderBy('id','DESC')->get());
+        $allRegistered = collect(QnaRegistration::with('user')->where('qna_id', $id)->orderBy('id', 'DESC')->get());
         $registered = $allRegistered->unique('user_id');
 
-        $totalRegistered = QnaRegistration::where('qna_id',$id)->orderBy('id','DESC')->distinct('user_id')->count();
+        $totalRegistered = QnaRegistration::where('qna_id', $id)->orderBy('id', 'DESC')->distinct('user_id')->count();
 
-        return view('ManagerAdmin.QnA.details', compact(['event','totalRegistered','registered']));
+        return view('ManagerAdmin.QnA.details', compact(['event', 'totalRegistered', 'registered']));
     }
 
 
@@ -84,7 +84,6 @@ class QnaController extends Controller
             $post->post_start_date = Carbon::parse($request->post_start_date);
             $post->post_end_date = Carbon::parse($request->post_end_date);
             $post->save();
-
         } else {
             $event->status = 10;
             $event->update();
@@ -114,7 +113,7 @@ class QnaController extends Controller
             'instruction' => 'required',
 
 
-        ],[
+        ], [
             'title.required' => 'Title Field Is Required',
             'description.required' => 'Description Field Is Required',
             'instruction.required' => 'Instruction Field Is Required',
@@ -160,8 +159,6 @@ class QnaController extends Controller
                 $file->move($path, $file_name);
                 $qnA->video = $path . $file_name;
             }
-
-
         }
 
         try {

@@ -331,6 +331,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/auction-product/{id}', [UserController::class, 'auctionSingleProduct']);
     Route::get('/user/getStarAuction/{star_id}', [UserController::class, 'starAuction']);
     // Auction
+    Route::get('/mobile/getProduct/{product_id}', [UserController::class, 'getAuctionByBidding']);
+    Route::get('/mobile/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProductMobile']);
     Route::get('/user/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
     Route::post('user/bidding/auction/product', [UserController::class, 'bidNow']);
     Route::get('user/liveBidding/auction/{auction_id}', [UserController::class, 'liveBidding']);

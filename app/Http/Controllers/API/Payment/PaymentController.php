@@ -24,6 +24,7 @@ use App\Models\Activity;
 use App\Models\AuditionCertification;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundAppealRegistration;
+use App\Models\Bidding;
 use Error;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -275,6 +276,11 @@ class PaymentController extends Controller
                 
                 return $this->auditionAppealPayment($user->id, $request->eventId, "PayTm-mobile", $request->TXNAMOUNT);
                 // $user_id, $round_info_id, $method, $fee
+            }
+
+            if($request->modelName == 'auction')
+            {
+                return $this->auctionPayment($user->id, $request->eventId, "PayTm-mobile");
             }
             
             
@@ -780,8 +786,32 @@ class PaymentController extends Controller
             return response()->json([
                 'status' => 200,
                 'appealedRegistration' => $appealedRegistration,
-            ]);
+            ]); 
         }
+    }
+
+    function auctionPayment($user_id, $event_id, $method)
+    {
+
+
+
+        $biddingInfo = Bidding::where([['auction_id', $event_id], ['user_id', $user_id], ['notify_status', 1]])->first();
+
+       
+
+        $biddingInfo->payment_status = 1;
+        $biddingInfo->applied_status = 1;
+        $biddingInfo->update();
+
+        
+        // ->update([
+        //     'payment_status' => 1,
+        //     'applied_status' => 1
+        // ]);
+        return response()->json([
+            'status' => 200,
+            'biddingInfo' => $biddingInfo,
+        ]);
     }
 
     //   <================================Love React Payment end ==================================>
