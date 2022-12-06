@@ -65,7 +65,7 @@
                             <tr>
                                 <th>SL</th>
                                 <th>Country Name</th>
-                                <th>Currency</th>
+                                <th>Currency Rate</th>
                                 <th>Code</th>
                                 <th>Symbol</th>
                                 <th>Status</th>
@@ -77,7 +77,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $currency->country ? $currency->country : '' }}</td>
-                                    <td>{{ $currency->currency ? $currency->currency : '' }}</td>
+                                    <td>{{ $currency->currency_value ? $currency->currency_value : '' }}</td>
                                     <td>{{ $currency->currency_code }}</td>
                                     <td>{{ $currency->symbol }}</td>
                                     <td>

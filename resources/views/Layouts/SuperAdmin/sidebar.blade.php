@@ -106,6 +106,18 @@
             </ul>
         </li>
 
+
+        <li class="nav-item">
+            <a href="{{ route('superAdmin.showAllQuiz') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.showAllQuiz') ? 'active' : '' }}">
+                <i class="fa fa-question-circle"> </i>
+                <p>
+                    Quize Result
+                </p>
+            </a>
+        </li>
+
+
         <li class="nav-item">
             <a href="{{ route('superAdmin.category.index') }}"
                 class="nav-link {{ Request::routeIs('superAdmin.category.index') ? 'active' : '' }}">
