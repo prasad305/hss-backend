@@ -692,7 +692,7 @@ class UserController extends Controller
         }
         if ($type == 'all') {
             // $post = Post::select("*")->where('user_id', $id)->latest()->paginate($limit);
-            $post = Post::where('type', '!=', null)->where('star_id', $star_id)->orWhereJsonContains('star_id', [$int_value])->latest()->get();
+            $post = Post::where('type', '!=', null)->where('star_id', $star_id)->orWhereJsonContains('star_id', [$int_value])->latest()->paginate($limit);
         }
 
 
