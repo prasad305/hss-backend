@@ -85,6 +85,7 @@ Route::get('/guest/all_post/with-paginate/{limit}', [GuestController::class, 'pa
 Route::get('all/currency', [CurrencyController::class, 'allCurrency']);
 Route::get('all/sidebar/list', [CategoryController::class, 'allDataList']);
 Route::get('user/location', [CurrencyController::class, 'getLocation']);
+Route::get('user/current-location/{ip}', [CurrencyController::class, 'getMyLocation']);
 
 
 // Home Page All Post

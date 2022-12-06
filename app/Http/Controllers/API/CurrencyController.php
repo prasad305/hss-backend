@@ -8,10 +8,11 @@ use App\Models\Currency;
 
 class CurrencyController extends Controller
 {
+
+
     public function allCurrency()
     {
         $currency = Currency::latest()->get();
-
 
         if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
             $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
@@ -47,6 +48,20 @@ class CurrencyController extends Controller
             'countryCode' => $locationData->countryCode,
         ]);
     }
+
+
+    function getMyLocation($ip)
+    {
+        $locationData = \Location::get($ip);
+
+        $currencyDetails = Currency::where('country_code', $locationData->countryCode)->first();
+        return response()->json([
+            'status' => 200,
+            'locationData' => $locationData,
+            'currencyDetails' => $currencyDetails,
+        ]);
+    }
+
 
 
     function getIPAddress()
