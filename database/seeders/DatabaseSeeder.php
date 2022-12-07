@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             PackageSeeder::class,
             ProfitShareSeeder::class,
             GreetingTypeSeeder::class,
+            SuperStarSeeder::class,
         ]);
 
 

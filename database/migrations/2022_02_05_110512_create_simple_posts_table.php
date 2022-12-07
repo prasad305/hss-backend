@@ -22,8 +22,8 @@ class CreateSimplePostsTable extends Migration
             $table->unsignedBigInteger('subcategory_id')->nullable();
             $table->string('title')->nullable();
             $table->double('fee')->default(0);
-            $table->string('post_type')->nullable();
-            $table->string('type')->nullable();
+            $table->string('post_type')->nullable()->comment('general or video');
+            $table->string('type')->nullable()->comment('free or paid');
             $table->longText('description')->nullable();
             $table->string('image')->nullable();
             $table->string('video')->nullable();
