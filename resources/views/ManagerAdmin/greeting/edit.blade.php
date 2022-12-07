@@ -41,7 +41,7 @@
             <br>
             {{-- @if ($greeting->video !== null) --}}
             <video width="312" controls>
-                <source id="videoPreview" src="{{ asset('http://localhost:8000/' . $greeting->video) }}" />
+                <source id="videoPreview" src="{{ asset($greeting->video) }}" />
             </video>
             {{-- @endif --}}
             <br>
