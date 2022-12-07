@@ -110,7 +110,7 @@
                                     width="20px" />
                             </span>Cost</label>
                         <h4 class="text-warning">
-                            {{ $greeting->cost }} BDT</h4>
+                            ${{ $greeting->cost }}</h4>
                     </div>
                 </div>
 
