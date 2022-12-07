@@ -248,6 +248,9 @@ class CategoryController extends Controller
         $category = json_decode($request->category);
 
         $cat = ChoiceList::where('user_id', $id)->first();
+        $userData = User::find($id);
+        $userData->status = 1;
+        $userData->update();
 
         if (!isset($cat)) {
             $cat = new ChoiceList();
@@ -452,6 +455,10 @@ class CategoryController extends Controller
 
         $subCategories = SubCategory::whereIn('category_id', $req->cat)->get();
 
+
+        $userInfo = User::find(auth('sanctum')->user()->id);
+        $userInfo->status = 1;
+        $userInfo->update();
 
         $user = ChoiceList::where('user_id', auth('sanctum')->user()->id)->first();
 

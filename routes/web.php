@@ -36,10 +36,15 @@ Route::get('/', function () {
 Route::get('/chat', function () {
     return view('Others.MailView.forgetPassword');
 });
-Route::get('/test-view', function () {
 
-    return "Please add a view !";
+Route::post('/quize-form', [HomeController::class, 'QuizeJoin'])->name('quizUserSubmit');
+Route::post('/quize-submit', [HomeController::class, 'QuizSubmit'])->name('quizDataSubmit');
+Route::get('/my-quize', function () {
+
+    return view('quiz');
 });
+
+
 
 /**
  * stripe web hook

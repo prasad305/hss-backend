@@ -583,17 +583,21 @@ class UserController extends Controller
     public function learningSeesionResult($slug)
     {
         // return $slug;
+
         $learnigSession = LearningSession::where('slug', $slug)->first();
 
         $marked_videos = LearningSessionAssignment::where([['event_id', $learnigSession->id], ['user_id', auth()->user()->id], ['send_to_user', 1], ['mark', '>', 0]])->get();
 
         $rejected_videos = LearningSessionAssignment::where([['event_id', $learnigSession->id], ['user_id', auth()->user()->id], ['status', 2], ['send_to_user', 1]])->get();
-
+        $paymentForCertificate = LearningSessionCertificate::where([['event_id', $learnigSession->id], ['user_id', auth()->user()->id], ['payment_status', 1]])->exists();
+        $appliedForCertificate = LearningSessionCertificate::where([['event_id', $learnigSession->id], ['user_id', auth()->user()->id]])->exists();
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
             'markedVideos' => $marked_videos,
             'rejectedVideos' => $rejected_videos,
+            'paymentForCertificate' => $paymentForCertificate,
+            'appliedForCertificate' => $appliedForCertificate,
         ]);
     }
 
@@ -688,7 +692,7 @@ class UserController extends Controller
         }
         if ($type == 'all') {
             // $post = Post::select("*")->where('user_id', $id)->latest()->paginate($limit);
-            $post = Post::where('type', '!=', null)->where('star_id', $star_id)->orWhereJsonContains('star_id', [$int_value])->latest()->get();
+            $post = Post::where('type', '!=', null)->where('star_id', $star_id)->orWhereJsonContains('star_id', [$int_value])->latest()->paginate($limit);
         }
 
 
@@ -1516,15 +1520,14 @@ class UserController extends Controller
      */
     public function checkUserNotifiaction()
     {
-        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->orderBy('updated_at', 'DESC')->get();
+        $notification = Notification::where('user_id', auth('sanctum')->user()->id)->latest()->get();
         $greeting_reg = GreetingsRegistration::where('user_id', auth('sanctum')->user()->id)->first();
 
         $biddingReg = Bidding::where('user_id', auth('sanctum')->user()->id)->first();
 
         $auctionInfo = '';
-        
-        if($biddingReg)
-        {
+
+        if ($biddingReg) {
             $auctionInfo = Auction::where('id', $biddingReg->auction_id)->first();
         }
 
@@ -1687,12 +1690,16 @@ class UserController extends Controller
     }
     public function auctionApply($auction_id)
     {
+        $auctionInfo = Auction::find($auction_id);
         $auctionApply = Bidding::with('user', 'auction')->where('auction_id', $auction_id)->where('notify_status', 1)->where('user_id', auth()->user()->id)->first();
         $winner = Bidding::with('user', 'auction')->where('auction_id', $auction_id)->where('win_status', 1)->where('user_id', auth()->user()->id)->first();
+        $topBidder = Bidding::with('user')->orderBy('amount', 'DESC')->where([['auction_id', $auction_id], ['user_id', auth()->user()->id]])->first();
         return response()->json([
             'status' => 200,
             'auctionApply' => $auctionApply,
-            'winner' => $winner
+            'winner' => $winner,
+            'auctionInfo' => $auctionInfo,
+            'topBidder' => $topBidder
         ]);
     }
     public function maxBid($id)

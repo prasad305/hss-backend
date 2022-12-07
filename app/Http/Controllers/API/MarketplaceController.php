@@ -21,14 +21,15 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class MarketplaceController extends Controller
 {
-    public function MarketplaceProductMobile(){
+    public function MarketplaceProductMobile()
+    {
 
         $pending = Marketplace::orderBy('id', 'DESC')->where('status', 0)
             ->where('superstar_id', Auth::user()->id)
             ->get();
         $approved = Marketplace::orderBy('id', 'DESC')->where('status', 1)
-        ->where('superstar_id', Auth::user()->id)
-        ->get();
+            ->where('superstar_id', Auth::user()->id)
+            ->get();
         return response()->json([
             'status' => 200,
             'pending' => $pending,
@@ -156,7 +157,7 @@ class MarketplaceController extends Controller
 
     public function marketplaceStarAll($starId)
     {
-        $starMarketplace = Marketplace::where('superstar_id', $starId)
+        $starMarketplace = Marketplace::orderBy('id', 'DESC')->where([['superstar_id', $starId], ['status', 1]])
             ->get();
 
         return response()->json([
@@ -592,22 +593,20 @@ class MarketplaceController extends Controller
         $marketplace->subcategory_id = Auth::user()->sub_category_id;
 
 
-        if($request->image['type']){
-            try{
+        if ($request->image['type']) {
+            try {
                 $originalExtension = str_ireplace("image/", "", $request->image['type']);
 
                 $folder_path       = 'uploads/images/marketplace/';
 
                 $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                 $decodedBase64 = $request->image['data'];
-            
+
                 Image::make($decodedBase64)->save($folder_path . $image_new_name);
                 $location = $folder_path . $image_new_name;
                 $marketplace->image = $location;
                 $marketplace->save();
-            }
-
-            catch (\Exception $exception) {
+            } catch (\Exception $exception) {
                 return response()->json([
                     "error" => $exception->getMessage(),
                     "status" => "from image",

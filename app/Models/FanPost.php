@@ -37,7 +37,7 @@ class FanPost extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
-    
+
     public function fangroup()
     {
         return $this->belongsTo(FanGroup::class, 'fan_group_id');
