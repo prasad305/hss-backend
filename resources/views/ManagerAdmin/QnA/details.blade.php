@@ -150,13 +150,14 @@
 
                     <div class="col-md-12 d-flex mb-2 p-2 bg-dark align-items-center card-rounded">
                         <div class="">
-                            <<<<<<< HEAD @if ($event->admin->image)
-                                =======
-                                @if ($event->admin->image !== null)
-                                    <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                            @if ($event->admin->image !== null)
+                                <img src="{{ asset($event->admin->image) }}" class="img-star-x" alt="Demo Image" />
+                            @else
+                                <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
+                                    <img src="{{ asset('demo_image/demo_user.png') }}" class="img-star-x"
                                         alt="Demo Image" />
-                                    </a>
-                                @endif
+                                </a>
+                            @endif
                         </div>
                         <div class="mx-2">
                             <label for="">Admin</label>

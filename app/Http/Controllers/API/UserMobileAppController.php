@@ -176,6 +176,7 @@ class UserMobileAppController extends Controller
                         'payment_status' => 1,
                         'publish_status' => 1,
                         'payment_method' => "wallet",
+                        'room_id' => $create_room_id,
                     ]);
                 }
 
