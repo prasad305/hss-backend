@@ -636,6 +636,7 @@ class SimplePostController extends Controller
         $post->description = $request->input('description');
         $post->fee = $request->input('fee') > 0  ? $request->input('fee') : 0;
         $post->type = $request->input('type');
+        $post->post_type = $request->input('post_type');
         $post->star_approval = 1;
 
 
@@ -692,6 +693,7 @@ class SimplePostController extends Controller
 
         return response()->json([
             'status' => 200,
+            'type' => $post->type,
             'message' => 'Post Added',
         ]);
     }
