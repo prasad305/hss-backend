@@ -26,6 +26,7 @@ use App\Models\WalletPayment;
 use App\Models\Activity;
 use App\Models\Audition\AuditionRoundAppealRegistration;
 use App\Models\Bidding;
+use App\Models\LearningSessionCertificate;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -404,6 +405,9 @@ if (!function_exists('random_code')) {
         if ($type == 'auditionAppeal') {
             auditionAppealPayment($user_id, $event_id, $paymentMethod, $amount);
         }
+        if ($type == 'learning_certificate') {
+            learningSessionCertificate($user_id, $event_id, $paymentMethod, $amount);
+        }
     }
 
 
@@ -549,6 +553,18 @@ if (!function_exists('random_code')) {
         try {
             $registerEvent = LearningSessionRegistration::where([['learning_session_id', $event_id], ['user_id', $user_id]])->first();
             $registerEvent->publish_status = 1;
+            $registerEvent->payment_status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+    //for learning session
+    function learningSessionCertificate($user_id, $event_id, $method)
+    {
+        try {
+            $registerEvent = LearningSessionCertificate::where([['event_id', $event_id], ['user_id', $user_id]])->first();
             $registerEvent->payment_status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();

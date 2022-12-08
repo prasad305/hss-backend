@@ -189,17 +189,18 @@ class UserMobileAppController extends Controller
                 $activity = new Activity();
                 $eventRegistration = new QnaRegistration();
                 $event = QnA::find($eventId);
-
+                $create_room_id = createRoomID();
 
                 $eventRegistration->user_id = $user->id;
                 $eventRegistration->qna_id = $eventId;
                 $eventRegistration->amount = $request->fee;
-                $eventRegistration->room_id = Str::random(20);
+                $eventRegistration->room_id = $create_room_id;
                 $eventRegistration->qna_date = $event->event_date;
                 // $eventRegistration->publish_status = 1;
                 $eventRegistration->qna_start_time = Carbon::parse($request->start_time)->format('H:i:s');
                 $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
                 $activity->type = 'qna';
+                $activity->room_id = $create_room_id;
                 $eventRegistration->save();
 
 
@@ -222,7 +223,7 @@ class UserMobileAppController extends Controller
 
         if ($modelName == 'greeting') {
 
-            if (!LiveChatRegistration::where([['user_id', auth()->user()->id], ['greeting_id', $eventId]])->exists()) {
+            if (!GreetingsRegistration::where([['user_id', auth()->user()->id], ['greeting_id', $eventId], ['payment_status', 1]])->exists()) {
                 $activity = new Activity();
                 $eventRegistration = GreetingsRegistration::find($request->event_registration_id);
                 $event = Greeting::find($eventId);
@@ -230,7 +231,19 @@ class UserMobileAppController extends Controller
                 $eventRegistration->amount = $event->cost;
                 $activity->type = 'greeting';
                 $eventRegistration->save();
+
+                if ($request->payment_method == "wallet") {
+                    $greeting =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('greetings');
+                    Wallet::where('user_id', auth('sanctum')->user()->id)->update(['greetings' => $greeting->greetings - 1]);
+                    GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id], ['greeting_id', $eventId]])->update([
+                        'payment_status' => 1,
+                        'status' => 1,
+                        'payment_method' => "wallet",
+
+                    ]);
+                }
             }
+
             // $notification = Notification::find($request->notification_id);
             // $notification->view_status = 1;
             // $notification->save();

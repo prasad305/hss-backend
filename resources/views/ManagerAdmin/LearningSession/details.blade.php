@@ -184,7 +184,7 @@
                     <form action="{{ route('managerAdmin.learningSession.set_publish', [$event->id]) }}" method="post">
                         @csrf
 
-                        @if ($event->status <= 2)
+                        @if ($event->status < 2)
                             <div class="row">
                                 <div class="mb-3 col-md-3 mb-2">
                                     <label for="start_date" class="form-label">Post Start Date</label>
