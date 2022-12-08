@@ -43,6 +43,9 @@ class AuthController extends Controller
 
         ]);
 
+        $Alluser = User::all();
+
+
         if ($validator->fails()) {
             return response()->json([
                 'validation_errors' => $validator->errors(),
@@ -51,7 +54,7 @@ class AuthController extends Controller
 
 
             $user = User::create([
-                'username' => $request->first_name . now()->timestamp,
+                'username' => "hss" . count($Alluser),
                 'first_name' => $request->first_name,
                 'last_name' => "",
                 'email' => $request->email,
