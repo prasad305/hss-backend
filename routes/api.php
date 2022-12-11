@@ -41,6 +41,9 @@ Route::get('/sdk/createMeeting/{token}', [SdkController::class, 'createMeetingId
 Route::post('/sdk/validate-meeting/{roomId}', [SdkController::class, 'roomValidate']);
 Route::get('/sdk/videoEnd/{room_id}/{token}', [SdkController::class, 'roomRoomEnd']);
 
+Route::post('/sdk/remove-participants', [SdkController::class, 'RemoveParticipantsMeeting']);
+
+
 
 
 

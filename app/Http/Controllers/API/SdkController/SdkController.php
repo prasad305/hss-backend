@@ -40,6 +40,44 @@ class SdkController extends Controller
         return json_encode(array("token" => $jwt));
     }
 
+
+    public function RemoveParticipantsMeeting(Request $request)
+    {
+        $getToken = $this->getToken();
+
+        $curl = curl_init();
+        $data = array(
+            "participantId" => $request->participantId,
+            "roomId" => $request->roomId,
+
+        );
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.videosdk.live/v2/sessions/participants/remove",
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization:' . json_decode($getToken)->token,
+                'Content-Type: application/json'
+            ),
+            CURLOPT_POSTFIELDS => json_encode($data),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        if ($response) {
+            return response()->json([
+                'status' => 200,
+                'message' =>  $response,
+            ]);
+        }
+    }
+
     /**
      * create meeting id
      */

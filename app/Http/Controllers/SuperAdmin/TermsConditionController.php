@@ -4,7 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\TarmsCondition;
+use App\Models\TermAndCondition;
 
 class TermsConditionController extends Controller
 {
@@ -15,8 +15,8 @@ class TermsConditionController extends Controller
      */
     public function index()
     {
-        $termscondition = TarmsCondition::orderBy('id', 'DESC')->first();
-        return view('SuperAdmin.TermsCondition.index',compact('termscondition'));
+        $termscondition = TermAndCondition::orderBy('id', 'DESC')->first();
+        return view('SuperAdmin.TermsCondition.index', compact('termscondition'));
     }
 
     /**
@@ -50,10 +50,10 @@ class TermsConditionController extends Controller
         ]);
 
         try {
-            $termscondition = TarmsCondition::create(
+            $termscondition = TermAndCondition::create(
                 $request->all()
             );
-            if ($ProPurchase) {
+            if ($termscondition) {
                 return response()->json([
                     'success' => true,
                     'message' => 'Terms Condition Add Successfully'
@@ -65,7 +65,6 @@ class TermsConditionController extends Controller
                 'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
             ]);
         }
-
     }
 
     /**
@@ -87,7 +86,7 @@ class TermsConditionController extends Controller
      */
     public function edit($id)
     {
-        $termscondition = TarmsCondition::findOrFail($id);
+        $termscondition = TermAndCondition::findOrFail($id);
         return view('SuperAdmin.TermsCondition.edit', compact('termscondition'));
     }
 
@@ -100,7 +99,7 @@ class TermsConditionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $tarmscondition = TarmsCondition::findOrFail($id);
+        $tarmscondition = TermAndCondition::findOrFail($id);
         $tarmscondition->title = $request->input('title');
         $tarmscondition->details = $request->input('details');
         $tarmscondition->status = $request->input('status');
@@ -127,7 +126,7 @@ class TermsConditionController extends Controller
      */
     public function destroy($id)
     {
-        $deletedata = TarmsCondition::findOrfail($id);
+        $deletedata = TermAndCondition::findOrfail($id);
         try {
             $deletedata->delete();
             return response()->json([

@@ -28,7 +28,7 @@ class Post extends Model
         'status',
     ];
 
-    protected $with = ['star', 'meetup', 'livechat', 'general', 'react', 'learningSession','audition', 'category', 'subCategory', 'fangroup', 'qna'];
+    protected $with = ['star', 'meetup', 'meetup.totalRegisteredMeetupSlot', 'livechat', 'general', 'react', 'learningSession', 'audition', 'category', 'subCategory', 'fangroup', 'qna'];
 
     public function star()
     {
