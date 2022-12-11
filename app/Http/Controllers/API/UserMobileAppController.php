@@ -226,15 +226,15 @@ class UserMobileAppController extends Controller
         if ($modelName == 'greeting') {
 
             if (!GreetingsRegistration::where([['user_id', auth()->user()->id], ['greeting_id', $eventId], ['payment_status', 1]])->exists()) {
-                $activity = new Activity();
+
                 $eventRegistration = GreetingsRegistration::find($request->event_registration_id);
                 $event = Greeting::find($eventId);
                 $eventRegistration->status = 1;
                 $eventRegistration->amount = $event->cost;
-                $activity->type = 'greeting';
                 $eventRegistration->save();
-
                 if ($request->payment_method == "wallet") {
+                    $activity = new Activity();
+                    $activity->type = 'greeting';
                     $greeting =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('greetings');
                     Wallet::where('user_id', auth('sanctum')->user()->id)->update(['greetings' => $greeting->greetings - 1]);
                     GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id], ['greeting_id', $eventId]])->update([

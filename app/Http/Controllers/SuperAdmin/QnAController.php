@@ -23,7 +23,7 @@ class QnAController extends Controller
     public function qnaList($categoryId)
     {
         $postList = QnA::where('category_id', $categoryId)->latest()->get();
-        return view('SuperAdmin.QnA.QnAList', compact('postList'));
+        return view('SuperAdmin.QnA.qnaList', compact('postList'));
     }
     public function qnaDetails($postId)
     {
