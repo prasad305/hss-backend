@@ -231,8 +231,7 @@ class PaymentController extends Controller
 
 
 
-            if($request->modelName == 'audition')
-            {
+            if ($request->modelName == 'audition') {
                 return $this->AuditionRegUpdate($user->id, $request->eventId, "PayTm-mobile");
             }
 
@@ -270,20 +269,19 @@ class PaymentController extends Controller
                 return $this->auditionCertificateUpdate($user->id, $request->eventId, "PayTm-mobile", $request->TXNAMOUNT);
                 // $user_id, $round_info_id, $method, $fee
             }
-            
+
             if ($request->modelName == 'auditionAppeal') {
                 // return $request->eventId();
-                
+
                 return $this->auditionAppealPayment($user->id, $request->eventId, "PayTm-mobile", $request->TXNAMOUNT);
                 // $user_id, $round_info_id, $method, $fee
             }
 
-            if($request->modelName == 'auction')
-            {
+            if ($request->modelName == 'auction') {
                 return $this->auctionPayment($user->id, $request->eventId, "PayTm-mobile");
             }
-            
-            
+
+
 
 
             return "success data received" . "__" . $request->modelName;
@@ -765,7 +763,7 @@ class PaymentController extends Controller
 
         $auditionRoundInfo = AuditionRoundInfo::find($round_info_id);
 
-        
+
 
 
         if (AuditionRoundAppealRegistration::where([['user_id', $user_id], ['audition_id',  $auditionRoundInfo->audition_id], ['round_info_id', $round_info_id]])->first()) {
@@ -786,7 +784,7 @@ class PaymentController extends Controller
             return response()->json([
                 'status' => 200,
                 'appealedRegistration' => $appealedRegistration,
-            ]); 
+            ]);
         }
     }
 
@@ -797,13 +795,13 @@ class PaymentController extends Controller
 
         $biddingInfo = Bidding::where([['auction_id', $event_id], ['user_id', $user_id], ['notify_status', 1]])->first();
 
-       
+
 
         $biddingInfo->payment_status = 1;
         $biddingInfo->applied_status = 1;
         $biddingInfo->update();
 
-        
+
         // ->update([
         //     'payment_status' => 1,
         //     'applied_status' => 1
