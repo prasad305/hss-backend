@@ -1026,11 +1026,13 @@ class UserController extends Controller
     public function registeredSingleMeetup($event_id)
     {
         $regMeetup = MeetupEventRegistration::where([['user_id', auth('sanctum')->user()->id], ['meetup_event_id', $event_id]])->first();
+        $totalRegistered = MeetupEventRegistration::where([['payment_status', 1], ['meetup_event_id', $event_id]])->count();
 
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
             'event' => $regMeetup,
+            'totalRegistered' => $totalRegistered,
         ]);
     }
 
