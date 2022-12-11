@@ -39,9 +39,9 @@
         }
 
         /* .active{
-                                                background-color: goldenrod !important;
-                                                color: white !important;
-                                            } */
+                                                    background-color: goldenrod !important;
+                                                    color: white !important;
+                                                } */
 
         .clockNOte {
             background-color: rgb(29, 29, 29);
@@ -71,8 +71,8 @@
         }
 
         /* .Notifytdx:hover, .lNTS:hover, .rNTS:hover{
-                                             background-color: rgb(255, 153, 0);
-                                            } */
+                                                 background-color: rgb(255, 153, 0);
+                                                } */
 
 
 
@@ -215,7 +215,7 @@
     </div>
     <div class="m-3">
         <div class="card ">
-            @if($greeting->banner)
+            @if ($greeting->banner)
                 <img src="{{ asset($greeting->banner) }}" alt="" class="BannerAGN" />
             @else
                 <a href="{{ asset('demo_image/banner.jpg') }}" target="_blank">
@@ -243,7 +243,7 @@
                                 <span class="text-light buTon-ab ">Cost</span>
                                 <br>
                                 <span class="text-light buTon-abc">
-                                    {{ $greeting->cost }} BDT
+                                    {{ $greeting->cost }} $
                                 </span>
                             </div>
                         </div>
@@ -265,12 +265,13 @@
                         <div class="card px-5 py-3">
                             <div class="row">
                                 <div class="col-xs-6 content-center">
-                                    @if($greeting->star->image)
+                                    @if ($greeting->star->image)
                                         <img src="{{ asset($greeting->star->image) }}"
                                             style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                     @else
                                         <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                            <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                            <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                                style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                         </a>
                                     @endif
                                 </div>
@@ -282,12 +283,13 @@
                             </div>
                             <div class="row py-3">
                                 <div class="col-xs-6 content-center">
-                                    @if($greeting->admin->image)
-                                    <img src="{{ asset($greeting->admin->image) }}"
-                                        style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                    @if ($greeting->admin->image)
+                                        <img src="{{ asset($greeting->admin->image) }}"
+                                            style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                     @else
                                         <a href="{{ asset('demo_image/demo_user.png') }}" target="_blank">
-                                            <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image" style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
+                                            <img src="{{ asset('demo_image/demo_user.png') }}" alt="Demo Image"
+                                                style="height: 80px; width: 80px; border-radius: 50%; border: 2px solid gray" />
                                         </a>
                                     @endif
                                 </div>

@@ -41,7 +41,7 @@
                                 <div class="panel-body pt-1">
                                     <h5 class="text-ellipsis-line-1">{{ $greeting->title }}</h5>
 
-                                    <p class="card-text text-center">Cost : {{ $greeting->cost }} BDT</p>
+                                    <p class="card-text text-center">Cost : {{ $greeting->cost }} $</p>
 
                                     <a href="{{ route('managerAdmin.greeting.show', $greeting->id) }}" type="button"
                                         class="btn btnDetails waves-effect waves-light mb-2">Details <i
