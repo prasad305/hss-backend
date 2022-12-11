@@ -2551,6 +2551,14 @@ class UserController extends Controller
         ]);
     }
 
+   public function getUploadedVideo(Request $request){
+    $videos = LearningSessionAssignment::where([['event_id', $request->event_id], ['user_id', auth()->user()->id]])->count();
+    return response()->json([
+        'status' => 200,
+        'videos' => $videos,
+    ]);
+   }
+
     public function uploadLearningSessionVideo(Request $request)
     {
         // return $request->all();

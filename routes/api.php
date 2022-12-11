@@ -347,6 +347,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
     Route::post('/user/learning-session/video-upload', [UserController::class, 'uploadLearningSessionVideo']);
     Route::post('/user/learning-session/saveCertificateInfo', [UserController::class, 'saveCertificateInfo']);
+    Route::get('/user/learning-session/getUploadedVideo/{event_id}', [UserController::class, 'getUploadedVideo']);
     Route::get('/user/greeting-leraning-certificate/{event_id}', [UserController::class, 'getCertificateData']);
 
     //use this api on react project file path- \src\components\Pages\Profile\profile-components\starProfile\StarChat
