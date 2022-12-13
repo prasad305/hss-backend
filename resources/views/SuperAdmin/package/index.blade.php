@@ -117,7 +117,7 @@
                                     </div>
                                     <div class="card-footer text-muted"
                                         style="color: #f0e25e !important; font-size: 30px; font-weight: 600;">
-                                        Price :: {{ $data->price }} Tk
+                                        Price :: {{ $data->price }} $
                                     </div>
                                 </div>
                             </div>
