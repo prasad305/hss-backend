@@ -2513,34 +2513,26 @@ class UserController extends Controller
 
 
 
-        if ($LearningSessionAssignment->count() <  (int)$request->video['taskNumber']) {
-            $evaluation = LearningSessionEvaluation::where([['event_id', $request->video['learningSessionId']], ['user_id', auth()->user()->id]])->first();
+        $evaluation = LearningSessionEvaluation::where([['event_id', $request->video['learningSessionId']], ['user_id', auth()->user()->id]])->first();
 
-            $learning_video = new LearningSessionAssignment();
-            $learning_video->event_id = $request->video['learningSessionId'];
-            $learning_video->user_id = auth()->user()->id;
-            $learning_video->evaluation_id = $evaluation->id;
+        $learning_video = new LearningSessionAssignment();
+        $learning_video->event_id = $request->video['learningSessionId'];
+        $learning_video->user_id = auth()->user()->id;
+        $learning_video->evaluation_id = $evaluation->id;
 
-            $path = "uploads/videos/learnings/" . time() . rand('0000', '9999') . $request->video['name'] . ".mp4";
+        $path = "uploads/videos/learnings/" . time() . rand('0000', '9999') . $request->video['name'] . ".mp4";
 
-            $learning_video->video = $path;
-            $learning_video->save();
-            $LearningSessionAssignment = LearningSessionAssignment::where([['event_id', $request->video['learningSessionId']], ['user_id', auth()->user()->id]])->get();
+        $learning_video->video = $path;
+        $learning_video->save();
+        $LearningSessionAssignment = LearningSessionAssignment::where([['event_id', $request->video['learningSessionId']], ['user_id', auth()->user()->id]])->get();
 
-            try {
+        try {
 
-                file_put_contents($path, base64_decode($request->video['data'], true));
-            } catch (\Exception $exception) {
-                return response()->json([
-                    'status' => 500,
-                    'message' =>  $exception->getMessage(),
-                ]);
-            }
-        } else {
+            file_put_contents($path, base64_decode($request->video['data'], true));
+        } catch (\Exception $exception) {
             return response()->json([
-                'status' => 300,
-                'message' => 'Video Already Submitted',
-                'assinmentNumber' => $LearningSessionAssignment->count()
+                'status' => 500,
+                'message' =>  $exception->getMessage(),
             ]);
         }
 
