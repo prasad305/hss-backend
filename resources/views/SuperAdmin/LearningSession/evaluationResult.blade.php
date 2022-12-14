@@ -102,7 +102,6 @@
                                 <th>SL</th>
                                 <th>User Name</th>
                                 <th>Videos</th>
-                                <th>Send To User</th>
                                 <th>Status</th>
                             </tr>
                         </thead>

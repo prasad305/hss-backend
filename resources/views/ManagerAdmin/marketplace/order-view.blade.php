@@ -90,7 +90,7 @@
                                 @else
                                     <b>Order Status:</b> <span class="badge badge-success"> Delivered </span><br>
                                 @endif
-                                <b>Total Price: </b> {{ $order->total_price }} Tk
+                                <b>Total Price: </b> {{ $order->total_price }} $
                             </div>
                         </div>
                         <div class="row">
@@ -141,15 +141,15 @@
                                     <table class="table">
                                         <tr>
                                             <th style="width:50%">Subtotal:</th>
-                                            <td>{{ $order->items * $order->unit_price }} Tk</td>
+                                            <td>{{ $order->items * $order->unit_price }} $</td>
                                         </tr>
                                         <tr>
                                             <th>Delivery Charge:</th>
-                                            <td>{{ $order->delivery_charge }} Tk</td>
+                                            <td>{{ $order->delivery_charge }} $</td>
                                         </tr>
                                         <tr>
                                             <th>Total:</th>
-                                            <td>{{ $order->items * $order->unit_price + $order->delivery_charge }} Tk</td>
+                                            <td>{{ $order->items * $order->unit_price + $order->delivery_charge }} $</td>
                                         </tr>
                                     </table>
                                 </div>

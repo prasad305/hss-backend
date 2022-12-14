@@ -19,9 +19,9 @@ class CreateLearningSessionAssignmentsTable extends Migration
             $table->integer('evaluation_id')->nullable();
             $table->integer('user_id')->nullable();
             $table->string('video')->nullable();
-            $table->double('mark',8,2)->default(0);
+            $table->double('mark', 8, 2)->default(0);
             $table->longText('comment')->nullable();
-            $table->integer('status')->default(0);
+            $table->integer('status')->default(0)->comment('1=selected,2=rejected');
             $table->integer('send_to_manager')->default(0);
             $table->integer('send_to_star')->default(0);
             $table->integer('send_to_user')->default(0);

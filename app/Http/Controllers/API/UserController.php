@@ -591,6 +591,7 @@ class UserController extends Controller
         $rejected_videos = LearningSessionAssignment::where([['event_id', $learnigSession->id], ['user_id', auth()->user()->id], ['status', 2], ['send_to_user', 1]])->get();
         $paymentForCertificate = LearningSessionCertificate::where([['event_id', $learnigSession->id], ['user_id', auth()->user()->id], ['payment_status', 1]])->exists();
         $appliedForCertificate = LearningSessionCertificate::where([['event_id', $learnigSession->id], ['user_id', auth()->user()->id]])->exists();
+        $markData = LearningSessionEvaluation::where([['event_id', $learnigSession->id], ['user_id', auth()->user()->id]])->first();
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
@@ -598,6 +599,7 @@ class UserController extends Controller
             'rejectedVideos' => $rejected_videos,
             'paymentForCertificate' => $paymentForCertificate,
             'appliedForCertificate' => $appliedForCertificate,
+            'totalMark' => $markData->total_mark,
         ]);
     }
 
@@ -2511,34 +2513,26 @@ class UserController extends Controller
 
 
 
-        if ($LearningSessionAssignment->count() <  (int)$request->video['taskNumber']) {
-            $evaluation = LearningSessionEvaluation::where([['event_id', $request->video['learningSessionId']], ['user_id', auth()->user()->id]])->first();
+        $evaluation = LearningSessionEvaluation::where([['event_id', $request->video['learningSessionId']], ['user_id', auth()->user()->id]])->first();
 
-            $learning_video = new LearningSessionAssignment();
-            $learning_video->event_id = $request->video['learningSessionId'];
-            $learning_video->user_id = auth()->user()->id;
-            $learning_video->evaluation_id = $evaluation->id;
+        $learning_video = new LearningSessionAssignment();
+        $learning_video->event_id = $request->video['learningSessionId'];
+        $learning_video->user_id = auth()->user()->id;
+        $learning_video->evaluation_id = $evaluation->id;
 
-            $path = "uploads/videos/learnings/" . time() . rand('0000', '9999') . $request->video['name'] . ".mp4";
+        $path = "uploads/videos/learnings/" . time() . rand('0000', '9999') . $request->video['name'] . ".mp4";
 
-            $learning_video->video = $path;
-            $learning_video->save();
-            $LearningSessionAssignment = LearningSessionAssignment::where([['event_id', $request->video['learningSessionId']], ['user_id', auth()->user()->id]])->get();
+        $learning_video->video = $path;
+        $learning_video->save();
+        $LearningSessionAssignment = LearningSessionAssignment::where([['event_id', $request->video['learningSessionId']], ['user_id', auth()->user()->id]])->get();
 
-            try {
+        try {
 
-                file_put_contents($path, base64_decode($request->video['data'], true));
-            } catch (\Exception $exception) {
-                return response()->json([
-                    'status' => 500,
-                    'message' =>  $exception->getMessage(),
-                ]);
-            }
-        } else {
+            file_put_contents($path, base64_decode($request->video['data'], true));
+        } catch (\Exception $exception) {
             return response()->json([
-                'status' => 300,
-                'message' => 'Video Already Submitted',
-                'assinmentNumber' => $LearningSessionAssignment->count()
+                'status' => 500,
+                'message' =>  $exception->getMessage(),
             ]);
         }
 
@@ -2553,13 +2547,14 @@ class UserController extends Controller
         ]);
     }
 
-   public function getUploadedVideo(Request $request){
-    $videos = LearningSessionAssignment::where([['event_id', $request->event_id], ['user_id', auth()->user()->id]])->count();
-    return response()->json([
-        'status' => 200,
-        'videos' => $videos,
-    ]);
-   }
+    public function getUploadedVideo(Request $request)
+    {
+        $videos = LearningSessionAssignment::where([['event_id', $request->event_id], ['user_id', auth()->user()->id]])->get();
+        return response()->json([
+            'status' => 200,
+            'videos' => $videos,
+        ]);
+    }
 
     public function uploadLearningSessionVideo(Request $request)
     {
