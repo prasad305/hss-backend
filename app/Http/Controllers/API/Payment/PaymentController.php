@@ -24,6 +24,7 @@ use App\Models\Activity;
 use App\Models\AuditionCertification;
 use App\Models\Audition\AuditionRoundInfo;
 use App\Models\Audition\AuditionRoundAppealRegistration;
+use App\Models\LearningSessionCertificate;
 use App\Models\Bidding;
 use Error;
 use Illuminate\Support\Facades\Auth;
@@ -280,6 +281,11 @@ class PaymentController extends Controller
             if ($request->modelName == 'auction') {
                 return $this->auctionPayment($user->id, $request->eventId, "PayTm-mobile");
             }
+
+            if ($request->modelName == 'learningSessionCertificate') {
+                return $this->learningSessionCertificate($user->id, $request->eventId, "PayTm-mobile");
+            }
+
 
 
 
@@ -580,15 +586,21 @@ class PaymentController extends Controller
     //for learning session
     public function learningSessionRegUpdate($user_id, $event_id, $method)
     {
-        try {
-            $registerEvent = LearningSessionRegistration::where([['learning_session_id', $event_id], ['user_id', $user_id]])->first();
-            $registerEvent->publish_status = 1;
-            $registerEvent->payment_status = 1;
-            $registerEvent->payment_method = $method;
-            $registerEvent->update();
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
+
+
+        // $registerEvent = LearningSessionRegistration::where([['learning_session_id', $event_id], ['user_id', $user_id]])->first();
+        //     $registerEvent->publish_status = 1;
+        //     $registerEvent->payment_status = 1;
+        //     $registerEvent->payment_method = $method;
+        //     $registerEvent->update();
+
+
+
+        $registerEvent = LearningSessionRegistration::where([['learning_session_id', $event_id], ['user_id', $user_id]])->first();
+        $registerEvent->publish_status = 1;
+        $registerEvent->payment_status = 1;
+        $registerEvent->payment_method = $method;
+        $registerEvent->update();
     }
 
     //for meetup
@@ -606,14 +618,22 @@ class PaymentController extends Controller
     // Marketplace
     public function marketplaceUpdate($user_id, $event_id, $method)
     {
-        try {
-            $registerEvent = MarketplaceOrder::where([['marketplace_id', $event_id], ['user_id', $user_id]])->first();
-            $registerEvent->payment_status = 1;
-            $registerEvent->payment_method = $method;
-            $registerEvent->update();
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
+
+        $registerEvent = MarketplaceOrder::where([['id', $event_id], ['user_id', $user_id]])->first();
+
+        $registerEvent->payment_status = 1;
+        $registerEvent->payment_method = $method;
+        $registerEvent->status = 1;
+        $registerEvent->update();
+
+
+
+        $activity = new Activity();
+        $activity->user_id = $user_id;
+        $activity->event_id = $event_id;
+        $activity->event_registration_id = $registerEvent->id;
+        $activity->type = 'marketplace';
+        $activity->save();
     }
 
     //for souvenir for mobile
@@ -809,6 +829,14 @@ class PaymentController extends Controller
             'status' => 200,
             'biddingInfo' => $biddingInfo,
         ]);
+    }
+
+    function learningSessionCertificate($user_id, $event_id, $method)
+    {
+        $registerEvent = LearningSessionCertificate::where([['event_id', $event_id], ['user_id', $user_id]])->first();
+        $registerEvent->payment_status = 1;
+        $registerEvent->payment_method = $method;
+        $registerEvent->update();
     }
 
     //   <================================Love React Payment end ==================================>

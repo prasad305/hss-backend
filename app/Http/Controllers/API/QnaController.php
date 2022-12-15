@@ -88,7 +88,7 @@ class QnaController extends Controller
             $eventRegistration->publish_status = 1;
             $eventRegistration->payment_method = 'wallet';
             $eventRegistration->payment_date = Carbon::now();
-            $eventRegistration->room_id = $request->room_id;
+            $eventRegistration->room_id = createRoomID();
             $eventRegistration->live_chat_date = $event->event_date;
             $eventRegistration->live_chat_start_time = Carbon::parse($request->start_time)->format('H:i:s');
             $eventRegistration->live_chat_end_time = Carbon::parse($request->end_time)->format('H:i:s');

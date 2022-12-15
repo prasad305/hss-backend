@@ -372,8 +372,8 @@ class LiveChatController extends Controller
 
     public function count()
     {
-        $approved = LiveChat::where([['created_by_id', auth('sanctum')->user()->id], ['status', 1]])->count();
-        $pending = LiveChat::where([['created_by_id', auth('sanctum')->user()->id], ['status', null]])->count();
+        $approved = LiveChat::where([['admin_id', auth('sanctum')->user()->id], ['status', '>', 1]])->count();
+        $pending = LiveChat::where([['admin_id', auth('sanctum')->user()->id], ['status', '<', 2]])->count();
 
         return response()->json([
             'status' => 200,
@@ -384,8 +384,9 @@ class LiveChatController extends Controller
 
     public function count2()
     {
-        $approved = LiveChat::where('star_id', auth('sanctum')->user()->id)->where('star_approve_status', 1)->count();
-        $pending = LiveChat::where('star_id', auth('sanctum')->user()->id)->where('star_approve_status', 0)->count();
+
+        $approved = LiveChat::where('star_id', auth('sanctum')->user()->id)->where('status', '>', 1)->count();
+        $pending = LiveChat::where('star_id', auth('sanctum')->user()->id)->where('status', '<', 2)->count();
 
         return response()->json([
             'status' => 200,

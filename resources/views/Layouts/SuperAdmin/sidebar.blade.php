@@ -223,6 +223,15 @@
                 </p>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ route('superAdmin.auction.index') }}"
+                class="nav-link {{ Request::routeIs('superAdmin.auction.index') ? 'active' : '' }}">
+                <i class="nav-icon fa fa-television"></i>
+                <p>
+                    Auction Instruction and Terms
+                </p>
+            </a>
+        </li>
 
         <li
             class="nav-item {{ Request::routeIs('superAdmin.virtual-tour.index') || Request::routeIs('superAdmin.greeting-type.index') || Request::routeIs('superAdmin.interest-type.index') || Request::routeIs('superAdmin.currency.index') || Request::routeIs('superAdmin.country.index') || Request::routeIs('superAdmin.state.index') || Request::routeIs('superAdmin.city.index') || Request::routeIs('superAdmin.educationlevel.index') || Request::routeIs('superAdmin.occupation.index') ? 'menu-open' : '' }}">

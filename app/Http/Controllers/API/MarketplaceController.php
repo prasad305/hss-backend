@@ -257,12 +257,6 @@ class MarketplaceController extends Controller
 
                 $data->save();
 
-                $marketplace->total_selling += $request->items;
-                $marketplace->save();
-
-
-
-
                 return response()->json([
                     'status' => 200,
                     'message' => 'Order submit Successfully',
@@ -419,6 +413,14 @@ class MarketplaceController extends Controller
         $orderListStatus = MarketplaceOrder::find($id);
         $orderListStatus->status = $status;
         $orderListStatus->save();
+
+        if ($orderListStatus->status == 2) {
+            $marketplace = Marketplace::find($orderListStatus->marketplace_id);
+            Marketplace::where('id', $marketplace->id)->update([
+                'total_selling' => $marketplace->total_selling + $orderListStatus->items,
+            ]);
+        }
+
 
         return response()->json([
             'status' => 200,

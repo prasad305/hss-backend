@@ -65,4 +65,8 @@ class MeetupEvent extends Model
     {
         return $this->hasMany(MeetupEventRegistration::class, 'meetup_event_id');
     }
+    public function totalRegisteredMeetupSlot()
+    {
+        return $this->hasMany(MeetupEventRegistration::class, 'meetup_event_id')->where('payment_status', 1);
+    }
 }
