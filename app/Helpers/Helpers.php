@@ -405,7 +405,7 @@ if (!function_exists('random_code')) {
         if ($type == 'auditionAppeal') {
             auditionAppealPayment($user_id, $event_id, $paymentMethod, $amount);
         }
-        if ($type == 'learning_certificate') {
+        if ($type == 'learningCertificate') {
             learningSessionCertificate($user_id, $event_id, $paymentMethod, $amount);
         }
     }
@@ -563,14 +563,11 @@ if (!function_exists('random_code')) {
     //for learning session
     function learningSessionCertificate($user_id, $event_id, $method)
     {
-        try {
-            $registerEvent = LearningSessionCertificate::where([['event_id', $event_id], ['user_id', $user_id]])->first();
-            $registerEvent->payment_status = 1;
-            $registerEvent->payment_method = $method;
-            $registerEvent->update();
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
+
+        $registerEvent = LearningSessionCertificate::where([['event_id', $event_id], ['user_id', $user_id]])->first();
+        $registerEvent->payment_status = 1;
+        $registerEvent->payment_method = $method;
+        $registerEvent->update();
     }
 
     //for meetup

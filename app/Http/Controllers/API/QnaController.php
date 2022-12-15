@@ -127,6 +127,7 @@ class QnaController extends Controller
             $eventRegistration->card_holder_name = Auth::user()->first_name . " " . Auth::user()->last_name;
             $eventRegistration->amount = $request->fee;
             $eventRegistration->payment_status = 1;
+            $eventRegistration->publish_status = 1;
             $eventRegistration->payment_method = 'wallet';
             $eventRegistration->payment_date = Carbon::now();
             $eventRegistration->save();
@@ -205,7 +206,7 @@ class QnaController extends Controller
             $activity->event_id = $event->id;
             $activity->event_registration_id = $eventRegistration->id;
             $activity->save();
-            
+
             $userWallet = Wallet::where('user_id', Auth::user()->id)->first();
 
             return response()->json([
@@ -215,16 +216,16 @@ class QnaController extends Controller
             ]);
         }
     }
-    public function allInOneMobileQna(){
-        
-        try{
+    public function allInOneMobileQna()
+    {
+
+        try {
             $rejected = QnA::where([['admin_id', auth('sanctum')->user()->id], ['star_approval', 2]])->count();
             $completed = QnA::where([['star_id', auth('sanctum')->user()->id], ['status', 9]])->count();
             $pending = QnA::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 0]])->count();
             $live = QnA::where([['star_id', auth('sanctum')->user()->id], ['star_approval', 1]])->count();
             $all = QnA::where([['star_id', auth('sanctum')->user()->id]])->count();
-        }
-        catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             return $th;
         }
 
@@ -418,7 +419,7 @@ class QnaController extends Controller
     public function count()
     {
         $approved = QnA::where([['admin_id', auth('sanctum')->user()->id], ['status', 2]])->count();
-        $pending = QnA::where([['admin_id', auth('sanctum')->user()->id], ['status', '<', 2],['star_approval', '!=', 2]])->count();
+        $pending = QnA::where([['admin_id', auth('sanctum')->user()->id], ['status', '<', 2], ['star_approval', '!=', 2]])->count();
 
         return response()->json([
             'status' => 200,
@@ -480,7 +481,8 @@ class QnaController extends Controller
 
     // Star Section
 
-    public function star_add_qna_mobile(Request $request){
+    public function star_add_qna_mobile(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:live_chats,title',
             'event_date' => 'required',
@@ -523,37 +525,35 @@ class QnaController extends Controller
             $qna->max_time = $request->input('max_time');
             $qna->time_interval = $request->input('time_interval');
 
-            // Upload Banner started 
-            
-            if($request->banner['type']){
-                try{
+            // Upload Banner started
+
+            if ($request->banner['type']) {
+                try {
                     $originalExtension = str_ireplace("image/", "", $request->banner['type']);
-    
+
                     $folder_path       = 'uploads/images/qna/';
-    
+
                     $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                     $decodedBase64 = $request->banner['data'];
-                
+
                     Image::make($decodedBase64)->save($folder_path . $image_new_name);
                     $location = $folder_path . $image_new_name;
                     $qna->banner = $location;
-                }
-    
-                catch (\Exception $exception) {
+                } catch (\Exception $exception) {
                     return response()->json([
                         "error" => $exception->getMessage(),
                         "status" => "from image",
                     ]);
                 }
             }
-            
+
             // Upload Banner ended
 
 
-            // Upload Video started 
+            // Upload Video started
 
-            if($request->video['type']){
-                try{
+            if ($request->video['type']) {
+                try {
                     $originalExtension = str_ireplace("video/", "", $request->video['type']);
 
                     $folder_path       = 'uploads/videos/qna/';
@@ -562,24 +562,22 @@ class QnaController extends Controller
                     $decodedBase64 = $request->video['data'];
                     $videoPath = $folder_path . $image_new_name;
                     file_put_contents($videoPath, base64_decode($decodedBase64, true));
-                    
+
                     $qna->video = $videoPath;
-                }
-    
-                catch (\Exception $exception) {
+                } catch (\Exception $exception) {
                     return response()->json([
                         "error" => $exception->getMessage(),
                         "status" => "from video",
                     ]);
                 }
             }
-            
+
             // Upload Video ended
-            
+
             $qna->save();
 
 
-            
+
 
 
             return response()->json([
