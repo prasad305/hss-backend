@@ -122,4 +122,144 @@ class SdkController extends Controller
 
         return $request;
     }
+
+    /**
+     * fatch session
+     */
+    public function getSdkAlluser($roomId)
+    {
+
+        $getToken = $this->getToken();
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.videosdk.live/v2/sessions/?roomId=" . $roomId,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization:' . json_decode($getToken)->token,
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+        // return response()->json([
+        //     'status' => 200,
+        //     'data' =>  json_decode,
+        // ]);
+        if ($response) {
+            $allsession = json_decode($response)->data;
+            $singleSession = $allsession[0]->participants;
+
+            return response()->json([
+                'status' => 200,
+                'participants' => $singleSession
+            ]);
+        }
+    }
+
+    /**
+     * meeting screen record
+     */
+    public function meetingRecordStart($roomId)
+    {
+        $getToken = $this->getToken();
+
+        $curl = curl_init();
+        $data = array(
+            "roomId" => $roomId,
+            "templateUrl" => "",
+            "config" => "",
+            "webhookUrl" => "",
+            "awsDirPath" => "s3path",
+        );
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.videosdk.live/v2/recordings/start",
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization:' . json_decode($getToken)->token,
+                'Content-Type: application/json'
+            ),
+            CURLOPT_POSTFIELDS => json_encode($data),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        return $response;
+    }
+
+    /**
+     * meeting record stop
+     */
+    public function meetingRecordStop($roomId)
+    {
+        $getToken = $this->getToken();
+        $curl = curl_init();
+        $data = array(
+            "roomId" => $roomId,
+        );
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.videosdk.live/v2/recordings/end",
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization:' . json_decode($getToken)->token,
+                'Content-Type: application/json'
+            ),
+            CURLOPT_POSTFIELDS => json_encode($data),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        return  $response;
+    }
+
+    /**
+     * meeting record download
+     */
+    public function meetingRecordDownlode($roomId)
+    {
+        $getToken = $this->getToken();
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.videosdk.live/v2/recordings?roomId=" . $roomId,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization:' . json_decode($getToken)->token,
+                'Content-Type: application/json'
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+        return response()->json([
+            'status' => 200,
+            'saveVideo' => json_decode($response)->data
+        ]);
+    }
 }

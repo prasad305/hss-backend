@@ -42,6 +42,12 @@ Route::post('/sdk/validate-meeting/{roomId}', [SdkController::class, 'roomValida
 Route::get('/sdk/videoEnd/{room_id}/{token}', [SdkController::class, 'roomRoomEnd']);
 
 Route::post('/sdk/remove-participants', [SdkController::class, 'RemoveParticipantsMeeting']);
+Route::get('/sdk/sdk-session-id/{roomId}', [SdkController::class, 'getSdkAlluser']);
+Route::get('/sdk/meeting-record-start/{roomId}', [SdkController::class, 'meetingRecordStart']);
+Route::get('/sdk/meeting-record-stop/{roomId}', [SdkController::class, 'meetingRecordStop']);
+Route::get('/sdk/meeting-record-download/{roomId}', [SdkController::class, 'meetingRecordDownlode']);
+
+
 
 
 
