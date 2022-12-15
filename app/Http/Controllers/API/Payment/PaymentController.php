@@ -282,12 +282,11 @@ class PaymentController extends Controller
                 return $this->auctionPayment($user->id, $request->eventId, "PayTm-mobile");
             }
 
-            if($request->modelName == 'learningSessionCertificate')
-            {
+            if ($request->modelName == 'learningSessionCertificate') {
                 return $this->learningSessionCertificate($user->id, $request->eventId, "PayTm-mobile");
             }
-            
-            
+
+
 
 
 
@@ -365,7 +364,7 @@ class PaymentController extends Controller
         $paymentIntent = \Stripe\PaymentIntent::create([
             'amount' => $request->amount * 100,
             'currency' => 'usd',
-            'description' => $user->id . "_" . $request->event_type . '_' . $request->event_id,
+            'description' => $user->id . "_" . $request->event_type . '_' . $request->event_id . "_value_0",
             'customer' => $customer->id,
             'automatic_payment_methods' => [
                 'enabled' => 'true',
@@ -413,9 +412,9 @@ class PaymentController extends Controller
             'discsount_amount' => 0,
             'disc_percent' => 0,
             'client_ip' => "192.168.0.1",
-            'customer_name' => "dad",
+            'customer_name' => $user->first_name,
             'customer_phone' => "04545674654",
-            'email' => "dadad@gaml.com",
+            'email' => $user->email,
             'customer_address' => "dhaka",
             'customer_city' => "dhaka",
             'customer_state' => "dhaka",
@@ -449,7 +448,6 @@ class PaymentController extends Controller
             'event_id' => $paymentData->value3,
             'txn_id' => $paymentData->order_id,
             'txn_amount' => $paymentData->payable_amount,
-            'amount' => $paymentData->payable_amount,
             'currency' => "BDT",
             'bank_name' => $paymentData->method,
             'resp_msg' => "shurjo-Payment",
@@ -598,11 +596,11 @@ class PaymentController extends Controller
 
 
 
-            $registerEvent = LearningSessionRegistration::where([['learning_session_id', $event_id], ['user_id', $user_id]])->first();
-            $registerEvent->publish_status = 1;
-            $registerEvent->payment_status = 1;
-            $registerEvent->payment_method = $method;
-            $registerEvent->update();
+        $registerEvent = LearningSessionRegistration::where([['learning_session_id', $event_id], ['user_id', $user_id]])->first();
+        $registerEvent->publish_status = 1;
+        $registerEvent->payment_status = 1;
+        $registerEvent->payment_method = $method;
+        $registerEvent->update();
     }
 
     //for meetup
@@ -620,24 +618,22 @@ class PaymentController extends Controller
     // Marketplace
     public function marketplaceUpdate($user_id, $event_id, $method)
     {
-        
-            $registerEvent = MarketplaceOrder::where([['id', $event_id], ['user_id', $user_id]])->first();
-            
-            $registerEvent->payment_status = 1;
-            $registerEvent->payment_method = $method;
-            $registerEvent->status = 1;
-            $registerEvent->update();
+
+        $registerEvent = MarketplaceOrder::where([['id', $event_id], ['user_id', $user_id]])->first();
+
+        $registerEvent->payment_status = 1;
+        $registerEvent->payment_method = $method;
+        $registerEvent->status = 1;
+        $registerEvent->update();
 
 
 
-            $activity = new Activity();
-            $activity->user_id = $user_id;
-            $activity->event_id = $event_id;
-            $activity->event_registration_id = $registerEvent->id;
-            $activity->type = 'marketplace';
-            $activity->save();
-
-
+        $activity = new Activity();
+        $activity->user_id = $user_id;
+        $activity->event_id = $event_id;
+        $activity->event_registration_id = $registerEvent->id;
+        $activity->type = 'marketplace';
+        $activity->save();
     }
 
     //for souvenir for mobile
