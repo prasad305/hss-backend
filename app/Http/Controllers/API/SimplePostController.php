@@ -7,11 +7,14 @@ use App\Models\LearningSession;
 use Illuminate\Http\Request;
 use App\Models\SimplePost;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
 use Vonage\Client\Exception\Validation;
 use Illuminate\Support\Str;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class SimplePostController extends Controller
 {
@@ -167,10 +170,16 @@ class SimplePostController extends Controller
         }
         $post->save();
 
+        $starInfo = getStarInfo($post->star_id);
+        $senderInfo = getAdminInfo($post->admin_id);
+        
+        Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
+        // Mail::to($starInfo->email)->send(new PostNotification($post));
+
         return response()->json([
             'status' => 200,
             'message' => 'Post Added',
-            'post' => $post,
+            'post' => $starInfo,
         ]);
     }
     public function simplePostUpdate(Request $request, $id)
@@ -690,6 +699,13 @@ class SimplePostController extends Controller
             $npost->details = $post->description;
             $npost->save();
         }
+
+        $adminInfo = User::find($post->admin_id);
+        $senderInfo = User::find($post->star_id);
+        
+        Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
+        // Mail::to($adminInfo->email)->send(new PostNotification($post));
+
 
         return response()->json([
             'status' => 200,

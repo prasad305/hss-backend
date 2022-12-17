@@ -701,4 +701,20 @@ if (!function_exists('random_code')) {
             'event_id' => $event_id,
         ]);
     }
+
+    function getStarInfo($id)
+    {
+        $star = User::findOrFail($id);
+        return $star;
+    }
+    function getAdminInfo($id)
+    {
+        $admin = User::findOrFail($id);
+        return $admin;
+    }
+    function getManagerInfo($id)
+    {
+        $manager = User::findOrFail($id);
+        return $manager;
+    }
 }
