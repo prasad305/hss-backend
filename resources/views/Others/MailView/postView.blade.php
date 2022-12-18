@@ -10,6 +10,12 @@
             text-decoration: underline !important;
         }
     </style>
+  <link
+         href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+         rel="stylesheet"
+         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+         crossorigin="anonymous"
+      />
 </head>
 
 <body marginheight="0" topmargin="0" marginwidth="0" style="margin: 0px; background-color: #f2f3f8;" leftmargin="0">
@@ -49,19 +55,25 @@
                                     <td style="padding:0 35px;padding-top:20px">
                                         <h2
                                             style="color:#1e1e2d; font-weight:500; margin:0;font-size:25px;font-family:'Rubik',sans-serif;">
-                                            <strong>Post Title = </strong>  {{$postInfo->title}}
-                                            <br>
-                                            <strong>Post By = </strong>  {{$senderInfo->username}}
+                                            {{$senderInfo->category->name}}
                                         </h2>
                                         <span
-                                            style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;"></span>
+                                            style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;">
+                                        </span>
+                                        <br>
+                                        <p style="color:#455056; font-weight:bold">
+                                            Post title : {{$postInfo->title}}
+                                        </p>
+
                                         <p style="color:#455056; font-size:15px;line-height:24px; margin:2px 40px;">
-                                            <strong>Post Description = </strong> {!! $postInfo->description !!}
+                                            Post Description : {!! $postInfo->description !!}
                                         </p>
 
                                         <div href="javascript:void(0);"
                                             style="background:#ececec;text-decoration:none !important; font-weight:500; margin-top:35px; color:rgb(0, 0, 0);text-transform:uppercase; font-size:14px;padding:5px 20px;display:inline-block;border-radius:5px;">
-                                            Thank You 
+                                            Posted By {{$senderInfo->first_name}} {{$senderInfo->last_name}} , Thank You
+                                            <br>
+                                            {{ date("F j, Y, g:i a") }}
                                         </div>
                                     </td>
                                 </tr>

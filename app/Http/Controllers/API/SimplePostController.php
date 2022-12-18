@@ -174,12 +174,12 @@ class SimplePostController extends Controller
         $senderInfo = getAdminInfo($post->admin_id);
         
         Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
-        // Mail::to($starInfo->email)->send(new PostNotification($post));
+        // Mail::to($starInfo->email)->send(new PostNotification($post,$senderInfo));
 
         return response()->json([
             'status' => 200,
             'message' => 'Post Added',
-            'post' => $starInfo,
+            'post' => $post,
         ]);
     }
     public function simplePostUpdate(Request $request, $id)
@@ -444,6 +444,7 @@ class SimplePostController extends Controller
         if ($spost->type == 'paid') {
             $spost->star_approval = 1;
             $spost->update();
+
         } else {
             if ($spost->status != 1) {
                 $spost->status = 1;
@@ -471,7 +472,10 @@ class SimplePostController extends Controller
                 $post->delete();
             }
         }
-
+        $managerInfo = getManagerInfo(auth('sanctum')->user()->category_id);
+        $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+        Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
+        // Mail::to($managerInfo->email)->send(new PostNotification($spost,$senderInfo));
 
         return response()->json([
             'status' => 200,
@@ -700,11 +704,15 @@ class SimplePostController extends Controller
             $npost->save();
         }
 
-        $adminInfo = User::find($post->admin_id);
-        $senderInfo = User::find($post->star_id);
+        $adminInfo = getAdminInfo($post->admin_id);
+        $senderInfo = getStarInfo($post->star_id);
+        $managerInfo = getManagerInfo(auth('sanctum')->user()->category_id);
+        
+
         
         Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
-        // Mail::to($adminInfo->email)->send(new PostNotification($post));
+        Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($post,$senderInfo));
+        // Mail::to([$adminInfo->email,$managerInfo->email])->send(new PostNotification($post,$senderInfo));
 
 
         return response()->json([

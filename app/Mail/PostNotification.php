@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class PostNotification extends Mailable
+class PostNotification extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -34,6 +34,6 @@ class PostNotification extends Mailable
     {
         $postInfo = $this->postInfo;
         $senderInfo = $this->senderInfo;
-        return $this->subject('Create Post')->view('Others.MailView.postView', compact('postInfo','senderInfo'));
+        return $this->subject('Approve Post')->view('Others.MailView.postView', compact('postInfo','senderInfo'));
     }
 }

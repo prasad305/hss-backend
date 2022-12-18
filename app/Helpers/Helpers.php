@@ -704,17 +704,28 @@ if (!function_exists('random_code')) {
 
     function getStarInfo($id)
     {
-        $star = User::findOrFail($id);
+        $star = User::with('category')->findOrFail($id);
         return $star;
     }
     function getAdminInfo($id)
     {
-        $admin = User::findOrFail($id);
+        $admin = User::with('category')->findOrFail($id);
         return $admin;
     }
+    function getManagerInfoFromCategory($cat_id)
+    {
+        $manager = User::with('category')->where('category_id',$cat_id)->where('user_type','manager-admin')->first();
+        return $manager;
+    }
+    
     function getManagerInfo($id)
     {
-        $manager = User::findOrFail($id);
+        $manager = User::with('category')->where('id',$id)->where('user_type','manager-admin')->first();
         return $manager;
+    }
+    function getUserInfo()
+    {
+        $user = User::where('user_type','user')->get();
+        return $user;
     }
 }

@@ -9,6 +9,8 @@ use App\Models\SuperStar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class SimplePostController extends Controller
 {
@@ -147,6 +149,15 @@ class SimplePostController extends Controller
             //Remove post //
             $post = Post::where('event_id', $id)->first();
             $post->delete();
+        }
+
+
+        $userInfo = getUserInfo();
+        $senderInfo = getManagerInfo(auth()->user()->id);
+        
+        foreach ($userInfo as $key => $data) {
+            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
+            // Mail::to($data->email)->send(new PostNotification($post,$senderInfo));
         }
 
         return redirect()->back()->with('success', 'Published');
