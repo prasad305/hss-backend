@@ -112,7 +112,7 @@ class StarScheduleController extends Controller
     public function current_month_schedule_list()
     {
 
-        $schedule = Schedule::select(['event_type as title','date as startDate','from','to'])->whereBetween('date',
+        $schedule = Schedule::select(['event_type as title','date as startDate','from','to' , 'id'])->whereBetween('date',
         [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->where('star_id',auth('sanctum')->user()->id)->get();
 
         return response()->json([
@@ -134,5 +134,34 @@ class StarScheduleController extends Controller
             'status' => 200,
             'schedules' => $schedules,
         ]);
+    }
+    public function deleteSchedule($id){
+        $schedule = Schedule::where('id', $id)->delete();
+        if($schedule){
+            return response()->json([
+                'status'=>200,
+                'message'=>'Deleted',
+            ]);
+        }
+    }
+    public function addSchedule(Request $request){
+
+        $schedule = new Schedule();
+        $schedule->admin_id = auth('sanctum')->user()->parent_user;
+        $schedule->star_id = auth('sanctum')->user()->id;
+        $schedule->event_type = $request->input('eventType');
+        $schedule->from = Carbon::parse($request->input('startTime'));
+        $schedule->to = Carbon::parse($request->input('endTime'));
+        $schedule->date = Carbon::parse($request->input('event_date'));
+        $schedule->month = Carbon::parse($request['eventDate'])->format('M');
+        $schedule->save();
+
+        if($schedule){
+            return response()->json([
+                'status' => 200,
+                'message' => 'Schedule Added Successfully',
+            ]);
+        }
+        
     }
 }
