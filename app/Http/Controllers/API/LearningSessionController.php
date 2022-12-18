@@ -13,6 +13,8 @@ use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class LearningSessionController extends Controller
 {
@@ -122,6 +124,10 @@ class LearningSessionController extends Controller
 
             $learningSession->save();
 
+            $starInfo = getStarInfo($learningSession->star_id);
+            $senderInfo = getAdminInfo($learningSession->admin_id);
+            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
+            // Mail::to($starInfo->email)->send(new PostNotification($learningSession,$senderInfo));
 
             return response()->json([
                 'status' => 200,
@@ -846,6 +852,15 @@ class LearningSessionController extends Controller
             $learningSession->save();
 
 
+            $adminInfo = getAdminInfo($learningSession->admin_id);
+            $senderInfo = getStarInfo($learningSession->star_id);
+            $managerInfo = getManagerInfo(auth('sanctum')->user()->category_id);
+        
+            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
+            Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
+            // Mail::to([$adminInfo->email,$managerInfo->email])->send(new PostNotification($learningSession,$senderInfo));
+
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Learning Session Added',
@@ -1085,6 +1100,12 @@ class LearningSessionController extends Controller
         $learningSession->status = 1;
 
         $learningSession->update();
+
+        $managerInfo = getManagerInfo(auth('sanctum')->user()->category_id);
+        $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+        Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
+        // Mail::to($managerInfo->email)->send(new PostNotification($learningSession,$senderInfo));
+
 
         return response()->json([
             'status' => 200,
