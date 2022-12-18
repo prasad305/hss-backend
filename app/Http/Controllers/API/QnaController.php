@@ -647,25 +647,25 @@ class QnaController extends Controller
             if ($request->hasfile('image')) {
                 $destination = $qna->banner;
                 if (File::exists($destination)) {
-                    File::delete($destination);
+                    // File::delete($destination);
                 }
                 $file = $request->file('image');
                 $extension = $file->getClientOriginalExtension();
                 $filename = 'uploads/images/qna/' . time() . '.' . $extension;
 
-                Image::make($file)->resize(900, 400)->save($filename, 100);
+                // Image::make($file)->resize(900, 400)->save($filename, 100);
                 $qna->banner = $filename;
             }
             if ($request->hasFile('video')) {
                 $destination = $qna->video;
                 if (File::exists($destination)) {
-                    File::delete($destination);
+                    // File::delete($destination);
                 }
 
                 $file        = $request->file('video');
                 $path        = 'uploads/videos/qna';
                 $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
-                $file->move($path, $file_name);
+                // $file->move($path, $file_name);
                 $qna->video = $path . '/' . $file_name;
             }
 
@@ -673,7 +673,7 @@ class QnaController extends Controller
                 $qna->banner = $request->image_path;
             }
 
-            $qna->save();
+            // $qna->save();
 
 
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
