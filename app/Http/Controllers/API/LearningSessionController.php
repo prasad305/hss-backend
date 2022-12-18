@@ -930,6 +930,7 @@ class LearningSessionController extends Controller
 
             return response()->json([
                 'status' => 200,
+                'event_status' => $learning_session->status,
                 'message' => 'Learning Session Updated',
             ]);
         }

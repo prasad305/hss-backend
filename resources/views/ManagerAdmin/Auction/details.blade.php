@@ -79,7 +79,8 @@
                     <div class="col-sm-12 col-md-6 col-lg-4 mb-2">
                         <div class="card p-3">
                             <h5>Date</h5>
-                            <h6 class="text-warning">{{ \Carbon\Carbon::parse($product->created_at)->format('d F,Y') }}
+                            <h6 class="text-warning">{{ \Carbon\Carbon::parse($product->bid_from)->format('d F,Y') }} -
+                                {{ \Carbon\Carbon::parse($product->bid_to)->format('d F,Y') }}
                             </h6>
                         </div>
                     </div>
@@ -87,7 +88,7 @@
                     <div class="col-sm-12 col-md-6 col-lg-4 mb-2">
                         <div class="card p-3">
                             <h5>Time</h5>
-                            <h6 class="text-warning">BID
+                            <h6 class="text-warning">
                                 {{ \Carbon\Carbon::parse($product->bid_from)->format('h:i A') }} -
                                 End {{ \Carbon\Carbon::parse($product->bid_to)->format('h:i A') }}
                             </h6>
@@ -238,7 +239,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                    success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })
