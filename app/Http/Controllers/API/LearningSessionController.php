@@ -854,7 +854,7 @@ class LearningSessionController extends Controller
 
             $adminInfo = getAdminInfo($learningSession->admin_id);
             $senderInfo = getStarInfo($learningSession->star_id);
-            $managerInfo = getManagerInfo(auth('sanctum')->user()->category_id);
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
         
             Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
             Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
@@ -1103,7 +1103,7 @@ class LearningSessionController extends Controller
 
         $learningSession->update();
 
-        $managerInfo = getManagerInfo(auth('sanctum')->user()->category_id);
+        $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
         $senderInfo = getStarInfo(auth('sanctum')->user()->id);
         Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
         // Mail::to($managerInfo->email)->send(new PostNotification($learningSession,$senderInfo));

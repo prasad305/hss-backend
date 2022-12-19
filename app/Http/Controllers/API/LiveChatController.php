@@ -16,6 +16,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class LiveChatController extends Controller
 {
@@ -84,7 +86,14 @@ class LiveChatController extends Controller
     {
         $approveLiveChat = LiveChat::find($id);
         $approveLiveChat->status = 1;
-        $approveLiveChat->update();
+        $starApproveResult = $approveLiveChat->update();
+
+        if($starApproveResult){
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+            Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($approveLiveChat,$senderInfo));
+                    // Mail::to($managerInfo->email)->send(new PostNotification($approveLiveChat,$senderInfo));
+        }
 
         return response()->json([
             'status' => 200,
@@ -197,7 +206,14 @@ class LiveChatController extends Controller
                 $liveChat->banner = $filename;
             }
 
-            $liveChat->save();
+           $adminAddResult =  $liveChat->save();
+
+           if($adminAddResult){
+                $starInfo = getStarInfo($liveChat->star_id);
+                $senderInfo = getAdminInfo($liveChat->admin_id);
+                Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($liveChat,$senderInfo));
+                        // Mail::to($starInfo->email)->send(new PostNotification($liveChat,$senderInfo));
+           }
 
 
             return response()->json([
@@ -528,7 +544,17 @@ class LiveChatController extends Controller
                 $liveChat->banner = $request->image_path;
             }
 
-            $liveChat->save();
+            $starAddResult = $liveChat->save();
+            if($starAddResult){
+                $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+                $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+
+                Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($liveChat,$senderInfo));
+                Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($liveChat,$senderInfo));
+                // Mail::to($adminInfo->email)->send(new PostNotification($liveChat,$senderInfo));
+                // Mail::to($managerInfo->email)->send(new PostNotification($liveChat,$senderInfo));
+            }
 
 
             return response()->json([

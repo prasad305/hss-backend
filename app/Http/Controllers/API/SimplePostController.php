@@ -472,7 +472,7 @@ class SimplePostController extends Controller
                 $post->delete();
             }
         }
-        $managerInfo = getManagerInfo(auth('sanctum')->user()->category_id);
+        $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
         $senderInfo = getStarInfo(auth('sanctum')->user()->id);
         Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
         // Mail::to($managerInfo->email)->send(new PostNotification($spost,$senderInfo));
@@ -706,7 +706,7 @@ class SimplePostController extends Controller
 
         $adminInfo = getAdminInfo($post->admin_id);
         $senderInfo = getStarInfo($post->star_id);
-        $managerInfo = getManagerInfo(auth('sanctum')->user()->category_id);
+        $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
         
 
         

@@ -12,6 +12,8 @@ use Intervention\Image\ImageManagerStatic as Image;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class MarketplaceController extends Controller
 {
@@ -157,6 +159,14 @@ class MarketplaceController extends Controller
         {
             $spost->status = 0;
             $spost->update();
+        }
+
+        $userInfo = getUserInfo();
+        $senderInfo = getManagerInfo(auth()->user()->id);
+        
+        foreach ($userInfo as $key => $data) {
+            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
+            // Mail::to($data->email)->send(new PostNotification($spost,$senderInfo));
         }
 
         return redirect()->back()->with('success', 'Published');
