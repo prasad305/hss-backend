@@ -289,8 +289,7 @@
                                     {{-- @dd($PDF['fullName']) --}}
                                     <div class="signature">
                                         <div class="sign">
-                                            <img src=" {{ asset('http://localhost:8000/' . $PDF['signature']) }}"
-                                                alt="" />
+                                            <img src=" {{ asset($PDF['signature']) }}" alt="" />
                                         </div>
                                         <span>{{ $PDF['name'] }}</span> <br />
                                         <small>Super Judge</small> <br />
@@ -307,8 +306,7 @@
                             <th>
                                 <div class="signature">
                                     <div class="sign">
-                                        <img src=" {{ asset('http://localhost:8000/' . $PDF['signature']) }}"
-                                            alt="" />
+                                        <img src=" {{ asset($PDF['signature']) }}" alt="" />
                                     </div>
                                     <span>{{ $PDF['name'] }}</span> <br />
                                     <small>Judge</small> <br />
