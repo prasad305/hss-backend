@@ -682,7 +682,8 @@ class QnaController extends Controller
 
             Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($qna,$senderInfo));
             Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($qna,$senderInfo));
-            // Mail::to([$adminInfo->email,$managerInfo->email])->send(new PostNotification($qna,$senderInfo));
+            // Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
+            // Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
 
             return response()->json([
                 'status' => 200,

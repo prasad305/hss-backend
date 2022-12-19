@@ -712,7 +712,8 @@ class SimplePostController extends Controller
         
         Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
         Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($post,$senderInfo));
-        // Mail::to([$adminInfo->email,$managerInfo->email])->send(new PostNotification($post,$senderInfo));
+        // Mail::to($adminInfo->email)->send(new PostNotification($post,$senderInfo));
+        // Mail::to($managerInfo->email)->send(new PostNotification($post,$senderInfo));
 
 
         return response()->json([
