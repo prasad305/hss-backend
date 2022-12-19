@@ -371,8 +371,9 @@ class UserController extends Controller
             ->whereIn('type', ['fangroup', 'audition'])
             ->orWhereIn('star_id', $selectedSubSubCat)
             ->orWhereIn('sub_category_id', $selectedSubCat)
-            ->orderBy('id', 'DESC')->paginate($limit)
-            ->whereIn('category_id', $selectedCat);
+            ->whereIn('category_id', $selectedCat)
+            ->whereIn('post_end_date', '>=', Carbon::now()->format('Y-m-d H:i:s'))
+            ->orderBy('id', 'DESC')->paginate($limit);
 
         // if (isset($selectedSubCat)) {
         //     $sub_cat_post = Post::select("*")

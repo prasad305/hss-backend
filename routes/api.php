@@ -180,6 +180,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/shurjo-payment-status/{order_id}', [PaymentController::class, 'shurjoPaymentStatus']);
 
 
+
     //stripe mobile
     Route::post('/stripe-make-mobile-payment', [PaymentController::class, 'stripePaymentMobile']);
 
