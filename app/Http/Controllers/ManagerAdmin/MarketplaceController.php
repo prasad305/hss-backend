@@ -153,7 +153,16 @@ class MarketplaceController extends Controller
         if($spost->status != 1)
         {
             $spost->status = 1;
-            $spost->update();
+            $managerPublish = $spost->update();
+            if($managerPublish){
+                $userInfo = getUserInfo();
+                $senderInfo = getManagerInfo(auth()->user()->id);
+                
+                foreach ($userInfo as $key => $data) {
+                    Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
+                    // Mail::to($data->email)->send(new PostNotification($spost,$senderInfo));
+                }
+            }
         }
         else
         {
@@ -161,13 +170,7 @@ class MarketplaceController extends Controller
             $spost->update();
         }
 
-        $userInfo = getUserInfo();
-        $senderInfo = getManagerInfo(auth()->user()->id);
         
-        foreach ($userInfo as $key => $data) {
-            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
-            // Mail::to($data->email)->send(new PostNotification($spost,$senderInfo));
-        }
 
         return redirect()->back()->with('success', 'Published');
 

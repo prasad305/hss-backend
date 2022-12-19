@@ -141,7 +141,16 @@ class SimplePostController extends Controller
             $post->details = $spost->description;
             $post->status = 1;
             $post->sub_category_id = $spost->subcategory_id;
-            $post->save();
+            $publishManager = $post->save();
+            if($publishManager){
+                $userInfo = getUserInfo();
+                $senderInfo = getManagerInfo(auth()->user()->id);
+                
+                foreach ($userInfo as $key => $data) {
+                    Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
+                    // Mail::to($data->email)->send(new PostNotification($post,$senderInfo));
+                }
+            }
         } else {
             $spost->status = 0;
             $spost->update();
@@ -149,15 +158,6 @@ class SimplePostController extends Controller
             //Remove post //
             $post = Post::where('event_id', $id)->first();
             $post->delete();
-        }
-
-
-        $userInfo = getUserInfo();
-        $senderInfo = getManagerInfo(auth()->user()->id);
-        
-        foreach ($userInfo as $key => $data) {
-            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
-            // Mail::to($data->email)->send(new PostNotification($post,$senderInfo));
         }
 
         return redirect()->back()->with('success', 'Published');

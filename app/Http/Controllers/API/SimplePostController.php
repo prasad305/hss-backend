@@ -168,13 +168,15 @@ class SimplePostController extends Controller
             $file->move($path, $file_name);
             $post->thumbnail = $path . '/' . $file_name;
         }
-        $post->save();
-
-        $starInfo = getStarInfo($post->star_id);
-        $senderInfo = getAdminInfo($post->admin_id);
+        $adminAddResult = $post->save();
+        if($adminAddResult){
+            $starInfo = getStarInfo($post->star_id);
+            $senderInfo = getAdminInfo($post->admin_id);
+            
+            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
+            // Mail::to($starInfo->email)->send(new PostNotification($post,$senderInfo));
+        }
         
-        Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
-        // Mail::to($starInfo->email)->send(new PostNotification($post,$senderInfo));
 
         return response()->json([
             'status' => 200,
@@ -462,7 +464,13 @@ class SimplePostController extends Controller
                 $post->title = $spost->title;
                 $post->status = 1;
                 $post->details = $spost->description;
-                $post->save();
+                $approveStar = $post->save();
+                if($approveStar){
+                    $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                    $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+                    Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
+                    // Mail::to($managerInfo->email)->send(new PostNotification($spost,$senderInfo));
+                }
             } else {
                 $spost->status = 0;
                 $spost->update();
@@ -472,10 +480,7 @@ class SimplePostController extends Controller
                 $post->delete();
             }
         }
-        $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
-        $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-        Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
-        // Mail::to($managerInfo->email)->send(new PostNotification($spost,$senderInfo));
+        
 
         return response()->json([
             'status' => 200,
@@ -686,7 +691,19 @@ class SimplePostController extends Controller
             $post->thumbnail = $path . '/' . $file_name;
         }
 
-        $post->save();
+        $starAddResult = $post->save();
+        if($adminAddResult){
+            $adminInfo = getAdminInfo($post->admin_id);
+            $senderInfo = getStarInfo($post->star_id);
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            
+
+            
+            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
+            Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($post,$senderInfo));
+            // Mail::to($adminInfo->email)->send(new PostNotification($post,$senderInfo));
+            // Mail::to($managerInfo->email)->send(new PostNotification($post,$senderInfo));
+        }
 
         if ($request->input('type') == 'free') {
 
@@ -704,16 +721,7 @@ class SimplePostController extends Controller
             $npost->save();
         }
 
-        $adminInfo = getAdminInfo($post->admin_id);
-        $senderInfo = getStarInfo($post->star_id);
-        $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
         
-
-        
-        Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
-        Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($post,$senderInfo));
-        // Mail::to($adminInfo->email)->send(new PostNotification($post,$senderInfo));
-        // Mail::to($managerInfo->email)->send(new PostNotification($post,$senderInfo));
 
 
         return response()->json([
