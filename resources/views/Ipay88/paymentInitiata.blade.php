@@ -137,7 +137,7 @@
 
 
     <form action="{{ url('https://payment.ipay88.com.my/epayment/entry.asp') }}" method="post" id="myForm">
-
+        @csrf
         <INPUT type="hidden" name="MerchantCode" value={{ $merchantCode }}><br>
 
         <INPUT type="hidden" name="PaymentId" value={{ $paymentFor }}><br>

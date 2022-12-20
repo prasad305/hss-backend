@@ -48,7 +48,7 @@ Route::get('/sdk/meeting-record-stop/{roomId}', [SdkController::class, 'meetingR
 Route::get('/sdk/meeting-record-download/{roomId}', [SdkController::class, 'meetingRecordDownlode']);
 
 
-
+Route::post('/ipay88-success', [PaymentController::class, 'ipay88PaymentSuccess']);
 
 
 

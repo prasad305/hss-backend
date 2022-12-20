@@ -499,7 +499,37 @@ class PaymentController extends Controller
     //--------------------shurjo pay end------------------------
 
     //-------------------ipay88 start--------------------------
-    public function ipayInitiate($userId, $amount, $eventName, $eventId, $valu)
+    //ipay88 payment success backend responce
+    public function ipay88PaymentSuccess(Request $request)
+    {
+
+        $extraData = explode('_', $request->Xfield1);
+        $userId = $extraData[0];
+        $event_type = $extraData[1];
+        $event_id = $extraData[2];
+        $extra_value = $extraData[3];
+
+        Transaction::create([
+            'user_id' => $userId,
+            'order_id' => $request->RefNo,
+            'txn_id' => $request->TransId,
+            'currency' => $request->Currency,
+            'txn_amount' => $request->Amount,
+            'status' => $request->Status,
+            'event' => $event_type,
+            'event_id' =>  $event_id,
+            'bank_name' => $request->S_bankname,
+            'resp_msg' => $request->Xfield1,
+
+        ]);
+
+
+        return resgistationSuccessUpdate($userId, $event_type, $event_id, "ipay88", $request->Amount, $extra_value);
+    }
+
+
+    //payment initiate
+    public function ipayInitiate($userId, $amount, $eventName, $eventId, $valu, $for = null)
     {
 
 
@@ -522,10 +552,18 @@ class PaymentController extends Controller
     }
 
 
-
+    //signature make
     public function ipayMakeSignatur($string)
     {
         return hash('sha256', $string);
+    }
+
+    //payment success view
+    public function iPayPaymentSuccess($order_id)
+    {
+        $paymentData = Transaction::where('order_id', $order_id)->first();
+
+        return view('Ipay88.iPaymentSuccess', compact('paymentData'));
     }
     //-------------------ipay88 end----------------------------
 
