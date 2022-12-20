@@ -23,6 +23,8 @@ use App\Models\WildCard;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -324,7 +326,16 @@ class AuditionController extends Controller
                 'post_end_date' => 'required',
             ]);
             $audition->status = 3;
-            $audition->update();
+            $publishManager = $audition->update();
+            if($publishManager){
+                $userInfo = getUserInfo();
+                $senderInfo = getManagerInfo(auth()->user()->id);
+                
+                foreach ($userInfo as $key => $data) {
+                    Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($audition,$senderInfo));
+                    // Mail::to($data->email)->send(new PostNotification($audition,$senderInfo));
+                }
+            }
 
             $judges = [];
 

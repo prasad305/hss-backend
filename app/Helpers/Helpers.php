@@ -702,6 +702,8 @@ if (!function_exists('random_code')) {
         ]);
     }
 
+// Mailer Function
+
     function getStarInfo($id)
     {
         $star = User::with('category')->findOrFail($id);
@@ -728,4 +730,7 @@ if (!function_exists('random_code')) {
         $user = User::where('user_type','user')->get();
         return $user;
     }
+
+
+
 }
