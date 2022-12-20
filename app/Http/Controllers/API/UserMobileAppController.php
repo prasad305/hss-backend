@@ -473,9 +473,9 @@ class UserMobileAppController extends Controller
 
 
             $user->save();
-            if ($request->img['oldImage'] != "") {
-                File::delete($request->img['oldImage']);
-            }
+            // if ($request->img['oldImage'] != "") {
+            //     File::delete($request->img['oldImage']);
+            // }
             return response()->json([
                 "message" => $request->img['for'] . " updated",
                 "status" => "200",
