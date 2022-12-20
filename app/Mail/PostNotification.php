@@ -34,6 +34,6 @@ class PostNotification extends Mailable implements ShouldQueue
     {
         $postInfo = $this->postInfo;
         $senderInfo = $this->senderInfo;
-        return $this->subject('Approve Post')->view('Others.MailView.postView', compact('postInfo','senderInfo'));
+        return $this->subject('New Post')->view('Others.MailView.postView', compact('postInfo','senderInfo'));
     }
 }

@@ -445,13 +445,20 @@ class SimplePostController extends Controller
 
         if ($spost->type == 'paid') {
             $spost->star_approval = 1;
-            $spost->update();
+            $approveStar = $spost->update();
 
+            if($approveStar){
+                $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+                Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
+                // Mail::to($managerInfo->email)->send(new PostNotification($spost,$senderInfo));
+            }
         } else {
             if ($spost->status != 1) {
                 $spost->status = 1;
                 $spost->star_approval = 1;
                 $spost->update();
+                
 
                 // Create New post //
                 $post = new Post();
@@ -464,13 +471,8 @@ class SimplePostController extends Controller
                 $post->title = $spost->title;
                 $post->status = 1;
                 $post->details = $spost->description;
-                $approveStar = $post->save();
-                if($approveStar){
-                    $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
-                    $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-                    Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
-                    // Mail::to($managerInfo->email)->send(new PostNotification($spost,$senderInfo));
-                }
+                $post->save();
+                
             } else {
                 $spost->status = 0;
                 $spost->update();
@@ -692,7 +694,7 @@ class SimplePostController extends Controller
         }
 
         $starAddResult = $post->save();
-        if($adminAddResult){
+        if($starAddResult){
             $adminInfo = getAdminInfo($post->admin_id);
             $senderInfo = getStarInfo($post->star_id);
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
