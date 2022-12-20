@@ -469,7 +469,7 @@ class QnaController extends Controller
     public function registeredList($slug)
     {
         $event = QnA::where('slug', $slug)->first();
-        $users = QnaRegistration::where('qna_id', $event->id)->get();
+        $users = QnaRegistration::where([['qna_id', $event->id], ['payment_status', 1]])->get();
 
         return response()->json([
             'status' => 200,
@@ -825,7 +825,7 @@ class QnaController extends Controller
     public function QnaRegisteredList($slug)
     {
         $event = QnA::where('slug', $slug)->first();
-        $users = QnaRegistration::where('qna_id', $event->id)->get();
+        $users = QnaRegistration::where([['qna_id', $event->id], ['payment_status', 1]])->get();
 
         return response()->json([
             'status' => 200,

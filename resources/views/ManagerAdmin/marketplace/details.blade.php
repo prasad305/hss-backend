@@ -65,28 +65,28 @@
                             <div class="col-sm-12 col-md-6 col-lg-3 mb-2">
                                 <div class="card p-3">
                                     <h5>Unit Price</h5>
-                                    <h6 class="text-warning">{{ $post->unit_price }}</h6>
+                                    <h6 class="text-warning">${{ $post->unit_price }}</h6>
                                 </div>
                             </div>
 
                             <div class="col-sm-12 col-md-6 col-lg-3 mb-2">
                                 <div class="card p-3">
                                     <h5> Total Items</h5>
-                                    <h6 class="text-warning">{{ $post->total_items }}</h6>
+                                    <h6 class="text-warning">${{ $post->total_items }}</h6>
                                 </div>
                             </div>
 
                             <div class="col-sm-12 col-md-6 col-lg-3 mb-2">
                                 <div class="card p-3">
                                     <h5> Delivery Charge</h5>
-                                    <h6 class="text-warning">{{ $post->delivery_charge }}</h6>
+                                    <h6 class="text-warning">${{ $post->delivery_charge }}</h6>
                                 </div>
                             </div>
 
                             <div class="col-sm-12 col-md-6 col-lg-3 mb-2">
                                 <div class="card p-3">
                                     <h5> Tax</h5>
-                                    <h6 class="text-warning">{{ $post->tax }}</h6>
+                                    <h6 class="text-warning">${{ $post->tax }}</h6>
                                 </div>
                             </div>
 
@@ -145,7 +145,7 @@
                     position: 'top-end',
                     icon: 'success',
                     title: '{{ Session::get('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            success ') }}',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                success ') }}',
                     showConfirmButton: false,
                     timer: 1500
                 })

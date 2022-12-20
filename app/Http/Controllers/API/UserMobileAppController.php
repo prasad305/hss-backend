@@ -839,17 +839,17 @@ class UserMobileAppController extends Controller
 
             $learning_session = LearningSession::find($request->event_id);
 
-                if ($learning_session) {
-                    $certificate =  LearningSessionCertificate::where([['event_id', $request->event_id], ['user_id', auth()->user()->id]])->first();
-                    if (empty($certificate)) {
-                        $certificate = new LearningSessionCertificate();
-                    }
-                    $certificate->event_id = $request->event_id;
-                    $certificate->user_id = auth()->user()->id;
-                    $certificate->name = $request->name;
-                    $certificate->father_name = $request->fatherName;
-                    $certificate->save();
+            if ($learning_session) {
+                $certificate =  LearningSessionCertificate::where([['event_id', $request->event_id], ['user_id', auth()->user()->id]])->first();
+                if (empty($certificate)) {
+                    $certificate = new LearningSessionCertificate();
                 }
+                $certificate->event_id = $request->event_id;
+                $certificate->user_id = auth()->user()->id;
+                $certificate->name = $request->name;
+                $certificate->father_name = $request->fatherName;
+                $certificate->save();
+            }
 
 
 

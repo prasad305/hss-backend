@@ -563,6 +563,7 @@ class PaymentController extends Controller
         try {
             $registerEvent = LiveChatRegistration::where([['live_chat_id', $event_id], ['user_id', $user_id]])->first();
             $registerEvent->publish_status = 1;
+            $registerEvent->payment_status = 1;
             $registerEvent->payment_method = $method;
             $registerEvent->update();
         } catch (\Throwable $th) {
