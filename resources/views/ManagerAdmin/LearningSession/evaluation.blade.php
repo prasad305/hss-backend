@@ -42,7 +42,7 @@
 
                                 @if ($event->video != null)
                                     <video controls class="img-fluid card-img">
-                                        <source src="{{ asset('http://localhost:8000/' . $event->video) }}" />
+                                        <source src="{{ asset($event->video) }}" />
                                     </video>
                                 @else
                                     <img width="100%" src="{{ asset($event->banner) }}" alt=""

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
+
 class AuctionController extends Controller
 {
 
@@ -86,7 +87,7 @@ class AuctionController extends Controller
         $product = Auction::create($data);
         return response()->json([
             'status' => 200,
-            'productId' => $product->id, 
+            'productId' => $product->id,
         ]);
         // return response()->json($product);
     }
@@ -344,9 +345,9 @@ class AuctionController extends Controller
         $notification->event_id = $bidding->auction_id;
         $notification->save();
 
-        
 
-        return $notification;
+
+        // return $notification;
 
         return response()->json([
             'status' => 200,
@@ -407,8 +408,8 @@ class AuctionController extends Controller
         $auction->subcategory_id = Auth::user()->sub_category_id;
 
         //Upload Banner
-        if($request->bannerImage['type']){
-            try{
+        if ($request->bannerImage['type']) {
+            try {
                 $originalExtension = str_ireplace("image/", "", $request->bannerImage['type']);
 
                 $folder_path       = 'uploads/images/auction/';
@@ -419,9 +420,7 @@ class AuctionController extends Controller
                 Image::make($decodedBase64)->save($folder_path . $image_new_name);
                 $location = $folder_path . $image_new_name;
                 $auction->banner = $location;
-            }
-
-            catch (\Exception $exception) {
+            } catch (\Exception $exception) {
                 return response()->json([
                     "error" => $exception->getMessage(),
                     "status" => "from image banner",
@@ -429,8 +428,8 @@ class AuctionController extends Controller
             }
         }
         //Upload Product_image
-        if($request->productImage['type']){
-            try{
+        if ($request->productImage['type']) {
+            try {
                 $originalExtension = str_ireplace("image/", "", $request->productImage['type']);
 
                 $folder_path       = 'uploads/images/auction/';
@@ -441,10 +440,7 @@ class AuctionController extends Controller
                 Image::make($decodedBase64)->save($folder_path . $image_new_name);
                 $location = $folder_path . $image_new_name;
                 $auction->product_image = $location;
-
-            }
-
-            catch (\Exception $exception) {
+            } catch (\Exception $exception) {
                 return response()->json([
                     "error" => $exception->getMessage(),
                     "status" => "from image productImage",

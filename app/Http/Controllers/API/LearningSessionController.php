@@ -285,7 +285,7 @@ class LearningSessionController extends Controller
     public function registured_user_star($slug)
     {
         $event = LearningSession::where('slug', $slug)->first();
-        $users = LearningSessionRegistration::where('learning_session_id', $event->id)->get();
+        $users = LearningSessionRegistration::where([['learning_session_id', $event->id], ['payment_status', 1]])->get();
 
         return response()->json([
             'status' => 200,
@@ -297,7 +297,7 @@ class LearningSessionController extends Controller
     public function registured_user($slug)
     {
         $event = LearningSession::where('slug', $slug)->first();
-        $users = LearningSessionRegistration::where('learning_session_id', $event->id)->get();
+        $users = LearningSessionRegistration::where([['learning_session_id', $event->id], ['payment_status', 1]])->get();
 
         return response()->json([
             'status' => 200,

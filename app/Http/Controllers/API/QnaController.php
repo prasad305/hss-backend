@@ -244,7 +244,7 @@ class QnaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'star_id' => 'required',
-            'title' => 'required|unique:live_chats,title',
+            'title' => 'required|unique:qn_a_s',
             'image' => 'required',
             'instruction' => 'required|min:5',
             'description' => 'required|min:5',
@@ -328,7 +328,7 @@ class QnaController extends Controller
     {
         // return $request->all();
         $validator = Validator::make($request->all(), [
-            'title' => 'required|unique:live_chats,title',
+            'title' => 'required',
             'event_date' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
@@ -469,7 +469,7 @@ class QnaController extends Controller
     public function registeredList($slug)
     {
         $event = QnA::where('slug', $slug)->first();
-        $users = QnaRegistration::where('qna_id', $event->id)->get();
+        $users = QnaRegistration::where([['qna_id', $event->id], ['payment_status', 1]])->get();
 
         return response()->json([
             'status' => 200,
@@ -484,7 +484,7 @@ class QnaController extends Controller
     public function star_add_qna_mobile(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|unique:live_chats,title',
+            'title' => 'required|unique:qn_a_s',
             'event_date' => 'required',
             'instruction' => 'required|min:5',
             'description' => 'required|min:5',
@@ -590,7 +590,7 @@ class QnaController extends Controller
     public function star_add_qna(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|unique:live_chats,title',
+            'title' => 'required|unique:qn_a_s',
             // 'image' => 'required',
             'event_date' => 'required',
             'instruction' => 'required|min:5',
@@ -677,7 +677,7 @@ class QnaController extends Controller
     {
         // return $request->all();
         $validator = Validator::make($request->all(), [
-            'title' => 'required|unique:live_chats,title',
+            'title' => 'required',
             'event_date' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
@@ -825,7 +825,7 @@ class QnaController extends Controller
     public function QnaRegisteredList($slug)
     {
         $event = QnA::where('slug', $slug)->first();
-        $users = QnaRegistration::where('qna_id', $event->id)->get();
+        $users = QnaRegistration::where([['qna_id', $event->id], ['payment_status', 1]])->get();
 
         return response()->json([
             'status' => 200,
