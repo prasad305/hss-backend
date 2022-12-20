@@ -667,6 +667,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/checkingSuperStar', function () {
         return response()->json(['message' => 'You are in as Superstar', 'status' => 200], 200);
     });
+    Route::get('star/getInformation', [DashboardController::class, 'getInformation']);
     Route::get('star/dashboard/posts/{type}', [DashboardController::class, 'adminPost']);
     Route::get('star/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
     Route::get('star/dashboard/mobile', [DashboardController::class, 'starDashboardCount']);
@@ -683,11 +684,13 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('star/notificationCount', [DashboardController::class, 'notificationCount']);
 
     // schdedule
+    Route::post('/star/addScheduleMobile', [StarScheduleController::class, 'addSchedule']);
     Route::post('/star/add_schedule/', [StarScheduleController::class, 'add_schedule']);
     Route::get('/star/schedule', [StarScheduleController::class, 'selected_schedule']);
     Route::get('/star/schedule/{date}', [StarScheduleController::class, 'dateWiseSchedule']);
     Route::get('/star/schedule_list', [StarScheduleController::class, 'schedule_list']);
     Route::get('/star/current_month_schedule_list', [StarScheduleController::class, 'current_month_schedule_list']);
+    Route::get('/star/deleteSchedule/{id}', [StarScheduleController::class, 'deleteSchedule']);
     Route::get('/star/schedule/notification', [StarScheduleController::class, 'notification']);
 
     // Fan Group Section

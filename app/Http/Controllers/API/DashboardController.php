@@ -40,6 +40,13 @@ use function PHPSTORM_META\type;
 
 class DashboardController extends Controller
 {
+    public function getInformation(){
+        $user = User::where('id', auth('sanctum')->user()->id)->first();
+        return response()->json([
+            'status' => 200,
+            'user' => $user,
+        ]);
+    }
     public function adminDashboard()
     {
 
