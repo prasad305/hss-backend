@@ -27,6 +27,7 @@ use App\Models\Activity;
 use App\Models\Audition\AuditionRoundAppealRegistration;
 use App\Models\Bidding;
 use App\Models\LearningSessionCertificate;
+use App\Models\SimplePost;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -670,6 +671,7 @@ if (!function_exists('random_code')) {
     {
         // return 'hit inside update';
         try {
+
             $generalPostPayment = new GeneralPostPayment();
             $generalPostPayment->post_id = $event_id;
             $generalPostPayment->user_id = auth('sanctum')->user()->id;
@@ -683,12 +685,12 @@ if (!function_exists('random_code')) {
     }
     function generalPostUpdate($event_id, $user_id, $method, $fee)
     {
+        $post = SimplePost::find($event_id);
         GeneralPostPayment::create([
-
             'post_id' => $event_id,
             'user_id' => $user_id,
             'payment_method' => $method,
-            'amount' => $fee,
+            'amount' => $post->fee,
             'status' => 1,
         ]);
     }

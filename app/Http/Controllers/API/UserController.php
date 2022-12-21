@@ -2495,7 +2495,7 @@ class UserController extends Controller
     public function UserAuditionRegistrationChecker($slug)
     {
         $audition = Audition::where('slug', $slug)->first();
-        $participant = AuditionParticipant::where([['user_id', auth('sanctum')->user()->id], ['audition_id', $audition->id]])->first();
+        $participant = AuditionParticipant::where([['user_id', auth('sanctum')->user()->id], ['audition_id', $audition->id], ['payment_status', 1]])->first();
 
         return response()->json([
             'status' => 200,
@@ -2759,6 +2759,7 @@ class UserController extends Controller
             $loveReactPayment->react_num = $request->reactNum;
             $loveReactPayment->cardHolderName = $request->cardHolderName;
             $loveReactPayment->ccv = $request->ccv;
+            // $loveReactPayment->fee = $request->fee;
             $loveReactPayment->expireDate = $request->expireDate;
             $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
             $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
