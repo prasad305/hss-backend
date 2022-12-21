@@ -837,6 +837,11 @@ class PaymentController extends Controller
         $registerEvent->payment_status = 1;
         $registerEvent->payment_method = $method;
         $registerEvent->update();
+
+        return response()->json([
+            'status' => 200,
+            'LearningSessionCertificate' => $registerEvent,
+        ]);
     }
 
     //   <================================Love React Payment end ==================================>

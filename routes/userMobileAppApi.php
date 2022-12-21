@@ -93,7 +93,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('mobile/audition/getLearningSessionCertificate/{slug}', [UserMobileAppController::class, 'getLearningSessionCertificate']);
     
     
-    Route::get('mobile/audition/checkPaymentStatus/{slug}', [UserMobileAppController::class, 'checkPaymentStatus']);
+    Route::get('mobile/learningSession/checkPaymentStatus/{slug}', [UserMobileAppController::class, 'checkPaymentStatus']);
 
 
 });

@@ -216,10 +216,20 @@ class UserMobileAppController extends Controller
                         'payment_method' => "wallet",
                     ]);
                 }
-
                 // Wallet End
                 $event->available_start_time = (Carbon::parse($request->end_time)->addMinutes($event->time_interval)->format('H:i:s')) <= Carbon::parse($event->end_time)->format('H:i:s') ? Carbon::parse($request->end_time)->addMinutes($event->time_interval)->format('H:i:s') : Carbon::parse($event->end_time)->format('H:i:s');
                 $event->update();
+                /**
+                 * qna add to my chat list
+                 */
+                $myChatList = new MyChatList();
+                $myChatList->title =  $event->title;
+                $myChatList->type =  'qna';
+                $myChatList->qna_id =  $eventRegistration->id;
+                $myChatList->user_id =  Auth()->user()->id;
+                $myChatList->status =  1;
+                $myChatList->save();
+
             }
         }
 
@@ -326,17 +336,11 @@ class UserMobileAppController extends Controller
          * qna add to my chat list
          */
 
-        if ($modelName == 'qna') {
-            if (!QnaRegistration::where([['user_id', auth()->user()->id], ['qna_id', $eventId]])->exists()) {
-                $myChatList = new MyChatList();
-                $myChatList->title =  $event->title;
-                $myChatList->type =  'qna';
-                $myChatList->qna_id =  $eventRegistration->id;
-                $myChatList->user_id =  Auth()->user()->id;
-                $myChatList->status =  1;
-                $myChatList->save();
-            }
-        }
+        // if ($modelName == 'qna') {
+        //     if (!QnaRegistration::where([['user_id', auth()->user()->id], ['qna_id', $eventId]])->exists()) {
+                
+        //     }
+        // }
 
         try {
             $activity->user_id = $user->id;
@@ -867,9 +871,10 @@ class UserMobileAppController extends Controller
         }
     }
 
-    public function checkPaymentStatus(Request $request)
+    public function checkPaymentStatus($slug)
     {
-        $certificatePay =  LearningSessionCertificate::where([['event_id', $request->event_id], ['user_id', auth()->user()->id], ['payment_status', 1]])->first();
+        $learningSession = LearningSession::where([['slug', $slug]])->first();
+        $certificatePay =  LearningSessionCertificate::where([['event_id', $learningSession->id], ['user_id', auth()->user()->id], ['payment_status', 1]])->first();
         return response()->json([
             'status' => 200,
             'certificate' => $certificatePay,
