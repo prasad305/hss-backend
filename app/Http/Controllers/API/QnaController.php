@@ -696,8 +696,9 @@ class QnaController extends Controller
     public function update_Qna(Request $request)
     {
         // return $request->all();
+        $qna = QnA::find($request->id);
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|unique:qn_a_s,title,'.$qna->id,
             'event_date' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
@@ -718,7 +719,7 @@ class QnaController extends Controller
             ]);
         } else {
 
-            $qna = QnA::find($request->id);
+            
             $qna->title = $request->input('title');
             $qna->slug = Str::slug($request->input('title'));
             $qna->admin_id = auth()->user()->parent_user;
