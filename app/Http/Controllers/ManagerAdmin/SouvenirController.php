@@ -12,6 +12,8 @@ use Intervention\Image\ImageManagerStatic as Image;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class SouvenirController extends Controller
 {
@@ -121,7 +123,16 @@ class SouvenirController extends Controller
         if($spost->status != 1)
         {
             $spost->status = 1;
-            $spost->update();
+            $publishManager = $spost->update();
+            if($publishManager){
+                $userInfo = getUserInfo();
+                $senderInfo = getManagerInfo(auth()->user()->id);
+                
+                foreach ($userInfo as $key => $data) {
+                    Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
+                    // Mail::to($data->email)->send(new PostNotification($spost,$senderInfo));
+                }
+            }
         }
         else
         {

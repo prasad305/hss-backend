@@ -7,11 +7,14 @@ use App\Models\LearningSession;
 use Illuminate\Http\Request;
 use App\Models\SimplePost;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
 use Vonage\Client\Exception\Validation;
 use Illuminate\Support\Str;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class SimplePostController extends Controller
 {
@@ -165,7 +168,15 @@ class SimplePostController extends Controller
             $file->move($path, $file_name);
             $post->thumbnail = $path . '/' . $file_name;
         }
-        $post->save();
+        $adminAddResult = $post->save();
+        if($adminAddResult){
+            $starInfo = getStarInfo($post->star_id);
+            $senderInfo = getAdminInfo($post->admin_id);
+            
+            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
+            // Mail::to($starInfo->email)->send(new PostNotification($post,$senderInfo));
+        }
+        
 
         return response()->json([
             'status' => 200,
@@ -434,12 +445,20 @@ class SimplePostController extends Controller
 
         if ($spost->type == 'paid') {
             $spost->star_approval = 1;
-            $spost->update();
+            $approveStar = $spost->update();
+
+            if($approveStar){
+                $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+                Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
+                // Mail::to($managerInfo->email)->send(new PostNotification($spost,$senderInfo));
+            }
         } else {
             if ($spost->status != 1) {
                 $spost->status = 1;
                 $spost->star_approval = 1;
                 $spost->update();
+                
 
                 // Create New post //
                 $post = new Post();
@@ -453,6 +472,7 @@ class SimplePostController extends Controller
                 $post->status = 1;
                 $post->details = $spost->description;
                 $post->save();
+                
             } else {
                 $spost->status = 0;
                 $spost->update();
@@ -462,7 +482,7 @@ class SimplePostController extends Controller
                 $post->delete();
             }
         }
-
+        
 
         return response()->json([
             'status' => 200,
@@ -673,7 +693,19 @@ class SimplePostController extends Controller
             $post->thumbnail = $path . '/' . $file_name;
         }
 
-        $post->save();
+        $starAddResult = $post->save();
+        if($starAddResult){
+            $adminInfo = getAdminInfo($post->admin_id);
+            $senderInfo = getStarInfo($post->star_id);
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            
+
+            
+            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
+            Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($post,$senderInfo));
+            // Mail::to($adminInfo->email)->send(new PostNotification($post,$senderInfo));
+            // Mail::to($managerInfo->email)->send(new PostNotification($post,$senderInfo));
+        }
 
         if ($request->input('type') == 'free') {
 
@@ -690,6 +722,9 @@ class SimplePostController extends Controller
             $npost->details = $post->description;
             $npost->save();
         }
+
+        
+
 
         return response()->json([
             'status' => 200,

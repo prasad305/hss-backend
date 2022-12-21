@@ -309,7 +309,7 @@
             url: url + "/" + round_id, // your request url
             type: 'GET',
             success: function(data) {
-                console.log(data);
+                
 
 
                 var htmlcode =

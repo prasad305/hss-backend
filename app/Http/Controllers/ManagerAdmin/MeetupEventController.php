@@ -12,6 +12,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class MeetupEventController extends Controller
 {
@@ -151,7 +153,18 @@ class MeetupEventController extends Controller
             }
 
             $meetup->status = 2;
-            $meetup->update();
+            $managerApprove = $meetup->update();
+
+            if($managerApprove){
+                $userInfo = getUserInfo();
+                $senderInfo = getManagerInfo(auth()->user()->id);
+                
+                foreach ($userInfo as $key => $data) {
+                    Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($meetup,$senderInfo));
+                    // Mail::to($data->email)->send(new PostNotification($meetup,$senderInfo));
+                }
+            }
+
 
             $starCat = SuperStar::where('star_id', $meetup->star_id)->first();
             // Create New post //

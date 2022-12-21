@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class StarGreetingController extends Controller
 {
@@ -204,7 +206,17 @@ class StarGreetingController extends Controller
             $greeting->star_approve_status = 1;
             $greeting->status = 1;
 
-            $greeting->save();
+            $starAddResult = $greeting->save();
+            if($starAddResult){
+                $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+                $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+
+                Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($greeting,$senderInfo));
+                Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($greeting,$senderInfo));
+                // Mail::to($adminInfo->email)->send(new PostNotification($greeting,$senderInfo));
+                // Mail::to($managerInfo->email)->send(new PostNotification($greeting,$senderInfo));
+            }
             return response()->json([
                 'status' => 200,
                 'greeting' => $greeting,
@@ -276,7 +288,13 @@ class StarGreetingController extends Controller
         $greeting = Greeting::find($greeting_id);
         $greeting->star_approve_status = 1;
         // $greeting->status = 1;
-        $greeting->save();
+        $starApprove = $greeting->save();
+        if($starApprove){
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+            Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($greeting,$senderInfo));
+                    // Mail::to($managerInfo->email)->send(new PostNotification($greeting,$senderInfo));
+        }
         return response()->json([
             'status' => 200,
             'greeting' => $greeting,

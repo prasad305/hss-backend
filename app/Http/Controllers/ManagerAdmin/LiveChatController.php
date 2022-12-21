@@ -12,6 +12,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class LiveChatController extends Controller
 {
@@ -71,7 +73,18 @@ class LiveChatController extends Controller
             $post->sub_category_id = $starCat->sub_category_id;
             $post->post_start_date = Carbon::parse($request->post_start_date);
             $post->post_end_date = Carbon::parse($request->post_end_date);
-            $post->save();
+
+            $managerApprovePost = $post->save();
+
+            if($managerApprovePost){
+                $userInfo = getUserInfo();
+                $senderInfo = getManagerInfo(auth()->user()->id);
+                foreach ($userInfo as $key => $data) {
+                    Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($event,$senderInfo));
+                    // Mail::to($data->email)->send(new PostNotification($event,$senderInfo));
+                }
+            }
+
         } else {
             $event->status = 10;
             $event->update();
@@ -79,6 +92,7 @@ class LiveChatController extends Controller
             $post = Post::where('event_id', $id)->first();
             $post->delete();
         }
+
 
         return redirect()->back()->with('success', 'Published');
     }

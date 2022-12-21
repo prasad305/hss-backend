@@ -13,6 +13,8 @@ use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class LearningSessionController extends Controller
 {
@@ -120,8 +122,14 @@ class LearningSessionController extends Controller
                 $learningSession->video = $path . '/' . $file_name;
             }
 
-            $learningSession->save();
-
+            $adminAddResult = $learningSession->save();
+            if($adminAddResult){
+                $starInfo = getStarInfo($learningSession->star_id);
+                $senderInfo = getAdminInfo($learningSession->admin_id);
+                Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
+                // Mail::to($starInfo->email)->send(new PostNotification($learningSession,$senderInfo));
+            }
+            
 
             return response()->json([
                 'status' => 200,
@@ -843,7 +851,19 @@ class LearningSessionController extends Controller
                 $learningSession->video = $path . '/' . $file_name;
             }
 
-            $learningSession->save();
+            $starAddResult = $learningSession->save();
+
+            if($starAddResult){
+                $adminInfo = getAdminInfo($learningSession->admin_id);
+                $senderInfo = getStarInfo($learningSession->star_id);
+                $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            
+                Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
+                Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
+                // Mail::to($adminInfo->email)->send(new PostNotification($learningSession,$senderInfo));
+                // Mail::to($managerInfo->email)->send(new PostNotification($learningSession,$senderInfo));
+            }
+            
 
 
             return response()->json([
@@ -1085,7 +1105,14 @@ class LearningSessionController extends Controller
 
         $learningSession->status = 1;
 
-        $learningSession->update();
+        $approvePost = $learningSession->update();
+        if($approvePost){
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
+            // Mail::to($managerInfo->email)->send(new PostNotification($learningSession,$senderInfo));
+        }
+
 
         return response()->json([
             'status' => 200,

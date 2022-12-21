@@ -251,8 +251,8 @@
                     type: "POST",
                     data: $("#filter").serialize(),
                     success: function(respose) {
-                        // console.log('Submission was successful.');
-                        console.log(respose);
+                        
+                        c
                         $("#filter")[0].reset();
                         $('#tot_certificate').html(respose.certificate);
                         $('#tot_assFee').html(respose.assignment_fee);
@@ -268,7 +268,7 @@
 
             $("#category_id").click(function() {
                 var category_id = $('#category_id').val();
-                // console.log(category_id);
+                
                 if (category_id > 0) {
                     $.ajax({
                         url: "{{ url('super-admin/all-report-filter-subCategory') }}/" +
@@ -276,7 +276,7 @@
                         type: 'GET',
 
                         success: function(res) {
-                            // console.log(res);
+                          
 
                             var _html = '<option>Select SubCateory</option>';
                             $.each(res, function(index, res) {
