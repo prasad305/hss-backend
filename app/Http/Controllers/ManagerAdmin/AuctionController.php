@@ -159,8 +159,7 @@ class AuctionController extends Controller
             $userInfo = getUserInfo();
             $senderInfo = getManagerInfo(auth()->user()->id);
             foreach ($userInfo as $key => $data) {
-                Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($product,$senderInfo));
-                // Mail::to($data->email)->send(new PostNotification($product,$senderInfo));
+                Mail::to($data->email)->send(new PostNotification($product,$senderInfo));
             }
            }
         }

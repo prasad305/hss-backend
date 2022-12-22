@@ -152,10 +152,8 @@ class StarGreetingController extends Controller
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
             
-                Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($greeting,$senderInfo));
-                Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($greeting,$senderInfo));
-                    // Mail::to($adminInfo->email)->send(new PostNotification($greeting,$senderInfo));
-                    // Mail::to($managerInfo->email)->send(new PostNotification($greeting,$senderInfo));
+                Mail::to($adminInfo->email)->send(new PostNotification($greeting,$senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($greeting,$senderInfo));
            }
             return response()->json([
                 'status' => 200,
@@ -222,10 +220,8 @@ class StarGreetingController extends Controller
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($greeting,$senderInfo));
-                Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($greeting,$senderInfo));
-                // Mail::to($adminInfo->email)->send(new PostNotification($greeting,$senderInfo));
-                // Mail::to($managerInfo->email)->send(new PostNotification($greeting,$senderInfo));
+                Mail::to($adminInfo->email)->send(new PostNotification($greeting,$senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($greeting,$senderInfo));
             }
             return response()->json([
                 'status' => 200,
@@ -302,8 +298,7 @@ class StarGreetingController extends Controller
         if($starApprove){
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($greeting,$senderInfo));
-                    // Mail::to($managerInfo->email)->send(new PostNotification($greeting,$senderInfo));
+            Mail::to($managerInfo->email)->send(new PostNotification($greeting,$senderInfo));
         }
         return response()->json([
             'status' => 200,

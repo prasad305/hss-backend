@@ -126,8 +126,7 @@ class LearningSessionController extends Controller
             if($adminAddResult){
                 $starInfo = getStarInfo($learningSession->star_id);
                 $senderInfo = getAdminInfo($learningSession->admin_id);
-                Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
-                // Mail::to($starInfo->email)->send(new PostNotification($learningSession,$senderInfo));
+                Mail::to($starInfo->email)->send(new PostNotification($learningSession,$senderInfo));
             }
             
 
@@ -718,10 +717,8 @@ class LearningSessionController extends Controller
                         $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                         $senderInfo = getStarInfo(auth('sanctum')->user()->id);
                     
-                        Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
-                        Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
-                            // Mail::to($adminInfo->email)->send(new PostNotification($learningSession,$senderInfo));
-                            // Mail::to($managerInfo->email)->send(new PostNotification($learningSession,$senderInfo));
+                        Mail::to($adminInfo->email)->send(new PostNotification($learningSession,$senderInfo));
+                        Mail::to($managerInfo->email)->send(new PostNotification($learningSession,$senderInfo));
                    }
                 } catch (\Exception $exception) {
                     return response()->json([
@@ -748,10 +745,8 @@ class LearningSessionController extends Controller
                         $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                         $senderInfo = getStarInfo(auth('sanctum')->user()->id);
                     
-                        Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($qna,$senderInfo));
-                        Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($qna,$senderInfo));
-                            // Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
-                            // Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
+                        Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
+                        Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
                    }
                 } catch (\Exception $exception) {
                     return response()->json([
@@ -878,10 +873,8 @@ class LearningSessionController extends Controller
                 $senderInfo = getStarInfo($learningSession->star_id);
                 $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             
-                Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
-                Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
-                // Mail::to($adminInfo->email)->send(new PostNotification($learningSession,$senderInfo));
-                // Mail::to($managerInfo->email)->send(new PostNotification($learningSession,$senderInfo));
+                Mail::to($adminInfo->email)->send(new PostNotification($learningSession,$senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($learningSession,$senderInfo));
             }
             
 
@@ -1129,8 +1122,7 @@ class LearningSessionController extends Controller
         if($approvePost){
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
-            // Mail::to($managerInfo->email)->send(new PostNotification($learningSession,$senderInfo));
+            Mail::to($managerInfo->email)->send(new PostNotification($learningSession,$senderInfo));
         }
 
 

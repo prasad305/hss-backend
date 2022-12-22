@@ -321,9 +321,8 @@ class QnaController extends Controller
             if($adminAddResult){
                 $starInfo = getStarInfo($qna->star_id);
                 $senderInfo = getAdminInfo($qna->admin_id);
-                
-                Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($qna,$senderInfo));
-                // Mail::to($starInfo->email)->send(new PostNotification($qna,$senderInfo));
+
+                Mail::to($starInfo->email)->send(new PostNotification($qna,$senderInfo));
             }
 
             return response()->json([
@@ -588,11 +587,9 @@ class QnaController extends Controller
                 $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            
-                Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($qna,$senderInfo));
-                Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($qna,$senderInfo));
-                    // Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
-                    // Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
+
+                Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
            }
 
 
@@ -688,10 +685,8 @@ class QnaController extends Controller
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($qna,$senderInfo));
-                Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($qna,$senderInfo));
-                // Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
-                // Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
+                Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
             }
 
             
@@ -838,8 +833,7 @@ class QnaController extends Controller
         if($approveStar){
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($approvedQna,$senderInfo));
-            // Mail::to($managerInfo->email)->send(new PostNotification($approvedQna,$senderInfo));
+            Mail::to($managerInfo->email)->send(new PostNotification($approvedQna,$senderInfo));
         }
 
        

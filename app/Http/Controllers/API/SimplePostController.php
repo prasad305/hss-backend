@@ -172,9 +172,7 @@ class SimplePostController extends Controller
         if($adminAddResult){
             $starInfo = getStarInfo($post->star_id);
             $senderInfo = getAdminInfo($post->admin_id);
-            
-            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
-            // Mail::to($starInfo->email)->send(new PostNotification($post,$senderInfo));
+            Mail::to($starInfo->email)->send(new PostNotification($post,$senderInfo));
         }
         
 
@@ -450,8 +448,7 @@ class SimplePostController extends Controller
             if($approveStar){
                 $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-                Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($spost,$senderInfo));
-                // Mail::to($managerInfo->email)->send(new PostNotification($spost,$senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($spost,$senderInfo));
             }
         } else {
             if ($spost->status != 1) {
@@ -604,10 +601,8 @@ class SimplePostController extends Controller
             $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
         
-            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
-            Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($post,$senderInfo));
-                // Mail::to($adminInfo->email)->send(new PostNotification($post,$senderInfo));
-                // Mail::to($managerInfo->email)->send(new PostNotification($post,$senderInfo));
+            Mail::to($adminInfo->email)->send(new PostNotification($post,$senderInfo));
+            Mail::to($managerInfo->email)->send(new PostNotification($post,$senderInfo));
        }
 
         if ($request->input('type') == 'free') {
@@ -709,12 +704,8 @@ class SimplePostController extends Controller
             $senderInfo = getStarInfo($post->star_id);
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             
-
-            
-            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
-            Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($post,$senderInfo));
-            // Mail::to($adminInfo->email)->send(new PostNotification($post,$senderInfo));
-            // Mail::to($managerInfo->email)->send(new PostNotification($post,$senderInfo));
+            Mail::to($adminInfo->email)->send(new PostNotification($post,$senderInfo));
+            Mail::to($managerInfo->email)->send(new PostNotification($post,$senderInfo));
         }
 
         if ($request->input('type') == 'free') {

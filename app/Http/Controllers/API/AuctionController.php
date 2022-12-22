@@ -91,8 +91,7 @@ class AuctionController extends Controller
         if($product){
             $starInfo = getStarInfo($request->star_id);
             $senderInfo = getAdminInfo($data['admin_id']);
-            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($product,$senderInfo));
-                    // Mail::to($starInfo->email)->send(new PostNotification($post,$senderInfo));
+            Mail::to($starInfo->email)->send(new PostNotification($post,$senderInfo));
         }
         return response()->json([
             'status' => 200,
@@ -464,10 +463,8 @@ class AuctionController extends Controller
             $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
         
-            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($auction,$senderInfo));
-            Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($auction,$senderInfo));
-                // Mail::to($adminInfo->email)->send(new PostNotification($auction,$senderInfo));
-                // Mail::to($managerInfo->email)->send(new PostNotification($auction,$senderInfo));
+            Mail::to($adminInfo->email)->send(new PostNotification($auction,$senderInfo));
+            Mail::to($managerInfo->email)->send(new PostNotification($auction,$senderInfo));
        }
 
 
@@ -546,10 +543,8 @@ class AuctionController extends Controller
             $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($product,$senderInfo));
-            Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($product,$senderInfo));
-            // Mail::to($adminInfo->email)->send(new PostNotification($product,$senderInfo));
-            // Mail::to($managerInfo->email)->send(new PostNotification($product,$senderInfo));
+            Mail::to($adminInfo->email)->send(new PostNotification($product,$senderInfo));
+            Mail::to($managerInfo->email)->send(new PostNotification($product,$senderInfo));
         }
         return response()->json($product);
     }
@@ -595,8 +590,7 @@ class AuctionController extends Controller
         if($approveStar){
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($auction,$senderInfo));
-                    // Mail::to($managerInfo->email)->send(new PostNotification($auction,$senderInfo));
+            Mail::to($managerInfo->email)->send(new PostNotification($auction,$senderInfo));
         }
 
 

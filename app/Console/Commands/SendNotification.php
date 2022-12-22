@@ -84,7 +84,7 @@ class SendNotification extends Command
 
         //send email
 
-        // Mail::to('test@gmail.com')->send(new UserScheduleNotification());
+       
         // return 0;
     }
 

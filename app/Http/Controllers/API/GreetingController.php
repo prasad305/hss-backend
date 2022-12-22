@@ -104,8 +104,7 @@ class GreetingController extends Controller
             if($adminAddResult){
                 $starInfo = getStarInfo($greeting->star_id);
                 $senderInfo = getAdminInfo($greeting->admin_id);
-                Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($greeting,$senderInfo));
-                        // Mail::to($starInfo->email)->send(new PostNotification($greeting,$senderInfo));
+                Mail::to($starInfo->email)->send(new PostNotification($greeting,$senderInfo));
             }
             return response()->json([
                 'status' => 200,
