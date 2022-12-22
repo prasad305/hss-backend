@@ -160,7 +160,7 @@ class UserMobileAppController extends Controller
 
                 $eventRegistration->user_id = $user->id;
                 $eventRegistration->live_chat_id = $eventId;
-                $eventRegistration->amount = $request->fee;
+                $eventRegistration->amount =  $request->quantity > 0 ? ($event->fee * $request->quantity) : $event->fee;
                 $eventRegistration->room_id = $create_room_id;
                 $eventRegistration->live_chat_start_time = Carbon::parse($request->start_time)->format('H:i:s');
                 $eventRegistration->live_chat_end_time = Carbon::parse($request->end_time)->format('H:i:s');
@@ -194,8 +194,9 @@ class UserMobileAppController extends Controller
                 $create_room_id = createRoomID();
 
                 $eventRegistration->user_id = $user->id;
+
                 $eventRegistration->qna_id = $eventId;
-                $eventRegistration->amount = $request->fee;
+                $eventRegistration->amount =  $request->quantity > 0 ? ($event->fee * $request->quantity) : $event->fee;
                 $eventRegistration->room_id = $create_room_id;
                 $eventRegistration->qna_date = $event->event_date;
                 // $eventRegistration->publish_status = 1;
