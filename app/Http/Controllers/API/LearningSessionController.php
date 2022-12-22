@@ -712,7 +712,17 @@ class LearningSessionController extends Controller
                     Image::make($decodedBase64)->save($folder_path . $image_new_name);
                     $location = $folder_path . $image_new_name;
                     $learningSession->banner = $location;
-                    $learningSession->save();
+                    $addFromMobile = $learningSession->save();
+                    if($addFromMobile){
+                        $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                        $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+                        $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+                    
+                        Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
+                        Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($learningSession,$senderInfo));
+                            // Mail::to($adminInfo->email)->send(new PostNotification($learningSession,$senderInfo));
+                            // Mail::to($managerInfo->email)->send(new PostNotification($learningSession,$senderInfo));
+                   }
                 } catch (\Exception $exception) {
                     return response()->json([
                         "error" => $exception->getMessage(),
@@ -732,7 +742,17 @@ class LearningSessionController extends Controller
                     file_put_contents($location, base64_decode($decodedBase64, true));
 
                     $learningSession->video = $location;
-                    $learningSession->save();
+                    $addFromMobile = $learningSession->save();
+                    if($addFromMobile){
+                        $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                        $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+                        $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+                    
+                        Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($qna,$senderInfo));
+                        Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($qna,$senderInfo));
+                            // Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
+                            // Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
+                   }
                 } catch (\Exception $exception) {
                     return response()->json([
                         "error" => $exception->getMessage(),

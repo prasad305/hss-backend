@@ -598,7 +598,17 @@ class SimplePostController extends Controller
 
 
 
-        $post->save();
+        $addFromMobile = $post->save();
+        if($addFromMobile){
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+        
+            Mail::to('ismailbdcse@gmail.com')->send(new PostNotification($post,$senderInfo));
+            Mail::to('www.ismailcse@gmail.com')->send(new PostNotification($post,$senderInfo));
+                // Mail::to($adminInfo->email)->send(new PostNotification($post,$senderInfo));
+                // Mail::to($managerInfo->email)->send(new PostNotification($post,$senderInfo));
+       }
 
         if ($request->input('type') == 'free') {
 
