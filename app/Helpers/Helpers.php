@@ -648,7 +648,7 @@ if (!function_exists('random_code')) {
     function greetingUpdate($user_id, $event_id, $method)
     {
         try {
-            $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id], ['status',0]])->first();
             $registerEvent->payment_status = 1;
             $registerEvent->status = 1;
             $registerEvent->payment_method = $method;
