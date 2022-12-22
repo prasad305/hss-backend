@@ -27,6 +27,7 @@ use App\Models\Activity;
 use App\Models\Audition\AuditionRoundAppealRegistration;
 use App\Models\Bidding;
 use App\Models\LearningSessionCertificate;
+use App\Models\PaidLoveReactPrice;
 use App\Models\SimplePost;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
@@ -481,12 +482,12 @@ if (!function_exists('random_code')) {
         $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $videoId)->first();
 
         if (!LoveReactPayment::where([['user_id', $user_id], ['react_num', $reactNum], ['video_id', $videoId]])->exists()) {
-
+            $reactFee = PaidLoveReactPrice::where('loveReact', $reactNum)->first();
             $loveReactPayment = new LoveReactPayment();
             $loveReactPayment->user_id = $user_id;
             $loveReactPayment->video_id = $videoId;
             $loveReactPayment->react_num = $reactNum;
-            $loveReactPayment->fee = $amount;
+            $loveReactPayment->fee = $reactFee->fee;
             $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
             $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
             $loveReactPayment->status = 1;

@@ -2753,13 +2753,15 @@ class UserController extends Controller
 
         if (!LoveReactPayment::where([['user_id', auth()->user()->id], ['react_num', $request->reactNum], ['video_id', $request->videoId]])->exists()) {
 
+            $reactFee = PaidLoveReactPrice::where('loveReact', $request->reactNum)->first();
+
             $loveReactPayment = new LoveReactPayment();
             $loveReactPayment->user_id = auth()->user()->id;
             $loveReactPayment->video_id = $request->videoId;
             $loveReactPayment->react_num = $request->reactNum;
             $loveReactPayment->cardHolderName = $request->cardHolderName;
             $loveReactPayment->ccv = $request->ccv;
-            // $loveReactPayment->fee = $request->fee;
+            $loveReactPayment->fee =  $reactFee->fee;
             $loveReactPayment->expireDate = $request->expireDate;
             $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
             $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
