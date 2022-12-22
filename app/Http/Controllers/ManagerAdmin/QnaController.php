@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class QnaController extends Controller
 {
@@ -40,7 +42,7 @@ class QnaController extends Controller
             $senderInfo = getManagerInfo(auth()->user()->id);
             
             foreach ($userInfo as $key => $data) {
-                Mail::to($data->email)->send(new PostNotification($post,$senderInfo));
+                Mail::to($data->email)->send(new PostNotification($upcommingEvent,$senderInfo));
             }
         }
         
