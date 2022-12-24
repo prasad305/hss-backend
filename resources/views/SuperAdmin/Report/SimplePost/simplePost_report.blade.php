@@ -330,7 +330,7 @@ Super Admin
                 data: $("#simplePostFilter").serialize(),
                 success: function(response) {
                     $("#simplePostFilter")[0].reset();
-                    // console.log(response);
+                    
                     $('#total_free_post').html(response.total_free_post);
                     $('#total_paid_post').html(response.total_paid_post);
                     $('#total_published_post').html(response.total_published_post);

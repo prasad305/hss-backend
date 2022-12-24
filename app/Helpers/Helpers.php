@@ -651,22 +651,22 @@ if (!function_exists('random_code')) {
     {
 
 
-        // try {
-        $registerEvent = GreetingsRegistration::find($reg_id);
-        $registerEvent->payment_status = 1;
-        $registerEvent->status = 1;
-        $registerEvent->payment_method = $method;
-        $registerEvent->update();
+        try {
+            $registerEvent = GreetingsRegistration::find($reg_id);
+            $registerEvent->payment_status = 1;
+            $registerEvent->status = 1;
+            $registerEvent->payment_method = $method;
+            $registerEvent->update();
 
-        $activity = new Activity();
-        $activity->type = 'greeting';
-        $activity->user_id = $user_id;
-        $activity->event_id =  $registerEvent->greeting_id;
-        $activity->event_registration_id = $reg_id;
-        $activity->save();
-        // } catch (\Throwable $th) {
-        //     //throw $th;
-        // }
+            $activity = new Activity();
+            $activity->type = 'greeting';
+            $activity->user_id = $user_id;
+            $activity->event_id =  $registerEvent->greeting_id;
+            $activity->event_registration_id = $reg_id;
+            $activity->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 
     // General post
@@ -705,5 +705,34 @@ if (!function_exists('random_code')) {
             'user_id' => $user_id,
             'event_id' => $event_id,
         ]);
+    }
+
+    // Mailer Function
+
+    function getStarInfo($id)
+    {
+        $star = User::with('category')->findOrFail($id);
+        return $star;
+    }
+    function getAdminInfo($id)
+    {
+        $admin = User::with('category')->findOrFail($id);
+        return $admin;
+    }
+    function getManagerInfoFromCategory($cat_id)
+    {
+        $manager = User::with('category')->where('category_id', $cat_id)->where('user_type', 'manager-admin')->first();
+        return $manager;
+    }
+
+    function getManagerInfo($id)
+    {
+        $manager = User::with('category')->where('id', $id)->where('user_type', 'manager-admin')->first();
+        return $manager;
+    }
+    function getUserInfo()
+    {
+        $user = User::where('user_type', 'user')->get();
+        return $user;
     }
 }

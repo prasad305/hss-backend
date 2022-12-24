@@ -23,6 +23,9 @@ use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
+
 
 class QnaController extends Controller
 {
@@ -150,25 +153,17 @@ class QnaController extends Controller
 
 
         if ($request->event_type == 'greeting') {
-            $event = Greeting::find($request->eventId);
-            $eventRegistration = GreetingsRegistration::where('user_id', Auth::user()->id)->where('id', $request->greetingId)->first();
-
-            $walletData = Wallet::where('user_id', Auth::user()->id)->first();
-            $walletData->greetings = $walletData->greetings - 1;
-            $walletData->save();
-
-            $eventRegistration->card_holder_name = Auth::user()->first_name . " " . Auth::user()->last_name;
-            $eventRegistration->amount = $event->cost;
-            $eventRegistration->payment_status = 1;
-            $eventRegistration->status = 1;
-            $eventRegistration->payment_method = 'wallet';
-            $eventRegistration->payment_date = Carbon::now();
-            $eventRegistration->save();
-
+            $greeting =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('greetings');
             $activity = new Activity();
             $activity->type = 'greeting';
             $activity->user_id = Auth::user()->id;
-            $activity->event_id = $event->id;
+            $eventRegistration = GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id], ['greeting_id', $request->eventId]])->first();
+            $eventRegistration->payment_status = 1;
+            $eventRegistration->status = 1;
+            $eventRegistration->payment_method = 'wallet';
+            $eventRegistration->save();
+            Wallet::where('user_id', auth('sanctum')->user()->id)->update(['greetings' => $greeting->greetings - 1]);
+            $activity->event_id = $greeting->id;
             $activity->event_registration_id = $eventRegistration->id;
             $activity->save();
             $userWallet = Wallet::where('user_id', Auth::user()->id)->first();
@@ -178,6 +173,36 @@ class QnaController extends Controller
                 'waletInfo' => $userWallet,
                 'eventRegistration' => $eventRegistration
             ]);
+
+
+            // $event = Greeting::find($request->eventId);
+            // $eventRegistration = GreetingsRegistration::where('user_id', Auth::user()->id)->where('id', $request->greetingId)->first();
+
+            // $walletData = Wallet::where('user_id', Auth::user()->id)->first();
+            // $walletData->greetings = $walletData->greetings - 1;
+            // $walletData->save();
+
+            // $eventRegistration->card_holder_name = Auth::user()->first_name . " " . Auth::user()->last_name;
+            // $eventRegistration->amount = $event->cost;
+            // $eventRegistration->payment_status = 1;
+            // $eventRegistration->status = 1;
+            // $eventRegistration->payment_method = 'wallet';
+            // $eventRegistration->payment_date = Carbon::now();
+            // $eventRegistration->save();
+
+            // $activity = new Activity();
+            // $activity->type = 'greeting';
+            // $activity->user_id = Auth::user()->id;
+            // $activity->event_id = $event->id;
+            // $activity->event_registration_id = $eventRegistration->id;
+            // $activity->save();
+            // $userWallet = Wallet::where('user_id', Auth::user()->id)->first();
+            // return response()->json([
+            //     'status' => 200,
+            //     'message' => 'Greeting Successfully Registered',
+            //     'waletInfo' => $userWallet,
+            //     'eventRegistration' => $eventRegistration
+            // ]);
         }
 
 
@@ -314,8 +339,13 @@ class QnaController extends Controller
                 $qna->video = $path . '/' . $file_name;
             }
 
-            $qna->save();
+            $adminAddResult = $qna->save();
+            if($adminAddResult){
+                $starInfo = getStarInfo($qna->star_id);
+                $senderInfo = getAdminInfo($qna->admin_id);
 
+                Mail::to($starInfo->email)->send(new PostNotification($qna,$senderInfo));
+            }
 
             return response()->json([
                 'status' => 200,
@@ -574,8 +604,15 @@ class QnaController extends Controller
 
             // Upload Video ended
 
-            $qna->save();
+            $addFromMobile = $qna->save();
+            if($addFromMobile){
+                $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+                $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
+                Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
+           }
 
 
 
@@ -664,8 +701,17 @@ class QnaController extends Controller
                 $qna->banner = $request->image_path;
             }
 
-            $qna->save();
+            $starAddResult = $qna->save();
+            if($starAddResult){
+                $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+                $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
+                Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
+            }
+
+            
 
             return response()->json([
                 'status' => 200,
@@ -676,8 +722,9 @@ class QnaController extends Controller
     public function update_Qna(Request $request)
     {
         // return $request->all();
+        $qna = QnA::find($request->id);
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|unique:qn_a_s,title,'.$qna->id,
             'event_date' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
@@ -698,7 +745,7 @@ class QnaController extends Controller
             ]);
         } else {
 
-            $qna = QnA::find($request->id);
+            
             $qna->title = $request->input('title');
             $qna->slug = Str::slug($request->input('title'));
             $qna->admin_id = auth()->user()->parent_user;
@@ -804,7 +851,14 @@ class QnaController extends Controller
     {
         $approvedQna = QnA::find($id);
         $approvedQna->star_approval = 1;
-        $approvedQna->update();
+        $approveStar = $approvedQna->update();
+        if($approveStar){
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+            Mail::to($managerInfo->email)->send(new PostNotification($approvedQna,$senderInfo));
+        }
+
+       
 
         return response()->json([
             'status' => 200,

@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class AuctionController extends Controller
 {
@@ -85,6 +87,12 @@ class AuctionController extends Controller
         }
 
         $product = Auction::create($data);
+
+        if($product){
+            $starInfo = getStarInfo($request->star_id);
+            $senderInfo = getAdminInfo($data['admin_id']);
+            Mail::to($starInfo->email)->send(new PostNotification($post,$senderInfo));
+        }
         return response()->json([
             'status' => 200,
             'productId' => $product->id,
@@ -449,8 +457,15 @@ class AuctionController extends Controller
         }
 
 
-        $auction->save();
-
+       $addFromMobile = $auction->save();
+       if($addFromMobile){
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+        
+            Mail::to($adminInfo->email)->send(new PostNotification($auction,$senderInfo));
+            Mail::to($managerInfo->email)->send(new PostNotification($auction,$senderInfo));
+       }
 
 
 
@@ -465,15 +480,6 @@ class AuctionController extends Controller
     public function star_addProduct(Request $request)
 
     {
-
-
-
-
-
-
-
-
-
         $validator = Validator::make($request->all(), [
 
             'title' => 'required',
@@ -532,6 +538,14 @@ class AuctionController extends Controller
 
         $product = Auction::create($data);
 
+        if($product){
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+
+            Mail::to($adminInfo->email)->send(new PostNotification($product,$senderInfo));
+            Mail::to($managerInfo->email)->send(new PostNotification($product,$senderInfo));
+        }
         return response()->json($product);
     }
     public function star_editOrConfirm($id)
@@ -567,7 +581,18 @@ class AuctionController extends Controller
     {
 
 
-        Auction::where('id', $id)->update(['star_approval' => 1]);
+        // Auction::where('id', $id)->update(['star_approval' => 1]);
+
+        $auction = Auction::find($id);
+        $auction->star_approval = 1;
+        $approveStar = $auction->update();
+
+        if($approveStar){
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+            Mail::to($managerInfo->email)->send(new PostNotification($auction,$senderInfo));
+        }
+
 
         return response()->json([
             'status' => 200,

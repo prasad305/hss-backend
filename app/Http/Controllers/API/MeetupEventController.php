@@ -14,6 +14,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class MeetupEventController extends Controller
 {
@@ -91,7 +93,12 @@ class MeetupEventController extends Controller
                 $meetup->video = $path . '/' . $filename;
             }
 
-            $meetup->save();
+            $adminAddResult = $meetup->save();
+            if($adminAddResult){
+                $starInfo = getStarInfo($meetup->star_id);
+                $senderInfo = getAdminInfo($meetup->admin_id);
+                Mail::to($starInfo->email)->send(new PostNotification($meetup,$senderInfo));
+            }
 
             return response()->json([
                 'status' => 200,
@@ -305,7 +312,13 @@ class MeetupEventController extends Controller
     {
         $meetup = MeetupEvent::find($id);
         $meetup->status = 1;
-        $meetup->update();
+        $starApprove = $meetup->update();
+
+        if($starApprove){
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+            Mail::to($managerInfo->email)->send(new PostNotification($meetup,$senderInfo));
+        }
 
         return response()->json([
             'status' => 200,
@@ -571,7 +584,15 @@ class MeetupEventController extends Controller
                     Image::make($decodedBase64)->save($folder_path . $image_new_name);
                     $location = $folder_path . $image_new_name;
                     $meetup->banner = $location;
-                    $meetup->save();
+                    $addFromMobile = $meetup->save();
+                    if($addFromMobile){
+                        $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                        $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+                        $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+                    
+                        Mail::to($adminInfo->email)->send(new PostNotification($meetup,$senderInfo));
+                        Mail::to($managerInfo->email)->send(new PostNotification($meetup,$senderInfo));
+                   }
                 } catch (\Exception $exception) {
                     return response()->json([
                         "error" => $exception->getMessage(),
@@ -668,8 +689,15 @@ class MeetupEventController extends Controller
                 $meetup->banner = $request->image_path;
             }
 
-            $meetup->save();
+            $starAddResult = $meetup->save();
+            if($starAddResult){
+                $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+                $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
+                Mail::to($adminInfo->email)->send(new PostNotification($meetup,$senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($meetup,$senderInfo));
+            }
             return response()->json([
                 'status' => 200,
                 'meetup_id' => $meetup->id,

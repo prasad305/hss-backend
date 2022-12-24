@@ -99,9 +99,6 @@ class AuthController extends Controller
     {
 
 
-        // Mail::to('apurboka@gmail.com')->send(new ForgetPassword());
-
-
 
 
         $validator = Validator::make($request->all(), [

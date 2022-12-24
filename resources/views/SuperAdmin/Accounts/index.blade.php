@@ -229,7 +229,7 @@
                     data: jQuery('#accountFilterForm').serialize(),
                     type: 'post',
                     success: function(response) {
-                    console.log(response);
+                    
                         var _html = '';
                         if (response.module == 4) {
                             var i = 0;
@@ -255,7 +255,7 @@
                         } else if (response.module == 1) {
                             var i = 0;
                             $.each(response.simple_post, function(index, res) {
-                                // console.log(response)
+                                
                                 _html +=
                                     '<div class="col-12 col-sm-6 col-md-3 dataList"><div class="info-box mb-3"><span class="info-box-icon bg-warning elevation-1"><i class="fa fa-users" aria-hidden="true"></i></span><div class="info-box-content"><div class="row"><div class="col-12 col-sm-6"><span class="info-box-text">Users <h1>' +
                                     response.userReg[index] +
@@ -476,7 +476,7 @@
                         $('#filterShowCard').html(_html);
                     },
                     error: function(err) {
-                        // console.log(err);
+                        
                     }
                 });
             });
