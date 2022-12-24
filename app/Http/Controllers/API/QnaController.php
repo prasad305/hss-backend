@@ -23,6 +23,9 @@ use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
+
 
 class QnaController extends Controller
 {
@@ -336,8 +339,13 @@ class QnaController extends Controller
                 $qna->video = $path . '/' . $file_name;
             }
 
-            $qna->save();
+            $adminAddResult = $qna->save();
+            if($adminAddResult){
+                $starInfo = getStarInfo($qna->star_id);
+                $senderInfo = getAdminInfo($qna->admin_id);
 
+                Mail::to($starInfo->email)->send(new PostNotification($qna,$senderInfo));
+            }
 
             return response()->json([
                 'status' => 200,
@@ -596,8 +604,15 @@ class QnaController extends Controller
 
             // Upload Video ended
 
-            $qna->save();
+            $addFromMobile = $qna->save();
+            if($addFromMobile){
+                $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+                $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
+                Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
+           }
 
 
 
@@ -686,8 +701,17 @@ class QnaController extends Controller
                 $qna->banner = $request->image_path;
             }
 
-            $qna->save();
+            $starAddResult = $qna->save();
+            if($starAddResult){
+                $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+                $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
+                Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
+            }
+
+            
 
             return response()->json([
                 'status' => 200,
@@ -698,8 +722,9 @@ class QnaController extends Controller
     public function update_Qna(Request $request)
     {
         // return $request->all();
+        $qna = QnA::find($request->id);
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|unique:qn_a_s,title,'.$qna->id,
             'event_date' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
@@ -720,7 +745,7 @@ class QnaController extends Controller
             ]);
         } else {
 
-            $qna = QnA::find($request->id);
+            
             $qna->title = $request->input('title');
             $qna->slug = Str::slug($request->input('title'));
             $qna->admin_id = auth()->user()->parent_user;
@@ -826,7 +851,14 @@ class QnaController extends Controller
     {
         $approvedQna = QnA::find($id);
         $approvedQna->star_approval = 1;
-        $approvedQna->update();
+        $approveStar = $approvedQna->update();
+        if($approveStar){
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+            Mail::to($managerInfo->email)->send(new PostNotification($approvedQna,$senderInfo));
+        }
+
+       
 
         return response()->json([
             'status' => 200,

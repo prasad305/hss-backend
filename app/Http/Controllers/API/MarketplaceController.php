@@ -18,6 +18,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class MarketplaceController extends Controller
 {
@@ -357,7 +359,12 @@ class MarketplaceController extends Controller
             $marketplace->image = $filename;
         }
 
-        $marketplace->save();
+        $adminAddResult = $marketplace->save();
+        if($adminAddResult){
+            $starInfo = getStarInfo($marketplace->superstar_id);
+            $senderInfo = getAdminInfo($marketplace->superstar_admin_id);
+            Mail::to($starInfo->email)->send(new PostNotification($marketplace,$senderInfo));
+        }
 
         return response()->json([
             'status' => 200,
@@ -607,7 +614,15 @@ class MarketplaceController extends Controller
                 Image::make($decodedBase64)->save($folder_path . $image_new_name);
                 $location = $folder_path . $image_new_name;
                 $marketplace->image = $location;
-                $marketplace->save();
+                $addFromMobile = $marketplace->save();
+                if($addFromMobile){
+                    $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                    $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+                    $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+
+                    Mail::to($adminInfo->email)->send(new PostNotification($marketplace,$senderInfo));
+                    Mail::to($managerInfo->email)->send(new PostNotification($marketplace,$senderInfo));
+               }
             } catch (\Exception $exception) {
                 return response()->json([
                     "error" => $exception->getMessage(),
@@ -690,7 +705,15 @@ class MarketplaceController extends Controller
             $marketplace->image = $filename;
         }
 
-        $marketplace->save();
+        $starAddResult = $marketplace->save();
+        if($starAddResult){
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+
+            Mail::to($adminInfo->email)->send(new PostNotification($marketplace,$senderInfo));
+            Mail::to($managerInfo->email)->send(new PostNotification($marketplace,$senderInfo));
+        }
 
         return response()->json([
             'status' => 200,
@@ -836,7 +859,13 @@ class MarketplaceController extends Controller
     {
         $marketplace = Marketplace::find($id);
         $marketplace->post_status = 1;
-        $marketplace->save();
+        $starApprove = $marketplace->save();
+        
+        if($starApprove){
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+            Mail::to($managerInfo->email)->send(new PostNotification($marketplace,$senderInfo));
+        }
 
         return response()->json([
             'status' => 200,

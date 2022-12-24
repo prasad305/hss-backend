@@ -16,6 +16,8 @@ use App\Models\Activity;
 use App\Models\SouvenirPayment;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class SouvinerController extends Controller
 {
@@ -79,7 +81,12 @@ class SouvinerController extends Controller
 
             $souvenir->approval_status = 0;
 
-            $souvenir->save();
+           $adminAddResult =  $souvenir->save();
+           if($adminAddResult){
+                $starInfo = getStarInfo($souvenir->star_id);
+                $senderInfo = getAdminInfo($souvenir->admin_id);
+                Mail::to($starInfo->email)->send(new PostNotification($souvenir,$senderInfo));
+           }
 
             return response()->json([
                 'status' => 200,
@@ -147,7 +154,15 @@ class SouvinerController extends Controller
 
             $souvenir->approval_status = 1;
 
-            $souvenir->save();
+            $starAddResult = $souvenir->save();
+            if($starAddResult){
+                $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+                $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+                $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+
+                Mail::to($adminInfo->email)->send(new PostNotification($souvenir,$senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($souvenir,$senderInfo));
+            }
 
             return response()->json([
                 'status' => 200,
@@ -412,7 +427,12 @@ class SouvinerController extends Controller
 
         $souviner = SouvenirCreate::find($id);
         $souviner->approval_status = 1;
-        $souviner->save();
+        $approveStar = $souviner->save();
+        if($approveStar){
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+            Mail::to($managerInfo->email)->send(new PostNotification($souviner,$senderInfo));
+        }
 
         return response()->json([
             'status' => 200,

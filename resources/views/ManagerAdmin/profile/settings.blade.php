@@ -201,7 +201,7 @@
         </script>
     @else{
         <script>
-            console.log('error')
+            
         </script>
     }@endif
 @endsection

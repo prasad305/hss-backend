@@ -9,6 +9,8 @@ use App\Models\SuperStar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 class SimplePostController extends Controller
 {
@@ -139,7 +141,15 @@ class SimplePostController extends Controller
             $post->details = $spost->description;
             $post->status = 1;
             $post->sub_category_id = $spost->subcategory_id;
-            $post->save();
+            $publishManager = $post->save();
+            if($publishManager){
+                $userInfo = getUserInfo();
+                $senderInfo = getManagerInfo(auth()->user()->id);
+                
+                foreach ($userInfo as $key => $data) {
+                    Mail::to($data->email)->send(new PostNotification($post,$senderInfo));
+                }
+            }
         } else {
             $spost->status = 0;
             $spost->update();
