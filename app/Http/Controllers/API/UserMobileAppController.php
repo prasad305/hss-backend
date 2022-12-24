@@ -217,10 +217,20 @@ class UserMobileAppController extends Controller
                         'payment_method' => "wallet",
                     ]);
                 }
-
                 // Wallet End
                 $event->available_start_time = (Carbon::parse($request->end_time)->addMinutes($event->time_interval)->format('H:i:s')) <= Carbon::parse($event->end_time)->format('H:i:s') ? Carbon::parse($request->end_time)->addMinutes($event->time_interval)->format('H:i:s') : Carbon::parse($event->end_time)->format('H:i:s');
                 $event->update();
+                /**
+                 * qna add to my chat list
+                 */
+                $myChatList = new MyChatList();
+                $myChatList->title =  $event->title;
+                $myChatList->type =  'qna';
+                $myChatList->qna_id =  $eventRegistration->id;
+                $myChatList->user_id =  Auth()->user()->id;
+                $myChatList->status =  1;
+                $myChatList->save();
+
             }
         }
 
@@ -327,17 +337,11 @@ class UserMobileAppController extends Controller
          * qna add to my chat list
          */
 
-        if ($modelName == 'qna') {
-            if (!QnaRegistration::where([['user_id', auth()->user()->id], ['qna_id', $eventId]])->exists()) {
-                $myChatList = new MyChatList();
-                $myChatList->title =  $event->title;
-                $myChatList->type =  'qna';
-                $myChatList->qna_id =  $eventRegistration->id;
-                $myChatList->user_id =  Auth()->user()->id;
-                $myChatList->status =  1;
-                $myChatList->save();
-            }
-        }
+        // if ($modelName == 'qna') {
+        //     if (!QnaRegistration::where([['user_id', auth()->user()->id], ['qna_id', $eventId]])->exists()) {
+                
+        //     }
+        // }
 
         try {
             $activity->user_id = $user->id;
@@ -834,7 +838,8 @@ class UserMobileAppController extends Controller
             // return $pdf;
 
 
-            $pdf = PDF::loadView('Others.Certificate.LearningCertificate', compact('PDFInfo'))->save(public_path('uploads/pdf/' . $time . '.' . 'pdf'));
+            $pdf = PDF::loadView('Others.Certificate.LearningCertificate', compact('PDFInfo'));
+			file_put_contents('uploads/pdf/' . $time . '.pdf', $pdf->output());
             $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
 
 
@@ -868,9 +873,10 @@ class UserMobileAppController extends Controller
         }
     }
 
-    public function checkPaymentStatus(Request $request)
+    public function checkPaymentStatus($slug)
     {
-        $certificatePay =  LearningSessionCertificate::where([['event_id', $request->event_id], ['user_id', auth()->user()->id], ['payment_status', 1]])->first();
+        $learningSession = LearningSession::where([['slug', $slug]])->first();
+        $certificatePay =  LearningSessionCertificate::where([['event_id', $learningSession->id], ['user_id', auth()->user()->id], ['payment_status', 1]])->first();
         return response()->json([
             'status' => 200,
             'certificate' => $certificatePay,
@@ -928,7 +934,9 @@ class UserMobileAppController extends Controller
             ];
             $time = time();
             try {
-                $pdf = PDF::loadView('Others.Certificate.Certificate', compact('PDFInfo'))->save(public_path('uploads/pdf/auditions/' . $time . '.' . 'pdf'));
+                $pdf = PDF::loadView('Others.Certificate.Certificate', compact('PDFInfo'));
+                file_put_contents('uploads/pdf/auditions/' . $time . '.pdf', $pdf->output());
+                // ->save(public_path('uploads/pdf/auditions/' . $time . '.' . 'pdf'));
                 $filename = 'uploads/pdf/auditions/' . $time . '.' . 'pdf';
             } catch (\Throwable $th) {
                 return $th;
@@ -955,24 +963,20 @@ class UserMobileAppController extends Controller
     /**
      * offline meetup ticket downlode
      */
-    public function meetUpTicketDownload($id)
+    public function meetUpTicketDownload(Request $request)
     {
 
         $time = time();
-
-        $user = User::find(auth()->user()->id);
-        $meetUp = MeetupEvent::find($id);
-
-        try {
-            $pdf = PDF::loadView('Others.ticket.ticketMeetup', compact('user', 'meetUp'))->save(public_path('uploads/pdf/' . $time . '.' . 'pdf'));
+        $user = User::find($request->uid);
+		$meetUp = MeetupEvent::find($request->id);
+            $pdf = PDF::loadView('Others.ticket.ticketMeetup', compact('user', 'meetUp'));
+			file_put_contents('uploads/pdf/' . $time . '.pdf', $pdf->output());
             $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
             return response()->json([
                 'status' => 200,
                 'certificateURL' =>  $filename,
             ]);
-        } catch (\Throwable $th) {
-            return $th;
-        }
+        
     }
     /**
      * oxygenReplyVideo
