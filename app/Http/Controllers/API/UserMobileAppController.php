@@ -837,7 +837,8 @@ class UserMobileAppController extends Controller
             // return $pdf;
 
 
-            $pdf = PDF::loadView('Others.Certificate.LearningCertificate', compact('PDFInfo'))->save(public_path('uploads/pdf/' . $time . '.' . 'pdf'));
+            $pdf = PDF::loadView('Others.Certificate.LearningCertificate', compact('PDFInfo'));
+			file_put_contents('uploads/pdf/' . $time . '.pdf', $pdf->output());
             $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
 
 
@@ -932,7 +933,9 @@ class UserMobileAppController extends Controller
             ];
             $time = time();
             try {
-                $pdf = PDF::loadView('Others.Certificate.Certificate', compact('PDFInfo'))->save(public_path('uploads/pdf/auditions/' . $time . '.' . 'pdf'));
+                $pdf = PDF::loadView('Others.Certificate.Certificate', compact('PDFInfo'));
+                file_put_contents('uploads/pdf/auditions/' . $time . '.pdf', $pdf->output());
+                // ->save(public_path('uploads/pdf/auditions/' . $time . '.' . 'pdf'));
                 $filename = 'uploads/pdf/auditions/' . $time . '.' . 'pdf';
             } catch (\Throwable $th) {
                 return $th;
@@ -959,24 +962,20 @@ class UserMobileAppController extends Controller
     /**
      * offline meetup ticket downlode
      */
-    public function meetUpTicketDownload($id)
+    public function meetUpTicketDownload(Request $request)
     {
 
         $time = time();
-
-        $user = User::find(auth()->user()->id);
-        $meetUp = MeetupEvent::find($id);
-
-        try {
-            $pdf = PDF::loadView('Others.ticket.ticketMeetup', compact('user', 'meetUp'))->save(public_path('uploads/pdf/' . $time . '.' . 'pdf'));
+        $user = User::find($request->uid);
+		$meetUp = MeetupEvent::find($request->id);
+            $pdf = PDF::loadView('Others.ticket.ticketMeetup', compact('user', 'meetUp'));
+			file_put_contents('uploads/pdf/' . $time . '.pdf', $pdf->output());
             $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
             return response()->json([
                 'status' => 200,
                 'certificateURL' =>  $filename,
             ]);
-        } catch (\Throwable $th) {
-            return $th;
-        }
+        
     }
     /**
      * oxygenReplyVideo
