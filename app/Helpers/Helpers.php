@@ -27,6 +27,8 @@ use App\Models\Activity;
 use App\Models\Audition\AuditionRoundAppealRegistration;
 use App\Models\Bidding;
 use App\Models\LearningSessionCertificate;
+use App\Models\PaidLoveReactPrice;
+use App\Models\SimplePost;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -480,12 +482,12 @@ if (!function_exists('random_code')) {
         $auditionRoundInfo = AuditionUploadVideo::with('roundInfo')->where('id', $videoId)->first();
 
         if (!LoveReactPayment::where([['user_id', $user_id], ['react_num', $reactNum], ['video_id', $videoId]])->exists()) {
-
+            $reactFee = PaidLoveReactPrice::where('loveReact', $reactNum)->first();
             $loveReactPayment = new LoveReactPayment();
             $loveReactPayment->user_id = $user_id;
             $loveReactPayment->video_id = $videoId;
             $loveReactPayment->react_num = $reactNum;
-            $loveReactPayment->fee = $amount;
+            $loveReactPayment->fee = $reactFee->fee;
             $loveReactPayment->audition_id = $auditionRoundInfo->roundInfo->audition_id;
             $loveReactPayment->round_info_id = $auditionRoundInfo->roundInfo->id;
             $loveReactPayment->status = 1;
@@ -670,6 +672,7 @@ if (!function_exists('random_code')) {
     {
         // return 'hit inside update';
         try {
+
             $generalPostPayment = new GeneralPostPayment();
             $generalPostPayment->post_id = $event_id;
             $generalPostPayment->user_id = auth('sanctum')->user()->id;
@@ -683,12 +686,12 @@ if (!function_exists('random_code')) {
     }
     function generalPostUpdate($event_id, $user_id, $method, $fee)
     {
+        $post = SimplePost::find($event_id);
         GeneralPostPayment::create([
-
             'post_id' => $event_id,
             'user_id' => $user_id,
             'payment_method' => $method,
-            'amount' => $fee,
+            'amount' => $post->fee,
             'status' => 1,
         ]);
     }

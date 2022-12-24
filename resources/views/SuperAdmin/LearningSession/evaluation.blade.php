@@ -42,7 +42,7 @@
                                     @if ($event->video != null)
                                         <video width="
                                     " height="200" controls>
-                                            <source src="{{ asset('http://localhost:8000/' . $event->video) }}" />
+                                            <source src="{{ asset($event->video) }}" />
                                         </video>
                                     @else
                                         <img width="100%" src="{{ asset($event->banner) }}" alt="">

@@ -6,10 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\LiveChat;
 use App\Models\EventProfile;
-use App\Models\Greeting;
 use App\Models\LiveChatRegistration;
-use App\Models\QnA;
-use App\Models\QnaRegistration;
 use App\Models\SuperStar;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -71,7 +68,7 @@ class LiveChatController extends Controller
     public function slots($slug)
     {
         $event = LiveChat::where('slug', $slug)->first();
-        $users = LiveChatRegistration::where('live_chat_id', $event->id)->get();
+        $users = LiveChatRegistration::where([['live_chat_id', $event->id], ['payment_status', 1]])->get();
 
         return response()->json([
             'status' => 200,
@@ -126,7 +123,7 @@ class LiveChatController extends Controller
     public function registeredUserList($live_chat_slug)
     {
         $event = LiveChat::where('slug', $live_chat_slug)->first();
-        $registeredLiveChats = LiveChatRegistration::where('live_chat_id', $event->id)->get();
+        $registeredLiveChats = LiveChatRegistration::where([['live_chat_id', $event->id], ['payment_status', 1]])->get();
 
 
         return response()->json([
@@ -313,7 +310,7 @@ class LiveChatController extends Controller
 
     public function admin_registeredUserList($live_chat_id)
     {
-        $registeredLiveChats = LiveChatRegistration::where('live_chat_id', $live_chat_id)->get();
+        $registeredLiveChats = LiveChatRegistration::where([['live_chat_id', $live_chat_id], ['payment_status', 1]])->get();
 
         return response()->json([
             'status' => 200,

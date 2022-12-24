@@ -61,7 +61,7 @@
             <label for="video">Video</label>
             <br>
             <video width="312" controls>
-                <source id="videoPreview" src="{{ asset('http://localhost:8000/' . $event->video) }}" />
+                <source id="videoPreview" src="{{ asset($event->video) }}" />
             </video>
             <br>
             <input type="file" class="mt-2" id="video" name="video" accept="video/mp4,video/x-m4v,video/*"

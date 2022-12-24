@@ -229,7 +229,7 @@ class MeetupEventController extends Controller
 
         $event = MeetupEvent::where('slug', $slug)->first();
 
-        $meetup = MeetupEventRegistration::where('meetup_event_id', $event->id)->get();
+        $meetup = MeetupEventRegistration::where([['meetup_event_id', $event->id], ['payment_status', 1]])->get();
         $slot = $event->total_seat;
 
         return response()->json([

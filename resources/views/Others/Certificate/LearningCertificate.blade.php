@@ -287,8 +287,7 @@
                         <div class="signature">
                             <div class="sign">
                                 {{-- <img src="{{ asset('/assets/img/text.png') }}" alt="" /> --}}
-                                <img src=" {{ asset('http://localhost:8000/' . $PDFInfo['signature']) }}"
-                                    alt="" />
+                                <img src=" {{ asset($PDFInfo['signature']) }}" alt="" />
                             </div>
                             <span>{{ $PDFInfo['starFullName'] }}</span> <br />
                             <small>Super Star</small> <br />
