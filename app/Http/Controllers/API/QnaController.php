@@ -150,25 +150,17 @@ class QnaController extends Controller
 
 
         if ($request->event_type == 'greeting') {
-            $event = Greeting::find($request->eventId);
-            $eventRegistration = GreetingsRegistration::where('user_id', Auth::user()->id)->where('id', $request->greetingId)->first();
-
-            $walletData = Wallet::where('user_id', Auth::user()->id)->first();
-            $walletData->greetings = $walletData->greetings - 1;
-            $walletData->save();
-
-            $eventRegistration->card_holder_name = Auth::user()->first_name . " " . Auth::user()->last_name;
-            $eventRegistration->amount = $event->cost;
-            $eventRegistration->payment_status = 1;
-            $eventRegistration->status = 1;
-            $eventRegistration->payment_method = 'wallet';
-            $eventRegistration->payment_date = Carbon::now();
-            $eventRegistration->save();
-
+            $greeting =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('greetings');
             $activity = new Activity();
             $activity->type = 'greeting';
             $activity->user_id = Auth::user()->id;
-            $activity->event_id = $event->id;
+            $eventRegistration = GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id], ['greeting_id', $request->eventId]])->first();
+            $eventRegistration->payment_status = 1;
+            $eventRegistration->status = 1;
+            $eventRegistration->payment_method = 'wallet';
+            $eventRegistration->save();
+            Wallet::where('user_id', auth('sanctum')->user()->id)->update(['greetings' => $greeting->greetings - 1]);
+            $activity->event_id = $greeting->id;
             $activity->event_registration_id = $eventRegistration->id;
             $activity->save();
             $userWallet = Wallet::where('user_id', Auth::user()->id)->first();
@@ -178,6 +170,36 @@ class QnaController extends Controller
                 'waletInfo' => $userWallet,
                 'eventRegistration' => $eventRegistration
             ]);
+
+
+            // $event = Greeting::find($request->eventId);
+            // $eventRegistration = GreetingsRegistration::where('user_id', Auth::user()->id)->where('id', $request->greetingId)->first();
+
+            // $walletData = Wallet::where('user_id', Auth::user()->id)->first();
+            // $walletData->greetings = $walletData->greetings - 1;
+            // $walletData->save();
+
+            // $eventRegistration->card_holder_name = Auth::user()->first_name . " " . Auth::user()->last_name;
+            // $eventRegistration->amount = $event->cost;
+            // $eventRegistration->payment_status = 1;
+            // $eventRegistration->status = 1;
+            // $eventRegistration->payment_method = 'wallet';
+            // $eventRegistration->payment_date = Carbon::now();
+            // $eventRegistration->save();
+
+            // $activity = new Activity();
+            // $activity->type = 'greeting';
+            // $activity->user_id = Auth::user()->id;
+            // $activity->event_id = $event->id;
+            // $activity->event_registration_id = $eventRegistration->id;
+            // $activity->save();
+            // $userWallet = Wallet::where('user_id', Auth::user()->id)->first();
+            // return response()->json([
+            //     'status' => 200,
+            //     'message' => 'Greeting Successfully Registered',
+            //     'waletInfo' => $userWallet,
+            //     'eventRegistration' => $eventRegistration
+            // ]);
         }
 
 

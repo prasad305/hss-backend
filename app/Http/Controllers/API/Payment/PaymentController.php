@@ -768,7 +768,8 @@ class PaymentController extends Controller
     public function greetingUpdate($user_id, $event_id, $method)
     {
         try {
-            $registerEvent = GreetingsRegistration::where([['id', $event_id], ['user_id', $user_id]])->first();
+            // $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id], ['status',0]])->first();
             // $eventRegistration = GreetingsRegistration::where('user_id', Auth::user()->id)->where('id', $request->greetingId)->first();
             $registerEvent->payment_status = 1;
             $registerEvent->status = 1;
@@ -919,6 +920,11 @@ class PaymentController extends Controller
         $registerEvent->payment_status = 1;
         $registerEvent->payment_method = $method;
         $registerEvent->update();
+
+        return response()->json([
+            'status' => 200,
+            'LearningSessionCertificate' => $registerEvent,
+        ]);
     }
 
     //   <================================Love React Payment end ==================================>

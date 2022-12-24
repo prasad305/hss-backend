@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Route;
 
 // Registered & Verified User Middleware
 Route::get('/mobile/getVirtualTourVideo', [UserMobileAppController::class, 'getVirtualTourVideo']);
+/**
+     * tiket for offline meetup
+     */
+    Route::post('/offlineMeetup/ticketDownload', [UserMobileAppController::class, 'meetUpTicketDownload']);
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::group(['prefix' => 'user/', 'as' => 'user.'], function () {
@@ -75,10 +79,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('mobile/audition/getAuditionCertificate/{audition_id}/{round_info_id}', [UserMobileAppController::class, 'getCertificate']);
 
 
-    /**
-     * tiket for offline meetup
-     */
-    Route::get('/offlineMeetup/ticketDownload/{id}', [UserMobileAppController::class, 'meetUpTicketDownload']);
+    
     /**
      * oxygenReplyVideo
      */
@@ -93,7 +94,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('mobile/audition/getLearningSessionCertificate/{slug}', [UserMobileAppController::class, 'getLearningSessionCertificate']);
     
     
-    Route::get('mobile/audition/checkPaymentStatus/{slug}', [UserMobileAppController::class, 'checkPaymentStatus']);
+    Route::get('mobile/learningSession/checkPaymentStatus/{slug}', [UserMobileAppController::class, 'checkPaymentStatus']);
 
 
 });
