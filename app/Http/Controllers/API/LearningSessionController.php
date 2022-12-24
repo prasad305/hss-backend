@@ -745,8 +745,8 @@ class LearningSessionController extends Controller
                         $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                         $senderInfo = getStarInfo(auth('sanctum')->user()->id);
                     
-                        Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
-                        Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
+                        Mail::to($adminInfo->email)->send(new PostNotification($learningSession,$senderInfo));
+                        Mail::to($managerInfo->email)->send(new PostNotification($learningSession,$senderInfo));
                    }
                 } catch (\Exception $exception) {
                     return response()->json([
