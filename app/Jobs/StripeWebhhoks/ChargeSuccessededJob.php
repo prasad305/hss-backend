@@ -2,6 +2,7 @@
 
 namespace App\Jobs\StripeWebhhoks;
 
+use App\Models\GreetingsRegistration;
 use App\Models\Transaction;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -32,6 +33,18 @@ class ChargeSuccessededJob implements ShouldQueue
         $event_type = $user_event[1];
         $user_id = $user_event[0];
         $value = $user_event[4];
+
+        switch ($event_type) {
+            case 'greeting':
+                $greetingRegistration = GreetingsRegistration::find($event_id);
+                $event_id = $greetingRegistration->greeting_id;
+                $value = $greetingRegistration->id;
+                break;
+
+            default:
+                $event_id =  $event_id;
+                break;
+        }
 
         Transaction::create([
             'user_id' => $user_id,

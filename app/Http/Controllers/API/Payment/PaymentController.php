@@ -52,9 +52,8 @@ class PaymentController extends Controller
     /**
      * stripe info
      */
-    protected $STRIPE_API_KEY = "sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX";
-    protected $STRIPE_PUBLIC_KEY = "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh";
-
+    protected $STRIPE_API_KEY = "sk_test_51LtSJLGiXzKYuOYkMt700dVTWeL5RG1a0e870EDiLRDuzgOkT7S0ylsMKUD2epCiLS5CvZD4imEFR7xDwuiWp7xZ00gQ3CCxeJ";
+    protected $STRIPE_PUBLIC_KEY = "pk_test_51LtSJLGiXzKYuOYkQjOQcod5ZhxNxnsyIezQUgDHHC5BPSr1JVrOeCrBUwdG1owKJEzFjh9V9CsXtRB9RTzEtaU200Kr8oNp8P";
     //---------------------paytm start----------
     //get paytm token
     public function paymentNow(Request $request)
@@ -133,11 +132,25 @@ class PaymentController extends Controller
             $response = curl_exec($ch);
             $result = json_decode($response);
             if ($result->body->resultInfo->resultStatus == 'TXN_SUCCESS') {
+
+
+                switch ($request->type) {
+                    case 'greeting':
+                        $greetingRegistration = GreetingsRegistration::find($request->event_id);
+                        $event_id = $greetingRegistration->greeting_id;
+                        $value = $request->event_id;
+                        break;
+
+                    default:
+                        $event_id =  $request->event_id;
+                        break;
+                }
+
                 Transaction::create([
                     'user_id' => $user_id,
                     'order_id' => $result->body->orderId,
                     'event' => $request->type,
-                    'event_id' => $request->event_id,
+                    'event_id' => $event_id,
                     'txn_id' => $result->body->txnId,
                     'txn_amount' => $result->body->txnAmount,
                     'currency' => "INR",
@@ -440,6 +453,7 @@ class PaymentController extends Controller
 
         $data = json_decode($shurjopay_service->verify($request->order_id));
         $paymentData = $data[0];
+
 
         Transaction::create([
             'user_id' => $paymentData->value1,

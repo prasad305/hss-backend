@@ -355,17 +355,19 @@ class GreetingController extends Controller
             $text->type = "Greetings";
             $text->save();
 
-            foreach ($users_arry as $key => $req) {
-                Notification::insert([
+            foreach ($users_arry as $key => $user_id) {
+                $notifications = Notification::create([
                     'notification_id' => $text->id,
-                    'event_id' => GreetingsRegistration::whereIn('id', $greetins_arry)->first()->greeting->id,
-                    'user_id' => $req,
+                    'event_id' => $request->greeting_id,
+                    'user_id' => $user_id,
                     'view_status' => 0,
                     'status' => 0,
                     'created_at' => Carbon::now(),
                 ]);
+                $register_greeting = GreetingsRegistration::where('user_id', $notifications->user_id)->update([
+                    'notification_at' => Carbon::now(),
+                ]);
             }
-            $register_greeting = GreetingsRegistration::whereIn('id', $greetins_arry)->update(['notification_at' => Carbon::now()]);
         }
 
         $register_list = GreetingsRegistration::whereIn('id', $greetins_arry)->where([['notification_at', null], ['status', 0]])->get();
