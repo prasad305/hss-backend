@@ -59,6 +59,7 @@ class CurrencyController extends Controller
             'status' => 200,
             'locationData' => $locationData,
             'currencyDetails' => $currencyDetails,
+            'strpe_pk' => env('STRIPE_PUBLIC_KEY')
         ]);
     }
 

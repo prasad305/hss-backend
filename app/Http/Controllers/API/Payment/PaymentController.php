@@ -55,6 +55,18 @@ class PaymentController extends Controller
     protected $STRIPE_API_KEY = "sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX";
     protected $STRIPE_PUBLIC_KEY = "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh";
 
+
+    /**
+     * ipay88 info
+     */
+    protected $iPAY88_MERCHANT_CODE = "M35354";
+    protected $iPAY88_MERCHANT_KEY = "YlZpMYxtcv";
+    protected $iPAY88_COUNTRY_CODE = "MYR";
+    protected $iPAY88_ENG_URL = "https://payment.ipay88.com.my/epayment/testing/testsignature_256.asp";
+    protected $iPAY88_RESPONSE_URL = "http://10.10.10.151:3000/";
+    protected $iPAY88_BACKEND_URL = "https://www.tfpbackend.hellosuperstars.com/api/ipay88-success";
+
+
     //---------------------paytm start----------
     //get paytm token
     public function paymentNow(Request $request)
@@ -485,6 +497,75 @@ class PaymentController extends Controller
 
 
     //--------------------shurjo pay end------------------------
+
+    //-------------------ipay88 start--------------------------
+    //ipay88 payment success backend responce
+    public function ipay88PaymentSuccess(Request $request)
+    {
+
+        $extraData = explode('_', $request->Xfield1);
+        $userId = $extraData[0];
+        $event_type = $extraData[1];
+        $event_id = $extraData[2];
+        $extra_value = $extraData[3];
+
+        Transaction::create([
+            'user_id' => $userId,
+            'order_id' => $request->RefNo,
+            'txn_id' => $request->TransId,
+            'currency' => $request->Currency,
+            'txn_amount' => $request->Amount,
+            'status' => $request->Status,
+            'event' => $event_type,
+            'event_id' =>  $event_id,
+            'bank_name' => $request->S_bankname,
+            'resp_msg' => $request->Xfield1,
+
+        ]);
+
+
+        return resgistationSuccessUpdate($userId, $event_type, $event_id, "ipay88", $request->Amount, $extra_value);
+    }
+
+
+    //payment initiate
+    public function ipayInitiate($userId, $amount, $eventName, $eventId, $valu, $for = null)
+    {
+
+
+
+        $refNo =  rand(1000, 999999);
+        $amount_str = round(1.00) . "00";
+        $amount = round(1.00) . "." . "00";
+        $merchantCode =  $this->iPAY88_MERCHANT_CODE;
+        $countryCode = $this->iPAY88_COUNTRY_CODE;
+        $resUrl = $this->iPAY88_RESPONSE_URL;
+        $resUrlBackend = $this->iPAY88_BACKEND_URL;
+        $paymentFor = $userId . "_" . $eventName . "_" . $eventId . "_" . $valu;
+
+        $hashString = $this->iPAY88_MERCHANT_KEY . $this->iPAY88_MERCHANT_CODE . $refNo . $amount_str . $this->iPAY88_COUNTRY_CODE . $paymentFor;
+
+
+        $signature = $this->ipayMakeSignatur($hashString);
+
+        return view('Ipay88.paymentInitiata', compact('refNo', 'amount', 'merchantCode', 'signature', 'countryCode', 'resUrl', 'resUrlBackend', 'paymentFor', 'eventName'));
+    }
+
+
+    //signature make
+    public function ipayMakeSignatur($string)
+    {
+        return hash('sha256', $string);
+    }
+
+    //payment success view
+    public function iPayPaymentSuccess($order_id)
+    {
+        $paymentData = Transaction::where('order_id', $order_id)->first();
+
+        return view('Ipay88.iPaymentSuccess', compact('paymentData'));
+    }
+    //-------------------ipay88 end----------------------------
 
     public function pocketToken()
     {

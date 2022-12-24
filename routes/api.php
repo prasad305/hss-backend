@@ -47,7 +47,7 @@ Route::get('/sdk/meeting-record-start/{roomId}', [SdkController::class, 'meeting
 Route::get('/sdk/meeting-record-stop/{roomId}', [SdkController::class, 'meetingRecordStop']);
 Route::get('/sdk/meeting-record-download/{roomId}', [SdkController::class, 'meetingRecordDownlode']);
 
-
+Route::post('/ipay88-success', [PaymentController::class, 'ipay88PaymentSuccess']);
 
 
 
@@ -178,6 +178,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/initiata-shurjo-payment', [PaymentController::class, 'initiataShurjoPayment']);
     //shurjoy pay status
     Route::get('/shurjo-payment-status/{order_id}', [PaymentController::class, 'shurjoPaymentStatus']);
+
 
 
     //stripe mobile
