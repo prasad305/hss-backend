@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Notification extends Model
 {
     use HasFactory;
-    protected $gauarded = [];
+    protected $guarded = [];
 
     protected $with = ['notificationText'];
 

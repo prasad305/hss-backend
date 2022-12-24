@@ -389,7 +389,7 @@ if (!function_exists('random_code')) {
         }
         //greeting
         if ($type == 'greeting') {
-            greetingUpdate($user_id, $event_id, $paymentMethod);
+            greetingUpdate($user_id, $event_id, $paymentMethod, $value);
         }
         //generalpost
         if ($type == 'generalpost') {
@@ -647,10 +647,12 @@ if (!function_exists('random_code')) {
     }
 
     //greeting update
-    function greetingUpdate($user_id, $event_id, $method)
+    function greetingUpdate($user_id, $event_id, $method, $reg_id)
     {
+
+
         try {
-            $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id], ['status',0]])->first();
+            $registerEvent = GreetingsRegistration::find($reg_id);
             $registerEvent->payment_status = 1;
             $registerEvent->status = 1;
             $registerEvent->payment_method = $method;
@@ -659,8 +661,8 @@ if (!function_exists('random_code')) {
             $activity = new Activity();
             $activity->type = 'greeting';
             $activity->user_id = $user_id;
-            $activity->event_id = $event_id;
-            $activity->event_registration_id = $registerEvent->id;
+            $activity->event_id =  $registerEvent->greeting_id;
+            $activity->event_registration_id = $reg_id;
             $activity->save();
         } catch (\Throwable $th) {
             //throw $th;
@@ -705,7 +707,7 @@ if (!function_exists('random_code')) {
         ]);
     }
 
-// Mailer Function
+    // Mailer Function
 
     function getStarInfo($id)
     {
@@ -719,21 +721,18 @@ if (!function_exists('random_code')) {
     }
     function getManagerInfoFromCategory($cat_id)
     {
-        $manager = User::with('category')->where('category_id',$cat_id)->where('user_type','manager-admin')->first();
+        $manager = User::with('category')->where('category_id', $cat_id)->where('user_type', 'manager-admin')->first();
         return $manager;
     }
-    
+
     function getManagerInfo($id)
     {
-        $manager = User::with('category')->where('id',$id)->where('user_type','manager-admin')->first();
+        $manager = User::with('category')->where('id', $id)->where('user_type', 'manager-admin')->first();
         return $manager;
     }
     function getUserInfo()
     {
-        $user = User::where('user_type','user')->get();
+        $user = User::where('user_type', 'user')->get();
         return $user;
     }
-
-
-
 }

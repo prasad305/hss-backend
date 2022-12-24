@@ -236,10 +236,10 @@ class UserMobileAppController extends Controller
 
         if ($modelName == 'greeting') {
 
-            if (!GreetingsRegistration::where([['user_id', auth()->user()->id], ['greeting_id', $eventId], ['payment_status', 1]])->exists()) {
+            if (!GreetingsRegistration::where([['user_id', auth()->user()->id], ['id', $eventId], ['payment_status', 1]])->exists()) {
 
-                $eventRegistration = GreetingsRegistration::find($request->event_registration_id);
-                $event = Greeting::find($eventId);
+                $eventRegistration = GreetingsRegistration::find($eventId);
+                $event = Greeting::find($eventRegistration->greeting_id);
                 $eventRegistration->status = 1;
                 $eventRegistration->amount = $event->cost;
                 $eventRegistration->save();
@@ -248,7 +248,7 @@ class UserMobileAppController extends Controller
                     $activity->type = 'greeting';
                     $greeting =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('greetings');
                     Wallet::where('user_id', auth('sanctum')->user()->id)->update(['greetings' => $greeting->greetings - 1]);
-                    GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id], ['greeting_id', $eventId]])->update([
+                    GreetingsRegistration::where([['user_id', auth('sanctum')->user()->id], ['id', $eventId]])->update([
                         'payment_status' => 1,
                         'status' => 1,
                         'payment_method' => "wallet",

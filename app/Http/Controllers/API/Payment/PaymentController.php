@@ -145,11 +145,25 @@ class PaymentController extends Controller
             $response = curl_exec($ch);
             $result = json_decode($response);
             if ($result->body->resultInfo->resultStatus == 'TXN_SUCCESS') {
+
+
+                switch ($request->type) {
+                    case 'greeting':
+                        $greetingRegistration = GreetingsRegistration::find($request->event_id);
+                        $event_id = $greetingRegistration->greeting_id;
+                        $value = $request->event_id;
+                        break;
+
+                    default:
+                        $event_id =  $request->event_id;
+                        break;
+                }
+
                 Transaction::create([
                     'user_id' => $user_id,
                     'order_id' => $result->body->orderId,
                     'event' => $request->type,
-                    'event_id' => $request->event_id,
+                    'event_id' => $event_id,
                     'txn_id' => $result->body->txnId,
                     'txn_amount' => $result->body->txnAmount,
                     'currency' => "INR",
@@ -452,6 +466,7 @@ class PaymentController extends Controller
 
         $data = json_decode($shurjopay_service->verify($request->order_id));
         $paymentData = $data[0];
+
 
         Transaction::create([
             'user_id' => $paymentData->value1,
@@ -769,7 +784,7 @@ class PaymentController extends Controller
     {
         try {
             // $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id]])->first();
-            $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id], ['status',0]])->first();
+            $registerEvent = GreetingsRegistration::where([['greeting_id', $event_id], ['user_id', $user_id], ['status', 0]])->first();
             // $eventRegistration = GreetingsRegistration::where('user_id', Auth::user()->id)->where('id', $request->greetingId)->first();
             $registerEvent->payment_status = 1;
             $registerEvent->status = 1;
