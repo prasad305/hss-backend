@@ -3,6 +3,7 @@
 namespace App\Jobs\StripeWebhhoks;
 
 use App\Models\GreetingsRegistration;
+use App\Models\MarketplaceOrder;
 use App\Models\Transaction;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -39,6 +40,11 @@ class ChargeSuccessededJob implements ShouldQueue
                 $greetingRegistration = GreetingsRegistration::find($event_id);
                 $event_id = $greetingRegistration->greeting_id;
                 $value = $greetingRegistration->id;
+                break;
+            case 'marketplace':
+                $order = MarketplaceOrder::find($event_id);
+                $event_id = $order->marketplace_id;
+                $value = $event_id;
                 break;
 
             default:

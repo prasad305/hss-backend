@@ -377,7 +377,7 @@ if (!function_exists('random_code')) {
         }
         //marketplace
         if ($type == 'marketplace') {
-            marketplaceUpdate($user_id, $event_id, $paymentMethod);
+            marketplaceUpdate($user_id, $event_id, $paymentMethod, $value);
         }
         //package
         if ($type == 'package') {
@@ -585,9 +585,9 @@ if (!function_exists('random_code')) {
         }
     }
     // Marketplace
-    function marketplaceUpdate($user_id, $event_id, $method)
+    function marketplaceUpdate($user_id, $event_id, $method, $orderId)
     {
-        $registerEvent = MarketplaceOrder::where([['marketplace_id', $event_id], ['user_id', $user_id]])->first();
+        $registerEvent = MarketplaceOrder::where([['id', $orderId], ['user_id', $user_id]])->first();
         $registerEvent->payment_status = 1;
         $registerEvent->payment_method = $method;
         $registerEvent->update();
@@ -595,7 +595,7 @@ if (!function_exists('random_code')) {
         $activity = new Activity();
         $activity->user_id = $user_id;
         $activity->event_id = $event_id;
-        $activity->event_registration_id = $registerEvent->id;
+        $activity->event_registration_id = $orderId;
         $activity->type = 'marketplace';
         $activity->save();
     }

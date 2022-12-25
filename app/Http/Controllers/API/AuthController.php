@@ -43,8 +43,6 @@ class AuthController extends Controller
 
         ]);
 
-        $Alluser = User::all();
-
 
         if ($validator->fails()) {
             return response()->json([
@@ -54,8 +52,8 @@ class AuthController extends Controller
 
 
             $user = User::create([
-                'username' => "hss" . count($Alluser),
                 'first_name' => $request->first_name,
+
                 'last_name' => "",
                 'email' => $request->email,
                 'phone' => $request->phone,
@@ -69,6 +67,8 @@ class AuthController extends Controller
                 'otp_verified_at' => Carbon::now(),
                 'user_type' => 'user'
             ]);
+
+            User::find($user->id)->update(['username' => $request->first_name . $user->id]);
 
             $token = $user->createToken($user->email . '_Token')->plainTextToken;
 
