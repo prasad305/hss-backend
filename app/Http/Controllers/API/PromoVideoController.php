@@ -26,19 +26,18 @@ class PromoVideoController extends Controller
     public function videoStore(Request $request)
     {
         // return auth('sanctum')->user()->category_id;
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'star_id' => 'required',
             'title' => 'required',
             'video_url' => 'required|mimes:mp4,mov,ogg',
             'thumbnail' => 'required|mimes:jpeg,jpg,png,webp | max:1000'
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'validation_errors' => $validator->errors(),
             ]);
-        }else{
+        } else {
             $promo = PromoVideo::create([
                 'category_id' => auth('sanctum')->user()->category_id,
                 'sub_category_id' => auth('sanctum')->user()->sub_category_id,
@@ -73,9 +72,6 @@ class PromoVideoController extends Controller
                 'message' => "Video Uploaded Successfully"
             ]);
         }
-
-
-
     }
 
 
@@ -90,19 +86,18 @@ class PromoVideoController extends Controller
 
     public function adminUpdate(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'star_id' => 'required',
             'title' => 'required',
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'validation_errors' => $validator->errors(),
             ]);
-        }else{
+        } else {
             $promo = PromoVideo::findOrFail($request->id);
-            
+
             $promo->star_id = $request->star_id;
             $promo->title = $request->title;
 
@@ -138,7 +133,7 @@ class PromoVideoController extends Controller
 
     public function pendingVideos()
     {
-        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('admin_id', auth()->user()->id)->where('status',0)->get();
+        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('admin_id', auth()->user()->id)->where('status', 0)->get();
         return response()->json([
             'status' => 200,
             'promoVideos' => $promoVideos,
@@ -147,7 +142,7 @@ class PromoVideoController extends Controller
 
     public function approvedVideos()
     {
-        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('admin_id',auth()->user()->id)->where('status',1)->get();
+        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('admin_id', auth()->user()->id)->where('status', 1)->get();
         return response()->json([
             'status' => 200,
             'promoVideos' => $promoVideos,
@@ -167,7 +162,7 @@ class PromoVideoController extends Controller
     public function liveVideos()
     {
 
-        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('admin_id', auth()->user()->id)->where('status',2)->get();
+        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('admin_id', auth()->user()->id)->where('status', 2)->get();
 
         return response()->json([
             'status' => 200,
@@ -179,7 +174,7 @@ class PromoVideoController extends Controller
     public function rejectVideos()
     {
 
-        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('admin_id', auth()->user()->id)->where([['status',11]])->get();
+        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('admin_id', auth()->user()->id)->where([['status', 11]])->get();
 
         return response()->json([
             'status' => 200,
@@ -189,11 +184,11 @@ class PromoVideoController extends Controller
     }
     public function promoVideoCount()
     {
-      
 
-        $pendingTotal = PromoVideo::where('admin_id', auth()->user()->id)->where('status',0)->count();
-        $liveTotal = PromoVideo::where('admin_id', auth()->user()->id)->where('status',2)->count();
-        $approveTotal = PromoVideo::where('admin_id', auth()->user()->id)->where('status',1)->count();
+
+        $pendingTotal = PromoVideo::where('admin_id', auth()->user()->id)->where('status', 0)->count();
+        $liveTotal = PromoVideo::where('admin_id', auth()->user()->id)->where('status', 2)->count();
+        $approveTotal = PromoVideo::where('admin_id', auth()->user()->id)->where('status', 1)->count();
 
         return response()->json([
             'status' => 200,
@@ -219,18 +214,17 @@ class PromoVideoController extends Controller
 
     public function starPromovideoStore(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'title' => 'required',
             'video_url' => 'required|mimes:mp4,mov,ogg',
             'thumbnail' => 'required|mimes:jpeg,jpg,png,webp | max:1000'
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'validation_errors' => $validator->errors(),
             ]);
-        }else{
+        } else {
             $promo = PromoVideo::create([
                 'category_id' => auth('sanctum')->user()->category_id,
                 'sub_category_id' => auth('sanctum')->user()->sub_category_id,
@@ -265,7 +259,6 @@ class PromoVideoController extends Controller
                 'message' => "Video Uploaded Successfully"
             ]);
         }
-
     }
 
 
@@ -273,7 +266,7 @@ class PromoVideoController extends Controller
     public function starPromopendingVideos()
     {
 
-        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('star_id', auth()->user()->id)->where('status',0)->get();
+        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('star_id', auth()->user()->id)->where('status', 0)->get();
         return response()->json([
             'status' => 200,
             'promoVideos' => $promoVideos,
@@ -283,17 +276,19 @@ class PromoVideoController extends Controller
     public function starPromoApprovedVideos()
     {
 
-        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('star_id', auth()->user()->id)->where('status',1)->get();
+        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('star_id', auth()->user()->id)->where('status', 1)->get();
+        $approveTotal = PromoVideo::where('star_id', auth()->user()->id)->where('status', 1)->count();
         return response()->json([
             'status' => 200,
             'promoVideos' => $promoVideos,
+            'approveTotal' => $approveTotal,
         ]);
     }
 
     public function starPromoRejectedVideos()
     {
 
-        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('star_id',auth()->user()->id)->where('status',11)->get();
+        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('star_id', auth()->user()->id)->where('status', 11)->get();
 
         return response()->json([
             'status' => 200,
@@ -304,7 +299,8 @@ class PromoVideoController extends Controller
     public function starPromoliveVideos()
     {
 
-        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('star_id', auth()->user()->id)->where('status',2)->get();
+        $promoVideos = PromoVideo::orderBy('id', 'DESC')->where('star_id', auth()->user()->id)->where('status', 2)->get();
+
 
         return response()->json([
             'status' => 200,
@@ -339,18 +335,17 @@ class PromoVideoController extends Controller
 
     public function update(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'title' => 'required',
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->errors(),
+                'validation_errors' => $validator->errors(),
             ]);
-        }else{
+        } else {
             $promo = PromoVideo::findOrFail($request->id);
-            
+
             $promo->title = $request->title;
 
             if ($request->hasFile('video_url')) {
@@ -381,7 +376,6 @@ class PromoVideoController extends Controller
                 'message' => "Video Updated Successfully"
             ]);
         }
-
     }
 
     public function starVideosDetails($id)
@@ -413,7 +407,7 @@ class PromoVideoController extends Controller
     public function starPromoVideoDecline($id)
     {
 
-        $promoVideos = PromoVideo::where('id', $id)->update(['status' =>11]);
+        $promoVideos = PromoVideo::where('id', $id)->update(['status' => 11]);
 
         return response()->json([
             'status' => 200,

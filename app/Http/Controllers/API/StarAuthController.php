@@ -169,6 +169,7 @@ class StarAuthController extends Controller
 
             $user->email = $request->input('email');
             $user->phone = $request->input('phone');
+            $user->username =  $user->first_name . $user->id;
             // $user->otp = rand(100000, 999999);
             $user->otp = 123456;
             $user->password = Hash::make($request->input('password'));

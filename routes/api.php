@@ -825,6 +825,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/meetup_event/set_approve/{id}', [MeetupEventController::class, 'set_approve']);
     Route::get('/star/rejectMeetup/{id}', [MeetupEventController::class, 'set_reject']);
     Route::post('/star/meetup_event/edit/{id}', [MeetupEventController::class, 'star_edit']);
+    Route::get('/star/meetup_event_slots/{slug}', [MeetupEventController::class, 'starSlots']);
 
     Route::get('/star/live_chat/count', [LiveChatController::class, 'count2']);
 
