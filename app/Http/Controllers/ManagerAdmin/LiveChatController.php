@@ -105,12 +105,13 @@ class LiveChatController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required',
+            'title' => 'required|unique:live_chats,title,'.$id,
             'description' => 'required|min:5',
             'instruction' => 'required|min:5',
             'image' => 'mimes:png,jpg,jpeg,webP',
         ], [
             'title.required' => 'This Field Is Required',
+            'title.unique' => 'This Title Already Exist',
             'description.required' => 'This Field Is Required',
             'instruction.required' => 'This Field Is Required',
         ]);

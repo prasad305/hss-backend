@@ -293,7 +293,7 @@ class MarketplaceController extends Controller
 
         $validator = Validator::make($request->all(), [
 
-            'title' => 'required',
+            'title' => 'required|unique:marketplaces',
             'category_id' => 'required',
             'description' => 'required',
             'keywords' => 'required',
@@ -308,6 +308,7 @@ class MarketplaceController extends Controller
 
         ], [
             'title.required' => 'Title Field Is Required',
+            'title.unique' => 'This Title Already Exist',
             'category_id.required' => "Category Field Is Required",
             'subcategory_id.required' => "Subcategory Field Is Required",
             'description.required' => 'Description Field Is Required',
@@ -335,7 +336,7 @@ class MarketplaceController extends Controller
         $marketplace->title = $request->title;
         $marketplace->category_id = $request->category_id;
         $marketplace->subcategory_id = $request->subcategory_id;
-        $marketplace->slug = Str::slug($request->input('title') . '-' . rand(9999, 99999));
+        $marketplace->slug = Str::slug($request->title);
         $marketplace->description = $request->description;
         $marketplace->tax = $request->tax;
         $marketplace->terms_conditions = $request->terms_conditions;
@@ -483,7 +484,7 @@ class MarketplaceController extends Controller
 
         $validator = Validator::make($request->all(), [
 
-            'title' => 'required',
+            'title' => 'required|unique:marketplaces,title,'.$id,
             'description' => 'required',
             'keywords' => 'required',
             'unit_price' => 'required',
@@ -494,6 +495,7 @@ class MarketplaceController extends Controller
 
         ], [
             'title.required' => 'Title Field Is Required',
+            'title.unique' => 'This Title Already Exist',
             'keywords.required' => 'Keywords Field Is Required',
             'description.required' => 'Description Field Is Required',
             'unit_price.required' => "Unit Price Field Is Required",
@@ -511,7 +513,7 @@ class MarketplaceController extends Controller
         $marketplace = Marketplace::find($id);
 
         $marketplace->title = $request->title;
-        $marketplace->slug = Str::slug($request->input('title') . '-' . rand(9999, 99999));
+        $marketplace->slug = Str::slug($request->title);
         $marketplace->description = $request->description;
         $marketplace->unit_price = $request->unit_price;
         $marketplace->tax = $request->tax;
@@ -553,7 +555,7 @@ class MarketplaceController extends Controller
         // return $request->all();
         $validator = Validator::make($request->all(), [
 
-            'title' => 'required',
+            'title' => 'required|unique:marketplaces',
             'description' => 'required',
             'keywords' => 'required',
             'terms_conditions' => 'required',
@@ -564,6 +566,7 @@ class MarketplaceController extends Controller
 
         ], [
             'title.required' => 'Title Field Is Required',
+            'title.unique' => 'This Title Already Exist',
             'description.required' => 'Description Field Is Required',
             'keywords.required' => 'Keywords Field Is Required',
             'image.required' => "Image Field Is Required",
@@ -585,7 +588,7 @@ class MarketplaceController extends Controller
         $marketplace = new Marketplace();
 
         $marketplace->title = $request->title;
-        $marketplace->slug = Str::slug($request->input('title') . '-' . rand(9999, 99999));
+        $marketplace->slug = Str::slug($request->title);
         $marketplace->description = $request->description;
         $marketplace->terms_conditions = $request->terms_conditions;
         $marketplace->delivery_charge = $request->delivery_charge;
@@ -645,7 +648,7 @@ class MarketplaceController extends Controller
         // return $request->all();
         $validator = Validator::make($request->all(), [
 
-            'title' => 'required',
+            'title' => 'required|unique:marketplaces',
             'description' => 'required',
             'keywords' => 'required',
             'terms_conditions' => 'required',
@@ -657,6 +660,7 @@ class MarketplaceController extends Controller
 
         ], [
             'title.required' => 'Title Field Is Required',
+            'title.unique' => 'This Title Already Exist',
             'description.required' => 'Description Field Is Required',
             'keywords.required' => 'Keywords Field Is Required',
             'image.required' => "Image Field Is Required",
@@ -678,7 +682,7 @@ class MarketplaceController extends Controller
         $marketplace = new Marketplace();
 
         $marketplace->title = $request->title;
-        $marketplace->slug = Str::slug($request->input('title') . '-' . rand(9999, 99999));
+        $marketplace->slug = Str::slug($request->title);
         $marketplace->description = $request->description;
         $marketplace->terms_conditions = $request->terms_conditions;
         $marketplace->delivery_charge = $request->delivery_charge;
@@ -796,7 +800,7 @@ class MarketplaceController extends Controller
 
         $validator = Validator::make($request->all(), [
 
-            'title' => 'required',
+            'title' => 'required|unique:marketplaces,title,'.$id,
             'description' => 'required',
             'keywords' => 'required',
             'terms_conditions' => 'required',
@@ -807,6 +811,7 @@ class MarketplaceController extends Controller
 
         ], [
             'title.required' => 'Title Field Is Required',
+            'title.unique' => 'This Title Already Exist',
             'description.required' => 'Description Field Is Required',
             'keywords.required' => 'Keywords Field Is Required',
             'unit_price.required' => "Unit Price Field Is Required",
@@ -824,7 +829,7 @@ class MarketplaceController extends Controller
         $marketplace = Marketplace::find($id);
 
         $marketplace->title = $request->title;
-        $marketplace->slug = Str::slug($request->input('title') . '-' . rand(9999, 99999));
+        $marketplace->slug = Str::slug($request->title);
         $marketplace->description = $request->description;
         $marketplace->unit_price = $request->unit_price;
         $marketplace->delivery_charge = $request->delivery_charge;

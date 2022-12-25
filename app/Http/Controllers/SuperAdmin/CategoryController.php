@@ -52,7 +52,7 @@ class CategoryController extends Controller
 
         $category->name = $request->input('name');
         $url = $request->input('name');
-        $category->slug = str::slug($url, '-');
+        $category->slug = Str::slug($url, '-');
 
         if ($request->hasFile('icon')) {
             if ($category->icon != null)
@@ -126,13 +126,13 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|unique:categories,name,'.$id,
         ]);
 
         $category = Category::findOrFail($id);
         $category->name = $request->input('name');
         $url = $request->input('name');
-        $category->slug = str::slug($url, '-');
+        $category->slug = Str::slug($url, '-');
 
         if ($request->hasFile('icon')) {
             if ($category->icon != null)

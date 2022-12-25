@@ -411,7 +411,7 @@ class LearningSessionController extends Controller
             ]);
         } else {
             $request->validate([
-                'title' => 'required|unique:learning_sessions,title,' . $id,
+                'title' => 'required|unique:learning_sessions,title,'. $id,
                 'description' => 'required',
                 'instruction' => 'required',
                 // 'event_date' => 'required',

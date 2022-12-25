@@ -24,7 +24,7 @@ class SouvinerController extends Controller
     public function souvinerStore(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|unique:souvenir_creates',
             'description' => 'required',
             'instruction' => 'required',
             'star_id' => 'required',
@@ -45,7 +45,7 @@ class SouvinerController extends Controller
 
             $souvenir = new SouvenirCreate();
             $souvenir->title = $request->title;
-            $souvenir->slug = Str::slug($request->input('title'));
+            $souvenir->slug = Str::slug($request->title);
             $souvenir->description = $request->description;
             $souvenir->instruction = $request->instruction;
             $souvenir->category_id = $user->category_id;
@@ -98,7 +98,7 @@ class SouvinerController extends Controller
     public function souvinerStarStore(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|unique:souvenir_creates',
             'description' => 'required',
             'instruction' => 'required',
             'price' => 'required',
@@ -118,7 +118,7 @@ class SouvinerController extends Controller
 
             $souvenir = new SouvenirCreate();
             $souvenir->title = $request->title;
-            $souvenir->slug = Str::slug($request->input('title'));
+            $souvenir->slug = Str::slug($request->title);
             $souvenir->description = $request->description;
             $souvenir->instruction = $request->instruction;
             $souvenir->price = $request->price;
@@ -173,7 +173,7 @@ class SouvinerController extends Controller
     public function souvinerStarStoreMobile(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|unique:souvenir_creates',
             'description' => 'required',
             'instruction' => 'required',
             'price' => 'required',
@@ -193,7 +193,7 @@ class SouvinerController extends Controller
 
             $souvenir = new SouvenirCreate();
             $souvenir->title = $request->title;
-            $souvenir->slug = Str::slug($request->input('title'));
+            $souvenir->slug = Str::slug($request->title);
             $souvenir->description = $request->description;
             $souvenir->instruction = $request->instruction;
             $souvenir->price = $request->price;
@@ -340,7 +340,7 @@ class SouvinerController extends Controller
     public function souvinerUpdate(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|unique:souvenir_creates,title,'.$id,
             'description' => 'required',
             'instruction' => 'required',
             'price' => 'required',
@@ -361,7 +361,7 @@ class SouvinerController extends Controller
             $souvenir = SouvenirCreate::find($id);
 
             $souvenir->title = $request->title;
-            $souvenir->slug = Str::slug($request->input('title'));
+            $souvenir->slug = Str::slug($request->title);
             $souvenir->description = $request->description;
             $souvenir->instruction = $request->instruction;
             $souvenir->price = $request->price;
@@ -467,7 +467,7 @@ class SouvinerController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|unique:souvenir_creates,title,'.$id,
             'description' => 'required',
             'instruction' => 'required',
             'price' => 'required',
@@ -484,7 +484,7 @@ class SouvinerController extends Controller
             $souvenir = SouvenirCreate::find($id);
 
             $souvenir->title = $request->title;
-            $souvenir->slug = Str::slug($request->input('title'));
+            $souvenir->slug = Str::slug($request->title);
             $souvenir->description = $request->description;
             $souvenir->instruction = $request->instruction;
             $souvenir->price = $request->price;

@@ -222,8 +222,9 @@ class LiveChatController extends Controller
 
     public function update_by_admin(Request $request)
     {
+        $liveChat = LiveChat::find($request->id);
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|unique:live_chats,title,'.$liveChat->id,
             'description' => 'required|min:5',
             'instruction' => 'required|min:5',
             'date' => 'required',
@@ -235,6 +236,8 @@ class LiveChatController extends Controller
             'max_time' => 'required|min:1',
             'min_time' => 'required|min:1',
             'interval' => 'required',
+        ],[
+            'title.unique' => 'This title already exist',
         ]);
 
         if ($validator->fails()) {
@@ -242,7 +245,7 @@ class LiveChatController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $liveChat = LiveChat::find($request->id);
+            
             $liveChat->title = $request->input('title');
             $liveChat->slug = Str::slug($request->input('title'));
             $liveChat->description = $request->input('description');
@@ -560,9 +563,9 @@ class LiveChatController extends Controller
     public function update_by_star(Request $request)
     {
         // return $request->all();
-
+        $liveChat = LiveChat::find($request->id);
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|unique:live_chats,title,'.$liveChat->id,
             'description' => 'required|min:5',
             'instruction' => 'required|min:5',
             'date' => 'required',
@@ -574,6 +577,8 @@ class LiveChatController extends Controller
             'max_time' => 'required|min:1',
             'min_time' => 'required|min:1',
             'interval' => 'required',
+        ],[
+            'title.unique' => 'This title already exist',
         ]);
 
         if ($validator->fails()) {
@@ -581,7 +586,7 @@ class LiveChatController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $liveChat = LiveChat::find($request->id);
+            
             $liveChat->title = $request->title;
             $liveChat->slug = Str::slug($request->title);
             $liveChat->description = $request->description;
