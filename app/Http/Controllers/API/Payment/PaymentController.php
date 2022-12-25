@@ -153,6 +153,11 @@ class PaymentController extends Controller
                         $event_id = $greetingRegistration->greeting_id;
                         $value = $request->event_id;
                         break;
+                    case 'marketplace':
+                        $order = MarketplaceOrder::find($request->event_id);
+                        $event_id = $order->marketplace_id;
+                        $value = $request->event_id;
+                        break;
 
                     default:
                         $event_id =  $request->event_id;
