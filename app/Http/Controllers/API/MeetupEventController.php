@@ -94,10 +94,10 @@ class MeetupEventController extends Controller
             }
 
             $adminAddResult = $meetup->save();
-            if($adminAddResult){
+            if ($adminAddResult) {
                 $starInfo = getStarInfo($meetup->star_id);
                 $senderInfo = getAdminInfo($meetup->admin_id);
-                Mail::to($starInfo->email)->send(new PostNotification($meetup,$senderInfo));
+                Mail::to($starInfo->email)->send(new PostNotification($meetup, $senderInfo));
             }
 
             return response()->json([
@@ -247,6 +247,22 @@ class MeetupEventController extends Controller
             'message' => 'Success',
         ]);
     }
+    public function starSlots($slug)
+    {
+
+        $event = MeetupEvent::where('slug', $slug)->first();
+
+        $meetup = MeetupEventRegistration::where([['meetup_event_id', $event->id], ['payment_status', 1]])->get();
+        $slot = $event->total_seat;
+
+        return response()->json([
+            'status' => 200,
+            'meetup' => $meetup,
+            'count' => $meetup->count(),
+            'empty_slot' => $slot - $meetup->count(),
+            'message' => 'Success',
+        ]);
+    }
 
     public function star_meetup_list_count()
     {
@@ -314,10 +330,10 @@ class MeetupEventController extends Controller
         $meetup->status = 1;
         $starApprove = $meetup->update();
 
-        if($starApprove){
+        if ($starApprove) {
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            Mail::to($managerInfo->email)->send(new PostNotification($meetup,$senderInfo));
+            Mail::to($managerInfo->email)->send(new PostNotification($meetup, $senderInfo));
         }
 
         return response()->json([
@@ -585,14 +601,14 @@ class MeetupEventController extends Controller
                     $location = $folder_path . $image_new_name;
                     $meetup->banner = $location;
                     $addFromMobile = $meetup->save();
-                    if($addFromMobile){
+                    if ($addFromMobile) {
                         $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
                         $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                         $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-                    
-                        Mail::to($adminInfo->email)->send(new PostNotification($meetup,$senderInfo));
-                        Mail::to($managerInfo->email)->send(new PostNotification($meetup,$senderInfo));
-                   }
+
+                        Mail::to($adminInfo->email)->send(new PostNotification($meetup, $senderInfo));
+                        Mail::to($managerInfo->email)->send(new PostNotification($meetup, $senderInfo));
+                    }
                 } catch (\Exception $exception) {
                     return response()->json([
                         "error" => $exception->getMessage(),
@@ -690,13 +706,13 @@ class MeetupEventController extends Controller
             }
 
             $starAddResult = $meetup->save();
-            if($starAddResult){
+            if ($starAddResult) {
                 $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                Mail::to($adminInfo->email)->send(new PostNotification($meetup,$senderInfo));
-                Mail::to($managerInfo->email)->send(new PostNotification($meetup,$senderInfo));
+                Mail::to($adminInfo->email)->send(new PostNotification($meetup, $senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($meetup, $senderInfo));
             }
             return response()->json([
                 'status' => 200,
