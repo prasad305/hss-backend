@@ -45,7 +45,7 @@ class FanGroupController extends Controller
     {
 
         $request->validate([
-            'group_name' => 'required',
+            'group_name' => 'required|unique:fan_groups,group_name,'.$id,
             'description' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
@@ -54,7 +54,7 @@ class FanGroupController extends Controller
         $fangroup = FanGroup::findOrFail($id);
 
         $fangroup->group_name = $request->group_name;
-        $fangroup->slug = Str::slug($request->input('group_name') . '-' . rand(9999, 99999));
+        $fangroup->slug = Str::slug($request->group_name);
         $fangroup->description = $request->description;
         $fangroup->start_date = $request->start_date;
         $fangroup->end_date = $request->end_date;

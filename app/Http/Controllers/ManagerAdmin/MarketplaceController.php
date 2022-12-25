@@ -77,7 +77,7 @@ class MarketplaceController extends Controller
     {
         $request->validate([
 
-            'title' => 'required',
+            'title' => 'required|unique:marketplaces,title,'.$id,
             'description' => 'required',
             'keywords' => 'required',
             'terms_conditions' => 'required',
@@ -90,7 +90,7 @@ class MarketplaceController extends Controller
         $marketplace->fill($request->except('_token','image'));
 
         $marketplace->title = $request->input('title');
-        $marketplace->slug = Str::slug($request->input('title').'-'.rand(9999,99999));
+        $marketplace->slug = Str::slug($request->input('title'));
         $marketplace->description = $request->input('description');
         $marketplace->keywords = $request->input('keywords');
         $marketplace->terms_conditions = $request->input('terms_conditions');

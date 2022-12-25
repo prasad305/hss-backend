@@ -357,8 +357,10 @@ class QnaController extends Controller
     public function admin_update_Qna(Request $request)
     {
         // return $request->all();
+        $qna = QnA::where('slug', $request->slug)->first();
+
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|unique:qn_a_s,title,'.$qna->id,
             'event_date' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
@@ -371,6 +373,8 @@ class QnaController extends Controller
             'min_time' => 'required|min:1',
             'max_time' => 'required|min:1',
             'time_interval' => 'required',
+        ],[
+            'title.unique' => 'This title already exist',
         ]);
 
         if ($validator->fails()) {
@@ -381,7 +385,7 @@ class QnaController extends Controller
 
             $superStar = SuperStar::where('star_id', $request->input('star_id'))->first();
 
-            $qna = QnA::where('slug', $request->slug)->first();
+            
             $qna->title = $request->input('title');
             $qna->slug = Str::slug($request->input('title'));
             $qna->star_id = $request->star_id;

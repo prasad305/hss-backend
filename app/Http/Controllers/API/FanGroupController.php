@@ -97,7 +97,7 @@ class FanGroupController extends Controller
     {
         // $validator = Validator::make($request->all(), [
         $validator = Validator::make($request->all(), [
-            'group_name' => 'required',
+            'group_name' => 'required|unique:fan_groups',
             'description' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
@@ -122,7 +122,7 @@ class FanGroupController extends Controller
             $fangroup = new FanGroup();
 
             $fangroup->group_name = $request->group_name;
-            $fangroup->slug = Str::slug($request->input('group_name') . '-' . rand(9999, 99999));
+            $fangroup->slug = Str::slug($request->group_name);
             $fangroup->description = $request->description;
             $fangroup->club_points = $request->club_points;
             $fangroup->start_date = $request->start_date;
@@ -171,9 +171,9 @@ class FanGroupController extends Controller
     // Update Fan Group in Admin
     public function updateFanGroup(Request $request, $slug)
     {
-
+        $fangroup = FanGroup::where('slug', $slug)->first();
         $validator = Validator::make($request->all(), [
-            'group_name' => 'required',
+            'group_name' => 'required|unique:fan_groups,group_name,'.$fangroup->id,
             'description' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
@@ -187,11 +187,11 @@ class FanGroupController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $fangroup = FanGroup::where('slug', $slug)->first();
+            
 
             $fangroup->group_name = $request->group_name;
             $fangroup->club_points = $request->club_points;
-            $fangroup->slug = Str::slug($request->input('group_name') . '-' . rand(9999, 99999));
+            $fangroup->slug = Str::slug($request->group_name);
             $fangroup->description = $request->description;
             $fangroup->start_date = $request->start_date;
             $fangroup->end_date = $request->end_date;
@@ -257,8 +257,9 @@ class FanGroupController extends Controller
     public function starUpdate(Request $request, $slug)
     {
 
+        $fangroup = FanGroup::where('slug', $slug)->first();
         $validator = Validator::make($request->all(), [
-            'group_name' => 'required',
+            'group_name' => 'required|unique:fan_groups,group_name,'.$fangroup->id,
             'description' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
@@ -271,11 +272,11 @@ class FanGroupController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $fangroup = FanGroup::where('slug', $slug)->first();
+           
 
             $fangroup->group_name = $request->group_name;
             $fangroup->club_points = $request->club_points;
-            $fangroup->slug = Str::slug($request->input('group_name') . '-' . rand(9999, 99999));
+            $fangroup->slug = Str::slug($request->group_name);
             $fangroup->description = $request->description;
             $fangroup->start_date = $request->start_date;
             $fangroup->end_date = $request->end_date;

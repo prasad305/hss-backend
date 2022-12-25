@@ -57,7 +57,7 @@ class SubCategoryController extends Controller
 
         $subCategory->name = $request->input('name');
         $url = $request->input('name');
-        $subCategory->slug = str::slug($url, '-');
+        $subCategory->slug = Str::slug($url, '-');
         $subCategory->category_id = $request->input('category_id');
         $subCategory->status = 1;
 
@@ -131,12 +131,12 @@ class SubCategoryController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name'  => 'required',
+            'name'  => 'required|unique:sub_categories,name,'.$id,
         ]);
 
         $subCategory = SubCategory::findOrFail($id);
         $subCategory->name = $request->name;
-        $subCategory->slug = time() . '-' . Str::random(12);
+        $subCategory->slug = Str::slug($request->name, '-');
         $subCategory->category_id = $request->category_id;
 
         if ($request->hasFile('icon')) {

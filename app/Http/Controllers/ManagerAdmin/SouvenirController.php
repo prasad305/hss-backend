@@ -58,7 +58,7 @@ class SouvenirController extends Controller
     {
         $request->validate([
 
-            'title' => 'required',
+            'title' => 'required|unique:souvenir_creates,title,'.$id,
             'description' => 'required',
             'instruction' => 'required',
 
@@ -68,7 +68,7 @@ class SouvenirController extends Controller
         $souvenir->fill($request->except('_token','banner', 'video'));
 
         $souvenir->title = $request->input('title');
-        $souvenir->slug = Str::slug($request->input('title').'-'.rand(9999,99999));
+        $souvenir->slug = Str::slug($request->input('title'));
         $souvenir->description = $request->input('description');
         $souvenir->instruction = $request->input('instruction');
 
