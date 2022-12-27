@@ -34,18 +34,18 @@ class GreetingController extends Controller
     // }
     public function subcategory($id)
     {
-        $greetings = Greeting::where('category_id', $id)->get();
+        $greetings = Greeting::where('category_id', $id)->latest()->get();;
         return view('ManagerAdmin.greeting.subcategory', compact(['greetings']));
     }
 
     public function request()
     {
-        $greetings = Greeting::where([['category_id', Auth::user()->category_id], ['status', 1]])->get();
+        $greetings = Greeting::where([['category_id', Auth::user()->category_id], ['status', 1]])->latest()->get();
         return view('ManagerAdmin.greeting.request', compact('greetings'));
     }
     public function published()
     {
-        $greetings = Greeting::where([['category_id', Auth::user()->category_id], ['status', '>', 1]])->get();
+        $greetings = Greeting::where([['category_id', Auth::user()->category_id], ['status', '>', 1]])->latest()->get();
         return view('ManagerAdmin.greeting.published', compact('greetings'));
     }
 
@@ -121,7 +121,7 @@ class GreetingController extends Controller
     public function publish($greeting_id)
     {
         $greeting = Greeting::findOrFail($greeting_id);
-        if($greeting->status == 2 ){
+        if ($greeting->status == 2) {
             $greeting->status = 1;
             $greeting->save();
             return response()->json([
@@ -130,15 +130,15 @@ class GreetingController extends Controller
             ]);
         }
         $greeting->status = 2;
-        
+
         try {
             $approveManager = $greeting->save();
-            if($approveManager){
+            if ($approveManager) {
                 $userInfo = getUserInfo();
                 $senderInfo = getManagerInfo(auth()->user()->id);
-                
+
                 foreach ($userInfo as $key => $data) {
-                    Mail::to($data->email)->send(new PostNotification($greeting,$senderInfo));
+                    Mail::to($data->email)->send(new PostNotification($greeting, $senderInfo));
                 }
             }
             return response()->json([
