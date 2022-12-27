@@ -44,7 +44,7 @@ class ChargeSuccessededJob implements ShouldQueue
             case 'marketplace':
                 $order = MarketplaceOrder::find($event_id);
                 $event_id = $order->marketplace_id;
-                $value = $event_id;
+                $value = $order->id;
                 break;
 
             default:

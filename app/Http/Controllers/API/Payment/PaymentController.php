@@ -432,6 +432,31 @@ class PaymentController extends Controller
     //--------------------shurjo pay start------------------------
     public function initiataShurjoPayment(Request $request)
     {
+        // return $request->all();
+
+        switch ($request->type) {
+            case ('loveReact'):
+
+                $value4 = $request->reactNum;
+
+                break;
+            case 'greeting':
+                $greetingRegistration = GreetingsRegistration::find($request->event_id);
+                $value3 = $greetingRegistration->greeting_id;
+                $value4 = $request->event_id;
+                break;
+            case 'marketplace':
+                $order = MarketplaceOrder::find($request->event_id);
+                $value3 = $order->marketplace_id;
+                $value4 = $request->event_id;
+                break;
+
+            default:
+                $value3 = $request->event_id;
+                $value4 = 0;
+        }
+
+
         $user = auth()->user();
         $shurjopay_service = new ShurjopayController();
 
@@ -453,8 +478,8 @@ class PaymentController extends Controller
             'customer_country' => "bangladesh",
             'value1' =>  $user->id,
             'value2' => $request->event_type,
-            'value3' => $request->event_id,
-            'value4' =>  $request->reactNum ? $request->reactNum : 0,
+            'value3' =>   $value3,
+            'value4' => $value4,
         );
 
 
