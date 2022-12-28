@@ -66,6 +66,8 @@
                                 <th>SL</th>
                                 <th>Country Name</th>
                                 <th>Currency Rate</th>
+                                <th>Time</th>
+                                <th>Time Action</th>
                                 <th>Code</th>
                                 <th>Symbol</th>
                                 <th>Status</th>
@@ -78,6 +80,9 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $currency->country ? $currency->country : '' }}</td>
                                     <td>{{ $currency->currency_value ? $currency->currency_value : '' }}</td>
+                                    <td>{{ $currency->hours ? $currency->hours : 0 }}:{{ $currency->minute ? $currency->minute : 0 }}
+                                    </td>
+                                    <td>{{ $currency->time_action }}</td>
                                     <td>{{ $currency->currency_code }}</td>
                                     <td>{{ $currency->symbol }}</td>
                                     <td>
@@ -115,6 +120,8 @@
                                 <th>SL</th>
                                 <th>Country Name</th>
                                 <th>Currency</th>
+                                <th>Time</th>
+                                <th>Time Action</th>
                                 <th>Code</th>
                                 <th>Symbol</th>
                                 <th>Status</th>

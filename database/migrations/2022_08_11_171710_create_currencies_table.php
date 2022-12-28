@@ -21,6 +21,9 @@ class CreateCurrenciesTable extends Migration
             $table->string('symbol')->nullable();
             $table->string('country_code')->nullable();
             $table->float('currency_value')->nullable();
+            $table->integer('minute')->nullable();
+            $table->integer('hours')->nullable();
+            $table->string('time_action')->nullable();
             $table->tinyInteger('currency_status')->default(0)->comment('inactive = 0 , active = 1');
             $table->tinyInteger('status')->default(1);
             $table->timestamps();

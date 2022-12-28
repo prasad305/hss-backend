@@ -118,6 +118,7 @@ class UserMobileAppController extends Controller
         if ($modelName == 'learningSession') {
 
             if (!LearningSessionRegistration::where([['user_id', auth()->user()->id], ['learning_session_id', $eventId]])->exists()) {
+
                 $activity = new Activity();
                 $eventRegistration = new LearningSessionRegistration();
                 $event = LearningSession::find($eventId);
@@ -125,6 +126,13 @@ class UserMobileAppController extends Controller
                 $eventRegistration->learning_session_id = $eventId;
                 $eventRegistration->amount = $event->fee;
                 $activity->type = 'learningSession';
+
+                //for free cost regisation
+                if ($request->payment_method == "Free-Registaion") {
+                    $eventRegistration->payment_method = $request->payment_method;
+                    $eventRegistration->publish_status = 1;
+                    $eventRegistration->payment_status = 1;
+                }
 
                 if ($event->assignment == 1) {
                     $evaluation = new LearningSessionEvaluation();
@@ -230,7 +238,6 @@ class UserMobileAppController extends Controller
                 $myChatList->user_id =  Auth()->user()->id;
                 $myChatList->status =  1;
                 $myChatList->save();
-
             }
         }
 
@@ -339,7 +346,7 @@ class UserMobileAppController extends Controller
 
         // if ($modelName == 'qna') {
         //     if (!QnaRegistration::where([['user_id', auth()->user()->id], ['qna_id', $eventId]])->exists()) {
-                
+
         //     }
         // }
 
@@ -839,7 +846,7 @@ class UserMobileAppController extends Controller
 
 
             $pdf = PDF::loadView('Others.Certificate.LearningCertificate', compact('PDFInfo'));
-			file_put_contents('uploads/pdf/' . $time . '.pdf', $pdf->output());
+            file_put_contents('uploads/pdf/' . $time . '.pdf', $pdf->output());
             $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
 
 
@@ -968,15 +975,14 @@ class UserMobileAppController extends Controller
 
         $time = time();
         $user = User::find($request->uid);
-		$meetUp = MeetupEvent::find($request->id);
-            $pdf = PDF::loadView('Others.ticket.ticketMeetup', compact('user', 'meetUp'));
-			file_put_contents('uploads/pdf/' . $time . '.pdf', $pdf->output());
-            $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
-            return response()->json([
-                'status' => 200,
-                'certificateURL' =>  $filename,
-            ]);
-        
+        $meetUp = MeetupEvent::find($request->id);
+        $pdf = PDF::loadView('Others.ticket.ticketMeetup', compact('user', 'meetUp'));
+        file_put_contents('uploads/pdf/' . $time . '.pdf', $pdf->output());
+        $filename = 'uploads/pdf/' . $time . '.' . 'pdf';
+        return response()->json([
+            'status' => 200,
+            'certificateURL' =>  $filename,
+        ]);
     }
     /**
      * oxygenReplyVideo
