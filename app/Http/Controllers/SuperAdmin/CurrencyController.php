@@ -18,7 +18,7 @@ class CurrencyController extends Controller
         $currencies = Currency::latest()->get();
         return view('SuperAdmin.currency.index', compact('currencies'));
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -33,17 +33,27 @@ class CurrencyController extends Controller
         return view('SuperAdmin.currency.create');
     }
 
-   
+
     public function store(Request $request)
     {
+
         $request->validate([
             'country' => 'required',
             'currency_code' => 'required',
             'symbol' => 'required',
             'currency' => 'required',
         ]);
-
         $currency = new Currency();
+
+        if (isset($request->time)) {
+            $timeString = $request->time;
+            $getTime = explode(":", $timeString);
+            $currency->minute = $getTime[1];
+            $currency->hours =  $getTime[0];
+            $currency->time_action =  $request->time_action;
+        }
+
+
         $currency->country = $request->country;
         $currency->currency_code = $request->currency_code;
         $currency->symbol = $request->symbol;
@@ -65,24 +75,22 @@ class CurrencyController extends Controller
                 'message' => 'Opps somthing went wrong. ' . $exception->getMessage(),
             ]);
         }
-
     }
 
- 
+
     public function show(User $admin)
     {
         //
     }
 
-  
+
     public function edit($id)
     {
         $currencies = Currency::find($id);
         $data['currency'] = $currencies;
-        return view('SuperAdmin.currency.edit',$data);
-
+        return view('SuperAdmin.currency.edit', $data);
     }
-    
+
 
     public function update(Request $request, $id)
     {
@@ -96,7 +104,15 @@ class CurrencyController extends Controller
         // return $request->sub_category_id;
 
         $currency = Currency::findOrFail($id);
-        
+
+        if (isset($request->time)) {
+            $timeString = $request->time;
+            $getTime = explode(":", $timeString);
+            $currency->minute = $getTime[1];
+            $currency->hours =  $getTime[0];
+            $currency->time_action =  $request->time_action;
+        }
+
         $currency->country = $request->country;
         $currency->currency_code = $request->currency_code;
         $currency->symbol = $request->symbol;
@@ -107,10 +123,10 @@ class CurrencyController extends Controller
 
         // $currency->fill($request->except('_token'));
 
-        
+
         try {
             $currency->save();
-            if($currency){
+            if ($currency) {
                 return response()->json([
                     'success' => true,
                     'message' => 'Currency Updated Successfully'
@@ -182,29 +198,29 @@ class CurrencyController extends Controller
     {
         $currencyValue = Currency::where('currency_code', '!=', 'USD')->latest()->get();
 
-        foreach($currencyValue as $key=> $currency){
+        foreach ($currencyValue as $key => $currency) {
             // return $currency->currency_value;
-            
 
-            $amount= 1;
-            $from= "USD";
-            $to= $currency->currency_code;
+
+            $amount = 1;
+            $from = "USD";
+            $to = $currency->currency_code;
 
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.apilayer.com/fixer/convert?to={$to}&from={$from}&amount={$amount}",
-            CURLOPT_HTTPHEADER => array(
-                "Content-Type: text/plain",
-                "apikey: K4yuAxX9TMxd7sSM0ZswVx7jUjJw3Zum"
-            ),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET"
+                CURLOPT_URL => "https://api.apilayer.com/fixer/convert?to={$to}&from={$from}&amount={$amount}",
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: text/plain",
+                    "apikey: K4yuAxX9TMxd7sSM0ZswVx7jUjJw3Zum"
+                ),
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET"
             ));
 
             $response = curl_exec($curl);
@@ -212,7 +228,6 @@ class CurrencyController extends Controller
             curl_close($curl);
             $currency->currency_value = json_decode($response)->result;
             $currency->save();
-
         }
 
         try {
@@ -226,6 +241,5 @@ class CurrencyController extends Controller
                 'message' => $exception->getMessage()
             ]);
         }
-
     }
 }
