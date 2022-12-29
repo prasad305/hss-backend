@@ -269,7 +269,7 @@ class AuctionController extends Controller
     {
 
         $product = Auction::where('product_status', 1)->where('admin_id', auth()->user()->id)->count();
-        $sold_product = Auction::where('product_status', 1)->where('admin_id', auth()->user()->id)->get();
+        $sold_product = Auction::orderBy('id', 'DESC')->where('product_status', 1)->where('admin_id', auth()->user()->id)->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
