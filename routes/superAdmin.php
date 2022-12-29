@@ -55,6 +55,7 @@ use App\Http\Controllers\SuperAdmin\ProfitWithdrawController;
 use App\Http\Controllers\SuperAdmin\TermsConditionController;
 use App\Http\Controllers\SuperAdmin\RefundController;
 use App\Http\Controllers\SuperAdmin\VirtualtourController;
+use App\Http\Controllers\SuperAdmin\DeliveryChargeController;
 
 
 // Super Admin routechange.password
@@ -73,6 +74,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::put('/txn-store/{id}', [ProfitWithdrawController::class, 'store'])->name('bankTxnId.store');
 
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
+
+    Route::resource('deliverycharge', DeliveryChargeController::class);
+    Route::post('deliverycharge-active/{id}', [DeliveryChargeController::class, 'activeNow'])->name('deliverycharge.activeNow');
+    Route::post('deliverycharge-inactive/{id}', [DeliveryChargeController::class, 'inactiveNow'])->name('deliverycharge.inactiveNow');
+
     Route::post('/profile/change/store', [DashboardController::class, 'changeProfile'])->name('change.profile');
 
     Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
