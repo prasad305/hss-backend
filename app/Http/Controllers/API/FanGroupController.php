@@ -173,7 +173,7 @@ class FanGroupController extends Controller
     {
         $fangroup = FanGroup::where('slug', $slug)->first();
         $validator = Validator::make($request->all(), [
-            'group_name' => 'required|unique:fan_groups,group_name,'.$fangroup->id,
+            'group_name' => 'required|unique:fan_groups,group_name,' . $fangroup->id,
             'description' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
@@ -187,7 +187,7 @@ class FanGroupController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            
+
 
             $fangroup->group_name = $request->group_name;
             $fangroup->club_points = $request->club_points;
@@ -259,7 +259,7 @@ class FanGroupController extends Controller
 
         $fangroup = FanGroup::where('slug', $slug)->first();
         $validator = Validator::make($request->all(), [
-            'group_name' => 'required|unique:fan_groups,group_name,'.$fangroup->id,
+            'group_name' => 'required|unique:fan_groups,group_name,' . $fangroup->id,
             'description' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
@@ -272,7 +272,7 @@ class FanGroupController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-           
+
 
             $fangroup->group_name = $request->group_name;
             $fangroup->club_points = $request->club_points;
@@ -321,12 +321,10 @@ class FanGroupController extends Controller
 
         $starApproved = FanGroup::where(function ($query) use ($id) {
             $query->where('my_star_status', 1)
-                ->where('my_star', $id)
-                ->where('status', 0);
+                ->where('my_star', $id);
         })->orWhere(function ($query) use ($id) {
             $query->where('another_star_status', 1)
-                ->where('another_star', $id)
-                ->where('status', 0);
+                ->where('another_star', $id);
         })->orderBy('id', 'DESC')->get();
 
         $starRejected = FanGroup::where(function ($query) use ($id) {
@@ -610,7 +608,7 @@ class FanGroupController extends Controller
         //     ->get();
 
 
-        $useFanGroup = Fan_Group_Join::where('user_id', Auth('sanctum')->user()->id)->get();
+        $useFanGroup = Fan_Group_Join::where('user_id', Auth('sanctum')->user()->id)->latest()->get();
 
         $fanList = FanGroup::where('status', 1)->whereNotIn('id', $fanUser)->latest()->get();
 
