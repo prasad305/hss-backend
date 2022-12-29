@@ -37,6 +37,9 @@ use App\Http\Controllers\API\VirtualtourController;
 
 //video for SDK
 Route::get('/sdk/get-token', [SdkController::class, 'getToken']);
+Route::get('/sdk/get-token/user', [SdkController::class, 'getTokenUser']);
+Route::get('/sdk/get-token/admin', [SdkController::class, 'getToken']);
+
 Route::get('/sdk/createMeeting/{token}', [SdkController::class, 'createMeetingId']);
 Route::post('/sdk/validate-meeting/{roomId}', [SdkController::class, 'roomValidate']);
 Route::get('/sdk/videoEnd/{room_id}/{token}', [SdkController::class, 'roomRoomEnd']);
