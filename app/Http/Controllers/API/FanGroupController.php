@@ -1150,6 +1150,7 @@ class FanGroupController extends Controller
     // User Post in Fan Group in FanPost table
     public function getFanPostStore(Request $request)
     {
+        // return $request->all();
         $id = auth('sanctum')->user()->id;
 
         $slug = $request->slug;
@@ -1230,7 +1231,7 @@ class FanGroupController extends Controller
 
         return response()->json([
             'status' => 200,
-            'message' => 'Fan Group Post Successfully',
+            'message' => 'Your Post Added Successfully',
             'post' => $fanPost
         ]);
     }
