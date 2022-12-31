@@ -66,7 +66,7 @@
                                 <tr>
                                     <td>{{ ++$key }}</td>
                                     <td>{{ $data->country }}</td>
-                                    <td>{{ $data->courier_charge }}</td>
+                                    <td>$ {{ $data->courier_charge }}</td>
                                     <td>{{ $data->courier_company }}</td>
                                     <td>
                                         @if ($data->status)
