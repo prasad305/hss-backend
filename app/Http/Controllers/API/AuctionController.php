@@ -91,7 +91,8 @@ class AuctionController extends Controller
         if($product){
             $starInfo = getStarInfo($request->star_id);
             $senderInfo = getAdminInfo($data['admin_id']);
-            Mail::to($starInfo->email)->send(new PostNotification($post,$senderInfo));
+
+            SendMail($starInfo->email,$post,$senderInfo);
         }
         return response()->json([
             'status' => 200,
@@ -463,8 +464,9 @@ class AuctionController extends Controller
             $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
         
-            Mail::to($adminInfo->email)->send(new PostNotification($auction,$senderInfo));
-            Mail::to($managerInfo->email)->send(new PostNotification($auction,$senderInfo));
+            
+            SendMail($adminInfo->email,$auction,$senderInfo);
+            SendMail($managerInfo->email,$auction,$senderInfo);
        }
 
 
@@ -543,8 +545,8 @@ class AuctionController extends Controller
             $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-            Mail::to($adminInfo->email)->send(new PostNotification($product,$senderInfo));
-            Mail::to($managerInfo->email)->send(new PostNotification($product,$senderInfo));
+            SendMail($adminInfo->email,$product,$senderInfo);
+            SendMail($managerInfo->email,$product,$senderInfo);
         }
         return response()->json($product);
     }
@@ -590,7 +592,8 @@ class AuctionController extends Controller
         if($approveStar){
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            Mail::to($managerInfo->email)->send(new PostNotification($auction,$senderInfo));
+            
+            SendMail($managerInfo->email,$auction,$senderInfo);
         }
 
 

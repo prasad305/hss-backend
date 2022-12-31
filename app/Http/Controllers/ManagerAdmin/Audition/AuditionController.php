@@ -332,7 +332,7 @@ class AuditionController extends Controller
                 $senderInfo = getManagerInfo(auth()->user()->id);
                 
                 foreach ($userInfo as $key => $data) {
-                    Mail::to($data->email)->send(new PostNotification($audition,$senderInfo));
+                    SendMail($data->email,$audition,$senderInfo);
                 }
             }
 

@@ -160,7 +160,7 @@ class MeetupEventController extends Controller
                 $senderInfo = getManagerInfo(auth()->user()->id);
                 
                 foreach ($userInfo as $key => $data) {
-                    Mail::to($data->email)->send(new PostNotification($meetup,$senderInfo));
+                    SendMail($data->email,$meetup,$senderInfo);
                 }
             }
 

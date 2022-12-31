@@ -33,6 +33,8 @@ use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use App\Mail\PostNotification;
+use Illuminate\Support\Facades\Mail;
 
 // use Illuminate\Support\Facades\Cache;
 // use Illuminate\Support\Facades\Mail;
@@ -734,5 +736,9 @@ if (!function_exists('random_code')) {
     {
         $user = User::where('user_type', 'user')->get();
         return $user;
+    }
+
+    function SendMail($email,$post,$senderInfo){
+        Mail::to($email)->send(new PostNotification($post,$senderInfo));
     }
 }

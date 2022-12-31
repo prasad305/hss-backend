@@ -97,7 +97,8 @@ class MeetupEventController extends Controller
             if ($adminAddResult) {
                 $starInfo = getStarInfo($meetup->star_id);
                 $senderInfo = getAdminInfo($meetup->admin_id);
-                Mail::to($starInfo->email)->send(new PostNotification($meetup, $senderInfo));
+
+                SendMail($starInfo->email,$meetup,$senderInfo);
             }
 
             return response()->json([
@@ -336,7 +337,8 @@ class MeetupEventController extends Controller
         if ($starApprove) {
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            Mail::to($managerInfo->email)->send(new PostNotification($meetup, $senderInfo));
+
+            SendMail($managerInfo->email,$meetup,$senderInfo);
         }
 
         return response()->json([
@@ -609,8 +611,8 @@ class MeetupEventController extends Controller
                         $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                         $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                        Mail::to($adminInfo->email)->send(new PostNotification($meetup, $senderInfo));
-                        Mail::to($managerInfo->email)->send(new PostNotification($meetup, $senderInfo));
+                        SendMail($adminInfo->email,$meetup,$senderInfo);
+                        SendMail($managerInfo->email,$meetup,$senderInfo);
                     }
                 } catch (\Exception $exception) {
                     return response()->json([
@@ -714,8 +716,8 @@ class MeetupEventController extends Controller
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                Mail::to($adminInfo->email)->send(new PostNotification($meetup, $senderInfo));
-                Mail::to($managerInfo->email)->send(new PostNotification($meetup, $senderInfo));
+                SendMail($adminInfo->email,$meetup,$senderInfo);
+                SendMail($managerInfo->email,$meetup,$senderInfo);
             }
             return response()->json([
                 'status' => 200,

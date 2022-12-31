@@ -42,7 +42,7 @@ class QnaController extends Controller
             $senderInfo = getManagerInfo(auth()->user()->id);
             
             foreach ($userInfo as $key => $data) {
-                Mail::to($data->email)->send(new PostNotification($upcommingEvent,$senderInfo));
+                SendMail($data->email,$upcommingEvent,$senderInfo);
             }
         }
         

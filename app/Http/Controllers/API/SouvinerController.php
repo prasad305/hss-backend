@@ -85,7 +85,8 @@ class SouvinerController extends Controller
            if($adminAddResult){
                 $starInfo = getStarInfo($souvenir->star_id);
                 $senderInfo = getAdminInfo($souvenir->admin_id);
-                Mail::to($starInfo->email)->send(new PostNotification($souvenir,$senderInfo));
+
+                SendMail($starInfo->email,$souvenir,$senderInfo);
            }
 
             return response()->json([
@@ -160,8 +161,8 @@ class SouvinerController extends Controller
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                Mail::to($adminInfo->email)->send(new PostNotification($souvenir,$senderInfo));
-                Mail::to($managerInfo->email)->send(new PostNotification($souvenir,$senderInfo));
+                SendMail($adminInfo->email,$souvenir,$senderInfo);
+                SendMail($managerInfo->email,$souvenir,$senderInfo);
             }
 
             return response()->json([
@@ -431,7 +432,8 @@ class SouvinerController extends Controller
         if($approveStar){
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            Mail::to($managerInfo->email)->send(new PostNotification($souviner,$senderInfo));
+
+            SendMail($managerInfo->email,$souviner,$senderInfo);
         }
 
         return response()->json([

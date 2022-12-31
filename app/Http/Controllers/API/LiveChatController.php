@@ -88,7 +88,8 @@ class LiveChatController extends Controller
         if($starApproveResult){
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            Mail::to($managerInfo->email)->send(new PostNotification($approveLiveChat,$senderInfo));
+
+            SendMail($managerInfo->email,$approveLiveChat,$senderInfo);
         }
 
         return response()->json([
@@ -207,7 +208,8 @@ class LiveChatController extends Controller
            if($adminAddResult){
                 $starInfo = getStarInfo($liveChat->star_id);
                 $senderInfo = getAdminInfo($liveChat->admin_id);
-                Mail::to($starInfo->email)->send(new PostNotification($liveChat,$senderInfo));
+
+                SendMail($starInfo->email,$liveChat,$senderInfo);
            }
 
 
@@ -548,8 +550,8 @@ class LiveChatController extends Controller
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                Mail::to($adminInfo->email)->send(new PostNotification($liveChat,$senderInfo));
-                Mail::to($managerInfo->email)->send(new PostNotification($liveChat,$senderInfo));
+                SendMail($adminInfo->email,$liveChat,$senderInfo);
+                SendMail($managerInfo->email,$liveChat,$senderInfo);
             }
 
 

@@ -129,7 +129,7 @@ class SouvenirController extends Controller
                 $senderInfo = getManagerInfo(auth()->user()->id);
                 
                 foreach ($userInfo as $key => $data) {
-                    Mail::to($data->email)->send(new PostNotification($spost,$senderInfo));
+                    SendMail($data->email,$spost,$senderInfo);
                 }
             }
         }

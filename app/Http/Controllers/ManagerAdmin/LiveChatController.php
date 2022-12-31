@@ -80,7 +80,7 @@ class LiveChatController extends Controller
                 $userInfo = getUserInfo();
                 $senderInfo = getManagerInfo(auth()->user()->id);
                 foreach ($userInfo as $key => $data) {
-                    Mail::to($data->email)->send(new PostNotification($event,$senderInfo));
+                    SendMail($data->email,$event,$senderInfo);
                 }
             }
 

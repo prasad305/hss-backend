@@ -138,7 +138,7 @@ class GreetingController extends Controller
                 $senderInfo = getManagerInfo(auth()->user()->id);
 
                 foreach ($userInfo as $key => $data) {
-                    Mail::to($data->email)->send(new PostNotification($greeting, $senderInfo));
+                    SendMail($data->email,$greeting,$senderInfo);
                 }
             }
             return response()->json([

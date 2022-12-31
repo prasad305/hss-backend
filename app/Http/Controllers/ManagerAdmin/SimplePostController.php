@@ -147,7 +147,7 @@ class SimplePostController extends Controller
                 $senderInfo = getManagerInfo(auth()->user()->id);
                 
                 foreach ($userInfo as $key => $data) {
-                    Mail::to($data->email)->send(new PostNotification($post,$senderInfo));
+                    SendMail($data->email,$post,$senderInfo);
                 }
             }
         } else {
