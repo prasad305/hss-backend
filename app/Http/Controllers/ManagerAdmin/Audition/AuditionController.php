@@ -23,8 +23,7 @@ use App\Models\WildCard;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
+
 
 use function PHPUnit\Framework\isEmpty;
 

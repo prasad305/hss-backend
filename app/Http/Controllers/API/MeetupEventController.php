@@ -14,8 +14,6 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Validator;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 class MeetupEventController extends Controller
 {

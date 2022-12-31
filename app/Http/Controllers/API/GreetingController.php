@@ -14,8 +14,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 class GreetingController extends Controller
 {

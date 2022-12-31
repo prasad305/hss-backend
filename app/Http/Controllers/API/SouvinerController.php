@@ -16,8 +16,6 @@ use App\Models\Activity;
 use App\Models\SouvenirPayment;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 class SouvinerController extends Controller
 {

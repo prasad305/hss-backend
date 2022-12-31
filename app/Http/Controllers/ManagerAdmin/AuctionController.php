@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 class AuctionController extends Controller
 {

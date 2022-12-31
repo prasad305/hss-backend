@@ -12,8 +12,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
+
 
 class SouvenirController extends Controller
 {

@@ -23,8 +23,6 @@ use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 
 class QnaController extends Controller

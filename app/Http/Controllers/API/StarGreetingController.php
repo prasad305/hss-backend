@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 class StarGreetingController extends Controller
 {

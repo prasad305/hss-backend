@@ -13,8 +13,6 @@ use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 class LearningSessionController extends Controller
 {
