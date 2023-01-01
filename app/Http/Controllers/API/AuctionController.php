@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 class AuctionController extends Controller
 {
@@ -39,6 +37,8 @@ class AuctionController extends Controller
             'details' => 'required|min:10',
             'base_price' => 'required',
             'star_id' => 'required',
+            'result_date' => 'required',
+            'product_delivery_date' => 'required',
 
         ], [
             'title.required' => 'Title Field Is Required',
@@ -50,6 +50,8 @@ class AuctionController extends Controller
             'banner.required' => "Image Field Is Required",
             'base_price.required' => "Price Field Is Required",
             'star_id.required' => "Superstar Field Is Required",
+            'result_date.required' => "Result Filed is Required",
+            'product_delivery_date.required' => "Delivery Field is Required",
         ]);
 
         if ($validator->fails()) {
@@ -64,7 +66,7 @@ class AuctionController extends Controller
         $data['admin_id'] = Auth::user()->id;
 
         if ($request->star_id) {
-            $star = SuperStar::where('star_id', $request->star_id)->first();
+            $star = User::find($request->star_id);
         }
         $data['category_id'] = $star->category_id;
         $data['subcategory_id'] = $star->sub_category_id;
@@ -88,10 +90,11 @@ class AuctionController extends Controller
 
         $product = Auction::create($data);
 
-        if($product){
+        if ($product) {
             $starInfo = getStarInfo($request->star_id);
             $senderInfo = getAdminInfo($data['admin_id']);
-            Mail::to($starInfo->email)->send(new PostNotification($post,$senderInfo));
+
+            SendMail($starInfo->email, $product, $senderInfo);
         }
         return response()->json([
             'status' => 200,
@@ -155,7 +158,7 @@ class AuctionController extends Controller
         $data = $request->all();
 
         if ($request->star_id) {
-            $star = SuperStar::where('star_id', $request->star_id)->first();
+            $star = User::find($request->star_id);
         }
         $data['category_id'] = $star->category_id;
         $data['subcategory_id'] = $star->sub_category_id;
@@ -265,7 +268,7 @@ class AuctionController extends Controller
     {
 
         $product = Auction::where('product_status', 1)->where('admin_id', auth()->user()->id)->count();
-        $sold_product = Auction::where('product_status', 1)->where('admin_id', auth()->user()->id)->get();
+        $sold_product = Auction::orderBy('id', 'DESC')->where('product_status', 1)->where('admin_id', auth()->user()->id)->get();
         return response()->json([
             'status' => 200,
             'product' => $product,
@@ -457,15 +460,16 @@ class AuctionController extends Controller
         }
 
 
-       $addFromMobile = $auction->save();
-       if($addFromMobile){
+        $addFromMobile = $auction->save();
+        if ($addFromMobile) {
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-        
-            Mail::to($adminInfo->email)->send(new PostNotification($auction,$senderInfo));
-            Mail::to($managerInfo->email)->send(new PostNotification($auction,$senderInfo));
-       }
+
+
+            SendMail($adminInfo->email, $auction, $senderInfo);
+            SendMail($managerInfo->email, $auction, $senderInfo);
+        }
 
 
 
@@ -490,6 +494,8 @@ class AuctionController extends Controller
             'banner' => 'required|image',
             'details' => 'required|min:10',
             'base_price' => 'required',
+            'result_date' => 'required',
+            'product_delivery_date' => 'required',
 
         ], [
             'title.required' => 'Title Field Is Required',
@@ -500,6 +506,8 @@ class AuctionController extends Controller
             'product_image.required' => "Image Field Is Required",
             'banner.required' => "Image Field Is Required",
             'base_price.required' => "Price Field Is Required",
+            'result_date.required' => "Result Filed is Required",
+            'product_delivery_date.required' => "Delivery Field is Required",
         ]);
 
         if ($validator->fails()) {
@@ -538,13 +546,13 @@ class AuctionController extends Controller
 
         $product = Auction::create($data);
 
-        if($product){
+        if ($product) {
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-            Mail::to($adminInfo->email)->send(new PostNotification($product,$senderInfo));
-            Mail::to($managerInfo->email)->send(new PostNotification($product,$senderInfo));
+            SendMail($adminInfo->email, $product, $senderInfo);
+            SendMail($managerInfo->email, $product, $senderInfo);
         }
         return response()->json($product);
     }
@@ -587,10 +595,11 @@ class AuctionController extends Controller
         $auction->star_approval = 1;
         $approveStar = $auction->update();
 
-        if($approveStar){
+        if ($approveStar) {
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            Mail::to($managerInfo->email)->send(new PostNotification($auction,$senderInfo));
+
+            SendMail($managerInfo->email, $auction, $senderInfo);
         }
 
 

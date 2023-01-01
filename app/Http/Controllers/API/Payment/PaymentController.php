@@ -434,7 +434,7 @@ class PaymentController extends Controller
     {
         // return $request->all();
 
-        switch ($request->type) {
+        switch ($request->event_type) {
             case ('loveReact'):
 
                 $value4 = $request->reactNum;
@@ -443,18 +443,20 @@ class PaymentController extends Controller
             case 'greeting':
                 $greetingRegistration = GreetingsRegistration::find($request->event_id);
                 $value3 = $greetingRegistration->greeting_id;
-                $value4 = $request->event_id;
+                $value4 = $greetingRegistration->id;
                 break;
             case 'marketplace':
                 $order = MarketplaceOrder::find($request->event_id);
                 $value3 = $order->marketplace_id;
-                $value4 = $request->event_id;
+                $value4 = $order->id;
                 break;
 
             default:
-                $value3 = $request->event_id;
+                $value3 = 5;
                 $value4 = 0;
         }
+
+        return $request->type;
 
 
         $user = auth()->user();

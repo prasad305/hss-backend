@@ -23,8 +23,7 @@ use App\Models\WildCard;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
+
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -332,7 +331,7 @@ class AuditionController extends Controller
                 $senderInfo = getManagerInfo(auth()->user()->id);
                 
                 foreach ($userInfo as $key => $data) {
-                    Mail::to($data->email)->send(new PostNotification($audition,$senderInfo));
+                    SendMail($data->email,$audition,$senderInfo);
                 }
             }
 

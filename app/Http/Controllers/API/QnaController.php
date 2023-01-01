@@ -23,8 +23,6 @@ use App\Models\Greeting;
 use App\Models\GreetingsRegistration;
 use App\Models\MeetupEvent;
 use App\Models\MeetupEventRegistration;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 
 class QnaController extends Controller
@@ -344,7 +342,7 @@ class QnaController extends Controller
                 $starInfo = getStarInfo($qna->star_id);
                 $senderInfo = getAdminInfo($qna->admin_id);
 
-                Mail::to($starInfo->email)->send(new PostNotification($qna, $senderInfo));
+                SendMail($starInfo->email, $qna, $senderInfo);
             }
 
             return response()->json([
@@ -614,8 +612,8 @@ class QnaController extends Controller
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                Mail::to($adminInfo->email)->send(new PostNotification($qna, $senderInfo));
-                Mail::to($managerInfo->email)->send(new PostNotification($qna, $senderInfo));
+                // SendMail($adminInfo->email,$qna,$senderInfo);
+                SendMail($managerInfo->email, $qna, $senderInfo);
             }
 
 
@@ -711,8 +709,8 @@ class QnaController extends Controller
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                Mail::to($adminInfo->email)->send(new PostNotification($qna, $senderInfo));
-                Mail::to($managerInfo->email)->send(new PostNotification($qna, $senderInfo));
+                //SendMail($adminInfo->email,$qna,$senderInfo);
+                SendMail($managerInfo->email, $qna, $senderInfo);
             }
 
 
@@ -859,7 +857,8 @@ class QnaController extends Controller
         if ($approveStar) {
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            Mail::to($managerInfo->email)->send(new PostNotification($approvedQna, $senderInfo));
+
+            SendMail($managerInfo->email, $approvedQna, $senderInfo);
         }
 
 
