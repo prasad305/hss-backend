@@ -121,13 +121,13 @@ class LearningSessionController extends Controller
             }
 
             $adminAddResult = $learningSession->save();
-            if($adminAddResult){
+            if ($adminAddResult) {
                 $starInfo = getStarInfo($learningSession->star_id);
                 $senderInfo = getAdminInfo($learningSession->admin_id);
 
-                SendMail($starInfo->email,$learningSession,$senderInfo);
+                SendMail($starInfo->email, $learningSession, $senderInfo);
             }
-            
+
 
             return response()->json([
                 'status' => 200,
@@ -530,9 +530,9 @@ class LearningSessionController extends Controller
         ]);
     }
 
-    public function details($slug)
+    public function details($id)
     {
-        $event = LearningSession::where('slug', $slug)->first();
+        $event = LearningSession::find($id);
 
         return response()->json([
             'status' => 200,
@@ -576,9 +576,9 @@ class LearningSessionController extends Controller
         ]);
     }
 
-    public function pending_details($slug)
+    public function pending_details($id)
     {
-        $post = LearningSession::where('slug', $slug)->first();
+        $post = LearningSession::find($id);
 
         return response()->json([
             'status' => 200,
@@ -711,15 +711,15 @@ class LearningSessionController extends Controller
                     $location = $folder_path . $image_new_name;
                     $learningSession->banner = $location;
                     $addFromMobile = $learningSession->save();
-                    if($addFromMobile){
+                    if ($addFromMobile) {
                         $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
                         $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                         $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-                    
-                       
-                        SendMail($adminInfo->email,$learningSession,$senderInfo);
-                        SendMail($managerInfo->email,$learningSession,$senderInfo);
-                   }
+
+
+                        // SendMail($adminInfo->email,$learningSession,$senderInfo);
+                        SendMail($managerInfo->email, $learningSession, $senderInfo);
+                    }
                 } catch (\Exception $exception) {
                     return response()->json([
                         "error" => $exception->getMessage(),
@@ -740,15 +740,15 @@ class LearningSessionController extends Controller
 
                     $learningSession->video = $location;
                     $addFromMobile = $learningSession->save();
-                    if($addFromMobile){
+                    if ($addFromMobile) {
                         $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
                         $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                         $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-                    
-                        
-                        SendMail($adminInfo->email,$learningSession,$senderInfo);
-                        SendMail($managerInfo->email,$learningSession,$senderInfo);
-                   }
+
+
+                        // SendMail($adminInfo->email,$learningSession,$senderInfo);
+                        SendMail($managerInfo->email, $learningSession, $senderInfo);
+                    }
                 } catch (\Exception $exception) {
                     return response()->json([
                         "error" => $exception->getMessage(),
@@ -869,16 +869,16 @@ class LearningSessionController extends Controller
 
             $starAddResult = $learningSession->save();
 
-            if($starAddResult){
+            if ($starAddResult) {
                 $adminInfo = getAdminInfo($learningSession->admin_id);
                 $senderInfo = getStarInfo($learningSession->star_id);
                 $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
-            
-               
-                SendMail($adminInfo->email,$learningSession,$senderInfo);
-                SendMail($managerInfo->email,$learningSession,$senderInfo);
+
+
+                // SendMail($adminInfo->email,$learningSession,$senderInfo);
+                SendMail($managerInfo->email, $learningSession, $senderInfo);
             }
-            
+
 
 
             return response()->json([
@@ -958,6 +958,18 @@ class LearningSessionController extends Controller
 
                 Image::make($file)->resize(900, 400)->save($filename, 100);
                 $learning_session->banner = $filename;
+            }
+
+
+            if ($request->hasFile('video')) {
+                if ($learning_session->video != null && file_exists($learning_session->video)) {
+                    unlink($learning_session->video);
+                }
+                $file        = $request->file('video');
+                $path        = 'uploads/videos/learning_session';
+                $file_name   = time() . rand('0000', '9999') . '.' . $file->getClientOriginalName();
+                $file->move($path, $file_name);
+                $learning_session->video = $path . '/' . $file_name;
             }
 
             $learning_session->save();
@@ -1121,11 +1133,11 @@ class LearningSessionController extends Controller
         $learningSession->status = 1;
 
         $approvePost = $learningSession->update();
-        if($approvePost){
+        if ($approvePost) {
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            
-            SendMail($managerInfo->email,$learningSession,$senderInfo);
+
+            SendMail($managerInfo->email, $learningSession, $senderInfo);
         }
 
 

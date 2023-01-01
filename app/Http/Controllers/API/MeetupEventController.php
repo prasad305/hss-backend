@@ -109,9 +109,9 @@ class MeetupEventController extends Controller
 
     public function update_by_admin(Request $request, $id)
     {
-        
+
         $validator = Validator::make($request->all(), [
-            'title' => 'required|unique:meetup_events,title,'.$id,
+            'title' => 'required|unique:meetup_events,title,' . $id,
             'description' => 'required|min:6',
             'instruction' => 'required|min:6',
             'event_date' => 'required',
@@ -122,7 +122,7 @@ class MeetupEventController extends Controller
             'fee' => 'required',
             'total_seat' => 'required|numeric|min:0',
             'venue' => 'required_if:meetup_type,"Offline"',
-        ],[
+        ], [
             'title.unique' => 'This title already exist',
         ]);
 
@@ -131,7 +131,7 @@ class MeetupEventController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            
+
             $meetup = MeetupEvent::find($id);
             $meetup->title = $request->input('title');
             $meetup->slug = Str::slug($request->input('title'));
@@ -222,9 +222,9 @@ class MeetupEventController extends Controller
         ]);
     }
 
-    public function details($slug)
+    public function details($id)
     {
-        $meetup = MeetupEvent::where('slug', $slug)->first();
+        $meetup = MeetupEvent::find($id);
 
         return response()->json([
             'status' => 200,
@@ -732,7 +732,7 @@ class MeetupEventController extends Controller
 
         $validator = Validator::make($request->all(), [
             // 'star_id' => 'required',
-            'title' => 'required|unique:meetup_events,title,'.$id,
+            'title' => 'required|unique:meetup_events,title,' . $id,
             'description' => 'required|min:6',
             'instruction' => 'required|min:6',
             'event_date' => 'required',
@@ -743,7 +743,7 @@ class MeetupEventController extends Controller
             'fee' => 'required',
             'total_seat' => 'required',
             'venue' => 'required_if:meetup_type,"Offline"',
-        ],[
+        ], [
             'title.unique' => 'This title already exist',
         ]);
 
