@@ -340,11 +340,11 @@ class QnaController extends Controller
             }
 
             $adminAddResult = $qna->save();
-            if($adminAddResult){
+            if ($adminAddResult) {
                 $starInfo = getStarInfo($qna->star_id);
                 $senderInfo = getAdminInfo($qna->admin_id);
 
-                Mail::to($starInfo->email)->send(new PostNotification($qna,$senderInfo));
+                Mail::to($starInfo->email)->send(new PostNotification($qna, $senderInfo));
             }
 
             return response()->json([
@@ -360,7 +360,7 @@ class QnaController extends Controller
         $qna = QnA::where('slug', $request->slug)->first();
 
         $validator = Validator::make($request->all(), [
-            'title' => 'required|unique:qn_a_s,title,'.$qna->id,
+            'title' => 'required|unique:qn_a_s,title,' . $qna->id,
             'event_date' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
@@ -373,7 +373,7 @@ class QnaController extends Controller
             'min_time' => 'required|min:1',
             'max_time' => 'required|min:1',
             'time_interval' => 'required',
-        ],[
+        ], [
             'title.unique' => 'This title already exist',
         ]);
 
@@ -385,7 +385,7 @@ class QnaController extends Controller
 
             $superStar = SuperStar::where('star_id', $request->input('star_id'))->first();
 
-            
+
             $qna->title = $request->input('title');
             $qna->slug = Str::slug($request->input('title'));
             $qna->star_id = $request->star_id;
@@ -461,9 +461,9 @@ class QnaController extends Controller
             'pending' => $pending,
         ]);
     }
-    public function details($slug)
+    public function details($id)
     {
-        $event = QnA::where('slug', $slug)->first();
+        $event = QnA::find($id);
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
@@ -500,9 +500,9 @@ class QnaController extends Controller
             'count' => $events->count(),
         ]);
     }
-    public function registeredList($slug)
+    public function registeredList($id)
     {
-        $event = QnA::where('slug', $slug)->first();
+        $event = QnA::find($id);
         $users = QnaRegistration::where([['qna_id', $event->id], ['payment_status', 1]])->get();
 
         return response()->json([
@@ -609,14 +609,14 @@ class QnaController extends Controller
             // Upload Video ended
 
             $addFromMobile = $qna->save();
-            if($addFromMobile){
+            if ($addFromMobile) {
                 $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
-                Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
-           }
+                Mail::to($adminInfo->email)->send(new PostNotification($qna, $senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($qna, $senderInfo));
+            }
 
 
 
@@ -706,16 +706,16 @@ class QnaController extends Controller
             }
 
             $starAddResult = $qna->save();
-            if($starAddResult){
+            if ($starAddResult) {
                 $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                Mail::to($adminInfo->email)->send(new PostNotification($qna,$senderInfo));
-                Mail::to($managerInfo->email)->send(new PostNotification($qna,$senderInfo));
+                Mail::to($adminInfo->email)->send(new PostNotification($qna, $senderInfo));
+                Mail::to($managerInfo->email)->send(new PostNotification($qna, $senderInfo));
             }
 
-            
+
 
             return response()->json([
                 'status' => 200,
@@ -728,7 +728,7 @@ class QnaController extends Controller
         // return $request->all();
         $qna = QnA::find($request->id);
         $validator = Validator::make($request->all(), [
-            'title' => 'required|unique:qn_a_s,title,'.$qna->id,
+            'title' => 'required|unique:qn_a_s,title,' . $qna->id,
             'event_date' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
@@ -749,7 +749,7 @@ class QnaController extends Controller
             ]);
         } else {
 
-            
+
             $qna->title = $request->input('title');
             $qna->slug = Str::slug($request->input('title'));
             $qna->admin_id = auth()->user()->parent_user;
@@ -822,9 +822,9 @@ class QnaController extends Controller
             'pending' => $pending,
         ]);
     }
-    public function qna_details($slug)
+    public function qna_details($id)
     {
-        $event = QnA::where('slug', $slug)->first();
+        $event = QnA::find($id);
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
@@ -856,13 +856,13 @@ class QnaController extends Controller
         $approvedQna = QnA::find($id);
         $approvedQna->star_approval = 1;
         $approveStar = $approvedQna->update();
-        if($approveStar){
+        if ($approveStar) {
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            Mail::to($managerInfo->email)->send(new PostNotification($approvedQna,$senderInfo));
+            Mail::to($managerInfo->email)->send(new PostNotification($approvedQna, $senderInfo));
         }
 
-       
+
 
         return response()->json([
             'status' => 200,
@@ -880,9 +880,9 @@ class QnaController extends Controller
             'message' => 'Event Rejected',
         ]);
     }
-    public function QnaRegisteredList($slug)
+    public function QnaRegisteredList($id)
     {
-        $event = QnA::where('slug', $slug)->first();
+        $event = QnA::find($id);
         $users = QnaRegistration::where([['qna_id', $event->id], ['payment_status', 1]])->get();
 
         return response()->json([
