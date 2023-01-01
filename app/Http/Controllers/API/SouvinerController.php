@@ -205,22 +205,22 @@ class SouvinerController extends Controller
             $souvenir->admin_id = $user->parent_user;
             $souvenir->star_id = $id;
 
-            // Upload Banner started 
-            
+            // Upload Banner started
+
             if($request->banner['type']){
                 try{
                     $originalExtension = str_ireplace("image/", "", $request->banner['type']);
-    
+
                     $folder_path       = 'uploads/images/souviner/apply/';
-    
+
                     $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                     $decodedBase64 = $request->banner['data'];
-                
+
                     Image::make($decodedBase64)->save($folder_path . $image_new_name);
                     $location = $folder_path . $image_new_name;
                     $souvenir->banner = $location;
                 }
-    
+
                 catch (\Exception $exception) {
                     return response()->json([
                         "error" => $exception->getMessage(),
@@ -228,11 +228,11 @@ class SouvinerController extends Controller
                     ]);
                 }
             }
-            
+
             // Upload Banner ended
 
 
-            // Upload Video started 
+            // Upload Video started
 
             if($request->video['type']){
                 try{
@@ -244,10 +244,10 @@ class SouvinerController extends Controller
                     $decodedBase64 = $request->video['data'];
                     $videoPath = $folder_path . $image_new_name;
                     file_put_contents($videoPath, base64_decode($decodedBase64, true));
-                    
+
                     $souvenir->video = $videoPath;
                 }
-    
+
                 catch (\Exception $exception) {
                     return response()->json([
                         "error" => $exception->getMessage(),
@@ -255,7 +255,7 @@ class SouvinerController extends Controller
                     ]);
                 }
             }
-            
+
             // Upload Video ended
 
             $souvenir->approval_status = 1;
@@ -555,13 +555,18 @@ class SouvinerController extends Controller
             if (Hash::check($request->password, $user->password)) {
 
                 $apply = new SouvenirApply();
+
+                $totalTax = (($souvenirAmount->price) * $souvenirAmount->tax)/100;
+
                 $apply->name = $request->name;
                 $apply->country_id = $request->country_id;
                 $apply->state_id = $request->state_id;
                 $apply->city_id = $request->city_id;
                 $apply->invoice_no = rand(999999999, 9999999999);
                 $apply->souvenir_id = $request->souvinerId;
-                $apply->total_amount =  $souvenirAmount->price + $souvenirAmount->delivery_charge + $souvenirAmount->tax;
+                $apply->tax = $totalTax;
+                $apply->delivery_charge =  $souvenirAmount->delivery_charge;
+                $apply->total_amount =  $souvenirAmount->price + $souvenirAmount->delivery_charge + $totalTax;
                 $apply->description = $request->description;
                 $apply->area = $request->area;
                 $apply->mobile_no = $request->mobile_no;

@@ -33,7 +33,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\SettingsController;
 use App\Http\Controllers\API\SdkController\SdkController;
-use App\Http\Controllers\API\VirtualtourController;
+use App\Http\Con
+use Vonage\Message\Shortcode\Marketing;trollers\API\VirtualtourController;
 
 //video for SDK
 Route::get('/sdk/get-token', [SdkController::class, 'getToken']);
@@ -306,8 +307,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/meetup-event/{star_id}/{event_id}', [MeetupEventController::class, 'meetup_event_booking']);
 
 
-
-
+// New Marketing
 
     Route::get('/star_info/{star_id}', [UserController::class, 'star_info']);
 

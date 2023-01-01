@@ -25,6 +25,7 @@ class MarketplaceOrder extends Model
         'items',
         'unit_price',
         'delivery_charge',
+        'tax',
         'total_price',
         'holder_name',
         'card_no',
