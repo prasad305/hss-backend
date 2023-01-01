@@ -10,8 +10,10 @@ class CurrencyController extends Controller
 {
 
 
-    public function allCurrency()
+    public function allCurrency($ip)
     {
+
+        // return $clientIp;
         $currency = Currency::latest()->get();
 
         if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
@@ -30,12 +32,13 @@ class CurrencyController extends Controller
             $clientIp = $remote;
         }
 
-        $clientIp = '101.33.63.255'; //india
+        // $clientIp = '101.33.63.255'; //india
+        // $clientIp = '103.104.69.255'; //my
         //$clientIp = '103.101.36.0'; //nepal
         //$clientIp = '162.210.194.38'; // usa
         //$clientIp = '104.44.7.192'; // arab amerates
         // $clientIp = '103.91.229.182'; // Bangladesh
-        $locationData = \Location::get($clientIp);
+        $locationData = \Location::get($ip);
         // dd($locationData->countryCode);
 
         $currencyDetails = Currency::where('country_code', $locationData->countryCode)->first();

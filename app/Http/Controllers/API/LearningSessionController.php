@@ -300,9 +300,9 @@ class LearningSessionController extends Controller
             'message' => 'Success',
         ]);
     }
-    public function registured_user($slug)
+    public function registured_user($id)
     {
-        $event = LearningSession::where('slug', $slug)->first();
+        $event = LearningSession::find($id);
         $users = LearningSessionRegistration::where([['learning_session_id', $event->id], ['payment_status', 1]])->get();
 
         return response()->json([
