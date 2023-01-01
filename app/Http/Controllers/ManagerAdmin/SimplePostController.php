@@ -9,8 +9,7 @@ use App\Models\SuperStar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
+
 
 class SimplePostController extends Controller
 {
@@ -147,7 +146,7 @@ class SimplePostController extends Controller
                 $senderInfo = getManagerInfo(auth()->user()->id);
                 
                 foreach ($userInfo as $key => $data) {
-                    Mail::to($data->email)->send(new PostNotification($post,$senderInfo));
+                    SendMail($data->email,$post,$senderInfo);
                 }
             }
         } else {

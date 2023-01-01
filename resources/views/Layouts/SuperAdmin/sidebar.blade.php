@@ -280,6 +280,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('superAdmin.deliverycharge.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.deliverycharge.index') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>
+                            Delivery Charges
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('superAdmin.country.index') }}"
                         class="nav-link {{ Request::routeIs('superAdmin.country.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>

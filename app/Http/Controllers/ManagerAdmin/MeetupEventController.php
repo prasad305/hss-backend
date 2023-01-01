@@ -12,8 +12,6 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Validator;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 class MeetupEventController extends Controller
 {
@@ -160,7 +158,7 @@ class MeetupEventController extends Controller
                 $senderInfo = getManagerInfo(auth()->user()->id);
                 
                 foreach ($userInfo as $key => $data) {
-                    Mail::to($data->email)->send(new PostNotification($meetup,$senderInfo));
+                    SendMail($data->email,$meetup,$senderInfo);
                 }
             }
 

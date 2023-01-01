@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 class GreetingController extends Controller
 {
@@ -138,7 +136,7 @@ class GreetingController extends Controller
                 $senderInfo = getManagerInfo(auth()->user()->id);
 
                 foreach ($userInfo as $key => $data) {
-                    Mail::to($data->email)->send(new PostNotification($greeting, $senderInfo));
+                    SendMail($data->email,$greeting,$senderInfo);
                 }
             }
             return response()->json([
