@@ -235,7 +235,7 @@ class MeetupEventController extends Controller
     public function slots($slug)
     {
 
-        $event = MeetupEvent::where('slug', $slug)->first();
+        $event = MeetupEvent::where('id', $slug)->first();
 
         $meetup = MeetupEventRegistration::where([['meetup_event_id', $event->id], ['payment_status', 1]])->get();
         $slot = $event->total_seat;
@@ -251,7 +251,7 @@ class MeetupEventController extends Controller
     public function starSlots($slug)
     {
 
-        $event = MeetupEvent::where('slug', $slug)->first();
+        $event = MeetupEvent::where('id', $slug)->first();
 
         $meetup = MeetupEventRegistration::where([['meetup_event_id', $event->id], ['payment_status', 1]])->get();
         $slot = $event->total_seat;
