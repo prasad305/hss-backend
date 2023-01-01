@@ -25,7 +25,7 @@ class CreateAuctionsTable extends Migration
             $table->string('type')->nullable();
             $table->unsignedBigInteger('owner_id')->nullable();
             $table->unsignedBigInteger('buyer_id')->nullable();
-            $table->integer('base_price')->nullable();
+            $table->double('base_price', 8, 2)->nullable();
             $table->longText('details')->nullable();
             $table->string('product_image')->nullable();
             $table->string('banner')->nullable();

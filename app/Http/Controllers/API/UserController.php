@@ -1345,27 +1345,33 @@ class UserController extends Controller
      */
     public function greetingsRegistation(Request $request)
     {
-        $greetings = new GreetingsRegistration();
 
-        $greetings->request_time = Carbon::parse($request->input('time'));
-        $greetings->purpose = $request->purpose;
-        $greetings->user_id = auth('sanctum')->user()->id;
-        $greetings->greeting_id = $request->greetings_id;
-        $greetings->save();
-
-        // New Activity Add for Greeting Register
-        // $activity = new Activity();
-        // $activity->user_id = auth('sanctum')->user()->id;
-        // $activity->event_id = $request->greetings_id;
-        // $activity->event_registration_id = $greetings->id;
-        // $activity->type = 'greeting';
-        // $activity->save();
-
-        return response()->json([
-            'status' => 200,
-            'message' => "Your request time is pending,Wating for approval",
-            'greeting' => $greetings,
+        $validator = Validator::make($request->all(), [
+            'purpose' => 'required',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'purpose' => $validator->errors(),
+            ]);
+        } else {
+
+            $greetings = new GreetingsRegistration();
+
+            $greetings->request_time = Carbon::parse($request->input('time'));
+            $greetings->purpose = $request->purpose;
+            $greetings->user_id = auth('sanctum')->user()->id;
+
+            $greetings->greeting_id = $request->greetings_id;
+            $greetings->status = 0;
+
+            $greetings->save();
+            return response()->json([
+                'status' => 200,
+                'message' => "Your request time is pending,Wating for approval",
+                'greeting' => $greetings,
+            ]);
+        }
     }
     /**
      * greetings reggistaion update
