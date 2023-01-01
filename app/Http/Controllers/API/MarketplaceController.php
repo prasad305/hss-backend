@@ -18,8 +18,6 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 class MarketplaceController extends Controller
 {
@@ -239,6 +237,7 @@ class MarketplaceController extends Controller
                 $rand = rand(100, 999) . $date;
 
                 $data = new MarketplaceOrder();
+                $totalTax = (($request->items * $request->unit_price) * $request->tax)/100;
                 $data->country_id = $request->country_id;
                 $data->state_id = $request->state_id;
                 $data->city_id = $request->city_id;
@@ -250,11 +249,12 @@ class MarketplaceController extends Controller
                 $data->items = $request->items;
                 $data->unit_price = $request->unit_price;
                 $data->delivery_charge = $request->delivery_charge;
+                $data->tax = $totalTax;
                 $data->user_id = Auth::user()->id;
                 $data->marketplace_id = $marketplace->id;
                 $data->superstar_id = $marketplace->superstar_id;
                 $data->superstar_admin_id = $marketplace->superstar_admin_id;
-                $data->total_price = ($request->items * $request->unit_price) + $request->delivery_charge + $request->tax;
+                $data->total_price = ($request->items * $request->unit_price) + $request->delivery_charge + $totalTax;
                 $data->status = 1;
 
                 $data->save();
@@ -365,7 +365,8 @@ class MarketplaceController extends Controller
         if ($adminAddResult) {
             $starInfo = getStarInfo($marketplace->superstar_id);
             $senderInfo = getAdminInfo($marketplace->superstar_admin_id);
-            Mail::to($starInfo->email)->send(new PostNotification($marketplace, $senderInfo));
+
+            SendMail($starInfo->email,$marketplace,$senderInfo);
         }
 
         return response()->json([
@@ -624,8 +625,8 @@ class MarketplaceController extends Controller
                     $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                     $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                    Mail::to($adminInfo->email)->send(new PostNotification($marketplace, $senderInfo));
-                    Mail::to($managerInfo->email)->send(new PostNotification($marketplace, $senderInfo));
+                    SendMail($adminInfo->email,$marketplace,$senderInfo);
+                    SendMail($managerInfo->email,$marketplace,$senderInfo);
                 }
             } catch (\Exception $exception) {
                 return response()->json([
@@ -716,8 +717,8 @@ class MarketplaceController extends Controller
             $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-            Mail::to($adminInfo->email)->send(new PostNotification($marketplace, $senderInfo));
-            Mail::to($managerInfo->email)->send(new PostNotification($marketplace, $senderInfo));
+            SendMail($adminInfo->email,$marketplace,$senderInfo);
+            SendMail($managerInfo->email,$marketplace,$senderInfo);
         }
 
         return response()->json([
@@ -870,7 +871,8 @@ class MarketplaceController extends Controller
         if ($starApprove) {
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-            Mail::to($managerInfo->email)->send(new PostNotification($marketplace, $senderInfo));
+
+            SendMail($managerInfo->email,$marketplace,$senderInfo);
         }
 
         return response()->json([

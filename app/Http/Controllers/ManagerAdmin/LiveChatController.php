@@ -12,8 +12,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 class LiveChatController extends Controller
 {
@@ -80,7 +78,7 @@ class LiveChatController extends Controller
                 $userInfo = getUserInfo();
                 $senderInfo = getManagerInfo(auth()->user()->id);
                 foreach ($userInfo as $key => $data) {
-                    Mail::to($data->email)->send(new PostNotification($event,$senderInfo));
+                    SendMail($data->email,$event,$senderInfo);
                 }
             }
 

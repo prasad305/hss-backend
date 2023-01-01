@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 class AuctionController extends Controller
 {
@@ -159,7 +157,7 @@ class AuctionController extends Controller
             $userInfo = getUserInfo();
             $senderInfo = getManagerInfo(auth()->user()->id);
             foreach ($userInfo as $key => $data) {
-                Mail::to($data->email)->send(new PostNotification($product,$senderInfo));
+                SendMail($data->email,$product,$senderInfo);
             }
            }
         }

@@ -14,8 +14,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
-use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
 
 class GreetingController extends Controller
 {
@@ -104,7 +102,8 @@ class GreetingController extends Controller
             if($adminAddResult){
                 $starInfo = getStarInfo($greeting->star_id);
                 $senderInfo = getAdminInfo($greeting->admin_id);
-                Mail::to($starInfo->email)->send(new PostNotification($greeting,$senderInfo));
+                
+                SendMail($starInfo->email,$greeting,$senderInfo);
             }
             return response()->json([
                 'status' => 200,

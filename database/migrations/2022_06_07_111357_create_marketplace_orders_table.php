@@ -29,6 +29,7 @@ class CreateMarketplaceOrdersTable extends Migration
             $table->integer('items')->nullable();
             $table->float('unit_price')->nullable();
             $table->float('delivery_charge')->nullable();
+            $table->float('tax')->nullable();
             $table->float('total_price')->nullable();
             $table->string('holder_name')->nullable();
             $table->string('card_no')->nullable();

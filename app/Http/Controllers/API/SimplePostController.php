@@ -14,7 +14,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 use Vonage\Client\Exception\Validation;
 use Illuminate\Support\Str;
 use App\Mail\PostNotification;
-use Illuminate\Support\Facades\Mail;
+
 
 class SimplePostController extends Controller
 {
@@ -172,7 +172,7 @@ class SimplePostController extends Controller
         if($adminAddResult){
             $starInfo = getStarInfo($post->star_id);
             $senderInfo = getAdminInfo($post->admin_id);
-            Mail::to($starInfo->email)->send(new PostNotification($post,$senderInfo));
+            SendMail($starInfo->email,$post,$senderInfo);
         }
         
 
@@ -448,7 +448,7 @@ class SimplePostController extends Controller
             if($approveStar){
                 $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-                Mail::to($managerInfo->email)->send(new PostNotification($spost,$senderInfo));
+                SendMail($managerInfo->email,$spost,$senderInfo);
             }
         } else {
             if ($spost->status != 1) {
@@ -601,8 +601,8 @@ class SimplePostController extends Controller
             $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
         
-            Mail::to($adminInfo->email)->send(new PostNotification($post,$senderInfo));
-            Mail::to($managerInfo->email)->send(new PostNotification($post,$senderInfo));
+            SendMail($adminInfo->email,$post,$senderInfo);
+            SendMail($managerInfo->email,$post,$senderInfo);
        }
 
         if ($request->input('type') == 'free') {
@@ -704,8 +704,8 @@ class SimplePostController extends Controller
             $senderInfo = getStarInfo($post->star_id);
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             
-            Mail::to($adminInfo->email)->send(new PostNotification($post,$senderInfo));
-            Mail::to($managerInfo->email)->send(new PostNotification($post,$senderInfo));
+            SendMail($adminInfo->email,$post,$senderInfo);
+            SendMail($managerInfo->email,$post,$senderInfo);
         }
 
         if ($request->input('type') == 'free') {
