@@ -239,6 +239,7 @@ class MarketplaceController extends Controller
                 $rand = rand(100, 999) . $date;
 
                 $data = new MarketplaceOrder();
+                $totalTax = (($request->items * $request->unit_price) * $request->tax)/100;
                 $data->country_id = $request->country_id;
                 $data->state_id = $request->state_id;
                 $data->city_id = $request->city_id;
@@ -250,11 +251,12 @@ class MarketplaceController extends Controller
                 $data->items = $request->items;
                 $data->unit_price = $request->unit_price;
                 $data->delivery_charge = $request->delivery_charge;
+                $data->tax = $totalTax;
                 $data->user_id = Auth::user()->id;
                 $data->marketplace_id = $marketplace->id;
                 $data->superstar_id = $marketplace->superstar_id;
                 $data->superstar_admin_id = $marketplace->superstar_admin_id;
-                $data->total_price = ($request->items * $request->unit_price) + $request->delivery_charge + $request->tax;
+                $data->total_price = ($request->items * $request->unit_price) + $request->delivery_charge + $totalTax;
                 $data->status = 1;
 
                 $data->save();
