@@ -39,6 +39,9 @@ use trollers\API\VirtualtourController;
 
 //video for SDK
 Route::get('/sdk/get-token', [SdkController::class, 'getToken']);
+Route::get('/sdk/get-token/user', [SdkController::class, 'getTokenUser']);
+Route::get('/sdk/get-token/admin', [SdkController::class, 'getToken']);
+
 Route::get('/sdk/createMeeting/{token}', [SdkController::class, 'createMeetingId']);
 Route::post('/sdk/validate-meeting/{roomId}', [SdkController::class, 'roomValidate']);
 Route::get('/sdk/videoEnd/{room_id}/{token}', [SdkController::class, 'roomRoomEnd']);
@@ -531,9 +534,9 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/learning_session/live', [LearningSessionController::class, 'live_list']);
     Route::get('/admin/learning_session/evaluation', [LearningSessionController::class, 'evaluation_list']);
     Route::get('/admin/learning_session/completed', [LearningSessionController::class, 'completed_list']);
-    Route::get('/admin/learning_session/details/{slug}', [LearningSessionController::class, 'details']);
+    Route::get('/admin/learning_session/details/{id}', [LearningSessionController::class, 'details']);
     Route::get('/admin/learning_session/registered_user/{slug}', [LearningSessionController::class, 'registured_user']);
-    Route::get('/admin/learning_session/pending/{slug}', [LearningSessionController::class, 'pending_details']);
+    Route::get('/admin/learning_session/pending/{id}', [LearningSessionController::class, 'pending_details']);
     Route::get('/admin/learning_session/approved', [LearningSessionController::class, 'approved_list']);
     Route::get('/admin/learning_session/assignment/{id}', [LearningSessionController::class, 'assignment_details']);
     Route::post('/admin/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
@@ -559,11 +562,11 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::post('/admin/add_qna', [QnaController::class, 'add_qna']);
     Route::get('/admin/pending/qna', [QnaController::class, 'pendingQna']);
     Route::get('/admin/qna/count', [QnaController::class, 'count']);
-    Route::get('/admin/qna/{slug}', [QnaController::class, 'details']);
+    Route::get('/admin/qna/{id}', [QnaController::class, 'details']);
     Route::get('/admin/qna_live', [QnaController::class, 'liveQnalist']);
     Route::get('/admin/qna_completed', [QnaController::class, 'qna_completed']);
     Route::get('/admin/qna_rejected', [QnaController::class, 'qna_rejected']);
-    Route::get('/admin/registeredList/{slug}', [QnaController::class, 'registeredList']);
+    Route::get('/admin/registeredList/{id}', [QnaController::class, 'registeredList']);
     Route::post('/admin/admin_update_Qna', [QnaController::class, 'admin_update_Qna']);
 
     //Meetup Session Section
@@ -572,7 +575,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/meetup_event/pending', [MeetupEventController::class, 'pending_list']);
     Route::get('/admin/meetup_event/live', [MeetupEventController::class, 'live_list']);
     Route::get('/admin/meetup_event/completed', [MeetupEventController::class, 'completed']);
-    Route::get('/admin/meetup_event/details/{slug}', [MeetupEventController::class, 'details']);
+    Route::get('/admin/meetup_event/details/{id}', [MeetupEventController::class, 'details']);
     Route::get('/admin/meetup_event_slots/{slug}', [MeetupEventController::class, 'slots']);
 
 
@@ -583,7 +586,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/live_chat/pending', [LiveChatController::class, 'pending_list']);
     Route::get('/admin/live_chat/live', [LiveChatController::class, 'live_list']);
     Route::get('/admin/live_chat/completed', [LiveChatController::class, 'completed_list']);
-    Route::get('/admin/live-chat/details/{slug}', [LiveChatController::class, 'details']);
+    Route::get('/admin/live-chat/details/{id}', [LiveChatController::class, 'details']);
     Route::get('/admin/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
     Route::get('/admin/live_chat/count', [LiveChatController::class, 'count']);
 
@@ -772,7 +775,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/learning_session/reject/{id}', [LearningSessionController::class, 'reject']);
     Route::get('/star/learning_session/completed', [LearningSessionController::class, 'star_completed_list']);
     Route::get('/star/learning_session/evaluation', [LearningSessionController::class, 'star_evaluation_list']);
-    Route::get('/star/learning_session/details/{slug}', [LearningSessionController::class, 'details']);
+    Route::get('/star/learning_session/details/{id}', [LearningSessionController::class, 'details']);
     Route::get('/star/learning_session/assignment/{id}', [LearningSessionController::class, 'star_assignment_details']);
     Route::post('/star/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
     Route::post('/star/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'star_assignment_set_approval']);
@@ -793,11 +796,11 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/qna/{slug}', [QnaController::class, 'star_details']);
     Route::get('/star/qna_live', [QnaController::class, 'star_liveQnalist']);
     Route::get('/star/qna_completed', [QnaController::class, 'star_qna_completed']);
-    Route::get('/star/qna_details/{slug}', [QnaController::class, 'qna_details']);
+    Route::get('/star/qna_details/{id}', [QnaController::class, 'qna_details']);
     Route::get('/star/qna/approved/{id}', [QnaController::class, 'setApprovedQna']);
     Route::get('/star/qna/rejected/{id}', [QnaController::class, 'setRejectedQna']);
     Route::post('/star/update_Qna', [QnaController::class, 'update_Qna']);
-    Route::get('/star/registeredList/{slug}', [QnaController::class, 'QnaRegisteredList']);
+    Route::get('/star/registeredList/{id}', [QnaController::class, 'QnaRegisteredList']);
     Route::get('/star/qna_enrolluser_status_update/{id}', [QnaController::class, 'QnaUserStatusUpdate']);
 
 
@@ -808,7 +811,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
     Route::get('/star/live-chat/{type}', [LiveChatController::class, 'liveChatList']);
     Route::get('/star/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
-    Route::get('/star/live-chat/details/{slug}', [LiveChatController::class, 'details']);
+    Route::get('/star/live-chat/details/{id}', [LiveChatController::class, 'details']);
     Route::get('/star/live-chat/setApprove/{id}', [LiveChatController::class, 'setApproveLiveChat']);
     Route::get('/star/live-chat/setReject/{id}', [LiveChatController::class, 'set_reject_by_star']);
 
@@ -822,7 +825,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/meetup_event/{type}', [MeetupEventController::class, 'star_meetup_list']);
     Route::post('/star/add_meetup/mobile', [MeetupEventController::class, 'star_add_meetup_mobile']);
     Route::post('/star/add_meetup', [MeetupEventController::class, 'star_add_meetup']);
-    Route::get('/star/meetup_event/details/{slug}', [MeetupEventController::class, 'details']);
+    Route::get('/star/meetup_event/details/{id}', [MeetupEventController::class, 'details']);
     Route::get('/star/meetup_event/set_approve/{id}', [MeetupEventController::class, 'set_approve']);
     Route::get('/star/rejectMeetup/{id}', [MeetupEventController::class, 'set_reject']);
     Route::post('/star/meetup_event/edit/{id}', [MeetupEventController::class, 'star_edit']);

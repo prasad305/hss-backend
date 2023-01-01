@@ -53,9 +53,9 @@ class LiveChatController extends Controller
     }
 
 
-    public function details($slug)
+    public function details($id)
     {
-        $event = LiveChat::where('slug', $slug)->first();
+        $event = LiveChat::find($id);
 
         return response()->json([
             'status' => 200,
@@ -83,11 +83,11 @@ class LiveChatController extends Controller
         $approveLiveChat->status = 1;
         $starApproveResult = $approveLiveChat->update();
 
-        if($starApproveResult){
+        if ($starApproveResult) {
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-            SendMail($managerInfo->email,$approveLiveChat,$senderInfo);
+            SendMail($managerInfo->email, $approveLiveChat, $senderInfo);
         }
 
         return response()->json([
@@ -201,14 +201,14 @@ class LiveChatController extends Controller
                 $liveChat->banner = $filename;
             }
 
-           $adminAddResult =  $liveChat->save();
+            $adminAddResult =  $liveChat->save();
 
-           if($adminAddResult){
+            if ($adminAddResult) {
                 $starInfo = getStarInfo($liveChat->star_id);
                 $senderInfo = getAdminInfo($liveChat->admin_id);
 
-                SendMail($starInfo->email,$liveChat,$senderInfo);
-           }
+                SendMail($starInfo->email, $liveChat, $senderInfo);
+            }
 
 
             return response()->json([
@@ -224,7 +224,7 @@ class LiveChatController extends Controller
     {
         $liveChat = LiveChat::find($request->id);
         $validator = Validator::make($request->all(), [
-            'title' => 'required|unique:live_chats,title,'.$liveChat->id,
+            'title' => 'required|unique:live_chats,title,' . $liveChat->id,
             'description' => 'required|min:5',
             'instruction' => 'required|min:5',
             'date' => 'required',
@@ -236,7 +236,7 @@ class LiveChatController extends Controller
             'max_time' => 'required|min:1',
             'min_time' => 'required|min:1',
             'interval' => 'required',
-        ],[
+        ], [
             'title.unique' => 'This title already exist',
         ]);
 
@@ -245,7 +245,7 @@ class LiveChatController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            
+
             $liveChat->title = $request->input('title');
             $liveChat->slug = Str::slug($request->input('title'));
             $liveChat->description = $request->input('description');
@@ -543,13 +543,13 @@ class LiveChatController extends Controller
             }
 
             $starAddResult = $liveChat->save();
-            if($starAddResult){
+            if ($starAddResult) {
                 $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                SendMail($adminInfo->email,$liveChat,$senderInfo);
-                SendMail($managerInfo->email,$liveChat,$senderInfo);
+                // SendMail($adminInfo->email,$liveChat,$senderInfo);
+                SendMail($managerInfo->email, $liveChat, $senderInfo);
             }
 
 
@@ -565,7 +565,7 @@ class LiveChatController extends Controller
         // return $request->all();
         $liveChat = LiveChat::find($request->id);
         $validator = Validator::make($request->all(), [
-            'title' => 'required|unique:live_chats,title,'.$liveChat->id,
+            'title' => 'required|unique:live_chats,title,' . $liveChat->id,
             'description' => 'required|min:5',
             'instruction' => 'required|min:5',
             'date' => 'required',
@@ -577,7 +577,7 @@ class LiveChatController extends Controller
             'max_time' => 'required|min:1',
             'min_time' => 'required|min:1',
             'interval' => 'required',
-        ],[
+        ], [
             'title.unique' => 'This title already exist',
         ]);
 
@@ -586,7 +586,7 @@ class LiveChatController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            
+
             $liveChat->title = $request->title;
             $liveChat->slug = Str::slug($request->title);
             $liveChat->description = $request->description;

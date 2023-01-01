@@ -15,21 +15,23 @@ class SdkController extends Controller
     protected $VIDEOSDK_API_ENDPOINT = "https://api.videosdk.live";
 
     /**
-     * get sdk token
+     * get sdk token user
      */
-    public function getToken()
+
+    public function getTokenUser()
     {
+
+
 
         header("Content-type: application/json; charset=utf-8");
 
         $issuedAt   = new DateTimeImmutable();
         $expire     = $issuedAt->modify('+24 hours')->getTimestamp();
 
+
         $payload = [
             'apikey' => $this->VIDEOSDK_API_KEY,
-            'permissions' => array(
-                "allow_join", "allow_mod"
-            ),
+            'permissions' => array("ask_join"),
             'iat' => $issuedAt->getTimestamp(),
             'exp' => $expire
         ];
@@ -39,6 +41,34 @@ class SdkController extends Controller
 
         return json_encode(array("token" => $jwt));
     }
+
+    /**
+     * get sdk token admin
+     */
+    public function getToken()
+    {
+
+
+
+        header("Content-type: application/json; charset=utf-8");
+
+        $issuedAt   = new DateTimeImmutable();
+        $expire     = $issuedAt->modify('+24 hours')->getTimestamp();
+
+
+        $payload = [
+            'apikey' => $this->VIDEOSDK_API_KEY,
+            'permissions' => array("allow_join", "allow_mod"),
+            'iat' => $issuedAt->getTimestamp(),
+            'exp' => $expire
+        ];
+
+
+        $jwt = JWT::encode($payload, $this->VIDEOSDK_SECRET_KEY, 'HS256');
+
+        return json_encode(array("token" => $jwt));
+    }
+
 
 
     public function RemoveParticipantsMeeting(Request $request)

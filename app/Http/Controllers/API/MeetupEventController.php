@@ -221,9 +221,9 @@ class MeetupEventController extends Controller
         ]);
     }
 
-    public function details($slug)
+    public function details($id)
     {
-        $meetup = MeetupEvent::where('slug', $slug)->first();
+        $meetup = MeetupEvent::find($id);
 
         return response()->json([
             'status' => 200,
