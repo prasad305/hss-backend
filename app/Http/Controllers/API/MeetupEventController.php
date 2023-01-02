@@ -39,14 +39,13 @@ class MeetupEventController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $star = SuperStar::where('star_id', $request->input('star_id'))->first();
 
             $meetup = new MeetupEvent();
 
             $meetup->created_by_id = auth('sanctum')->user()->id;
             $meetup->star_id = $request->input('star_id');
-            $meetup->category_id = $star->category_id;
-            $meetup->sub_category_id = $star->sub_category_id;
+            $meetup->category_id = auth('sanctum')->user()->category_id;
+            $meetup->sub_category_id = auth('sanctum')->user()->sub_category_id;
             $meetup->admin_id = auth()->user()->id;
             $meetup->title = $request->input('title');
             $meetup->slug = Str::slug($request->input('title'));
@@ -96,7 +95,7 @@ class MeetupEventController extends Controller
                 $starInfo = getStarInfo($meetup->star_id);
                 $senderInfo = getAdminInfo($meetup->admin_id);
 
-                SendMail($starInfo->email,$meetup,$senderInfo);
+                SendMail($starInfo->email, $meetup, $senderInfo);
             }
 
             return response()->json([
@@ -236,7 +235,7 @@ class MeetupEventController extends Controller
     public function slots($slug)
     {
 
-        $event = MeetupEvent::where('slug', $slug)->first();
+        $event = MeetupEvent::where('id', $slug)->first();
 
         $meetup = MeetupEventRegistration::where([['meetup_event_id', $event->id], ['payment_status', 1]])->get();
         $slot = $event->total_seat;
@@ -252,7 +251,7 @@ class MeetupEventController extends Controller
     public function starSlots($slug)
     {
 
-        $event = MeetupEvent::where('slug', $slug)->first();
+        $event = MeetupEvent::where('id', $slug)->first();
 
         $meetup = MeetupEventRegistration::where([['meetup_event_id', $event->id], ['payment_status', 1]])->get();
         $slot = $event->total_seat;
@@ -336,7 +335,7 @@ class MeetupEventController extends Controller
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-            SendMail($managerInfo->email,$meetup,$senderInfo);
+            SendMail($managerInfo->email, $meetup, $senderInfo);
         }
 
         return response()->json([
@@ -562,15 +561,14 @@ class MeetupEventController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $superStar = SuperStar::where('star_id', auth('sanctum')->user()->id)->first();
 
             $meetup = new MeetupEvent();
 
             $meetup->created_by_id = auth('sanctum')->user()->id;
             $meetup->star_id = auth('sanctum')->user()->id;
             $meetup->admin_id = auth('sanctum')->user()->parent_user;
-            $meetup->category_id = $superStar->category_id;
-            $meetup->sub_category_id = $superStar->sub_category_id;
+            $meetup->category_id = auth('sanctum')->user()->category_id;
+            $meetup->sub_category_id = auth('sanctum')->user()->sub_category_id;
             $meetup->title = $request->input('title');
             $meetup->slug = Str::slug($request->input('title'));
             $meetup->event_link = $request->input('event_link');
@@ -609,8 +607,8 @@ class MeetupEventController extends Controller
                         $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                         $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                        SendMail($adminInfo->email,$meetup,$senderInfo);
-                        SendMail($managerInfo->email,$meetup,$senderInfo);
+                        SendMail($adminInfo->email, $meetup, $senderInfo);
+                        SendMail($managerInfo->email, $meetup, $senderInfo);
                     }
                 } catch (\Exception $exception) {
                     return response()->json([
@@ -651,15 +649,14 @@ class MeetupEventController extends Controller
                 'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $superStar = SuperStar::where('star_id', auth('sanctum')->user()->id)->first();
 
             $meetup = new MeetupEvent();
 
             $meetup->created_by_id = auth('sanctum')->user()->id;
             $meetup->star_id = auth('sanctum')->user()->id;
             $meetup->admin_id = auth('sanctum')->user()->parent_user;
-            $meetup->category_id = $superStar->category_id;
-            $meetup->sub_category_id = $superStar->sub_category_id;
+            $meetup->category_id = auth('sanctum')->user()->category_id;
+            $meetup->sub_category_id = auth('sanctum')->user()->sub_category_id;
             $meetup->title = $request->input('title');
             $meetup->slug = Str::slug($request->input('title'));
             $meetup->event_link = $request->input('event_link');
@@ -714,8 +711,8 @@ class MeetupEventController extends Controller
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                SendMail($adminInfo->email,$meetup,$senderInfo);
-                SendMail($managerInfo->email,$meetup,$senderInfo);
+                SendMail($adminInfo->email, $meetup, $senderInfo);
+                SendMail($managerInfo->email, $meetup, $senderInfo);
             }
             return response()->json([
                 'status' => 200,

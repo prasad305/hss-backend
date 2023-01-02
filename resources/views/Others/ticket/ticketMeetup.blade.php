@@ -185,8 +185,12 @@
                                     <p>{{ $user->first_name . ' ' . $user->last_name }}</p>
                                 </div>
                                 <div class="content-3">
-                                    <h4>Address</h4>
+                                    <h4>Venue</h4>
                                     <p>{{ $meetUp->venue }}</p>
+                                </div>
+                                <div class="content-3">
+                                    <h4>Event Host</h4>
+                                    <p>{{ $meetUp->star->first_name }}</p>
                                 </div>
                                 <div class="content-3">
                                     <h4>Time</h4>
