@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\MeetupEvent;
 use App\Models\Post;
 use App\Models\SuperStar;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -153,17 +154,17 @@ class MeetupEventController extends Controller
             $meetup->status = 2;
             $managerApprove = $meetup->update();
 
-            if($managerApprove){
+            if ($managerApprove) {
                 $userInfo = getUserInfo();
                 $senderInfo = getManagerInfo(auth()->user()->id);
-                
+
                 foreach ($userInfo as $key => $data) {
-                    SendMail($data->email,$meetup,$senderInfo);
+                    SendMail($data->email, $meetup, $senderInfo);
                 }
             }
 
 
-            $starCat = SuperStar::where('star_id', $meetup->star_id)->first();
+            $starCat = User::where('id', $meetup->star_id)->first();
             // Create New post //
             $post = new Post();
             $post->type = 'meetup';
