@@ -83,7 +83,7 @@ class SimplePostController extends Controller
                 $extension = $file->getClientOriginalExtension();
                 $filename = 'uploads/images/learning_session/' . time() . '.' . $extension;
 
-                Image::make($file)->resize(900, 400)->save($filename, 100);
+                Image::make($file)->save($filename, 100);
                 $post->banner = $filename;
             }
 
@@ -149,7 +149,7 @@ class SimplePostController extends Controller
             $extension = $file->getClientOriginalExtension();
             $filename = 'uploads/images/post/' . time() . '.' . $extension;
 
-            Image::make($file)->resize(900, 400)->save($filename, 100);
+            Image::make($file)->save($filename, 100);
             $post->image = $filename;
         }
         if ($request->hasFile('video')) {
@@ -169,12 +169,12 @@ class SimplePostController extends Controller
             $post->thumbnail = $path . '/' . $file_name;
         }
         $adminAddResult = $post->save();
-        if($adminAddResult){
+        if ($adminAddResult) {
             $starInfo = getStarInfo($post->star_id);
             $senderInfo = getAdminInfo($post->admin_id);
-            SendMail($starInfo->email,$post,$senderInfo);
+            SendMail($starInfo->email, $post, $senderInfo);
         }
-        
+
 
         return response()->json([
             'status' => 200,
@@ -232,7 +232,7 @@ class SimplePostController extends Controller
             $extension = $file->getClientOriginalExtension();
             $filename = 'uploads/images/post/' . time() . '.' . $extension;
 
-            Image::make($file)->resize(900, 400)->save($filename, 100);
+            Image::make($file)->save($filename, 100);
             $post->image = $filename;
             $post->video = null;
         }
@@ -445,17 +445,17 @@ class SimplePostController extends Controller
             $spost->star_approval = 1;
             $approveStar = $spost->update();
 
-            if($approveStar){
+            if ($approveStar) {
                 $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-                SendMail($managerInfo->email,$spost,$senderInfo);
+                SendMail($managerInfo->email, $spost, $senderInfo);
             }
         } else {
             if ($spost->status != 1) {
                 $spost->status = 1;
                 $spost->star_approval = 1;
                 $spost->update();
-                
+
 
                 // Create New post //
                 $post = new Post();
@@ -469,7 +469,6 @@ class SimplePostController extends Controller
                 $post->status = 1;
                 $post->details = $spost->description;
                 $post->save();
-                
             } else {
                 $spost->status = 0;
                 $spost->update();
@@ -479,7 +478,7 @@ class SimplePostController extends Controller
                 $post->delete();
             }
         }
-        
+
 
         return response()->json([
             'status' => 200,
@@ -596,14 +595,14 @@ class SimplePostController extends Controller
 
 
         $addFromMobile = $post->save();
-        if($addFromMobile){
+        if ($addFromMobile) {
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-        
-            SendMail($adminInfo->email,$post,$senderInfo);
-            SendMail($managerInfo->email,$post,$senderInfo);
-       }
+
+            SendMail($adminInfo->email, $post, $senderInfo);
+            SendMail($managerInfo->email, $post, $senderInfo);
+        }
 
         if ($request->input('type') == 'free') {
 
@@ -678,7 +677,7 @@ class SimplePostController extends Controller
             $extension = $file->getClientOriginalExtension();
             $filename = 'uploads/images/post/' . time() . '.' . $extension;
 
-            Image::make($file)->resize(900, 400)->save($filename, 100);
+            Image::make($file)->save($filename, 100);
             $post->image = $filename;
         }
         if ($request->hasFile('video')) {
@@ -699,13 +698,13 @@ class SimplePostController extends Controller
         }
 
         $starAddResult = $post->save();
-        if($starAddResult){
+        if ($starAddResult) {
             $adminInfo = getAdminInfo($post->admin_id);
             $senderInfo = getStarInfo($post->star_id);
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
-            
-            SendMail($adminInfo->email,$post,$senderInfo);
-            SendMail($managerInfo->email,$post,$senderInfo);
+
+            SendMail($adminInfo->email, $post, $senderInfo);
+            SendMail($managerInfo->email, $post, $senderInfo);
         }
 
         if ($request->input('type') == 'free') {
@@ -724,7 +723,7 @@ class SimplePostController extends Controller
             $npost->save();
         }
 
-        
+
 
 
         return response()->json([
@@ -780,7 +779,7 @@ class SimplePostController extends Controller
             $extension = $file->getClientOriginalExtension();
             $filename = 'uploads/images/post/' . time() . '.' . $extension;
 
-            Image::make($file)->resize(900, 400)->save($filename, 100);
+            Image::make($file)->save($filename, 100);
             $post->image = $filename;
             $post->video = null;
         }
