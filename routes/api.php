@@ -37,7 +37,13 @@ use App\Http\Con;
 use Vonage\Message\Shortcode\Marketing;
 use trollers\API\VirtualtourController;
 
+
+
+
+
 //video for SDK
+Route::get('/time-distribute/{event_id}', [UserController::class, 'distributionTime']);
+
 Route::get('/sdk/get-token', [SdkController::class, 'getToken']);
 Route::get('/sdk/get-token/user', [SdkController::class, 'getTokenUser']);
 Route::get('/sdk/get-token/admin', [SdkController::class, 'getToken']);
@@ -535,7 +541,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/learning_session/evaluation', [LearningSessionController::class, 'evaluation_list']);
     Route::get('/admin/learning_session/completed', [LearningSessionController::class, 'completed_list']);
     Route::get('/admin/learning_session/details/{id}', [LearningSessionController::class, 'details']);
-    Route::get('/admin/learning_session/registered_user/{slug}', [LearningSessionController::class, 'registured_user']);
+    Route::get('/admin/learning_session/registered_user/{id}', [LearningSessionController::class, 'registured_user']);
     Route::get('/admin/learning_session/pending/{id}', [LearningSessionController::class, 'pending_details']);
     Route::get('/admin/learning_session/approved', [LearningSessionController::class, 'approved_list']);
     Route::get('/admin/learning_session/assignment/{id}', [LearningSessionController::class, 'assignment_details']);
@@ -663,7 +669,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/view-category', [CategoryController::class, 'index']);
 });
 
-Route::get('/star/registeredUserList/{live_chat_slug}', [LiveChatController::class, 'registeredUserList']);
+Route::get('/star/registeredUserList/{live_chat_id}', [LiveChatController::class, 'registeredUserList']);
 
 
 
@@ -761,7 +767,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
 
     // Learning Session Section
-    Route::get('/star/learning_session/registered_user/{slug}', [LearningSessionController::class, 'registured_user']);
+    Route::get('/star/learning_session/registered_user/{id}', [LearningSessionController::class, 'registured_user']);
     Route::get('/star/learning_session/allInOneMobile', [LearningSessionController::class, 'allInOneMobileLearning']);
     Route::post('/star/learning_session/create', [LearningSessionController::class, 'star_add']);
     Route::post('/star/update_learning_session/{id}', [LearningSessionController::class, 'update']);
@@ -808,9 +814,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
 
     // Live Session Section
-    Route::get('/star/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
+    Route::get('/star/live-chat/registered_user_list/{id}', [LiveChatController::class, 'slots']);
     Route::get('/star/live-chat/{type}', [LiveChatController::class, 'liveChatList']);
-    Route::get('/star/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
+    // Route::get('/star/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
     Route::get('/star/live-chat/details/{id}', [LiveChatController::class, 'details']);
     Route::get('/star/live-chat/setApprove/{id}', [LiveChatController::class, 'setApproveLiveChat']);
     Route::get('/star/live-chat/setReject/{id}', [LiveChatController::class, 'set_reject_by_star']);

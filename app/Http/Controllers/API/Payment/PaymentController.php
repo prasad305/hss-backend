@@ -182,7 +182,7 @@ class PaymentController extends Controller
                 resgistationSuccessUpdate($user_id, $type, $event_id, "paytm", $result->body->txnAmount, $value);
             }
             $orderId = $result->body->orderId;
-            $url = "http://localhost:3000/";
+            $url = "http://10.10.10.151:3000/";
             return  redirect()->away($url . $redirectTo);
         } else {
             return "Checksum Mismatched";

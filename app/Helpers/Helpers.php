@@ -738,7 +738,8 @@ if (!function_exists('random_code')) {
         return $user;
     }
 
-    function SendMail($email,$post,$senderInfo){
-       // Mail::to($email)->send(new PostNotification($post,$senderInfo));
+    function SendMail($email, $post, $senderInfo)
+    {
+        // Mail::to($email)->send(new PostNotification($post,$senderInfo));
     }
 }

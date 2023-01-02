@@ -32,13 +32,13 @@ class CurrencyController extends Controller
             $clientIp = $remote;
         }
 
-        // $clientIp = '101.33.63.255'; //india
+        $clientIp = '101.33.63.255'; //india
         // $clientIp = '103.104.69.255'; //my
         //$clientIp = '103.101.36.0'; //nepal
         //$clientIp = '162.210.194.38'; // usa
         //$clientIp = '104.44.7.192'; // arab amerates
         // $clientIp = '103.91.229.182'; // Bangladesh
-        $locationData = \Location::get($ip);
+        $locationData = \Location::get($clientIp);
         // dd($locationData->countryCode);
 
         $currencyDetails = Currency::where('country_code', $locationData->countryCode)->first();

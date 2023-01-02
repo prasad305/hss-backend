@@ -8,6 +8,7 @@ use App\Models\LiveChat;
 use App\Models\EventProfile;
 use App\Models\LiveChatRegistration;
 use App\Models\SuperStar;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
@@ -65,9 +66,9 @@ class LiveChatController extends Controller
     }
 
 
-    public function slots($slug)
+    public function slots($id)
     {
-        $event = LiveChat::where('slug', $slug)->first();
+        $event = LiveChat::find($id);
         $users = LiveChatRegistration::where([['live_chat_id', $event->id], ['payment_status', 1]])->get();
 
         return response()->json([
@@ -127,9 +128,9 @@ class LiveChatController extends Controller
         ]);
     }
 
-    public function registeredUserList($live_chat_slug)
+    public function registeredUserList($live_chat_id)
     {
-        $event = LiveChat::where('slug', $live_chat_slug)->first();
+        $event = LiveChat::find($live_chat_id);
         $registeredLiveChats = LiveChatRegistration::where([['live_chat_id', $event->id], ['payment_status', 1]])->get();
 
 
@@ -516,8 +517,14 @@ class LiveChatController extends Controller
             $liveChat->instruction = $request->input('instruction');
             $liveChat->description = $request->input('description');
             $liveChat->event_date = Carbon::parse($request->input('date'));
+
             $liveChat->start_time = Carbon::parse($request->input('start_time'));
             $liveChat->end_time = Carbon::parse($request->input('end_time'));
+            $starTime = Carbon::parse($request->input('start_time'));
+            $endTime = Carbon::parse($request->input('end_time'));
+
+            $liveChat->available_start_time = $starTime->diffInMinutes($endTime);
+
             $liveChat->registration_start_date = Carbon::parse($request->input('registration_start_date'));
             $liveChat->registration_end_date = Carbon::parse($request->input('registration_end_date'));
             $liveChat->fee = $request->input('fee');

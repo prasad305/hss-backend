@@ -79,6 +79,7 @@ use App\Models\Wallet;
 use PhpParser\Node\Stmt\TryCatch;
 use App\Models\WildCard;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon as SupportCarbon;
 use PDF;
 
 class UserController extends Controller
@@ -1147,9 +1148,12 @@ class UserController extends Controller
     public function liveChatRegDetails($id)
     {
         $event = LiveChatRegistration::where([['live_chat_id', $id], ['user_id', auth('sanctum')->user()->id]])->first();
+        $admin = User::find(LiveChat::find($id)->admin_id);
+
         return response()->json([
             'status' => 200,
             'event' => $event,
+            'admin' => $admin->first_name . " " . $admin->last_name
         ]);
     }
 
@@ -1216,20 +1220,20 @@ class UserController extends Controller
     {
         $livechat = LiveChat::find($id);
 
-        $user_start_time = $livechat->available_start_time ? $livechat->available_start_time : $livechat->start_time;
-        $user_end_time = Carbon::parse($user_start_time)->addMinutes($minute)->format('H:i:s');
+        // $user_start_time = $livechat->available_start_time ? $livechat->available_start_time : $livechat->start_time;
+        // $user_end_time = Carbon::parse($user_start_time)->addMinutes($minute)->format('H:i:s');
 
-        $start_date = new DateTime($user_start_time);
-        $end_date = new DateTime($livechat->end_time);
+        // $start_date = new DateTime($user_start_time);
+        // $end_date = new DateTime($livechat->end_time);
 
-        $interval = $start_date->diff($end_date);
-        $hours   = $interval->format('%h');
-        $minutes = $interval->format('%i');
+        // $interval = $start_date->diff($end_date);
+        // $hours   = $interval->format('%h');
+        // $minutes = $interval->format('%i');
 
-        $available_minutes = ($hours * 60 + $minutes);
+        // $available_minutes = ($hours * 60 + $minutes);
         // $available_time = $available_minutes - $taken_minute;
 
-        if ($available_minutes >= $minute) {
+        if ($livechat->available_start_time >= $minute) {
             $msg = "Congratulation! Slot is available for You";
             $available_status = true;
         } else {
@@ -1240,8 +1244,8 @@ class UserController extends Controller
 
         return response()->json([
             'status' => 200,
-            'start_time' => $user_start_time,
-            'end_time' => $user_end_time,
+            'start_time' => "",
+            'end_time' => "",
             'available' => $available_status,
             'message' =>  $msg,
         ]);
@@ -2882,5 +2886,48 @@ class UserController extends Controller
             'status' => 200,
             'loveReact' => $loveReact
         ]);
+    }
+    /**
+     * slot distrubition
+     */
+
+    public function distributionTime($event_id)
+    {
+
+        $liveChat = LiveChat::find($event_id);
+        $liveChatRegs = LiveChatRegistration::where([['live_chat_id', $event_id], ['getSlot', '=', 0], ['payment_status', '=', 1]])->get();
+
+
+
+        // return $lastRegister->live_chat_end_time;
+        foreach ($liveChatRegs  as $key => $value) {
+            $this->slotClculation($value->id, $event_id, $liveChat->interval, $liveChat->start_time);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'affected_row' => count($liveChatRegs),
+            'loveReact' => "Distribute slot done"
+        ]);
+    }
+
+    public function slotClculation($reg_id, $event_id, $interval, $event_time)
+    {
+
+        $liveChatRegs = LiveChatRegistration::find($reg_id);
+        $lastRegister = LiveChatRegistration::where([['live_chat_id', $event_id], ['getSlot', '=', 1]])->orderBy('id', 'desc')->first();
+
+        // return count($lastRegister);
+        if (isset($lastRegister)) {
+            $liveChatRegs->live_chat_start_time = Carbon::parse($lastRegister->live_chat_end_time)->addMinutes($interval)->format('H:i:s');
+
+            $liveChatRegs->live_chat_end_time = Carbon::parse($lastRegister->live_chat_end_time)->addMinutes($interval)->addMinutes($liveChatRegs->taken_time)->format('H:i:s');
+        } else {
+            $liveChatRegs->live_chat_start_time = Carbon::parse($event_time)->format('H:i:s');
+
+            $liveChatRegs->live_chat_end_time = Carbon::parse($event_time)->addMinutes($liveChatRegs->taken_time)->format('H:i:s');
+        }
+        $liveChatRegs->getSlot = 1;
+        $liveChatRegs->update();
     }
 }
