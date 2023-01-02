@@ -37,7 +37,13 @@ use App\Http\Con;
 use Vonage\Message\Shortcode\Marketing;
 use trollers\API\VirtualtourController;
 
+
+
+
+
 //video for SDK
+Route::get('/time-distribute/{event_id}', [UserController::class, 'distributionTime']);
+
 Route::get('/sdk/get-token', [SdkController::class, 'getToken']);
 Route::get('/sdk/get-token/user', [SdkController::class, 'getTokenUser']);
 Route::get('/sdk/get-token/admin', [SdkController::class, 'getToken']);

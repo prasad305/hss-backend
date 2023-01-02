@@ -517,8 +517,14 @@ class LiveChatController extends Controller
             $liveChat->instruction = $request->input('instruction');
             $liveChat->description = $request->input('description');
             $liveChat->event_date = Carbon::parse($request->input('date'));
+
             $liveChat->start_time = Carbon::parse($request->input('start_time'));
             $liveChat->end_time = Carbon::parse($request->input('end_time'));
+            $starTime = Carbon::parse($request->input('start_time'));
+            $endTime = Carbon::parse($request->input('end_time'));
+
+            $liveChat->available_start_time = $starTime->diffInMinutes($endTime);
+
             $liveChat->registration_start_date = Carbon::parse($request->input('registration_start_date'));
             $liveChat->registration_end_date = Carbon::parse($request->input('registration_end_date'));
             $liveChat->fee = $request->input('fee');
