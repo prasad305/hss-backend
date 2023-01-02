@@ -39,6 +39,8 @@ class LiveChatRegistration extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+
+
     public function liveChatRoom()
     {
         return $this->belongsTo(LiveChatRoom::class, 'live_chat_id', 'live_chat_id');

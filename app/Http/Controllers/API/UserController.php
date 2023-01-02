@@ -1147,9 +1147,12 @@ class UserController extends Controller
     public function liveChatRegDetails($id)
     {
         $event = LiveChatRegistration::where([['live_chat_id', $id], ['user_id', auth('sanctum')->user()->id]])->first();
+        $admin = User::find(LiveChat::find($id)->admin_id);
+
         return response()->json([
             'status' => 200,
             'event' => $event,
+            'admin' => $admin->first_name . " " . $admin->last_name
         ]);
     }
 

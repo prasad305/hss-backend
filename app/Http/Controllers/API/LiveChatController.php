@@ -8,6 +8,7 @@ use App\Models\LiveChat;
 use App\Models\EventProfile;
 use App\Models\LiveChatRegistration;
 use App\Models\SuperStar;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
@@ -65,9 +66,9 @@ class LiveChatController extends Controller
     }
 
 
-    public function slots($slug)
+    public function slots($id)
     {
-        $event = LiveChat::where('slug', $slug)->first();
+        $event = LiveChat::find($id);
         $users = LiveChatRegistration::where([['live_chat_id', $event->id], ['payment_status', 1]])->get();
 
         return response()->json([
@@ -127,9 +128,9 @@ class LiveChatController extends Controller
         ]);
     }
 
-    public function registeredUserList($live_chat_slug)
+    public function registeredUserList($live_chat_id)
     {
-        $event = LiveChat::where('slug', $live_chat_slug)->first();
+        $event = LiveChat::find($live_chat_id);
         $registeredLiveChats = LiveChatRegistration::where([['live_chat_id', $event->id], ['payment_status', 1]])->get();
 
 

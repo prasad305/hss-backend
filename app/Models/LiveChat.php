@@ -30,8 +30,9 @@ class LiveChat extends Model
         'max_time_per_person',
         'publish_status',
         'status',
+        'admin_id'
     ];
-    protected $with = ['star'];
+    protected $with = ['star', 'admin'];
 
     public function admin()
     {
