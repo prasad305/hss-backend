@@ -8,7 +8,7 @@ use App\Models\AboutUs;
 use App\Models\PrivacyPolicy;
 use App\Models\FAQ;
 use App\Models\ProductPurchase;
-use App\Models\TarmsCondition;
+use App\Models\TermAndCondition;
 use App\Models\RefundPolicy;
 
 class SettingsController extends Controller
@@ -55,7 +55,7 @@ class SettingsController extends Controller
     }
     public function termsCondition()
     {
-        $data = TarmsCondition::orderBy('id', 'DESC')->first();
+        $data = TermAndCondition::orderBy('id', 'DESC')->first();
 
         return response()->json([
             'status' => 200,

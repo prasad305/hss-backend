@@ -647,4 +647,25 @@ class LiveChatController extends Controller
             'message' => 'Event has been rejected!',
         ]);
     }
+    public function allInOneMobileLiveChat()
+    {
+        $id = auth('sanctum')->user()->id;
+        try {
+            $all = LiveChat::where([['star_id', $id], ['status', '>', 0]])->count();
+            $pending = LiveChat::where([['star_id', $id], ['status', '<', 1]])->count();
+            $approved = LiveChat::where([['star_id', $id], ['status', '>', 0], ['status', '<', 10]])->count();
+            $completed =  LiveChat::where([['star_id', $id], ['status', 9]])->count();
+            $rejected = LiveChat::where([['star_id', $id], ['status', 11]])->count();
+        } catch (\Throwable $th) {
+            return $th;
+        }
+        return response()->json([
+            'status' => 200,
+            'all' => $all,
+            'pending' => $pending,
+            'approved' => $approved,
+            'completed' => $completed,
+            'rejected' => $rejected,
+        ]);
+    }
 }
