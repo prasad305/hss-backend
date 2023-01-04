@@ -563,6 +563,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/livechatListByDate/{date}', [LiveChatController::class, 'admin_livechatListByDate']);
     Route::get('/admin/registeredUserList/{live_chat_id}', [LiveChatController::class, 'admin_registeredUserList']);
 
+
     // Question and Answers
 
     Route::post('/admin/add_qna', [QnaController::class, 'add_qna']);
@@ -824,6 +825,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::post('/star/add_live_session', [LiveChatController::class, 'add_by_star']);
     Route::post('/star/update_live_session', [LiveChatController::class, 'update_by_star']);
     Route::get('/livechatListByDate/{date}', [LiveChatController::class, 'livechatListByDate']);
+    Route::get('/star/liveChat/allInOneMobile', [LiveChatController::class, 'allInOneMobileLiveChat']);
 
 
     // Meetup Event Section
