@@ -594,7 +594,7 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/live_chat/live', [LiveChatController::class, 'live_list']);
     Route::get('/admin/live_chat/completed', [LiveChatController::class, 'completed_list']);
     Route::get('/admin/live-chat/details/{id}', [LiveChatController::class, 'details']);
-    Route::get('/admin/live-chat/registered_user_list/{slug}', [LiveChatController::class, 'slots']);
+    Route::get('/admin/live-chat/registered_user_list/{id}', [LiveChatController::class, 'slots']);
     Route::get('/admin/live_chat/count', [LiveChatController::class, 'count']);
 
 

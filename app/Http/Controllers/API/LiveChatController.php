@@ -69,12 +69,14 @@ class LiveChatController extends Controller
     public function slots($id)
     {
         $event = LiveChat::find($id);
-        $users = LiveChatRegistration::where([['live_chat_id', $event->id], ['payment_status', 1]])->get();
+        $users = LiveChatRegistration::orderBy('live_chat_start_time', 'ASC')->where([['live_chat_id', $event->id], ['payment_status', 1], ['getSlot', 1]])->get();
+        $usersWithOutSlot = LiveChatRegistration::orderBy('live_chat_start_time', 'ASC')->where([['live_chat_id', $event->id], ['payment_status', 1], ['getSlot', 0]])->get();
 
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
             'users' => $users,
+            'withOutSlotUser' => $usersWithOutSlot,
         ]);
     }
 
