@@ -456,8 +456,6 @@ class PaymentController extends Controller
                 $value4 = 0;
         }
 
-        return $request->type;
-
 
         $user = auth()->user();
         $shurjopay_service = new ShurjopayController();

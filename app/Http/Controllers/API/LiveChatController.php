@@ -172,8 +172,8 @@ class LiveChatController extends Controller
             $liveChat->title = $request->input('title');
             $liveChat->slug = Str::slug($request->input('title'));
             $liveChat->star_id = $request->input('star_id');
-            $liveChat->category_id = $superStar->category_id;
-            $liveChat->sub_category_id = $superStar->sub_category_id;
+            $liveChat->category_id = auth()->user()->category_id;
+            $liveChat->sub_category_id = auth()->user()->sub_category_id;
             $liveChat->admin_id = auth('sanctum')->user()->id;
             $liveChat->created_by_id = auth('sanctum')->user()->id;
             $liveChat->instruction = $request->input('instruction');
@@ -510,8 +510,8 @@ class LiveChatController extends Controller
             $liveChat->title = $request->input('title');
             $liveChat->slug = Str::slug($request->input('title'));
             $liveChat->star_id = auth('sanctum')->user()->id;
-            $liveChat->category_id = $superStar->category_id;
-            $liveChat->sub_category_id = $superStar->sub_category_id;
+            $liveChat->category_id = auth()->user()->category_id;
+            $liveChat->sub_category_id = auth()->user()->sub_category_id;
             $liveChat->admin_id = auth('sanctum')->user()->parent_user;
             $liveChat->created_by_id = auth('sanctum')->user()->id;
             $liveChat->instruction = $request->input('instruction');
