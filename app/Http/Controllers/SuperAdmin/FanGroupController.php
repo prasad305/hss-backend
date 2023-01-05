@@ -18,13 +18,13 @@ class FanGroupController extends Controller
     public function index()
     {
         $categories = Category::get();
-        return view('SuperAdmin.FanGroup.index', compact('categories'));
+        return view('SuperAdmin.Fangroup.index', compact('categories'));
     }
     public function fanGroupList($categoryId)
     {
 
         $postList = FanGroup::where('category_id', $categoryId)->latest()->get();
-        return view('SuperAdmin.FanGroup.FanGroupList', compact('postList'));
+        return view('SuperAdmin.Fangroup.FanGroupList', compact('postList'));
     }
     public function fanGroupDetails($postId)
     {
@@ -33,19 +33,19 @@ class FanGroupController extends Controller
         $star_one = User::find($post->my_star);
         $another_star = User::find($post->another_star);
 
-        return view('SuperAdmin.fanGroup.details', compact('post', 'star_one', 'another_star'));
+        return view('SuperAdmin.Fangroup.details', compact('post', 'star_one', 'another_star'));
     }
     public function fanGroupEdit($id)
     {
         $event = FanGroup::find($id);
 
-        return view('SuperAdmin.FanGroup.edit', compact('event'));
+        return view('SuperAdmin.Fangroup.edit', compact('event'));
     }
     public function fanGroupUpdate(Request $request, $id)
     {
 
         $request->validate([
-            'group_name' => 'required|unique:fan_groups,group_name,'.$id,
+            'group_name' => 'required|unique:fan_groups,group_name,' . $id,
             'description' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
