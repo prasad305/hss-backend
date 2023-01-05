@@ -497,6 +497,29 @@ class PaymentController extends Controller
         $data = json_decode($shurjopay_service->verify($request->order_id));
         $paymentData = $data[0];
 
+        $paymentStatus = "";
+        $PaymentMessage = "";
+        if ($paymentData->method = "OK Wallet" || $paymentData->method = "bKash") {
+
+            if ($paymentData->transaction_status = "Complete" || $paymentData->transaction_status = "APPROVED") {
+                $PaymentMessage = "Payment successful";
+                $paymentStatus = true;
+            } else {
+                $PaymentMessage = "Payment Faild !";
+                $paymentStatus = false;
+            }
+        } else if ($paymentData->method = "Nagad") {
+
+            if ($paymentData->sp_massage = "Success") {
+                $PaymentMessage = "Payment successful";
+                $paymentStatus = true;
+            } else {
+                $PaymentMessage = "Payment Faild !";
+                $paymentStatus = false;
+            }
+        }
+
+
 
         Transaction::create([
             'user_id' => $paymentData->value1,
@@ -508,7 +531,7 @@ class PaymentController extends Controller
             'currency' => "BDT",
             'bank_name' => $paymentData->method,
             'resp_msg' => "shurjo-Payment",
-            'status' => $paymentData->transaction_status,
+            'status' => $paymentStatus,
 
         ]);
 
@@ -522,7 +545,7 @@ class PaymentController extends Controller
             $paymentData->value4
         );
 
-        return view("Others.Payment.shurjoPaymentSuccess", compact('paymentData'));
+        return view("Others.Payment.shurjoPaymentSuccess", compact('paymentData', 'paymentStatus', 'PaymentMessage'));
 
         return $paymentData;
     }
