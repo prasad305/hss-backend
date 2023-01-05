@@ -95,6 +95,11 @@ class UserMobileAppController extends Controller
                 $activity = new Activity();
                 $eventRegistration = new MeetupEventRegistration();
                 $event = MeetupEvent::find($eventId);
+                //for free cost regisation
+                if ($request->payment_method == "Free-Registaion") {
+                    $eventRegistration->payment_method = $request->payment_method;
+                    $eventRegistration->payment_status = 1;
+                }
                 $eventRegistration->user_id = $user->id;
                 $eventRegistration->meetup_event_id = $eventId;
                 $eventRegistration->amount = $event->fee;
@@ -166,6 +171,13 @@ class UserMobileAppController extends Controller
                 $event = LiveChat::find($eventId);
 
 
+                //for free cost regisation
+                if ($request->payment_method == "Free-Registaion") {
+                    $eventRegistration->payment_method = $request->payment_method;
+                    $eventRegistration->publish_status = 1;
+                    $eventRegistration->payment_status = 1;
+                }
+
                 $eventRegistration->user_id = $user->id;
                 $eventRegistration->live_chat_id = $eventId;
                 $eventRegistration->amount =  $request->quantity > 0 ? ($event->fee * $request->quantity) : $event->fee;
@@ -211,6 +223,14 @@ class UserMobileAppController extends Controller
                 $eventRegistration->amount =  $request->quantity > 0 ? ($event->fee * $request->quantity) : $event->fee;
                 $eventRegistration->room_id = $create_room_id;
                 $eventRegistration->qna_date = $event->event_date;
+
+                //for free cost regisation
+                if ($request->payment_method == "Free-Registaion") {
+                    $eventRegistration->payment_method = $request->payment_method;
+                    $eventRegistration->payment_status = 1;
+                }
+
+
                 // $eventRegistration->publish_status = 1;
                 $eventRegistration->qna_start_time = Carbon::parse($event->start_time)->format('H:i:s');
                 $eventRegistration->card_holder_name =  $request->quantity;
@@ -254,6 +274,14 @@ class UserMobileAppController extends Controller
                 $event = Greeting::find($eventRegistration->greeting_id);
                 $eventRegistration->status = 1;
                 $eventRegistration->amount = $event->cost;
+
+                //for free cost regisation
+                if ($request->payment_method == "Free-Registaion") {
+                    $eventRegistration->payment_method = $request->payment_method;
+                    $eventRegistration->payment_status = 1;
+                }
+
+
                 $eventRegistration->save();
                 if ($request->payment_method == "wallet") {
                     $activity = new Activity();
