@@ -92,10 +92,10 @@
                 <img src="https://cdn.dribbble.com/users/614270/screenshots/14575431/media/4907a0869e9ed2ac4e2d1c2beaf9f012.gif"
                     height="100px" width="100px">
             </div>
-            <div class="status">Payment Received</div>
+            <div class="status">Payment Summery</div>
 
             <p>Hi, {{ $paymentData->name }}</p>
-            <span>Your transaction was successfull !</span>
+            <span>{{ $PaymentMessage }}</span>
 
             <p>Payment Details:</p>
             <span>Amount: <b> {{ $paymentData->amount }}</b> ট</span>
@@ -107,11 +107,12 @@
             </span>
             </br>
 
+            <input type="hidden" id="paymentStatus" value="{{ $paymentStatus }}">
 
             <div class="border"></div>
 
             <b class="id">
-                Reference id : <p id='eventType'>{{ $paymentData->value2 }}</p>{{ $paymentData->order_id }}
+                Reference id : <p id='eventType'>{{ $paymentData->value2 }}_</p>{{ $paymentData->order_id }}
             </b>
 
             <div style="display: flex;justify-content: center;">
@@ -143,50 +144,53 @@
 </body>
 <script>
     var eventType = document.getElementById('eventType').value;
+    var paymentStatus = document.getElementById('paymentStatus').value;
 
-    window.onload = setTimeout(function() {
-        webSuccessRedirect();
-        window.ReactNativeWebView.postMessage('go-back');
-        window.ReactNativeWebView.postMessage(eventType);
-        window.top.postMessage(
-            JSON.stringify({
-                error: false,
-                message: "Hello-World"
-            }),
-            '*'
-        );
-    }, 10000);
+    if (paymentStatus) {
+        window.onload = setTimeout(function() {
+            webSuccessRedirect();
+            window.ReactNativeWebView.postMessage('go-back');
+            window.ReactNativeWebView.postMessage(eventType);
+            window.top.postMessage(
+                JSON.stringify({
+                    error: false,
+                    message: "Hello-World"
+                }),
+                '*'
+            );
+        }, 10000);
 
-    function goBack() {
-        webSuccessRedirect();
-        window.ReactNativeWebView.postMessage('go-back');
-        window.ReactNativeWebView.postMessage(eventType);
-        window.top.postMessage(
-            JSON.stringify({
-                error: false,
-                message: "Hello-World"
-            }),
-            '*'
-        );
+        function goBack() {
+            webSuccessRedirect();
+            window.ReactNativeWebView.postMessage('go-back');
+            window.ReactNativeWebView.postMessage(eventType);
+            window.top.postMessage(
+                JSON.stringify({
+                    error: false,
+                    message: "Hello-World"
+                }),
+                '*'
+            );
+        }
+
+
+        function webSuccessRedirect() {
+            window.parent.postMessage({
+                message: 'go-back'
+            }, "*");
+
+        }
+
+        var seconds = 10;
+        var el = document.getElementById('seconds-counter');
+
+        function incrementSeconds() {
+            seconds -= 1;
+            el.innerText = seconds;
+        }
+
+        var cancel = setInterval(incrementSeconds, 1000);
     }
-
-
-    function webSuccessRedirect() {
-        window.parent.postMessage({
-            message: 'go-back'
-        }, "*");
-
-    }
-
-    var seconds = 10;
-    var el = document.getElementById('seconds-counter');
-
-    function incrementSeconds() {
-        seconds -= 1;
-        el.innerText = seconds;
-    }
-
-    var cancel = setInterval(incrementSeconds, 1000);
 </script>
 
 </html>
