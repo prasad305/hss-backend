@@ -43,7 +43,7 @@ class PaymentController extends Controller
     protected $PAYTM_MERCHENT_KEY = "zXhNYVPF4RKIsIIz";
     protected $PAYTM_STAGING_MODE = true;
     protected $PAYTM_WEBSITE_NAME = "WEBSTAGING";
-    protected $PAYTM_CALLBACK_URL_WEB = "http://10.10.10.140/HelloSuperStarsBackend-2/public/api/paytm-callback/";
+    protected $PAYTM_CALLBACK_URL_WEB = "http://192.168.0.216/HelloSuperStarsBackend-2/public/api/paytm-callback/";
     protected $PAYTM_CALLBACK_URL_MOBILE = "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=";
     protected $PAYTM_URL_MOBILE = "https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid=";
     protected $PAYTM_URL_WEB = "https://securegw-stage.paytm.in/v3/order/status";
@@ -182,7 +182,7 @@ class PaymentController extends Controller
                 resgistationSuccessUpdate($user_id, $type, $event_id, "paytm", $result->body->txnAmount, $value);
             }
             $orderId = $result->body->orderId;
-            $url = "http://10.10.10.151:3000/";
+            $url = "http://192.168.0.216:3000/";
             return  redirect()->away($url . $redirectTo);
         } else {
             return "Checksum Mismatched";
