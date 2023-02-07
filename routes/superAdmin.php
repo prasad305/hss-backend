@@ -69,6 +69,44 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/quiz-result', [HomeController::class, 'viewAllQuize'])->name('showAllQuiz');
 
 
+    //********************************************//
+    //******Learning Session Routes Start *******//
+    //********************************************//
+
+    //=================Dashboard Routes ===============//
+    Route::get('/learning-session', [DashboardController::class, 'learningSessions'])->name('learningSessions');
+    Route::get('/learningSession-events-dashboard', [DashboardController::class, 'learningSessionEventsDashboard'])->name('learningSessionEvents.dashboard');
+    Route::get('/learningSession-data-list/{type}', [DashboardController::class, 'learningSessionDataList'])->name('learningSessionEvents.learningSessionDataList');
+    Route::get('/learningSession-manager-list', [DashboardController::class, 'learningSessionManagerAdminList'])->name('learningSessionEvents.managerAdminList');
+    Route::get('/learningSession-manager-events/{id}', [DashboardController::class, 'learningSessionManagerAdminEvents'])->name('learningSessionEvents.managerAdminEvents');
+    Route::get('/learningSession-admin-list', [DashboardController::class, 'learningSessionAdminList'])->name('learningSessionEvents.adminList');
+    Route::get('/learningSession-admin-events/{id}', [DashboardController::class, 'learningSessionAdminEvents'])->name('learningSessionEvents.adminEvents');
+     Route::get('/learningSession-superstar-list', [DashboardController::class, 'learningSessionSuperstarList'])->name('learningSessionEvents.superstarList');
+     Route::get('/learningSession-superstar-events/{id}', [DashboardController::class, 'learningSessionSuperstarEvents'])->name('learningSessionEvents.superstarEvents');
+
+
+
+    
+    Route::get('/all/learning-session', [DashboardInfoController::class, 'allLearningSession'])->name('allLearningSession');
+    Route::get('/all/complete/learning-session', [DashboardInfoController::class, 'allCompleteLearningSession'])->name('allCompleteLearningSession');
+    Route::get('/all/upcoming/learning-session', [DashboardInfoController::class, 'allUpcomingLearningSession'])->name('allUpcomingLearningSession');
+
+    Route::get('learningSession-index', [LearningSessionController::class, 'index'])->name('learningSession.index');
+    Route::get('learningSession-list/{id}', [LearningSessionController::class, 'learningSessionList'])->name('learningSession.list');
+    Route::get('learningSession-details/{id}', [LearningSessionController::class, 'learningSessionDetails'])->name('learningSession.details');
+    Route::get('learningSession-edit/{id}', [LearningSessionController::class, 'learningSessionEdit'])->name('learningSession.edit');
+    Route::PUT('learningSession-update/{id}', [LearningSessionController::class, 'LearningSessionUpdate'])->name('learningSession.update');
+    Route::delete('learningSession-destroy/{id}', [LearningSessionController::class, 'learningSessionDestroy'])->name('learningSession.destroy');
+
+    //===================== Reports Routes =====================//
+    Route::get('/learningSession-report', [ReportController::class, 'learningSessionReport'])->name('report.learningSession');
+    Route::post('/learningSession-report-filter', [ReportController::class, 'learningFilter'])->name('report.filter.learningSession');
+
+    //********************************************//
+    //******Learning Session Routes End *******//
+    //********************************************//
+
+
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/withdraw', [ProfitWithdrawController::class, 'index'])->name('withdraw.index');
     Route::put('/txn-store/{id}', [ProfitWithdrawController::class, 'store'])->name('bankTxnId.store');
@@ -84,7 +122,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
 
     Route::get('/meetup-events', [DashboardController::class, 'meetupEvents'])->name('meetupEvents');
-    Route::get('/learning-session', [DashboardController::class, 'learningSessions'])->name('learningSessions');
     Route::get('/live-chats', [DashboardController::class, 'liveChats'])->name('liveChats');
     Route::get('/fan-group', [DashboardController::class, 'fanGroup'])->name('fanGroup');
     Route::get('/greetings', [DashboardController::class, 'greetings'])->name('greetings');
@@ -110,10 +147,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/all/online/upcoming/meetup', [DashboardInfoController::class, 'allUpcomingOnlineMeetUp'])->name('allUpcomingOnlineMeetUp');
     Route::get('/all/offline/upcoming/meetup', [DashboardInfoController::class, 'allUpcomingOfflineMeetUp'])->name('allUpcomingOfflineMeetUp');
 
-    //Learning Session
-    Route::get('/all/learning-session', [DashboardInfoController::class, 'allLearningSession'])->name('allLearningSession');
-    Route::get('/all/complete/learning-session', [DashboardInfoController::class, 'allCompleteLearningSession'])->name('allCompleteLearningSession');
-    Route::get('/all/upcoming/learning-session', [DashboardInfoController::class, 'allUpcomingLearningSession'])->name('allUpcomingLearningSession');
 
     //Live Chats
     Route::get('/all/live-chat', [DashboardInfoController::class, 'allLiveChat'])->name('allLiveChat');
@@ -261,13 +294,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::PUT('qna-update/{id}', [QnAController::class, 'qnaUpdate'])->name('qna.update');
     Route::delete('qna-destroy/{id}', [QnAController::class, 'qnaDestroy'])->name('qna.destroy');
 
-    //LearningSession
-    Route::get('learningSession-index', [LearningSessionController::class, 'index'])->name('learningSession.index');
-    Route::get('learningSession-list/{id}', [LearningSessionController::class, 'learningSessionList'])->name('learningSession.list');
-    Route::get('learningSession-details/{id}', [LearningSessionController::class, 'learningSessionDetails'])->name('learningSession.details');
-    Route::get('learningSession-edit/{id}', [LearningSessionController::class, 'learningSessionEdit'])->name('learningSession.edit');
-    Route::PUT('learningSession-update/{id}', [LearningSessionController::class, 'LearningSessionUpdate'])->name('learningSession.update');
-    Route::delete('learningSession-destroy/{id}', [LearningSessionController::class, 'learningSessionDestroy'])->name('learningSession.destroy');
+
 
     //MeetupEvents
     Route::get('meetupEvent-index', [MeetupEventController::class, 'index'])->name('meetupEvent.index');
@@ -416,11 +443,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/simplePost-data-list/{type}', [DashboardController::class, 'postDataList'])->name('simplePostEvents.postDataList');
     Route::get('/simplePost-manager-list', [DashboardController::class, 'simplePostManagerAdminList'])->name('simplePostEvents.managerAdminList');
     Route::get('/simplePost-manager-events/{id}', [DashboardController::class, 'simplePostManagerAdminEvents'])->name('simplePostEvents.managerAdminEvents');
-    // learning Session dashboard
-    Route::get('/learningSession-events-dashboard', [DashboardController::class, 'learningSessionEventsDashboard'])->name('learningSessionEvents.dashboard');
-    Route::get('/learningSession-data-list/{type}', [DashboardController::class, 'learningSessionDataList'])->name('learningSessionEvents.learningSessionDataList');
-    Route::get('/learningSession-manager-list', [DashboardController::class, 'learningSessionManagerAdminList'])->name('learningSessionEvents.managerAdminList');
-    Route::get('/learningSession-manager-events/{id}', [DashboardController::class, 'learningSessionManagerAdminEvents'])->name('learningSessionEvents.managerAdminEvents');
+    
     // live Chat dashboard
     Route::get('/liveChat-events-dashboard', [DashboardController::class, 'liveChatEventsDashboard'])->name('liveChatEvents.dashboard');
     Route::get('/liveChat-data-list/{type}', [DashboardController::class, 'liveChatDataList'])->name('liveChatEvents.liveChatDataList');
@@ -469,9 +492,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // simplePost dashboard
     Route::get('/simplePost-admin-list', [DashboardController::class, 'simplePostAdminList'])->name('simplePostEvents.adminList');
     Route::get('/simplePost-admin-events/{id}', [DashboardController::class, 'simplePostAdminEvents'])->name('simplePostEvents.adminEvents');
-    // learning Session dashboard
-    Route::get('/learningSession-admin-list', [DashboardController::class, 'learningSessionAdminList'])->name('learningSessionEvents.adminList');
-    Route::get('/learningSession-admin-events/{id}', [DashboardController::class, 'learningSessionAdminEvents'])->name('learningSessionEvents.adminEvents');
+    
     // live Chat dashboard
     Route::get('/liveChat-admin-list', [DashboardController::class, 'liveChatAdminList'])->name('liveChatEvents.adminList');
     Route::get('/liveChat-admin-events/{id}', [DashboardController::class, 'liveChatAdminEvents'])->name('liveChatEvents.adminEvents');
@@ -502,9 +523,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // simplePost dashboard
     Route::get('/simplePost-superstar-list', [DashboardController::class, 'simplePostSuperstarList'])->name('simplePostEvents.superstarList');
     Route::get('/simplePost-superstar-events/{id}', [DashboardController::class, 'simplePostSuperstarEvents'])->name('simplePostEvents.superstarEvents');
-    // learning Session dashboard
-    Route::get('/learningSession-superstar-list', [DashboardController::class, 'learningSessionSuperstarList'])->name('learningSessionEvents.superstarList');
-    Route::get('/learningSession-superstar-events/{id}', [DashboardController::class, 'learningSessionSuperstarEvents'])->name('learningSessionEvents.superstarEvents');
+   
     // live Chat dashboard
     Route::get('/liveChat-superstar-list', [DashboardController::class, 'liveChatSuperstarList'])->name('liveChatEvents.superstarList');
     Route::get('/liveChat-superstar-events/{id}', [DashboardController::class, 'liveChatSuperstarEvents'])->name('liveChatEvents.superstarEvents');
@@ -541,8 +560,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // <================================= All Report ======================================>
 
     Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
-    Route::get('/learningSession-report', [ReportController::class, 'learningSessionReport'])->name('report.learningSession');
-    Route::post('/learningSession-report-filter', [ReportController::class, 'learningFilter'])->name('report.filter.learningSession');
     Route::get('/all-report-filter-subCategory/{id}', [ReportController::class, 'allSubCategory']);
     Route::get('/liveChat-report', [ReportController::class, 'liveChatReport'])->name('report.liveChat');
     Route::post('/liveChat-report', [ReportController::class, 'liveChatReportFilter'])->name('report.Filter.liveChat');

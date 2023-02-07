@@ -147,7 +147,7 @@ Route::get('/user/all-upcomming-events', [UserController::class, 'allUpCommingEv
 
 
 // Data Fetching For Landing Page Right Side Bar
-Route::get('/user/learning_session/all', [LearningSessionController::class, 'user_all']);
+
 Route::get('/user/live_chat/all', [LiveChatController::class, 'userAll']);
 
 
@@ -172,15 +172,38 @@ Route::get('/pocket-token', [PaymentController::class, 'pocketToken']);
 Route::post('/pocket-signature', [PaymentController::class, 'getPocketSignature']);
 
 
-
-
-
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/checkingAuthenticated', function () {
         return response()->json(['message' => 'You are in', 'status' => 200], 200);
     });
+
+    //********************************************//
+    //******Learning Session Routes Start *******//
+    //********************************************//
+
+    Route::get('/user/learning_session/all', [LearningSessionController::class, 'user_all']);
+    Route::post('/learning-assinment-upload', [UserController::class, 'lerningSessionAssinmentVideoUplad']);
+    Route::get('/user/learning-single/{event_id}', [UserController::class, 'registeredSingleLearning']);
+    Route::get('/user/registerLearningSession', [UserController::class, 'registeredLearningSession']);
+    Route::get('/learnig-session/{slug}', [UserController::class, 'singleLearnigSession']);
+    Route::get('/user/learning-session/{slug}', [UserController::class, 'userSingleLearnigSession']);
+    Route::get('/learning-session/result/{slug}', [UserController::class, 'learningSeesionResult']);
+
+    //lerning session registaion
+    Route::post('/learnig-session', [UserController::class, 'LearningSessionReg']);
+
+    //Event Registaion By User (Learning Session)
+    Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
+    Route::post('/user/learning-session/video-upload', [UserController::class, 'uploadLearningSessionVideo']);
+    Route::post('/user/learning-session/saveCertificateInfo', [UserController::class, 'saveCertificateInfo']);
+    Route::get('/user/learning-session/getUploadedVideo/{event_id}', [UserController::class, 'getUploadedVideo']);
+    Route::get('/user/greeting-leraning-certificate/{event_id}', [UserController::class, 'getCertificateData']);
+
+    //********************************************//
+    //******Learning Session Routes End *******//
+    //********************************************//
 
     //delete account
     Route::post('/delet-user', [UserController::class, 'deleteUser']);
@@ -216,7 +239,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
 
 
-    Route::post('/learning-assinment-upload', [UserController::class, 'lerningSessionAssinmentVideoUplad']);
+    
     Route::get('/user_info', [AuthController::class, 'user_info']);
     Route::post('/user_info_update', [AuthController::class, 'user_info_update']);
     Route::post('/user_info_update/star_admin', [AuthController::class, 'star_admin_info_update']);
@@ -249,9 +272,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/user/registerMeestup', [UserController::class, 'registeredMeetup']);
     Route::get('/user/registerMeestup-single/{event_id}', [UserController::class, 'registeredSingleMeetup']);
-    Route::get('/user/learning-single/{event_id}', [UserController::class, 'registeredSingleLearning']);
+    
     Route::get('/user/registerLivechat', [UserController::class, 'registeredLivechat']);
-    Route::get('/user/registerLearningSession', [UserController::class, 'registeredLearningSession']);
+    
     Route::get('/user/registerGreetings', [UserController::class, 'registerGreetings']);
 
 
@@ -339,12 +362,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     //check user notification
     Route::get('/user/check_notification', [UserController::class, 'checkUserNotifiaction']);
-    Route::get('/learnig-session/{slug}', [UserController::class, 'singleLearnigSession']);
-    Route::get('/user/learning-session/{slug}', [UserController::class, 'userSingleLearnigSession']);
-    Route::get('/learning-session/result/{slug}', [UserController::class, 'learningSeesionResult']);
+    
 
-    //lerning session registaion
-    Route::post('/learnig-session', [UserController::class, 'LearningSessionReg']);
+    
 
     // auction product
     Route::get('/auction-product/all', [UserController::class, 'auctionProduct']);
@@ -363,12 +383,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/auction_activites', [UserController::class, 'auction_activites']);
 
 
-    //Event Registaion By User (Learning Session + Live Chat + Greeting + Meetup Event)
-    Route::post('/user/learning_session/register', [UserController::class, 'LearningSessionRegistration']);
-    Route::post('/user/learning-session/video-upload', [UserController::class, 'uploadLearningSessionVideo']);
-    Route::post('/user/learning-session/saveCertificateInfo', [UserController::class, 'saveCertificateInfo']);
-    Route::get('/user/learning-session/getUploadedVideo/{event_id}', [UserController::class, 'getUploadedVideo']);
-    Route::get('/user/greeting-leraning-certificate/{event_id}', [UserController::class, 'getCertificateData']);
+    
 
     //use this api on react project file path- \src\components\Pages\Profile\profile-components\starProfile\StarChat
     Route::post('/user/liveChat/register', [UserController::class, 'liveChatRigister']);
@@ -457,14 +472,47 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 });
 
 
-
-
 // Approved Star Admin Middleware
 Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
     Route::get('/checkingAdmin', function () {
         return response()->json(['message' => 'You are in as Admin', 'status' => 200], 200);
     });
+
+    //********************************************//
+    //******Learning Session Routes Start *******//
+    //********************************************//
+
+    // Learning Session Section
+    Route::post('admin/learning_session/create', [LearningSessionController::class, 'add_learning']);
+    Route::post('/admin/update_learning_session/{id}', [LearningSessionController::class, 'adminUpdateLearning']);
+    Route::get('/admin/learning_session/all', [LearningSessionController::class, 'all']);
+    Route::get('/admin/learning_session/count', [LearningSessionController::class, 'count']);
+    Route::get('/admin/learning_session/rejected', [LearningSessionController::class, 'rejected_list']);
+    Route::get('/admin/learning_session/pending', [LearningSessionController::class, 'pending_list']);
+    Route::get('/admin/learning_session/live', [LearningSessionController::class, 'live_list']);
+    Route::get('/admin/learning_session/evaluation', [LearningSessionController::class, 'evaluation_list']);
+    Route::get('/admin/learning_session/completed', [LearningSessionController::class, 'completed_list']);
+    Route::get('/admin/learning_session/details/{id}', [LearningSessionController::class, 'details']);
+    Route::get('/admin/learning_session/registered_user/{id}', [LearningSessionController::class, 'registured_user']);
+    Route::get('/admin/learning_session/pending/{id}', [LearningSessionController::class, 'pending_details']);
+    Route::get('/admin/learning_session/approved', [LearningSessionController::class, 'approved_list']);
+    Route::get('/admin/learning_session/assignment/{id}', [LearningSessionController::class, 'assignment_details']);
+    Route::post('/admin/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
+    Route::post('admin/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'assignment_set_approval']);
+    Route::post('admin/learning_session/assignment/approval/withMark/{type}/{id}', [LearningSessionController::class, 'assignment_set_approval_with_mark']);
+    Route::get('admin/learning_session/assignment/send_to_manager/{slug}', [LearningSessionController::class, 'assignment_send_to_manager']);
+    Route::get('admin/learning_session/assignment/send_to_star/{id}', [LearningSessionController::class, 'assignment_send_to_star']);
+    Route::get('/admin/learning_session/assignment/marks/{slug}', [LearningSessionController::class, 'admin_assignment_marks']);
+    Route::get('/admin/learning_session/setComplete/{id}', [LearningSessionController::class, 'admin_assignment_set_complete']);
+    Route::get('/admin/learning_session/setAssignment/{id}', [LearningSessionController::class, 'admin_assignment_set_assignment']);
+    Route::get('/admin/learning_session/result', [LearningSessionController::class, 'showLearninSessionResult']);
+    Route::get('/admin/learning_session/showResult/{eventId}', [LearningSessionController::class, 'showLearninSessionResultData']);
+
+
+    //********************************************//
+    //******Learning Session Routes End *******//
+    //********************************************//
 
     Route::get('admin/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('admin/dashboard/posts/{type}', [DashboardController::class, 'dashboardPosts']);
@@ -530,31 +578,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/simple_post/approved', [SimplePostController::class, 'approved_list']);
     Route::get('/admin/simple_post/rejected', [SimplePostController::class, 'rejected_list']);
 
-    // Learning Session Section
-    Route::post('admin/learning_session/create', [LearningSessionController::class, 'add_learning']);
-    Route::post('/admin/update_learning_session/{id}', [LearningSessionController::class, 'adminUpdateLearning']);
-    Route::get('/admin/learning_session/all', [LearningSessionController::class, 'all']);
-    Route::get('/admin/learning_session/count', [LearningSessionController::class, 'count']);
-    Route::get('/admin/learning_session/rejected', [LearningSessionController::class, 'rejected_list']);
-    Route::get('/admin/learning_session/pending', [LearningSessionController::class, 'pending_list']);
-    Route::get('/admin/learning_session/live', [LearningSessionController::class, 'live_list']);
-    Route::get('/admin/learning_session/evaluation', [LearningSessionController::class, 'evaluation_list']);
-    Route::get('/admin/learning_session/completed', [LearningSessionController::class, 'completed_list']);
-    Route::get('/admin/learning_session/details/{id}', [LearningSessionController::class, 'details']);
-    Route::get('/admin/learning_session/registered_user/{id}', [LearningSessionController::class, 'registured_user']);
-    Route::get('/admin/learning_session/pending/{id}', [LearningSessionController::class, 'pending_details']);
-    Route::get('/admin/learning_session/approved', [LearningSessionController::class, 'approved_list']);
-    Route::get('/admin/learning_session/assignment/{id}', [LearningSessionController::class, 'assignment_details']);
-    Route::post('/admin/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
-    Route::post('admin/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'assignment_set_approval']);
-    Route::post('admin/learning_session/assignment/approval/withMark/{type}/{id}', [LearningSessionController::class, 'assignment_set_approval_with_mark']);
-    Route::get('admin/learning_session/assignment/send_to_manager/{slug}', [LearningSessionController::class, 'assignment_send_to_manager']);
-    Route::get('admin/learning_session/assignment/send_to_star/{id}', [LearningSessionController::class, 'assignment_send_to_star']);
-    Route::get('/admin/learning_session/assignment/marks/{slug}', [LearningSessionController::class, 'admin_assignment_marks']);
-    Route::get('/admin/learning_session/setComplete/{id}', [LearningSessionController::class, 'admin_assignment_set_complete']);
-    Route::get('/admin/learning_session/setAssignment/{id}', [LearningSessionController::class, 'admin_assignment_set_assignment']);
-    Route::get('/admin/learning_session/result', [LearningSessionController::class, 'showLearninSessionResult']);
-    Route::get('/admin/learning_session/showResult/{eventId}', [LearningSessionController::class, 'showLearninSessionResultData']);
 
 
     // Live Session Section
@@ -679,6 +702,38 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/checkingSuperStar', function () {
         return response()->json(['message' => 'You are in as Superstar', 'status' => 200], 200);
     });
+
+    //********************************************//
+    //******Learning Session Routes Start *******//
+    //********************************************//
+
+    Route::get('/star/learning_session/registered_user/{id}', [LearningSessionController::class, 'registured_user']);
+    Route::get('/star/learning_session/allInOneMobile', [LearningSessionController::class, 'allInOneMobileLearning']);
+    Route::post('/star/learning_session/create', [LearningSessionController::class, 'star_add']);
+    Route::post('/star/update_learning_session/{id}', [LearningSessionController::class, 'update']);
+    Route::get('/star/learning_session/all', [LearningSessionController::class, 'star_all']);
+    Route::get('/star/learning_session/count', [LearningSessionController::class, 'star_count']);
+    Route::get('/star/learning_session/pending', [LearningSessionController::class, 'star_pending_list']);
+    Route::get('/star/learning_session/pending/{id}', [LearningSessionController::class, 'star_pending_details']);
+    Route::get('/star/learning_session/approved', [LearningSessionController::class, 'star_approved_list']);
+    Route::get('/star/learning_session/reject', [LearningSessionController::class, 'star_reject_list']);
+    Route::get('/star/learning_session/approve/{id}', [LearningSessionController::class, 'approve_post']);
+    Route::get('/star/learning_session/reject/{id}', [LearningSessionController::class, 'reject']);
+    Route::get('/star/learning_session/completed', [LearningSessionController::class, 'star_completed_list']);
+    Route::get('/star/learning_session/evaluation', [LearningSessionController::class, 'star_evaluation_list']);
+    Route::get('/star/learning_session/details/{id}', [LearningSessionController::class, 'details']);
+    Route::get('/star/learning_session/assignment/{id}', [LearningSessionController::class, 'star_assignment_details']);
+    Route::post('/star/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
+    Route::post('/star/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'star_assignment_set_approval']);
+    Route::get('/star/learning_session/result', [LearningSessionController::class, 'starShowLearninSessionResult']);
+    Route::get('/star/learning_session/showResult/{eventId}', [LearningSessionController::class, 'starShowLearninSessionResultData']);
+
+    //Learning Session For Mobile
+    Route::post('/star/mobile/learning_session/create', [LearningSessionController::class, 'star_add_mobile']);
+
+    //********************************************//
+    //******Learning Session Routes End *******//
+    //********************************************//
     Route::get('star/getInformation', [DashboardController::class, 'getInformation']);
     Route::get('star/dashboard/posts/{type}', [DashboardController::class, 'adminPost']);
     Route::get('star/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
@@ -766,31 +821,6 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/souvenir/register/approve/{id}', [SouvinerController::class, 'registerSouvenirApprove']);
     Route::get('/star/souvenir/register/decline/{id}', [SouvinerController::class, 'registerSouvenirDecline']);
     Route::get('/star/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
-
-    // Learning Session Section
-    Route::get('/star/learning_session/registered_user/{id}', [LearningSessionController::class, 'registured_user']);
-    Route::get('/star/learning_session/allInOneMobile', [LearningSessionController::class, 'allInOneMobileLearning']);
-    Route::post('/star/learning_session/create', [LearningSessionController::class, 'star_add']);
-    Route::post('/star/update_learning_session/{id}', [LearningSessionController::class, 'update']);
-    Route::get('/star/learning_session/all', [LearningSessionController::class, 'star_all']);
-    Route::get('/star/learning_session/count', [LearningSessionController::class, 'star_count']);
-    Route::get('/star/learning_session/pending', [LearningSessionController::class, 'star_pending_list']);
-    Route::get('/star/learning_session/pending/{id}', [LearningSessionController::class, 'star_pending_details']);
-    Route::get('/star/learning_session/approved', [LearningSessionController::class, 'star_approved_list']);
-    Route::get('/star/learning_session/reject', [LearningSessionController::class, 'star_reject_list']);
-    Route::get('/star/learning_session/approve/{id}', [LearningSessionController::class, 'approve_post']);
-    Route::get('/star/learning_session/reject/{id}', [LearningSessionController::class, 'reject']);
-    Route::get('/star/learning_session/completed', [LearningSessionController::class, 'star_completed_list']);
-    Route::get('/star/learning_session/evaluation', [LearningSessionController::class, 'star_evaluation_list']);
-    Route::get('/star/learning_session/details/{id}', [LearningSessionController::class, 'details']);
-    Route::get('/star/learning_session/assignment/{id}', [LearningSessionController::class, 'star_assignment_details']);
-    Route::post('/star/learning_session/add_assignment_rules', [LearningSessionController::class, 'assignment_rule_add']);
-    Route::post('/star/learning_session/assignment/approval/{type}/{id}', [LearningSessionController::class, 'star_assignment_set_approval']);
-    Route::get('/star/learning_session/result', [LearningSessionController::class, 'starShowLearninSessionResult']);
-    Route::get('/star/learning_session/showResult/{eventId}', [LearningSessionController::class, 'starShowLearninSessionResultData']);
-
-    //Learning Session For Mobile
-    Route::post('/star/mobile/learning_session/create', [LearningSessionController::class, 'star_add_mobile']);
 
 
 
