@@ -882,16 +882,19 @@ class UserController extends Controller
         // return $request->all();
         $userId = auth('sanctum')->user()->id;
 
-        $userInfoTypes = UserInfo::where('user_id', $userId)->first();
+        $userInfo = UserInfo::where('user_id', $userId)->first();
         $userList = User::find($userId);
-        if ($userInfoTypes) {
+
+
+        if ($userInfo) {
+
             $userList->first_name = $request->first_name;
-            $userList->last_name = $request->last_name;
+            // $userList->last_name = $request->last_name;
             $userList->save();
 
-            $userInfoTypes->country = $request->country;
-            $userInfoTypes->dob = Carbon::parse($request->birthday);
-            $userInfoTypes->save();
+            $userInfo->country = $request->country;
+            $userInfo->dob = Carbon::parse($request->birthday);
+            $userInfo->save();
             $user = User::find(auth('sanctum')->user()->id);
 
             return response()->json([
@@ -901,7 +904,7 @@ class UserController extends Controller
             ]);
         } else {
             $userList->first_name = $request->first_name;
-            $userList->last_name = $request->last_name;
+            // $userList->last_name = $request->last_name;
             $userList->save();
 
             $newPersonalInfo = new UserInfo();

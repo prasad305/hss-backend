@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Document</title>
+    <title>Payment Success</title>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Roboto:ital,wght@0,300;1,300&display=swap');
@@ -20,13 +20,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #fff;
+            background-color: #cecece4f;
             font-family: 'Roboto', sans-serif;
 
         }
 
         .mainCard {
             background-color: #FDFEFE;
+            box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
             height: 500px;
             width: 30%;
             border-radius: 20px;
@@ -44,8 +45,9 @@
 
         .status {
             text-align: center;
-            font-size: 20px;
-            color: #F16822
+            font-size: 25px;
+            color: #229F5E;
+            font-weight: 900;
         }
 
         .border {
@@ -88,30 +90,13 @@
     <div class="mainCard">
         <div class="subBody">
             <div class="logo">
-                <img src="https://www.ipay88.com/wp-content/uploads/2021/02/ipay88-logo-white.png" height="100px"
-                    width="150px">
+                <img src="https://cdn.dribbble.com/users/614270/screenshots/14575431/media/4907a0869e9ed2ac4e2d1c2beaf9f012.gif"
+                    height="100px" width="100px">
             </div>
-
-
-
-            <span>Your transaction was successfull !</span>
-
-            <p>Payment Details:</p>
-            <span>Amount: <b>{{ $paymentData->txn_amount }}</b> </span>
-            </br>
-            <span>Bank: <b>{{ $paymentData->bank_name }}</b></span>
-            </br>
-            <span>Date: <b> {{ $paymentData->updated_at }}</b>
-                <p id="demo"></p>
-            </span>
-            </br>
-
-
-            <div class="border"></div>
-
-            <b class="id">
-                Reference id : <p>{{ $paymentData->txn_id }}</p>
-            </b>
+            <div class="logo">
+                <img src="https://www.ipay88.com/wp-content/uploads/2021/02/ipay88-logo-white.png" width="160px">
+            </div>
+            <div class="status">Payment Received</div>
 
             <div style="display: flex;justify-content: center;">
                 <div style="display:flex;margin: 10px;">
@@ -130,7 +115,7 @@
 
             <div style="display: flex;justify-content: center;">
                 <button onclick="goBack()"
-                    style="background-color: #F16822; border:none; padding:5px 10px 5px 10px;color: white; border-radius: 10px; ">Go
+                    style="background-color: #F16822; border:none; padding:10px;color: white; border-radius: 5px; ">Go
                     Back</button>
             </div>
 
@@ -141,12 +126,13 @@
 
 </body>
 <script>
-    var eventType = document.getElementById('eventType').value;
+    // var eventType = document.getElementById('eventType').value;
 
     window.onload = setTimeout(function() {
-        webSuccessRedirect();
+
+        // webSuccessRedirect();
         window.ReactNativeWebView.postMessage('go-back');
-        window.ReactNativeWebView.postMessage(eventType);
+        // window.ReactNativeWebView.postMessage(eventType);
         window.top.postMessage(
             JSON.stringify({
                 error: false,
@@ -157,9 +143,9 @@
     }, 10000);
 
     function goBack() {
-        webSuccessRedirect();
+        // webSuccessRedirect();
         window.ReactNativeWebView.postMessage('go-back');
-        window.ReactNativeWebView.postMessage(eventType);
+        // window.ReactNativeWebView.postMessage(eventType);
         window.top.postMessage(
             JSON.stringify({
                 error: false,
@@ -170,12 +156,12 @@
     }
 
 
-    function webSuccessRedirect() {
-        window.parent.postMessage({
-            message: 'go-back'
-        }, "*");
+    // function webSuccessRedirect() {
+    //     window.parent.postMessage({
+    //         message: 'go-back'
+    //     }, "*");
 
-    }
+    // }
 
     var seconds = 10;
     var el = document.getElementById('seconds-counter');

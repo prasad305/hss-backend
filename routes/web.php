@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Auth;
 //ipay88
 Route::get('/ipay88-make-payment/{userId}/{amount}/{eventName}/{eventId}/{valu}/{for}', [PaymentController::class, 'ipayInitiate']);
 Route::get('/ipay88-payment-success/{order_id}', [PaymentController::class, 'iPayPaymentSuccess']);
+Route::get('/ipay88', function () {
+    return view('Ipay88.iPaymentSuccess');
+});
 
 
 Route::get('/', function () {
