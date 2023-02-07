@@ -52,8 +52,8 @@ class PaymentController extends Controller
     /**
      * stripe info
      */
-    protected $STRIPE_API_KEY = "sk_test_51LtqaHHGaW7JdcX6mntQAvXUaEyc4YYWOHZiH4gVo6VgvQ8gnEMnrX9mtmFboei1LTP0zJ1a6TlNl9v6W0H5mlDI00fPclqtRX";
-    protected $STRIPE_PUBLIC_KEY = "pk_test_51LtqaHHGaW7JdcX6i8dovZ884aYW9wHVjPgw214lNBN19ndCHovhZa2A62UzACaTfavZYOzW1nf3uw2FHyf3U6C600GXAjc3Wh";
+    protected $STRIPE_API_KEY = "sk_test_51M7EDzIUEL35Efmybkt91bgIdKsiO6jfzKlLq0p59epmOBrmQbQPiMKfnCq4g8UqpQG7uAbBVVGOdhxpzYSrE3GZ00vWx2eh5j";
+    protected $STRIPE_PUBLIC_KEY = "pk_test_51M7EDzIUEL35EfmyNjFUMsSyvRaGWKsNtxuktoH8h0L47rvu01Y3vSYL0IaneHMxxNloVJGq9hG2Tz7H9lIW4qIR00ih4hucW7";
 
 
     /**
