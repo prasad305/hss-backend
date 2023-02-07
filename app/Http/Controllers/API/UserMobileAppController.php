@@ -336,12 +336,9 @@ class UserMobileAppController extends Controller
         }
         if ($modelName == 'audition') {
 
-            $activity = new Activity();
-            $activity->type = 'audition';
             $eventRegistration = new AuditionParticipant();
             $event = Audition::find($eventId);
             $first_round_info = AuditionRoundInfo::where([['audition_id', $eventId]])->first();
-
             $eventRegistration->user_id = $user->id;
             $eventRegistration->audition_id = $eventId;
             $eventRegistration->round_info_id = $first_round_info->id;
@@ -350,6 +347,8 @@ class UserMobileAppController extends Controller
 
 
             if ($request->payment_method == "wallet") {
+                $activity = new Activity();
+                $activity->type = 'audition';
                 $walletAuditions =  Wallet::where('user_id', auth('sanctum')->user()->id)->first('auditions');
                 Wallet::where('user_id', auth('sanctum')->user()->id)->update(['auditions' => $walletAuditions->auditions - 1]);
                 AuditionParticipant::where([['user_id', auth('sanctum')->user()->id], ['audition_id', $eventId]])->update([

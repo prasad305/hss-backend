@@ -354,7 +354,7 @@ class AuditionController extends Controller
 
         $totalNumberOfVideos = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['type', 'general'], ['audition_id', $audition_id], ['approval_status', 1]])->count();
 
-        if ($auditionRoundInfo->round_type == 0) {
+        if ($auditionRoundInfo->has_jury_or_judge_mark == 0) {
             $alreadyAssignedCount = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['type', 'general'], ['audition_id', $audition_id], ['approval_status', 1], ['group_b_jury_id', '!=', null], ['group_c_jury_id', '!=', null]])->count();
         } else {
             $alreadyAssignedCount = AuditionUploadVideo::where([['round_info_id', $audition_round_info_id], ['type', 'general'], ['audition_id', $audition_id], ['approval_status', 1], ['judge_id', '!=', '[]']])->count();
