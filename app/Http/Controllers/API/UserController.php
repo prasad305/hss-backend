@@ -555,9 +555,23 @@ class UserController extends Controller
         ]);
     }
 
+    // Trash Code
+
+    // public function learningSessionUserRightSide()
+    // {
+    //     $post = LearningSession::with('star')->where('status', 2)->latest()->get();
+
+    //     return response()->json([
+    //         'status' => 200,
+    //         'post' => $post,
+    //         'message' => 'Success',
+    //     ]);
+    // }
+
+
     public function singleLearnigSession($slug)
     {
-        $learnigSession = LearningSession::where([['slug', $slug]])->first();
+        $learnigSession = LearningSession::with(['star', 'learningSessionAssignment'])->where([['slug', $slug]])->first();
 
         return response()->json([
             'status' => 200,
@@ -998,7 +1012,7 @@ class UserController extends Controller
 
     public function registeredLearningSession()
     {
-        $register = LearningSessionRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+        $register = LearningSessionRegistration::with(['user', 'learningSession'])->where('user_id', auth('sanctum')->user()->id)->latest()->get();
 
         return response()->json([
             'status' => 200,

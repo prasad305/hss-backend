@@ -183,7 +183,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //******Learning Session Routes Start *******//
     //********************************************//
 
-    Route::get('/user/learning_session/all', [LearningSessionController::class, 'user_all']);
+    //Route::get('/user/learning_session/all', [UserController::class, 'learningSessionUserRightSide']); // Trash API
+    
     Route::post('/learning-assinment-upload', [UserController::class, 'lerningSessionAssinmentVideoUplad']);
     Route::get('/user/learning-single/{event_id}', [UserController::class, 'registeredSingleLearning']);
     Route::get('/user/registerLearningSession', [UserController::class, 'registeredLearningSession']);

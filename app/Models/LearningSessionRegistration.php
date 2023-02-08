@@ -21,7 +21,7 @@ class LearningSessionRegistration extends Model
         'account_no',
     ];
 
-    protected $with = ['user', 'learningSession'];
+    // protected $with = ['user', 'learningSession'];
 
     public function learningSession()
     {

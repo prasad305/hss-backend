@@ -1184,16 +1184,17 @@ class LearningSessionController extends Controller
 
 
 
-
+    //Trash code
+    
     /// User Section
-    public function user_all()
-    {
-        $post = LearningSession::where('status', 2)->latest()->get();
+    // public function user_all()
+    // {
+    //     $post = LearningSession::with('star')->where('status', 2)->latest()->get();
 
-        return response()->json([
-            'status' => 200,
-            'post' => $post,
-            'message' => 'Success',
-        ]);
-    }
+    //     return response()->json([
+    //         'status' => 200,
+    //         'post' => $post,
+    //         'message' => 'Success',
+    //     ]);
+    // }
 }
