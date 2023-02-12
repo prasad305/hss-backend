@@ -571,7 +571,7 @@ class UserController extends Controller
 
     public function singleLearnigSession($slug)
     {
-        $learnigSession = LearningSession::with(['star', 'learningSessionAssignment'])->where([['slug', $slug]])->first();
+        $learnigSession = LearningSession::with(['star'])->where([['slug', $slug]])->first();
 
         return response()->json([
             'status' => 200,
