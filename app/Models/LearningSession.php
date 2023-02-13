@@ -34,6 +34,7 @@ class LearningSession extends Model
         'assignment',
     ];
     // protected $with = ['star', 'learningSessionAssignment'];
+    protected $with = ['star'];
 
     public function admin()
     {

@@ -613,7 +613,7 @@ class LearningSessionController extends Controller
     }
     public function showLearninSessionResultData($eventId)
     {
-        $events = LearningSessionAssignment::where([['event_id', $eventId]])->latest()->get();
+        $events = LearningSessionAssignment::with('user')->where([['event_id', $eventId]])->latest()->get();
         return response()->json([
             'status' => 200,
             'events' => $events,
@@ -1091,7 +1091,7 @@ class LearningSessionController extends Controller
 
     public function star_evaluation_list()
     {
-        $events = LearningSession::with(['star', 'learningSessionAssignment'])->where([['star_id', auth('sanctum')->user()->id], ['status', '>', 2], ['status', '<', 9]]);
+        $events = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 2], ['status', '<', 9]]);
 
         return response()->json([
             'status' => 200,
@@ -1102,8 +1102,8 @@ class LearningSessionController extends Controller
 
     public function star_assignment_details($id)
     {
-        $event = LearningSessionAssignment::with(['star', 'learningSessionAssignment'])->where([['event_id', $id], ['send_to_star', 1], ['mark', 0]])->get();
-        $approved_event = LearningSessionAssignment::with(['star', 'learningSessionAssignment'])->where([['event_id', $id], ['send_to_star', 1], ['mark', '>', 0]])->get();
+        $event = LearningSessionAssignment::where([['event_id', $id], ['send_to_star', 1], ['mark', 0]])->get();
+        $approved_event = LearningSessionAssignment::where([['event_id', $id], ['send_to_star', 1], ['mark', '>', 0]])->get();
 
         return response()->json([
             'status' => 200,
@@ -1174,7 +1174,7 @@ class LearningSessionController extends Controller
     }
     public function StarShowLearninSessionResultData($eventId)
     {
-        $events = LearningSessionAssignment::with(['star', 'learningSessionAssignment'])->where([['event_id', $eventId]])->latest()->get();
+        $events = LearningSessionAssignment::with('user')->where([['event_id', $eventId]])->latest()->get();
         return response()->json([
             'status' => 200,
             'events' => $events,
