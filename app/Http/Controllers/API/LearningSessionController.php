@@ -303,7 +303,7 @@ class LearningSessionController extends Controller
     public function registured_user($id)
     {
         $event = LearningSession::find($id);
-        $users = LearningSessionRegistration::where([['learning_session_id', $event->id], ['payment_status', 1]])->get();
+        $users = LearningSessionRegistration::with(['user'])->where([['learning_session_id', $event->id], ['payment_status', 1]])->get();
 
         return response()->json([
             'status' => 200,
@@ -388,7 +388,7 @@ class LearningSessionController extends Controller
 
     public function admin_assignment_marks($slug)
     {
-        $event = LearningSession::where('slug', $slug)->first();
+        $event = LearningSession::with(['star', 'learningSessionAssignment'])->where('slug', $slug)->first();
 
         $approved = LearningSessionAssignment::where('status', 1)->count();
         $with_mark = LearningSessionAssignment::where('mark', '>', 0)->count();
@@ -601,7 +601,7 @@ class LearningSessionController extends Controller
     }
     public function showLearninSessionResult()
     {
-        $event = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', 9], ['assignment', 1]])->latest()->get();
+        $event = LearningSession::with(['star', 'learningSessionAssignment'])->where([['admin_id', auth('sanctum')->user()->id], ['status', 9], ['assignment', 1]])->latest()->get();
         $count = LearningSession::where([['admin_id', auth('sanctum')->user()->id], ['status', 9], ['assignment', 1]])->count();
 
         return response()->json([
@@ -613,7 +613,7 @@ class LearningSessionController extends Controller
     }
     public function showLearninSessionResultData($eventId)
     {
-        $events = LearningSessionAssignment::where([['event_id', $eventId]])->latest()->get();
+        $events = LearningSessionAssignment::with('user')->where([['event_id', $eventId]])->latest()->get();
         return response()->json([
             'status' => 200,
             'events' => $events,
@@ -747,7 +747,7 @@ class LearningSessionController extends Controller
 
 
                         // SendMail($adminInfo->email,$learningSession,$senderInfo);
-                        SendMail($managerInfo->email, $learningSession, $senderInfo);
+                        // SendMail($managerInfo->email, $learningSession, $senderInfo);
                     }
                 } catch (\Exception $exception) {
                     return response()->json([
@@ -1000,7 +1000,7 @@ class LearningSessionController extends Controller
     }
     public function star_completed_list()
     {
-        $events = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 9]]);
+        $events = LearningSession::with(['star', 'learningSessionAssignment'])->where([['star_id', auth('sanctum')->user()->id], ['status', 9]]);
 
         return response()->json([
             'status' => 200,
@@ -1011,13 +1011,13 @@ class LearningSessionController extends Controller
 
     public function allInOneMobileLearning()
     {
-        $allEvents = LearningSession::where('star_id', auth('sanctum')->user()->id)->latest()->get();
-        $pendingEvents = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', '<', 1]])->latest()->get();
-        $approvedEvents = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0], ['status', '<', 10]])->latest()->get();
-        $RejectedEvents = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 11]])->latest()->get();
-        $EvaluatedEvents = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', '>', 2], ['status', '<', 9]])->latest()->get();
-        $CompletedEvents = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 9]])->latest()->get();
-        $ResultEvent = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 9], ['assignment', 1]])->latest()->get();
+        $allEvents = LearningSession::with(['star', 'learningSessionAssignment'])->where('star_id', auth('sanctum')->user()->id)->latest()->get();
+        $pendingEvents = LearningSession::with(['star', 'learningSessionAssignment'])->where([['star_id', auth('sanctum')->user()->id], ['status', '<', 1]])->latest()->get();
+        $approvedEvents = LearningSession::with(['star', 'learningSessionAssignment'])->where([['star_id', auth('sanctum')->user()->id], ['status', '>', 0], ['status', '<', 10]])->latest()->get();
+        $RejectedEvents = LearningSession::with(['star', 'learningSessionAssignment'])->where([['star_id', auth('sanctum')->user()->id], ['status', 11]])->latest()->get();
+        $EvaluatedEvents = LearningSession::with(['star', 'learningSessionAssignment'])->where([['star_id', auth('sanctum')->user()->id], ['status', '>', 2], ['status', '<', 9]])->latest()->get();
+        $CompletedEvents = LearningSession::with(['star', 'learningSessionAssignment'])->where([['star_id', auth('sanctum')->user()->id], ['status', 9]])->latest()->get();
+        $ResultEvent = LearningSession::with(['star', 'learningSessionAssignment'])->where([['star_id', auth('sanctum')->user()->id], ['status', 9], ['assignment', 1]])->latest()->get();
         return response()->json([
             'status' => 200,
             'allEvents' => $allEvents,
@@ -1162,7 +1162,7 @@ class LearningSessionController extends Controller
     }
     public function starShowLearninSessionResult()
     {
-        $event = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 9], ['assignment', 1]])->latest()->get();
+        $event = LearningSession::with(['star', 'learningSessionAssignment'])->where([['star_id', auth('sanctum')->user()->id], ['status', 9], ['assignment', 1]])->latest()->get();
         $count = LearningSession::where([['star_id', auth('sanctum')->user()->id], ['status', 9], ['assignment', 1]])->count();
 
         return response()->json([
@@ -1174,7 +1174,7 @@ class LearningSessionController extends Controller
     }
     public function StarShowLearninSessionResultData($eventId)
     {
-        $events = LearningSessionAssignment::where([['event_id', $eventId]])->latest()->get();
+        $events = LearningSessionAssignment::with('user')->where([['event_id', $eventId]])->latest()->get();
         return response()->json([
             'status' => 200,
             'events' => $events,
@@ -1184,16 +1184,17 @@ class LearningSessionController extends Controller
 
 
 
-
+    //Trash code
+    
     /// User Section
-    public function user_all()
-    {
-        $post = LearningSession::where('status', 2)->latest()->get();
+    // public function user_all()
+    // {
+    //     $post = LearningSession::with('star')->where('status', 2)->latest()->get();
 
-        return response()->json([
-            'status' => 200,
-            'post' => $post,
-            'message' => 'Success',
-        ]);
-    }
+    //     return response()->json([
+    //         'status' => 200,
+    //         'post' => $post,
+    //         'message' => 'Success',
+    //     ]);
+    // }
 }

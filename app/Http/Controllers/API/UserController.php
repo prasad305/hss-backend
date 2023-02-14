@@ -555,9 +555,23 @@ class UserController extends Controller
         ]);
     }
 
+    // Trash Code
+
+    // public function learningSessionUserRightSide()
+    // {
+    //     $post = LearningSession::with('star')->where('status', 2)->latest()->get();
+
+    //     return response()->json([
+    //         'status' => 200,
+    //         'post' => $post,
+    //         'message' => 'Success',
+    //     ]);
+    // }
+
+
     public function singleLearnigSession($slug)
     {
-        $learnigSession = LearningSession::where([['slug', $slug]])->first();
+        $learnigSession = LearningSession::with(['star'])->where([['slug', $slug]])->first();
 
         return response()->json([
             'status' => 200,
@@ -568,7 +582,7 @@ class UserController extends Controller
 
     public function userSingleLearnigSession($slug)
     {
-        $learnigSession = LearningSession::where([['slug', $slug]])->with(['learningSessionAssignment' => function ($query) {
+        $learnigSession = LearningSession::where([['slug', $slug]])->with(['star','learningSessionAssignment' => function ($query) {
             return $query->where('user_id', auth()->user()->id)->get();
         }])->first();
 
@@ -998,7 +1012,7 @@ class UserController extends Controller
 
     public function registeredLearningSession()
     {
-        $register = LearningSessionRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+        $register = LearningSessionRegistration::with(['user', 'learningSession'])->where('user_id', auth('sanctum')->user()->id)->latest()->get();
 
         return response()->json([
             'status' => 200,
@@ -2563,7 +2577,7 @@ class UserController extends Controller
 
     public function getUploadedVideo(Request $request)
     {
-        $videos = LearningSessionAssignment::where([['event_id', $request->event_id], ['user_id', auth()->user()->id]])->get();
+        $videos = LearningSessionAssignment::with('user')->where([['event_id', $request->event_id], ['user_id', auth()->user()->id]])->get();
         return response()->json([
             'status' => 200,
             'videos' => $videos,
@@ -2653,7 +2667,7 @@ class UserController extends Controller
 
     public function getCertificateData($event_id)
     {
-        $certificate = LearningSessionCertificate::where([['event_id', $event_id], ['user_id', auth()->user()->id]])->first();
+        $certificate = LearningSessionCertificate::with(['learningSession','user'])->where([['event_id', $event_id], ['user_id', auth()->user()->id]])->first();
         return response()->json([
             'status' => 200,
             'certificateData' => $certificate,

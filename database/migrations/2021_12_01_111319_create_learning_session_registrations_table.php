@@ -21,10 +21,11 @@ class CreateLearningSessionRegistrationsTable extends Migration
             $table->boolean('payment_status')->nullable();
             $table->timestamp('payment_date')->nullable();
             $table->float('amount')->nullable();
-            $table->string('card_holder_name')->nullable();
-            $table->string('account_no')->nullable();
             $table->integer('publish_status')->nullable();
             $table->timestamps();
+            
+            $table->foreign('learning_session_id')->references('id')->on('learning_sessions')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
