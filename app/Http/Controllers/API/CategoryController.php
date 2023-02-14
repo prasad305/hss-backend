@@ -12,6 +12,7 @@ use App\Models\SubCategory;
 use App\Models\SuperStar;
 use App\Models\Wallet;
 use App\Models\Currency;
+use Illuminate\Support\Facades\Redis;
 use phpDocumentor\Reflection\Types\Null_;
 
 class CategoryController extends Controller
@@ -244,6 +245,8 @@ class CategoryController extends Controller
     public function selectedCategoryStore(Request $request)
     {
 
+        Redis::del('post');
+
         $id = auth('sanctum')->user()->id;
         $category = json_decode($request->category);
 
@@ -307,7 +310,6 @@ class CategoryController extends Controller
         $cat->subcategory = $subCat;
         $cat->star_id = json_encode($followingStars);
         $cat->save();
-
         return response()->json([
             'status' => 200,
             'message' => 'Admin category added',

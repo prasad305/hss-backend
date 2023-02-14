@@ -80,6 +80,8 @@ use PhpParser\Node\Stmt\TryCatch;
 use App\Models\WildCard;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon as SupportCarbon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use PDF;
 
 class UserController extends Controller
@@ -294,9 +296,18 @@ class UserController extends Controller
         } else {
             $sub_sub_cat_post = [];
         }
+        // $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
 
-        $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
 
+        // <============== Redis code =============>
+         $post =  Redis::get('post');
+        if(!$post){
+            $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
+            Redis::set('post',$post);
+        }else{
+         $post = json_decode($post);
+        }
+        // Redis::del('post');
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
@@ -394,6 +405,17 @@ class UserController extends Controller
         $dame = array();
         // $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
         $post = $PostArray->concat($dame);
+
+
+        // <============== Redis code =============>
+        // $post =  Redis::get('post');
+
+        // if(!$post){
+        //     $post = $PostArray->concat($dame);
+        //     Redis::set('post',$post);
+        // }else{
+        //  $post = json_decode($post);
+        // }
 
         return response()->json([
             'status' => 200,
