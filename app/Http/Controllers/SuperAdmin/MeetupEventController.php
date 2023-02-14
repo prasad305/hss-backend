@@ -21,7 +21,7 @@ class MeetupEventController extends Controller
     }
     public function meetupEventList($categoryId)
     {
-        $postList = MeetupEvent::where('category_id', $categoryId)->latest()->get();
+        $postList = MeetupEvent::with(['star','admin'])->where('category_id', $categoryId)->latest()->get();
         return view('SuperAdmin.MeetupEvent.MeetupEventList', compact('postList'));
     }
     public function meetupEventDetails($postId)

@@ -1224,7 +1224,7 @@ class UserController extends Controller
 
     public function meetupDetails($slug)
     {
-        $event = MeetupEvent::where('slug', $slug)->first();
+        $event = MeetupEvent::with('star')->where('slug', $slug)->first();
 
         return response()->json([
             'status' => 200,
