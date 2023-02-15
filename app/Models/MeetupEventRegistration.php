@@ -22,7 +22,7 @@ class MeetupEventRegistration extends Model
     ];
 
     //Relation For API
-    protected $with = ['user', 'meetupEvent']; // It we remove then it will generate error in user activities 
+    protected $with = ['user', 'meetupEvent']; // If we remove this, it will generate error in user activities 
 
     public function meetupEvent()
     {
