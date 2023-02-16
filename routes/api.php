@@ -110,8 +110,9 @@ Route::get('user/current-location/{ip}', [CurrencyController::class, 'getMyLocat
 
 // Home Page All Post
 Route::get('/user/all_post', [UserController::class, 'all_post']);
+Route::get('/user/all_post/with-paginate/{limit}', [UserController::class, 'all_post']);
 Route::get('/user/search/{query}', [UserController::class, 'allSearchData']);
-Route::get('/user/all_post/with-paginate/{limit}', [UserController::class, 'paginate_all_post']);
+// Route::get('/user/all_post/with-paginate/{limit}', [UserController::class, 'paginate_all_post']);
 Route::get('/user/post/{type}', [UserController::class, 'single_type_post']);
 Route::post('/user/general-post/payment', [UserController::class, 'generalPostPayment']);
 Route::get('/user/generalPost/payment/check/{post_id}', [UserController::class, 'generalPostPaymentCheck']);
@@ -184,7 +185,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //********************************************//
 
     //Route::get('/user/learning_session/all', [UserController::class, 'learningSessionUserRightSide']); // Trash API
-    
+
     Route::post('/learning-assinment-upload', [UserController::class, 'lerningSessionAssinmentVideoUplad']);
     Route::get('/user/learning-single/{event_id}', [UserController::class, 'registeredSingleLearning']);
     Route::get('/user/registerLearningSession', [UserController::class, 'registeredLearningSession']);
@@ -240,7 +241,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
 
 
-    
+
     Route::get('/user_info', [AuthController::class, 'user_info']);
     Route::post('/user_info_update', [AuthController::class, 'user_info_update']);
     Route::post('/user_info_update/star_admin', [AuthController::class, 'star_admin_info_update']);
@@ -273,9 +274,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/user/registerMeestup', [UserController::class, 'registeredMeetup']);
     Route::get('/user/registerMeestup-single/{event_id}', [UserController::class, 'registeredSingleMeetup']);
-    
+
     Route::get('/user/registerLivechat', [UserController::class, 'registeredLivechat']);
-    
+
     Route::get('/user/registerGreetings', [UserController::class, 'registerGreetings']);
 
 
@@ -363,9 +364,9 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     //check user notification
     Route::get('/user/check_notification', [UserController::class, 'checkUserNotifiaction']);
-    
 
-    
+
+
 
     // auction product
     Route::get('/auction-product/all', [UserController::class, 'auctionProduct']);
@@ -384,7 +385,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/auction_activites', [UserController::class, 'auction_activites']);
 
 
-    
+
 
     //use this api on react project file path- \src\components\Pages\Profile\profile-components\starProfile\StarChat
     Route::post('/user/liveChat/register', [UserController::class, 'liveChatRigister']);

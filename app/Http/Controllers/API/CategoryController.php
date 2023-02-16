@@ -12,6 +12,7 @@ use App\Models\SubCategory;
 use App\Models\SuperStar;
 use App\Models\Wallet;
 use App\Models\Currency;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redis;
 use phpDocumentor\Reflection\Types\Null_;
 
@@ -245,8 +246,6 @@ class CategoryController extends Controller
     public function selectedCategoryStore(Request $request)
     {
 
-        Redis::del('post');
-
         $id = auth('sanctum')->user()->id;
         $category = json_decode($request->category);
 
@@ -305,14 +304,15 @@ class CategoryController extends Controller
         //         // $ok = false;
         //     }
         // }
+         $result = array_diff($followingStars ,json_decode($cat->unfollowed_star_id));
 
         $cat->category = $category;
         $cat->subcategory = $subCat;
-        $cat->star_id = json_encode($followingStars);
+        $cat->star_id = json_encode(array_values($result),JSON_NUMERIC_CHECK);
         $cat->save();
         return response()->json([
             'status' => 200,
-            'message' => 'Admin category added',
+            'message' => 'Category Selected',
         ]);
     }
 
@@ -345,6 +345,8 @@ class CategoryController extends Controller
         }
 
         $cat->subcategory = $subcategory;
+        // update star category when category switched
+
         $cat->star_id = $starCat;
         $cat->save();
 
@@ -359,48 +361,66 @@ class CategoryController extends Controller
 
         $id = auth('sanctum')->user()->id;
         $cat = ChoiceList::where('user_id', $id)->first();
+        //followed star id
+        $all_star_id = json_decode($cat->star_id);
+        $unfollowed_all_star_id = json_decode($cat->unfollowed_star_id);
+        if(in_array($request->star_id,$all_star_id)){
 
-        $all_star_id = json_decode($request->star_id);
-        $all_category_id = json_decode($cat->category);
-        $all_subcategory_id = json_decode($cat->subcategory);
+            $result = array_diff($all_star_id ,[$request->star_id]);
+            $cat->star_id = json_encode(array_values($result),JSON_NUMERIC_CHECK);
 
-        $userStarCategory = Superstar::select("*")
-            ->whereIn('id', $all_star_id)
-            ->get();
+            array_push($unfollowed_all_star_id,$request->star_id);
+            $cat->unfollowed_star_id = json_encode($unfollowed_all_star_id,JSON_NUMERIC_CHECK);
 
-        // category unset
-        foreach ($userStarCategory as $key => $category) {
-            if (($key = array_search($category->category_id, $all_category_id)) !== false) {
-                unset($all_category_id[$key]);
-            }
+        }else{
+
+            $result = array_diff($unfollowed_all_star_id ,[$request->star_id]);
+            $cat->unfollowed_star_id = json_encode(array_values($result),JSON_NUMERIC_CHECK);
+
+            array_push($all_star_id,$request->star_id);
+            $cat->star_id = json_encode(array_values($all_star_id),JSON_NUMERIC_CHECK);
+
         }
-        $newCategory = array();
+        // $all_category_id = json_decode($cat->category);
+        // $all_subcategory_id = json_decode($cat->subcategory);
 
-        foreach ($all_category_id as $obj => $key) {
-            array_push($newCategory, $key);
-        }
+        // $userStarCategory = Superstar::select("*")
+        //     ->whereIn('id', $all_star_id)
+        //     ->get();
 
-        // Sub category unset
-        foreach ($userStarCategory as $key => $subcategory) {
-            if (($key = array_search($subcategory->sub_category_id, $all_subcategory_id)) !== false) {
-                unset($all_subcategory_id[$key]);
-            }
-        }
-        $newSubCategory = array();
+        // // category unset
+        // foreach ($userStarCategory as $key => $category) {
+        //     if (($key = array_search($category->category_id, $all_category_id)) !== false) {
+        //         unset($all_category_id[$key]);
+        //     }
+        // }
+        // $newCategory = array();
 
-        foreach ($all_subcategory_id as $obj => $key) {
-            array_push($newSubCategory, $key);
-        }
+        // foreach ($all_category_id as $obj => $key) {
+        //     array_push($newCategory, $key);
+        // }
+
+        // // Sub category unset
+        // foreach ($userStarCategory as $key => $subcategory) {
+        //     if (($key = array_search($subcategory->sub_category_id, $all_subcategory_id)) !== false) {
+        //         unset($all_subcategory_id[$key]);
+        //     }
+        // }
+        // $newSubCategory = array();
+
+        // foreach ($all_subcategory_id as $obj => $key) {
+        //     array_push($newSubCategory, $key);
+        // }
 
 
-        $cat->star_id = $request->star_id;
-        // $cat->category = $newCategory;
-        // $cat->subcategory = $newSubCategory;
+        // $cat->star_id = $request->star_id;
+        // // $cat->category = $newCategory;
+        // // $cat->subcategory = $newSubCategory;
         $cat->save();
 
         return response()->json([
             'status' => 200,
-            'message' => 'Admin category added',
+            'message' => 'Changes successful',
             'followers' => $cat->star_id
         ]);
     }
@@ -489,6 +509,7 @@ class CategoryController extends Controller
 
         if ($user) {
             $user->category = json_encode($req->cat);
+            $user->star_id = json_encode($followingStars);
             $user->update();
         } else {
             ChoiceList::create([

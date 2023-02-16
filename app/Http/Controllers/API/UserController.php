@@ -268,18 +268,19 @@ class UserController extends Controller
     }
 
 
-    public function all_post()
+    public function all_post($limit)
     {
         $id = auth('sanctum')->user()->id;
         $selectedCategory = ChoiceList::where('user_id', $id)->first();
 
         $selectedCat = json_decode($selectedCategory->category);
         $selectedSubCat = json_decode($selectedCategory->subcategory);
-        $selectedSubSubCat = json_decode($selectedCategory->star_id);
+        $followedId = json_decode($selectedCategory->star_id,JSON_NUMERIC_CHECK);
 
         $cat_post = Post::select("*")
             ->whereIn('category_id', $selectedCat)
-            ->latest()->get();
+            ->whereIn('star_id',$followedId )
+            ->paginate($limit);
 
         if (isset($sub_cat_post)) {
             $sub_cat_post = Post::select("*")
@@ -289,24 +290,24 @@ class UserController extends Controller
             $sub_cat_post = [];
         }
 
-        if (isset($sub_sub_cat_post)) {
-            $sub_sub_cat_post = Post::select("*")
-                ->whereIn('user_id', $selectedSubSubCat)
+        if (isset($followedPost)) {
+            $followedPost = Post::select("*")
+                ->whereIn('user_id', $followedId)
                 ->latest()->get();
         } else {
-            $sub_sub_cat_post = [];
+            $followedPost = [];
         }
-        // $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
+        $post = $cat_post->concat($sub_cat_post)->concat($followedPost);
 
 
         // <============== Redis code =============>
-         $post =  Redis::get('post');
-        if(!$post){
-            $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
-            Redis::set('post',$post);
-        }else{
-         $post = json_decode($post);
-        }
+        //  $post =  Redis::get('post');
+        // if(!$post){
+        //     $post = $cat_post->concat($sub_cat_post)->concat($followedPost);
+        //     Redis::set('post',$post);
+        // }else{
+        //  $post = json_decode($post);
+        // }
         // Redis::del('post');
         return response()->json([
             'status' => 200,
