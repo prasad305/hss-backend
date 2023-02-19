@@ -40,7 +40,7 @@ class MeetupEvent extends Model
     ];
 
     //Relation For API
-    protected $with = ['star', 'admin'];
+    // protected $with = ['star', 'admin'];
 
     public function createdUser()
     {

@@ -106,6 +106,43 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     //******Learning Session Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //******MeetUp Routes Start *******//
+    //********************************************//
+
+    //************************** Dashboard Route *************************//
+    Route::get('/all/meetup', [DashboardInfoController::class, 'allMeetUp'])->name('allMeetUp');
+    Route::get('/all/offline/meetup', [DashboardInfoController::class, 'allOfflineMeetUp'])->name('allOfflineMeetUp');
+    Route::get('/all/offline/complete/meetup', [DashboardInfoController::class, 'allCompleteOfflineMeetUp'])->name('allCompleteOfflineMeetUp');
+    Route::get('/all/online/complete/meetup', [DashboardInfoController::class, 'allCompleteOnlineMeetUp'])->name('allCompleteOnlineMeetUp');
+    Route::get('/all/online/upcoming/meetup', [DashboardInfoController::class, 'allUpcomingOnlineMeetUp'])->name('allUpcomingOnlineMeetUp');
+    Route::get('/all/offline/upcoming/meetup', [DashboardInfoController::class, 'allUpcomingOfflineMeetUp'])->name('allUpcomingOfflineMeetUp');
+    Route::get('/meetup-events', [DashboardController::class, 'meetupEvents'])->name('meetupEvents');
+    Route::get('/meetup-events-dashboard', [DashboardController::class, 'meetupEventsDashboard'])->name('meetupEvents.dashboard');
+    Route::get('/meetup-data-list/{type}', [DashboardController::class, 'meetupDataList'])->name('meetupEvents.meetupDataList');
+    Route::get('/meetup-manager-list', [DashboardController::class, 'meetupManagerAdminList'])->name('meetupEvents.managerAdminList');
+    Route::get('/meetup-manager-events/{id}', [DashboardController::class, 'meetupManagerAdminEvents'])->name('meetupEvents.managerAdminEvents');
+    Route::get('/meetup-admin-list', [DashboardController::class, 'meetupAdminList'])->name('meetupEvents.adminList');
+    Route::get('/meetup-admin-events/{id}', [DashboardController::class, 'meetupAdminEvents'])->name('meetupEvents.adminEvents');
+    Route::get('/meetup-superstar-list', [DashboardController::class, 'meetupSuperstarList'])->name('meetupEvents.superstarList');
+    Route::get('/meetup-superstar-events/{id}', [DashboardController::class, 'meetupSuperstarEvents'])->name('meetupEvents.superstarEvents');
+
+    //********************** Report Route *******************//
+    Route::get('/meetup-report', [ReportController::class, 'meetupReport'])->name('report.meetup');
+    Route::post('/meetup-report-filter', [ReportController::class, 'meetupReportFilter'])->name('report.filter.meetupevent');
+
+    //******************** Meetup route *******************//
+    Route::get('meetupEvent-index', [MeetupEventController::class, 'index'])->name('meetupEvent.index');
+    Route::get('meetupEvent-list/{id}', [MeetupEventController::class, 'meetupEventList'])->name('meetupEvent.list');
+    Route::get('meetupEvent-details/{id}', [MeetupEventController::class, 'meetupEventDetails'])->name('meetupEvent.details');
+    Route::get('meetupEvent-edit/{id}', [MeetupEventController::class, 'meetupEventEdit'])->name('meetupEvent.edit');
+    Route::PUT('meetupEvent-update/{id}', [MeetupEventController::class, 'meetupEventUpdate'])->name('meetupEvent.update');
+    Route::delete('meetupEvent-destroy/{id}', [MeetupEventController::class, 'meetupEventDestroy'])->name('meetupEvent.destroy');
+    
+
+    //********************************************//
+    //******MeetUp Routes End *******//
+    //********************************************//
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/withdraw', [ProfitWithdrawController::class, 'index'])->name('withdraw.index');
@@ -121,7 +158,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
 
-    Route::get('/meetup-events', [DashboardController::class, 'meetupEvents'])->name('meetupEvents');
     Route::get('/live-chats', [DashboardController::class, 'liveChats'])->name('liveChats');
     Route::get('/fan-group', [DashboardController::class, 'fanGroup'])->name('fanGroup');
     Route::get('/greetings', [DashboardController::class, 'greetings'])->name('greetings');
@@ -139,13 +175,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/all/marketplace', [DashboardInfoController::class, 'allMarketplace'])->name('allMarketplace');
     Route::get('/all/auction', [DashboardInfoController::class, 'allAuction'])->name('allAuction');
 
-    //MeetUp Events
-    Route::get('/all/meetup', [DashboardInfoController::class, 'allMeetUp'])->name('allMeetUp');
-    Route::get('/all/offline/meetup', [DashboardInfoController::class, 'allOfflineMeetUp'])->name('allOfflineMeetUp');
-    Route::get('/all/offline/complete/meetup', [DashboardInfoController::class, 'allCompleteOfflineMeetUp'])->name('allCompleteOfflineMeetUp');
-    Route::get('/all/online/complete/meetup', [DashboardInfoController::class, 'allCompleteOnlineMeetUp'])->name('allCompleteOnlineMeetUp');
-    Route::get('/all/online/upcoming/meetup', [DashboardInfoController::class, 'allUpcomingOnlineMeetUp'])->name('allUpcomingOnlineMeetUp');
-    Route::get('/all/offline/upcoming/meetup', [DashboardInfoController::class, 'allUpcomingOfflineMeetUp'])->name('allUpcomingOfflineMeetUp');
 
 
     //Live Chats
@@ -295,15 +324,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::delete('qna-destroy/{id}', [QnAController::class, 'qnaDestroy'])->name('qna.destroy');
 
 
-
-    //MeetupEvents
-    Route::get('meetupEvent-index', [MeetupEventController::class, 'index'])->name('meetupEvent.index');
-    Route::get('meetupEvent-list/{id}', [MeetupEventController::class, 'meetupEventList'])->name('meetupEvent.list');
-    Route::get('meetupEvent-details/{id}', [MeetupEventController::class, 'meetupEventDetails'])->name('meetupEvent.details');
-    Route::get('meetupEvent-edit/{id}', [MeetupEventController::class, 'meetupEventEdit'])->name('meetupEvent.edit');
-    Route::PUT('meetupEvent-update/{id}', [MeetupEventController::class, 'meetupEventUpdate'])->name('meetupEvent.update');
-    Route::delete('meetupEvent-destroy/{id}', [MeetupEventController::class, 'meetupEventDestroy'])->name('meetupEvent.destroy');
-
     //Greeting
     Route::get('greeting-index', [GreetingController::class, 'events'])->name('greeting.index');
     Route::get('greeting-list/{id}', [GreetingController::class, 'greetingList'])->name('greeting.list');
@@ -449,11 +469,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/liveChat-data-list/{type}', [DashboardController::class, 'liveChatDataList'])->name('liveChatEvents.liveChatDataList');
     Route::get('/liveChat-manager-list', [DashboardController::class, 'liveChatManagerAdminList'])->name('liveChatEvents.managerAdminList');
     Route::get('/liveChat-manager-events/{id}', [DashboardController::class, 'liveChatManagerAdminEvents'])->name('liveChatEvents.managerAdminEvents');
-    // meetup dashboard
-    Route::get('/meetup-events-dashboard', [DashboardController::class, 'meetupEventsDashboard'])->name('meetupEvents.dashboard');
-    Route::get('/meetup-data-list/{type}', [DashboardController::class, 'meetupDataList'])->name('meetupEvents.meetupDataList');
-    Route::get('/meetup-manager-list', [DashboardController::class, 'meetupManagerAdminList'])->name('meetupEvents.managerAdminList');
-    Route::get('/meetup-manager-events/{id}', [DashboardController::class, 'meetupManagerAdminEvents'])->name('meetupEvents.managerAdminEvents');
+    
     // greeting dashboard
     Route::get('/greeting-events-dashboard', [DashboardController::class, 'greetingEventsDashboard'])->name('greetingEvents.dashboard');
     Route::get('/greeting-data-list/{type}', [DashboardController::class, 'greetingDataList'])->name('greetingEvents.greetingDataList');
@@ -496,9 +512,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // live Chat dashboard
     Route::get('/liveChat-admin-list', [DashboardController::class, 'liveChatAdminList'])->name('liveChatEvents.adminList');
     Route::get('/liveChat-admin-events/{id}', [DashboardController::class, 'liveChatAdminEvents'])->name('liveChatEvents.adminEvents');
-    // meetup dashboard
-    Route::get('/meetup-admin-list', [DashboardController::class, 'meetupAdminList'])->name('meetupEvents.adminList');
-    Route::get('/meetup-admin-events/{id}', [DashboardController::class, 'meetupAdminEvents'])->name('meetupEvents.adminEvents');
+    
     // greeting dashboard
     Route::get('/greeting-admin-list', [DashboardController::class, 'greetingAdminList'])->name('greetingEvents.adminList');
     Route::get('/greeting-admin-events/{id}', [DashboardController::class, 'greetingAdminEvents'])->name('greetingEvents.adminEvents');
@@ -527,9 +541,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // live Chat dashboard
     Route::get('/liveChat-superstar-list', [DashboardController::class, 'liveChatSuperstarList'])->name('liveChatEvents.superstarList');
     Route::get('/liveChat-superstar-events/{id}', [DashboardController::class, 'liveChatSuperstarEvents'])->name('liveChatEvents.superstarEvents');
-    // meetup dashboard
-    Route::get('/meetup-superstar-list', [DashboardController::class, 'meetupSuperstarList'])->name('meetupEvents.superstarList');
-    Route::get('/meetup-superstar-events/{id}', [DashboardController::class, 'meetupSuperstarEvents'])->name('meetupEvents.superstarEvents');
+   
     // greeting dashboard
     Route::get('/greeting-superstar-list', [DashboardController::class, 'greetingSuperstarList'])->name('greetingEvents.superstarList');
     Route::get('/greeting-superstar-events/{id}', [DashboardController::class, 'greetingSuperstarEvents'])->name('greetingEvents.superstarEvents');
@@ -565,8 +577,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('/liveChat-report', [ReportController::class, 'liveChatReportFilter'])->name('report.Filter.liveChat');
     Route::get('/qna-report', [ReportController::class, 'qnaReport'])->name('report.qna');
     Route::post('/qna-report-filter', [ReportController::class, 'qnaReportFilter'])->name('report.Filter.qna');
-    Route::get('/meetup-report', [ReportController::class, 'meetupReport'])->name('report.meetup');
-    Route::post('/meetup-report-filter', [ReportController::class, 'meetupReportFilter'])->name('report.filter.meetupevent');
+   
     Route::get('/greeting-report', [ReportController::class, 'greetingReport'])->name('report.greeting');
     Route::post('/greeting-report-filter', [ReportController::class, 'greetingReportFilter'])->name('report.filter.greeting');
     // Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');

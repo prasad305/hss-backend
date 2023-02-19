@@ -201,9 +201,20 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/learning-session/saveCertificateInfo', [UserController::class, 'saveCertificateInfo']);
     Route::get('/user/learning-session/getUploadedVideo/{event_id}', [UserController::class, 'getUploadedVideo']);
     Route::get('/user/greeting-leraning-certificate/{event_id}', [UserController::class, 'getCertificateData']);
-
     //********************************************//
     //******Learning Session Routes End *******//
+    //********************************************//
+
+    
+    //********************************************//
+    //******MeetUp Routes Start *******//
+    //********************************************//
+    Route::get('/user/meetup/{slug}', [UserController::class, 'meetupDetails']);
+    Route::get('view-country', [CategoryController::class, 'index']);
+    Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
+    Route::post('/user/meetup-event/register', [MeetupEventController::class, 'meetup_register']);
+    //********************************************//
+    //******MeetUp Routes End *******//
     //********************************************//
 
     //delete account
@@ -301,12 +312,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
 
 
-
-    //Meetup Event
-    Route::get('/user/meetup/{slug}', [UserController::class, 'meetupDetails']);
-    Route::get('view-country', [CategoryController::class, 'index']);
-    Route::get('subcategory/{slug}', [SubCategoryController::class, 'index']);
-
     //not use
     Route::get('/user/registeredLivechat', [UserController::class, 'registeredLivechat']);
 
@@ -337,8 +342,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/fan/group/analytics/{slug}', [FanGroupController::class, 'showFanGroupAnalytics']);
 
 
-    Route::get('/user/meetupEventList', [MeetupEventController::class, 'meetup_event_list']);
-    Route::get('/user/meetup-event/{star_id}/{event_id}', [MeetupEventController::class, 'meetup_event_booking']);
+   
 
 
     // New Marketing
@@ -390,7 +394,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/liveChat/register', [UserController::class, 'liveChatRigister']);
 
     Route::post('/user/greetings/register', [UserController::class, 'greetingsRegistation']);
-    Route::post('/user/meetup-event/register', [MeetupEventController::class, 'meetup_register']);
+    
 
 
     // Audition
@@ -483,8 +487,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     //********************************************//
     //******Learning Session Routes Start *******//
     //********************************************//
-
-    // Learning Session Section
     Route::post('admin/learning_session/create', [LearningSessionController::class, 'add_learning']);
     Route::post('/admin/update_learning_session/{id}', [LearningSessionController::class, 'adminUpdateLearning']);
     Route::get('/admin/learning_session/all', [LearningSessionController::class, 'all']);
@@ -509,10 +511,23 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/learning_session/setAssignment/{id}', [LearningSessionController::class, 'admin_assignment_set_assignment']);
     Route::get('/admin/learning_session/result', [LearningSessionController::class, 'showLearninSessionResult']);
     Route::get('/admin/learning_session/showResult/{eventId}', [LearningSessionController::class, 'showLearninSessionResultData']);
+    //********************************************//
+    //******Learning Session Routes End *******//
+    //********************************************//
 
 
     //********************************************//
-    //******Learning Session Routes End *******//
+    //******Meet Up Routes Start *******//
+    //********************************************//
+    Route::post('/admin/add_meetup', [MeetupEventController::class, 'add_by_admin']);
+    Route::post('/admin/edit_meetup/{id}', [MeetupEventController::class, 'update_by_admin']);
+    Route::get('/admin/meetup_event/pending', [MeetupEventController::class, 'pending_list']);
+    Route::get('/admin/meetup_event/live', [MeetupEventController::class, 'live_list']);
+    Route::get('/admin/meetup_event/completed', [MeetupEventController::class, 'completed']);
+    Route::get('/admin/meetup_event/details/{id}', [MeetupEventController::class, 'details']);
+    Route::get('/admin/meetup_event_slots/{slug}', [MeetupEventController::class, 'slots']);
+    //********************************************//
+    //******Meet Up Routes End *******//
     //********************************************//
 
     Route::get('admin/dashboard', [DashboardController::class, 'adminDashboard']);
@@ -599,15 +614,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/qna_rejected', [QnaController::class, 'qna_rejected']);
     Route::get('/admin/registeredList/{id}', [QnaController::class, 'registeredList']);
     Route::post('/admin/admin_update_Qna', [QnaController::class, 'admin_update_Qna']);
-
-    //Meetup Session Section
-    Route::post('/admin/add_meetup', [MeetupEventController::class, 'add_by_admin']);
-    Route::post('/admin/edit_meetup/{id}', [MeetupEventController::class, 'update_by_admin']);
-    Route::get('/admin/meetup_event/pending', [MeetupEventController::class, 'pending_list']);
-    Route::get('/admin/meetup_event/live', [MeetupEventController::class, 'live_list']);
-    Route::get('/admin/meetup_event/completed', [MeetupEventController::class, 'completed']);
-    Route::get('/admin/meetup_event/details/{id}', [MeetupEventController::class, 'details']);
-    Route::get('/admin/meetup_event_slots/{slug}', [MeetupEventController::class, 'slots']);
 
 
     Route::post('/admin/add_livechat_profile', [LiveChatController::class, 'profile_create']);
@@ -704,10 +710,10 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
         return response()->json(['message' => 'You are in as Superstar', 'status' => 200], 200);
     });
 
+
     //********************************************//
     //******Learning Session Routes Start *******//
     //********************************************//
-
     Route::get('/star/learning_session/registered_user/{id}', [LearningSessionController::class, 'registured_user']);
     Route::get('/star/learning_session/allInOneMobile', [LearningSessionController::class, 'allInOneMobileLearning']);
     Route::post('/star/learning_session/create', [LearningSessionController::class, 'star_add']);
@@ -731,10 +737,26 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
 
     //Learning Session For Mobile
     Route::post('/star/mobile/learning_session/create', [LearningSessionController::class, 'star_add_mobile']);
-
     //********************************************//
     //******Learning Session Routes End *******//
     //********************************************//
+
+    //********************************************//
+    //******Meet Up Routes Start *******//
+    //********************************************//
+    Route::get('/star/meetup_event/mobile/count', [MeetupEventController::class, 'star_meetup_list_count']);
+    Route::get('/star/meetup_event/{type}', [MeetupEventController::class, 'star_meetup_list']);
+    Route::post('/star/add_meetup/mobile', [MeetupEventController::class, 'star_add_meetup_mobile']);
+    Route::post('/star/add_meetup', [MeetupEventController::class, 'star_add_meetup']);
+    Route::get('/star/meetup_event/details/{id}', [MeetupEventController::class, 'details']);
+    Route::get('/star/meetup_event/set_approve/{id}', [MeetupEventController::class, 'set_approve']);
+    Route::get('/star/rejectMeetup/{id}', [MeetupEventController::class, 'set_reject']);
+    Route::post('/star/meetup_event/edit/{id}', [MeetupEventController::class, 'star_edit']);
+    Route::get('/star/meetup_event_slots/{slug}', [MeetupEventController::class, 'starSlots']);
+    //********************************************//
+    //******Meet Up Routes End *******//
+    //********************************************//
+
     Route::get('star/getInformation', [DashboardController::class, 'getInformation']);
     Route::get('star/dashboard/posts/{type}', [DashboardController::class, 'adminPost']);
     Route::get('star/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
@@ -859,16 +881,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/liveChat/allInOneMobile', [LiveChatController::class, 'allInOneMobileLiveChat']);
 
 
-    // Meetup Event Section
-    Route::get('/star/meetup_event/mobile/count', [MeetupEventController::class, 'star_meetup_list_count']);
-    Route::get('/star/meetup_event/{type}', [MeetupEventController::class, 'star_meetup_list']);
-    Route::post('/star/add_meetup/mobile', [MeetupEventController::class, 'star_add_meetup_mobile']);
-    Route::post('/star/add_meetup', [MeetupEventController::class, 'star_add_meetup']);
-    Route::get('/star/meetup_event/details/{id}', [MeetupEventController::class, 'details']);
-    Route::get('/star/meetup_event/set_approve/{id}', [MeetupEventController::class, 'set_approve']);
-    Route::get('/star/rejectMeetup/{id}', [MeetupEventController::class, 'set_reject']);
-    Route::post('/star/meetup_event/edit/{id}', [MeetupEventController::class, 'star_edit']);
-    Route::get('/star/meetup_event_slots/{slug}', [MeetupEventController::class, 'starSlots']);
+
 
     Route::get('/star/live_chat/count', [LiveChatController::class, 'count2']);
 
