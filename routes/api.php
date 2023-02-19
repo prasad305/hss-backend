@@ -217,6 +217,23 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //******MeetUp Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //******Marketplace Routes Start *******//
+    //********************************************//
+    // Marketplace Section
+    Route::get('/user/marketplace/all', [MarketplaceController::class, 'marketplaceAll']);
+    Route::get('/user/marketplace/all/{star_id}', [MarketplaceController::class, 'marketplaceStarAll']);
+    Route::get('/user/marketplace/view-country', [MarketplaceController::class, 'viewCountry']);
+    Route::get('/user/marketplace/state/{id}', [MarketplaceController::class, 'viewState']);
+    Route::get('/user/marketplace/city/{id}', [MarketplaceController::class, 'viewCity']);
+    Route::get('/user/marketplace/details/{slug}', [MarketplaceController::class, 'getSlugDetails']);
+    Route::post('/user/marketplace/order/store', [MarketplaceController::class, 'viewMarketplaceOrder']);
+    Route::get('/user/marketplace/activities', [MarketplaceController::class, 'viewMarketplaceActivities']);
+    Route::get('/user/marketplace/order/product-list/view/{id}', [MarketplaceController::class, 'orderAdminProductListView']);
+    //********************************************//
+    //******Marketplace Routes End *******//
+    //********************************************//
+
     //delete account
     Route::post('/delet-user', [UserController::class, 'deleteUser']);
 
@@ -317,17 +334,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
 
     Route::get('/user/interest/type', [UserController::class, 'interestType']);
-
-    // Marketplace Section
-    Route::get('/user/marketplace/all', [MarketplaceController::class, 'marketplaceAll']);
-    Route::get('/user/marketplace/all/{star_id}', [MarketplaceController::class, 'marketplaceStarAll']);
-    Route::get('/user/marketplace/view-country', [MarketplaceController::class, 'viewCountry']);
-    Route::get('/user/marketplace/state/{id}', [MarketplaceController::class, 'viewState']);
-    Route::get('/user/marketplace/city/{id}', [MarketplaceController::class, 'viewCity']);
-    Route::get('/user/marketplace/details/{slug}', [MarketplaceController::class, 'getSlugDetails']);
-    Route::post('/user/marketplace/order/store', [MarketplaceController::class, 'viewMarketplaceOrder']);
-    Route::get('/user/marketplace/activities', [MarketplaceController::class, 'viewMarketplaceActivities']);
-    Route::get('/user/marketplace/order/product-list/view/{id}', [MarketplaceController::class, 'orderAdminProductListView']);
 
     // Fan Group Section
     Route::get('/user/fan/group/list', [FanGroupController::class, 'getFanGroupList']);
@@ -530,6 +536,23 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     //******Meet Up Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //******Marketplace Routes Start *******//
+    //********************************************//
+    // Marketplace Section
+    Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
+    Route::get('/admin/marketplace/product-list/approved', [MarketplaceController::class, 'allProductList']);
+    Route::get('/admin/marketplace/product-list/pending', [MarketplaceController::class, 'pendingProductList']);
+    Route::get('/admin/marketplace/product-list/live', [MarketplaceController::class, 'liveProductList']);
+    Route::get('/admin/marketplace/product-edit/{id}', [MarketplaceController::class, 'editAdminProductList']);
+    Route::post('/admin/marketplace/product-store/{id}', [MarketplaceController::class, 'storeAdminProductList']);
+    Route::get('/admin/marketplace/order/product-list', [MarketplaceController::class, 'orderAdminProductList']);
+    Route::get('/admin/marketplace/order/product-list/view/{id}', [MarketplaceController::class, 'orderAdminProductListView']);
+    Route::post('/admin/marketplace/order/product/status/{status}/{id}', [MarketplaceController::class, 'orderAdminProductListStatus']);
+    //********************************************//
+    //******Marketplace Routes End *******//
+    //********************************************//
+
     Route::get('admin/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('admin/dashboard/posts/{type}', [DashboardController::class, 'dashboardPosts']);
     Route::get('admin/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
@@ -559,17 +582,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/fan/group/settings/delete/{fanJoinId}', [FanGroupController::class, 'deleteSettingsFan']);
     Route::post('/admin/fan/group/settings/no-warning/{warningId}', [FanGroupController::class, 'noWarningSettingsFan']);
     Route::post('/admin/fan/group/approval/warning/{fanUserId}/{fanGroupId}', [FanGroupController::class, 'warningSettingsFan']);
-
-    // Marketplace Section
-    Route::post('admin/marketplace/store', [MarketplaceController::class, 'marketplaceStore']);
-    Route::get('/admin/marketplace/product-list/approved', [MarketplaceController::class, 'allProductList']);
-    Route::get('/admin/marketplace/product-list/pending', [MarketplaceController::class, 'pendingProductList']);
-    Route::get('/admin/marketplace/product-list/live', [MarketplaceController::class, 'liveProductList']);
-    Route::get('/admin/marketplace/product-edit/{id}', [MarketplaceController::class, 'editAdminProductList']);
-    Route::post('/admin/marketplace/product-store/{id}', [MarketplaceController::class, 'storeAdminProductList']);
-    Route::get('/admin/marketplace/order/product-list', [MarketplaceController::class, 'orderAdminProductList']);
-    Route::get('/admin/marketplace/order/product-list/view/{id}', [MarketplaceController::class, 'orderAdminProductListView']);
-    Route::post('/admin/marketplace/order/product/status/{status}/{id}', [MarketplaceController::class, 'orderAdminProductListStatus']);
 
 
     // Souviner Section
@@ -757,6 +769,26 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     //******Meet Up Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //******Marketplace Routes Start *******//
+    //********************************************//
+    // Marketplace Section
+    Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);
+    Route::get('/star/marketplace/product-list/approved', [MarketplaceController::class, 'allStarProductList']);
+    Route::get('/star/marketplace/product-list/pending', [MarketplaceController::class, 'pendingStarProductList']);
+    Route::get('/star/marketplace/product-list/live', [MarketplaceController::class, 'liveStarProductList']);
+    Route::get('/star/marketplace/product-edit/{id}', [MarketplaceController::class, 'editStarProductList']);
+    Route::post('/star/marketplace/product-store/{id}', [MarketplaceController::class, 'storeStarProductList']);
+    Route::get('/star/marketplace/product-approved/{id}', [MarketplaceController::class, 'approvedStarProductList']);
+    Route::get('/star/marketplace/product-decline/{id}', [MarketplaceController::class, 'declineStarProductList']);
+    //For Mobile
+    Route::get('/star/showcase/count/mobile', [DashboardController::class, 'starShowCaseProductsCount']);
+    Route::get('/star/showcase/MarketplaceProductMobile/mobile', [MarketplaceController::class, 'MarketplaceProductMobile']);
+    Route::post('star/marketplace/store/mobile', [MarketplaceController::class, 'starMarketplaceStoreMobile']);
+    //********************************************//
+    //******Marketplace Routes End *******//
+    //********************************************//
+
     Route::get('star/getInformation', [DashboardController::class, 'getInformation']);
     Route::get('star/dashboard/posts/{type}', [DashboardController::class, 'adminPost']);
     Route::get('star/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
@@ -802,21 +834,9 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::post('/star/fan/group/deline/nofification/{postId}', [FanGroupController::class, 'declineFanPostNotification']);
 
     // StarShowCase API for Mobile count
-    Route::get('/star/showcase/count/mobile', [DashboardController::class, 'starShowCaseProductsCount']);
-    Route::get('/star/showcase/MarketplaceProductMobile/mobile', [MarketplaceController::class, 'MarketplaceProductMobile']);
-    Route::post('star/marketplace/store/mobile', [MarketplaceController::class, 'starMarketplaceStoreMobile']);
     Route::get('/star/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
     Route::get('/star/liveBidding/auction/{auction_id}', [AuctionController::class, 'liveBidding']);
 
-    // Marketplace Section
-    Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);
-    Route::get('/star/marketplace/product-list/approved', [MarketplaceController::class, 'allStarProductList']);
-    Route::get('/star/marketplace/product-list/pending', [MarketplaceController::class, 'pendingStarProductList']);
-    Route::get('/star/marketplace/product-list/live', [MarketplaceController::class, 'liveStarProductList']);
-    Route::get('/star/marketplace/product-edit/{id}', [MarketplaceController::class, 'editStarProductList']);
-    Route::post('/star/marketplace/product-store/{id}', [MarketplaceController::class, 'storeStarProductList']);
-    Route::get('/star/marketplace/product-approved/{id}', [MarketplaceController::class, 'approvedStarProductList']);
-    Route::get('/star/marketplace/product-decline/{id}', [MarketplaceController::class, 'declineStarProductList']);
 
 
     // Simple Post Section

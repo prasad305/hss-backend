@@ -117,7 +117,7 @@ class MarketplaceController extends Controller
         $selectedSubCat = json_decode($selectedCategory->subcategory);
         $selectedSubSubCat = json_decode($selectedCategory->star_id);
 
-        $cat_post = Marketplace::select("*")
+        $cat_post = Marketplace::with(['superstar'])->select("*")
             ->whereIn('category_id', $selectedCat)
             ->whereColumn('total_items', '>', 'total_selling')
             ->where('post_status', 1)
@@ -125,7 +125,7 @@ class MarketplaceController extends Controller
             ->latest()->get();
 
         if (isset($sub_cat_post)) {
-            $sub_cat_post = Marketplace::select("*")
+            $sub_cat_post = Marketplace::with(['superstar'])->select("*")
                 ->whereIn('subcategory_id', $selectedSubCat)
                 ->whereColumn('total_items', '>', 'total_selling')
                 ->where('post_status', 1)
@@ -136,7 +136,7 @@ class MarketplaceController extends Controller
         }
 
         if (isset($sub_sub_cat_post)) {
-            $sub_sub_cat_post = Marketplace::select("*")
+            $sub_sub_cat_post = Marketplace::with(['superstar'])->select("*")
                 ->whereIn('superstar_id', $selectedSubSubCat)
                 ->whereColumn('total_items', '>', 'total_selling')
                 ->where('post_status', 1)
@@ -157,7 +157,7 @@ class MarketplaceController extends Controller
 
     public function marketplaceStarAll($starId)
     {
-        $starMarketplace = Marketplace::orderBy('id', 'DESC')->where([['superstar_id', $starId], ['status', 1]])
+        $starMarketplace = Marketplace::with(['superstar'])->orderBy('id', 'DESC')->where([['superstar_id', $starId], ['status', 1]])
             ->get();
 
         return response()->json([
@@ -275,7 +275,7 @@ class MarketplaceController extends Controller
 
     public function viewMarketplaceActivities()
     {
-        $data = Activity::where('user_id', Auth::user()->id)->where('type', 'marketplace')->latest()->get();
+        $data = Activity::with(['marketPlace', 'marketPlaceOrder'])->where('user_id', Auth::user()->id)->where('type', 'marketplace')->latest()->get();
         // $data = MarketplaceOrder::where('user_id', Auth::user()->id)
         //     ->latest()
         //     ->get();
@@ -394,9 +394,9 @@ class MarketplaceController extends Controller
 
     public function orderAdminProductList()
     {
-        $totalOrder = MarketplaceOrder::where('superstar_admin_id', Auth::user()->id)
+        $totalOrder = MarketplaceOrder::with(['marketplace','user','star'])->where('superstar_admin_id', Auth::user()->id)
             ->count();
-        $orderList = MarketplaceOrder::orderBy('id', 'DESC')->where('superstar_admin_id', Auth::user()->id)
+        $orderList = MarketplaceOrder::with(['marketplace','user','star'])->orderBy('id', 'DESC')->where('superstar_admin_id', Auth::user()->id)
             ->get();
 
         return response()->json([
@@ -409,7 +409,7 @@ class MarketplaceController extends Controller
     public function orderAdminProductListView($id)
     {
 
-        $orderListView = MarketplaceOrder::find($id);
+        $orderListView = MarketplaceOrder::with(['marketplace','user','star'])->find($id);
 
         return response()->json([
             'status' => 200,
