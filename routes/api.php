@@ -74,6 +74,9 @@ Route::get('refund', [SettingsController::class, 'refund']);
 Route::get('product-purchase', [SettingsController::class, 'productPurchase']);
 Route::get('terms-condition', [SettingsController::class, 'termsCondition']);
 
+//DeliveryCharge
+Route::get('deliverycharge',[SettingsController::class,'deliverycharge']);
+
 
 //Virtual Tour
 Route::get('virtualtourforweb', [VirtualtourController::class, 'virtualtourforweb']);

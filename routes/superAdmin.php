@@ -138,10 +138,39 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('meetupEvent-edit/{id}', [MeetupEventController::class, 'meetupEventEdit'])->name('meetupEvent.edit');
     Route::PUT('meetupEvent-update/{id}', [MeetupEventController::class, 'meetupEventUpdate'])->name('meetupEvent.update');
     Route::delete('meetupEvent-destroy/{id}', [MeetupEventController::class, 'meetupEventDestroy'])->name('meetupEvent.destroy');
-    
-
     //********************************************//
     //******MeetUp Routes End *******//
+    //********************************************//
+
+    //********************************************//
+    //******Marketplace Routes Start *******//
+    //********************************************//
+
+    //********************* Marketplace ********************//
+    Route::get('marketplace-index', [MarketplaceController::class, 'index'])->name('marketplace.dashboard');
+    Route::get('marketplace-list/{id}', [MarketplaceController::class, 'marketplaceList'])->name('marketplace.list');
+    Route::get('marketplace-details/{id}', [MarketplaceController::class, 'marketplaceDetails'])->name('marketplace.details');
+    Route::get('marketplace-edit/{id}', [MarketplaceController::class, 'marketplaceEdit'])->name('marketplace.edit');
+    Route::PUT('marketplace-update/{id}', [MarketplaceController::class, 'marketplaceUpdate'])->name('marketplace.update');
+    Route::delete('marketplace-destroy/{id}', [MarketplaceController::class, 'marketplaceDestroy'])->name('marketplace.destroy');
+
+    //********************* Dashboard ********************//
+    Route::get('/all/marketplace', [DashboardInfoController::class, 'allMarketplace'])->name('allMarketplace');
+    Route::get('/marketplace-events-dashboard', [DashboardController::class, 'marketplaceEventsDashboard'])->name('marketplaceEvents.dashboard');
+    Route::get('/marketplace-manager-list', [DashboardController::class, 'marketplaceManagerAdminList'])->name('marketplaceEvents.managerAdminList');
+    Route::get('/marketplace-data-list/{type}', [DashboardController::class, 'marketplaceDataList'])->name('marketplaceEvents.marketplaceDataList');
+    Route::get('/marketplace-manager-events/{id}', [DashboardController::class, 'marketplaceManagerAdminEvents'])->name('marketplaceEvents.managerAdminEvents');
+     Route::get('/marketplace-admin-list', [DashboardController::class, 'marketplaceAdminList'])->name('marketplaceEvents.adminList');
+     Route::get('/marketplace-admin-events/{id}', [DashboardController::class, 'marketplaceAdminEvents'])->name('marketplaceEvents.adminEvents');
+     Route::get('/marketplace-superstar-list', [DashboardController::class, 'marketplaceSuperstarList'])->name('marketplaceEvents.superstarList');
+    Route::get('/marketplace-superstar-events/{id}', [DashboardController::class, 'marketplaceSuperstarEvents'])->name('marketplaceEvents.superstarEvents');
+
+    //********************* Report ********************//
+    Route::get('/marketplace-report', [ReportController::class, 'marketplaceReport'])->name('report.marketplace');
+    Route::post('/marketplace-report-filter', [ReportController::class, 'marketPlaceFilter'])->name('report.filter.marketPlace');
+
+     //********************************************//
+    //******Marketplace Routes End *******//
     //********************************************//
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
@@ -172,7 +201,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/all/user', [DashboardInfoController::class, 'allUser'])->name('allUser');
     Route::get('/all/star', [DashboardInfoController::class, 'allStar'])->name('allStar');
     Route::get('/all/admin', [DashboardInfoController::class, 'allAdmin'])->name('allAdmin');
-    Route::get('/all/marketplace', [DashboardInfoController::class, 'allMarketplace'])->name('allMarketplace');
     Route::get('/all/auction', [DashboardInfoController::class, 'allAuction'])->name('allAuction');
 
 
@@ -291,14 +319,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // Refund Policy
     Route::resource('refundpolicy', RefundController::class);
 
-
-    // Marketplace
-    Route::get('marketplace-index', [MarketplaceController::class, 'index'])->name('marketplace.dashboard');
-    Route::get('marketplace-list/{id}', [MarketplaceController::class, 'marketplaceList'])->name('marketplace.list');
-    Route::get('marketplace-details/{id}', [MarketplaceController::class, 'marketplaceDetails'])->name('marketplace.details');
-    Route::get('marketplace-edit/{id}', [MarketplaceController::class, 'marketplaceEdit'])->name('marketplace.edit');
-    Route::PUT('marketplace-update/{id}', [MarketplaceController::class, 'marketplaceUpdate'])->name('marketplace.update');
-    Route::delete('marketplace-destroy/{id}', [MarketplaceController::class, 'marketplaceDestroy'])->name('marketplace.destroy');
     // Souvenir
     Route::get('souvenir-dashboard', [SouvenirController::class, 'dashboard'])->name('souvenir.dashboard');
     Route::get('souvenir-list/{id}', [SouvenirController::class, 'souvenirList'])->name('souvenir.list');
@@ -488,11 +508,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/qna-manager-events/{id}', [DashboardController::class, 'qnaManagerAdminEvents'])->name('qnaEvents.managerAdminEvents');
 
 
-    // marketplace dashboard
-    Route::get('/marketplace-events-dashboard', [DashboardController::class, 'marketplaceEventsDashboard'])->name('marketplaceEvents.dashboard');
-    Route::get('/marketplace-manager-list', [DashboardController::class, 'marketplaceManagerAdminList'])->name('marketplaceEvents.managerAdminList');
-    Route::get('/marketplace-data-list/{type}', [DashboardController::class, 'marketplaceDataList'])->name('marketplaceEvents.marketplaceDataList');
-    Route::get('/marketplace-manager-events/{id}', [DashboardController::class, 'marketplaceManagerAdminEvents'])->name('marketplaceEvents.managerAdminEvents');
     // auction dashboard
     Route::get('/auction-events-dashboard', [DashboardController::class, 'auctionEventsDashboard'])->name('auctionEvents.dashboard');
     Route::get('/auction-data-list/{type}', [DashboardController::class, 'auctionDataList'])->name('auctionEvents.auctionDataList');
@@ -522,9 +537,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // qna dashboard
     Route::get('/qna-admin-list', [DashboardController::class, 'qnaAdminList'])->name('qnaEvents.adminList');
     Route::get('/qna-admin-events/{id}', [DashboardController::class, 'qnaAdminEvents'])->name('qnaEvents.adminEvents');
-    // marketplace dashboard
-    Route::get('/marketplace-admin-list', [DashboardController::class, 'marketplaceAdminList'])->name('marketplaceEvents.adminList');
-    Route::get('/marketplace-admin-events/{id}', [DashboardController::class, 'marketplaceAdminEvents'])->name('marketplaceEvents.adminEvents');
+   
     // auction dashboard
     Route::get('/auction-admin-list', [DashboardController::class, 'auctionAdminList'])->name('auctionEvents.adminList');
     Route::get('/auction-admin-events/{id}', [DashboardController::class, 'auctionAdminEvents'])->name('auctionEvents.adminEvents');
@@ -552,10 +565,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // qna dashboard
     Route::get('/qna-superstar-list', [DashboardController::class, 'qnaSuperstarList'])->name('qnaEvents.superstarList');
     Route::get('/qna-superstar-events/{id}', [DashboardController::class, 'qnaSuperstarEvents'])->name('qnaEvents.superstarEvents');
-    // marketplace dashboard
-
-    Route::get('/marketplace-superstar-list', [DashboardController::class, 'marketplaceSuperstarList'])->name('marketplaceEvents.superstarList');
-    Route::get('/marketplace-superstar-events/{id}', [DashboardController::class, 'marketplaceSuperstarEvents'])->name('marketplaceEvents.superstarEvents');
     // auction dashboard
 
     Route::get('/auction-superstar-list', [DashboardController::class, 'auctionSuperstarList'])->name('auctionEvents.superstarList');
@@ -581,8 +590,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/greeting-report', [ReportController::class, 'greetingReport'])->name('report.greeting');
     Route::post('/greeting-report-filter', [ReportController::class, 'greetingReportFilter'])->name('report.filter.greeting');
     // Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
-    Route::get('/marketplace-report', [ReportController::class, 'marketplaceReport'])->name('report.marketplace');
-    Route::post('/marketplace-report-filter', [ReportController::class, 'marketPlaceFilter'])->name('report.filter.marketPlace');
     Route::get('/auction-report', [ReportController::class, 'auctionReport'])->name('report.auction');
     Route::post('/auction-report-filter', [ReportController::class, 'auctionReportFilter'])->name('report.filter.auctionReport');
     Route::get('/souvenir-report', [ReportController::class, 'souvenirReport'])->name('report.souvenir');

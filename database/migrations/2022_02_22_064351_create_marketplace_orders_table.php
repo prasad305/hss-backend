@@ -24,6 +24,7 @@ class CreateMarketplaceOrdersTable extends Migration
             $table->unsignedBigInteger('country_id')->nullable();
             $table->unsignedBigInteger('state_id')->nullable();
             $table->unsignedBigInteger('city_id')->nullable();
+            $table->unsignedBigInteger('delivery_charge_id')->nullable();
             $table->string('area')->nullable();
             $table->string('phone')->nullable();
             $table->integer('items')->nullable();
@@ -51,6 +52,7 @@ class CreateMarketplaceOrdersTable extends Migration
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
             $table->foreign('state_id')->references('id')->on('states')->onDelete('cascade');
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
+            $table->foreign('delivery_charge_id')->references('id')->on('cities')->onDelete('cascade');
 
         });
     }
