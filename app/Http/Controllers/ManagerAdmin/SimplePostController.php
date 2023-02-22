@@ -144,11 +144,13 @@ class SimplePostController extends Controller
             if($publishManager){
                 $userInfo = getUserInfo();
                 $senderInfo = getManagerInfo(auth()->user()->id);
-                
+
                 foreach ($userInfo as $key => $data) {
                     SendMail($data->email,$post,$senderInfo);
                 }
             }
+
+        return redirect()->back()->with(['success'=>'Published','post_published'=>'Post Published','star_id'=>$post->star_id]);
         } else {
             $spost->status = 0;
             $spost->update();
@@ -156,8 +158,9 @@ class SimplePostController extends Controller
             //Remove post //
             $post = Post::where('event_id', $id)->first();
             $post->delete();
+            return redirect()->back()->with('error', 'Post Successfully Removed');
         }
 
-        return redirect()->back()->with('success', 'Published');
+
     }
 }

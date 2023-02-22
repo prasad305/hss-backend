@@ -36,6 +36,21 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="{{ asset('assets/new-main.css') }}" rel="stylesheet" type="text/css" />
 
+        {{-- Socket CDN  and Connection --}}
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+
+
+        @if (session()->has('post_published'))
+        <script>
+
+           let socket = io.connect("http://192.168.0.216:5000");
+            let star_id = '{{session('star_id')}}';
+            socket.emit('newPostCreated',star_id);
+
+        </script>
+        @endif
+
+    {{-- Socket CDN  End  and Connection--}}
 
     @stack('css')
     <style>
@@ -799,8 +814,8 @@
                     position: 'center',
                     icon: 'error',
                     title: '{{ Session::get('error') }}',
-                    showConfirmButton: true,
-                    // timer: 1500
+                    showConfirmButton: false,
+                    timer: 1500
                 })
             });
         </script>
@@ -812,7 +827,7 @@
             document.getElementById('show-image').src = file;
         }
     </script>
-    
+
     <script>
         function Show(title, link, style = '') {
 
@@ -1010,7 +1025,6 @@
     <script src="{{ asset('assets/manager-admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('assets/manager-admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('assets/manager-admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-
     <script>
         $(function() {
             $("#example1").DataTable({
@@ -1034,7 +1048,6 @@
 
 
     @stack('jsstyle')
-
 </body>
 
 </html>
