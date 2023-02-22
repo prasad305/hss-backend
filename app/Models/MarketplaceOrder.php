@@ -20,11 +20,11 @@ class MarketplaceOrder extends Model
         'country_id',
         'state_id',
         'city_id',
+        'delivery_charge_id',
         'area',
         'phone',
         'items',
         'unit_price',
-        'delivery_charge',
         'tax',
         'total_price',
         'holder_name',
@@ -39,7 +39,8 @@ class MarketplaceOrder extends Model
         'delivery_at',
     ];
 
-    protected $with = ['marketplace', 'user', 'state', 'country', 'city', 'star'];
+    // protected $with = ['marketplace', 'user', 'state', 'country', 'city', 'star'];
+    protected $with = ['marketplace'];
 
 
     public function marketplace()
@@ -68,5 +69,9 @@ class MarketplaceOrder extends Model
     public function star()
     {
         return $this->belongsTo(User::class, 'superstar_id');
+    }
+    public function deliverycharge()
+    {
+        return $this->belongsTo(DeliveryCharge::class, 'delivery_charge_id');
     }
 }

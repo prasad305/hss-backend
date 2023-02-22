@@ -15,15 +15,16 @@ class CreateMarketplaceOrdersTable extends Migration
     {
         Schema::create('marketplace_orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('invoice_no')->nullable();
             $table->string('order_no')->nullable();
-            $table->integer('marketplace_id')->nullable();
-            $table->integer('superstar_id')->nullable();
-            $table->integer('superstar_admin_id')->nullable();
-            $table->integer('country_id')->nullable();
-            $table->integer('state_id')->nullable();
-            $table->integer('city_id')->nullable();
+            $table->unsignedBigInteger('marketplace_id')->nullable();
+            $table->unsignedBigInteger('superstar_id')->nullable();
+            $table->unsignedBigInteger('superstar_admin_id')->nullable();
+            $table->unsignedBigInteger('country_id')->nullable();
+            $table->unsignedBigInteger('state_id')->nullable();
+            $table->unsignedBigInteger('city_id')->nullable();
+            $table->unsignedBigInteger('delivery_charge_id')->nullable();
             $table->string('area')->nullable();
             $table->string('phone')->nullable();
             $table->integer('items')->nullable();
@@ -43,6 +44,16 @@ class CreateMarketplaceOrdersTable extends Migration
             $table->integer('status')->nullable()->comment('1 = Ordered, 2 = Received, 3 = Out for Delivery, 4 = Delivered');
             $table->timestamp('delivery_at')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('marketplace_id')->references('id')->on('marketplaces')->onDelete('cascade');
+            $table->foreign('superstar_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('superstar_admin_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
+            $table->foreign('state_id')->references('id')->on('states')->onDelete('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
+            $table->foreign('delivery_charge_id')->references('id')->on('cities')->onDelete('cascade');
+
         });
     }
 

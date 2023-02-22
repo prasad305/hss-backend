@@ -10,6 +10,7 @@ use App\Models\FAQ;
 use App\Models\ProductPurchase;
 use App\Models\TermAndCondition;
 use App\Models\RefundPolicy;
+use App\Models\DeliveryCharge;
 
 class SettingsController extends Controller
 {
@@ -71,6 +72,16 @@ class SettingsController extends Controller
             'status' => 200,
             'data' => $data,
             'message' => 'Refund Added Successfully',
+        ]);
+    }
+
+    public function deliverycharge()
+    {
+        $data = DeliveryCharge::where('status',1)->orderBy('id', 'DESC')->get();
+
+        return response()->json([
+            'status' => 200,
+            'data' => $data,
         ]);
     }
 }

@@ -122,9 +122,49 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('meetupEvents/edit/{id}', [MeetupEventController::class, 'edit'])->name('meetupEvent.edit');
     Route::put('meetupEvents/edit/{id}', [MeetupEventController::class, 'update'])->name('meetupEvent.update');
     Route::post('meetupEvents/set_publish/{id}', [MeetupEventController::class, 'manager_event_set_publish'])->name('meetupEvent.set_publish');
-    
     //********************************************//
     //************ MeetUp Routes End **************//
+    //********************************************//
+
+
+    //********************************************//
+    //******Marketplace Routes Start *******//
+    //********************************************//
+
+    //********************* Marketplace Post ***************//
+    Route::get('marketplace/pending', [MarketplaceController::class, 'pending'])->name('marketplace.pending');
+    Route::get('marketplace/published', [MarketplaceController::class, 'published'])->name('marketplace.published');
+    Route::get('marketplace/all', [MarketplaceController::class, 'all'])->name('marketplace.all');
+    Route::get('marketplace/order/list', [MarketplaceController::class, 'allOrderList'])->name('marketplace.allOrderList');
+
+    Route::get('marketplace/details/{id}', [MarketplaceController::class, 'details'])->name('marketplace.details');
+    Route::get('marketplace/edit/{id}', [MarketplaceController::class, 'edit'])->name('marketplace.edit');
+    Route::put('marketplace/update/{id}', [MarketplaceController::class, 'update'])->name('marketplace.update');
+    Route::get('marketplace/set_publish/{id}', [MarketplaceController::class, 'set_publish'])->name('marketplace.set_publish');
+   
+
+    //********************* dashboard ************************//
+    Route::get('marketplace-dashboard', [DashboardController::class, 'marketplace'])->name('dashboard.marketplace');
+    Route::get('marketplace-data/{type}', [DashboardController::class, 'marketplaceData'])->name('dashboard.marketplaceData');
+    Route::get('submarketplace-list/{id}', [DashboardController::class, 'submarketplaceList'])->name('submarketplace.list');
+    Route::get('marketplace-admin-list', [DashboardController::class, 'marketplaceAdminList'])->name('marketplaceEvents.adminList');
+    Route::get('marketplace-admin-events/{adminId}', [DashboardController::class, 'marketplaceAdminEvents'])->name('marketplaceEvents.adminEvents');
+    Route::get('marketplace-superstar-list', [DashboardController::class, 'marketplaceSuperstarList'])->name('marketplaceEvents.superstarList');
+    Route::get('marketplace-superstar-events/{starId}', [DashboardController::class, 'marketplaceSuperstarEvents'])->name('marketplaceEvents.superstarEvents');
+    Route::get('marketplace/order/list/{id}', [MarketplaceController::class, 'allOrderDetails'])->name('marketplace.allOrderDetails');
+
+    //************************* Reports *************************//
+    Route::get('/marketplace-report', [ReportController::class, 'marketplaceReport'])->name('report.marketplace');
+    Route::post('/marketplace-report-filter', [ReportController::class, 'marketPlaceFilter'])->name('report.filter.marketPlace');
+
+    //************************* Accounts *************************//
+    Route::get('marketplace-totalIncome', [AccountsController::class, 'marketplaceTotalIncome'])->name('marketplaceTotalIncome');
+    Route::get('marketplace-dailyIncome', [AccountsController::class, 'marketplaceDailyIncome'])->name('marketplaceDailyIncome');
+    Route::get('marketplace-weeklyIncome', [AccountsController::class, 'marketplaceweeklyIncome'])->name('marketplaceWeeklyIncome');
+    Route::get('marketplace-monthlyIncome', [AccountsController::class, 'marketplaceMonthlyIncome'])->name('marketplaceMonthlyIncome');
+    Route::get('marketplace-yearlyIncome', [AccountsController::class, 'marketplaceYearlyIncome'])->name('marketplaceYearlyIncome');
+    //********************************************//
+    //******Marketplace Routes End *******//
     //********************************************//
 
     // Dashboard Routes By Srabon
@@ -350,26 +390,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('auction-superstar-list', [DashboardController::class, 'auctionSuperstarList'])->name('auctionEvents.superstarList');
     Route::get('auction-superstar-events/{starId}', [DashboardController::class, 'auctionSuperstarEvents'])->name('auctionEvents.superstarEvents');
 
-
-    //Marketplace Post
-    Route::get('marketplace/pending', [MarketplaceController::class, 'pending'])->name('marketplace.pending');
-    Route::get('marketplace/published', [MarketplaceController::class, 'published'])->name('marketplace.published');
-    Route::get('marketplace/all', [MarketplaceController::class, 'all'])->name('marketplace.all');
-    Route::get('marketplace/order/list', [MarketplaceController::class, 'allOrderList'])->name('marketplace.allOrderList');
-
-    Route::get('marketplace/details/{id}', [MarketplaceController::class, 'details'])->name('marketplace.details');
-    Route::get('marketplace/edit/{id}', [MarketplaceController::class, 'edit'])->name('marketplace.edit');
-    Route::put('marketplace/update/{id}', [MarketplaceController::class, 'update'])->name('marketplace.update');
-    Route::get('marketplace/set_publish/{id}', [MarketplaceController::class, 'set_publish'])->name('marketplace.set_publish');
-
-    Route::get('marketplace-dashboard', [DashboardController::class, 'marketplace'])->name('dashboard.marketplace');
-    Route::get('marketplace-data/{type}', [DashboardController::class, 'marketplaceData'])->name('dashboard.marketplaceData');
-    Route::get('submarketplace-list/{id}', [DashboardController::class, 'submarketplaceList'])->name('submarketplace.list');
-    Route::get('marketplace-admin-list', [DashboardController::class, 'marketplaceAdminList'])->name('marketplaceEvents.adminList');
-    Route::get('marketplace-admin-events/{adminId}', [DashboardController::class, 'marketplaceAdminEvents'])->name('marketplaceEvents.adminEvents');
-    Route::get('marketplace-superstar-list', [DashboardController::class, 'marketplaceSuperstarList'])->name('marketplaceEvents.superstarList');
-    Route::get('marketplace-superstar-events/{starId}', [DashboardController::class, 'marketplaceSuperstarEvents'])->name('marketplaceEvents.superstarEvents');
-
     //Souviner Post
     Route::get('souvenir/pending', [SouvenirController::class, 'pending'])->name('souvenir.pending');
     Route::get('souvenir/published', [SouvenirController::class, 'published'])->name('souvenir.published');
@@ -491,12 +511,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('fanGroup-weeklyIncome', [AccountsController::class, 'fanGroupweeklyIncome'])->name('fanGroupWeeklyIncome');
     Route::get('fanGroup-monthlyIncome', [AccountsController::class, 'fanGroupMonthlyIncome'])->name('fanGroupMonthlyIncome');
     Route::get('fanGroup-yearlyIncome', [AccountsController::class, 'fanGroupYearlyIncome'])->name('fanGroupYearlyIncome');
-    // marketplace
-    Route::get('marketplace-totalIncome', [AccountsController::class, 'marketplaceTotalIncome'])->name('marketplaceTotalIncome');
-    Route::get('marketplace-dailyIncome', [AccountsController::class, 'marketplaceDailyIncome'])->name('marketplaceDailyIncome');
-    Route::get('marketplace-weeklyIncome', [AccountsController::class, 'marketplaceweeklyIncome'])->name('marketplaceWeeklyIncome');
-    Route::get('marketplace-monthlyIncome', [AccountsController::class, 'marketplaceMonthlyIncome'])->name('marketplaceMonthlyIncome');
-    Route::get('marketplace-yearlyIncome', [AccountsController::class, 'marketplaceYearlyIncome'])->name('marketplaceYearlyIncome');
+    
     // souvenir
     Route::get('souvenir-totalIncome', [AccountsController::class, 'souvenirTotalIncome'])->name('souvenirTotalIncome');
     Route::get('souvenir-dailyIncome', [AccountsController::class, 'souvenirDailyIncome'])->name('souvenirDailyIncome');
@@ -528,8 +543,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('/greeting-report', [ReportController::class, 'greetingReport'])->name('report.greeting');
     Route::post('/greeting-report-filter', [ReportController::class, 'greetingReportFilter'])->name('report.filter.greeting');
     // Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
-    Route::get('/marketplace-report', [ReportController::class, 'marketplaceReport'])->name('report.marketplace');
-    Route::post('/marketplace-report-filter', [ReportController::class, 'marketPlaceFilter'])->name('report.filter.marketPlace');
+   
     Route::get('/auction-report', [ReportController::class, 'auctionReport'])->name('report.auction');
     Route::post('/auction-report-filter', [ReportController::class, 'auctionReportFilter'])->name('report.filter.auctionReport');
     Route::get('/souvenir-report', [ReportController::class, 'souvenirReport'])->name('report.souvenir');
@@ -543,4 +557,5 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
 
 Route::get('manager-admin/souvenir/order/list/{id}', [SouvenirController::class, 'allOrderDetails'])->name('managerAdmin.souvenir.allOrderDetails');
-Route::get('manager-admin/marketplace/order/list/{id}', [MarketplaceController::class, 'allOrderDetails'])->name('managerAdmin.marketplace.allOrderDetails');
+
+
