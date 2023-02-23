@@ -85,13 +85,6 @@
 
                 <div class="col-sm-12 col-md-4 col-lg-3 mb-2">
                     <div class="card p-3">
-                        <h5> Delivery Charge</h5>
-                        <h6 class="text-warning"> $ {{ $post->delivery_charge }}</h6>
-                    </div>
-                </div>
-
-                <div class="col-sm-12 col-md-4 col-lg-3 mb-2">
-                    <div class="card p-3">
                         <h5> Tax</h5>
                         <h6 class="text-warning"> $ {{ $post->tax }} %</h6>
                     </div>

@@ -56,6 +56,7 @@ use App\Http\Controllers\SuperAdmin\TermsConditionController;
 use App\Http\Controllers\SuperAdmin\RefundController;
 use App\Http\Controllers\SuperAdmin\VirtualtourController;
 use App\Http\Controllers\SuperAdmin\DeliveryChargeController;
+use App\Http\Controllers\SuperAdmin\SouvenirDeliveryChargeController;
 
 
 // Super Admin routechange.password
@@ -146,6 +147,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     //******Marketplace Routes Start *******//
     //********************************************//
 
+    //********************* Delivery Routes ********************//
+    Route::resource('marketplacedeliverycharge', DeliveryChargeController::class);
+    Route::post('marketplacedeliverycharge-active/{id}', [DeliveryChargeController::class, 'activeNow'])->name('marketplacedeliverycharge.activeNow');
+    Route::post('marketplacedeliverycharge-inactive/{id}', [DeliveryChargeController::class, 'inactiveNow'])->name('marketplacedeliverycharge.inactiveNow');
+
     //********************* Marketplace ********************//
     Route::get('marketplace-index', [MarketplaceController::class, 'index'])->name('marketplace.dashboard');
     Route::get('marketplace-list/{id}', [MarketplaceController::class, 'marketplaceList'])->name('marketplace.list');
@@ -169,8 +175,44 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/marketplace-report', [ReportController::class, 'marketplaceReport'])->name('report.marketplace');
     Route::post('/marketplace-report-filter', [ReportController::class, 'marketPlaceFilter'])->name('report.filter.marketPlace');
 
-     //********************************************//
+    //********************************************//
     //******Marketplace Routes End *******//
+    //********************************************//
+
+    //********************************************//
+    //******Souvenir Routes Start *******//
+    //********************************************//
+
+    //**************** Delivery Routes ***************//
+    Route::resource('souvenirdeliverycharge', SouvenirDeliveryChargeController::class);
+    Route::post('souvenirdeliverycharge-active/{id}', [SouvenirDeliveryChargeController::class, 'activeNow'])->name('souvenirdeliverycharge.activeNow');
+    Route::post('souvenirdeliverycharge-inactive/{id}', [SouvenirDeliveryChargeController::class, 'inactiveNow'])->name('souvenirdeliverycharge.inactiveNow');
+
+    //**************** Souvenir ***************//
+    Route::get('souvenir-dashboard', [SouvenirController::class, 'dashboard'])->name('souvenir.dashboard');
+    Route::get('souvenir-list/{id}', [SouvenirController::class, 'souvenirList'])->name('souvenir.list');
+    Route::get('souvenir-details/{id}', [SouvenirController::class, 'souvenirDetails'])->name('souvenir.details');
+    Route::get('souvenir-edit/{id}', [SouvenirController::class, 'souvenirEdit'])->name('souvenir.edit');
+    Route::PUT('souvenir-update/{id}', [SouvenirController::class, 'souvenirUpdate'])->name('souvenir.update');
+    Route::delete('souvenir-destroy/{id}', [SouvenirController::class, 'souvenirDestroy'])->name('souvenir.destroy');
+
+    //**************** Souvenir Dashboard ***************//
+    Route::get('/souvenir-events-dashboard', [DashboardController::class, 'souvenirEventsDashboard'])->name('souvenirEvents.dashboard');
+    Route::get('/souvenir-data-list/{type}', [DashboardController::class, 'souvenirDataList'])->name('souvenirEvents.souvenirDataList');
+    Route::get('/souvenir-manager-list', [DashboardController::class, 'souvenirManagerAdminList'])->name('souvenirEvents.managerAdminList');
+    Route::get('/souvenir-manager-events/{id}', [DashboardController::class, 'souvenirManagerAdminEvents'])->name('souvenirEvents.managerAdminEvents');
+    Route::get('/souvenir-admin-list', [DashboardController::class, 'souvenirAdminList'])->name('souvenirEvents.adminList');
+    Route::get('/souvenir-admin-events/{id}', [DashboardController::class, 'souvenirAdminEvents'])->name('souvenirEvents.adminEvents');
+    Route::get('/souvenir-superstar-list', [DashboardController::class, 'souvenirSuperstarList'])->name('souvenirEvents.superstarList');
+    Route::get('/souvenir-superstar-events/{id}', [DashboardController::class, 'souvenirSuperstarEvents'])->name('souvenirEvents.superstarEvents');
+
+    //**************** Souvenir Reports ***************//
+    Route::get('/souvenir-report', [ReportController::class, 'souvenirReport'])->name('report.souvenir');
+    Route::post('/souvenir-report-filter', [ReportController::class, 'souvenirReportFilter'])->name('report.filter.souvenirReport');
+
+
+    //********************************************//
+    //******Souvenir Routes End *******//
     //********************************************//
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
@@ -179,9 +221,9 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
 
-    Route::resource('deliverycharge', DeliveryChargeController::class);
-    Route::post('deliverycharge-active/{id}', [DeliveryChargeController::class, 'activeNow'])->name('deliverycharge.activeNow');
-    Route::post('deliverycharge-inactive/{id}', [DeliveryChargeController::class, 'inactiveNow'])->name('deliverycharge.inactiveNow');
+
+   
+
 
     Route::post('/profile/change/store', [DashboardController::class, 'changeProfile'])->name('change.profile');
 
@@ -318,14 +360,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // Refund Policy
     Route::resource('refundpolicy', RefundController::class);
-
-    // Souvenir
-    Route::get('souvenir-dashboard', [SouvenirController::class, 'dashboard'])->name('souvenir.dashboard');
-    Route::get('souvenir-list/{id}', [SouvenirController::class, 'souvenirList'])->name('souvenir.list');
-    Route::get('souvenir-details/{id}', [SouvenirController::class, 'souvenirDetails'])->name('souvenir.details');
-    Route::get('souvenir-edit/{id}', [SouvenirController::class, 'souvenirEdit'])->name('souvenir.edit');
-    Route::PUT('souvenir-update/{id}', [SouvenirController::class, 'souvenirUpdate'])->name('souvenir.update');
-    Route::delete('souvenir-destroy/{id}', [SouvenirController::class, 'souvenirDestroy'])->name('souvenir.destroy');
 
     //LiveChat
     Route::get('liveChat-index', [LiveChatController::class, 'index'])->name('liveChat.index');
@@ -513,11 +547,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/auction-data-list/{type}', [DashboardController::class, 'auctionDataList'])->name('auctionEvents.auctionDataList');
     Route::get('/auction-manager-list', [DashboardController::class, 'auctionManagerAdminList'])->name('auctionEvents.managerAdminList');
     Route::get('/auction-manager-events/{id}', [DashboardController::class, 'auctionManagerAdminEvents'])->name('auctionEvents.managerAdminEvents');
-    // souvenir dashboard
-    Route::get('/souvenir-events-dashboard', [DashboardController::class, 'souvenirEventsDashboard'])->name('souvenirEvents.dashboard');
-    Route::get('/souvenir-data-list/{type}', [DashboardController::class, 'souvenirDataList'])->name('souvenirEvents.souvenirDataList');
-    Route::get('/souvenir-manager-list', [DashboardController::class, 'souvenirManagerAdminList'])->name('souvenirEvents.managerAdminList');
-    Route::get('/souvenir-manager-events/{id}', [DashboardController::class, 'souvenirManagerAdminEvents'])->name('souvenirEvents.managerAdminEvents');
+    
 
     //                                  superstar admin
     // simplePost dashboard
@@ -541,9 +571,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // auction dashboard
     Route::get('/auction-admin-list', [DashboardController::class, 'auctionAdminList'])->name('auctionEvents.adminList');
     Route::get('/auction-admin-events/{id}', [DashboardController::class, 'auctionAdminEvents'])->name('auctionEvents.adminEvents');
-    // souvenir dashboard
-    Route::get('/souvenir-admin-list', [DashboardController::class, 'souvenirAdminList'])->name('souvenirEvents.adminList');
-    Route::get('/souvenir-admin-events/{id}', [DashboardController::class, 'souvenirAdminEvents'])->name('souvenirEvents.adminEvents');
+    
 
     //                     superstar
 
@@ -569,10 +597,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     Route::get('/auction-superstar-list', [DashboardController::class, 'auctionSuperstarList'])->name('auctionEvents.superstarList');
     Route::get('/auction-superstar-events/{id}', [DashboardController::class, 'auctionSuperstarEvents'])->name('auctionEvents.superstarEvents');
-    // souvenir dashboard
-
-    Route::get('/souvenir-superstar-list', [DashboardController::class, 'souvenirSuperstarList'])->name('souvenirEvents.superstarList');
-    Route::get('/souvenir-superstar-events/{id}', [DashboardController::class, 'souvenirSuperstarEvents'])->name('souvenirEvents.superstarEvents');
 
 
 
@@ -592,8 +616,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
     Route::get('/auction-report', [ReportController::class, 'auctionReport'])->name('report.auction');
     Route::post('/auction-report-filter', [ReportController::class, 'auctionReportFilter'])->name('report.filter.auctionReport');
-    Route::get('/souvenir-report', [ReportController::class, 'souvenirReport'])->name('report.souvenir');
-    Route::post('/souvenir-report-filter', [ReportController::class, 'souvenirReportFilter'])->name('report.filter.souvenirReport');
     Route::get('/simplePost-report', [ReportController::class, 'simplePostReport'])->name('report.simplePost');
     Route::post('/simplePost-report-filter', [ReportController::class, 'simplePostFilter'])->name('report.filter.simplePost');
     Route::get('/simplePost-report-filter-userType/{name}', [ReportController::class, 'simplePostUserName']);

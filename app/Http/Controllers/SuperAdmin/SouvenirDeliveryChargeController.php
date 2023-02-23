@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\Models\SouvenirDeliveryCharge;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\DeliveryCharge;
 
-class DeliveryChargeController extends Controller
+class SouvenirDeliveryChargeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class DeliveryChargeController extends Controller
      */
     public function index()
     {
-        $deliverycharges = DeliveryCharge::orderBy('id', 'DESC')->get();
-        return view('SuperAdmin.marketplacedeliverycharge.index',compact('deliverycharges'));
+        $deliverycharges = SouvenirDeliveryCharge::orderBy('id', 'DESC')->get();
+        return view('SuperAdmin.souvenirdeliverycharge.index',compact('deliverycharges'));
     }
 
     /**
@@ -26,7 +26,7 @@ class DeliveryChargeController extends Controller
      */
     public function create()
     {
-        return view('SuperAdmin.marketplacedeliverycharge.create');
+        return view('SuperAdmin.souvenirdeliverycharge.create');
     }
 
     /**
@@ -38,12 +38,12 @@ class DeliveryChargeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'country' => 'required|unique:delivery_charges',
+            'country' => 'required|unique:souvenir_delivery_charges',
             'courier_charge' => 'required',
-            'courier_company' => 'required|unique:delivery_charges',
+            'courier_company' => 'required|unique:souvenir_delivery_charges',
         ]);
 
-        $deliverycharge = new DeliveryCharge();
+        $deliverycharge = new SouvenirDeliveryCharge();
 
         $deliverycharge->country = $request->country;
         $deliverycharge->courier_charge = $request->courier_charge;
@@ -68,10 +68,10 @@ class DeliveryChargeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\SouvenirDeliveryCharge  $souvenirDeliveryCharge
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(SouvenirDeliveryCharge $souvenirDeliveryCharge)
     {
         //
     }
@@ -79,31 +79,31 @@ class DeliveryChargeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\SouvenirDeliveryCharge  $souvenirDeliveryCharge
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $deliverycharge = DeliveryCharge::findOrfail($id);
-        return view('SuperAdmin.marketplacedeliverycharge.edit', compact('deliverycharge'));
+        $deliverycharge = SouvenirDeliveryCharge::findOrfail($id);
+        return view('SuperAdmin.souvenirdeliverycharge.edit', compact('deliverycharge'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\SouvenirDeliveryCharge  $souvenirDeliveryCharge
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $request->validate([
-            'country' => 'required|unique:delivery_charges,country,'.$id,
+            'country' => 'required|unique:souvenir_delivery_charges,country,'.$id,
             'courier_charge' => 'required',
-            'courier_company' => 'required|unique:delivery_charges,courier_company,'.$id,
+            'courier_company' => 'required|unique:souvenir_delivery_charges,courier_company,'.$id,
         ]);
 
-        $deliverycharge = DeliveryCharge::findOrfail($id);
+        $deliverycharge = SouvenirDeliveryCharge::findOrfail($id);
         $deliverycharge->country = $request->country;
         $deliverycharge->courier_charge = $request->courier_charge;
         $deliverycharge->courier_company = $request->courier_company;
@@ -125,17 +125,17 @@ class DeliveryChargeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\SouvenirDeliveryCharge  $souvenirDeliveryCharge
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(SouvenirDeliveryCharge $souvenirDeliveryCharge)
     {
         //
     }
 
     public function activeNow($id)
     {
-        $deliverycharge = DeliveryCharge::findOrFail($id);
+        $deliverycharge = SouvenirDeliveryCharge::findOrFail($id);
         $deliverycharge->status = 1;
         try {
             $deliverycharge->save();
@@ -153,7 +153,7 @@ class DeliveryChargeController extends Controller
 
     public function inactiveNow($id)
     {
-        $deliverycharge = DeliveryCharge::findOrFail($id);
+        $deliverycharge = SouvenirDeliveryCharge::findOrFail($id);
         $deliverycharge->status = 0;
         try {
             $deliverycharge->save();
@@ -168,5 +168,4 @@ class DeliveryChargeController extends Controller
             ]);
         }
     }
-
 }

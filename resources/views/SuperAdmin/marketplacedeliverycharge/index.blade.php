@@ -45,7 +45,7 @@
                 <div class="card-header">
                     <h3 class="card-title">All Delivery Charges Lists</h3>
                     <a class="btn btn-success btn-sm" style="float: right;"
-                        onclick="Show('New Delivery Charge','{{ route('superAdmin.deliverycharge.create') }}')"><i
+                        onclick="Show('New Delivery Charge','{{ route('superAdmin.marketplacedeliverycharge.create') }}')"><i
                             class=" fa fa-plus"></i>&nbsp;New Delivery Charges</a>
                 </div>
                 <!-- /.card-header -->
@@ -78,16 +78,16 @@
 
                                     <td style="width: 150px">
                                         <a class="btn btn-sm btn-info"
-                                            onclick="Show('Edit Delivery Charge','{{ route('superAdmin.deliverycharge.edit', $data->id) }}')"><i
+                                            onclick="Show('Edit Delivery Charge','{{ route('superAdmin.marketplacedeliverycharge.edit', $data->id) }}')"><i
                                                 class="fa fa-edit text-white"></i></a>
                                         @if ($data->status == 0)
                                             <button class="btn btn-success" onclick="activeNow(this)"
-                                                value="{{ route('superAdmin.deliverycharge.activeNow', $data->id) }}">
+                                                value="{{ route('superAdmin.marketplacedeliverycharge.activeNow', $data->id) }}">
                                                 <i class="fa fa-check" aria-hidden="true"></i>
                                             </button>
                                         @elseif($data->status == 1)
                                             <button class="btn btn-danger" onclick="inactiveNow(this)"
-                                                value="{{ route('superAdmin.deliverycharge.inactiveNow', $data->id) }}">
+                                                value="{{ route('superAdmin.marketplacedeliverycharge.inactiveNow', $data->id) }}">
                                                 <i class="fa fa-close"></i>
                                             </button>
                                         @endif
