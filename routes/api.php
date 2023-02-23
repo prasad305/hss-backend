@@ -51,6 +51,7 @@ Route::get('/sdk/get-token/admin', [SdkController::class, 'getToken']);
 Route::get('/sdk/createMeeting/{token}', [SdkController::class, 'createMeetingId']);
 Route::post('/sdk/validate-meeting/{roomId}', [SdkController::class, 'roomValidate']);
 Route::get('/sdk/videoEnd/{room_id}/{token}', [SdkController::class, 'roomRoomEnd']);
+Route::get('/sdk/sessionEnd/{room_id}', [SdkController::class, 'sessionEnd']);
 
 Route::post('/sdk/remove-participants', [SdkController::class, 'RemoveParticipantsMeeting']);
 Route::get('/sdk/sdk-session-id/{roomId}', [SdkController::class, 'getSdkAlluser']);
