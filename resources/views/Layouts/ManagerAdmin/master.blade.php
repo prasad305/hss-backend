@@ -43,7 +43,7 @@
         @if (session()->has('post_published'))
         <script>
 
-           let socket = io.connect("http://192.168.0.216:5000");
+           let socket = io.connect("http://192.168.0.216:3005");
             let star_id = '{{session('star_id')}}';
             socket.emit('newPostCreated',star_id);
 

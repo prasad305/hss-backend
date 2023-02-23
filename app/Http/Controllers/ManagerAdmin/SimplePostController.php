@@ -122,6 +122,7 @@ class SimplePostController extends Controller
 
     public function set_publish($id)
     {
+
         $spost = SimplePost::find($id);
 
         if ($spost->status != 1) {
@@ -152,12 +153,11 @@ class SimplePostController extends Controller
 
         return redirect()->back()->with(['success'=>'Published','post_published'=>'Post Published','star_id'=>$post->star_id]);
         } else {
-            $spost->status = 0;
-            $spost->update();
+              //Remove post //
+              $post = Post::where('event_id', $id)->where('type','general')->delete();
+              $spost->status = 0;
+              $spost->update();
 
-            //Remove post //
-            $post = Post::where('event_id', $id)->first();
-            $post->delete();
             return redirect()->back()->with('error', 'Post Successfully Removed');
         }
 

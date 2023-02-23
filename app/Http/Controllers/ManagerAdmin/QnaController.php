@@ -38,12 +38,12 @@ class QnaController extends Controller
         if($upcommingEvent){
             $userInfo = getUserInfo();
             $senderInfo = getManagerInfo(auth()->user()->id);
-            
+
             foreach ($userInfo as $key => $data) {
                 SendMail($data->email,$upcommingEvent,$senderInfo);
             }
         }
-        
+
 
         return view('ManagerAdmin.QnA.index', compact('upcommingEvent'));
     }
@@ -93,15 +93,15 @@ class QnaController extends Controller
             $post->post_start_date = Carbon::parse($request->post_start_date);
             $post->post_end_date = Carbon::parse($request->post_end_date);
             $post->save();
+            return redirect()->back()->with(['success'=>'Published','post_published'=>'Post Published','star_id'=>$post->star_id]);
         } else {
             $event->status = 10;
             $event->update();
             // Remove post //
-            $post = Post::where('event_id', $id)->first();
-            $post->delete();
+            $post = Post::where('event_id', $id)->where('type','qna')->delete();
+            return redirect()->back()->with('error', 'Post Successfully Removed');
         }
 
-        return redirect()->back()->with('success', 'Published');
     }
 
     public function edit($id)

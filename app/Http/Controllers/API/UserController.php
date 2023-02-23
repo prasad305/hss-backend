@@ -277,13 +277,13 @@ class UserController extends Controller
         $selectedSubCat = json_decode($selectedCategory->subcategory);
         $followedId = json_decode($selectedCategory->star_id,JSON_NUMERIC_CHECK);
 
-        $cat_post = Post::select("*")
+        $cat_post = Post::orderBy('id','DESC')
             ->whereIn('category_id', $selectedCat)
             ->whereIn('star_id',$followedId )
             ->paginate($limit);
 
         if (isset($sub_cat_post)) {
-            $sub_cat_post = Post::select("*")
+            $sub_cat_post = Post::orderBy('id','DESC')
                 ->whereIn('sub_category_id', $selectedSubCat)
                 ->latest()->get();
         } else {
@@ -291,7 +291,7 @@ class UserController extends Controller
         }
 
         if (isset($followedPost)) {
-            $followedPost = Post::select("*")
+            $followedPost = Post::orderBy('id','DESC')
                 ->whereIn('user_id', $followedId)
                 ->latest()->get();
         } else {
@@ -2969,5 +2969,13 @@ class UserController extends Controller
         }
         $liveChatRegs->getSlot = 1;
         $liveChatRegs->update();
+    }
+
+    public function followStarId(){
+        $followStarId = ChoiceList::where('user_id',auth('sanctum')->user()->id)->first();
+        return response()->json([
+            'status' => 200,
+            'followStarId'=>json_decode($followStarId->star_id)
+        ]);
     }
 }

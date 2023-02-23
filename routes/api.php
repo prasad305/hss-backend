@@ -119,7 +119,7 @@ Route::get('/user/generalPost/payment/check/{post_id}', [UserController::class, 
 Route::get('/user/generalPost/payment/check', [UserController::class, 'simplePostPaymentCheck']);
 
 Route::get('/user/post/{type}/with-paginate/{limit}', [UserController::class, 'paginate_single_type_post']);
-
+Route::get('/user/followers/star', [UserController::class, 'followStarId']);
 //User Settings
 Route::post('/user/interest/store', [UserController::class, 'interestStore']);
 Route::post('/user/educational/store', [UserController::class, 'educationalStore']);
