@@ -578,9 +578,9 @@ class UserMobileAppController extends Controller
 
                 $originalExtension = str_ireplace("video/", "", $request->type);
 
-                $folder_path       = 'uploads/images/fanpost/';
+                $folder_path       = 'uploads/audio/qna/';
 
-                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.mp4';
                 $decodedBase64 = $request->base64;
             }
             $videoPath = $folder_path . $image_new_name;
