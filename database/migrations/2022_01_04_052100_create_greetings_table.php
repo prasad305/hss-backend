@@ -34,6 +34,12 @@ class CreateGreetingsTable extends Migration
             $table->integer('star_approve_status')->default(0)->comment('1 = star approve, decline = delete ');
             $table->integer('status')->default(0)->comment('1 = forwared to manager admin, 2 = published to website');
             $table->timestamps();
+
+            $table->foreign('created_by_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('sub_category_id')->references('id')->on('sub_categories')->onDelete('cascade');
+            $table->foreign('star_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

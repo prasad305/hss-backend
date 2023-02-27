@@ -298,7 +298,7 @@ class GreetingController extends Controller
     public function adminGreetingsRegisterListWithPaymentComplete()
     {
         $greeting = auth('sanctum')->user()->star->asStarGreeting;
-        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 1]])->get();
+        $register_list = GreetingsRegistration::with('user')->where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 1]])->get();
 
         return response()->json([
             'status' => 200,
@@ -308,7 +308,7 @@ class GreetingController extends Controller
     public function greetingsVideoUploadedList()
     {
         $greeting = auth('sanctum')->user()->star->asStarGreeting;
-        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 2]])->get();
+        $register_list = GreetingsRegistration::with('user')->where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 2]])->get();
 
         return response()->json([
             'status' => 200,
@@ -319,7 +319,7 @@ class GreetingController extends Controller
     public function greetingsForwardedToUserList()
     {
         $greeting = auth('sanctum')->user()->star->asStarGreeting;
-        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 3]])->get();
+        $register_list = GreetingsRegistration::with('user')->where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 3]])->get();
 
         return response()->json([
             'status' => 200,
@@ -342,7 +342,7 @@ class GreetingController extends Controller
     public function greetingsRegisterListByGreetingsId()
     {
         $greeting = auth('sanctum')->user()->star->asStarGreeting;
-        $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', null], ['status', 0]])->get();
+        $register_list = GreetingsRegistration::with('user')->where([['greeting_id', $greeting->id], ['notification_at', null], ['status', 0]])->get();
 
         return response()->json([
             'status' => 200,

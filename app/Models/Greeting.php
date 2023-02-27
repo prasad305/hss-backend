@@ -29,7 +29,7 @@ class Greeting extends Model
         'status',
     ];
 
-    protected $with = ['star'];
+    protected $with = ['star'];// we have to add it in activities controller
 
     public function star()
     {
