@@ -2892,19 +2892,61 @@ class UserController extends Controller
 
     public function allUpCommingEvents()
     {
-        $learningSession = LearningSession::where('status', 2)->latest()->get();
-        $LiveChat = LiveChat::where('status', 2)->orderBy('id', 'DESC')->get();
-        $qna = QnA::where('status', 2)->orderBy('id', 'DESC')->get();
-        $audition =  Audition::where('status', 2)->orderBy('id', 'DESC')->get();
-        $meetup = MeetupEvent::where('status', 2)->orderBy('id', 'DESC')->get();
+
+        $learningSession = LearningSession::where('status', 2)->latest()->get(['id','slug','banner']);
+        $LiveChat = LiveChat::where('status', 2)->latest()->get(['id','slug','banner']);
+        $qna = QnA::where('status', 2)->latest()->get(['id','slug','banner']);
+        $audition =  Audition::where('status', 2)->latest()->get(['id','slug','banner']);
+        $meetup = MeetupEvent::where('status', 2)->latest()->get(['id','slug','banner']);
+
+
+         $learnigSessionLiveNow =  LearningSession::whereDate('event_date',today())
+        ->whereTime('start_time','<=',now()->toTimeString())
+        ->whereTime('end_time','>=',now()->toTimeString())->get(['id','slug','banner'])
+        ->map(function ($item) {
+            $item['event_type'] = 'learning-session';
+            return $item;
+        });
+        $liveChatLiveNow =  LiveChat::whereDate('event_date',today())
+        ->whereTime('start_time','<=',now()->toTimeString())
+        ->whereTime('end_time','>=',now()->toTimeString())->get(['id','slug','banner'])->map(function ($item) {
+            $item['event_type'] = 'livechat';
+            return $item;
+        });
+
+        $qnaLiveNow =  QnA::whereDate('event_date',today())
+        ->whereTime('start_time','<=',now()->toTimeString())
+        ->whereTime('end_time','>=',now()->toTimeString())->get(['id','slug','banner'])->map(function ($item) {
+            $item['event_type'] = 'qna';
+            return $item;
+        });
+
+        $meetupLiveNow =  MeetupEvent::whereDate('event_date',today())
+        ->whereTime('start_time','<=',now()->toTimeString())
+        ->whereTime('end_time','>=',now()->toTimeString())->get(['id','slug','banner'])->map(function ($item) {
+            $item['event_type'] = 'meetup-event';
+            return $item;
+        });
+
+        $auditionLiveNow =  audition::whereDate('start_date',"<=",today())->whereDate('end_date',">=",today())->get(['id','slug','banner'])->map(function ($item) {
+            $item['event_type'] = 'audition';
+            return $item;
+        });
+
+        $liveNow = collect([]);
+        $collections = [$learnigSessionLiveNow, $liveChatLiveNow, $qnaLiveNow, $meetupLiveNow,$auditionLiveNow];
+        foreach ($collections as $collection) {
+            $liveNow = $liveNow->merge($collection);
+        }
 
         return response()->json([
             'status' => 200,
             'learningSession' => $learningSession,
             'LiveChat' =>  $LiveChat,
             'qna' => $qna,
-            'audition' =>  $audition,
-            'meetup' =>  $meetup
+            'audition' => $audition,
+            'meetup'=>   $meetup,
+            'liveNow'=>  $liveNow,
 
         ]);
     }
