@@ -18,7 +18,7 @@ class MeetupEventController extends Controller
 {
     public function manager_all()
     {
-        $upcommingEvent = MeetupEvent::where([['status', '>', 0], ['status', '!=', 11], ['category_id', auth()->user()->category_id]])->latest()->get();
+        $upcommingEvent = MeetupEvent::with(['star','admin'])->where([['status', '>', 0], ['status', '!=', 11], ['category_id', auth()->user()->category_id]])->latest()->get();
 
         return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
     }
@@ -26,14 +26,14 @@ class MeetupEventController extends Controller
 
     public function manager_pending()
     {
-        $upcommingEvent = MeetupEvent::where([['status', 1], ['category_id', auth()->user()->category_id]])->latest()->get();
+        $upcommingEvent = MeetupEvent::with(['star','admin'])->where([['status', 1], ['category_id', auth()->user()->category_id]])->latest()->get();
 
         return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
     }
 
     public function manager_published()
     {
-        $upcommingEvent = MeetupEvent::where([['status', 2], ['category_id', auth()->user()->category_id]])->latest()->get();
+        $upcommingEvent = MeetupEvent::with(['star','admin'])->where([['status', 2], ['category_id', auth()->user()->category_id]])->latest()->get();
 
         return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
     }

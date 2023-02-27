@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStatesTable extends Migration
+class CreateSouvenirDeliveryChargesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateStatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('states', function (Blueprint $table) {
+        Schema::create('souvenir_delivery_charges', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('country_id')->nullable();
-            $table->string('status')->nullable();
+            $table->string('country')->nullable();
+            $table->float('courier_charge')->nullable();
+            $table->string('courier_company')->nullable();
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateStatesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('states');
+        Schema::dropIfExists('souvenir_delivery_charges');
     }
 }

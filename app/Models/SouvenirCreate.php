@@ -18,6 +18,8 @@ class SouvenirCreate extends Model
         'banner',
     ];
 
+    protected $with = ['star'];
+
     public function images()
     {
         return $this->hasMany(SouvenirImage::class, 'souvenir_id');

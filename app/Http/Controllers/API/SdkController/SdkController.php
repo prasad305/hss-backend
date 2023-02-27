@@ -153,6 +153,27 @@ class SdkController extends Controller
         return $request;
     }
 
+
+    /**
+     * session end from mobile
+     */
+
+    public function sessionEnd($roomId)
+    {
+        //   sleep(3000);
+        $getToken = $this->getToken();
+        $room_id = json_encode(array("roomId" => $roomId));
+
+        $request = Http::withHeaders([
+            'Authorization' => $getToken,
+            'Content-Type' => ' application/json'
+        ])->post('https://api.videosdk.live/v2/sessions/end', [
+            'roomId' => $roomId,
+        ]);
+
+        return $request;
+    }
+
     /**
      * fatch session
      */

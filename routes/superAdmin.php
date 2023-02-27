@@ -56,6 +56,7 @@ use App\Http\Controllers\SuperAdmin\TermsConditionController;
 use App\Http\Controllers\SuperAdmin\RefundController;
 use App\Http\Controllers\SuperAdmin\VirtualtourController;
 use App\Http\Controllers\SuperAdmin\DeliveryChargeController;
+use App\Http\Controllers\SuperAdmin\SouvenirDeliveryChargeController;
 
 
 // Super Admin routechange.password
@@ -106,6 +107,135 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     //******Learning Session Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //******MeetUp Routes Start *******//
+    //********************************************//
+
+    //************************** Dashboard Route *************************//
+    Route::get('/all/meetup', [DashboardInfoController::class, 'allMeetUp'])->name('allMeetUp');
+    Route::get('/all/offline/meetup', [DashboardInfoController::class, 'allOfflineMeetUp'])->name('allOfflineMeetUp');
+    Route::get('/all/offline/complete/meetup', [DashboardInfoController::class, 'allCompleteOfflineMeetUp'])->name('allCompleteOfflineMeetUp');
+    Route::get('/all/online/complete/meetup', [DashboardInfoController::class, 'allCompleteOnlineMeetUp'])->name('allCompleteOnlineMeetUp');
+    Route::get('/all/online/upcoming/meetup', [DashboardInfoController::class, 'allUpcomingOnlineMeetUp'])->name('allUpcomingOnlineMeetUp');
+    Route::get('/all/offline/upcoming/meetup', [DashboardInfoController::class, 'allUpcomingOfflineMeetUp'])->name('allUpcomingOfflineMeetUp');
+    Route::get('/meetup-events', [DashboardController::class, 'meetupEvents'])->name('meetupEvents');
+    Route::get('/meetup-events-dashboard', [DashboardController::class, 'meetupEventsDashboard'])->name('meetupEvents.dashboard');
+    Route::get('/meetup-data-list/{type}', [DashboardController::class, 'meetupDataList'])->name('meetupEvents.meetupDataList');
+    Route::get('/meetup-manager-list', [DashboardController::class, 'meetupManagerAdminList'])->name('meetupEvents.managerAdminList');
+    Route::get('/meetup-manager-events/{id}', [DashboardController::class, 'meetupManagerAdminEvents'])->name('meetupEvents.managerAdminEvents');
+    Route::get('/meetup-admin-list', [DashboardController::class, 'meetupAdminList'])->name('meetupEvents.adminList');
+    Route::get('/meetup-admin-events/{id}', [DashboardController::class, 'meetupAdminEvents'])->name('meetupEvents.adminEvents');
+    Route::get('/meetup-superstar-list', [DashboardController::class, 'meetupSuperstarList'])->name('meetupEvents.superstarList');
+    Route::get('/meetup-superstar-events/{id}', [DashboardController::class, 'meetupSuperstarEvents'])->name('meetupEvents.superstarEvents');
+
+    //********************** Report Route *******************//
+    Route::get('/meetup-report', [ReportController::class, 'meetupReport'])->name('report.meetup');
+    Route::post('/meetup-report-filter', [ReportController::class, 'meetupReportFilter'])->name('report.filter.meetupevent');
+
+    //******************** Meetup route *******************//
+    Route::get('meetupEvent-index', [MeetupEventController::class, 'index'])->name('meetupEvent.index');
+    Route::get('meetupEvent-list/{id}', [MeetupEventController::class, 'meetupEventList'])->name('meetupEvent.list');
+    Route::get('meetupEvent-details/{id}', [MeetupEventController::class, 'meetupEventDetails'])->name('meetupEvent.details');
+    Route::get('meetupEvent-edit/{id}', [MeetupEventController::class, 'meetupEventEdit'])->name('meetupEvent.edit');
+    Route::PUT('meetupEvent-update/{id}', [MeetupEventController::class, 'meetupEventUpdate'])->name('meetupEvent.update');
+    Route::delete('meetupEvent-destroy/{id}', [MeetupEventController::class, 'meetupEventDestroy'])->name('meetupEvent.destroy');
+    //********************************************//
+    //******MeetUp Routes End *******//
+    //********************************************//
+
+    //********************************************//
+    //******Marketplace Routes Start *******//
+    //********************************************//
+    //********************* Delivery Routes ********************//
+    Route::resource('marketplacedeliverycharge', DeliveryChargeController::class);
+    Route::post('marketplacedeliverycharge-active/{id}', [DeliveryChargeController::class, 'activeNow'])->name('marketplacedeliverycharge.activeNow');
+    Route::post('marketplacedeliverycharge-inactive/{id}', [DeliveryChargeController::class, 'inactiveNow'])->name('marketplacedeliverycharge.inactiveNow');
+    //********************* Marketplace ********************//
+    Route::get('marketplace-index', [MarketplaceController::class, 'index'])->name('marketplace.dashboard');
+    Route::get('marketplace-list/{id}', [MarketplaceController::class, 'marketplaceList'])->name('marketplace.list');
+    Route::get('marketplace-details/{id}', [MarketplaceController::class, 'marketplaceDetails'])->name('marketplace.details');
+    Route::get('marketplace-edit/{id}', [MarketplaceController::class, 'marketplaceEdit'])->name('marketplace.edit');
+    Route::PUT('marketplace-update/{id}', [MarketplaceController::class, 'marketplaceUpdate'])->name('marketplace.update');
+    Route::delete('marketplace-destroy/{id}', [MarketplaceController::class, 'marketplaceDestroy'])->name('marketplace.destroy');
+    //********************* Dashboard ********************//
+    Route::get('/all/marketplace', [DashboardInfoController::class, 'allMarketplace'])->name('allMarketplace');
+    Route::get('/marketplace-events-dashboard', [DashboardController::class, 'marketplaceEventsDashboard'])->name('marketplaceEvents.dashboard');
+    Route::get('/marketplace-manager-list', [DashboardController::class, 'marketplaceManagerAdminList'])->name('marketplaceEvents.managerAdminList');
+    Route::get('/marketplace-data-list/{type}', [DashboardController::class, 'marketplaceDataList'])->name('marketplaceEvents.marketplaceDataList');
+    Route::get('/marketplace-manager-events/{id}', [DashboardController::class, 'marketplaceManagerAdminEvents'])->name('marketplaceEvents.managerAdminEvents');
+     Route::get('/marketplace-admin-list', [DashboardController::class, 'marketplaceAdminList'])->name('marketplaceEvents.adminList');
+     Route::get('/marketplace-admin-events/{id}', [DashboardController::class, 'marketplaceAdminEvents'])->name('marketplaceEvents.adminEvents');
+     Route::get('/marketplace-superstar-list', [DashboardController::class, 'marketplaceSuperstarList'])->name('marketplaceEvents.superstarList');
+    Route::get('/marketplace-superstar-events/{id}', [DashboardController::class, 'marketplaceSuperstarEvents'])->name('marketplaceEvents.superstarEvents');
+    //********************* Report ********************//
+    Route::get('/marketplace-report', [ReportController::class, 'marketplaceReport'])->name('report.marketplace');
+    Route::post('/marketplace-report-filter', [ReportController::class, 'marketPlaceFilter'])->name('report.filter.marketPlace');
+    //********************************************//
+    //******Marketplace Routes End *******//
+    //********************************************//
+
+    //********************************************//
+    //******Souvenir Routes Start *******//
+    //********************************************//
+    //**************** Delivery Routes ***************//
+    Route::resource('souvenirdeliverycharge', SouvenirDeliveryChargeController::class);
+    Route::post('souvenirdeliverycharge-active/{id}', [SouvenirDeliveryChargeController::class, 'activeNow'])->name('souvenirdeliverycharge.activeNow');
+    Route::post('souvenirdeliverycharge-inactive/{id}', [SouvenirDeliveryChargeController::class, 'inactiveNow'])->name('souvenirdeliverycharge.inactiveNow');
+    //**************** Souvenir ***************//
+    Route::get('souvenir-dashboard', [SouvenirController::class, 'dashboard'])->name('souvenir.dashboard');
+    Route::get('souvenir-list/{id}', [SouvenirController::class, 'souvenirList'])->name('souvenir.list');
+    Route::get('souvenir-details/{id}', [SouvenirController::class, 'souvenirDetails'])->name('souvenir.details');
+    Route::get('souvenir-edit/{id}', [SouvenirController::class, 'souvenirEdit'])->name('souvenir.edit');
+    Route::PUT('souvenir-update/{id}', [SouvenirController::class, 'souvenirUpdate'])->name('souvenir.update');
+    Route::delete('souvenir-destroy/{id}', [SouvenirController::class, 'souvenirDestroy'])->name('souvenir.destroy');
+    //**************** Souvenir Dashboard ***************//
+    Route::get('/souvenir-events-dashboard', [DashboardController::class, 'souvenirEventsDashboard'])->name('souvenirEvents.dashboard');
+    Route::get('/souvenir-data-list/{type}', [DashboardController::class, 'souvenirDataList'])->name('souvenirEvents.souvenirDataList');
+    Route::get('/souvenir-manager-list', [DashboardController::class, 'souvenirManagerAdminList'])->name('souvenirEvents.managerAdminList');
+    Route::get('/souvenir-manager-events/{id}', [DashboardController::class, 'souvenirManagerAdminEvents'])->name('souvenirEvents.managerAdminEvents');
+    Route::get('/souvenir-admin-list', [DashboardController::class, 'souvenirAdminList'])->name('souvenirEvents.adminList');
+    Route::get('/souvenir-admin-events/{id}', [DashboardController::class, 'souvenirAdminEvents'])->name('souvenirEvents.adminEvents');
+    Route::get('/souvenir-superstar-list', [DashboardController::class, 'souvenirSuperstarList'])->name('souvenirEvents.superstarList');
+    Route::get('/souvenir-superstar-events/{id}', [DashboardController::class, 'souvenirSuperstarEvents'])->name('souvenirEvents.superstarEvents');
+    //**************** Souvenir Reports ***************//
+    Route::get('/souvenir-report', [ReportController::class, 'souvenirReport'])->name('report.souvenir');
+    Route::post('/souvenir-report-filter', [ReportController::class, 'souvenirReportFilter'])->name('report.filter.souvenirReport');
+    //********************************************//
+    //******Souvenir Routes End *******//
+    //********************************************//
+
+    //********************************************//
+    //******Auction Routes End *******//
+    //********************************************//
+    //**************** Auction ***************//
+    Route::get('auction-index', [AuctionController::class, 'index'])->name('auction.index');
+    Route::get('terms-create', [AuctionController::class, 'termsCreate'])->name('auctionTerms.create');
+    Route::post('terms-store', [AuctionController::class, 'termsStore'])->name('auctionTerms.store');
+    Route::get('terms-edit/{id}', [AuctionController::class, 'termsEdit'])->name('auctionTerms.edit');
+    Route::put('terms-update/{id}', [AuctionController::class, 'termsUpdate'])->name('auctionTerms.update');
+    Route::delete('terms-destroy/{id}', [AuctionController::class, 'termsDestroy'])->name('auctionTerms.destroy');
+    Route::get('auction-dashboard', [AuctionController::class, 'dashboard'])->name('auction.dashboard');
+    Route::get('auction-list/{id}', [AuctionController::class, 'auctionList'])->name('auction.list');
+    Route::get('auction-details/{id}', [AuctionController::class, 'auctionDetails'])->name('auction.details');
+    Route::get('auction-edit/{id}', [AuctionController::class, 'auctionEdit'])->name('auction.edit');
+    Route::PUT('auction-update/{id}', [AuctionController::class, 'auctionUpdate'])->name('auction.update');
+    Route::delete('auction-destroy/{id}', [AuctionController::class, 'auctionDestroy'])->name('auction.destroy');
+    //**************** Dashboard ***************//
+    Route::get('/all/auction', [DashboardInfoController::class, 'allAuction'])->name('allAuction');
+    Route::get('/auction-events-dashboard', [DashboardController::class, 'auctionEventsDashboard'])->name('auctionEvents.dashboard');
+    Route::get('/auction-data-list/{type}', [DashboardController::class, 'auctionDataList'])->name('auctionEvents.auctionDataList');
+    Route::get('/auction-manager-list', [DashboardController::class, 'auctionManagerAdminList'])->name('auctionEvents.managerAdminList');
+    Route::get('/auction-manager-events/{id}', [DashboardController::class, 'auctionManagerAdminEvents'])->name('auctionEvents.managerAdminEvents');
+    Route::get('/auction-admin-list', [DashboardController::class, 'auctionAdminList'])->name('auctionEvents.adminList');
+    Route::get('/auction-admin-events/{id}', [DashboardController::class, 'auctionAdminEvents'])->name('auctionEvents.adminEvents');
+    Route::get('/auction-superstar-list', [DashboardController::class, 'auctionSuperstarList'])->name('auctionEvents.superstarList');
+    Route::get('/auction-superstar-events/{id}', [DashboardController::class, 'auctionSuperstarEvents'])->name('auctionEvents.superstarEvents');
+    //**************** Reports ***************//
+    Route::get('/auction-report', [ReportController::class, 'auctionReport'])->name('report.auction');
+    Route::post('/auction-report-filter', [ReportController::class, 'auctionReportFilter'])->name('report.filter.auctionReport');
+    //********************************************//
+    //******Auction Routes End *******//
+    //********************************************//
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/withdraw', [ProfitWithdrawController::class, 'index'])->name('withdraw.index');
@@ -113,15 +243,14 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
 
-    Route::resource('deliverycharge', DeliveryChargeController::class);
-    Route::post('deliverycharge-active/{id}', [DeliveryChargeController::class, 'activeNow'])->name('deliverycharge.activeNow');
-    Route::post('deliverycharge-inactive/{id}', [DeliveryChargeController::class, 'inactiveNow'])->name('deliverycharge.inactiveNow');
+
+   
+
 
     Route::post('/profile/change/store', [DashboardController::class, 'changeProfile'])->name('change.profile');
 
     Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
 
-    Route::get('/meetup-events', [DashboardController::class, 'meetupEvents'])->name('meetupEvents');
     Route::get('/live-chats', [DashboardController::class, 'liveChats'])->name('liveChats');
     Route::get('/fan-group', [DashboardController::class, 'fanGroup'])->name('fanGroup');
     Route::get('/greetings', [DashboardController::class, 'greetings'])->name('greetings');
@@ -136,16 +265,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/all/user', [DashboardInfoController::class, 'allUser'])->name('allUser');
     Route::get('/all/star', [DashboardInfoController::class, 'allStar'])->name('allStar');
     Route::get('/all/admin', [DashboardInfoController::class, 'allAdmin'])->name('allAdmin');
-    Route::get('/all/marketplace', [DashboardInfoController::class, 'allMarketplace'])->name('allMarketplace');
-    Route::get('/all/auction', [DashboardInfoController::class, 'allAuction'])->name('allAuction');
 
-    //MeetUp Events
-    Route::get('/all/meetup', [DashboardInfoController::class, 'allMeetUp'])->name('allMeetUp');
-    Route::get('/all/offline/meetup', [DashboardInfoController::class, 'allOfflineMeetUp'])->name('allOfflineMeetUp');
-    Route::get('/all/offline/complete/meetup', [DashboardInfoController::class, 'allCompleteOfflineMeetUp'])->name('allCompleteOfflineMeetUp');
-    Route::get('/all/online/complete/meetup', [DashboardInfoController::class, 'allCompleteOnlineMeetUp'])->name('allCompleteOnlineMeetUp');
-    Route::get('/all/online/upcoming/meetup', [DashboardInfoController::class, 'allUpcomingOnlineMeetUp'])->name('allUpcomingOnlineMeetUp');
-    Route::get('/all/offline/upcoming/meetup', [DashboardInfoController::class, 'allUpcomingOfflineMeetUp'])->name('allUpcomingOfflineMeetUp');
 
 
     //Live Chats
@@ -230,14 +350,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // Audition Routes ends here
 
-    // Auction Routes
-    Route::get('auction-index', [AuctionController::class, 'index'])->name('auction.index');
-    Route::get('terms-create', [AuctionController::class, 'termsCreate'])->name('auctionTerms.create');
-    Route::post('terms-store', [AuctionController::class, 'termsStore'])->name('auctionTerms.store');
-    Route::get('terms-edit/{id}', [AuctionController::class, 'termsEdit'])->name('auctionTerms.edit');
-    Route::put('terms-update/{id}', [AuctionController::class, 'termsUpdate'])->name('auctionTerms.update');
-    Route::delete('terms-destroy/{id}', [AuctionController::class, 'termsDestroy'])->name('auctionTerms.destroy');
-
     // SimplePost
     Route::get('simplepost-index', [SimplePostController::class, 'index'])->name('simplePost.index');
     Route::get('simplepost-list/{id}', [SimplePostController::class, 'simplepostList'])->name('simplePost.list');
@@ -245,13 +357,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('simplepost-edit/{id}', [SimplePostController::class, 'simplepostEdit'])->name('simplePost.edit');
     Route::PUT('simplepost-update/{id}', [SimplePostController::class, 'simplepostUpdate'])->name('simplePost.update');
     Route::delete('simplepost-destroy/{id}', [SimplePostController::class, 'simplepostDestroy'])->name('simplePost.destroy');
-    // Auction
-    Route::get('auction-dashboard', [AuctionController::class, 'dashboard'])->name('auction.dashboard');
-    Route::get('auction-list/{id}', [AuctionController::class, 'auctionList'])->name('auction.list');
-    Route::get('auction-details/{id}', [AuctionController::class, 'auctionDetails'])->name('auction.details');
-    Route::get('auction-edit/{id}', [AuctionController::class, 'auctionEdit'])->name('auction.edit');
-    Route::PUT('auction-update/{id}', [AuctionController::class, 'auctionUpdate'])->name('auction.update');
-    Route::delete('auction-destroy/{id}', [AuctionController::class, 'auctionDestroy'])->name('auction.destroy');
 
     // Product Purchase
     Route::resource('productpurchase', ProductPurchaseController::class);
@@ -261,22 +366,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // Refund Policy
     Route::resource('refundpolicy', RefundController::class);
-
-
-    // Marketplace
-    Route::get('marketplace-index', [MarketplaceController::class, 'index'])->name('marketplace.dashboard');
-    Route::get('marketplace-list/{id}', [MarketplaceController::class, 'marketplaceList'])->name('marketplace.list');
-    Route::get('marketplace-details/{id}', [MarketplaceController::class, 'marketplaceDetails'])->name('marketplace.details');
-    Route::get('marketplace-edit/{id}', [MarketplaceController::class, 'marketplaceEdit'])->name('marketplace.edit');
-    Route::PUT('marketplace-update/{id}', [MarketplaceController::class, 'marketplaceUpdate'])->name('marketplace.update');
-    Route::delete('marketplace-destroy/{id}', [MarketplaceController::class, 'marketplaceDestroy'])->name('marketplace.destroy');
-    // Souvenir
-    Route::get('souvenir-dashboard', [SouvenirController::class, 'dashboard'])->name('souvenir.dashboard');
-    Route::get('souvenir-list/{id}', [SouvenirController::class, 'souvenirList'])->name('souvenir.list');
-    Route::get('souvenir-details/{id}', [SouvenirController::class, 'souvenirDetails'])->name('souvenir.details');
-    Route::get('souvenir-edit/{id}', [SouvenirController::class, 'souvenirEdit'])->name('souvenir.edit');
-    Route::PUT('souvenir-update/{id}', [SouvenirController::class, 'souvenirUpdate'])->name('souvenir.update');
-    Route::delete('souvenir-destroy/{id}', [SouvenirController::class, 'souvenirDestroy'])->name('souvenir.destroy');
 
     //LiveChat
     Route::get('liveChat-index', [LiveChatController::class, 'index'])->name('liveChat.index');
@@ -294,15 +383,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::PUT('qna-update/{id}', [QnAController::class, 'qnaUpdate'])->name('qna.update');
     Route::delete('qna-destroy/{id}', [QnAController::class, 'qnaDestroy'])->name('qna.destroy');
 
-
-
-    //MeetupEvents
-    Route::get('meetupEvent-index', [MeetupEventController::class, 'index'])->name('meetupEvent.index');
-    Route::get('meetupEvent-list/{id}', [MeetupEventController::class, 'meetupEventList'])->name('meetupEvent.list');
-    Route::get('meetupEvent-details/{id}', [MeetupEventController::class, 'meetupEventDetails'])->name('meetupEvent.details');
-    Route::get('meetupEvent-edit/{id}', [MeetupEventController::class, 'meetupEventEdit'])->name('meetupEvent.edit');
-    Route::PUT('meetupEvent-update/{id}', [MeetupEventController::class, 'meetupEventUpdate'])->name('meetupEvent.update');
-    Route::delete('meetupEvent-destroy/{id}', [MeetupEventController::class, 'meetupEventDestroy'])->name('meetupEvent.destroy');
 
     //Greeting
     Route::get('greeting-index', [GreetingController::class, 'events'])->name('greeting.index');
@@ -449,11 +529,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/liveChat-data-list/{type}', [DashboardController::class, 'liveChatDataList'])->name('liveChatEvents.liveChatDataList');
     Route::get('/liveChat-manager-list', [DashboardController::class, 'liveChatManagerAdminList'])->name('liveChatEvents.managerAdminList');
     Route::get('/liveChat-manager-events/{id}', [DashboardController::class, 'liveChatManagerAdminEvents'])->name('liveChatEvents.managerAdminEvents');
-    // meetup dashboard
-    Route::get('/meetup-events-dashboard', [DashboardController::class, 'meetupEventsDashboard'])->name('meetupEvents.dashboard');
-    Route::get('/meetup-data-list/{type}', [DashboardController::class, 'meetupDataList'])->name('meetupEvents.meetupDataList');
-    Route::get('/meetup-manager-list', [DashboardController::class, 'meetupManagerAdminList'])->name('meetupEvents.managerAdminList');
-    Route::get('/meetup-manager-events/{id}', [DashboardController::class, 'meetupManagerAdminEvents'])->name('meetupEvents.managerAdminEvents');
+    
     // greeting dashboard
     Route::get('/greeting-events-dashboard', [DashboardController::class, 'greetingEventsDashboard'])->name('greetingEvents.dashboard');
     Route::get('/greeting-data-list/{type}', [DashboardController::class, 'greetingDataList'])->name('greetingEvents.greetingDataList');
@@ -470,25 +546,9 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/qna-data-list/{type}', [DashboardController::class, 'qnaDataList'])->name('qnaEvents.qnaDataList');
     Route::get('/qna-manager-list', [DashboardController::class, 'qnaManagerAdminList'])->name('qnaEvents.managerAdminList');
     Route::get('/qna-manager-events/{id}', [DashboardController::class, 'qnaManagerAdminEvents'])->name('qnaEvents.managerAdminEvents');
+    
 
-
-    // marketplace dashboard
-    Route::get('/marketplace-events-dashboard', [DashboardController::class, 'marketplaceEventsDashboard'])->name('marketplaceEvents.dashboard');
-    Route::get('/marketplace-manager-list', [DashboardController::class, 'marketplaceManagerAdminList'])->name('marketplaceEvents.managerAdminList');
-    Route::get('/marketplace-data-list/{type}', [DashboardController::class, 'marketplaceDataList'])->name('marketplaceEvents.marketplaceDataList');
-    Route::get('/marketplace-manager-events/{id}', [DashboardController::class, 'marketplaceManagerAdminEvents'])->name('marketplaceEvents.managerAdminEvents');
-    // auction dashboard
-    Route::get('/auction-events-dashboard', [DashboardController::class, 'auctionEventsDashboard'])->name('auctionEvents.dashboard');
-    Route::get('/auction-data-list/{type}', [DashboardController::class, 'auctionDataList'])->name('auctionEvents.auctionDataList');
-    Route::get('/auction-manager-list', [DashboardController::class, 'auctionManagerAdminList'])->name('auctionEvents.managerAdminList');
-    Route::get('/auction-manager-events/{id}', [DashboardController::class, 'auctionManagerAdminEvents'])->name('auctionEvents.managerAdminEvents');
-    // souvenir dashboard
-    Route::get('/souvenir-events-dashboard', [DashboardController::class, 'souvenirEventsDashboard'])->name('souvenirEvents.dashboard');
-    Route::get('/souvenir-data-list/{type}', [DashboardController::class, 'souvenirDataList'])->name('souvenirEvents.souvenirDataList');
-    Route::get('/souvenir-manager-list', [DashboardController::class, 'souvenirManagerAdminList'])->name('souvenirEvents.managerAdminList');
-    Route::get('/souvenir-manager-events/{id}', [DashboardController::class, 'souvenirManagerAdminEvents'])->name('souvenirEvents.managerAdminEvents');
-
-    //                                  superstar admin
+    //superstar admin
     // simplePost dashboard
     Route::get('/simplePost-admin-list', [DashboardController::class, 'simplePostAdminList'])->name('simplePostEvents.adminList');
     Route::get('/simplePost-admin-events/{id}', [DashboardController::class, 'simplePostAdminEvents'])->name('simplePostEvents.adminEvents');
@@ -496,9 +556,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // live Chat dashboard
     Route::get('/liveChat-admin-list', [DashboardController::class, 'liveChatAdminList'])->name('liveChatEvents.adminList');
     Route::get('/liveChat-admin-events/{id}', [DashboardController::class, 'liveChatAdminEvents'])->name('liveChatEvents.adminEvents');
-    // meetup dashboard
-    Route::get('/meetup-admin-list', [DashboardController::class, 'meetupAdminList'])->name('meetupEvents.adminList');
-    Route::get('/meetup-admin-events/{id}', [DashboardController::class, 'meetupAdminEvents'])->name('meetupEvents.adminEvents');
+    
     // greeting dashboard
     Route::get('/greeting-admin-list', [DashboardController::class, 'greetingAdminList'])->name('greetingEvents.adminList');
     Route::get('/greeting-admin-events/{id}', [DashboardController::class, 'greetingAdminEvents'])->name('greetingEvents.adminEvents');
@@ -508,17 +566,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // qna dashboard
     Route::get('/qna-admin-list', [DashboardController::class, 'qnaAdminList'])->name('qnaEvents.adminList');
     Route::get('/qna-admin-events/{id}', [DashboardController::class, 'qnaAdminEvents'])->name('qnaEvents.adminEvents');
-    // marketplace dashboard
-    Route::get('/marketplace-admin-list', [DashboardController::class, 'marketplaceAdminList'])->name('marketplaceEvents.adminList');
-    Route::get('/marketplace-admin-events/{id}', [DashboardController::class, 'marketplaceAdminEvents'])->name('marketplaceEvents.adminEvents');
-    // auction dashboard
-    Route::get('/auction-admin-list', [DashboardController::class, 'auctionAdminList'])->name('auctionEvents.adminList');
-    Route::get('/auction-admin-events/{id}', [DashboardController::class, 'auctionAdminEvents'])->name('auctionEvents.adminEvents');
-    // souvenir dashboard
-    Route::get('/souvenir-admin-list', [DashboardController::class, 'souvenirAdminList'])->name('souvenirEvents.adminList');
-    Route::get('/souvenir-admin-events/{id}', [DashboardController::class, 'souvenirAdminEvents'])->name('souvenirEvents.adminEvents');
+   
+   
+    
 
-    //                     superstar
+    //superstar
 
     // simplePost dashboard
     Route::get('/simplePost-superstar-list', [DashboardController::class, 'simplePostSuperstarList'])->name('simplePostEvents.superstarList');
@@ -527,9 +579,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // live Chat dashboard
     Route::get('/liveChat-superstar-list', [DashboardController::class, 'liveChatSuperstarList'])->name('liveChatEvents.superstarList');
     Route::get('/liveChat-superstar-events/{id}', [DashboardController::class, 'liveChatSuperstarEvents'])->name('liveChatEvents.superstarEvents');
-    // meetup dashboard
-    Route::get('/meetup-superstar-list', [DashboardController::class, 'meetupSuperstarList'])->name('meetupEvents.superstarList');
-    Route::get('/meetup-superstar-events/{id}', [DashboardController::class, 'meetupSuperstarEvents'])->name('meetupEvents.superstarEvents');
+   
     // greeting dashboard
     Route::get('/greeting-superstar-list', [DashboardController::class, 'greetingSuperstarList'])->name('greetingEvents.superstarList');
     Route::get('/greeting-superstar-events/{id}', [DashboardController::class, 'greetingSuperstarEvents'])->name('greetingEvents.superstarEvents');
@@ -540,18 +590,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // qna dashboard
     Route::get('/qna-superstar-list', [DashboardController::class, 'qnaSuperstarList'])->name('qnaEvents.superstarList');
     Route::get('/qna-superstar-events/{id}', [DashboardController::class, 'qnaSuperstarEvents'])->name('qnaEvents.superstarEvents');
-    // marketplace dashboard
-
-    Route::get('/marketplace-superstar-list', [DashboardController::class, 'marketplaceSuperstarList'])->name('marketplaceEvents.superstarList');
-    Route::get('/marketplace-superstar-events/{id}', [DashboardController::class, 'marketplaceSuperstarEvents'])->name('marketplaceEvents.superstarEvents');
-    // auction dashboard
-
-    Route::get('/auction-superstar-list', [DashboardController::class, 'auctionSuperstarList'])->name('auctionEvents.superstarList');
-    Route::get('/auction-superstar-events/{id}', [DashboardController::class, 'auctionSuperstarEvents'])->name('auctionEvents.superstarEvents');
-    // souvenir dashboard
-
-    Route::get('/souvenir-superstar-list', [DashboardController::class, 'souvenirSuperstarList'])->name('souvenirEvents.superstarList');
-    Route::get('/souvenir-superstar-events/{id}', [DashboardController::class, 'souvenirSuperstarEvents'])->name('souvenirEvents.superstarEvents');
 
 
 
@@ -565,17 +603,10 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('/liveChat-report', [ReportController::class, 'liveChatReportFilter'])->name('report.Filter.liveChat');
     Route::get('/qna-report', [ReportController::class, 'qnaReport'])->name('report.qna');
     Route::post('/qna-report-filter', [ReportController::class, 'qnaReportFilter'])->name('report.Filter.qna');
-    Route::get('/meetup-report', [ReportController::class, 'meetupReport'])->name('report.meetup');
-    Route::post('/meetup-report-filter', [ReportController::class, 'meetupReportFilter'])->name('report.filter.meetupevent');
+   
     Route::get('/greeting-report', [ReportController::class, 'greetingReport'])->name('report.greeting');
     Route::post('/greeting-report-filter', [ReportController::class, 'greetingReportFilter'])->name('report.filter.greeting');
     // Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
-    Route::get('/marketplace-report', [ReportController::class, 'marketplaceReport'])->name('report.marketplace');
-    Route::post('/marketplace-report-filter', [ReportController::class, 'marketPlaceFilter'])->name('report.filter.marketPlace');
-    Route::get('/auction-report', [ReportController::class, 'auctionReport'])->name('report.auction');
-    Route::post('/auction-report-filter', [ReportController::class, 'auctionReportFilter'])->name('report.filter.auctionReport');
-    Route::get('/souvenir-report', [ReportController::class, 'souvenirReport'])->name('report.souvenir');
-    Route::post('/souvenir-report-filter', [ReportController::class, 'souvenirReportFilter'])->name('report.filter.souvenirReport');
     Route::get('/simplePost-report', [ReportController::class, 'simplePostReport'])->name('report.simplePost');
     Route::post('/simplePost-report-filter', [ReportController::class, 'simplePostFilter'])->name('report.filter.simplePost');
     Route::get('/simplePost-report-filter-userType/{name}', [ReportController::class, 'simplePostUserName']);

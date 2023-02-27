@@ -60,8 +60,6 @@ class AuctionController extends Controller
     
                     'title' => 'required',
                     'details' => 'required',
-        
-        
                 ],[
                     'title.required' => 'Title Field Is Required',
                     'details.required' => 'Description Field Is Required',

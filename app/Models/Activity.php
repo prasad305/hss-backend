@@ -21,7 +21,7 @@ class Activity extends Model
     ];
 
     //, 'marketPlaceOrder', 'marketPlace'
-    protected $with = ['marketPlace', 'marketPlaceOrder', 'user', 'meetup', 'meetupRegistration', 'souvenirApply', 'livechat', 'livechatRegistration', 'learningSession', 'learningSessionRegistration', 'greetingRegistration', 'greeting', 'qna', 'qnaRegistration', 'auction', 'audition'];
+    protected $with = ['marketPlace', 'marketPlaceOrder', 'user', 'meetup', 'meetupRegistration', 'souvenir','souvenirApply', 'livechat', 'livechatRegistration', 'learningSession', 'learningSessionRegistration', 'greetingRegistration', 'greeting', 'qna', 'qnaRegistration', 'auction', 'audition'];
 
 
 
@@ -83,6 +83,10 @@ class Activity extends Model
     public function marketPlaceOrder()
     {
         return $this->belongsTo(MarketplaceOrder::class, 'event_registration_id');
+    }
+    public function souvenir()
+    {
+        return $this->belongsTo(SouvenirCreate::class, 'event_id');
     }
     public function souvenirApply()
     {

@@ -11,10 +11,10 @@ class SouvenirApply extends Model
 
     protected $fillable = [
         'name',
-        'marketplace_id'
+        'delivery_charge_id',
     ];
 
-    protected $with = ['souvenir', 'user', 'state', 'country', 'city', 'star','marketplace'];
+    // protected $with = ['souvenir', 'user', 'state', 'country', 'city', 'star','souvenirdeliverycharge'];
 
     public function user()
     {
@@ -42,8 +42,12 @@ class SouvenirApply extends Model
     {
         return $this->belongsTo(SouvenirCreate::class, 'souvenir_id');
     }
-    public function marketplace()
+    public function souvenirdeliverycharge()
     {
-        return $this->belongsTo(Marketplace::class, 'marketplace_id');
+        return $this->belongsTo(SouvenirDeliveryCharge::class, 'delivery_charge_id');
     }
+    // public function marketplace()
+    // {
+    //     return $this->belongsTo(Marketplace::class, 'marketplace_id');
+    // }
 }

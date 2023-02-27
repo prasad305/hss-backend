@@ -36,9 +36,7 @@ class MarketplaceController extends Controller
         return view('ManagerAdmin.marketplace.order', compact('orders'));
     }
     public function allOrderDetails($id){
-        $order = MarketplaceOrder::find($id);
-        // dd($order);
-
+        $order = MarketplaceOrder::with('deliverycharge')->find($id);
         return view('ManagerAdmin.marketplace.order-view', compact('order'));
     }
 
