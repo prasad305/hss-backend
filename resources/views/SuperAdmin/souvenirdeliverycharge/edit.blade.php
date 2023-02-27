@@ -40,7 +40,7 @@
     });
 
     $.ajax({
-        url: "{{ route('superAdmin.deliverycharge.update',$deliverycharge->id) }}",// your request url
+        url: "{{ route('superAdmin.souvenirdeliverycharge.update',$deliverycharge->id) }}",// your request url
         data: formData,
         processData: false,
         contentType: false,

@@ -11,6 +11,7 @@ use App\Models\ProductPurchase;
 use App\Models\TermAndCondition;
 use App\Models\RefundPolicy;
 use App\Models\DeliveryCharge;
+use App\Models\SouvenirDeliveryCharge;
 
 class SettingsController extends Controller
 {
@@ -75,9 +76,19 @@ class SettingsController extends Controller
         ]);
     }
 
-    public function deliverycharge()
+    public function marketplacedeliverycharge()
     {
         $data = DeliveryCharge::where('status',1)->orderBy('id', 'DESC')->get();
+
+        return response()->json([
+            'status' => 200,
+            'data' => $data,
+        ]);
+    }
+
+    public function souvenirdeliverycharge()
+    {
+        $data = SouvenirDeliveryCharge::where('status',1)->orderBy('id', 'DESC')->get();
 
         return response()->json([
             'status' => 200,

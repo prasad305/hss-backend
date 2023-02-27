@@ -39,7 +39,7 @@ class MarketplaceOrder extends Model
         'delivery_at',
     ];
 
-    // protected $with = ['marketplace', 'user', 'state', 'country', 'city', 'star'];
+    // protected $with = ['marketplace', 'user', 'state', 'country', 'city', 'star','deliverycharge'];
     protected $with = ['marketplace'];
 
 

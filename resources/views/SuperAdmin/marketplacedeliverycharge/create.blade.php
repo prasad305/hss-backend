@@ -35,7 +35,7 @@
             }
         });
         $.ajax({
-            url: "{{route('superAdmin.deliverycharge.store')}}",// your request url
+            url: "{{route('superAdmin.marketplacedeliverycharge.store')}}",// your request url
             data: formData,
             processData: false,
             contentType: false,

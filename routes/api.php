@@ -76,7 +76,8 @@ Route::get('product-purchase', [SettingsController::class, 'productPurchase']);
 Route::get('terms-condition', [SettingsController::class, 'termsCondition']);
 
 //DeliveryCharge
-Route::get('deliverycharge',[SettingsController::class,'deliverycharge']);
+Route::get('marketplacedeliverycharge',[SettingsController::class,'marketplacedeliverycharge']);
+Route::get('souvenirdeliverycharge',[SettingsController::class,'souvenirdeliverycharge']);
 
 
 //Virtual Tour
@@ -238,6 +239,46 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //******Marketplace Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //****** Souvenir Routes Start *******//
+    //********************************************//
+    //*************** Souviner Section ********//
+    Route::get('/user/souviner/view/{starId}', [SouvinerController::class, 'getUserSouvenir']);
+    Route::post('/user/souviner/payment/store', [SouvinerController::class, 'userSouvenirPaymentStore']);
+    Route::post('/user/souvenir/apply/store/{starId}', [SouvinerController::class, 'applyUserSouvenir']);
+    Route::get('/user/souvenir/activities/list', [SouvinerController::class, 'activitiesUserSouvenir']);
+    Route::get('/user/souvenir/activities/view/{id}', [SouvinerController::class, 'activitiesDetailsUserSouvenir']);
+    Route::get('/user/souvenir/order/view/{id}', [SouvinerController::class, 'orderDetailsSouvenir']);
+
+    //********************************************//
+    //****** Souvenir Routes End *******//
+    //********************************************//
+
+
+    //********************************************//
+    //******Auction Routes Start *******//
+    //********************************************//
+    //************ Auction product ***************//
+    Route::get('/auction-product/all', [UserController::class, 'auctionProduct']);
+    Route::get('/auction-product/{id}', [UserController::class, 'auctionSingleProduct']);
+    Route::get('/user/getStarAuction/{star_id}', [UserController::class, 'starAuction']);
+    Route::get('/mobile/getProduct/{product_id}', [UserController::class, 'getAuctionByBidding']);
+    Route::get('/mobile/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProductMobile']);
+    Route::get('/user/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
+    Route::post('user/bidding/auction/product', [UserController::class, 'bidNow']);
+    Route::get('user/liveBidding/auction/{auction_id}', [UserController::class, 'liveBidding']);
+    Route::get('user/auctionApply/auction/{auction_id}', [UserController::class, 'auctionApply']);
+    Route::get('user/liveBidding/history/{auction_id}', [UserController::class, 'bidHistory']);
+    Route::post('user/aquired/auction', [UserController::class, 'aquiredProduct']);
+    Route::get('user/maxbid/auction/{id}', [UserController::class, 'maxBid']);
+    Route::get('/user/auction_activites', [UserController::class, 'auction_activites']);
+
+
+    //********************************************//
+    //******Auction Routes End *******//
+    //********************************************//
+
+
     //delete account
     Route::post('/delet-user', [UserController::class, 'deleteUser']);
 
@@ -377,25 +418,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     //check user notification
     Route::get('/user/check_notification', [UserController::class, 'checkUserNotifiaction']);
-    
-
-    
-
-    // auction product
-    Route::get('/auction-product/all', [UserController::class, 'auctionProduct']);
-    Route::get('/auction-product/{id}', [UserController::class, 'auctionSingleProduct']);
-    Route::get('/user/getStarAuction/{star_id}', [UserController::class, 'starAuction']);
-    // Auction
-    Route::get('/mobile/getProduct/{product_id}', [UserController::class, 'getAuctionByBidding']);
-    Route::get('/mobile/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProductMobile']);
-    Route::get('/user/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
-    Route::post('user/bidding/auction/product', [UserController::class, 'bidNow']);
-    Route::get('user/liveBidding/auction/{auction_id}', [UserController::class, 'liveBidding']);
-    Route::get('user/auctionApply/auction/{auction_id}', [UserController::class, 'auctionApply']);
-    Route::get('user/liveBidding/history/{auction_id}', [UserController::class, 'bidHistory']);
-    Route::post('user/aquired/auction', [UserController::class, 'aquiredProduct']);
-    Route::get('user/maxbid/auction/{id}', [UserController::class, 'maxBid']);
-    Route::get('/user/auction_activites', [UserController::class, 'auction_activites']);
 
 
     
@@ -454,13 +476,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
 
 
-    // Souviner Section
-    Route::get('/user/souviner/view/{starId}', [SouvinerController::class, 'getUserSouvenir']);
-    Route::post('/user/souviner/payment/store', [SouvinerController::class, 'userSouvenirPaymentStore']);
-    Route::post('/user/souvenir/apply/store/{starId}', [SouvinerController::class, 'applyUserSouvenir']);
-    Route::get('/user/souvenir/activities/list', [SouvinerController::class, 'activitiesUserSouvenir']);
-    Route::get('/user/souvenir/activities/view/{id}', [SouvinerController::class, 'activitiesDetailsUserSouvenir']);
-    Route::get('/user/souvenir/order/view/{id}', [SouvinerController::class, 'orderDetailsSouvenir']);
+    
 
 
 
@@ -557,6 +573,51 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     //******Marketplace Routes End *******//
     //********************************************//
 
+
+    //********************************************//
+    //******Souvenir Routes Start *******//
+    //********************************************//
+    //**************** Souviner Section ************//
+    Route::post('/admin/souviner/store', [SouvinerController::class, 'souvinerStore']);
+    Route::post('/admin/souviner/update/{id}', [SouvinerController::class, 'souvinerUpdate']);
+    Route::get('/admin/souviner/view/{id}', [SouvinerController::class, 'souvinerView']);
+    Route::get('/admin/souviner/check', [SouvinerController::class, 'souvinerCheck']);
+    Route::get('/admin/souvenir/register/list', [SouvinerController::class, 'registerUserSouvenirList']);
+    Route::get('/admin/souvenir/status/change/{status}/{souvenirId}', [SouvinerController::class, 'statusSouvenirChange']);
+    Route::get('/admin/souvenir/register/approve/{id}', [SouvinerController::class, 'registerSouvenirApprove']);
+    Route::get('/admin/souvenir/register/decline/{id}', [SouvinerController::class, 'registerSouvenirDecline']);
+    Route::get('/admin/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
+    Route::get('/admin/souvenir/order/view/{id}', [SouvinerController::class, 'orderDetailsSouvenir']);
+    //********************************************//
+    //******Souvenir Routes End *******//
+    //********************************************//
+
+    //********************************************//
+    //******Auction Routes Start *******//
+    //********************************************//
+    Route::post('/admin/add/auction/product', [AuctionController::class, 'addProduct']);
+    Route::get('/admin/editOrConfirm/auction/editOrConfirm', [AuctionController::class, 'editOrConfirm']);
+    Route::get('/admin/edit/auction/{id}', [AuctionController::class, 'editProduct']);
+    Route::post('/admin/update/auction/{id}', [AuctionController::class, 'updateProduct']);
+    Route::get('/admin/all/auction/product', [AuctionController::class, 'allProduct']);
+    Route::get('/admin/show/auction/product/{id}', [AuctionController::class, 'showProductDetails']);
+    Route::get('/admin/total/auction/product', [AuctionController::class, 'totalProduct']);
+    Route::get('/admin/pending/auction/product', [AuctionController::class, 'pendingProduct']);
+    Route::get('/admin/sold/auction/product', [AuctionController::class, 'soldProduct']);
+    Route::get('/admin/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
+    Route::get('/admin/rejected/auction/product', [AuctionController::class, 'rejectedProduct']);
+    Route::get('/admin/live/allProduct', [AuctionController::class, 'allLiveProduct']);
+    Route::get('/admin/liveBidding/auction/{auction_id}', [AuctionController::class, 'liveBidding']);
+    Route::get('/admin/topBidder/auction/{auction_id}', [AuctionController::class, 'topBidder']);
+    Route::post('/admin/topBidder/auction/notify', [AuctionController::class, 'notify_bidder']);
+    Route::get('/admin/allBidderList/auction/{id}', [AuctionController::class, 'allBidderList']);
+    Route::post('/admin/winner/auction/{id}', [AuctionController::class, 'makeWinner']);
+    Route::post('/admin/topBidder/auction/reject/{id}', [AuctionController::class, 'rejectBidder']);
+    Route::get('/admin/bidderInfo/auction/{id}', [AuctionController::class, 'bidderInfo']);
+    //********************************************//
+    //******Auction Routes End *******//
+    //********************************************//
+
     Route::get('admin/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('admin/dashboard/posts/{type}', [DashboardController::class, 'dashboardPosts']);
     Route::get('admin/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
@@ -586,19 +647,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/fan/group/settings/delete/{fanJoinId}', [FanGroupController::class, 'deleteSettingsFan']);
     Route::post('/admin/fan/group/settings/no-warning/{warningId}', [FanGroupController::class, 'noWarningSettingsFan']);
     Route::post('/admin/fan/group/approval/warning/{fanUserId}/{fanGroupId}', [FanGroupController::class, 'warningSettingsFan']);
-
-
-    // Souviner Section
-    Route::post('/admin/souviner/store', [SouvinerController::class, 'souvinerStore']);
-    Route::post('/admin/souviner/update/{id}', [SouvinerController::class, 'souvinerUpdate']);
-    Route::get('/admin/souviner/view/{id}', [SouvinerController::class, 'souvinerView']);
-    Route::get('/admin/souviner/check', [SouvinerController::class, 'souvinerCheck']);
-    Route::get('/admin/souvenir/register/list', [SouvinerController::class, 'registerUserSouvenirList']);
-    Route::get('/admin/souvenir/status/change/{status}/{souvenirId}', [SouvinerController::class, 'statusSouvenirChange']);
-    Route::get('/admin/souvenir/register/approve/{id}', [SouvinerController::class, 'registerSouvenirApprove']);
-    Route::get('/admin/souvenir/register/decline/{id}', [SouvinerController::class, 'registerSouvenirDecline']);
-    Route::get('/admin/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
-    Route::get('/admin/souvenir/order/view/{id}', [SouvinerController::class, 'orderDetailsSouvenir']);
 
     // Simple Post Section
     Route::post('admin/add_simple_post', [SimplePostController::class, 'add']);
@@ -673,27 +721,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     //Sent Notification to user
     Route::post('/admin/sent_notofiaction_user', [GreetingController::class, 'sentNotificationToUser']);
 
-    //<======================== Auction Route ========================>
-
-    Route::post('/admin/add/auction/product', [AuctionController::class, 'addProduct']);
-    Route::get('/admin/editOrConfirm/auction/editOrConfirm', [AuctionController::class, 'editOrConfirm']);
-    Route::get('/admin/edit/auction/{id}', [AuctionController::class, 'editProduct']);
-    Route::post('/admin/update/auction/{id}', [AuctionController::class, 'updateProduct']);
-    Route::get('/admin/all/auction/product', [AuctionController::class, 'allProduct']);
-    Route::get('/admin/show/auction/product/{id}', [AuctionController::class, 'showProductDetails']);
-    Route::get('/admin/total/auction/product', [AuctionController::class, 'totalProduct']);
-    Route::get('/admin/pending/auction/product', [AuctionController::class, 'pendingProduct']);
-    Route::get('/admin/sold/auction/product', [AuctionController::class, 'soldProduct']);
-    Route::get('/admin/unSold/auction/product', [AuctionController::class, 'unSoldProduct']);
-    Route::get('/admin/rejected/auction/product', [AuctionController::class, 'rejectedProduct']);
-    Route::get('/admin/live/allProduct', [AuctionController::class, 'allLiveProduct']);
-    Route::get('/admin/liveBidding/auction/{auction_id}', [AuctionController::class, 'liveBidding']);
-    Route::get('/admin/topBidder/auction/{auction_id}', [AuctionController::class, 'topBidder']);
-    Route::post('/admin/topBidder/auction/notify', [AuctionController::class, 'notify_bidder']);
-    Route::get('/admin/allBidderList/auction/{id}', [AuctionController::class, 'allBidderList']);
-    Route::post('/admin/winner/auction/{id}', [AuctionController::class, 'makeWinner']);
-    Route::post('/admin/topBidder/auction/reject/{id}', [AuctionController::class, 'rejectBidder']);
-    Route::get('/admin/bidderInfo/auction/{id}', [AuctionController::class, 'bidderInfo']);
 
     // audition routes
 
@@ -793,6 +820,58 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     //******Marketplace Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //******Souvenir Routes Start *******//
+    //********************************************//
+    //************* Souviner Section *********//
+     Route::post('/star/souviner/store/mobile', [SouvinerController::class, 'souvinerStarStoreMobile']);
+     Route::post('/star/souviner/store', [SouvinerController::class, 'souvinerStarStore']);
+     Route::get('/star/souviner/check', [SouvinerController::class, 'souvinerStarCheck']);
+     Route::get('/star/souviner/edit/{id}', [SouvinerController::class, 'souvinerStarEdit']);
+     Route::post('/star/souviner/update/{id}', [SouvinerController::class, 'souvinerStarUpdate']);
+     Route::post('/star/souviner/approve/{id}', [SouvinerController::class, 'souvinerStarApprove']);
+     Route::post('/star/souviner/decline/{id}', [SouvinerController::class, 'souvinerStarDecline']);
+     Route::get('/star/souvenir/register/list', [SouvinerController::class, 'starRegisterUserSouvenirList']);
+     Route::get('/star/souvenir/register/approve/{id}', [SouvinerController::class, 'registerSouvenirApprove']);
+     Route::get('/star/souvenir/register/decline/{id}', [SouvinerController::class, 'registerSouvenirDecline']);
+     Route::get('/star/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
+
+    //********************************************//
+    //******Souvenir Routes End *******//
+    //********************************************//
+
+    //********************************************//
+    //******Auction Routes Start *******//
+    //********************************************//
+    Route::get('/star/add/auction/product/mobile', [AuctionController::class, 'auctionHomeMobile']);
+    Route::post('/star/add/auction/mobile', [AuctionController::class, 'star_addProduct_mobile']);
+    Route::post('/star/add/auction/product', [AuctionController::class, 'star_addProduct']);
+    Route::get('/star/editOrConfirm/auction/editOrConfirm/{id}', [AuctionController::class, 'star_editOrConfirm']);
+    Route::get('/star/edit/auction/{id}', [AuctionController::class, 'star_editProduct']);
+    Route::get('/star/approvedOrDecline/auction/{id}', [AuctionController::class, 'star_approvedOrDecline']);
+    Route::put('/star/approved/auction/{id}', [AuctionController::class, 'star_approved']);
+    Route::put('/star/decline/auction/{id}', [AuctionController::class, 'decline']);
+    Route::post('/star/update/auction/{id}', [AuctionController::class, 'star_updateProduct']);
+    Route::get('/star/all/auction/product', [AuctionController::class, 'star_allProduct']);
+    Route::get('/star/show/auction/product/{id}', [AuctionController::class, 'star_showProduct']);
+    Route::get('/star/total/auction/product', [AuctionController::class, 'star_totalProduct']);
+    Route::get('/star/pending/auction/product', [AuctionController::class, 'star_pendingProduct']);
+    Route::get('/star/pending/auction/product/all', [AuctionController::class, 'star_pendingProductList']);
+    Route::get('/star/unSold/auction/product/all', [AuctionController::class, 'star_unSoldProductList']);
+    Route::get('/star/sold/auction/product/all', [AuctionController::class, 'star_soldProductList']);
+    Route::get('/star/sold/auction/product', [AuctionController::class, 'star_soldProduct']);
+    Route::get('/star/unSold/auction/product', [AuctionController::class, 'star_unSoldProduct']);
+    Route::get('/star/live/allProduct', [AuctionController::class, 'star_allLiveProduct']);
+    Route::get('/star/all/bidders', [AuctionController::class, 'star_allBidders']);
+    Route::get('/star/allBidderList/auction/{id}', [AuctionController::class, 'allBidderList']);
+    // Auction API for Mobile
+    Route::get('/star/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
+    Route::get('/star/liveBidding/auction/{auction_id}', [AuctionController::class, 'liveBidding']);
+
+    //********************************************//
+    //******Auction Routes End *******//
+    //********************************************//
+
     Route::get('star/getInformation', [DashboardController::class, 'getInformation']);
     Route::get('star/dashboard/posts/{type}', [DashboardController::class, 'adminPost']);
     Route::get('star/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
@@ -837,10 +916,6 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/fan/group/analytics/{slug}', [FanGroupController::class, 'showFanGroupAnalytics']);
     Route::post('/star/fan/group/deline/nofification/{postId}', [FanGroupController::class, 'declineFanPostNotification']);
 
-    // StarShowCase API for Mobile count
-    Route::get('/star/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
-    Route::get('/star/liveBidding/auction/{auction_id}', [AuctionController::class, 'liveBidding']);
-
 
 
     // Simple Post Section
@@ -855,19 +930,6 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/simple_post/approved', [SimplePostController::class, 'star_approved_list']);
     Route::get('/star/approve_post/{id}', [SimplePostController::class, 'approve_post']);
     Route::get('/star/decline_post/{id}', [SimplePostController::class, 'decline_post']);
-
-    // Souviner Section
-    Route::post('/star/souviner/store/mobile', [SouvinerController::class, 'souvinerStarStoreMobile']);
-    Route::post('/star/souviner/store', [SouvinerController::class, 'souvinerStarStore']);
-    Route::get('/star/souviner/check', [SouvinerController::class, 'souvinerStarCheck']);
-    Route::get('/star/souviner/edit/{id}', [SouvinerController::class, 'souvinerStarEdit']);
-    Route::post('/star/souviner/update/{id}', [SouvinerController::class, 'souvinerStarUpdate']);
-    Route::post('/star/souviner/approve/{id}', [SouvinerController::class, 'souvinerStarApprove']);
-    Route::post('/star/souviner/decline/{id}', [SouvinerController::class, 'souvinerStarDecline']);
-    Route::get('/star/souvenir/register/list', [SouvinerController::class, 'starRegisterUserSouvenirList']);
-    Route::get('/star/souvenir/register/approve/{id}', [SouvinerController::class, 'registerSouvenirApprove']);
-    Route::get('/star/souvenir/register/decline/{id}', [SouvinerController::class, 'registerSouvenirDecline']);
-    Route::get('/star/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
 
 
 
@@ -928,29 +990,6 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/single_greeting_registration/{greeting_registration_id}', [StarGreetingController::class, 'singleGreetingRegistration']);
     Route::post('/star/greeting_video_upload', [StarGreetingController::class, 'videoUpload']);
 
-    //<======================== Auction Route ========================>
-
-    Route::get('/star/add/auction/product/mobile', [AuctionController::class, 'auctionHomeMobile']);
-    Route::post('/star/add/auction/mobile', [AuctionController::class, 'star_addProduct_mobile']);
-    Route::post('/star/add/auction/product', [AuctionController::class, 'star_addProduct']);
-    Route::get('/star/editOrConfirm/auction/editOrConfirm/{id}', [AuctionController::class, 'star_editOrConfirm']);
-    Route::get('/star/edit/auction/{id}', [AuctionController::class, 'star_editProduct']);
-    Route::get('/star/approvedOrDecline/auction/{id}', [AuctionController::class, 'star_approvedOrDecline']);
-    Route::put('/star/approved/auction/{id}', [AuctionController::class, 'star_approved']);
-    Route::put('/star/decline/auction/{id}', [AuctionController::class, 'decline']);
-    Route::post('/star/update/auction/{id}', [AuctionController::class, 'star_updateProduct']);
-    Route::get('/star/all/auction/product', [AuctionController::class, 'star_allProduct']);
-    Route::get('/star/show/auction/product/{id}', [AuctionController::class, 'star_showProduct']);
-    Route::get('/star/total/auction/product', [AuctionController::class, 'star_totalProduct']);
-    Route::get('/star/pending/auction/product', [AuctionController::class, 'star_pendingProduct']);
-    Route::get('/star/pending/auction/product/all', [AuctionController::class, 'star_pendingProductList']);
-    Route::get('/star/unSold/auction/product/all', [AuctionController::class, 'star_unSoldProductList']);
-    Route::get('/star/sold/auction/product/all', [AuctionController::class, 'star_soldProductList']);
-    Route::get('/star/sold/auction/product', [AuctionController::class, 'star_soldProduct']);
-    Route::get('/star/unSold/auction/product', [AuctionController::class, 'star_unSoldProduct']);
-    Route::get('/star/live/allProduct', [AuctionController::class, 'star_allLiveProduct']);
-    Route::get('/star/all/bidders', [AuctionController::class, 'star_allBidders']);
-    Route::get('/star/allBidderList/auction/{id}', [AuctionController::class, 'allBidderList']);
 
 
     // Super Star Audition Routes

@@ -31,7 +31,6 @@ class MarketPlaceSeeder extends Seeder
             $marketplace->unit_price = $faker->numberBetween(500, 1000);
             $marketplace->total_items = $faker->numberBetween(40, 70);
             $marketplace->total_selling = $faker->numberBetween(10, 20);
-            $marketplace->delivery_charge = $faker->numberBetween(100, 200);
             $marketplace->tax = $faker->numberBetween(150, 250);
             $marketplace->superstar_id = $userInfoForFootball[$i]->id;
             $marketplace->created_by_id = $userInfoForFootball[$i]->id;
@@ -57,7 +56,6 @@ class MarketPlaceSeeder extends Seeder
             $marketplace->unit_price = $faker->numberBetween(500, 1000);
             $marketplace->total_items = $faker->numberBetween(40, 70);
             $marketplace->total_selling = $faker->numberBetween(10, 20);
-            $marketplace->delivery_charge = $faker->numberBetween(100, 200);
             $marketplace->tax = $faker->numberBetween(150, 250);
             $marketplace->superstar_id = $userInfoForCricket[$i]->id;
             $marketplace->created_by_id = $userInfoForCricket[$i]->id;

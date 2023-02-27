@@ -27,6 +27,10 @@ class CreateSouvenirPaymentsTable extends Migration
             $table->float('total_amount')->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();
+
+            $table->foreign('souvenir_create_id')->references('id')->on('souvenir_creates')->onDelete('cascade');
+            $table->foreign('souvenir_apply_id')->references('id')->on('souvenir_applies')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

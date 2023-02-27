@@ -108,7 +108,7 @@
                                     Status : <span class="badge badge-success" style="width: 140px;">Delivered</span>
                                 @endif
                                 <br>
-                                <b>Total Price: </b> {{ $order->total_price }} $
+                                <b>Total Price: </b> {{ $order->total_amount }} $
                             </div>
                         </div>
                         <div class="row">
@@ -163,11 +163,11 @@
                                         </tr>
                                         <tr>
                                             <th>Delivery Charge:</th>
-                                            <td>{{ $order->souvenir->delivery_charge }} $</td>
+                                            <td>{{ $order->souvenirdeliverycharge->courier_charge }} $</td>
                                         </tr>
                                         <tr>
                                             <th>Tax:</th>
-                                            <td>{{ $order->souvenir->tax }} $</td>
+                                            <td>{{ $order->tax }} $</td>
                                         </tr>
                                         <tr>
                                             <th>Total:</th>
