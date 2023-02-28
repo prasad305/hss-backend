@@ -272,10 +272,25 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('user/aquired/auction', [UserController::class, 'aquiredProduct']);
     Route::get('user/maxbid/auction/{id}', [UserController::class, 'maxBid']);
     Route::get('/user/auction_activites', [UserController::class, 'auction_activites']);
+    //********************************************//
+    //******Auction Routes End *******//
+    //********************************************//
 
 
     //********************************************//
-    //******Auction Routes End *******//
+    //******Greetings Routes Start *******//
+    //********************************************//
+    //************* greetings **************//
+    Route::get('/user/greeting-info-to_registration/{greeting_id}', [UserController::class, 'greetingInfoToRegistration']);
+    Route::post('/user/greetings_registaion_update', [UserController::class, 'greetingsRegistationUpdate']);
+    Route::get('/user/greetings_registaion_status/{star_id}', [UserController::class, 'greetingStatus']);
+    Route::get('/user/greetings/get_purpose_list', [UserController::class, 'getPurposeList']);
+    Route::get('/user/greetings_star_status/{star_id}', [GreetingController::class, 'greetingsCreateStatus']);
+    Route::get('/user/greetings_reg_delete/{id}', [GreetingController::class, 'greetingsRegDelete']);
+    Route::post('/user/greetings/register', [UserController::class, 'greetingsRegistation']);
+
+    //********************************************//
+    //******Greetings Routes End *******//
     //********************************************//
 
 
@@ -400,35 +415,12 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     Route::get('/star_info/{star_id}', [UserController::class, 'star_info']);
 
-
-
-    //greetings registation update
-    Route::get('/user/greeting-info-to_registration/{greeting_id}', [UserController::class, 'greetingInfoToRegistration']);
-    Route::post('/user/greetings_registaion_update', [UserController::class, 'greetingsRegistationUpdate']);
-
-    //user greeting registatin status
-    Route::get('/user/greetings_registaion_status/{star_id}', [UserController::class, 'greetingStatus']);
-    Route::get('/user/greetings/get_purpose_list', [UserController::class, 'getPurposeList']);
-
-    //greetings Activety check
-    Route::get('/user/greetings_star_status/{star_id}', [GreetingController::class, 'greetingsCreateStatus']);
-    //greetings reg delete
-    Route::get('/user/greetings_reg_delete/{id}', [GreetingController::class, 'greetingsRegDelete']);
-
-
     //check user notification
     Route::get('/user/check_notification', [UserController::class, 'checkUserNotifiaction']);
 
-
-    
-
     //use this api on react project file path- \src\components\Pages\Profile\profile-components\starProfile\StarChat
     Route::post('/user/liveChat/register', [UserController::class, 'liveChatRigister']);
-
-    Route::post('/user/greetings/register', [UserController::class, 'greetingsRegistation']);
     
-
-
     // Audition
     Route::get('/user/audition/all', [UserController::class, 'audition_list']);
     Route::get('/user/audition/participate/{id}', [UserController::class, 'participateAudition']);
@@ -618,6 +610,26 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     //******Auction Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //****** Greetings Routes Start *******//
+    //********************************************//
+    //************ Greetings ******************//
+    Route::post('admin/add_greetings', [GreetingController::class, 'add']);
+    Route::post('admin/edit_greetings', [GreetingController::class, 'edit_greetings']);
+    Route::get('/admin/greetings_star_status', [GreetingController::class, 'greetingsCreateStatusAdmin']);
+    Route::get('/admin/greetings_register_list', [GreetingController::class, 'greetingsRegisterListByGreetingsId']);
+    Route::get('/admin/greetings_register_list_with_payment_complete', [GreetingController::class, 'adminGreetingsRegisterListWithPaymentComplete']);
+    Route::get('/admin/greetings_video_uploaded_list', [GreetingController::class, 'greetingsVideoUploadedList']);
+    Route::get('/admin/greetings_forwarded_to_user_list', [GreetingController::class, 'greetingsForwardedToUserList']);
+    Route::get('/admin/greeting_approve', [GreetingController::class, 'greetingsApprovedByStar']);
+    Route::get('admin/greeting/{id}', [GreetingController::class, 'show']);
+    Route::get('admin/greeting/forwardToManagerAdmin/{id}', [GreetingController::class, 'forwardToManagerAdmin']);
+    // Route::get('admin/greeting/check_status', [GreetingController::class, 'greetingsCreateStatus']);
+    Route::post('admin/greeting/forward_to_user', [GreetingController::class, 'forwardToUser']);
+    //********************************************//
+    //****** Greetings Routes End *******//
+    //********************************************//
+
     Route::get('admin/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('admin/dashboard/posts/{type}', [DashboardController::class, 'dashboardPosts']);
     Route::get('admin/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
@@ -703,20 +715,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
 
     Route::get('/admin/schedule_list', [ScheduleController::class, 'schedule_list']);
     Route::get('/admin/current_year_schedule_list', [ScheduleController::class, 'current_year_schedule_list']);
-
-    //greetings Activety check
-    Route::post('admin/add_greetings', [GreetingController::class, 'add']);
-    Route::post('admin/edit_greetings', [GreetingController::class, 'edit_greetings']);
-    Route::get('/admin/greetings_star_status', [GreetingController::class, 'greetingsCreateStatusAdmin']);
-    Route::get('/admin/greetings_register_list', [GreetingController::class, 'greetingsRegisterListByGreetingsId']);
-    Route::get('/admin/greetings_register_list_with_payment_complete', [GreetingController::class, 'adminGreetingsRegisterListWithPaymentComplete']);
-    Route::get('/admin/greetings_video_uploaded_list', [GreetingController::class, 'greetingsVideoUploadedList']);
-    Route::get('/admin/greetings_forwarded_to_user_list', [GreetingController::class, 'greetingsForwardedToUserList']);
-    Route::get('/admin/greeting_approve', [GreetingController::class, 'greetingsApprovedByStar']);
-    Route::get('admin/greeting/{id}', [GreetingController::class, 'show']);
-    Route::get('admin/greeting/forwardToManagerAdmin/{id}', [GreetingController::class, 'forwardToManagerAdmin']);
-    // Route::get('admin/greeting/check_status', [GreetingController::class, 'greetingsCreateStatus']);
-    Route::post('admin/greeting/forward_to_user', [GreetingController::class, 'forwardToUser']);
 
     //Sent Notification to user
     Route::post('/admin/sent_notofiaction_user', [GreetingController::class, 'sentNotificationToUser']);
