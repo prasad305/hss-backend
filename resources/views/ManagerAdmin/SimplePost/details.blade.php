@@ -135,24 +135,10 @@
 
 
 
-    @if (session()->has('success'))
-        <script type="text/javascript">
-            $(document).ready(function() {
-                // notify('{{ session()->get('success') }}','success');
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: '{{ Session::get('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            success ') }}',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-            });
-        </script>
-    @endif
 @endsection
 
 @push('script')
     {{-- <script src="{{ asset('assets/manager-admin/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script> --}}
     <script src="{{ asset('assets/manager-admin/pages/dashborad.js') }}"></script>
+
 @endpush

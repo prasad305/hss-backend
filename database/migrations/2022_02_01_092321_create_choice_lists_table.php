@@ -18,7 +18,8 @@ class CreateChoiceListsTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->text('category')->nullable();
             $table->text('subcategory')->nullable();
-            $table->text('star_id')->nullable();
+            $table->text('star_id')->nullable()->comment('followed');
+            $table->text('unfollowed_star_id')->nullable()->comment('unfollowed')->default('[]');
             $table->timestamps();
         });
     }

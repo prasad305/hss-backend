@@ -73,6 +73,7 @@ class LiveChatController extends Controller
             $post->post_end_date = Carbon::parse($request->post_end_date);
 
             $managerApprovePost = $post->save();
+            return redirect()->back()->with(['success'=>'Published','post_published'=>'Post Published','star_id'=>$post->star_id]);
 
             if($managerApprovePost){
                 $userInfo = getUserInfo();
@@ -86,12 +87,9 @@ class LiveChatController extends Controller
             $event->status = 10;
             $event->update();
             // Remove post //
-            $post = Post::where('event_id', $id)->first();
-            $post->delete();
+            $post = Post::where('event_id', $id)->where('type','liveChat')->delete();
+            return redirect()->back()->with('error', 'Post Successfully Removed');
         }
-
-
-        return redirect()->back()->with('success', 'Published');
     }
 
     public function edit($id)
