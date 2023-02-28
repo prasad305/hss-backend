@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\RegistarNewStarFollow;
 use App\Http\Controllers\Controller;
 use App\Models\JuryBoard;
 use Illuminate\Http\Request;
@@ -179,7 +180,7 @@ class StarAuthController extends Controller
             $token = $user->createToken($user->email . '_Token')->plainTextToken;
 
             send_sms('Welcome to Hello SuperStars, your otp is : ' . $user->otp, $user->phone);
-
+            event(new RegistarNewStarFollow($request->id));
 
             return response()->json([
                 'status' => 200,
@@ -190,6 +191,9 @@ class StarAuthController extends Controller
                 'message' => 'Verify Phone Number',
             ]);
         }
+
+
+
     }
 
     /**
