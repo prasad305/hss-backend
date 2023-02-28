@@ -73,7 +73,13 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     //********************************************//
     //******Learning Session Routes Start *******//
     //********************************************//
-
+    //================= Learning ===============//
+    Route::get('learningSession-index', [LearningSessionController::class, 'index'])->name('learningSession.index');
+    Route::get('learningSession-list/{id}', [LearningSessionController::class, 'learningSessionList'])->name('learningSession.list');
+    Route::get('learningSession-details/{id}', [LearningSessionController::class, 'learningSessionDetails'])->name('learningSession.details');
+    Route::get('learningSession-edit/{id}', [LearningSessionController::class, 'learningSessionEdit'])->name('learningSession.edit');
+    Route::PUT('learningSession-update/{id}', [LearningSessionController::class, 'LearningSessionUpdate'])->name('learningSession.update');
+    Route::delete('learningSession-destroy/{id}', [LearningSessionController::class, 'learningSessionDestroy'])->name('learningSession.destroy');
     //=================Dashboard Routes ===============//
     Route::get('/learning-session', [DashboardController::class, 'learningSessions'])->name('learningSessions');
     Route::get('/learningSession-events-dashboard', [DashboardController::class, 'learningSessionEventsDashboard'])->name('learningSessionEvents.dashboard');
@@ -82,27 +88,14 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/learningSession-manager-events/{id}', [DashboardController::class, 'learningSessionManagerAdminEvents'])->name('learningSessionEvents.managerAdminEvents');
     Route::get('/learningSession-admin-list', [DashboardController::class, 'learningSessionAdminList'])->name('learningSessionEvents.adminList');
     Route::get('/learningSession-admin-events/{id}', [DashboardController::class, 'learningSessionAdminEvents'])->name('learningSessionEvents.adminEvents');
-     Route::get('/learningSession-superstar-list', [DashboardController::class, 'learningSessionSuperstarList'])->name('learningSessionEvents.superstarList');
-     Route::get('/learningSession-superstar-events/{id}', [DashboardController::class, 'learningSessionSuperstarEvents'])->name('learningSessionEvents.superstarEvents');
-
-
-
-    
+    Route::get('/learningSession-superstar-list', [DashboardController::class, 'learningSessionSuperstarList'])->name('learningSessionEvents.superstarList');
+    Route::get('/learningSession-superstar-events/{id}', [DashboardController::class, 'learningSessionSuperstarEvents'])->name('learningSessionEvents.superstarEvents');
     Route::get('/all/learning-session', [DashboardInfoController::class, 'allLearningSession'])->name('allLearningSession');
     Route::get('/all/complete/learning-session', [DashboardInfoController::class, 'allCompleteLearningSession'])->name('allCompleteLearningSession');
     Route::get('/all/upcoming/learning-session', [DashboardInfoController::class, 'allUpcomingLearningSession'])->name('allUpcomingLearningSession');
-
-    Route::get('learningSession-index', [LearningSessionController::class, 'index'])->name('learningSession.index');
-    Route::get('learningSession-list/{id}', [LearningSessionController::class, 'learningSessionList'])->name('learningSession.list');
-    Route::get('learningSession-details/{id}', [LearningSessionController::class, 'learningSessionDetails'])->name('learningSession.details');
-    Route::get('learningSession-edit/{id}', [LearningSessionController::class, 'learningSessionEdit'])->name('learningSession.edit');
-    Route::PUT('learningSession-update/{id}', [LearningSessionController::class, 'LearningSessionUpdate'])->name('learningSession.update');
-    Route::delete('learningSession-destroy/{id}', [LearningSessionController::class, 'learningSessionDestroy'])->name('learningSession.destroy');
-
     //===================== Reports Routes =====================//
     Route::get('/learningSession-report', [ReportController::class, 'learningSessionReport'])->name('report.learningSession');
     Route::post('/learningSession-report-filter', [ReportController::class, 'learningFilter'])->name('report.filter.learningSession');
-
     //********************************************//
     //******Learning Session Routes End *******//
     //********************************************//
@@ -110,7 +103,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     //********************************************//
     //******MeetUp Routes Start *******//
     //********************************************//
-
     //************************** Dashboard Route *************************//
     Route::get('/all/meetup', [DashboardInfoController::class, 'allMeetUp'])->name('allMeetUp');
     Route::get('/all/offline/meetup', [DashboardInfoController::class, 'allOfflineMeetUp'])->name('allOfflineMeetUp');
@@ -127,11 +119,9 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/meetup-admin-events/{id}', [DashboardController::class, 'meetupAdminEvents'])->name('meetupEvents.adminEvents');
     Route::get('/meetup-superstar-list', [DashboardController::class, 'meetupSuperstarList'])->name('meetupEvents.superstarList');
     Route::get('/meetup-superstar-events/{id}', [DashboardController::class, 'meetupSuperstarEvents'])->name('meetupEvents.superstarEvents');
-
     //********************** Report Route *******************//
     Route::get('/meetup-report', [ReportController::class, 'meetupReport'])->name('report.meetup');
     Route::post('/meetup-report-filter', [ReportController::class, 'meetupReportFilter'])->name('report.filter.meetupevent');
-
     //******************** Meetup route *******************//
     Route::get('meetupEvent-index', [MeetupEventController::class, 'index'])->name('meetupEvent.index');
     Route::get('meetupEvent-list/{id}', [MeetupEventController::class, 'meetupEventList'])->name('meetupEvent.list');
@@ -237,6 +227,40 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     //******Auction Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //******Greetings Routes Start *******//
+    //********************************************//
+    //********* Greeting Type ************//
+    Route::resource('greeting-type', GreetingController::class);
+    Route::post('admin/greeting-type-active/{id}', [GreetingController::class, 'activeNow'])->name('greetingtype.activeNow');
+    Route::post('admin/greeting-type-inactive/{id}', [GreetingController::class, 'inactiveNow'])->name('greetingtype.inactiveNow');
+    //********* Greeting ****************//
+    Route::get('greeting-index', [GreetingController::class, 'events'])->name('greeting.index');
+    Route::get('greeting-list/{id}', [GreetingController::class, 'greetingList'])->name('greeting.list');
+    Route::get('greeting-details/{id}', [GreetingController::class, 'greetingDetails'])->name('greeting.details');
+    Route::get('greeting-edit/{id}', [GreetingController::class, 'greetingEdit'])->name('greeting.edit');
+    Route::PUT('greeting-update/{id}', [GreetingController::class, 'greetingUpdate'])->name('greeting.update');
+    Route::delete('greeting-destroy/{id}', [GreetingController::class, 'greetingDestroy'])->name('greeting.destroy');
+    //********* Dashboard ****************/
+    Route::get('/greetings', [DashboardController::class, 'greetings'])->name('greetings');
+    Route::get('/all/greetings', [DashboardInfoController::class, 'allGreeting'])->name('allGreeting');
+    Route::get('/all/complete/greetings', [DashboardInfoController::class, 'allCompleteGreeting'])->name('allCompleteGreeting');
+    Route::get('/all/upcoming/greetings', [DashboardInfoController::class, 'allUpcomingGreeting'])->name('allUpcomingGreeting');
+    Route::get('/greeting-events-dashboard', [DashboardController::class, 'greetingEventsDashboard'])->name('greetingEvents.dashboard');
+    Route::get('/greeting-data-list/{type}', [DashboardController::class, 'greetingDataList'])->name('greetingEvents.greetingDataList');
+    Route::get('/greeting-manager-list', [DashboardController::class, 'greetingManagerAdminList'])->name('greetingEvents.managerAdminList');
+    Route::get('/greeting-manager-events/{id}', [DashboardController::class, 'greetingManagerAdminEvents'])->name('greetingEvents.managerAdminEvents');
+    Route::get('/greeting-admin-list', [DashboardController::class, 'greetingAdminList'])->name('greetingEvents.adminList');
+    Route::get('/greeting-admin-events/{id}', [DashboardController::class, 'greetingAdminEvents'])->name('greetingEvents.adminEvents');
+    Route::get('/greeting-superstar-list', [DashboardController::class, 'greetingSuperstarList'])->name('greetingEvents.superstarList');
+    Route::get('/greeting-superstar-events/{id}', [DashboardController::class, 'greetingSuperstarEvents'])->name('greetingEvents.superstarEvents');
+    //********* Reports ****************/
+    Route::get('/greeting-report', [ReportController::class, 'greetingReport'])->name('report.greeting');
+    Route::post('/greeting-report-filter', [ReportController::class, 'greetingReportFilter'])->name('report.filter.greeting');
+    //********************************************//
+    //******Greetings Routes End *******//
+    //********************************************//
+
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/withdraw', [ProfitWithdrawController::class, 'index'])->name('withdraw.index');
     Route::put('/txn-store/{id}', [ProfitWithdrawController::class, 'store'])->name('bankTxnId.store');
@@ -253,7 +277,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     Route::get('/live-chats', [DashboardController::class, 'liveChats'])->name('liveChats');
     Route::get('/fan-group', [DashboardController::class, 'fanGroup'])->name('fanGroup');
-    Route::get('/greetings', [DashboardController::class, 'greetings'])->name('greetings');
     Route::get('/user-posts', [DashboardController::class, 'userPosts'])->name('userPosts');
     Route::get('/wallet', [DashboardController::class, 'wallets'])->name('wallets');
 
@@ -274,11 +297,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/all/upcoming/live-chat', [DashboardInfoController::class, 'allUpcomingLiveChat'])->name('allUpcomingLiveChat');
     Route::get('/all/running/live-chat', [DashboardInfoController::class, 'allRunningLiveChat'])->name('allRunningLiveChat');
 
-
-    //Greetings
-    Route::get('/all/greetings', [DashboardInfoController::class, 'allGreeting'])->name('allGreeting');
-    Route::get('/all/complete/greetings', [DashboardInfoController::class, 'allCompleteGreeting'])->name('allCompleteGreeting');
-    Route::get('/all/upcoming/greetings', [DashboardInfoController::class, 'allUpcomingGreeting'])->name('allUpcomingGreeting');
 
     //Post
     Route::get('/all/post/list', [DashboardInfoController::class, 'allPost'])->name('allPost');
@@ -384,14 +402,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::delete('qna-destroy/{id}', [QnAController::class, 'qnaDestroy'])->name('qna.destroy');
 
 
-    //Greeting
-    Route::get('greeting-index', [GreetingController::class, 'events'])->name('greeting.index');
-    Route::get('greeting-list/{id}', [GreetingController::class, 'greetingList'])->name('greeting.list');
-    Route::get('greeting-details/{id}', [GreetingController::class, 'greetingDetails'])->name('greeting.details');
-    Route::get('greeting-edit/{id}', [GreetingController::class, 'greetingEdit'])->name('greeting.edit');
-    Route::PUT('greeting-update/{id}', [GreetingController::class, 'greetingUpdate'])->name('greeting.update');
-    Route::delete('greeting-destroy/{id}', [GreetingController::class, 'greetingDestroy'])->name('greeting.destroy');
-
     //Fangroup
     Route::get('fanGroup-index', [FanGroupController::class, 'index'])->name('fanGroup.index');
     Route::get('fanGroup-list/{id}', [FanGroupController::class, 'fanGroupList'])->name('fanGroup.list');
@@ -409,14 +419,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // Events
     Route::resource('events', EventsController::class);
 
-
-
-    // Greeting Type
-    Route::resource('greeting-type', GreetingController::class);
-    Route::post('admin/greeting-type-active/{id}', [GreetingController::class, 'activeNow'])->name('greetingtype.activeNow');
-    Route::post('admin/greeting-type-inactive/{id}', [GreetingController::class, 'inactiveNow'])->name('greetingtype.inactiveNow');
-
-
     // Country
     Route::resource('country', CountryController::class);
     Route::post('admin/country-active/{id}', [CountryController::class, 'activeNow'])->name('country.activeNow');
@@ -425,7 +427,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // Package
     Route::resource('package', PackageController::class);
     Route::resource('love', LoveReactPriceController::class);
-
 
     // Route::resource('love-package', LoveController::class);
     Route::post('admin/package-active/{id}', [PackageController::class, 'activeNow'])->name('package.activeNow');
@@ -508,15 +509,11 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('superstar-accounts/{id}/{module}', [AccountsController::class, 'superstarList'])->name('accounts.superstarList');
     // superadmin end
 
-
-
-
     //<=========================== Accounts Releated Route End =====================================>
-
 
     // <================================= All Module Dashboard ======================================>
 
-    //                                manager admin
+    // manager admin
 
     // simplePost dashboard
     Route::get('/simplePost-events-dashboard', [DashboardController::class, 'simplePostEventsDashboard'])->name('simplePostEvents.dashboard');
@@ -529,12 +526,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/liveChat-data-list/{type}', [DashboardController::class, 'liveChatDataList'])->name('liveChatEvents.liveChatDataList');
     Route::get('/liveChat-manager-list', [DashboardController::class, 'liveChatManagerAdminList'])->name('liveChatEvents.managerAdminList');
     Route::get('/liveChat-manager-events/{id}', [DashboardController::class, 'liveChatManagerAdminEvents'])->name('liveChatEvents.managerAdminEvents');
-    
-    // greeting dashboard
-    Route::get('/greeting-events-dashboard', [DashboardController::class, 'greetingEventsDashboard'])->name('greetingEvents.dashboard');
-    Route::get('/greeting-data-list/{type}', [DashboardController::class, 'greetingDataList'])->name('greetingEvents.greetingDataList');
-    Route::get('/greeting-manager-list', [DashboardController::class, 'greetingManagerAdminList'])->name('greetingEvents.managerAdminList');
-    Route::get('/greeting-manager-events/{id}', [DashboardController::class, 'greetingManagerAdminEvents'])->name('greetingEvents.managerAdminEvents');
 
     // fanGroup dashboard
     Route::get('/fanGroup-events-dashboard', [DashboardController::class, 'fanGroupEventsDashboard'])->name('fanGroupEvents.dashboard');
@@ -557,9 +548,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/liveChat-admin-list', [DashboardController::class, 'liveChatAdminList'])->name('liveChatEvents.adminList');
     Route::get('/liveChat-admin-events/{id}', [DashboardController::class, 'liveChatAdminEvents'])->name('liveChatEvents.adminEvents');
     
-    // greeting dashboard
-    Route::get('/greeting-admin-list', [DashboardController::class, 'greetingAdminList'])->name('greetingEvents.adminList');
-    Route::get('/greeting-admin-events/{id}', [DashboardController::class, 'greetingAdminEvents'])->name('greetingEvents.adminEvents');
     // fanGroup dashboard
     Route::get('/fanGroup-admin-list', [DashboardController::class, 'fanGroupAdminList'])->name('fanGroupEvents.adminList');
     Route::get('/fanGroup-admin-events/{id}', [DashboardController::class, 'fanGroupAdminEvents'])->name('fanGroupEvents.adminEvents');
@@ -579,10 +567,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // live Chat dashboard
     Route::get('/liveChat-superstar-list', [DashboardController::class, 'liveChatSuperstarList'])->name('liveChatEvents.superstarList');
     Route::get('/liveChat-superstar-events/{id}', [DashboardController::class, 'liveChatSuperstarEvents'])->name('liveChatEvents.superstarEvents');
-   
-    // greeting dashboard
-    Route::get('/greeting-superstar-list', [DashboardController::class, 'greetingSuperstarList'])->name('greetingEvents.superstarList');
-    Route::get('/greeting-superstar-events/{id}', [DashboardController::class, 'greetingSuperstarEvents'])->name('greetingEvents.superstarEvents');
 
     // fanGroup dashboard
     Route::get('/fanGroup-superstar-list', [DashboardController::class, 'fanGroupSuperstarList'])->name('fanGroupEvents.superstarList');
@@ -604,8 +588,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/qna-report', [ReportController::class, 'qnaReport'])->name('report.qna');
     Route::post('/qna-report-filter', [ReportController::class, 'qnaReportFilter'])->name('report.Filter.qna');
    
-    Route::get('/greeting-report', [ReportController::class, 'greetingReport'])->name('report.greeting');
-    Route::post('/greeting-report-filter', [ReportController::class, 'greetingReportFilter'])->name('report.filter.greeting');
     // Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
     Route::get('/simplePost-report', [ReportController::class, 'simplePostReport'])->name('report.simplePost');
     Route::post('/simplePost-report-filter', [ReportController::class, 'simplePostFilter'])->name('report.filter.simplePost');

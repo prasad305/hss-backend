@@ -36,6 +36,9 @@ class CreateGreetingsRegistrationsTable extends Migration
             $table->string('card_holder_name')->nullable();
             $table->string('account_no')->nullable();
             $table->timestamps();
+
+            $table->foreign('greeting_id')->references('id')->on('greetings')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
