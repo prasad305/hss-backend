@@ -421,6 +421,14 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //use this api on react project file path- \src\components\Pages\Profile\profile-components\starProfile\StarChat
     Route::post('/user/liveChat/register', [UserController::class, 'liveChatRigister']);
     
+
+
+
+    //use this api on react project file path- \src\components\Pages\Profile\profile-components\starProfile\StarChat
+    Route::post('/user/liveChat/register', [UserController::class, 'liveChatRigister']);
+
+
+
     // Audition
     Route::get('/user/audition/all', [UserController::class, 'audition_list']);
     Route::get('/user/audition/participate/{id}', [UserController::class, 'participateAudition']);
