@@ -31,6 +31,12 @@ class CreateSimplePostsTable extends Migration
             $table->integer('star_approval')->default(0)->comment('0 = pending, 1 = approved,2 = reject');
             $table->integer('status')->default(0)->comment('1 = published');
             $table->timestamps();
+
+            $table->foreign('created_by_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('star_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('subcategory_id')->references('id')->on('sub_categories')->onDelete('cascade');
         });
     }
 

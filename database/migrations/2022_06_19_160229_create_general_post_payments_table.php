@@ -21,6 +21,9 @@ class CreateGeneralPostPaymentsTable extends Migration
             $table->string('payment_method')->nullable();
             $table->boolean('status')->default(0);
             $table->timestamps();
+
+            $table->foreign('post_id')->references('id')->on('simple_posts')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

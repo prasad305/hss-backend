@@ -37,7 +37,7 @@ class SimplePostController extends Controller
 
     public function details($id)
     {
-        $post = SimplePost::find($id);
+        $post = SimplePost::with(['star','starAdmin'])->find($id);
 
         return view('ManagerAdmin.SimplePost.details', compact('post'));
     }

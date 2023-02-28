@@ -19,7 +19,7 @@ class SimplePostController extends Controller
     }
     public function simplepostList($categoryId)
     {
-        $postList = SimplePost::where('category_id', $categoryId)->latest()->get();
+        $postList = SimplePost::with(['star','admin'])->where('category_id', $categoryId)->latest()->get();
         return view('SuperAdmin.SimplePost.PostList', compact('postList'));
     }
     public function simplepostDetails($postId)
