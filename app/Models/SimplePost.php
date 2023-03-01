@@ -12,7 +12,7 @@ class SimplePost extends Model
     protected $guarded = [];
 
     //Relation For API
-    protected $with = ['star', 'admin', 'generalPostPayment'];
+    // protected $with = ['star', 'admin', 'generalPostPayment'];
 
 
     public function star()

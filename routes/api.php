@@ -119,9 +119,6 @@ Route::get('/user/all_post/with-paginate/{limit}', [UserController::class, 'all_
 Route::get('/user/followers/star', [UserController::class, 'followStarId']);
 Route::get('/user/search/{query}', [UserController::class, 'allSearchData']);
 Route::get('/user/post/{type}', [UserController::class, 'single_type_post']);
-Route::post('/user/general-post/payment', [UserController::class, 'generalPostPayment']);
-Route::get('/user/generalPost/payment/check/{post_id}', [UserController::class, 'generalPostPaymentCheck']);
-Route::get('/user/generalPost/payment/check', [UserController::class, 'simplePostPaymentCheck']);
 
 Route::get('/user/post/{type}/with-paginate/{limit}', [UserController::class, 'paginate_single_type_post']);
 
@@ -286,6 +283,16 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/greetings/register', [UserController::class, 'greetingsRegistation']);
     //********************************************//
     //******Greetings Routes End *******//
+    //********************************************//
+
+    //********************************************//
+    //******Simple Post Routes Start *******//
+    //********************************************//
+    Route::post('/user/general-post/payment', [UserController::class, 'generalPostPayment']);
+    Route::get('/user/generalPost/payment/check/{post_id}', [UserController::class, 'generalPostPaymentCheck']);
+    Route::get('/user/generalPost/payment/check', [UserController::class, 'simplePostPaymentCheck']);
+    //********************************************//
+    //******Simple Post Routes End *******//
     //********************************************//
 
 
@@ -634,6 +641,21 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     //****** Greetings Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //****** Simple Post Routes Start *******//
+    //********************************************//
+    Route::post('admin/add_simple_post', [SimplePostController::class, 'add']);
+    Route::get('/admin/simple_post/all', [SimplePostController::class, 'all']);
+    Route::post('/admin/simple_post/update/{id}', [SimplePostController::class, 'simplePostUpdate']);
+    Route::get('/admin/simple_post/count', [SimplePostController::class, 'count']);
+    Route::get('/admin/simple_post/pending', [SimplePostController::class, 'pending_list']);
+    Route::get('/admin/simple_post/pending/{id}', [SimplePostController::class, 'pending_details']);
+    Route::get('/admin/simple_post/approved', [SimplePostController::class, 'approved_list']);
+    Route::get('/admin/simple_post/rejected', [SimplePostController::class, 'rejected_list']);
+    //********************************************//
+    //****** Simple Post Routes End *******//
+    //********************************************//
+
     Route::get('admin/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('admin/dashboard/posts/{type}', [DashboardController::class, 'dashboardPosts']);
     Route::get('admin/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
@@ -663,16 +685,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/fan/group/settings/delete/{fanJoinId}', [FanGroupController::class, 'deleteSettingsFan']);
     Route::post('/admin/fan/group/settings/no-warning/{warningId}', [FanGroupController::class, 'noWarningSettingsFan']);
     Route::post('/admin/fan/group/approval/warning/{fanUserId}/{fanGroupId}', [FanGroupController::class, 'warningSettingsFan']);
-
-    // Simple Post Section
-    Route::post('admin/add_simple_post', [SimplePostController::class, 'add']);
-    Route::get('/admin/simple_post/all', [SimplePostController::class, 'all']);
-    Route::post('/admin/simple_post/update/{id}', [SimplePostController::class, 'simplePostUpdate']);
-    Route::get('/admin/simple_post/count', [SimplePostController::class, 'count']);
-    Route::get('/admin/simple_post/pending', [SimplePostController::class, 'pending_list']);
-    Route::get('/admin/simple_post/pending/{id}', [SimplePostController::class, 'pending_details']);
-    Route::get('/admin/simple_post/approved', [SimplePostController::class, 'approved_list']);
-    Route::get('/admin/simple_post/rejected', [SimplePostController::class, 'rejected_list']);
 
 
 
@@ -891,6 +903,24 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     //******Greetings Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //******Simple Post Routes Start *******//
+    //********************************************//
+    Route::get('/star/simple_post/all/mobile', [SimplePostController::class, 'star_all_mobile']);
+    Route::post('/star/add_simple_post/mobile', [SimplePostController::class, 'star_add_mobile']);
+    Route::post('/star/add_simple_post', [SimplePostController::class, 'star_add']);
+    Route::get('/star/simple_post/all', [SimplePostController::class, 'star_all']);
+    Route::get('/star/simple_post/count', [SimplePostController::class, 'star_count']);
+    Route::get('/star/simple_post/pending', [SimplePostController::class, 'star_pending_list']);
+    Route::get('/star/simple_post/pending/{id}', [SimplePostController::class, 'star_pending_details']);
+    Route::post('/star/simple_post/update/{id}', [SimplePostController::class, 'star_post_update']);
+    Route::get('/star/simple_post/approved', [SimplePostController::class, 'star_approved_list']);
+    Route::get('/star/approve_post/{id}', [SimplePostController::class, 'approve_post']);
+    Route::get('/star/decline_post/{id}', [SimplePostController::class, 'decline_post']);
+    //********************************************//
+    //******Simple Post Routes End *******//
+    //********************************************//
+
     Route::get('star/getInformation', [DashboardController::class, 'getInformation']);
     Route::get('star/dashboard/posts/{type}', [DashboardController::class, 'adminPost']);
     Route::get('star/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
@@ -934,21 +964,6 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::post('/star/fan/group/approval/warning/{fanUserId}/{fanGroupId}', [FanGroupController::class, 'warningSettingsFan']);
     Route::get('/star/fan/group/analytics/{slug}', [FanGroupController::class, 'showFanGroupAnalytics']);
     Route::post('/star/fan/group/deline/nofification/{postId}', [FanGroupController::class, 'declineFanPostNotification']);
-
-
-
-    // Simple Post Section
-    Route::get('/star/simple_post/all/mobile', [SimplePostController::class, 'star_all_mobile']);
-    Route::post('/star/add_simple_post/mobile', [SimplePostController::class, 'star_add_mobile']);
-    Route::post('/star/add_simple_post', [SimplePostController::class, 'star_add']);
-    Route::get('/star/simple_post/all', [SimplePostController::class, 'star_all']);
-    Route::get('/star/simple_post/count', [SimplePostController::class, 'star_count']);
-    Route::get('/star/simple_post/pending', [SimplePostController::class, 'star_pending_list']);
-    Route::get('/star/simple_post/pending/{id}', [SimplePostController::class, 'star_pending_details']);
-    Route::post('/star/simple_post/update/{id}', [SimplePostController::class, 'star_post_update']);
-    Route::get('/star/simple_post/approved', [SimplePostController::class, 'star_approved_list']);
-    Route::get('/star/approve_post/{id}', [SimplePostController::class, 'approve_post']);
-    Route::get('/star/decline_post/{id}', [SimplePostController::class, 'decline_post']);
 
 
 
