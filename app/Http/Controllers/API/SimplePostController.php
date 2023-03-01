@@ -554,16 +554,24 @@ class SimplePostController extends Controller
             }
         }
         if ($request->video != null) {
+
             try {
                 $originalExtension = str_ireplace("image/", "", $request->video['type']);
 
                 $folder_path       = 'uploads/videos/post/';
 
-                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.mp4';
                 $decodedBase64 = $request->video['data'];
 
-                Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                $videoData = base64_decode($decodedBase64);
+
+                // Image::make($videoData)->save($folder_path . $image_new_name);
+
+
                 $location = $folder_path . $image_new_name;
+
+                file_put_contents($location, $videoData);
+
                 $post->video = $location;
             } catch (\Exception $exception) {
                 return response()->json([

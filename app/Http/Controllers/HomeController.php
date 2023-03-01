@@ -9,6 +9,7 @@ use Illuminate\Auth\Events\Validated;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Str;
 
 class HomeController extends Controller
@@ -31,20 +32,56 @@ class HomeController extends Controller
 
     public function video_upload(Request $request)
     {
+        // return $request->video;
+        // return base64_decode($request->video, true);
+
+        $file = $request->video;
+        $chunk = $request->chunk_number;
+        $chunks = $request->total_chunks - 1;
+
+        // $fileName = $file->getClientOriginalName();
+        $fileName = $request->fileName;
+        $chunkName = $fileName . '_' . $chunk . '.part';
+
+        // $file->move(storage_path('uploads/videos/temp'), $chunkName);
 
 
 
+        file_put_contents('uploads/videos/temp/' . $chunkName, base64_decode($request->video, true));
 
-        try {
-            file_put_contents('uploads/images/sample5.mp4', base64_decode($request->video['data'], true));
-        } catch (\Exception $exception) {
+        if ($chunk == $chunks) {
+            // return "hello";
+            $filePath = $this->mergeChunks($fileName, $chunks + 1);
+            return response()->json(['success' => true, 'file_path' => $filePath]);
         }
 
-
         return response()->json([
-            'message' => "ok"
+            'success' => true,
+            'current' => $chunk,
+            'total' => $chunks
         ]);
     }
+
+
+    private function mergeChunks($fileName, $chunks)
+    {
+        $filePath = public_path('uploads/videos') . '/' . $fileName;
+        $target = fopen($filePath, 'w'); //write last chunk
+
+        for ($i = 0; $i < $chunks; $i++) {
+            $chunkName = public_path('uploads/videos/temp') . '/' . $fileName . '_' . $i . '.part';
+            $chunk = fopen($chunkName, 'r'); //read chunk previous chunk form temp file
+            stream_copy_to_stream($chunk, $target); //add all chunks
+            fclose($chunk);
+            unlink($chunkName);
+        }
+
+        fclose($target);
+
+        return $filePath;
+    }
+
+
 
     /**
      * quize join
