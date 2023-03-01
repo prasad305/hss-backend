@@ -37,7 +37,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     //********************************************//
     //******Learning Session Routes Start *******//
     //********************************************//
-    //=================== Dashboard Routes =====================//
+    //=================== Dashboard Routes =============//
     Route::get('learning-sessions', [DashboardController::class, 'learningSessions'])->name('dashboard.learningSession');
     Route::get('learning-session/{type}', [DashboardController::class, 'learninSessionData'])->name('dashboard.learningSessionData');
     Route::get('learning-session-details/{id}', [DashboardController::class, 'learninSessionDetails'])->name('dashboard.learninSessionDetails');
@@ -246,17 +246,19 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     //******Greetings Routes End *******//
     //********************************************//
 
-    // Dashboard Routes By Srabon
+    //********************************************//
+    //****** Simple Post Routes Start *******//
+    //********************************************//
+    //************ Simple Post *************//
+    Route::get('post/pending', [SimplePostController::class, 'pending'])->name('simplePost.pending');
+    Route::get('post/published', [SimplePostController::class, 'published'])->name('simplePost.published');
+    Route::get('post/all', [SimplePostController::class, 'all'])->name('simplePost.all');
 
-    Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
-    // Schedule Routes By Monir
-
-    Route::resource('schedule', ScheduleController::class);
-    Route::post('schdeule/updateAll/{admin_id}', [ScheduleController::class, 'update_all'])->name('schedule.update_all');
-
-
-
-    // simple Post
+    Route::get('post/details/{id}', [SimplePostController::class, 'details'])->name('simplePost.details');
+    Route::get('post/edit/{id}', [SimplePostController::class, 'edit'])->name('simplePost.edit');
+    Route::put('post/edit/{id}', [SimplePostController::class, 'update'])->name('simplePost.update');
+    Route::get('post/set_publish/{id}', [SimplePostController::class, 'set_publish'])->name('simplePost.set_publish');
+    //************ Dashboard *************//
     Route::get('simple-post', [DashboardController::class, 'simplePost'])->name('dashboard.simplePost');
     Route::get('subsimplepost-list/{id}', [DashboardController::class, 'subsimplepostList'])->name('subsimplePost.list');
     Route::get('simple-post-data/{type}', [DashboardController::class, 'simplePostData'])->name('dashboard.simplePostData');
@@ -265,6 +267,27 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('simplePost-admin-events/{adminId}', [DashboardController::class, 'simplePostAdminEvents'])->name('simplePostEvents.adminEvents');
     Route::get('simplePost-superstar-list', [DashboardController::class, 'simplePostSuperstarList'])->name('simplePostEvents.superstarList');
     Route::get('simplePost-superstar-events/{starId}', [DashboardController::class, 'simplePostSuperstarEvents'])->name('simplePostEvents.superstarEvents');
+    //************ Accounts *************//
+    Route::get('simplePost-totalIncome', [AccountsController::class, 'simplePostTotalIncome'])->name('simplePostTotalIncome');
+    Route::get('simplePost-dailyIncome', [AccountsController::class, 'simplePostDailyIncome'])->name('simplePostDailyIncome');
+    Route::get('simplePost-weeklyIncome', [AccountsController::class, 'simplePostweeklyIncome'])->name('simplePostWeeklyIncome');
+    Route::get('simplePost-monthlyIncome', [AccountsController::class, 'simplePostMonthlyIncome'])->name('simplePostMonthlyIncome');
+    Route::get('simplePost-yearlyIncome', [AccountsController::class, 'simplePostYearlyIncome'])->name('simplePostYearlyIncome');
+    //************ Report *************//
+    Route::get('/simplePost-report', [ReportController::class, 'simplePostReport'])->name('report.simplePost');
+    Route::post('/simplePost-report-filter', [ReportController::class, 'simplePostFilter'])->name('report.filter.simplePost');
+    Route::get('/simplePost-report-filter-userType/{name}', [ReportController::class, 'simplePostUserName']);
+    //********************************************//
+    //****** Simple Post Routes End *******//
+    //********************************************//
+
+    // Dashboard Routes By Srabon
+
+    Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
+    // Schedule Routes By Monir
+
+    Route::resource('schedule', ScheduleController::class);
+    Route::post('schdeule/updateAll/{admin_id}', [ScheduleController::class, 'update_all'])->name('schedule.update_all');
 
     // Live Chats
     Route::get('live-chats', [DashboardController::class, 'liveChats'])->name('dashboard.liveChat');
@@ -409,15 +432,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('livechat/edit/{id}', [LiveChatController::class, 'edit'])->name('liveChat.edit');
     Route::put('livechat/edit/{id}', [LiveChatController::class, 'update'])->name('liveChat.update');
 
-    //Simple Post
-    Route::get('post/pending', [SimplePostController::class, 'pending'])->name('simplePost.pending');
-    Route::get('post/published', [SimplePostController::class, 'published'])->name('simplePost.published');
-    Route::get('post/all', [SimplePostController::class, 'all'])->name('simplePost.all');
-
-    Route::get('post/details/{id}', [SimplePostController::class, 'details'])->name('simplePost.details');
-    Route::get('post/edit/{id}', [SimplePostController::class, 'edit'])->name('simplePost.edit');
-    Route::put('post/edit/{id}', [SimplePostController::class, 'update'])->name('simplePost.update');
-    Route::get('post/set_publish/{id}', [SimplePostController::class, 'set_publish'])->name('simplePost.set_publish');
 
 
     //Fan Group
@@ -481,12 +495,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('superstar-accounts/{id}/{module}', [AccountsController::class, 'superstarList'])->name('accounts.superstarList');
     //manager panel end
 
-    // simple posts
-    Route::get('simplePost-totalIncome', [AccountsController::class, 'simplePostTotalIncome'])->name('simplePostTotalIncome');
-    Route::get('simplePost-dailyIncome', [AccountsController::class, 'simplePostDailyIncome'])->name('simplePostDailyIncome');
-    Route::get('simplePost-weeklyIncome', [AccountsController::class, 'simplePostweeklyIncome'])->name('simplePostWeeklyIncome');
-    Route::get('simplePost-monthlyIncome', [AccountsController::class, 'simplePostMonthlyIncome'])->name('simplePostMonthlyIncome');
-    Route::get('simplePost-yearlyIncome', [AccountsController::class, 'simplePostYearlyIncome'])->name('simplePostYearlyIncome');
+
     // live chats
     Route::get('liveChat-totalIncome', [AccountsController::class, 'liveChatTotalIncome'])->name('liveChatTotalIncome');
     Route::get('liveChat-dailyIncome', [AccountsController::class, 'liveChatDailyIncome'])->name('liveChatDailyIncome');
@@ -526,10 +535,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::post('/qna-report-filter', [ReportController::class, 'qnaReportFilter'])->name('report.Filter.qna');
     
     // Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
-    
-    Route::get('/simplePost-report', [ReportController::class, 'simplePostReport'])->name('report.simplePost');
-    Route::post('/simplePost-report-filter', [ReportController::class, 'simplePostFilter'])->name('report.filter.simplePost');
-    Route::get('/simplePost-report-filter-userType/{name}', [ReportController::class, 'simplePostUserName']);
     Route::get('/fanGroup-report', [ReportController::class, 'fanGroupReport'])->name('report.fanGroup');
 });
 

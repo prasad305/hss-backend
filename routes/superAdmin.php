@@ -241,7 +241,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('greeting-edit/{id}', [GreetingController::class, 'greetingEdit'])->name('greeting.edit');
     Route::PUT('greeting-update/{id}', [GreetingController::class, 'greetingUpdate'])->name('greeting.update');
     Route::delete('greeting-destroy/{id}', [GreetingController::class, 'greetingDestroy'])->name('greeting.destroy');
-    //********* Dashboard ****************/
+    //********* Dashboard ****************//
     Route::get('/greetings', [DashboardController::class, 'greetings'])->name('greetings');
     Route::get('/all/greetings', [DashboardInfoController::class, 'allGreeting'])->name('allGreeting');
     Route::get('/all/complete/greetings', [DashboardInfoController::class, 'allCompleteGreeting'])->name('allCompleteGreeting');
@@ -259,6 +259,33 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('/greeting-report-filter', [ReportController::class, 'greetingReportFilter'])->name('report.filter.greeting');
     //********************************************//
     //******Greetings Routes End *******//
+    //********************************************//
+
+    //********************************************//
+    //******Simple Post Routes Start *******//
+    //********************************************//
+    //*********** Simple Post ************//
+    Route::get('simplepost-index', [SimplePostController::class, 'index'])->name('simplePost.index');
+    Route::get('simplepost-list/{id}', [SimplePostController::class, 'simplepostList'])->name('simplePost.list');
+    Route::get('simplepost-details/{id}', [SimplePostController::class, 'simplepostDetails'])->name('simplePost.details');
+    Route::get('simplepost-edit/{id}', [SimplePostController::class, 'simplepostEdit'])->name('simplePost.edit');
+    Route::PUT('simplepost-update/{id}', [SimplePostController::class, 'simplepostUpdate'])->name('simplePost.update');
+    Route::delete('simplepost-destroy/{id}', [SimplePostController::class, 'simplepostDestroy'])->name('simplePost.destroy');
+    //*********** Dashboard ************//
+    Route::get('/simplePost-events-dashboard', [DashboardController::class, 'simplePostEventsDashboard'])->name('simplePostEvents.dashboard');
+    Route::get('/simplePost-data-list/{type}', [DashboardController::class, 'postDataList'])->name('simplePostEvents.postDataList');
+    Route::get('/simplePost-manager-list', [DashboardController::class, 'simplePostManagerAdminList'])->name('simplePostEvents.managerAdminList');
+    Route::get('/simplePost-manager-events/{id}', [DashboardController::class, 'simplePostManagerAdminEvents'])->name('simplePostEvents.managerAdminEvents');
+    Route::get('/simplePost-admin-list', [DashboardController::class, 'simplePostAdminList'])->name('simplePostEvents.adminList');
+    Route::get('/simplePost-admin-events/{id}', [DashboardController::class, 'simplePostAdminEvents'])->name('simplePostEvents.adminEvents');
+    Route::get('/simplePost-superstar-list', [DashboardController::class, 'simplePostSuperstarList'])->name('simplePostEvents.superstarList');
+    Route::get('/simplePost-superstar-events/{id}', [DashboardController::class, 'simplePostSuperstarEvents'])->name('simplePostEvents.superstarEvents');
+    //*********** Reports ************//
+    Route::get('/simplePost-report', [ReportController::class, 'simplePostReport'])->name('report.simplePost');
+    Route::post('/simplePost-report-filter', [ReportController::class, 'simplePostFilter'])->name('report.filter.simplePost');
+    Route::get('/simplePost-report-filter-userType/{name}', [ReportController::class, 'simplePostUserName']);
+    //********************************************//
+    //******Simple Post Routes End *******//
     //********************************************//
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
@@ -368,13 +395,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // Audition Routes ends here
 
-    // SimplePost
-    Route::get('simplepost-index', [SimplePostController::class, 'index'])->name('simplePost.index');
-    Route::get('simplepost-list/{id}', [SimplePostController::class, 'simplepostList'])->name('simplePost.list');
-    Route::get('simplepost-details/{id}', [SimplePostController::class, 'simplepostDetails'])->name('simplePost.details');
-    Route::get('simplepost-edit/{id}', [SimplePostController::class, 'simplepostEdit'])->name('simplePost.edit');
-    Route::PUT('simplepost-update/{id}', [SimplePostController::class, 'simplepostUpdate'])->name('simplePost.update');
-    Route::delete('simplepost-destroy/{id}', [SimplePostController::class, 'simplepostDestroy'])->name('simplePost.destroy');
 
     // Product Purchase
     Route::resource('productpurchase', ProductPurchaseController::class);
@@ -515,11 +535,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // manager admin
 
-    // simplePost dashboard
-    Route::get('/simplePost-events-dashboard', [DashboardController::class, 'simplePostEventsDashboard'])->name('simplePostEvents.dashboard');
-    Route::get('/simplePost-data-list/{type}', [DashboardController::class, 'postDataList'])->name('simplePostEvents.postDataList');
-    Route::get('/simplePost-manager-list', [DashboardController::class, 'simplePostManagerAdminList'])->name('simplePostEvents.managerAdminList');
-    Route::get('/simplePost-manager-events/{id}', [DashboardController::class, 'simplePostManagerAdminEvents'])->name('simplePostEvents.managerAdminEvents');
     
     // live Chat dashboard
     Route::get('/liveChat-events-dashboard', [DashboardController::class, 'liveChatEventsDashboard'])->name('liveChatEvents.dashboard');
@@ -540,9 +555,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     
 
     //superstar admin
-    // simplePost dashboard
-    Route::get('/simplePost-admin-list', [DashboardController::class, 'simplePostAdminList'])->name('simplePostEvents.adminList');
-    Route::get('/simplePost-admin-events/{id}', [DashboardController::class, 'simplePostAdminEvents'])->name('simplePostEvents.adminEvents');
     
     // live Chat dashboard
     Route::get('/liveChat-admin-list', [DashboardController::class, 'liveChatAdminList'])->name('liveChatEvents.adminList');
@@ -560,9 +572,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     //superstar
 
-    // simplePost dashboard
-    Route::get('/simplePost-superstar-list', [DashboardController::class, 'simplePostSuperstarList'])->name('simplePostEvents.superstarList');
-    Route::get('/simplePost-superstar-events/{id}', [DashboardController::class, 'simplePostSuperstarEvents'])->name('simplePostEvents.superstarEvents');
    
     // live Chat dashboard
     Route::get('/liveChat-superstar-list', [DashboardController::class, 'liveChatSuperstarList'])->name('liveChatEvents.superstarList');
@@ -589,9 +598,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('/qna-report-filter', [ReportController::class, 'qnaReportFilter'])->name('report.Filter.qna');
    
     // Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
-    Route::get('/simplePost-report', [ReportController::class, 'simplePostReport'])->name('report.simplePost');
-    Route::post('/simplePost-report-filter', [ReportController::class, 'simplePostFilter'])->name('report.filter.simplePost');
-    Route::get('/simplePost-report-filter-userType/{name}', [ReportController::class, 'simplePostUserName']);
     Route::get('/fanGroup-report', [ReportController::class, 'fanGroupReport'])->name('report.fanGroup');
 
     // <=================================End All Report ======================================>
