@@ -22,7 +22,7 @@ class PromoVideo extends Model
         'title',
         'status'
     ];
-    protected $with =['star'];
+    // protected $with =['star'];
 
     public function star()
     {
