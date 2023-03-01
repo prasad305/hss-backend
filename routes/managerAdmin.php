@@ -281,6 +281,20 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     //****** Simple Post Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //****** Promo Video Routes Start *******//
+    //********************************************//
+    Route::get('promoVideo/pending', [PromoVideoController::class, 'pending'])->name('promoVideo.pending');
+    Route::get('promoVideo/published', [PromoVideoController::class, 'published'])->name('promoVideo.published');
+    Route::get('promoVideo/all', [PromoVideoController::class, 'all'])->name('promoVideo.all');
+    Route::get('promoVideo/details/{id}', [PromoVideoController::class, 'details'])->name('promoVideo.details');
+    Route::get('promoVideo/edit/{id}', [PromoVideoController::class, 'edit'])->name('promoVideo.edit');
+    Route::put('promoVideo/edit/{id}', [PromoVideoController::class, 'update'])->name('promoVideo.update');
+    Route::post('promoVideo/set_publish/{id}', [PromoVideoController::class, 'set_publish'])->name('promoVideo.set_publish');
+    //********************************************//
+    //****** Promo Video Routes End *******//
+    //********************************************//
+
     // Dashboard Routes By Srabon
 
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
@@ -467,20 +481,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     Route::get('qna/edit/{id}', [QnaController::class, 'edit'])->name('qna.edit');
     Route::put('qna/edit/{id}', [QnaController::class, 'update'])->name('qna.update');
-
-    
-
-
-
-    // Promo Video0
-    Route::get('promoVideo/pending', [PromoVideoController::class, 'pending'])->name('promoVideo.pending');
-    Route::get('promoVideo/published', [PromoVideoController::class, 'published'])->name('promoVideo.published');
-    Route::get('promoVideo/all', [PromoVideoController::class, 'all'])->name('promoVideo.all');
-
-    Route::get('promoVideo/details/{id}', [PromoVideoController::class, 'details'])->name('promoVideo.details');
-    Route::get('promoVideo/edit/{id}', [PromoVideoController::class, 'edit'])->name('promoVideo.edit');
-    Route::put('promoVideo/edit/{id}', [PromoVideoController::class, 'update'])->name('promoVideo.update');
-    Route::post('promoVideo/set_publish/{id}', [PromoVideoController::class, 'set_publish'])->name('promoVideo.set_publish');
 
     Route::get('dashboard/wildCardUser', [DashboardController::class, 'wildCardUser'])->name('wildCardUser');
 

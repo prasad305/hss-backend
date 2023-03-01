@@ -247,7 +247,6 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //****** Souvenir Routes End *******//
     //********************************************//
 
-
     //********************************************//
     //******Auction Routes Start *******//
     //********************************************//
@@ -293,6 +292,14 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/generalPost/payment/check', [UserController::class, 'simplePostPaymentCheck']);
     //********************************************//
     //******Simple Post Routes End *******//
+    //********************************************//
+
+    //********************************************//
+    //******Promo Videos Routes Start *******//
+    //********************************************//
+    Route::get('/user/PromoVideos', [UserController::class, 'getPromoVideo']);
+    //********************************************//
+    //******Promo Videos Routes End *******//
     //********************************************//
 
 
@@ -465,8 +472,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/audition/getOxygen/videos', [UserController::class, 'getOxygenVideo']);
     Route::post('/user/audition/getOxygenReply/video', [UserController::class, 'oxygenReplyVideo']);
     Route::get('/user/audition/videofeed/loveReact', [UserController::class, 'getVideoFeedLoveReact']);
-    // Promo Videos
-    Route::get('/user/PromoVideos', [UserController::class, 'getPromoVideo']);
+    
 
     // Jury Profile
     Route::post('/jury/juryUpdateCover/{id}', [UserController::class, 'juryUpdateCover']);
@@ -656,6 +662,23 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     //****** Simple Post Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //****** Promo Videos Route Start *******//
+    //********************************************//
+    Route::get('/admin/promoVideo/all', [PromoVideoController::class, 'adminAllPromoVideos']);
+    Route::post('/admin/promoVideo/store', [PromoVideoController::class, 'videoStore']);
+    Route::get('/admin/promoVideo/edit/{id}', [PromoVideoController::class, 'adminEdit']);
+    Route::post('/admin/promoVideo/update', [PromoVideoController::class, 'adminUpdate']);
+    Route::get('/admin/promoVideo/pending', [PromoVideoController::class, 'pendingVideos']);
+    Route::get('/admin/promoVideoApproved', [PromoVideoController::class, 'approvedVideos']);
+    Route::get('/admin/promoVideo/{promo_id}', [PromoVideoController::class, 'videoDetails']);
+    Route::get('/admin/promoVideoLive', [PromoVideoController::class, 'liveVideos']);
+    Route::get('/admin/promoVideoReject', [PromoVideoController::class, 'rejectVideos']);
+    Route::get('/admin/promoVideoCount', [PromoVideoController::class, 'promoVideoCount']);
+    //********************************************//
+    //****** Promo Videos Route End *******//
+    //********************************************//
+
     Route::get('admin/dashboard', [DashboardController::class, 'adminDashboard']);
     Route::get('admin/dashboard/posts/{type}', [DashboardController::class, 'dashboardPosts']);
     Route::get('admin/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
@@ -738,18 +761,6 @@ Route::middleware(['auth:sanctum', 'isAPIAdmin'])->group(function () {
     Route::get('/admin/auditions', [AuditionController::class, 'getAdminAuditions']);
     Route::get('/admin/audition/details/{id}', [AuditionController::class, 'starAdminDetailsAudition']);
 
-
-    // Promo Videos
-    Route::get('/admin/promoVideo/all', [PromoVideoController::class, 'adminAllPromoVideos']);
-    Route::post('/admin/promoVideo/store', [PromoVideoController::class, 'videoStore']);
-    Route::get('/admin/promoVideo/edit/{id}', [PromoVideoController::class, 'adminEdit']);
-    Route::post('/admin/promoVideo/update', [PromoVideoController::class, 'adminUpdate']);
-    Route::get('/admin/promoVideo/pending', [PromoVideoController::class, 'pendingVideos']);
-    Route::get('/admin/promoVideoApproved', [PromoVideoController::class, 'approvedVideos']);
-    Route::get('/admin/promoVideo/{promo_id}', [PromoVideoController::class, 'videoDetails']);
-    Route::get('/admin/promoVideoLive', [PromoVideoController::class, 'liveVideos']);
-    Route::get('/admin/promoVideoReject', [PromoVideoController::class, 'rejectVideos']);
-    Route::get('/admin/promoVideoCount', [PromoVideoController::class, 'promoVideoCount']);
     //Category
     Route::get('/admin/view-category', [CategoryController::class, 'index']);
 });
@@ -921,6 +932,25 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     //******Simple Post Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //******Promo Videos Routes Start *******//
+    //********************************************//
+     Route::get('/star/promoVideo/all', [PromoVideoController::class, 'starPromovideoAll']);
+     Route::post('/star/promoVideo/store', [PromoVideoController::class, 'starPromovideoStore']);
+     Route::get('/star/promoVideo/pending', [PromoVideoController::class, 'starPromopendingVideos']);
+     Route::get('/star/promoVideoApproved', [PromoVideoController::class, 'starPromoApprovedVideos']);
+     Route::get('/star/promoVideoReject', [PromoVideoController::class, 'starPromoRejectedVideos']);
+     Route::get('/star/promoVideo/edit/{id}', [PromoVideoController::class, 'edit']);
+     Route::post('/star/promoVideo/update', [PromoVideoController::class, 'update']);
+     Route::get('/star/promoVideo/pending/{id}', [PromoVideoController::class, 'starVideosDetails']);
+     Route::get('/star/promoVideoLive', [PromoVideoController::class, 'starPromoliveVideos']);
+     Route::get('/star/promoVideo/count', [PromoVideoController::class, 'starPromoVideoCount']);
+     Route::get('/star/promoVideo/approved/{id}', [PromoVideoController::class, 'starPromoVideoApproved']);
+     Route::get('/star/promoVideo/decline/{id}', [PromoVideoController::class, 'starPromoVideoDecline']);
+    //********************************************//
+    //******Promo Videos Routes End *******//
+    //********************************************//
+
     Route::get('star/getInformation', [DashboardController::class, 'getInformation']);
     Route::get('star/dashboard/posts/{type}', [DashboardController::class, 'adminPost']);
     Route::get('star/dashboard/post-details/{id}/{type}', [DashboardController::class, 'postDeatils']);
@@ -1045,20 +1075,6 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/superstar/audition/promotional/video/accepted/{id}', [AuditionController::class, 'judgePromotionalViewAccepted']);
     Route::get('/superstar/audition/promotional/video/declined/{id}', [AuditionController::class, 'judgePromotionalViewDecline']);
     Route::get('/superstar/audition/promotional/video/check/{auditionId}', [AuditionController::class, 'judgePromotionalVideoCheck']);
-
-    // Promo Vidoes
-    Route::get('/star/promoVideo/all', [PromoVideoController::class, 'starPromovideoAll']);
-    Route::post('/star/promoVideo/store', [PromoVideoController::class, 'starPromovideoStore']);
-    Route::get('/star/promoVideo/pending', [PromoVideoController::class, 'starPromopendingVideos']);
-    Route::get('/star/promoVideoApproved', [PromoVideoController::class, 'starPromoApprovedVideos']);
-    Route::get('/star/promoVideoReject', [PromoVideoController::class, 'starPromoRejectedVideos']);
-    Route::get('/star/promoVideo/edit/{id}', [PromoVideoController::class, 'edit']);
-    Route::post('/star/promoVideo/update', [PromoVideoController::class, 'update']);
-    Route::get('/star/promoVideo/pending/{id}', [PromoVideoController::class, 'starVideosDetails']);
-    Route::get('/star/promoVideoLive', [PromoVideoController::class, 'starPromoliveVideos']);
-    Route::get('/star/promoVideo/count', [PromoVideoController::class, 'starPromoVideoCount']);
-    Route::get('/star/promoVideo/approved/{id}', [PromoVideoController::class, 'starPromoVideoApproved']);
-    Route::get('/star/promoVideo/decline/{id}', [PromoVideoController::class, 'starPromoVideoDecline']);
 });
 
 
