@@ -20,7 +20,7 @@ class LearningSessionSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        LearningSession::factory(2)->create([
+        LearningSession::factory(20)->create([
             'category_id' => 2,
             'sub_category_id' => 5,
             'created_by_id' => 20,

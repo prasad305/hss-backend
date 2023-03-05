@@ -26,7 +26,8 @@ class Marketplace extends Model
     ];
 
     //Relation For API
-    protected $with = ['superstar', 'starAdmin'];
+    // protected $with = ['superstar', 'starAdmin'];
+    protected $with = ['superstar'];
 
 
     public function superstar()

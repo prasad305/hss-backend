@@ -319,6 +319,7 @@ class LearningSessionController extends Controller
             $post->post_start_date = Carbon::parse($request->post_start_date);
             $post->post_end_date = Carbon::parse($request->post_end_date);
             $post->save();
+            return redirect()->back()->with(['success'=>'Published','post_published'=>'Post Published','star_id'=>$post->star_id]);
         } else {
             //$learningSession->manager_approval = 0;
             $learningSession->status = 1;
@@ -328,9 +329,9 @@ class LearningSessionController extends Controller
             //Remove post //
             $post = Post::where([['event_id', $learningSession->id], ['type', 'learningSession']])->first();
             $post->delete();
+            return redirect()->back()->with('error', 'Post Successfully Removed');
         }
 
-        return redirect()->back()->with('success', 'Published');
     }
 
 

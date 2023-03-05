@@ -130,7 +130,7 @@ class GreetingController extends Controller
     }
     public function greetingList($categoryId)
     {
-        $postList = Greeting::with('admin')->where('category_id', $categoryId)->latest()->get();
+        $postList = Greeting::with(['admin','star'])->where('category_id', $categoryId)->latest()->get();
         return view('SuperAdmin.Greeting.GreetingList', compact('postList'));
     }
     public function greetingDetails($postId)

@@ -43,7 +43,8 @@ class PaymentController extends Controller
     protected $PAYTM_MERCHENT_KEY = "zXhNYVPF4RKIsIIz";
     protected $PAYTM_STAGING_MODE = true;
     protected $PAYTM_WEBSITE_NAME = "WEBSTAGING";
-    protected $PAYTM_CALLBACK_URL_WEB = "http://10.10.10.140/HelloSuperStarsBackend-2/public/api/paytm-callback/";
+    protected $PAYTM_CALLBACK_URL_WEB = "http://127.0.0.1:8000/api/paytm-callback/";
+    // protected $PAYTM_CALLBACK_URL_WEB = "http://192.168.0.156/HelloSuperStarsBackend-2/public/api/paytm-callback/";
     protected $PAYTM_CALLBACK_URL_MOBILE = "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=";
     protected $PAYTM_URL_MOBILE = "https://securegw-stage.paytm.in/theia/api/v1/initiateTransaction?mid=";
     protected $PAYTM_URL_WEB = "https://securegw-stage.paytm.in/v3/order/status";
@@ -182,7 +183,7 @@ class PaymentController extends Controller
                 resgistationSuccessUpdate($user_id, $type, $event_id, "paytm", $result->body->txnAmount, $value);
             }
             $orderId = $result->body->orderId;
-            $url = "http://10.10.10.151:3000/";
+            $url = "http://192.168.0.156:3001/";
             return  redirect()->away($url . $redirectTo);
         } else {
             return "Checksum Mismatched";
@@ -497,6 +498,29 @@ class PaymentController extends Controller
         $data = json_decode($shurjopay_service->verify($request->order_id));
         $paymentData = $data[0];
 
+        $paymentStatus = "";
+        $PaymentMessage = "";
+        if ($paymentData->method = "OK Wallet" || $paymentData->method = "bKash") {
+
+            if ($paymentData->transaction_status = "Complete" || $paymentData->transaction_status = "APPROVED") {
+                $PaymentMessage = "Payment successful";
+                $paymentStatus = true;
+            } else {
+                $PaymentMessage = "Payment Faild !";
+                $paymentStatus = false;
+            }
+        } else if ($paymentData->method = "Nagad") {
+
+            if ($paymentData->sp_massage = "Success") {
+                $PaymentMessage = "Payment successful";
+                $paymentStatus = true;
+            } else {
+                $PaymentMessage = "Payment Faild !";
+                $paymentStatus = false;
+            }
+        }
+
+
 
         Transaction::create([
             'user_id' => $paymentData->value1,
@@ -508,7 +532,7 @@ class PaymentController extends Controller
             'currency' => "BDT",
             'bank_name' => $paymentData->method,
             'resp_msg' => "shurjo-Payment",
-            'status' => $paymentData->transaction_status,
+            'status' => $paymentStatus,
 
         ]);
 
@@ -522,7 +546,7 @@ class PaymentController extends Controller
             $paymentData->value4
         );
 
-        return view("Others.Payment.shurjoPaymentSuccess", compact('paymentData'));
+        return view("Others.Payment.shurjoPaymentSuccess", compact('paymentData', 'paymentStatus', 'PaymentMessage'));
 
         return $paymentData;
     }

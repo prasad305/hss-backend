@@ -11,8 +11,8 @@ class GreetingsRegistration extends Model
 
     protected $guarded = [];
 
-    protected $with = ['user','greeting'];
-    // protected $with = ['user', 'greeting'];
+    // protected $with = ['user', 'greeting']; 
+    protected $with = ['greeting'];// we have to add it in activities controller 
 
     public function greeting()
     {

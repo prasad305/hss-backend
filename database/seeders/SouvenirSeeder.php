@@ -29,7 +29,6 @@ class SouvenirSeeder extends Seeder
             $souvenir->description = $faker->text(25);
             $souvenir->instruction = $faker->text(25);
             $souvenir->price = $faker->numberBetween(500, 1000);
-            $souvenir->delivery_charge = $faker->numberBetween(100, 200);
             $souvenir->tax = $faker->numberBetween(150, 250);
             $souvenir->admin_id = $userInfoForFootball[$i]->parent_user;
             $souvenir->star_id = $userInfoForFootball[$i]->id;
@@ -52,7 +51,6 @@ class SouvenirSeeder extends Seeder
             $souvenir->description = $faker->text(25);
             $souvenir->instruction = $faker->text(25);
             $souvenir->price = $faker->numberBetween(500, 1000);
-            $souvenir->delivery_charge = $faker->numberBetween(100, 200);
             $souvenir->tax = $faker->numberBetween(150, 250);
             $souvenir->admin_id = $userInfoForCricket[$i]->parent_user;
             $souvenir->star_id = $userInfoForCricket[$i]->id;

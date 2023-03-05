@@ -16,7 +16,7 @@ class DeliveryChargeController extends Controller
     public function index()
     {
         $deliverycharges = DeliveryCharge::orderBy('id', 'DESC')->get();
-        return view('SuperAdmin.deliverycharge.index',compact('deliverycharges'));
+        return view('SuperAdmin.marketplacedeliverycharge.index',compact('deliverycharges'));
     }
 
     /**
@@ -26,7 +26,7 @@ class DeliveryChargeController extends Controller
      */
     public function create()
     {
-        return view('SuperAdmin.deliverycharge.create');
+        return view('SuperAdmin.marketplacedeliverycharge.create');
     }
 
     /**
@@ -85,7 +85,7 @@ class DeliveryChargeController extends Controller
     public function edit($id)
     {
         $deliverycharge = DeliveryCharge::findOrfail($id);
-        return view('SuperAdmin.deliverycharge.edit', compact('deliverycharge'));
+        return view('SuperAdmin.marketplacedeliverycharge.edit', compact('deliverycharge'));
     }
 
     /**

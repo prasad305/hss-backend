@@ -10,7 +10,7 @@ class LearningSessionCertificate extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $with = ['learningSession','user'];
+    // protected $with = ['learningSession','user'];
     public function learningSession()
     {
         return $this->belongsTo(LearningSession::class, 'event_id','id');

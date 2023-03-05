@@ -143,7 +143,7 @@ class SouvenirController extends Controller
 
     public function showApplySouvenir()
     {
-        $applySouvenir = SouvenirApply::where('category_id', auth('sanctum')->user()->category_id)
+        $applySouvenir = SouvenirApply::with(['souvenir', 'user', 'state', 'country', 'city', 'star'])->where('category_id', auth('sanctum')->user()->category_id)
                                         ->where('is_delete', '=', 0)
                                         ->latest()
                                         ->get();
@@ -162,8 +162,7 @@ class SouvenirController extends Controller
     }
 
     public function allOrderDetails($id){
-        // dd('ok');
-        $order = SouvenirApply::find($id);
+        $order = SouvenirApply::with(['souvenir', 'user', 'state', 'country', 'city', 'star','souvenirdeliverycharge'])->find($id);
 
         return view('ManagerAdmin.souvenir.order-view', compact('order'));
     }

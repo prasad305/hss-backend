@@ -80,6 +80,8 @@ use PhpParser\Node\Stmt\TryCatch;
 use App\Models\WildCard;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon as SupportCarbon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use PDF;
 
 class UserController extends Controller
@@ -266,37 +268,47 @@ class UserController extends Controller
     }
 
 
-    public function all_post()
+    public function all_post($limit)
     {
         $id = auth('sanctum')->user()->id;
         $selectedCategory = ChoiceList::where('user_id', $id)->first();
 
         $selectedCat = json_decode($selectedCategory->category);
         $selectedSubCat = json_decode($selectedCategory->subcategory);
-        $selectedSubSubCat = json_decode($selectedCategory->star_id);
+        $followedId = json_decode($selectedCategory->star_id,JSON_NUMERIC_CHECK);
 
-        $cat_post = Post::select("*")
+        $cat_post = Post::orderBy('id','DESC')
             ->whereIn('category_id', $selectedCat)
-            ->latest()->get();
+            ->whereIn('star_id',$followedId )
+            ->paginate($limit);
 
         if (isset($sub_cat_post)) {
-            $sub_cat_post = Post::select("*")
+            $sub_cat_post = Post::orderBy('id','DESC')
                 ->whereIn('sub_category_id', $selectedSubCat)
                 ->latest()->get();
         } else {
             $sub_cat_post = [];
         }
 
-        if (isset($sub_sub_cat_post)) {
-            $sub_sub_cat_post = Post::select("*")
-                ->whereIn('user_id', $selectedSubSubCat)
+        if (isset($followedPost)) {
+            $followedPost = Post::orderBy('id','DESC')
+                ->whereIn('user_id', $followedId)
                 ->latest()->get();
         } else {
-            $sub_sub_cat_post = [];
+            $followedPost = [];
         }
+        $post = $cat_post->concat($sub_cat_post)->concat($followedPost);
 
-        $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
 
+        // <============== Redis code =============>
+        //  $post =  Redis::get('post');
+        // if(!$post){
+        //     $post = $cat_post->concat($sub_cat_post)->concat($followedPost);
+        //     Redis::set('post',$post);
+        // }else{
+        //  $post = json_decode($post);
+        // }
+        // Redis::del('post');
         return response()->json([
             'status' => 200,
             'message' => 'Ok',
@@ -394,6 +406,17 @@ class UserController extends Controller
         $dame = array();
         // $post = $cat_post->concat($sub_cat_post)->concat($sub_sub_cat_post);
         $post = $PostArray->concat($dame);
+
+
+        // <============== Redis code =============>
+        // $post =  Redis::get('post');
+
+        // if(!$post){
+        //     $post = $PostArray->concat($dame);
+        //     Redis::set('post',$post);
+        // }else{
+        //  $post = json_decode($post);
+        // }
 
         return response()->json([
             'status' => 200,
@@ -555,9 +578,23 @@ class UserController extends Controller
         ]);
     }
 
+    // Trash Code
+
+    // public function learningSessionUserRightSide()
+    // {
+    //     $post = LearningSession::with('star')->where('status', 2)->latest()->get();
+
+    //     return response()->json([
+    //         'status' => 200,
+    //         'post' => $post,
+    //         'message' => 'Success',
+    //     ]);
+    // }
+
+
     public function singleLearnigSession($slug)
     {
-        $learnigSession = LearningSession::where([['slug', $slug]])->first();
+        $learnigSession = LearningSession::with(['star'])->where([['slug', $slug]])->first();
 
         return response()->json([
             'status' => 200,
@@ -568,7 +605,7 @@ class UserController extends Controller
 
     public function userSingleLearnigSession($slug)
     {
-        $learnigSession = LearningSession::where([['slug', $slug]])->with(['learningSessionAssignment' => function ($query) {
+        $learnigSession = LearningSession::where([['slug', $slug]])->with(['star','learningSessionAssignment' => function ($query) {
             return $query->where('user_id', auth()->user()->id)->get();
         }])->first();
 
@@ -998,7 +1035,7 @@ class UserController extends Controller
 
     public function registeredLearningSession()
     {
-        $register = LearningSessionRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+        $register = LearningSessionRegistration::with(['user', 'learningSession'])->where('user_id', auth('sanctum')->user()->id)->latest()->get();
 
         return response()->json([
             'status' => 200,
@@ -1210,7 +1247,7 @@ class UserController extends Controller
 
     public function meetupDetails($slug)
     {
-        $event = MeetupEvent::where('slug', $slug)->first();
+        $event = MeetupEvent::with('star')->where('slug', $slug)->first();
 
         return response()->json([
             'status' => 200,
@@ -2563,7 +2600,7 @@ class UserController extends Controller
 
     public function getUploadedVideo(Request $request)
     {
-        $videos = LearningSessionAssignment::where([['event_id', $request->event_id], ['user_id', auth()->user()->id]])->get();
+        $videos = LearningSessionAssignment::with('user')->where([['event_id', $request->event_id], ['user_id', auth()->user()->id]])->get();
         return response()->json([
             'status' => 200,
             'videos' => $videos,
@@ -2653,7 +2690,7 @@ class UserController extends Controller
 
     public function getCertificateData($event_id)
     {
-        $certificate = LearningSessionCertificate::where([['event_id', $event_id], ['user_id', auth()->user()->id]])->first();
+        $certificate = LearningSessionCertificate::with(['learningSession','user'])->where([['event_id', $event_id], ['user_id', auth()->user()->id]])->first();
         return response()->json([
             'status' => 200,
             'certificateData' => $certificate,
@@ -2855,19 +2892,61 @@ class UserController extends Controller
 
     public function allUpCommingEvents()
     {
-        $learningSession = LearningSession::where('status', 2)->latest()->get();
-        $LiveChat = LiveChat::where('status', 2)->orderBy('id', 'DESC')->get();
-        $qna = QnA::where('status', 2)->orderBy('id', 'DESC')->get();
-        $audition =  Audition::where('status', 2)->orderBy('id', 'DESC')->get();
-        $meetup = MeetupEvent::where('status', 2)->orderBy('id', 'DESC')->get();
+
+        $learningSession = LearningSession::where('status', 2)->latest()->get(['id','slug','banner']);
+        $LiveChat = LiveChat::where('status', 2)->latest()->get(['id','slug','banner']);
+        $qna = QnA::where('status', 2)->latest()->get(['id','slug','banner']);
+        $audition =  Audition::where('status', 2)->latest()->get(['id','slug','banner']);
+        $meetup = MeetupEvent::where('status', 2)->latest()->get(['id','slug','banner']);
+
+
+         $learnigSessionLiveNow =  LearningSession::whereDate('event_date',today())
+        ->whereTime('start_time','<=',now()->toTimeString())
+        ->whereTime('end_time','>=',now()->toTimeString())->get(['id','slug','banner'])
+        ->map(function ($item) {
+            $item['event_type'] = 'learning-session';
+            return $item;
+        });
+        $liveChatLiveNow =  LiveChat::whereDate('event_date',today())
+        ->whereTime('start_time','<=',now()->toTimeString())
+        ->whereTime('end_time','>=',now()->toTimeString())->get(['id','slug','banner'])->map(function ($item) {
+            $item['event_type'] = 'livechat';
+            return $item;
+        });
+
+        $qnaLiveNow =  QnA::whereDate('event_date',today())
+        ->whereTime('start_time','<=',now()->toTimeString())
+        ->whereTime('end_time','>=',now()->toTimeString())->get(['id','slug','banner'])->map(function ($item) {
+            $item['event_type'] = 'qna';
+            return $item;
+        });
+
+        $meetupLiveNow =  MeetupEvent::whereDate('event_date',today())
+        ->whereTime('start_time','<=',now()->toTimeString())
+        ->whereTime('end_time','>=',now()->toTimeString())->get(['id','slug','banner'])->map(function ($item) {
+            $item['event_type'] = 'meetup-event';
+            return $item;
+        });
+
+        $auditionLiveNow =  audition::whereDate('start_date',"<=",today())->whereDate('end_date',">=",today())->get(['id','slug','banner'])->map(function ($item) {
+            $item['event_type'] = 'audition';
+            return $item;
+        });
+
+        $liveNow = collect([]);
+        $collections = [$learnigSessionLiveNow, $liveChatLiveNow, $qnaLiveNow, $meetupLiveNow,$auditionLiveNow];
+        foreach ($collections as $collection) {
+            $liveNow = $liveNow->merge($collection);
+        }
 
         return response()->json([
             'status' => 200,
             'learningSession' => $learningSession,
             'LiveChat' =>  $LiveChat,
             'qna' => $qna,
-            'audition' =>  $audition,
-            'meetup' =>  $meetup
+            'audition' => $audition,
+            'meetup'=>   $meetup,
+            'liveNow'=>  $liveNow,
 
         ]);
     }
@@ -2932,5 +3011,13 @@ class UserController extends Controller
         }
         $liveChatRegs->getSlot = 1;
         $liveChatRegs->update();
+    }
+
+    public function followStarId(){
+        $followStarId = ChoiceList::where('user_id',auth('sanctum')->user()->id)->first();
+        return response()->json([
+            'status' => 200,
+            'followStarId'=>json_decode($followStarId->star_id)
+        ]);
     }
 }

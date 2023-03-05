@@ -17,16 +17,16 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->string('type')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('star_id')->default("[]");
             $table->unsignedBigInteger('event_id')->nullable();
             $table->unsignedBigInteger('category_id')->default(0);
             $table->unsignedBigInteger('sub_category_id')->default(0);
+            $table->string('star_id')->default("[]");
+            $table->string('user_like_id')->default("[]");
             $table->integer('comment_number')->default(0);
             $table->integer('react_number')->default(0);
             $table->integer('share_number')->default(0);
             $table->string('title')->nullable();
             $table->longText('details')->nullable();
-            $table->string('user_like_id')->default("[]");
             $table->string('share_link')->nullable();
             $table->integer('share_count')->default(0);
             $table->string('react_provider')->nullable();
