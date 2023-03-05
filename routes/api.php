@@ -44,7 +44,7 @@ use trollers\API\VirtualtourController;
 
 
 
-
+//chunk video upload
 Route::post('/mobile-file-upload', [UserMobileAppController::class, 'fileUploadForMobile']);
 
 //video for SDK
