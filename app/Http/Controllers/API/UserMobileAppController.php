@@ -1088,4 +1088,14 @@ class UserMobileAppController extends Controller
             "status" => "402",
         ]);
     }
+
+    public function fileUploadForMobile(Request $request)
+    {
+        if (Request::hasFile('file')) {
+
+            $file = Request::file('file');
+            $file->move('uploads', $file->getClientOriginalName());
+            return "file upload done";
+        }
+    }
 }

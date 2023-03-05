@@ -23,6 +23,7 @@
         "orangehill/iseed": "^3.0",
         "paytm/paytmchecksum": "^1.1",
         "predis/predis": "^2.1",
+
         "pusher/pusher-php-server": "~3.0",
         "realrashid/sweet-alert": "^4.1",
         "shurjopayv2/laravel8": "dev-master",
@@ -31,7 +32,8 @@
         "spatie/laravel-stripe-webhooks": "^2.6",
         "stevebauman/location": "^6.5",
         "stripe/stripe-php": "7.51",
-        "vonage/client": "^2.4"
+        "vonage/client": "^2.4",
+        "wester/chunk-upload": "^2.4"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",

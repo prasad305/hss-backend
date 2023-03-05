@@ -34,12 +34,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\SettingsController;
 use App\Http\Controllers\API\SdkController\SdkController;
 use App\Http\Con;
+use App\Http\Controllers\API\UserMobileAppController;
 use Vonage\Message\Shortcode\Marketing;
 use trollers\API\VirtualtourController;
 
 
 
 
+
+
+
+//chunk video upload
+Route::post('/mobile-file-upload', [UserMobileAppController::class, 'fileUploadForMobile']);
 
 //video for SDK
 Route::get('/time-distribute/{event_id}', [UserController::class, 'distributionTime']);
