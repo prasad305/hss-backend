@@ -48,6 +48,10 @@ Route::get('/chat', function () {
 
 Route::post('/quize-form', [HomeController::class, 'QuizeJoin'])->name('quizUserSubmit');
 Route::post('/quize-submit', [HomeController::class, 'QuizSubmit'])->name('quizDataSubmit');
+
+
+Route::post('/uplad-video-post', [HomeController::class, 'upload-video']);
+
 Route::get('/my-quize', function () {
 
     return view('quiz');
