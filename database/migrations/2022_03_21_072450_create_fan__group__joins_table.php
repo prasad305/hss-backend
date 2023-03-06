@@ -15,13 +15,18 @@ class CreateFanGroupJoinsTable extends Migration
     {
         Schema::create('fan__group__joins', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->nullable();
-            $table->integer('fan_group_id')->nullable();
-            $table->integer('star_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('fan_group_id')->nullable();
+            $table->unsignedBigInteger('star_id')->nullable();
             $table->string('star_name')->nullable();
             $table->integer('warning_count')->nullable();
             $table->integer('approveStatus')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('star_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('fan_group_id')->references('id')->on('fan_groups')->onDelete('cascade');
+
         });
     }
 

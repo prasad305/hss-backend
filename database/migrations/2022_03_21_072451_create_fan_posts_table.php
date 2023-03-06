@@ -15,19 +15,24 @@ class CreateFanPostsTable extends Migration
     {
         Schema::create('fan_posts', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->nullable();
-            $table->integer('fan_group_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('fan_group_id')->nullable();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
-            $table->integer('star_id')->nullable();
+            $table->unsignedBigInteger('star_id')->nullable();
             $table->string('star_name')->nullable();
-            $table->unsignedBigInteger('like_count')->nullable();
+            $table->longText('like_count')->nullable();
             $table->longText('user_like_id')->nullable();
             $table->string('video')->nullable();
             $table->string('share_link')->nullable();
             $table->string('share_count')->default(0);
             $table->integer('status')->nullable()->comment('1 = active, 0 = inactive');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('star_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('fan_group_id')->references('id')->on('fan_groups')->onDelete('cascade');
+            
         });
     }
 
