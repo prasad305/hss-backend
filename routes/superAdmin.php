@@ -288,6 +288,32 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     //******Simple Post Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //****** Fan Group Routes Start *******//
+    //********************************************//
+    //========== Fangroup ==========//
+    Route::get('fanGroup-index', [FanGroupController::class, 'index'])->name('fanGroup.index');
+    Route::get('fanGroup-list/{id}', [FanGroupController::class, 'fanGroupList'])->name('fanGroup.list');
+    Route::get('fanGroup-details/{id}', [FanGroupController::class, 'fanGroupDetails'])->name('fanGroup.details');
+    Route::get('fanGroup-edit/{id}', [FanGroupController::class, 'fanGroupEdit'])->name('fanGroup.edit');
+    Route::PUT('fanGroup-update/{id}', [FanGroupController::class, 'fanGroupUpdate'])->name('fanGroup.update');
+    Route::delete('fanGroup-destroy/{id}', [FanGroupController::class, 'fanGroupDestroy'])->name('fanGroup.destroy');
+    //========== Dashboard ==========//
+    Route::get('/fan-group', [DashboardController::class, 'fanGroup'])->name('fanGroup');
+    Route::get('/fanGroup-events-dashboard', [DashboardController::class, 'fanGroupEventsDashboard'])->name('fanGroupEvents.dashboard');
+    Route::get('/fanGroup-data-list/{type}', [DashboardController::class, 'fanGroupDataList'])->name('fanGroupEvents.fanGroupDataList');
+    Route::get('/fanGroup-manager-list', [DashboardController::class, 'fanGroupManagerAdminList'])->name('fanGroupEvents.managerAdminList');
+    Route::get('/fanGroup-manager-events/{id}', [DashboardController::class, 'fanGroupManagerAdminEvents'])->name('fanGroupEvents.managerAdminEvents');
+    Route::get('/fanGroup-admin-list', [DashboardController::class, 'fanGroupAdminList'])->name('fanGroupEvents.adminList');
+    Route::get('/fanGroup-admin-events/{id}', [DashboardController::class, 'fanGroupAdminEvents'])->name('fanGroupEvents.adminEvents');
+    Route::get('/fanGroup-superstar-list', [DashboardController::class, 'fanGroupSuperstarList'])->name('fanGroupEvents.superstarList');
+    Route::get('/fanGroup-superstar-events/{id}', [DashboardController::class, 'fanGroupSuperstarEvents'])->name('fanGroupEvents.superstarEvents');
+    //========== Report ==========//
+    Route::get('/fanGroup-report', [ReportController::class, 'fanGroupReport'])->name('report.fanGroup');
+    //********************************************//
+    //****** Fan Group Routes End *******//
+    //********************************************//
+
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/withdraw', [ProfitWithdrawController::class, 'index'])->name('withdraw.index');
     Route::put('/txn-store/{id}', [ProfitWithdrawController::class, 'store'])->name('bankTxnId.store');
@@ -303,7 +329,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
 
     Route::get('/live-chats', [DashboardController::class, 'liveChats'])->name('liveChats');
-    Route::get('/fan-group', [DashboardController::class, 'fanGroup'])->name('fanGroup');
     Route::get('/user-posts', [DashboardController::class, 'userPosts'])->name('userPosts');
     Route::get('/wallet', [DashboardController::class, 'wallets'])->name('wallets');
 
@@ -421,21 +446,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::PUT('qna-update/{id}', [QnAController::class, 'qnaUpdate'])->name('qna.update');
     Route::delete('qna-destroy/{id}', [QnAController::class, 'qnaDestroy'])->name('qna.destroy');
 
-
-    //Fangroup
-    Route::get('fanGroup-index', [FanGroupController::class, 'index'])->name('fanGroup.index');
-    Route::get('fanGroup-list/{id}', [FanGroupController::class, 'fanGroupList'])->name('fanGroup.list');
-    Route::get('fanGroup-details/{id}', [FanGroupController::class, 'fanGroupDetails'])->name('fanGroup.details');
-    Route::get('fanGroup-edit/{id}', [FanGroupController::class, 'fanGroupEdit'])->name('fanGroup.edit');
-    Route::PUT('fanGroup-update/{id}', [FanGroupController::class, 'fanGroupUpdate'])->name('fanGroup.update');
-    Route::delete('fanGroup-destroy/{id}', [FanGroupController::class, 'fanGroupDestroy'])->name('fanGroup.destroy');
-
-
-
-
-
-
-
     // Events
     Route::resource('events', EventsController::class);
 
@@ -542,11 +552,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/liveChat-manager-list', [DashboardController::class, 'liveChatManagerAdminList'])->name('liveChatEvents.managerAdminList');
     Route::get('/liveChat-manager-events/{id}', [DashboardController::class, 'liveChatManagerAdminEvents'])->name('liveChatEvents.managerAdminEvents');
 
-    // fanGroup dashboard
-    Route::get('/fanGroup-events-dashboard', [DashboardController::class, 'fanGroupEventsDashboard'])->name('fanGroupEvents.dashboard');
-    Route::get('/fanGroup-data-list/{type}', [DashboardController::class, 'fanGroupDataList'])->name('fanGroupEvents.fanGroupDataList');
-    Route::get('/fanGroup-manager-list', [DashboardController::class, 'fanGroupManagerAdminList'])->name('fanGroupEvents.managerAdminList');
-    Route::get('/fanGroup-manager-events/{id}', [DashboardController::class, 'fanGroupManagerAdminEvents'])->name('fanGroupEvents.managerAdminEvents');
     // qna dashboard
     Route::get('/qna-events-dashboard', [DashboardController::class, 'qnaEventsDashboard'])->name('qnaEvents.dashboard');
     Route::get('/qna-data-list/{type}', [DashboardController::class, 'qnaDataList'])->name('qnaEvents.qnaDataList');
@@ -559,10 +564,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // live Chat dashboard
     Route::get('/liveChat-admin-list', [DashboardController::class, 'liveChatAdminList'])->name('liveChatEvents.adminList');
     Route::get('/liveChat-admin-events/{id}', [DashboardController::class, 'liveChatAdminEvents'])->name('liveChatEvents.adminEvents');
-    
-    // fanGroup dashboard
-    Route::get('/fanGroup-admin-list', [DashboardController::class, 'fanGroupAdminList'])->name('fanGroupEvents.adminList');
-    Route::get('/fanGroup-admin-events/{id}', [DashboardController::class, 'fanGroupAdminEvents'])->name('fanGroupEvents.adminEvents');
+
     // qna dashboard
     Route::get('/qna-admin-list', [DashboardController::class, 'qnaAdminList'])->name('qnaEvents.adminList');
     Route::get('/qna-admin-events/{id}', [DashboardController::class, 'qnaAdminEvents'])->name('qnaEvents.adminEvents');
@@ -577,9 +579,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/liveChat-superstar-list', [DashboardController::class, 'liveChatSuperstarList'])->name('liveChatEvents.superstarList');
     Route::get('/liveChat-superstar-events/{id}', [DashboardController::class, 'liveChatSuperstarEvents'])->name('liveChatEvents.superstarEvents');
 
-    // fanGroup dashboard
-    Route::get('/fanGroup-superstar-list', [DashboardController::class, 'fanGroupSuperstarList'])->name('fanGroupEvents.superstarList');
-    Route::get('/fanGroup-superstar-events/{id}', [DashboardController::class, 'fanGroupSuperstarEvents'])->name('fanGroupEvents.superstarEvents');
     // qna dashboard
     Route::get('/qna-superstar-list', [DashboardController::class, 'qnaSuperstarList'])->name('qnaEvents.superstarList');
     Route::get('/qna-superstar-events/{id}', [DashboardController::class, 'qnaSuperstarEvents'])->name('qnaEvents.superstarEvents');
@@ -598,7 +597,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::post('/qna-report-filter', [ReportController::class, 'qnaReportFilter'])->name('report.Filter.qna');
    
     // Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
-    Route::get('/fanGroup-report', [ReportController::class, 'fanGroupReport'])->name('report.fanGroup');
 
     // <=================================End All Report ======================================>
 });

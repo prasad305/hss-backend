@@ -295,6 +295,41 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     //****** Promo Video Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //****** Fan Group Routes Start *******//
+    //********************************************//
+    //============ Fan Group ============//
+    Route::get('fangroup/pending', [FanGroupController::class, 'pending'])->name('fangroup.pending');
+    Route::get('fangroup/published', [FanGroupController::class, 'published'])->name('fangroup.published');
+    Route::get('fangroup/all', [FanGroupController::class, 'all'])->name('fangroup.all');
+    Route::get('fangroup/list', [FanGroupController::class, 'allFangroupList'])->name('fangroup.allFangroupList');
+    Route::get('fangroup/list/{id}', [FanGroupController::class, 'allFangroupDetails'])->name('fangroup.allFangroupDetails');
+    Route::get('fangroup/details/{id}', [FanGroupController::class, 'details'])->name('fangroup.details');
+    Route::post('fangroup/set_publish', [FanGroupController::class, 'set_publish'])->name('fangroup.set_publish');
+    Route::get('fangroup/edit/{id}', [FanGroupController::class, 'edit'])->name('fangroup.edit');
+    Route::put('fangroup/update/{id}', [FanGroupController::class, 'update'])->name('fangroup.update');
+    //============ Dashboard ============//
+    Route::get('fan-group', [DashboardController::class, 'fanGroups'])->name('dashboard.fanGroup');
+    Route::get('fan-group-data/{type}', [DashboardController::class, 'fanGroupsData'])->name('dashboard.fanGroupData');
+    // Route::get('fan-group-post', [DashboardController::class, 'fanGroupsPost'])->name('dashboard.fanGroupsPost');
+    Route::get('fan-group-details/{id}', [DashboardController::class, 'fanGroupsDetails'])->name('dashboard.fanGroupDetails');
+    Route::get('subFanGroup-list/{id}', [DashboardController::class, 'subFanGroupList'])->name('subFanGroup.list');
+    Route::get('fanGroup-admin-list', [DashboardController::class, 'fanGroupAdminList'])->name('fanGroupEvents.adminList');
+    Route::get('fanGroup-admin-events/{adminId}', [DashboardController::class, 'fanGroupAdminEvents'])->name('fanGroupEvents.adminEvents');
+    Route::get('fanGroup-superstar-list', [DashboardController::class, 'fanGroupSuperstarList'])->name('fanGroupEvents.superstarList');
+    Route::get('fanGroup-superstar-events/{starId}', [DashboardController::class, 'fanGroupSuperstarEvents'])->name('fanGroupEvents.superstarEvents');
+    //============ Accounts ============//
+    Route::get('fanGroup-totalIncome', [AccountsController::class, 'fanGroupTotalIncome'])->name('fanGroupTotalIncome');
+    Route::get('fanGroup-dailyIncome', [AccountsController::class, 'fanGroupDailyIncome'])->name('fanGroupDailyIncome');
+    Route::get('fanGroup-weeklyIncome', [AccountsController::class, 'fanGroupweeklyIncome'])->name('fanGroupWeeklyIncome');
+    Route::get('fanGroup-monthlyIncome', [AccountsController::class, 'fanGroupMonthlyIncome'])->name('fanGroupMonthlyIncome');
+    Route::get('fanGroup-yearlyIncome', [AccountsController::class, 'fanGroupYearlyIncome'])->name('fanGroupYearlyIncome');
+    //============ Reports ============//
+    Route::get('/fanGroup-report', [ReportController::class, 'fanGroupReport'])->name('report.fanGroup');
+    //********************************************//
+    //****** Fan Group Routes End *******//
+    //********************************************//
+
     // Dashboard Routes By Srabon
 
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
@@ -379,19 +414,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     });
     // Audition routes ends here
 
-    // fan Group
-    Route::get('fan-group', [DashboardController::class, 'fanGroups'])->name('dashboard.fanGroup');
-    Route::get('fan-group-data/{type}', [DashboardController::class, 'fanGroupsData'])->name('dashboard.fanGroupData');
-    // Route::get('fan-group-post', [DashboardController::class, 'fanGroupsPost'])->name('dashboard.fanGroupsPost');
-    Route::get('fan-group-details/{id}', [DashboardController::class, 'fanGroupsDetails'])->name('dashboard.fanGroupDetails');
-
-
-    Route::get('subFanGroup-list/{id}', [DashboardController::class, 'subFanGroupList'])->name('subFanGroup.list');
-    Route::get('fanGroup-admin-list', [DashboardController::class, 'fanGroupAdminList'])->name('fanGroupEvents.adminList');
-    Route::get('fanGroup-admin-events/{adminId}', [DashboardController::class, 'fanGroupAdminEvents'])->name('fanGroupEvents.adminEvents');
-    Route::get('fanGroup-superstar-list', [DashboardController::class, 'fanGroupSuperstarList'])->name('fanGroupEvents.superstarList');
-    Route::get('fanGroup-superstar-events/{starId}', [DashboardController::class, 'fanGroupSuperstarEvents'])->name('fanGroupEvents.superstarEvents');
-
 
 
 
@@ -445,19 +467,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
 
     Route::get('livechat/edit/{id}', [LiveChatController::class, 'edit'])->name('liveChat.edit');
     Route::put('livechat/edit/{id}', [LiveChatController::class, 'update'])->name('liveChat.update');
-
-
-
-    //Fan Group
-    Route::get('fangroup/pending', [FanGroupController::class, 'pending'])->name('fangroup.pending');
-    Route::get('fangroup/published', [FanGroupController::class, 'published'])->name('fangroup.published');
-    Route::get('fangroup/all', [FanGroupController::class, 'all'])->name('fangroup.all');
-    Route::get('fangroup/list', [FanGroupController::class, 'allFangroupList'])->name('fangroup.allFangroupList');
-    Route::get('fangroup/list/{id}', [FanGroupController::class, 'allFangroupDetails'])->name('fangroup.allFangroupDetails');
-    Route::get('fangroup/details/{id}', [FanGroupController::class, 'details'])->name('fangroup.details');
-    Route::post('fangroup/set_publish', [FanGroupController::class, 'set_publish'])->name('fangroup.set_publish');
-    Route::get('fangroup/edit/{id}', [FanGroupController::class, 'edit'])->name('fangroup.edit');
-    Route::put('fangroup/update/{id}', [FanGroupController::class, 'update'])->name('fangroup.update');
 
 
     // Live Chat Events
@@ -516,12 +525,7 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('qna-weeklyIncome', [AccountsController::class, 'qnaweeklyIncome'])->name('qnaWeeklyIncome');
     Route::get('qna-monthlyIncome', [AccountsController::class, 'qnaMonthlyIncome'])->name('qnaMonthlyIncome');
     Route::get('qna-yearlyIncome', [AccountsController::class, 'qnaYearlyIncome'])->name('qnaYearlyIncome');
-    // fan group
-    Route::get('fanGroup-totalIncome', [AccountsController::class, 'fanGroupTotalIncome'])->name('fanGroupTotalIncome');
-    Route::get('fanGroup-dailyIncome', [AccountsController::class, 'fanGroupDailyIncome'])->name('fanGroupDailyIncome');
-    Route::get('fanGroup-weeklyIncome', [AccountsController::class, 'fanGroupweeklyIncome'])->name('fanGroupWeeklyIncome');
-    Route::get('fanGroup-monthlyIncome', [AccountsController::class, 'fanGroupMonthlyIncome'])->name('fanGroupMonthlyIncome');
-    Route::get('fanGroup-yearlyIncome', [AccountsController::class, 'fanGroupYearlyIncome'])->name('fanGroupYearlyIncome');
+    
 
 
     // <================================= All Report ======================================>
@@ -535,7 +539,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::post('/qna-report-filter', [ReportController::class, 'qnaReportFilter'])->name('report.Filter.qna');
     
     // Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
-    Route::get('/fanGroup-report', [ReportController::class, 'fanGroupReport'])->name('report.fanGroup');
 });
 
 
