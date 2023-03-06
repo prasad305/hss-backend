@@ -733,9 +733,12 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     // StarShowCase API for Mobile count
     Route::get('/star/showcase/count/mobile', [DashboardController::class, 'starShowCaseProductsCount']);
     Route::get('/star/showcase/MarketplaceProductMobile/mobile', [MarketplaceController::class, 'MarketplaceProductMobile']);
-    Route::post('star/marketplace/store/mobile', [MarketplaceController::class, 'starMarketplaceStoreMobile']);
+
     Route::get('/star/getStarAuctionProduct/{product_id}', [UserController::class, 'starAuctionProduct']);
     Route::get('/star/liveBidding/auction/{auction_id}', [AuctionController::class, 'liveBidding']);
+    //market place mobile
+    Route::post('star/marketplace/store/mobile', [MarketplaceController::class, 'starMarketplaceStoreMobile']);
+    Route::post('star/marketplace/update/mobile/{productId}', [MarketplaceController::class, 'starMarketplaceUpdateMobile']);
 
     // Marketplace Section
     Route::post('star/marketplace/store', [MarketplaceController::class, 'starMarketplaceStore']);
