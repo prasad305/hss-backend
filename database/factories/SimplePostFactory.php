@@ -15,9 +15,9 @@ class SimplePostFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(),
-            'created_by_id' => 38,
-            'admin_id' => 38,
-            'star_id' => 20,
+            'created_by_id' => 20,
+            'admin_id' => 20,
+            'star_id' => 38,
             'category_id' => 2,
             'subcategory_id' => 5,
             'image' => 'seeder_media/image/post.png',

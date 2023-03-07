@@ -37,7 +37,7 @@ class SimplePostController extends Controller
 
     public function details($id)
     {
-        $post = SimplePost::find($id);
+        $post = SimplePost::with(['star','starAdmin'])->find($id);
 
         return view('ManagerAdmin.SimplePost.details', compact('post'));
     }
@@ -122,6 +122,7 @@ class SimplePostController extends Controller
 
     public function set_publish($id)
     {
+
         $spost = SimplePost::find($id);
 
         if ($spost->status != 1) {
@@ -144,20 +145,22 @@ class SimplePostController extends Controller
             if($publishManager){
                 $userInfo = getUserInfo();
                 $senderInfo = getManagerInfo(auth()->user()->id);
-                
+
                 foreach ($userInfo as $key => $data) {
                     SendMail($data->email,$post,$senderInfo);
                 }
             }
-        } else {
-            $spost->status = 0;
-            $spost->update();
 
-            //Remove post //
-            $post = Post::where('event_id', $id)->first();
-            $post->delete();
+        return redirect()->back()->with(['success'=>'Published','post_published'=>'Post Published','star_id'=>$post->star_id]);
+        } else {
+              //Remove post //
+              $post = Post::where('event_id', $id)->where('type','general')->delete();
+              $spost->status = 0;
+              $spost->update();
+
+            return redirect()->back()->with('error', 'Post Successfully Removed');
         }
 
-        return redirect()->back()->with('success', 'Published');
+
     }
 }

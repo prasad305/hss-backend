@@ -24,6 +24,9 @@ class CreateMeetupEventRegistrationsTable extends Migration
             $table->string('card_holder_name')->nullable();
             $table->string('account_no')->nullable();
             $table->timestamps();
+
+            $table->foreign('meetup_event_id')->references('id')->on('meetup_events')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

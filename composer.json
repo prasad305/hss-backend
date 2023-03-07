@@ -15,12 +15,15 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.7",
         "laravel/framework": "^8.54",
+        "laravel/horizon": "^5.14",
         "laravel/sanctum": "^2.11",
+        "laravel/telescope": "^4.10",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
         "orangehill/iseed": "^3.0",
         "paytm/paytmchecksum": "^1.1",
-        "pion/laravel-chunk-upload": "^1.5",
+        "predis/predis": "^2.1",
+
         "pusher/pusher-php-server": "~3.0",
         "realrashid/sweet-alert": "^4.1",
         "shurjopayv2/laravel8": "dev-master",
@@ -76,7 +79,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "laravel/telescope"
+            ]
         }
     },
     "config": {

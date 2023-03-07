@@ -145,11 +145,15 @@
                                         </tr>
                                         <tr>
                                             <th>Delivery Charge:</th>
-                                            <td>{{ $order->delivery_charge }} $</td>
+                                            <td>{{ $order->deliverycharge->courier_charge }} $</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Tax:</th>
+                                            <td>{{ $order->tax }} $</td>
                                         </tr>
                                         <tr>
                                             <th>Total:</th>
-                                            <td>{{ $order->items * $order->unit_price + $order->delivery_charge }} $</td>
+                                            <td>{{ $order->total_price }} $</td>
                                         </tr>
                                     </table>
                                 </div>

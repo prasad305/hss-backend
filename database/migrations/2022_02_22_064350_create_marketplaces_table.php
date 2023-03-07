@@ -27,7 +27,7 @@ class CreateMarketplacesTable extends Migration
             $table->float('delivery_charge')->nullable();
             $table->float('tax')->nullable();
             $table->unsignedBigInteger('superstar_id')->nullable();
-            $table->integer('created_by_id')->nullable();
+            $table->unsignedBigInteger('created_by_id')->nullable();
             $table->unsignedBigInteger('superstar_admin_id')->nullable();
             $table->string('keywords')->nullable();
             $table->integer('post_status')->nullable()->comment('0 = Admin Status, 1 = Star Status');
@@ -35,6 +35,12 @@ class CreateMarketplacesTable extends Migration
             $table->string('image')->nullable();
             $table->timestamp('approved_date')->nullable();
             $table->timestamps();
+
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('subcategory_id')->references('id')->on('sub_categories')->onDelete('cascade');
+            $table->foreign('superstar_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('created_by_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('superstar_admin_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

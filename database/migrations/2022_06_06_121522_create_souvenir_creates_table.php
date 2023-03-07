@@ -17,12 +17,11 @@ class CreateSouvenirCreatesTable extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
-            $table->integer('category_id')->nullable();
-            $table->integer('sub_category_id')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('sub_category_id')->nullable();
             $table->longText('description')->nullable();
             $table->longText('instruction')->nullable();
             $table->float('price')->nullable();
-            $table->float('delivery_charge')->nullable();
             $table->float('tax')->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->unsignedBigInteger('star_id')->nullable();
@@ -31,6 +30,11 @@ class CreateSouvenirCreatesTable extends Migration
             $table->integer('approval_status')->default(0)->comment('0 = admin approval , 1 = star approval');
             $table->integer('status')->default(0)->comment('0 = inactive , 1 = active');
             $table->timestamps();
+
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('sub_category_id')->references('id')->on('sub_categories')->onDelete('cascade');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('star_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

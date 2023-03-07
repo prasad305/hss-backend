@@ -280,15 +280,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('superAdmin.deliverycharge.index') }}"
-                        class="nav-link {{ Request::routeIs('superAdmin.deliverycharge.index') ? 'active' : '' }}">
-                        <i class="fas fa-caret-right nav-icon"></i>
-                        <p>
-                            Delivery Charges
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="{{ route('superAdmin.country.index') }}"
                         class="nav-link {{ Request::routeIs('superAdmin.country.index') ? 'active' : '' }}">
                         <i class="fas fa-caret-right nav-icon"></i>
@@ -332,6 +323,37 @@
                         <i class="fas fa-caret-right nav-icon"></i>
                         <p>
                             Occupation
+                        </p>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+        <li
+            class="nav-item {{Request::routeIs('superAdmin.occupation.index') ? 'menu-open' : '' }}">
+            <a href="#"
+                class="nav-link {{Request::routeIs('superAdmin.occupation.index') ? 'active' : '' }}">
+                <i class="nav-icon fa fa-sliders" aria-hidden="true"></i>
+                <p>Delivery Charge
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.marketplacedeliverycharge.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.marketplacedeliverycharge.index') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>
+                            Marketplace Delivery Charge
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.souvenirdeliverycharge.index') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.souvenirdeliverycharge.index') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>
+                            Souvenir Delivery Charge
                         </p>
                     </a>
                 </li>

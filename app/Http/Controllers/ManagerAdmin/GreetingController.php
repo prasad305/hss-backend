@@ -38,7 +38,7 @@ class GreetingController extends Controller
 
     public function request()
     {
-        $greetings = Greeting::where([['category_id', Auth::user()->category_id], ['status', 1]])->latest()->get();
+        $greetings = Greeting::with(['star','admin'])->where([['category_id', Auth::user()->category_id], ['status', 1]])->latest()->get();
         return view('ManagerAdmin.greeting.request', compact('greetings'));
     }
     public function published()

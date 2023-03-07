@@ -24,15 +24,15 @@ class CreateBiddingsTable extends Migration
             $table->integer('applied_status')->default(0);
             $table->timestamp('checkout_time')->nullable();
             $table->boolean('status')->nullable();
-
-
             $table->boolean('payment_status')->nullable();
             $table->timestamp('payment_last_date')->nullable();
             $table->string('card_holder_name')->nullable();
             $table->string('account_no')->nullable();
-
-
             $table->timestamps();
+
+            $table->foreign('auction_id')->references('id')->on('auctions')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 

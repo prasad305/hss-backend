@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,7 +87,24 @@ Route::get('/shurjo', function () {
     return view("Others.Payment.shurjoPaymentSuccess");
 });
 
+// Redis Testing Route
 
+
+Route::get('/redis', function () {
+    // $posts =  Redis::get('posts');
+
+    // if(!$posts){
+    //     $posts = Post::limit(40000)->get();
+    //     Redis::set('posts',$posts);
+    // }else{
+    //      $posts = json_decode($posts);
+    //     }
+    //     return view('index',compact('posts'));
+
+    // Redis::set('posts',"data set successfully");
+    // Redis::get('posts');
+    // return response()->json("okay");
+});
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

@@ -11,7 +11,7 @@ class LearningSessionEvaluation extends Model
 
     protected $guarded = [];
 
-    protected $with = ['assignments','learningSession','user'];
+    // protected $with = ['assignments','learningSession','user'];
 
     public function assignments()
     {

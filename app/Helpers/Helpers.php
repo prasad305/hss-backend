@@ -419,16 +419,22 @@ if (!function_exists('random_code')) {
     // Auditions
     function auditionRegUpdate($user_id, $event_id, $method)
     {
-        // try {
+        try {
         $registerEvent = AuditionParticipant::where([['audition_id', $event_id], ['user_id', $user_id]])->first();
         $registerEvent->payment_status = 1;
-
         $registerEvent->payment_method =  $method;
-
         $registerEvent->update();
-        // } catch (\Throwable $th) {
-        //     //throw $th;
-        // }
+
+        $activity = new Activity();
+        $activity->type = 'audition';
+        $activity->user_id = $user_id;
+        $activity->event_id =  $event_id;
+        $activity->event_registration_id = $registerEvent->id;
+        $activity->save();
+
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 
     //auditionCertificateUpdate

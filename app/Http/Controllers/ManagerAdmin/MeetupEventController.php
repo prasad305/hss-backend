@@ -18,7 +18,7 @@ class MeetupEventController extends Controller
 {
     public function manager_all()
     {
-        $upcommingEvent = MeetupEvent::where([['status', '>', 0], ['status', '!=', 11], ['category_id', auth()->user()->category_id]])->latest()->get();
+        $upcommingEvent = MeetupEvent::with(['star','admin'])->where([['status', '>', 0], ['status', '!=', 11], ['category_id', auth()->user()->category_id]])->latest()->get();
 
         return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
     }
@@ -26,14 +26,14 @@ class MeetupEventController extends Controller
 
     public function manager_pending()
     {
-        $upcommingEvent = MeetupEvent::where([['status', 1], ['category_id', auth()->user()->category_id]])->latest()->get();
+        $upcommingEvent = MeetupEvent::with(['star','admin'])->where([['status', 1], ['category_id', auth()->user()->category_id]])->latest()->get();
 
         return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
     }
 
     public function manager_published()
     {
-        $upcommingEvent = MeetupEvent::where([['status', 2], ['category_id', auth()->user()->category_id]])->latest()->get();
+        $upcommingEvent = MeetupEvent::with(['star','admin'])->where([['status', 2], ['category_id', auth()->user()->category_id]])->latest()->get();
 
         return view('ManagerAdmin.MeetupEvents.index', compact('upcommingEvent'));
     }
@@ -179,19 +179,13 @@ class MeetupEventController extends Controller
             // $post->react_provider = '[]';
 
             $post->save();
-
-            return redirect()->back()->with('success', 'Published');
+            return redirect()->back()->with(['success'=>'Published','post_published'=>'Post Published','star_id'=>$post->star_id]);
         } else {
             $meetup->status = 10;
             $meetup->update();
             //Remove post //
-            $post = Post::where('event_id', $id)->first();
-            $post->delete();
-
-            return redirect()->back()->with('warning', 'Removed');
+            $post = Post::where('event_id', $id)->where('type','meetup')->delete();
+            return redirect()->back()->with('error', 'Post Successfully Removed');
         }
-
-
-        return redirect()->back()->with('success', 'Published');
     }
 }
