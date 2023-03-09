@@ -875,8 +875,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/editOrConfirm/auction/editOrConfirm/{id}', [AuctionController::class, 'star_editOrConfirm']);
     Route::get('/star/edit/auction/{id}', [AuctionController::class, 'star_editProduct']);
     Route::get('/star/approvedOrDecline/auction/{id}', [AuctionController::class, 'star_approvedOrDecline']);
-    Route::put('/star/approved/auction/{id}', [AuctionController::class, 'star_approved']);
-    Route::put('/star/decline/auction/{id}', [AuctionController::class, 'decline']);
+    Route::get('/star/approved/auction/{id}', [AuctionController::class, 'star_approved']);
+    Route::get('/star/decline/auction/{id}', [AuctionController::class, 'decline']);
     Route::post('/star/update/auction/{id}', [AuctionController::class, 'star_updateProduct']);
     Route::get('/star/all/auction/product', [AuctionController::class, 'star_allProduct']);
     Route::get('/star/show/auction/product/{id}', [AuctionController::class, 'star_showProduct']);
@@ -987,8 +987,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('star/fan/group/starlist/status', [FanGroupController::class, 'statusStar']);
     Route::post('star/fan/group/update/{slug}', [FanGroupController::class, 'starUpdate']);
     Route::get('star/fan/group/details/{slug}', [FanGroupController::class, 'fanGroupDetails']);
-    Route::get('star/fan/group/active/{slug}', [FanGroupController::class, 'fanGroupActive']);
-    Route::get('star/fan/group/ignore/{slug}', [FanGroupController::class, 'fanGroupIgnore']);
+    Route::get('star/fan/group/active/{id}', [FanGroupController::class, 'fanGroupActive']);
+    Route::get('star/fan/group/ignore/{id}', [FanGroupController::class, 'fanGroupIgnore']);
     Route::get('/star/fan/group/show/{slug}', [FanGroupController::class, 'showStarFanGroup']);
     Route::post('/star/fan/member/approve/{joinMemberId}', [FanGroupController::class, 'approveFanMember']);
     Route::post('/star/fan/member/post/{postId}', [FanGroupController::class, 'approveFanPost']);

@@ -490,8 +490,8 @@ class AuctionController extends Controller
             'keyword' => 'required',
             'bid_from' => 'required',
             'bid_to' => 'required',
-            'product_image' => 'required|image',
-            'banner' => 'required|image',
+            // 'product_image' => 'required|image',
+            // 'banner' => 'required|image',
             'details' => 'required|min:10',
             'base_price' => 'required',
             'result_date' => 'required',
@@ -610,7 +610,7 @@ class AuctionController extends Controller
     public function decline($id)
     {
 
-
+        return $id;
         Auction::where('id', $id)->update(['star_approval' => 2]);
 
         return response()->json([

@@ -474,15 +474,15 @@ class FanGroupController extends Controller
     }
 
     // Active Fan Group
-    public function fanGroupActive($slug)
+    public function fanGroupActive($id)
     {
-        $fanDetails = FanGroup::where('slug', $slug)->first();
-        $id = auth('sanctum')->user()->id;
+        $fanDetails = FanGroup::where('id', $id)->first();
+        $authId = auth('sanctum')->user()->id;
 
-        if ($fanDetails->my_star == $id) {
+        if ($fanDetails->my_star == $authId) {
             $fanDetails->my_star_status = 1;
         }
-        if ($fanDetails->another_star == $id) {
+        if ($fanDetails->another_star == $authId) {
             $fanDetails->another_star_status = 1;
         }
 
@@ -495,15 +495,15 @@ class FanGroupController extends Controller
     }
 
     // Fan group Ignore in Star
-    public function fanGroupIgnore($slug)
+    public function fanGroupIgnore($id)
     {
-        $fanDetails = FanGroup::where('slug', $slug)->first();
-        $id = auth('sanctum')->user()->id;
+        $fanDetails = FanGroup::where('id', $id)->first();
+        $authId = auth('sanctum')->user()->id;
 
-        if ($fanDetails->my_star == $id) {
+        if ($fanDetails->my_star == $authId) {
             $fanDetails->my_star_status = 2;
         }
-        if ($fanDetails->another_star == $id) {
+        if ($fanDetails->another_star == $authId) {
             $fanDetails->another_star_status = 2;
         }
 
