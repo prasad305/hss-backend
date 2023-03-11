@@ -60,8 +60,8 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
                 // 'otp' => rand(100000, 999999)
                 'otp' => 123456,
-                //'country_code' => $request->countryCode,
-                'status' => 0,
+                'country_code' => $request->countryCode,
+                'status' => 1,
 
                 //for temporary
                 'otp_verified_at' => Carbon::now(),
