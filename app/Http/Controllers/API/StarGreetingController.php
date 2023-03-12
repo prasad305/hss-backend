@@ -87,57 +87,55 @@ class StarGreetingController extends Controller
             $greeting->cost = $request->cost;
             $greeting->user_required_day = $request->user_required_day;
 
-            // Upload Banner started 
-            
-            if($request->banner['type']){
-                try{
+            // Upload Banner started
+
+            if ($request->banner['type']) {
+                try {
                     $originalExtension = str_ireplace("image/", "", $request->banner['type']);
-    
+
                     $folder_path       = 'uploads/images/greeting/';
-    
+
                     $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
                     $decodedBase64 = $request->banner['data'];
-                
+
                     Image::make($decodedBase64)->save($folder_path . $image_new_name);
                     $location = $folder_path . $image_new_name;
                     $greeting->banner = $location;
-                }
-    
-                catch (\Exception $exception) {
+                } catch (\Exception $exception) {
                     return response()->json([
                         "error" => $exception->getMessage(),
                         "status" => "from image",
                     ]);
                 }
             }
-            
+
             // Upload Banner ended
 
 
-            // Upload Video started 
+            // Upload Video started
 
-            if($request->video['type']){
-                try{
-                    $originalExtension = str_ireplace("video/", "", $request->video['type']);
+            // if($request->video['type']){
+            //     try{
+            //         $originalExtension = str_ireplace("video/", "", $request->video['type']);
 
-                    $folder_path       = 'uploads/videos/greeting/';
+            //         $folder_path       = 'uploads/videos/greeting/';
 
-                    $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
-                    $decodedBase64 = $request->video['data'];
-                    $videoPath = $folder_path . $image_new_name;
-                    file_put_contents($videoPath, base64_decode($decodedBase64, true));
-                    
-                    $greeting->video = $videoPath;
-                }
-    
-                catch (\Exception $exception) {
-                    return response()->json([
-                        "error" => $exception->getMessage(),
-                        "status" => "from video",
-                    ]);
-                }
-            }
-            
+            //         $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+            //         $decodedBase64 = $request->video['data'];
+            //         $videoPath = $folder_path . $image_new_name;
+            //         file_put_contents($videoPath, base64_decode($decodedBase64, true));
+
+            //         $greeting->video = $videoPath;
+            //     }
+
+            //     catch (\Exception $exception) {
+            //         return response()->json([
+            //             "error" => $exception->getMessage(),
+            //             "status" => "from video",
+            //         ]);
+            //     }
+            // }
+
             // Upload Video ended
 
 
@@ -145,15 +143,15 @@ class StarGreetingController extends Controller
             $greeting->status = 1;
 
             $addFromMobile = $greeting->save();
-            if($addFromMobile){
+            if ($addFromMobile) {
                 $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
 
-                SendMail($adminInfo->email,$greeting,$senderInfo);
-                SendMail($managerInfo->email,$greeting,$senderInfo);
-           }
+                SendMail($adminInfo->email, $greeting, $senderInfo);
+                SendMail($managerInfo->email, $greeting, $senderInfo);
+            }
             return response()->json([
                 'status' => 200,
                 'greeting' => $greeting,
@@ -214,13 +212,13 @@ class StarGreetingController extends Controller
             $greeting->status = 1;
 
             $starAddResult = $greeting->save();
-            if($starAddResult){
+            if ($starAddResult) {
                 $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
                 $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
                 $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-                SendMail($adminInfo->email,$greeting,$senderInfo);
-                SendMail($managerInfo->email,$greeting,$senderInfo);
+                SendMail($adminInfo->email, $greeting, $senderInfo);
+                SendMail($managerInfo->email, $greeting, $senderInfo);
             }
             return response()->json([
                 'status' => 200,
@@ -294,11 +292,11 @@ class StarGreetingController extends Controller
         $greeting->star_approve_status = 1;
         // $greeting->status = 1;
         $starApprove = $greeting->save();
-        if($starApprove){
+        if ($starApprove) {
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-            SendMail($managerInfo->email,$greeting,$senderInfo);
+            SendMail($managerInfo->email, $greeting, $senderInfo);
         }
         return response()->json([
             'status' => 200,
@@ -326,13 +324,13 @@ class StarGreetingController extends Controller
     //         'list' => $register_list
     //     ]);
     // }
-    
-    public function allGreetingInfo(){
+
+    public function allGreetingInfo()
+    {
         $greeting = auth('sanctum')->user()->asStarGreeting;
         // $greeting = Greeting::where(['star_id',auth('sanctum')->user()->id]);
         // return $greeting;
-        if($greeting)
-        {
+        if ($greeting) {
             $forwarded_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 3]])->get();
 
             $register_list = GreetingsRegistration::where([['greeting_id', $greeting->id], ['notification_at', '!=', null], ['status', 1]])->get();
@@ -344,10 +342,7 @@ class StarGreetingController extends Controller
                 'register_list' => $register_list,
                 'completed_list' => $completed_list,
             ]);
-
         }
-
-        
     }
 
     public function registerListWithPaymentComplete()

@@ -68,8 +68,8 @@ Route::get('product-purchase', [SettingsController::class, 'productPurchase']);
 Route::get('terms-condition', [SettingsController::class, 'termsCondition']);
 
 //DeliveryCharge
-Route::get('marketplacedeliverycharge',[SettingsController::class,'marketplacedeliverycharge']);
-Route::get('souvenirdeliverycharge',[SettingsController::class,'souvenirdeliverycharge']);
+Route::get('marketplacedeliverycharge', [SettingsController::class, 'marketplacedeliverycharge']);
+Route::get('souvenirdeliverycharge', [SettingsController::class, 'souvenirdeliverycharge']);
 
 //Virtual Tour
 Route::get('virtualtourforweb', [VirtualtourController::class, 'virtualtourforweb']);
@@ -303,6 +303,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::post('/user/liveChat/register', [UserController::class, 'liveChatRigister']);
     //not use
     Route::get('/user/registeredLivechat', [UserController::class, 'registeredLivechat']);
+    // Route::get('/user/registerLivechat', [UserController::class, 'registeredLivechat']);
     //********************************************//
     //******Live Chat Routes End *******//
     //********************************************//
@@ -350,6 +351,10 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     //post search
     Route::get('/search-post/{valu}', [UserController::class, 'searchPost']);
+
+
+
+
     Route::get('/user_info', [AuthController::class, 'user_info']);
     Route::post('/user_info_update', [AuthController::class, 'user_info_update']);
     Route::post('/user_info_update/star_admin', [AuthController::class, 'star_admin_info_update']);
@@ -366,6 +371,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/activity_count', [AuthController::class, 'activity_count']);
     Route::get('/user/registerMeestup', [UserController::class, 'registeredMeetup']);
     Route::get('/user/registerMeestup-single/{event_id}', [UserController::class, 'registeredSingleMeetup']);
+
+
     Route::get('/user/registerGreetings', [UserController::class, 'registerGreetings']);
     Route::get('/user/interest/type', [UserController::class, 'interestType']);
 
@@ -374,6 +381,8 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
     //check user notification
     Route::get('/user/check_notification', [UserController::class, 'checkUserNotifiaction']);
+
+
 
     // Audition
     Route::get('/user/audition/all', [UserController::class, 'audition_list']);
@@ -751,6 +760,7 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/showcase/count/mobile', [DashboardController::class, 'starShowCaseProductsCount']);
     Route::get('/star/showcase/MarketplaceProductMobile/mobile', [MarketplaceController::class, 'MarketplaceProductMobile']);
     Route::post('star/marketplace/store/mobile', [MarketplaceController::class, 'starMarketplaceStoreMobile']);
+    Route::post('star/marketplace/update/mobile/{productId}', [MarketplaceController::class, 'starMarketplaceUpdateMobile']);
     //********************************************//
     //******Marketplace Routes End *******//
     //********************************************//
@@ -759,17 +769,17 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     //******Souvenir Routes Start *******//
     //********************************************//
     //************* Souviner Section *********//
-     Route::post('/star/souviner/store/mobile', [SouvinerController::class, 'souvinerStarStoreMobile']);
-     Route::post('/star/souviner/store', [SouvinerController::class, 'souvinerStarStore']);
-     Route::get('/star/souviner/check', [SouvinerController::class, 'souvinerStarCheck']);
-     Route::get('/star/souviner/edit/{id}', [SouvinerController::class, 'souvinerStarEdit']);
-     Route::post('/star/souviner/update/{id}', [SouvinerController::class, 'souvinerStarUpdate']);
-     Route::post('/star/souviner/approve/{id}', [SouvinerController::class, 'souvinerStarApprove']);
-     Route::post('/star/souviner/decline/{id}', [SouvinerController::class, 'souvinerStarDecline']);
-     Route::get('/star/souvenir/register/list', [SouvinerController::class, 'starRegisterUserSouvenirList']);
-     Route::get('/star/souvenir/register/approve/{id}', [SouvinerController::class, 'registerSouvenirApprove']);
-     Route::get('/star/souvenir/register/decline/{id}', [SouvinerController::class, 'registerSouvenirDecline']);
-     Route::get('/star/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
+    Route::post('/star/souviner/store/mobile', [SouvinerController::class, 'souvinerStarStoreMobile']);
+    Route::post('/star/souviner/store', [SouvinerController::class, 'souvinerStarStore']);
+    Route::get('/star/souviner/check', [SouvinerController::class, 'souvinerStarCheck']);
+    Route::get('/star/souviner/edit/{id}', [SouvinerController::class, 'souvinerStarEdit']);
+    Route::post('/star/souviner/update/{id}', [SouvinerController::class, 'souvinerStarUpdate']);
+    Route::post('/star/souviner/approve/{id}', [SouvinerController::class, 'souvinerStarApprove']);
+    Route::post('/star/souviner/decline/{id}', [SouvinerController::class, 'souvinerStarDecline']);
+    Route::get('/star/souvenir/register/list', [SouvinerController::class, 'starRegisterUserSouvenirList']);
+    Route::get('/star/souvenir/register/approve/{id}', [SouvinerController::class, 'registerSouvenirApprove']);
+    Route::get('/star/souvenir/register/decline/{id}', [SouvinerController::class, 'registerSouvenirDecline']);
+    Route::get('/star/souvenir/apply/view/{id}', [SouvinerController::class, 'registerSouvenirView']);
     //********************************************//
     //******Souvenir Routes End *******//
     //********************************************//
@@ -783,8 +793,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('/star/editOrConfirm/auction/editOrConfirm/{id}', [AuctionController::class, 'star_editOrConfirm']);
     Route::get('/star/edit/auction/{id}', [AuctionController::class, 'star_editProduct']);
     Route::get('/star/approvedOrDecline/auction/{id}', [AuctionController::class, 'star_approvedOrDecline']);
-    Route::put('/star/approved/auction/{id}', [AuctionController::class, 'star_approved']);
-    Route::put('/star/decline/auction/{id}', [AuctionController::class, 'decline']);
+    Route::get('/star/approved/auction/{id}', [AuctionController::class, 'star_approved']);
+    Route::get('/star/decline/auction/{id}', [AuctionController::class, 'decline']);
     Route::post('/star/update/auction/{id}', [AuctionController::class, 'star_updateProduct']);
     Route::get('/star/all/auction/product', [AuctionController::class, 'star_allProduct']);
     Route::get('/star/show/auction/product/{id}', [AuctionController::class, 'star_showProduct']);
@@ -849,18 +859,18 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     //********************************************//
     //******Promo Videos Routes Start *******//
     //********************************************//
-     Route::get('/star/promoVideo/all', [PromoVideoController::class, 'starPromovideoAll']);
-     Route::post('/star/promoVideo/store', [PromoVideoController::class, 'starPromovideoStore']);
-     Route::get('/star/promoVideo/pending', [PromoVideoController::class, 'starPromopendingVideos']);
-     Route::get('/star/promoVideoApproved', [PromoVideoController::class, 'starPromoApprovedVideos']);
-     Route::get('/star/promoVideoReject', [PromoVideoController::class, 'starPromoRejectedVideos']);
-     Route::get('/star/promoVideo/edit/{id}', [PromoVideoController::class, 'edit']);
-     Route::post('/star/promoVideo/update', [PromoVideoController::class, 'update']);
-     Route::get('/star/promoVideo/pending/{id}', [PromoVideoController::class, 'starVideosDetails']);
-     Route::get('/star/promoVideoLive', [PromoVideoController::class, 'starPromoliveVideos']);
-     Route::get('/star/promoVideo/count', [PromoVideoController::class, 'starPromoVideoCount']);
-     Route::get('/star/promoVideo/approved/{id}', [PromoVideoController::class, 'starPromoVideoApproved']);
-     Route::get('/star/promoVideo/decline/{id}', [PromoVideoController::class, 'starPromoVideoDecline']);
+    Route::get('/star/promoVideo/all', [PromoVideoController::class, 'starPromovideoAll']);
+    Route::post('/star/promoVideo/store', [PromoVideoController::class, 'starPromovideoStore']);
+    Route::get('/star/promoVideo/pending', [PromoVideoController::class, 'starPromopendingVideos']);
+    Route::get('/star/promoVideoApproved', [PromoVideoController::class, 'starPromoApprovedVideos']);
+    Route::get('/star/promoVideoReject', [PromoVideoController::class, 'starPromoRejectedVideos']);
+    Route::get('/star/promoVideo/edit/{id}', [PromoVideoController::class, 'edit']);
+    Route::post('/star/promoVideo/update', [PromoVideoController::class, 'update']);
+    Route::get('/star/promoVideo/pending/{id}', [PromoVideoController::class, 'starVideosDetails']);
+    Route::get('/star/promoVideoLive', [PromoVideoController::class, 'starPromoliveVideos']);
+    Route::get('/star/promoVideo/count', [PromoVideoController::class, 'starPromoVideoCount']);
+    Route::get('/star/promoVideo/approved/{id}', [PromoVideoController::class, 'starPromoVideoApproved']);
+    Route::get('/star/promoVideo/decline/{id}', [PromoVideoController::class, 'starPromoVideoDecline']);
     //********************************************//
     //******Promo Videos Routes End *******//
     //********************************************//
@@ -871,6 +881,8 @@ Route::middleware(['auth:sanctum', 'isAPIStar'])->group(function () {
     Route::get('star/fan/group/starlist/status', [FanGroupController::class, 'statusStar']);
     Route::post('star/fan/group/update/{slug}', [FanGroupController::class, 'starUpdate']);
     Route::get('star/fan/group/details/{slug}', [FanGroupController::class, 'fanGroupDetails']);
+    Route::get('star/fan/group/active/{id}', [FanGroupController::class, 'fanGroupActive']);
+    Route::get('star/fan/group/ignore/{id}', [FanGroupController::class, 'fanGroupIgnore']);
     Route::get('star/fan/group/active/{slug}', [FanGroupController::class, 'fanGroupActive']);
     Route::get('star/fan/group/ignore/{slug}', [FanGroupController::class, 'fanGroupIgnore']);
     Route::get('/star/fan/group/show/{slug}', [FanGroupController::class, 'showStarFanGroup']);

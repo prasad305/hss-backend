@@ -49,11 +49,11 @@ class HomeController extends Controller
 
         file_put_contents('uploads/videos/temp/' . $chunkName, base64_decode($request->video, true));
 
-        if ($chunk == $chunks) {
-            // return "hello";
-            $filePath = $this->mergeChunks($fileName, $chunks + 1);
-            return response()->json(['success' => true, 'file_path' => $filePath]);
-        }
+        // if ($chunk == $chunks) {
+        //     // return "hello";
+        //     $filePath = $this->mergeChunks($fileName, $chunks + 1);
+        //     return response()->json(['success' => true, 'file_path' => $filePath]);
+        // }
 
         return response()->json([
             'success' => true,
