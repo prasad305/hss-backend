@@ -57,7 +57,7 @@ class QnaController extends Controller
 
     public function manager_event_details($id)
     {
-        $event = QnA::with('admin')->find($id);
+        $event = QnA::with(['admin','star'])->find($id);
 
         $allRegistered = collect(QnaRegistration::with('user')->where('qna_id', $id)->orderBy('id', 'DESC')->get());
         $registered = $allRegistered->unique('user_id');

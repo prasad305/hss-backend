@@ -1013,7 +1013,7 @@ class UserController extends Controller
 
     public function registeredLivechat()
     {
-        $post = LiveChatRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+        $post = LiveChatRegistration::with(['user', 'liveChat'])->where('user_id', auth('sanctum')->user()->id)->latest()->get();
 
         return response()->json([
             'status' => 200,
@@ -1023,7 +1023,7 @@ class UserController extends Controller
     }
     public function qna_activities()
     {
-        $post = QnaRegistration::where('user_id', auth('sanctum')->user()->id)->latest()->get();
+        $post = QnaRegistration::with('qna')->where('user_id', auth('sanctum')->user()->id)->latest()->get();
 
 
         return response()->json([
@@ -1176,7 +1176,7 @@ class UserController extends Controller
 
     public function liveChatDetails($slug)
     {
-        $event = LiveChat::where('slug', $slug)->first();
+        $event = LiveChat::with('star')->where('slug', $slug)->first();
 
         return response()->json([
             'status' => 200,
@@ -1212,7 +1212,7 @@ class UserController extends Controller
 
     public function qnaDetails($slug)
     {
-        $event = QnA::where('slug', $slug)->first();
+        $event = QnA::with('star')->where('slug', $slug)->first();
 
         return response()->json([
             'status' => 200,

@@ -26,6 +26,9 @@ class CreateQnaMessagesTable extends Migration
             $table->string('time')->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();
+
+            $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('qna_id')->references('id')->on('qn_a_s')->onDelete('cascade');
         });
     }
 

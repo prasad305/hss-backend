@@ -9,6 +9,7 @@ class QnaRegistration extends Model
 {
     use HasFactory;
     protected $with = ['user', 'qna'];
+    // protected $with = ['qna'];
 
     public function qna()
     {

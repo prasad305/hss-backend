@@ -28,7 +28,7 @@ class CreateQnASTable extends Migration
             $table->time('available_start_time')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
-            $table->unsignedBigInteger('slot_counter')->nullable();
+            $table->integer('slot_counter')->nullable();
             $table->text('banner')->nullable();
             $table->text('video')->nullable();
             $table->double('fee')->nullable();
@@ -42,6 +42,12 @@ class CreateQnASTable extends Migration
             $table->boolean('star_approval')->default(0)->comment('0 = pending, 1 = approved,2 = reject');
             $table->integer('status')->default(0)->comment('0 = pending, 2 = publisehd, 9 = completed, 10 = removed, 22 = rejected by Manager Admin');
             $table->timestamps();
+
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('sub_category_id')->references('id')->on('sub_categories')->onDelete('cascade');
+            $table->foreign('created_by_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('star_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
