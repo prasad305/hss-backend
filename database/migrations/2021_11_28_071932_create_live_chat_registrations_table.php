@@ -33,6 +33,9 @@ class CreateLiveChatRegistrationsTable extends Migration
             $table->integer('comment_count')->nullable();
             $table->integer('publish_status')->nullable();
             $table->timestamps();
+
+            $table->foreign('live_chat_id')->references('id')->on('live_chats')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

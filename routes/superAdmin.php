@@ -58,17 +58,11 @@ use App\Http\Controllers\SuperAdmin\VirtualtourController;
 use App\Http\Controllers\SuperAdmin\DeliveryChargeController;
 use App\Http\Controllers\SuperAdmin\SouvenirDeliveryChargeController;
 
+    // Super Admin routechange.password
+    Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin', 'prevent-back-history']], function () {
 
-// Super Admin routechange.password
-
-Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' => ['auth', 'superAdmin', 'prevent-back-history']], function () {
-
-
-    /**
-     * quize view
-     */
+    // quize view
     Route::get('/quiz-result', [HomeController::class, 'viewAllQuize'])->name('showAllQuiz');
-
 
     //********************************************//
     //******Learning Session Routes Start *******//
@@ -165,7 +159,7 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     //********************************************//
 
     //********************************************//
-    //******Souvenir Routes Start *******//
+    //****** Souvenir Routes Start *******//
     //********************************************//
     //**************** Delivery Routes ***************//
     Route::resource('souvenirdeliverycharge', SouvenirDeliveryChargeController::class);
@@ -314,24 +308,71 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     //****** Fan Group Routes End *******//
     //********************************************//
 
+    //********************************************//
+    //****** Live Chat Routes Start *******//
+    //********************************************//
+    //========== LiveChat ==========//
+    Route::get('liveChat-index', [LiveChatController::class, 'index'])->name('liveChat.index');
+    Route::get('liveChat-list/{id}', [LiveChatController::class, 'liveChatList'])->name('liveChat.list');
+    Route::get('liveChat-details/{id}', [LiveChatController::class, 'liveChatDetails'])->name('liveChat.details');
+    Route::get('liveChat-edit/{id}', [LiveChatController::class, 'liveChatEdit'])->name('liveChat.edit');
+    Route::PUT('liveChat-update/{id}', [LiveChatController::class, 'livechatUpdate'])->name('liveChat.update');
+    Route::delete('liveChat-destroy/{id}', [LiveChatController::class, 'liveChatDestroy'])->name('liveChat.destroy');
+    //========== Dashboard ==========//
+    Route::get('/all/live-chat', [DashboardInfoController::class, 'allLiveChat'])->name('allLiveChat');
+    Route::get('/all/complete/live-chat', [DashboardInfoController::class, 'allCompleteLiveChat'])->name('allCompleteLiveChat');
+    Route::get('/all/upcoming/live-chat', [DashboardInfoController::class, 'allUpcomingLiveChat'])->name('allUpcomingLiveChat');
+    Route::get('/all/running/live-chat', [DashboardInfoController::class, 'allRunningLiveChat'])->name('allRunningLiveChat');
+    Route::get('/live-chats', [DashboardController::class, 'liveChats'])->name('liveChats');
+    Route::get('/liveChat-events-dashboard', [DashboardController::class, 'liveChatEventsDashboard'])->name('liveChatEvents.dashboard');
+    Route::get('/liveChat-data-list/{type}', [DashboardController::class, 'liveChatDataList'])->name('liveChatEvents.liveChatDataList');
+    Route::get('/liveChat-manager-list', [DashboardController::class, 'liveChatManagerAdminList'])->name('liveChatEvents.managerAdminList');
+    Route::get('/liveChat-manager-events/{id}', [DashboardController::class, 'liveChatManagerAdminEvents'])->name('liveChatEvents.managerAdminEvents');
+    Route::get('/liveChat-admin-list', [DashboardController::class, 'liveChatAdminList'])->name('liveChatEvents.adminList');
+    Route::get('/liveChat-admin-events/{id}', [DashboardController::class, 'liveChatAdminEvents'])->name('liveChatEvents.adminEvents');
+    Route::get('/liveChat-superstar-list', [DashboardController::class, 'liveChatSuperstarList'])->name('liveChatEvents.superstarList');
+    Route::get('/liveChat-superstar-events/{id}', [DashboardController::class, 'liveChatSuperstarEvents'])->name('liveChatEvents.superstarEvents');
+    //========== Report ==========//
+    Route::get('/liveChat-report', [ReportController::class, 'liveChatReport'])->name('report.liveChat');
+    Route::post('/liveChat-report', [ReportController::class, 'liveChatReportFilter'])->name('report.Filter.liveChat');
+    //********************************************//
+    //****** Live Chat Routes End *******//
+    //********************************************//
+
+    //********************************************//
+    //****** QNA Routes Start *******//
+    //********************************************//
+    //========== QNA ==========//
+    Route::get('qna-index', [QnAController::class, 'index'])->name('qna.index');
+    Route::get('qna-list/{id}', [QnAController::class, 'qnaList'])->name('qna.list');
+    Route::get('qna-details/{id}', [QnAController::class, 'qnaDetails'])->name('qna.details');
+    Route::get('qna-edit/{id}', [QnAController::class, 'qnaEdit'])->name('qna.edit');
+    Route::PUT('qna-update/{id}', [QnAController::class, 'qnaUpdate'])->name('qna.update');
+    Route::delete('qna-destroy/{id}', [QnAController::class, 'qnaDestroy'])->name('qna.destroy');
+    //========== Dashboard ==========//
+    Route::get('/qna-events-dashboard', [DashboardController::class, 'qnaEventsDashboard'])->name('qnaEvents.dashboard');
+    Route::get('/qna-data-list/{type}', [DashboardController::class, 'qnaDataList'])->name('qnaEvents.qnaDataList');
+    Route::get('/qna-manager-list', [DashboardController::class, 'qnaManagerAdminList'])->name('qnaEvents.managerAdminList');
+    Route::get('/qna-manager-events/{id}', [DashboardController::class, 'qnaManagerAdminEvents'])->name('qnaEvents.managerAdminEvents');
+    Route::get('/qna-admin-list', [DashboardController::class, 'qnaAdminList'])->name('qnaEvents.adminList');
+    Route::get('/qna-admin-events/{id}', [DashboardController::class, 'qnaAdminEvents'])->name('qnaEvents.adminEvents');
+    Route::get('/qna-superstar-list', [DashboardController::class, 'qnaSuperstarList'])->name('qnaEvents.superstarList');
+    Route::get('/qna-superstar-events/{id}', [DashboardController::class, 'qnaSuperstarEvents'])->name('qnaEvents.superstarEvents');
+    //========== Report ==========//
+    Route::get('/qna-report', [ReportController::class, 'qnaReport'])->name('report.qna');
+    Route::post('/qna-report-filter', [ReportController::class, 'qnaReportFilter'])->name('report.Filter.qna');
+    //********************************************//
+    //****** QNA Routes End *******//
+    //********************************************//
+
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/withdraw', [ProfitWithdrawController::class, 'index'])->name('withdraw.index');
     Route::put('/txn-store/{id}', [ProfitWithdrawController::class, 'store'])->name('bankTxnId.store');
-
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
-
-
-   
-
-
     Route::post('/profile/change/store', [DashboardController::class, 'changeProfile'])->name('change.profile');
-
     Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
-
-    Route::get('/live-chats', [DashboardController::class, 'liveChats'])->name('liveChats');
     Route::get('/user-posts', [DashboardController::class, 'userPosts'])->name('userPosts');
     Route::get('/wallet', [DashboardController::class, 'wallets'])->name('wallets');
-
     // Route::get('/package', [DashboardController::class, 'package'])->name('package');
     // Route::get('/add-package', [DashboardController::class, 'addPackage'])->name('addPackage');
     // Route::post('/store-package', [DashboardController::class, 'packageStore'])->name('packageStore');
@@ -341,15 +382,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/all/star', [DashboardInfoController::class, 'allStar'])->name('allStar');
     Route::get('/all/admin', [DashboardInfoController::class, 'allAdmin'])->name('allAdmin');
 
-
-
-    //Live Chats
-    Route::get('/all/live-chat', [DashboardInfoController::class, 'allLiveChat'])->name('allLiveChat');
-    Route::get('/all/complete/live-chat', [DashboardInfoController::class, 'allCompleteLiveChat'])->name('allCompleteLiveChat');
-    Route::get('/all/upcoming/live-chat', [DashboardInfoController::class, 'allUpcomingLiveChat'])->name('allUpcomingLiveChat');
-    Route::get('/all/running/live-chat', [DashboardInfoController::class, 'allRunningLiveChat'])->name('allRunningLiveChat');
-
-
     //Post
     Route::get('/all/post/list', [DashboardInfoController::class, 'allPost'])->name('allPost');
     Route::get('/all/post/daily', [DashboardInfoController::class, 'dailyPost'])->name('dailyPost');
@@ -357,7 +389,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('/all/post/monthly', [DashboardInfoController::class, 'monthlyPost'])->name('monthlyPost');
 
     //Super Admin Profile
-
     Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
     Route::post('/change/password/store', [DashboardController::class, 'changePassword'])->name('change.password');
@@ -402,7 +433,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::delete('/audition-events/destroy/{id}', [DashboardController::class, 'auditionDestroy'])->name('audition.destroy');
 
     // UserVoteMarkSetting
-
     Route::get('audition-user-mark', [AuditionUserVoteController::class, 'index'])->name('userVoteMark.index');
     Route::get('userVoteMark-create', [AuditionUserVoteController::class, 'userVoteMarkCreate'])->name('userVoteMark.create');
     Route::post('userVoteMark-store', [AuditionUserVoteController::class, 'userVoteMarkStore'])->name('userVoteMark.store');
@@ -417,7 +447,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('loveReactPrice-edit/{id}', [PaidLoveReactPriceController::class, 'loveReactPriceEdit'])->name('loveReactPrice.edit');
     Route::put('loveReactPrice-update/{id}', [PaidLoveReactPriceController::class, 'loveReactPriceUpdate'])->name('loveReactPrice.update');
     Route::delete('loveReactPrice-destroy/{id}', [PaidLoveReactPriceController::class, 'loveReactPriceDestroy'])->name('loveReactPrice.destroy');
-
     // Audition Routes ends here
 
 
@@ -429,22 +458,6 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
 
     // Refund Policy
     Route::resource('refundpolicy', RefundController::class);
-
-    //LiveChat
-    Route::get('liveChat-index', [LiveChatController::class, 'index'])->name('liveChat.index');
-    Route::get('liveChat-list/{id}', [LiveChatController::class, 'liveChatList'])->name('liveChat.list');
-    Route::get('liveChat-details/{id}', [LiveChatController::class, 'liveChatDetails'])->name('liveChat.details');
-    Route::get('liveChat-edit/{id}', [LiveChatController::class, 'liveChatEdit'])->name('liveChat.edit');
-    Route::PUT('liveChat-update/{id}', [LiveChatController::class, 'livechatUpdate'])->name('liveChat.update');
-    Route::delete('liveChat-destroy/{id}', [LiveChatController::class, 'liveChatDestroy'])->name('liveChat.destroy');
-
-    //Q&A
-    Route::get('qna-index', [QnAController::class, 'index'])->name('qna.index');
-    Route::get('qna-list/{id}', [QnAController::class, 'qnaList'])->name('qna.list');
-    Route::get('qna-details/{id}', [QnAController::class, 'qnaDetails'])->name('qna.details');
-    Route::get('qna-edit/{id}', [QnAController::class, 'qnaEdit'])->name('qna.edit');
-    Route::PUT('qna-update/{id}', [QnAController::class, 'qnaUpdate'])->name('qna.update');
-    Route::delete('qna-destroy/{id}', [QnAController::class, 'qnaDestroy'])->name('qna.destroy');
 
     // Events
     Route::resource('events', EventsController::class);
@@ -515,13 +528,9 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     // Admin route
     Route::resource('admin', AdminController::class);
     Route::get('admin/{category_id}/get-subcategory', [AdminController::class, 'getSubCategory']);
-
     Route::post('admin/active/{id}', [AdminController::class, 'activeNow'])->name('admin.activeNow');
     Route::post('admin/inactive/{id}', [AdminController::class, 'inactiveNow'])->name('admin.inactiveNow');
-
-
     Route::get('admin/starlist', [AdminController::class, 'starlist'])->name('admin.starlist');
-
     Route::resource('star', SuperStarController::class);
     Route::post('star/active/{id}', [SuperStarController::class, 'activeNow'])->name('star.activeNow');
     Route::post('star/inactive/{id}', [SuperStarController::class, 'inactiveNow'])->name('star.inactiveNow');
@@ -539,63 +548,9 @@ Route::group(['prefix' => 'super-admin/', 'as' => 'superAdmin.', 'middleware' =>
     Route::get('superstar-accounts/{id}/{module}', [AccountsController::class, 'superstarList'])->name('accounts.superstarList');
     // superadmin end
 
-    //<=========================== Accounts Releated Route End =====================================>
-
-    // <================================= All Module Dashboard ======================================>
-
-    // manager admin
-
-    
-    // live Chat dashboard
-    Route::get('/liveChat-events-dashboard', [DashboardController::class, 'liveChatEventsDashboard'])->name('liveChatEvents.dashboard');
-    Route::get('/liveChat-data-list/{type}', [DashboardController::class, 'liveChatDataList'])->name('liveChatEvents.liveChatDataList');
-    Route::get('/liveChat-manager-list', [DashboardController::class, 'liveChatManagerAdminList'])->name('liveChatEvents.managerAdminList');
-    Route::get('/liveChat-manager-events/{id}', [DashboardController::class, 'liveChatManagerAdminEvents'])->name('liveChatEvents.managerAdminEvents');
-
-    // qna dashboard
-    Route::get('/qna-events-dashboard', [DashboardController::class, 'qnaEventsDashboard'])->name('qnaEvents.dashboard');
-    Route::get('/qna-data-list/{type}', [DashboardController::class, 'qnaDataList'])->name('qnaEvents.qnaDataList');
-    Route::get('/qna-manager-list', [DashboardController::class, 'qnaManagerAdminList'])->name('qnaEvents.managerAdminList');
-    Route::get('/qna-manager-events/{id}', [DashboardController::class, 'qnaManagerAdminEvents'])->name('qnaEvents.managerAdminEvents');
-    
-
-    //superstar admin
-    
-    // live Chat dashboard
-    Route::get('/liveChat-admin-list', [DashboardController::class, 'liveChatAdminList'])->name('liveChatEvents.adminList');
-    Route::get('/liveChat-admin-events/{id}', [DashboardController::class, 'liveChatAdminEvents'])->name('liveChatEvents.adminEvents');
-
-    // qna dashboard
-    Route::get('/qna-admin-list', [DashboardController::class, 'qnaAdminList'])->name('qnaEvents.adminList');
-    Route::get('/qna-admin-events/{id}', [DashboardController::class, 'qnaAdminEvents'])->name('qnaEvents.adminEvents');
-   
-   
-    
-
-    //superstar
-
-   
-    // live Chat dashboard
-    Route::get('/liveChat-superstar-list', [DashboardController::class, 'liveChatSuperstarList'])->name('liveChatEvents.superstarList');
-    Route::get('/liveChat-superstar-events/{id}', [DashboardController::class, 'liveChatSuperstarEvents'])->name('liveChatEvents.superstarEvents');
-
-    // qna dashboard
-    Route::get('/qna-superstar-list', [DashboardController::class, 'qnaSuperstarList'])->name('qnaEvents.superstarList');
-    Route::get('/qna-superstar-events/{id}', [DashboardController::class, 'qnaSuperstarEvents'])->name('qnaEvents.superstarEvents');
-
-
-
-    // <================================= End All Module Dashboard ======================================>
-
     // <================================= All Report ======================================>
-
     Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
     Route::get('/all-report-filter-subCategory/{id}', [ReportController::class, 'allSubCategory']);
-    Route::get('/liveChat-report', [ReportController::class, 'liveChatReport'])->name('report.liveChat');
-    Route::post('/liveChat-report', [ReportController::class, 'liveChatReportFilter'])->name('report.Filter.liveChat');
-    Route::get('/qna-report', [ReportController::class, 'qnaReport'])->name('report.qna');
-    Route::post('/qna-report-filter', [ReportController::class, 'qnaReportFilter'])->name('report.Filter.qna');
-   
     // Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
 
     // <=================================End All Report ======================================>

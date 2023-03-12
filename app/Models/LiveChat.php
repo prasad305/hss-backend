@@ -32,7 +32,8 @@ class LiveChat extends Model
         'status',
         'admin_id'
     ];
-    protected $with = ['star', 'admin'];
+    // protected $with = ['star', 'admin'];
+    protected $with = ['star'];
 
     public function admin()
     {

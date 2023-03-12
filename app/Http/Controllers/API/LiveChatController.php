@@ -69,8 +69,8 @@ class LiveChatController extends Controller
     public function slots($id)
     {
         $event = LiveChat::find($id);
-        $users = LiveChatRegistration::orderBy('live_chat_start_time', 'ASC')->where([['live_chat_id', $event->id], ['payment_status', 1], ['getSlot', 1]])->get();
-        $usersWithOutSlot = LiveChatRegistration::orderBy('live_chat_start_time', 'ASC')->where([['live_chat_id', $event->id], ['payment_status', 1], ['getSlot', 0]])->get();
+        $users = LiveChatRegistration::with('user')->orderBy('live_chat_start_time', 'ASC')->where([['live_chat_id', $event->id], ['payment_status', 1], ['getSlot', 1]])->get();
+        $usersWithOutSlot = LiveChatRegistration::with('user')->orderBy('live_chat_start_time', 'ASC')->where([['live_chat_id', $event->id], ['payment_status', 1], ['getSlot', 0]])->get();
 
         return response()->json([
             'status' => 200,
@@ -185,6 +185,10 @@ class LiveChatController extends Controller
             $liveChat->end_time = $request->input('end_time');
             $liveChat->registration_start_date = $request->input('registration_start_date');
             $liveChat->registration_end_date = $request->input('registration_end_date');
+            $startTime = Carbon::parse($request->input('start_time'));
+            $endTime = Carbon::parse($request->input('end_time'));
+            $totalTime = $endTime->diffInMinutes($startTime);
+            $liveChat->available_start_time = $totalTime;
             $liveChat->fee = $request->input('fee');
             $liveChat->total_seat = $request->input('total_seat');
             $liveChat->max_time = $request->input('max_time');

@@ -329,38 +329,84 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     //********************************************//
     //****** Fan Group Routes End *******//
     //********************************************//
-
-    // Dashboard Routes By Srabon
-
-    Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
-    // Schedule Routes By Monir
-
-    Route::resource('schedule', ScheduleController::class);
-    Route::post('schdeule/updateAll/{admin_id}', [ScheduleController::class, 'update_all'])->name('schedule.update_all');
-
-    // Live Chats
+    
+    //********************************************//
+    //****** Live Chat Routes Start *******//
+    //********************************************//
+    Route::get('liveChat', [LiveChatController::class, 'index'])->name('liveChat.index');
+    Route::put('liveChat/approve/{id}', [LiveChatController::class, 'approve'])->name('liveChat.approve');
+    Route::get('liveChat/details/{id}', [LiveChatController::class, 'show'])->name('liveChat.details');
+    Route::get('livechat/edit/{id}', [LiveChatController::class, 'edit'])->name('liveChat.edit');
+    Route::put('livechat/edit/{id}', [LiveChatController::class, 'update'])->name('liveChat.update');
+    Route::get('liveChat/pending', [LiveChatController::class, 'pending'])->name('liveChat.pending');
+    Route::get('liveChat/published', [LiveChatController::class, 'published'])->name('liveChat.published');
+    Route::get('liveChat/all', [LiveChatController::class, 'all'])->name('liveChat.all');
+    Route::get('LiveChatEvents/details/{id}', [LiveChatController::class, 'manager_event_details'])->name('LiveChatEvents.details');
+    Route::post('LiveChatEvents/set_publish/{id}', [LiveChatController::class, 'manager_event_set_publish'])->name('liveChat.set_publish');
+    //=========== Dashboard ==========//
     Route::get('live-chats', [DashboardController::class, 'liveChats'])->name('dashboard.liveChat');
     Route::get('live-chats-data/{type}', [DashboardController::class, 'liveChatsData'])->name('dashboard.liveChatData');
     Route::get('live-chats-details/{id}', [DashboardController::class, 'liveChatsDetails'])->name('dashboard.liveChatDetails');
-
-
     Route::get('subliveChat-list/{id}', [DashboardController::class, 'subliveChatList'])->name('subliveChat.list');
     Route::get('liveChat-admin-list', [DashboardController::class, 'liveChatAdminList'])->name('liveChatEvents.adminList');
     Route::get('liveChat-admin-events/{adminId}', [DashboardController::class, 'liveChatAdminEvents'])->name('liveChatEvents.adminEvents');
     Route::get('liveChat-superstar-list', [DashboardController::class, 'liveChatSuperstarList'])->name('liveChatEvents.superstarList');
     Route::get('liveChat-superstar-events/{starId}', [DashboardController::class, 'liveChatSuperstarEvents'])->name('liveChatEvents.superstarEvents');
+    //=========== Accounts ==========//
+    Route::get('liveChat-totalIncome', [AccountsController::class, 'liveChatTotalIncome'])->name('liveChatTotalIncome');
+    Route::get('liveChat-dailyIncome', [AccountsController::class, 'liveChatDailyIncome'])->name('liveChatDailyIncome');
+    Route::get('liveChat-weeklyIncome', [AccountsController::class, 'liveChatweeklyIncome'])->name('liveChatWeeklyIncome');
+    Route::get('liveChat-monthlyIncome', [AccountsController::class, 'liveChatMonthlyIncome'])->name('liveChatMonthlyIncome');
+    Route::get('liveChat-yearlyIncome', [AccountsController::class, 'liveChatYearlyIncome'])->name('liveChatYearlyIncome');
+    //=========== Report ==========//
+    Route::get('/liveChat-report', [ReportController::class, 'liveChatReport'])->name('report.liveChat');
+    Route::post('/liveChat-report', [ReportController::class, 'liveChatReportFilter'])->name('report.Filter.liveChat');
+    //********************************************//
+    //****** Live Chat Routes End *******//
+    //********************************************//
 
-    //Question And Answers
+    //********************************************//
+    //****** QNA Routes Start *******//
+    //********************************************//
+    //=========== QNA ==========//
+    Route::get('qna/pending', [QnaController::class, 'pending'])->name('qna.pending');
+    Route::get('qna/published', [QnaController::class, 'published'])->name('qna.published');
+    Route::get('qna/all', [QnaController::class, 'all'])->name('qna.all');
+    Route::get('qna/details/{id}', [QnaController::class, 'manager_event_details'])->name('qna.details');
+    Route::post('qna/set_publish/{id}', [QnaController::class, 'manager_event_set_publish'])->name('qna.set_publish');
+    Route::get('qna', [QnaController::class, 'index'])->name('qna.index');
+    Route::put('qna/approve/{id}', [QnaController::class, 'approve'])->name('qna.approve');
+    // Route::get('qna/details/{id}', [QnaController::class, 'show'])->name('qna.details');
+    Route::get('qna/edit/{id}', [QnaController::class, 'edit'])->name('qna.edit');
+    Route::put('qna/edit/{id}', [QnaController::class, 'update'])->name('qna.update');
+    //=========== Dashboard ==========//
     Route::get('qna-dashboard', [DashboardController::class, 'qna'])->name('dashboard.qna');
     Route::get('qna-data/{type}', [DashboardController::class, 'qnaData'])->name('dashboard.qnaData');
     Route::get('qna-details/{id}', [DashboardController::class, 'qnaDetails'])->name('dashboard.qnaDetails');
-
     Route::get('subqna-list/{id}', [DashboardController::class, 'subqnaList'])->name('subqna.list');
     Route::get('qna-admin-list', [DashboardController::class, 'qnaAdminList'])->name('qnaEvents.adminList');
     Route::get('qna-admin-events/{adminId}', [DashboardController::class, 'qnaAdminEvents'])->name('qnaEvents.adminEvents');
     Route::get('qna-superstar-list', [DashboardController::class, 'qnaSuperstarList'])->name('qnaEvents.superstarList');
     Route::get('qna-superstar-events/{starId}', [DashboardController::class, 'qnaSuperstarEvents'])->name('qnaEvents.superstarEvents');
+    //=========== Accounts ==========//
+    Route::get('qna-totalIncome', [AccountsController::class, 'qnaTotalIncome'])->name('qnaTotalIncome');
+    Route::get('qna-dailyIncome', [AccountsController::class, 'qnaDailyIncome'])->name('qnaDailyIncome');
+    Route::get('qna-weeklyIncome', [AccountsController::class, 'qnaweeklyIncome'])->name('qnaWeeklyIncome');
+    Route::get('qna-monthlyIncome', [AccountsController::class, 'qnaMonthlyIncome'])->name('qnaMonthlyIncome');
+    Route::get('qna-yearlyIncome', [AccountsController::class, 'qnaYearlyIncome'])->name('qnaYearlyIncome');
+    //=========== Report ==========//
+    Route::get('/qna-report', [ReportController::class, 'qnaReport'])->name('report.qna');
+    Route::post('/qna-report-filter', [ReportController::class, 'qnaReportFilter'])->name('report.Filter.qna');
+    //********************************************//
+    //****** QNA Routes End *******//
+    //********************************************//
 
+    // Dashboard Routes By Srabon
+    Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
+
+    // Schedule Routes By Monir
+    Route::resource('schedule', ScheduleController::class);
+    Route::post('schdeule/updateAll/{admin_id}', [ScheduleController::class, 'update_all'])->name('schedule.update_all');
 
     // Audition routes starts here
     Route::get('auditions', [DashboardController::class, 'auditions'])->name('dashboard.audition');
@@ -414,9 +460,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     });
     // Audition routes ends here
 
-
-
-
     //up commingevent
     Route::get('upcomming-events', [LiveEventController::class, 'UpcommingEvent'])->name('UpcommingEvent');
     //event details
@@ -442,59 +485,18 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     //For Super Star route
     Route::resource('star', SuperStarController::class);
 
-
-
-
     // Jury Board route
     Route::resource('jury', JuryBoardController::class);
-
     Route::post('jury/active/{id}', [JuryBoardController::class, 'activeNow'])->name('jury.activeNow');
     Route::post('jury/inactive/{id}', [JuryBoardController::class, 'inactiveNow'])->name('jury.inactiveNow');
     Route::get('jury-view/{jury_id}', [JuryBoardController::class, 'views'])->name('jury.views');
-
-
     Route::post('jury-video-assign', [JuryBoardController::class, 'assignVideo'])->name('jury.AssingVideos');
 
 
     // assigned route for admin to star or star to admin
     Route::resource('assigned', StarAssignedController::class);
-
-
-    // Live route
-    Route::get('liveChat', [LiveChatController::class, 'index'])->name('liveChat.index');
-    Route::put('liveChat/approve/{id}', [LiveChatController::class, 'approve'])->name('liveChat.approve');
-    Route::get('liveChat/details/{id}', [LiveChatController::class, 'show'])->name('liveChat.details');
-
-    Route::get('livechat/edit/{id}', [LiveChatController::class, 'edit'])->name('liveChat.edit');
-    Route::put('livechat/edit/{id}', [LiveChatController::class, 'update'])->name('liveChat.update');
-
-
-    // Live Chat Events
-    Route::get('liveChat/pending', [LiveChatController::class, 'pending'])->name('liveChat.pending');
-    Route::get('liveChat/published', [LiveChatController::class, 'published'])->name('liveChat.published');
-    Route::get('liveChat/all', [LiveChatController::class, 'all'])->name('liveChat.all');
-
-    Route::get('LiveChatEvents/details/{id}', [LiveChatController::class, 'manager_event_details'])->name('LiveChatEvents.details');
-    Route::post('LiveChatEvents/set_publish/{id}', [LiveChatController::class, 'manager_event_set_publish'])->name('liveChat.set_publish');
-
-    // Questions and Answers
-    Route::get('qna/pending', [QnaController::class, 'pending'])->name('qna.pending');
-    Route::get('qna/published', [QnaController::class, 'published'])->name('qna.published');
-    Route::get('qna/all', [QnaController::class, 'all'])->name('qna.all');
-    Route::get('qna/details/{id}', [QnaController::class, 'manager_event_details'])->name('qna.details');
-    Route::post('qna/set_publish/{id}', [QnaController::class, 'manager_event_set_publish'])->name('qna.set_publish');
-
-    Route::get('qna', [QnaController::class, 'index'])->name('qna.index');
-    Route::put('qna/approve/{id}', [QnaController::class, 'approve'])->name('qna.approve');
-    // Route::get('qna/details/{id}', [QnaController::class, 'show'])->name('qna.details');
-
-    Route::get('qna/edit/{id}', [QnaController::class, 'edit'])->name('qna.edit');
-    Route::put('qna/edit/{id}', [QnaController::class, 'update'])->name('qna.update');
-
     Route::get('dashboard/wildCardUser', [DashboardController::class, 'wildCardUser'])->name('wildCardUser');
-
     Route::get('dashboard/roundResult', [DashboardController::class, 'roundResult'])->name('roundResult');
-
     Route::get('dashboard/roundCompleteCard', [DashboardController::class, 'roundCompleteCard'])->name('roundCompleteCard');
     //====================== Accounts Route =================
     //manager panel start
@@ -503,14 +505,6 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::post('accountFilter', [AccountsController::class, 'accountFilter'])->name('accounts.accountFilter');
     Route::get('superstar-accounts/{id}/{module}', [AccountsController::class, 'superstarList'])->name('accounts.superstarList');
     //manager panel end
-
-
-    // live chats
-    Route::get('liveChat-totalIncome', [AccountsController::class, 'liveChatTotalIncome'])->name('liveChatTotalIncome');
-    Route::get('liveChat-dailyIncome', [AccountsController::class, 'liveChatDailyIncome'])->name('liveChatDailyIncome');
-    Route::get('liveChat-weeklyIncome', [AccountsController::class, 'liveChatweeklyIncome'])->name('liveChatWeeklyIncome');
-    Route::get('liveChat-monthlyIncome', [AccountsController::class, 'liveChatMonthlyIncome'])->name('liveChatMonthlyIncome');
-    Route::get('liveChat-yearlyIncome', [AccountsController::class, 'liveChatYearlyIncome'])->name('liveChatYearlyIncome');
     
     // Audition
     Route::get('audition-totalIncome', [AccountsController::class, 'auditionTotalIncome'])->name('auditionTotalIncome');
@@ -519,25 +513,9 @@ Route::group(['prefix' => 'manager-admin/', 'as' => 'managerAdmin.', 'middleware
     Route::get('audition-monthlyIncome', [AccountsController::class, 'auditionMonthlyIncome'])->name('auditionMonthlyIncome');
     Route::get('audition-yearlyIncome', [AccountsController::class, 'auditionYearlyIncome'])->name('auditionYearlyIncome');
     
-    // Q&A
-    Route::get('qna-totalIncome', [AccountsController::class, 'qnaTotalIncome'])->name('qnaTotalIncome');
-    Route::get('qna-dailyIncome', [AccountsController::class, 'qnaDailyIncome'])->name('qnaDailyIncome');
-    Route::get('qna-weeklyIncome', [AccountsController::class, 'qnaweeklyIncome'])->name('qnaWeeklyIncome');
-    Route::get('qna-monthlyIncome', [AccountsController::class, 'qnaMonthlyIncome'])->name('qnaMonthlyIncome');
-    Route::get('qna-yearlyIncome', [AccountsController::class, 'qnaYearlyIncome'])->name('qnaYearlyIncome');
-    
-
-
     // <================================= All Report ======================================>
-
     Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
-    
     Route::get('/all-report-filter-subCategory/{id}', [ReportController::class, 'allSubCategory']);
-    Route::get('/liveChat-report', [ReportController::class, 'liveChatReport'])->name('report.liveChat');
-    Route::post('/liveChat-report', [ReportController::class, 'liveChatReportFilter'])->name('report.Filter.liveChat');
-    Route::get('/qna-report', [ReportController::class, 'qnaReport'])->name('report.qna');
-    Route::post('/qna-report-filter', [ReportController::class, 'qnaReportFilter'])->name('report.Filter.qna');
-    
     // Route::get('/audition-report', [ReportController::class, 'auditionReport'])->name('report.audition');
 });
 

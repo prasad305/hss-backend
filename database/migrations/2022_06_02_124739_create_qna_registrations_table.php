@@ -30,6 +30,9 @@ class CreateQnaRegistrationsTable extends Migration
             $table->integer('comment_count')->nullable();
             $table->integer('publish_status')->nullable();
             $table->timestamps();
+
+            $table->foreign('qna_id')->references('id')->on('qn_a_s')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

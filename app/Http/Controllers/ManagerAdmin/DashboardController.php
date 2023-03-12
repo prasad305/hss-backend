@@ -750,29 +750,29 @@ class DashboardController extends Controller
 
         // Registered User
 
-        $weeklyUser = QnaRegistration::whereHas('qna', function ($q) {
+        $weeklyUser = QnaRegistration::with('qna')->whereHas('qna', function ($q) {
             $q->where([['category_id', auth()->user()->category_id]]);
         })->where('payment_status', 1)->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->count();
-        $monthlyUser = QnaRegistration::whereHas('qna', function ($q) {
+        $monthlyUser = QnaRegistration::with('qna')->whereHas('qna', function ($q) {
             $q->where([['category_id', auth()->user()->category_id]]);
         })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->count();
-        $yearlyUser = QnaRegistration::whereHas('qna', function ($q) {
+        $yearlyUser = QnaRegistration::with('qna')->whereHas('qna', function ($q) {
             $q->where([['category_id', auth()->user()->category_id]]);
         })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->count();
 
         // Income Statement
 
-        $weeklyIncome = QnaRegistration::whereHas('qna', function ($q) {
+        $weeklyIncome = QnaRegistration::with('qna')->whereHas('qna', function ($q) {
             $q->where([['category_id', auth()->user()->category_id]]);
         })->where('created_at', '>', Carbon::now()->startOfWeek())->where('created_at', '<', Carbon::now()->endOfWeek())->sum('amount');
-        $monthlyIncome = QnaRegistration::whereHas('qna', function ($q) {
+        $monthlyIncome = QnaRegistration::with('qna')->whereHas('qna', function ($q) {
             $q->where([['category_id', auth()->user()->category_id]]);
         })->where('created_at', '>', Carbon::now()->startOfMonth())->where('created_at', '<', Carbon::now()->endOfMonth())->sum('amount');
-        $yearlyIncome = QnaRegistration::whereHas('qna', function ($q) {
+        $yearlyIncome = QnaRegistration::with('qna')->whereHas('qna', function ($q) {
             $q->where([['category_id', auth()->user()->category_id]]);
         })->where('created_at', '>', Carbon::now()->startOfYear())->where('created_at', '<', Carbon::now()->endOfYear())->sum('amount');
 
-        $labels = QnaRegistration::whereHas('qna', function ($q) {
+        $labels = QnaRegistration::with('qna')->whereHas('qna', function ($q) {
             $q->where([['category_id', auth()->user()->category_id]]);
         })->get(['id', 'created_at', 'amount'])->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('M');

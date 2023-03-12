@@ -232,9 +232,9 @@ class UserMobileAppController extends Controller
 
 
                 // $eventRegistration->publish_status = 1;
-                $eventRegistration->qna_start_time = Carbon::parse($event->start_time)->format('H:i:s');
-                $eventRegistration->card_holder_name =  $request->quantity;
-                // $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
+                $eventRegistration->qna_start_time = $event->available_start_time ? Carbon::parse($event->available_start_time)->format('H:i:s'):Carbon::parse($event->start_time)->format('H:i:s');
+                // $eventRegistration->card_holder_name =  $request->quantity;
+                $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
                 $activity->type = 'qna';
                 $activity->room_id = $create_room_id;
                 $eventRegistration->save();
