@@ -239,7 +239,7 @@ class MarketplaceController extends Controller
                 $rand = rand(100, 999) . $date;
 
                 $data = new MarketplaceOrder();
-                $totalTax = (($request->items * $request->unit_price) * $request->tax)/100;
+                $totalTax = (($request->items * $request->unit_price) * $request->tax) / 100;
                 $data->country_id = $request->country_id;
                 $data->state_id = $request->state_id;
                 $data->city_id = $request->city_id;
@@ -366,7 +366,7 @@ class MarketplaceController extends Controller
             $starInfo = getStarInfo($marketplace->superstar_id);
             $senderInfo = getAdminInfo($marketplace->superstar_admin_id);
 
-            SendMail($starInfo->email,$marketplace,$senderInfo);
+            SendMail($starInfo->email, $marketplace, $senderInfo);
         }
 
         return response()->json([
@@ -485,7 +485,7 @@ class MarketplaceController extends Controller
 
         $validator = Validator::make($request->all(), [
 
-            'title' => 'required|unique:marketplaces,title,'.$id,
+            'title' => 'required|unique:marketplaces,title,' . $id,
             'description' => 'required',
             'keywords' => 'required',
             'unit_price' => 'required',
@@ -616,15 +616,6 @@ class MarketplaceController extends Controller
                 Image::make($decodedBase64)->save($folder_path . $image_new_name);
                 $location = $folder_path . $image_new_name;
                 $marketplace->image = $location;
-                $addFromMobile = $marketplace->save();
-                if ($addFromMobile) {
-                    $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
-                    $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
-                    $senderInfo = getStarInfo(auth('sanctum')->user()->id);
-
-                    SendMail($adminInfo->email,$marketplace,$senderInfo);
-                    SendMail($managerInfo->email,$marketplace,$senderInfo);
-                }
             } catch (\Exception $exception) {
                 return response()->json([
                     "error" => $exception->getMessage(),
@@ -633,9 +624,114 @@ class MarketplaceController extends Controller
             }
         }
 
+
+        $addFromMobile = $marketplace->save();
+        if ($addFromMobile) {
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+
+            SendMail($adminInfo->email, $marketplace, $senderInfo);
+            SendMail($managerInfo->email, $marketplace, $senderInfo);
+        }
+
         return response()->json([
             'status' => 200,
-            'message' => 'Marketplace Added Successfully',
+            'message' => 'Product Added Successfully',
+        ]);
+    }
+
+    public function starMarketplaceUpdateMobile(Request $request, $productId)
+    {
+
+        $validator = Validator::make($request->all(), [
+
+            // 'title' => 'required|unique:marketplaces',
+            'description' => 'required',
+            'keywords' => 'required',
+            'terms_conditions' => 'required',
+            'unit_price' => 'required',
+            'total_items' => 'required',
+            'tax' => 'required',
+            'delivery_charge' => 'required',
+
+        ], [
+            // 'title.required' => 'Title Field Is Required',
+            'title.unique' => 'This Title Already Exist',
+            'description.required' => 'Description Field Is Required',
+            'keywords.required' => 'Keywords Field Is Required',
+            'image.required' => "Image Field Is Required",
+            'unit_price.required' => "Unit Price Field Is Required",
+            'total_items.required' => "Total Item Field Is Required",
+            'tax.required' => "Tax Field Is Required",
+            'delivery_charge.required' => "Delivery Charge Field Is Required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 402,
+                'errors' => $validator->errors(),
+            ]);
+        }
+        $id = Auth::user()->id;
+        $parent_id = User::find($id);
+
+        $marketplace = Marketplace::find($productId);
+
+        $marketplace->title = $request->title;
+        $marketplace->slug = Str::slug($request->title);
+        $marketplace->description = $request->description;
+        $marketplace->terms_conditions = $request->terms_conditions;
+        $marketplace->delivery_charge = $request->delivery_charge;
+        $marketplace->tax = $request->tax;
+        $marketplace->unit_price = $request->unit_price;
+        $marketplace->total_items = $request->total_items;
+        $marketplace->keywords = $request->keywords;
+        $marketplace->status = 0;
+        $marketplace->post_status = 1;
+        $marketplace->total_selling = 0;
+        $marketplace->superstar_admin_id = $parent_id->parent_user;
+        $marketplace->superstar_id = $id;
+        $marketplace->created_by_id = $id;
+        $marketplace->category_id = Auth::user()->category_id;
+        $marketplace->subcategory_id = Auth::user()->sub_category_id;
+
+
+        if ($request->image['type']) {
+            try {
+                $originalExtension = str_ireplace("image/", "", $request->image['type']);
+
+                $folder_path       = 'uploads/images/marketplace/';
+
+                $image_new_name    = Str::random(20) . '-' . now()->timestamp . '.' . $originalExtension;
+                $decodedBase64 = $request->image['data'];
+
+                Image::make($decodedBase64)->save($folder_path . $image_new_name);
+                $location = $folder_path . $image_new_name;
+                $marketplace->image = $location;
+            } catch (\Exception $exception) {
+                return response()->json([
+                    "error" => $exception->getMessage(),
+                    "status" => "from image",
+                ]);
+            }
+        }
+
+
+        $addFromMobile = $marketplace->update();
+        if ($addFromMobile) {
+            $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
+            $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
+            $senderInfo = getStarInfo(auth('sanctum')->user()->id);
+
+            SendMail($adminInfo->email, $marketplace, $senderInfo);
+            SendMail($managerInfo->email, $marketplace, $senderInfo);
+        }
+
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Product Update Successfully',
         ]);
     }
 
@@ -711,8 +807,8 @@ class MarketplaceController extends Controller
             $adminInfo = getAdminInfo(auth('sanctum')->user()->parent_user);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-            SendMail($adminInfo->email,$marketplace,$senderInfo);
-            SendMail($managerInfo->email,$marketplace,$senderInfo);
+            SendMail($adminInfo->email, $marketplace, $senderInfo);
+            SendMail($managerInfo->email, $marketplace, $senderInfo);
         }
 
         return response()->json([
@@ -720,6 +816,8 @@ class MarketplaceController extends Controller
             'message' => 'Marketplace Added Successfully',
         ]);
     }
+
+
 
     public function allStarProductList()
     {
@@ -795,7 +893,7 @@ class MarketplaceController extends Controller
 
         $validator = Validator::make($request->all(), [
 
-            'title' => 'required|unique:marketplaces,title,'.$id,
+            'title' => 'required|unique:marketplaces,title,' . $id,
             'description' => 'required',
             'keywords' => 'required',
             'terms_conditions' => 'required',
@@ -863,7 +961,7 @@ class MarketplaceController extends Controller
             $managerInfo = getManagerInfoFromCategory(auth('sanctum')->user()->category_id);
             $senderInfo = getStarInfo(auth('sanctum')->user()->id);
 
-            SendMail($managerInfo->email,$marketplace,$senderInfo);
+            SendMail($managerInfo->email, $marketplace, $senderInfo);
         }
 
         return response()->json([

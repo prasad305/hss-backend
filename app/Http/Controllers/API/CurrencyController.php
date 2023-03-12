@@ -50,6 +50,7 @@ class CurrencyController extends Controller
             'locationData' => $locationData,
             'currencyDetails' => $currencyDetails,
             'countryCode' => $locationData->countryCode,
+
         ]);
     }
 
@@ -63,7 +64,8 @@ class CurrencyController extends Controller
             'status' => 200,
             'locationData' => $locationData,
             'currencyDetails' => $currencyDetails,
-            'strpe_pk' => env('STRIPE_PUBLIC_KEY')
+            'strpe_pk' => env('STRIPE_PUBLIC_KEY'),
+            'eventMode' => true
         ]);
     }
 
