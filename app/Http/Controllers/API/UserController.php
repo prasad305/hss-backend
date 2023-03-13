@@ -86,6 +86,27 @@ use PDF;
 
 class UserController extends Controller
 {
+
+    public function trackDevice(Request $request){
+
+        $user = User::find(Auth::user()->id);
+        if($user->device_id != $request->device_id){
+            $user->device_id = $request->device_id;
+            $user->update();
+        return response()->json([
+                'status' => 200,
+                'message' => 'Ok',
+                'data' => 'Device Id Update Successfully',
+            ]);
+        }else{
+            return response()->json([
+                'status' => 200,
+                'message' => 'Ok',
+                'data' => 'Already have device id',
+            ]);
+        }
+    }
+
     public function star_info($id)
     {
         $star = User::find($id);

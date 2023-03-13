@@ -28,6 +28,7 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'phone',
+        'device_id',
         'email',
         'otp',
         'otp_verified_at',
@@ -40,6 +41,7 @@ class User extends Authenticatable
         'parent_user',
         'category_id',
         'country_code',
+        'notify_status',
 
     ];
 
