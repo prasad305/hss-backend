@@ -1098,4 +1098,61 @@ class UserMobileAppController extends Controller
             return "file upload done";
         }
     }
+
+
+    // sent nptification
+
+    public function sendNotification()
+    {
+
+        // return 'done';
+        $url = 'https://fcm.googleapis.com/fcm/send';
+
+        $FcmToken = [
+            'c3A8rwK8RmeW80RLwg2nr-:APA91bFLp7ooIFolzZw9b3rLe9bCkzLbUf4MUx69AeCemAARpcXzLLQkJJRbETKdfIGsNNYfY3q1lMdUEpZvtut_NcLBhHFkdZXqnvPJaW4rYApGalalAVp38bCk8SNhIlPEs-Rf0OVG',
+            'eU6a12BhQMqHBDBwV88u84:APA91bEZO-uemn5MsS0cDjeFOIQptLrKH9QykyIPFz0Ims81W162NF6jFW_tfr7IX7A-lSi94jHm8KPkJAoQXCwA11w8Kxn-kSAjbm9pXpV1c3maBFHaAC1XKg3Of_WFOlCQPgyx4Uq0',
+            'ednwG747T7msZ-1rf_k50m:APA91bHIZNMnCmHDVlZTZ_kkT2yKx-yWbNKXy-zpgnIJuZG3oDF0kxOUQPBFd_F8T3Pqep_CxENraEQM4BL2x8CqNiEhwiHftP496i0vwuzDAD8p51MsXgOyXOfL07vNX43vYajURK4R',
+            'f0HS8uecTPqlRyuSXuDlyG:APA91bHZfBQWL6cRNhzvJl_eeF9VomLrvswUBQYsdVAj5dpGHqZqPwCHLGySxoWFd3BnjouQsrSNrPETPaStlltBiaxL-Xk1hZHLGk5qAhzWXPOTIj4dk3hpBqmVTc3uWUpxub63zji9',
+            'fNc9MMj2Sl2N7owWjwHerQ:APA91bEjeCPvp8q1cZlU1pLu9ixqzzkAJC48tgkF-h6TdhMyNR_h_JrqygiLUlIJzPL4v2f712blcbbX7Px9wB5gDE6f4fUf6cpZES0QXuuBxgjQHeHjCub4dWmtrGcQwUboaZ3AzDxl',
+            'eqgITqeDRdq4m8U6Ozz8bC:APA91bEBfV2uohutpyQE4II5VehvC1mZgtI3v0IFrdDQLf3aMaxNMbvUYwKFRooR-pvFKciXkM4KLrkEGIFDkzaxxRX_8LMFjyomnklFTyH5k0wB2mo593kNf3QOWqL79REjYnYEQBL8'
+        ];
+
+        $serverKey = 'AAAA1HPHLVg:APA91bEqi8JCGZfEV6CCEs-VCZpMX83_cWlUWGDqkayVzoR5uqhbJGXYX-DmuHSS-_fusEyLthoOEIjafEbx1-l4xzamf-q3-gV8QlXLG-xSa8HqxiS5WCvbayLLfjK_ww0zoPDraSGC'; // ADD SERVER KEY HERE PROVIDED BY FCM
+
+        $data = [
+            "registration_ids" => $FcmToken,
+            "notification" => [
+                "title" => "দেশের মাটিতে পা রাখলেন কামরুল আহসান ",
+                "body" => "ami backend thaka bolsi",
+                "image" => "http://www.kamrulgroup.com/assets/page-img/aboutmebrif.jpg"
+            ]
+        ];
+        $encodedData = json_encode($data);
+
+        $headers = [
+            'Authorization:key=' . $serverKey,
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        // Disabling SSL Certificate support temporarly
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $encodedData);
+        // Execute post
+        $result = curl_exec($ch);
+        if ($result === FALSE) {
+            die('Curl failed: ' . curl_error($ch));
+        }
+        // Close connection
+        curl_close($ch);
+        // FCM response
+        dd($result);
+    }
 }
