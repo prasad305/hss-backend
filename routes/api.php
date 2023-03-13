@@ -154,6 +154,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
         return response()->json(['message' => 'You are in', 'status' => 200], 200);
     });
 
+    Route::post('/user/device_id_update', [UserController::class, 'trackDevice']);
     //********************************************//
     //******Learning Session Routes Start *******//
     //********************************************//

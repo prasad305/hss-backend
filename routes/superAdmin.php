@@ -56,6 +56,7 @@ use App\Http\Controllers\SuperAdmin\TermsConditionController;
 use App\Http\Controllers\SuperAdmin\RefundController;
 use App\Http\Controllers\SuperAdmin\VirtualtourController;
 use App\Http\Controllers\SuperAdmin\DeliveryChargeController;
+use App\Http\Controllers\SuperAdmin\RaffleDrowController;
 use App\Http\Controllers\SuperAdmin\SouvenirDeliveryChargeController;
 
     // Super Admin routechange.password
@@ -63,6 +64,26 @@ use App\Http\Controllers\SuperAdmin\SouvenirDeliveryChargeController;
 
     // quize view
     Route::get('/quiz-result', [HomeController::class, 'viewAllQuize'])->name('showAllQuiz');
+
+    //********************************************//
+    //****** Raffle Drow Routes Start *******//
+    //********************************************//
+    Route::get('/all-user', [RaffleDrowController::class, 'allUser'])->name('alluser');
+    Route::get('/country-user', [RaffleDrowController::class, 'countryUser'])->name('countryUser');
+    Route::get('/select-user', [RaffleDrowController::class, 'selectedUser'])->name('selectUser');
+    //Get All Winner
+    Route::get('/all-winner-user', [RaffleDrowController::class, 'allWinnerUser'])->name('allwinneruser');
+    Route::get('/country-winner-user', [RaffleDrowController::class, 'countryWinnerUser'])->name('countrywinneruser');
+    //Resete Winner
+    Route::post('/resete-user', [RaffleDrowController::class, 'reseteUser'])->name('reseteuser');
+    //Notification Route cretemessage
+    Route::get('/generalmessage/{code}', [RaffleDrowController::class, 'countryUserGeneralmessage'])->name('creategeneralmessage');
+    Route::post('/general-notify', [RaffleDrowController::class, 'countryUserNotify'])->name('countryusernotify');
+    Route::get('/winnermessage/{code}', [RaffleDrowController::class, 'countryUserWinnermessage'])->name('createwinnermessage');
+    Route::post('/winner-notify', [RaffleDrowController::class, 'winnerUserNotify'])->name('winnerusernotify');
+    //********************************************//
+    //****** Raffle Drow Routes Start *******//
+    //********************************************//
 
     //********************************************//
     //******Learning Session Routes Start *******//

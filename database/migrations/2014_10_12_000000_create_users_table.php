@@ -23,8 +23,9 @@ class CreateUsersTable extends Migration
             $table->string('username')->nullable()->unique();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
-            $table->string('country_code')->unique()->nullable();
+            $table->string('country_code')->nullable();
             $table->string('phone')->unique()->nullable();
+            $table->string('device_id')->nullable();
             $table->longText('details')->nullable();
             $table->text('address')->nullable();
             $table->date('dob')->nullable();
@@ -38,6 +39,8 @@ class CreateUsersTable extends Migration
             $table->string('user_type')->nullable();
             $table->string('password')->nullable();
             $table->integer('user_points')->nullable();
+            $table->integer('raffle_drow_status')->default(0)->comment('0 = loser, 1 = winner');
+            $table->integer('notify_status')->default(0)->comment('1 = general notify ,2 = winner notify');
             $table->boolean('is_online')->default(0);
             $table->integer('active_status')->default(1)->comment('1 = active, 0 = inactive');
             $table->integer('status')->default(0)->comment('0= unapproved, 1 = approved');

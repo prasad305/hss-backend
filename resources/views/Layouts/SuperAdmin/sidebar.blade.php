@@ -110,14 +110,41 @@
         <li class="nav-item">
             <a href="{{ route('superAdmin.showAllQuiz') }}"
                 class="nav-link {{ Request::routeIs('superAdmin.showAllQuiz') ? 'active' : '' }}">
-                <i class="fa fa-question-circle"> </i>
+                <i class="nav-icon fa fa-question-circle"> </i>
                 <p>
                     Quize Result
                 </p>
             </a>
         </li>
+        <li
+            class="nav-item {{ Request::routeIs('superAdmin.alluser') || Request::routeIs('superAdmin.allwinneruser') ? 'menu-open' : '' }}">
+            <a href="#"
+                class="nav-link {{ Request::routeIs('superAdmin.alluser') || Request::routeIs('superAdmin.allwinneruser') ? 'active' : '' }}">
+                <i class="nav-icon fa fa-inbox" aria-hidden="true"></i>
+                <p>
+                    Raffle Drow
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.alluser') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.alluser') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>User List</p>
+                    </a>
+                </li>
 
+                <li class="nav-item">
+                    <a href="{{ route('superAdmin.allwinneruser') }}"
+                        class="nav-link {{ Request::routeIs('superAdmin.allwinneruser') ? 'active' : '' }}">
+                        <i class="fas fa-caret-right nav-icon"></i>
+                        <p>Winner List</p>
+                    </a>
+                </li>
 
+            </ul>
+        </li>
         <li class="nav-item">
             <a href="{{ route('superAdmin.category.index') }}"
                 class="nav-link {{ Request::routeIs('superAdmin.category.index') ? 'active' : '' }}">
