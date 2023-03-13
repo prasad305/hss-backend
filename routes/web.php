@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\Payment\PaymentController;
+use App\Http\Controllers\API\UserMobileAppController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,7 @@ Route::post('/quize-submit', [HomeController::class, 'QuizSubmit'])->name('quizD
 
 
 Route::post('/uplad-video-post', [HomeController::class, 'upload-video']);
+Route::get('/send_push_notiifcation', [UserMobileAppController::class, 'sendNotification']);
 
 Route::get('/my-quize', function () {
 

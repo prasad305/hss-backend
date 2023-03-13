@@ -275,15 +275,15 @@ class UserController extends Controller
 
         $selectedCat = json_decode($selectedCategory->category);
         $selectedSubCat = json_decode($selectedCategory->subcategory);
-        $followedId = json_decode($selectedCategory->star_id,JSON_NUMERIC_CHECK);
+        $followedId = json_decode($selectedCategory->star_id, JSON_NUMERIC_CHECK);
 
-        $cat_post = Post::orderBy('id','DESC')
+        $cat_post = Post::orderBy('id', 'DESC')
             ->whereIn('category_id', $selectedCat)
-            ->whereIn('star_id',$followedId )
+            ->whereIn('star_id', $followedId)
             ->paginate($limit);
 
         if (isset($sub_cat_post)) {
-            $sub_cat_post = Post::orderBy('id','DESC')
+            $sub_cat_post = Post::orderBy('id', 'DESC')
                 ->whereIn('sub_category_id', $selectedSubCat)
                 ->latest()->get();
         } else {
@@ -291,7 +291,7 @@ class UserController extends Controller
         }
 
         if (isset($followedPost)) {
-            $followedPost = Post::orderBy('id','DESC')
+            $followedPost = Post::orderBy('id', 'DESC')
                 ->whereIn('user_id', $followedId)
                 ->latest()->get();
         } else {
@@ -605,7 +605,7 @@ class UserController extends Controller
 
     public function userSingleLearnigSession($slug)
     {
-        $learnigSession = LearningSession::where([['slug', $slug]])->with(['star','learningSessionAssignment' => function ($query) {
+        $learnigSession = LearningSession::where([['slug', $slug]])->with(['star', 'learningSessionAssignment' => function ($query) {
             return $query->where('user_id', auth()->user()->id)->get();
         }])->first();
 
@@ -916,46 +916,59 @@ class UserController extends Controller
 
     public function personalDataStore(Request $request)
     {
-        // return $request->all();
-        $userId = auth('sanctum')->user()->id;
+        //  return $request->all();
 
-        $userInfo = UserInfo::where('user_id', $userId)->first();
-        $userList = User::find($userId);
+        $validator = Validator::make($request->all(), [
+            //  'email' => 'email:rfc,dns|email'
+        ]);
 
 
-        if ($userInfo) {
-
-            $userList->first_name = $request->first_name;
-            // $userList->last_name = $request->last_name;
-            $userList->save();
-
-            $userInfo->country = $request->country;
-            $userInfo->dob = Carbon::parse($request->birthday);
-            $userInfo->save();
-            $user = User::find(auth('sanctum')->user()->id);
-
+        if ($validator->fails()) {
             return response()->json([
-                'status' => 200,
-                'message' => 'UserInfo Updated Successfully',
-                "userInfo" =>  $user
+                'validation_errors' => $validator->errors(),
             ]);
         } else {
-            $userList->first_name = $request->first_name;
-            // $userList->last_name = $request->last_name;
-            $userList->save();
+            $userId = auth('sanctum')->user()->id;
 
-            $newPersonalInfo = new UserInfo();
-            $newPersonalInfo->user_id = $userId;
-            $newPersonalInfo->country = $request->country;
-            $newPersonalInfo->dob = $request->birthday;
-            $newPersonalInfo->save();
+            $userInfoTypes = UserInfo::where('user_id', $userId)->first();
+            $userList = User::find($userId);
 
-            return response()->json([
-                'status' => 200,
-                'message' => 'UserInfo Added Successfully'
-            ]);
+            if ($userInfoTypes) {
+                $userList->first_name = $request->first_name;
+                $userList->last_name = $request->last_name;
+                $userList->email = $request->email;
+                $userList->update();
+
+                $userInfoTypes->country = $request->country;
+                $userInfoTypes->dob = Carbon::parse($request->birthday);
+                $userInfoTypes->update();
+                $user = User::find(auth('sanctum')->user()->id);
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'UserInfo Updated Successfully',
+                    "userInfo" =>  $user
+                ]);
+            } else {
+                $userList->first_name = $request->first_name;
+                $userList->last_name = $request->last_name;
+                $userList->email = $request->email;
+                $userList->update();
+
+                $newPersonalInfo = new UserInfo();
+                $newPersonalInfo->user_id = $userId;
+                $newPersonalInfo->country = $request->country;
+                $newPersonalInfo->dob = $request->birthday;
+                $newPersonalInfo->save();
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'UserInfo Added Successfully'
+                ]);
+            }
         }
     }
+
 
     public function userPasswordChanges(Request $request)
     {
@@ -2690,7 +2703,7 @@ class UserController extends Controller
 
     public function getCertificateData($event_id)
     {
-        $certificate = LearningSessionCertificate::with(['learningSession','user'])->where([['event_id', $event_id], ['user_id', auth()->user()->id]])->first();
+        $certificate = LearningSessionCertificate::with(['learningSession', 'user'])->where([['event_id', $event_id], ['user_id', auth()->user()->id]])->first();
         return response()->json([
             'status' => 200,
             'certificateData' => $certificate,
@@ -2893,48 +2906,48 @@ class UserController extends Controller
     public function allUpCommingEvents()
     {
 
-        $learningSession = LearningSession::where('status', 2)->latest()->get(['id','slug','banner']);
-        $LiveChat = LiveChat::where('status', 2)->latest()->get(['id','slug','banner']);
-        $qna = QnA::where('status', 2)->latest()->get(['id','slug','banner']);
-        $audition =  Audition::where('status', 2)->latest()->get(['id','slug','banner']);
-        $meetup = MeetupEvent::where('status', 2)->latest()->get(['id','slug','banner']);
+        $learningSession = LearningSession::where('status', 2)->latest()->get(['id', 'slug', 'banner']);
+        $LiveChat = LiveChat::where('status', 2)->latest()->get(['id', 'slug', 'banner']);
+        $qna = QnA::where('status', 2)->latest()->get(['id', 'slug', 'banner']);
+        $audition =  Audition::where('status', 2)->latest()->get(['id', 'slug', 'banner']);
+        $meetup = MeetupEvent::where('status', 2)->latest()->get(['id', 'slug', 'banner']);
 
 
-         $learnigSessionLiveNow =  LearningSession::whereDate('event_date',today())
-        ->whereTime('start_time','<=',now()->toTimeString())
-        ->whereTime('end_time','>=',now()->toTimeString())->get(['id','slug','banner'])
-        ->map(function ($item) {
-            $item['event_type'] = 'learning-session';
-            return $item;
-        });
-        $liveChatLiveNow =  LiveChat::whereDate('event_date',today())
-        ->whereTime('start_time','<=',now()->toTimeString())
-        ->whereTime('end_time','>=',now()->toTimeString())->get(['id','slug','banner'])->map(function ($item) {
-            $item['event_type'] = 'livechat';
-            return $item;
-        });
+        $learnigSessionLiveNow =  LearningSession::whereDate('event_date', today())
+            ->whereTime('start_time', '<=', now()->toTimeString())
+            ->whereTime('end_time', '>=', now()->toTimeString())->get(['id', 'slug', 'banner'])
+            ->map(function ($item) {
+                $item['event_type'] = 'learning-session';
+                return $item;
+            });
+        $liveChatLiveNow =  LiveChat::whereDate('event_date', today())
+            ->whereTime('start_time', '<=', now()->toTimeString())
+            ->whereTime('end_time', '>=', now()->toTimeString())->get(['id', 'slug', 'banner'])->map(function ($item) {
+                $item['event_type'] = 'livechat';
+                return $item;
+            });
 
-        $qnaLiveNow =  QnA::whereDate('event_date',today())
-        ->whereTime('start_time','<=',now()->toTimeString())
-        ->whereTime('end_time','>=',now()->toTimeString())->get(['id','slug','banner'])->map(function ($item) {
-            $item['event_type'] = 'qna';
-            return $item;
-        });
+        $qnaLiveNow =  QnA::whereDate('event_date', today())
+            ->whereTime('start_time', '<=', now()->toTimeString())
+            ->whereTime('end_time', '>=', now()->toTimeString())->get(['id', 'slug', 'banner'])->map(function ($item) {
+                $item['event_type'] = 'qna';
+                return $item;
+            });
 
-        $meetupLiveNow =  MeetupEvent::whereDate('event_date',today())
-        ->whereTime('start_time','<=',now()->toTimeString())
-        ->whereTime('end_time','>=',now()->toTimeString())->get(['id','slug','banner'])->map(function ($item) {
-            $item['event_type'] = 'meetup-event';
-            return $item;
-        });
+        $meetupLiveNow =  MeetupEvent::whereDate('event_date', today())
+            ->whereTime('start_time', '<=', now()->toTimeString())
+            ->whereTime('end_time', '>=', now()->toTimeString())->get(['id', 'slug', 'banner'])->map(function ($item) {
+                $item['event_type'] = 'meetup-event';
+                return $item;
+            });
 
-        $auditionLiveNow =  audition::whereDate('start_date',"<=",today())->whereDate('end_date',">=",today())->get(['id','slug','banner'])->map(function ($item) {
+        $auditionLiveNow =  audition::whereDate('start_date', "<=", today())->whereDate('end_date', ">=", today())->get(['id', 'slug', 'banner'])->map(function ($item) {
             $item['event_type'] = 'audition';
             return $item;
         });
 
         $liveNow = collect([]);
-        $collections = [$learnigSessionLiveNow, $liveChatLiveNow, $qnaLiveNow, $meetupLiveNow,$auditionLiveNow];
+        $collections = [$learnigSessionLiveNow, $liveChatLiveNow, $qnaLiveNow, $meetupLiveNow, $auditionLiveNow];
         foreach ($collections as $collection) {
             $liveNow = $liveNow->merge($collection);
         }
@@ -2945,8 +2958,8 @@ class UserController extends Controller
             'LiveChat' =>  $LiveChat,
             'qna' => $qna,
             'audition' => $audition,
-            'meetup'=>   $meetup,
-            'liveNow'=>  $liveNow,
+            'meetup' =>   $meetup,
+            'liveNow' =>  $liveNow,
 
         ]);
     }
@@ -3013,11 +3026,12 @@ class UserController extends Controller
         $liveChatRegs->update();
     }
 
-    public function followStarId(){
-        $followStarId = ChoiceList::where('user_id',auth('sanctum')->user()->id)->first();
+    public function followStarId()
+    {
+        $followStarId = ChoiceList::where('user_id', auth('sanctum')->user()->id)->first();
         return response()->json([
             'status' => 200,
-            'followStarId'=>json_decode($followStarId->star_id)
+            'followStarId' => json_decode($followStarId->star_id)
         ]);
     }
 }
