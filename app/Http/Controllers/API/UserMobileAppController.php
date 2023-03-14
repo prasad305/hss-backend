@@ -52,7 +52,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Models\AuditionOxygenReplyVideo;
-
+use App\Models\NotificationMessage;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
 // use Barryvdh\DomPDF\Facade\Pdf;
@@ -1153,5 +1153,33 @@ class UserMobileAppController extends Controller
         curl_close($ch);
         // FCM response
         dd($result);
+    }
+
+    /**
+     * raffaldrow wining status
+     */
+    public function showWinResult()
+    {
+
+        $user = User::where('user_type', 'user')
+            ->where('id', auth('sanctum')->user()->id)
+            ->where('raffle_drow_status', 1)
+            ->where('status', 1)
+            ->orderBy('id', 'DESC')->first();
+
+        if ($user) {
+            return response()->json([
+                "status" => 200,
+                "isWin" => true,
+                "qr_code" =>   $user->phone,
+                "body" => NotificationMessage::where('type', 'success')->first()
+            ]);
+        } else {
+            return response()->json([
+                "status" => 200,
+                "isWin" => false,
+                "body" => NotificationMessage::where('type', 'fail')->first()
+            ]);
+        }
     }
 }

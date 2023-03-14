@@ -41,6 +41,7 @@ use trollers\API\VirtualtourController;
 //chunk video upload
 Route::post('/mobile-file-upload', [UserMobileAppController::class, 'fileUploadForMobile']);
 
+
 //video for SDK
 Route::get('/time-distribute/{event_id}', [UserController::class, 'distributionTime']);
 Route::get('/sdk/get-token', [SdkController::class, 'getToken']);
@@ -150,6 +151,11 @@ Route::post('/pocket-signature', [PaymentController::class, 'getPocketSignature'
 // Registered & Verified User Middleware
 Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
 
+
+
+    //rafaldrow status
+    Route::get('/user/raffle-drow', [UserMobileAppController::class, 'showWinResult']);
+
     Route::get('/checkingAuthenticated', function () {
         return response()->json(['message' => 'You are in', 'status' => 200], 200);
     });
@@ -176,7 +182,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     //********************************************//
     //******Learning Session Routes End *******//
     //********************************************//
-    
+
     //********************************************//
     //******MeetUp Routes Start *******//
     //********************************************//
@@ -416,7 +422,7 @@ Route::middleware(['auth:sanctum', 'isAPIUser'])->group(function () {
     Route::get('/user/audition/getOxygen/videos', [UserController::class, 'getOxygenVideo']);
     Route::post('/user/audition/getOxygenReply/video', [UserController::class, 'oxygenReplyVideo']);
     Route::get('/user/audition/videofeed/loveReact', [UserController::class, 'getVideoFeedLoveReact']);
-    
+
     // Jury Profile
     Route::post('/jury/juryUpdateCover/{id}', [UserController::class, 'juryUpdateCover']);
     Route::post('/jury/juryUpdateProfile/{id}', [UserController::class, 'juryUpdateProfile']);

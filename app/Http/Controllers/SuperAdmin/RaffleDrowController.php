@@ -32,16 +32,35 @@ class RaffleDrowController extends Controller
 
     public function selectedUser(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'start_date' => 'required',
             'end_date' => 'required',
             'number_of_user' => 'required',
+            'push_message' => 'required',
         ]);
         $country_code = $request->country_code;
         $number_of_user = $request->number_of_user;
         $start_date = Carbon::parse($request->start_date);
         $end_date = Carbon::parse($request->end_date);
+
         $getusers = User::where([['user_type', 'user'], ['created_at', '>=', $start_date], ['created_at', '<=', $end_date], ['country_code', $country_code], ['status', 1]])->inRandomOrder()->limit($number_of_user)->get();
+
+        $selectedusers = User::where([['user_type', 'user'], ['created_at', '>=', $start_date], ['created_at', '<=', $end_date], ['country_code', $country_code], ['status', '!=', 1], ['notify_status', 0]])->whereNotNull('device_id')->pluck('device_id')->all();
+
+        $selectedusersDate = User::where([['user_type', 'user'], ['created_at', '>=', $start_date], ['created_at', '<=', $end_date], ['country_code', $country_code], ['status', 1]])->get();
+
+
+        foreach ($selectedusersDate as $selecteduser) {
+            $selecteduser->notify_status = 1;
+            $selecteduser->update();
+        }
+
+        setMobilePushNotification($request->push_message, "", $selectedusers);
+
+
+        // dd($selecteduser);
+
         $checkNotify = User::where([['notify_status', 2], ['country_code', $country_code], ['status', 1]])->first();
         $checkWinner = User::where([['raffle_drow_status', 1], ['country_code', $country_code], ['status', 1]])->first();
         if (!isset($checkWinner->raffle_drow_status)) {
@@ -51,6 +70,7 @@ class RaffleDrowController extends Controller
             }
         }
         $users = User::where([['country_code', $country_code], ['raffle_drow_status', 1], ['status', 1]])->get();
+
         return view('SuperAdmin.raffleDrow.selectuser', compact('users', 'country_code', 'checkNotify'));
     }
 
@@ -80,16 +100,21 @@ class RaffleDrowController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'description' => 'required',
+            //'description' => 'required',
         ]);
         $country_code = $request->country_code;
         $title = $request->title;
         $description = $request->description;
         $getusers = User::where([['country_code', $country_code], ['status', 1]])->get();
-        foreach ($getusers as $user) {
-            $user->notify_status = 1;
-            $user->update();
-        }
+        // foreach ($getusers as $user) {
+        //     $user->notify_status = 1;
+        //     $user->update();
+        // }
+        // $notificationStatus = setMobilePushNotification($title, $description);
+
+        //dd($notificationStatus);
+
+        return "hello";
         return response()->json([
             'type' => 'success',
             'message' => 'Notification send successfully',

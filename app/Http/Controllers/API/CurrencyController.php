@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Currency;
+use App\Models\NotificationMessage;
 
 class CurrencyController extends Controller
 {
@@ -65,7 +66,8 @@ class CurrencyController extends Controller
             'locationData' => $locationData,
             'currencyDetails' => $currencyDetails,
             'strpe_pk' => env('STRIPE_PUBLIC_KEY'),
-            'eventMode' => true
+            'eventMode' => true,
+            'promoText' => NotificationMessage::where('type', 'signUp')->first()->message,
         ]);
     }
 

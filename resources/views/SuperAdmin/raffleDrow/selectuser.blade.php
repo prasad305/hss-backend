@@ -25,23 +25,23 @@
         <div class="container-fluid">
             <div class="card card-bg head-line mt-4 mb-2">
                 <div class="text-light d-flex p-2">
-                    <h4 class="mx-3 text-white p-2">Raffle Drow 
-                    ( Selected User Of
-                            @if($country_code == 'BH')
-                                Bahrain
-                            @elseif($country_code == 'IN')
-                                India
-                            @elseif($country_code == 'KW')
-                                Kuwait
-                            @elseif($country_code == 'AE')
-                                UAE
-                            @elseif($country_code == 'MY')
-                                Malaysia
-                            @elseif($country_code == 'US')
-                                United States of America
-                            @elseif($country_code == 'BD')
-                                Bangladesh
-                            @endif
+                    <h4 class="mx-3 text-white p-2">Raffle Drow
+                        ( Selected User Of
+                        @if ($country_code == 'BH')
+                            Bahrain
+                        @elseif($country_code == 'IN')
+                            India
+                        @elseif($country_code == 'KW')
+                            Kuwait
+                        @elseif($country_code == 'AE')
+                            UAE
+                        @elseif($country_code == 'MY')
+                            Malaysia
+                        @elseif($country_code == 'US')
+                            United States of America
+                        @elseif($country_code == 'BD')
+                            Bangladesh
+                        @endif
                         )
                     </h4>
                 </div>
@@ -57,13 +57,13 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    <button class="btn btn-info btn-sm">Total Winner User( {{count($users)}} )</button>
-                        @if(isset($checkNotify->notify_status) && $checkNotify->notify_status > 1)
+                    <button class="btn btn-info btn-sm">Total Winner User( {{ count($users) }} )</button>
+                    {{-- @if (isset($checkNotify->notify_status) && $checkNotify->notify_status > 1)
                             <button disabled class="btn btn-sm" style="background: #ffad00;color:#fff;">Send Notification <i class="fa fa-bell-o" aria-hidden="true"></i></button>
                         @else
                             <button onclick="Show('Write Message','{{ route('superAdmin.createwinnermessage',$country_code) }}')" class="btn btn-sm" style="background: #ffad00;color:#fff;">Send Notification <i class="fa fa-bell-o" aria-hidden="true"></i></button>
                         @endif
-                    </form>
+                    </form> --}}
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -86,20 +86,20 @@
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->phone }}</td>
                                     <td>
-                                        @if($user->country_code == 'BH')
-                                        Bahrain
+                                        @if ($user->country_code == 'BH')
+                                            Bahrain
                                         @elseif($user->country_code == 'IN')
-                                        India
+                                            India
                                         @elseif($user->country_code == 'KW')
-                                        Kuwait
+                                            Kuwait
                                         @elseif($user->country_code == 'AE')
-                                        UAE
+                                            UAE
                                         @elseif($user->country_code == 'MY')
-                                        Malaysia
+                                            Malaysia
                                         @elseif($user->country_code == 'US')
-                                        United States of America
+                                            United States of America
                                         @elseif($user->country_code == 'BD')
-                                        Bangladesh
+                                            Bangladesh
                                         @endif
                                     </td>
                                     <td>{{ $user->device_id }}</td>

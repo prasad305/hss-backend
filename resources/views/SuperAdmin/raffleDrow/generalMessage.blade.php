@@ -1,27 +1,28 @@
 <form id="create-form">
     @csrf
-    <input type="hidden" name="country_code" value="{{$code}}">
+    <input type="hidden" name="country_code" value="{{ $code }}">
     <div class="row form-group">
         <div class="col-md-12">
-            <label for="title">Title</label>
-            <input type="text" class="form-control" id="title" name="title" placeholder="Enter Title">
+            <label for="title">Push Text</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Enter Push Message">
             <span class="text-danger" id="title_error"></span>
         </div>
     </div>
-    <div class="form-group row">
+    {{-- <div class="form-group row">
         <div class="col-md-12">
             <label for="description">Description</label>
-            <textarea id="summernote" name="description" id="description"></textarea>
+            <textarea name="description" id="description"></textarea>
             <span class="text-danger" id="description_error"></span>
         </div>
-    </div>
+    </div> --}}
 
-    <button type="submit" class="btn btn-primary" id="createMessage"><i class="fa fa-save"></i>&nbsp; Message Send </button>
+    <button type="submit" class="btn btn-primary" id="createMessage"><i class="fa fa-save"></i>&nbsp; Message Send
+    </button>
 
 </form>
 
 <script>
-    $(document).on('click','#createMessage',function (event) {
+    $(document).on('click', '#createMessage', function(event) {
         event.preventDefault();
         $('#title_error').text('');
         $('#description_error').text('');
@@ -35,12 +36,12 @@
             }
         });
         $.ajax({
-            url: "{{route('superAdmin.countryusernotify')}}",// your request url
+            url: "{{ route('superAdmin.countryusernotify') }}", // your request url
             data: formData,
             processData: false,
             contentType: false,
             type: 'POST',
-            success: function (data) {
+            success: function(data) {
                 Swal.fire({
                     position: 'top-end',
                     icon: data.type,
@@ -52,10 +53,10 @@
                     location.reload();
                 }, 1000);
             },
-            error: function (data) {
+            error: function(data) {
                 var errorMessage = '<div class="card bg-danger">\n' +
-                            '<div class="card-body text-center p-5">\n' +
-                            '<span class="text-white">';
+                    '<div class="card-body text-center p-5">\n' +
+                    '<span class="text-white">';
                 $.each(data.responseJSON.errors, function(key, value) {
                     errorMessage += ('' + value + '<br>');
                     $("#" + key + "_error").text(value[0]);
@@ -63,12 +64,12 @@
                 errorMessage += '</span>\n' +
                     '</div>\n' +
                     '</div>';
-                
+
             }
         });
 
     });
- </script>
+</script>
 
 <script>
     $('#summernote').summernote({

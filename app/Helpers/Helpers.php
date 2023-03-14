@@ -420,18 +420,17 @@ if (!function_exists('random_code')) {
     function auditionRegUpdate($user_id, $event_id, $method)
     {
         try {
-        $registerEvent = AuditionParticipant::where([['audition_id', $event_id], ['user_id', $user_id]])->first();
-        $registerEvent->payment_status = 1;
-        $registerEvent->payment_method =  $method;
-        $registerEvent->update();
+            $registerEvent = AuditionParticipant::where([['audition_id', $event_id], ['user_id', $user_id]])->first();
+            $registerEvent->payment_status = 1;
+            $registerEvent->payment_method =  $method;
+            $registerEvent->update();
 
-        $activity = new Activity();
-        $activity->type = 'audition';
-        $activity->user_id = $user_id;
-        $activity->event_id =  $event_id;
-        $activity->event_registration_id = $registerEvent->id;
-        $activity->save();
-
+            $activity = new Activity();
+            $activity->type = 'audition';
+            $activity->user_id = $user_id;
+            $activity->event_id =  $event_id;
+            $activity->event_registration_id = $registerEvent->id;
+            $activity->save();
         } catch (\Throwable $th) {
             //throw $th;
         }
@@ -747,5 +746,64 @@ if (!function_exists('random_code')) {
     function SendMail($email, $post, $senderInfo)
     {
         // Mail::to($email)->send(new PostNotification($post,$senderInfo));
+    }
+
+
+    /**
+     * sent push notification to mobile user
+     */
+    function setMobilePushNotification($title, $description, $users)
+    {
+        // return 'done';
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $FcmToken = [
+            'c3A8rwK8RmeW80RLwg2nr-:APA91bFLp7ooIFolzZw9b3rLe9bCkzLbUf4MUx69AeCemAARpcXzLLQkJJRbETKdfIGsNNYfY3q1lMdUEpZvtut_NcLBhHFkdZXqnvPJaW4rYApGalalAVp38bCk8SNhIlPEs-Rf0OVG',
+            'eU6a12BhQMqHBDBwV88u84:APA91bEZO-uemn5MsS0cDjeFOIQptLrKH9QykyIPFz0Ims81W162NF6jFW_tfr7IX7A-lSi94jHm8KPkJAoQXCwA11w8Kxn-kSAjbm9pXpV1c3maBFHaAC1XKg3Of_WFOlCQPgyx4Uq0',
+            'ednwG747T7msZ-1rf_k50m:APA91bHIZNMnCmHDVlZTZ_kkT2yKx-yWbNKXy-zpgnIJuZG3oDF0kxOUQPBFd_F8T3Pqep_CxENraEQM4BL2x8CqNiEhwiHftP496i0vwuzDAD8p51MsXgOyXOfL07vNX43vYajURK4R',
+            'f0HS8uecTPqlRyuSXuDlyG:APA91bHZfBQWL6cRNhzvJl_eeF9VomLrvswUBQYsdVAj5dpGHqZqPwCHLGySxoWFd3BnjouQsrSNrPETPaStlltBiaxL-Xk1hZHLGk5qAhzWXPOTIj4dk3hpBqmVTc3uWUpxub63zji9',
+            'fNc9MMj2Sl2N7owWjwHerQ:APA91bEjeCPvp8q1cZlU1pLu9ixqzzkAJC48tgkF-h6TdhMyNR_h_JrqygiLUlIJzPL4v2f712blcbbX7Px9wB5gDE6f4fUf6cpZES0QXuuBxgjQHeHjCub4dWmtrGcQwUboaZ3AzDxl',
+            'ckRk5GjVQ1O8eH9pvJJash:APA91bGK9fMOdKYcYh81QgsVNlFUuU7WSBdcjwZMZgDDDJwCRQuUtPC4272lMHYr9c4Hmff4ull21CJB4sNMSy9eggnXV9rVUC-f5H2ThTEgZnTYENY-7R8pu8uBOG7DfVLBaIkdSi6Y'
+        ];
+
+        $serverKey = 'AAAA1HPHLVg:APA91bEqi8JCGZfEV6CCEs-VCZpMX83_cWlUWGDqkayVzoR5uqhbJGXYX-DmuHSS-_fusEyLthoOEIjafEbx1-l4xzamf-q3-gV8QlXLG-xSa8HqxiS5WCvbayLLfjK_ww0zoPDraSGC'; // ADD SERVER KEY HERE PROVIDED BY FCM
+
+        $data = [
+            "registration_ids" => $users,
+            "notification" => [
+                "title" => "",
+                "body" => $title,
+                "image" => ""
+                // "image" => "https://backend.hellosuperstars.com/uploads/notifiacation-banner.png"
+            ]
+        ];
+        $encodedData = json_encode($data);
+
+        $headers = [
+            'Authorization:key=' . $serverKey,
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        // Disabling SSL Certificate support temporarly
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $encodedData);
+        // Execute post
+        $result = curl_exec($ch);
+        if ($result === FALSE) {
+            die('Curl failed: ' . curl_error($ch));
+        }
+        // Close connection
+        curl_close($ch);
+        // FCM response
+
+        return $result;
+        // dd($result);
     }
 }

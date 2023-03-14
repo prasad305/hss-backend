@@ -87,18 +87,19 @@ use PDF;
 class UserController extends Controller
 {
 
-    public function trackDevice(Request $request){
+    public function trackDevice(Request $request)
+    {
 
         $user = User::find(Auth::user()->id);
-        if($user->device_id != $request->device_id){
+        if ($user->device_id != $request->device_id) {
             $user->device_id = $request->device_id;
             $user->update();
-        return response()->json([
+            return response()->json([
                 'status' => 200,
                 'message' => 'Ok',
                 'data' => 'Device Id Update Successfully',
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status' => 200,
                 'message' => 'Ok',

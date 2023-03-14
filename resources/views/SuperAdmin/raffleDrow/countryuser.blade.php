@@ -25,23 +25,23 @@
         <div class="container-fluid">
             <div class="card card-bg head-line mt-4 mb-2">
                 <div class="text-light d-flex p-2">
-                    <h4 class="mx-3 text-white p-2">Raffle Drow 
+                    <h4 class="mx-3 text-white p-2">Raffle Drow
                         ( All User Of
-                            @if($country_code == 'BH')
-                                Bahrain
-                            @elseif($country_code == 'IN')
-                                India
-                            @elseif($country_code == 'KW')
-                                Kuwait
-                            @elseif($country_code == 'AE')
-                                UAE
-                            @elseif($country_code == 'MY')
-                                Malaysia
-                            @elseif($country_code == 'US')
-                                United States of America
-                            @elseif($country_code == 'BD')
-                                Bangladesh
-                            @endif
+                        @if ($country_code == 'BH')
+                            Bahrain
+                        @elseif($country_code == 'IN')
+                            India
+                        @elseif($country_code == 'KW')
+                            Kuwait
+                        @elseif($country_code == 'AE')
+                            UAE
+                        @elseif($country_code == 'MY')
+                            Malaysia
+                        @elseif($country_code == 'US')
+                            United States of America
+                        @elseif($country_code == 'BD')
+                            Bangladesh
+                        @endif
                         )
                     </h4>
                 </div>
@@ -57,43 +57,65 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    <button class="btn btn-info btn-sm">Total User( {{count($users)}} )</button>
-                @if(isset($checkNotify->notify_status) && $checkNotify->notify_status > 0)
-                    <button disabled class="btn btn-sm" style="background: #ffad00;color:#fff;">Send Notification <i class="fa fa-bell-o" aria-hidden="true"></i></button>
-                @else
-                <button onclick="Show('Write Message','{{ route('superAdmin.creategeneralmessage',$country_code) }}')" class="btn btn-sm" style="background: #ffad00;color:#fff;">Send Notification <i class="fa fa-bell-o" aria-hidden="true"></i></button>
-                @endif
+                    <button class="btn btn-info btn-sm">Total User( {{ count($users) }} )</button>
+                    {{-- @if (isset($checkNotify->notify_status) && $checkNotify->notify_status > 0)
+                        <button disabled class="btn btn-sm" style="background: #ffad00;color:#fff;">Send Notification<i
+                                class="fa fa-bell-o" aria-hidden="true"></i></button>
+                    @else
+                        <button
+                            onclick="Show('Write Message','{{ route('superAdmin.creategeneralmessage', $country_code) }}')"
+                            class="btn btn-sm" style="background: #ffad00;color:#fff;">Send Notification <i
+                                class="fa fa-bell-o" aria-hidden="true"></i></button>
+                    @endif --}}
                     <br>
-                    <form action="{{route('superAdmin.selectUser')}}" method="get">
-                        <input type="hidden" value="{{$country_code}}" name="country_code">
+                    <form action="{{ route('superAdmin.selectUser') }}" method="get">
+                        <input type="hidden" value="{{ $country_code }}" name="country_code">
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="">Start Date</label>
-                                <input type="datetime-local" name="start_date" class="form-control"> 
+                                <input type="datetime-local" name="start_date" class="form-control">
                                 @error('start_date')
-                                <span class="text-danger">{{$message}}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-4">
                                 <label for="">End Date</label>
                                 <input type="datetime-local" name="end_date" class="form-control">
                                 @error('end_date')
-                                <span class="text-danger">{{$message}}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="col-md-4">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="">Total User</label>
-                                        <input type="number" name="number_of_user" placeholder="Enter number of user" class="form-control">
+                                        <input type="number" name="number_of_user" placeholder="Enter number of user"
+                                            class="form-control">
                                         @error('number_of_user')
-                                        <span class="text-danger">{{$message}}</span>
+                                            <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for=""></label>
-                                        <label for=""></label>
-                                        <input type="submit" value="Search" class="btn btn-info btn-block">
+
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-8 mt-2">
+                                        <label for="">Push Notification Text</label>
+                                        <input type="" name="push_message"
+                                            placeholder="Enter Push notifaiction message" class="form-control">
+                                        @error('push_message')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+
+                                    <div class="col-md-4">
+                                        <input type="submit" value="Search" class="btn btn-info btn-block  mt-3">
                                     </div>
                                 </div>
                             </div>
@@ -121,23 +143,23 @@
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->phone }}</td>
                                     <td>
-                                        @if($user->country_code == 'BH')
-                                        Bahrain
+                                        @if ($user->country_code == 'BH')
+                                            Bahrain
                                         @elseif($user->country_code == 'IN')
-                                        India
+                                            India
                                         @elseif($user->country_code == 'KW')
-                                        Kuwait
+                                            Kuwait
                                         @elseif($user->country_code == 'AE')
-                                        UAE
+                                            UAE
                                         @elseif($user->country_code == 'MY')
-                                        Malaysia
+                                            Malaysia
                                         @elseif($user->country_code == 'US')
-                                        United States of America
+                                            United States of America
                                         @elseif($user->country_code == 'BD')
-                                        Bangladesh
+                                            Bangladesh
                                         @endif
                                     </td>
-                                    <td>{{$user->device_id}}</td>
+                                    <td>{{ $user->device_id }}</td>
                                     <td>{{ $user->created_at }}</td>
                                 </tr>
                             @endforeach
