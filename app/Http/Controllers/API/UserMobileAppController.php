@@ -232,7 +232,7 @@ class UserMobileAppController extends Controller
 
 
                 // $eventRegistration->publish_status = 1;
-                $eventRegistration->qna_start_time = $event->available_start_time ? Carbon::parse($event->available_start_time)->format('H:i:s'):Carbon::parse($event->start_time)->format('H:i:s');
+                $eventRegistration->qna_start_time = $event->available_start_time ? Carbon::parse($event->available_start_time)->format('H:i:s') : Carbon::parse($event->start_time)->format('H:i:s');
                 // $eventRegistration->card_holder_name =  $request->quantity;
                 $eventRegistration->qna_end_time = Carbon::parse($request->end_time)->format('H:i:s');
                 $activity->type = 'qna';
@@ -1107,7 +1107,6 @@ class UserMobileAppController extends Controller
 
         // return 'done';
         $url = 'https://fcm.googleapis.com/fcm/send';
-
         $FcmToken = [
             'c3A8rwK8RmeW80RLwg2nr-:APA91bFLp7ooIFolzZw9b3rLe9bCkzLbUf4MUx69AeCemAARpcXzLLQkJJRbETKdfIGsNNYfY3q1lMdUEpZvtut_NcLBhHFkdZXqnvPJaW4rYApGalalAVp38bCk8SNhIlPEs-Rf0OVG',
             'eU6a12BhQMqHBDBwV88u84:APA91bEZO-uemn5MsS0cDjeFOIQptLrKH9QykyIPFz0Ims81W162NF6jFW_tfr7IX7A-lSi94jHm8KPkJAoQXCwA11w8Kxn-kSAjbm9pXpV1c3maBFHaAC1XKg3Of_WFOlCQPgyx4Uq0',
